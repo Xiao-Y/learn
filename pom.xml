@@ -11,6 +11,13 @@
     <module>learn-store-cloud-zuul</module>
     <module>learn-store-cloud-hystrix</module>
     <module>learn-store-cloud-feign</module>
+    <module>learn-store-shop-service</module>
+    <module>learn-store-shop-dao</module>
+    <module>learn-store-shop-common</module>
+    <module>learn-store-shop-tools</module>
+    <module>learn-store-shop-model</module>
+    <module>learn-store-shop-admin</module>
+    <module>learn-store-shop-web</module>
   </modules>
   <packaging>pom</packaging>
 
