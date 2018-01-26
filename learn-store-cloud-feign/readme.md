@@ -1,1 +1,1 @@
-服务消费者（Feign）
+Feign声明式的Web Service客户端消费者

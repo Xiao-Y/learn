@@ -18,6 +18,8 @@
     <module>learn-store-shop-model</module>
     <module>learn-store-shop-admin</module>
     <module>learn-store-shop-web</module>
+    <module>learn-store-cloud-gateway</module>
+    <module>learn-store-cloud-ribbon</module>
   </modules>
   <packaging>pom</packaging>
 
