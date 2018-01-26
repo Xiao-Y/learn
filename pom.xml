@@ -1,41 +1,60 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.ft</groupId>
-  <artifactId>learn</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <modules>
-    <module>learn-store-cloud-config</module>
-    <module>learn-store-cloud-eureka</module>
-    <module>learn-store-cloud-zuul</module>
-    <module>learn-store-cloud-hystrix</module>
-    <module>learn-store-cloud-feign</module>
-    <module>learn-store-shop-service</module>
-    <module>learn-store-shop-dao</module>
-    <module>learn-store-shop-common</module>
-    <module>learn-store-shop-tools</module>
-    <module>learn-store-shop-model</module>
-    <module>learn-store-shop-admin</module>
-    <module>learn-store-shop-web</module>
-    <module>learn-store-cloud-gateway</module>
-    <module>learn-store-cloud-ribbon</module>
-  </modules>
-  <packaging>pom</packaging>
+    <groupId>com.ft</groupId>
+    <artifactId>learn</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>learn-store-cloud-config</module>
+        <module>learn-store-cloud-eureka</module>
+        <module>learn-store-cloud-zuul</module>
+        <module>learn-store-cloud-hystrix</module>
+        <module>learn-store-cloud-feign</module>
+        <module>learn-store-shop-service</module>
+        <module>learn-store-shop-dao</module>
+        <module>learn-store-shop-common</module>
+        <module>learn-store-shop-tools</module>
+        <module>learn-store-shop-model</module>
+        <module>learn-store-shop-admin</module>
+        <module>learn-store-cloud-gateway</module>
+        <module>learn-store-cloud-ribbon</module>
+        <module>learn-store-shop-web</module>
+    </modules>
+    <packaging>pom</packaging>
 
-  <name>learn</name>
-  <url>http://maven.apache.org</url>
+    <name>learn</name>
+    <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.0.RELEASE</version>
+    </parent>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Brixton.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
