@@ -5,6 +5,13 @@
   <groupId>com.ft</groupId>
   <artifactId>learn</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>learn-store-cloud-config</module>
+    <module>learn-store-cloud-eureka</module>
+    <module>learn-store-cloud-zuul</module>
+    <module>learn-store-cloud-hystrix</module>
+    <module>learn-store-cloud-feign</module>
+  </modules>
   <packaging>pom</packaging>
 
   <name>learn</name>
