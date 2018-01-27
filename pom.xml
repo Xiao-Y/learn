@@ -14,12 +14,12 @@
         <module>learn-cloud-gateway</module>
         <module>learn-cloud-ribbon</module>
         <module>learn-shop-admin-system</module>
+        <module>learn-shop-admin-user</module>
         <module>learn-shop-leading-cart</module>
         <module>learn-shop-leading-order</module>
         <module>learn-shop-leading-product</module>
         <module>learn-shop-public-common</module>
         <module>learn-shop-public-tools</module>
-        <module>learn-shop-public-user</module>
     </modules>
     <packaging>pom</packaging>
 
