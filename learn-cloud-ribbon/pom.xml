@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-store-cloud-hystrix</artifactId>
+    <artifactId>learn-cloud-ribbon</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-cloud-hystrix</name>
+    <name>learn-cloud-ribbon</name>
     <url>http://maven.apache.org</url>
 
     <properties>

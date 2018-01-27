@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-store-shop-tools</artifactId>
+    <artifactId>learn-cloud-zuul</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-shop-tools</name>
+    <name>learn-cloud-zuul</name>
     <url>http://maven.apache.org</url>
 
     <properties>

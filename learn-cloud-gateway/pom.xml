@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-store-shop-dao</artifactId>
+    <artifactId>learn-cloud-gateway</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-shop-dao</name>
+    <name>learn-cloud-gateway</name>
     <url>http://maven.apache.org</url>
 
     <properties>

@@ -6,20 +6,20 @@
     <artifactId>learn</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>learn-store-cloud-config</module>
-        <module>learn-store-cloud-eureka</module>
-        <module>learn-store-cloud-zuul</module>
-        <module>learn-store-cloud-hystrix</module>
-        <module>learn-store-cloud-feign</module>
-        <module>learn-store-shop-service</module>
-        <module>learn-store-shop-dao</module>
-        <module>learn-store-shop-common</module>
-        <module>learn-store-shop-tools</module>
-        <module>learn-store-shop-model</module>
-        <module>learn-store-shop-admin</module>
-        <module>learn-store-cloud-gateway</module>
-        <module>learn-store-cloud-ribbon</module>
-        <module>learn-store-shop-web</module>
+        <module>learn-cloud-config</module>
+        <module>learn-cloud-eureka</module>
+        <module>learn-cloud-zuul</module>
+        <module>learn-cloud-hystrix</module>
+        <module>learn-cloud-feign</module>
+        <module>learn-cloud-gateway</module>
+        <module>learn-cloud-ribbon</module>
+        <module>learn-shop-admin-system</module>
+        <module>learn-shop-leading-cart</module>
+        <module>learn-shop-leading-order</module>
+        <module>learn-shop-leading-product</module>
+        <module>learn-shop-public-common</module>
+        <module>learn-shop-public-tools</module>
+        <module>learn-shop-public-user</module>
     </modules>
     <packaging>pom</packaging>
 

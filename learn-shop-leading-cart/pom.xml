@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-store-cloud-gateway</artifactId>
+    <artifactId>learn-shop-leading-cart</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-cloud-gateway</name>
+    <name>learn-shop-leading-cart</name>
     <url>http://maven.apache.org</url>
 
     <properties>

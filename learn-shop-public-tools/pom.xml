@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-store-cloud-feign</artifactId>
+    <artifactId>learn-shop-public-tools</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-cloud-feign</name>
+    <name>learn-shop-public-tools</name>
     <url>http://maven.apache.org</url>
 
     <properties>

@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-store-shop-model</artifactId>
+    <artifactId>learn-cloud-config</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-shop-model</name>
+    <name>learn-cloud-config</name>
     <url>http://maven.apache.org</url>
 
     <properties>

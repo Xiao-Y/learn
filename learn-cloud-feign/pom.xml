@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-store-cloud-ribbon</artifactId>
+    <artifactId>learn-cloud-feign</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-cloud-ribbon</name>
+    <name>learn-cloud-feign</name>
     <url>http://maven.apache.org</url>
 
     <properties>

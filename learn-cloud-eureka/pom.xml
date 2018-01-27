@@ -5,24 +5,24 @@
         <groupId>com.ft</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>learn-store-shop-service</artifactId>
+
+    <artifactId>learn-cloud-eureka</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-store-shop-service</name>
+    <name>learn-cloud-eureka</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>
         <!--增加eureka-server的依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>learn-store-shop-service</finalName>
+        <finalName>spring-eureka-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
