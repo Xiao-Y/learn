@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-shop-leading-cart</artifactId>
+    <artifactId>learn-shop-core-product</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-shop-leading-cart</name>
+    <name>learn-shop-core-product</name>
     <url>http://maven.apache.org</url>
 
     <properties>

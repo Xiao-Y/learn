@@ -15,9 +15,9 @@
         <module>learn-cloud-ribbon</module>
         <module>learn-shop-admin-system</module>
         <module>learn-shop-admin-user</module>
-        <module>learn-shop-leading-cart</module>
-        <module>learn-shop-leading-order</module>
-        <module>learn-shop-leading-product</module>
+        <module>learn-shop-core-cart</module>
+        <module>learn-shop-core-order</module>
+        <module>learn-shop-core-product</module>
         <module>learn-shop-public-common</module>
         <module>learn-shop-public-tools</module>
     </modules>
@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.RELEASE</version>
+        <version>1.5.9.RELEASE</version>
     </parent>
 
     <properties>
@@ -42,7 +42,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Brixton.RELEASE</version>
+                <version>Edgware.SR1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

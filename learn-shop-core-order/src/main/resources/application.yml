@@ -1,0 +1,13 @@
+server:
+  port: 8901
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: learn-shop-core-order #客户端名称
+
+words: 123,688,sldfjo,ioweur
