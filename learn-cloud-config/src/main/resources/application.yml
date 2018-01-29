@@ -1,17 +1,17 @@
 server:
-  port: 8888
+  port: 8781
 
 spring:
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/Xiao-Y/cloud-config-server-repo.git #配置git仓库地址
-          search-paths: cloud-config-repo #指定搜索路径，config-server会自动搜索根目录和指定目录（逗号分隔）下的文件
+          uri: https://github.com/Xiao-Y/learn.git #配置git仓库地址
+          search-paths: learn-cloud-config/cloud-config-repo #指定搜索路径，config-server会自动搜索根目录和指定目录（逗号分隔）下的文件
           #username: username #访问git仓库的用户名
           #password: password #访问git仓库的用户密码
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/ #注册到8761
+#eureka:
+#  client:
+ #   serviceUrl:
+  #    defaultZone: http://localhost:8761/eureka/ #注册到8761
