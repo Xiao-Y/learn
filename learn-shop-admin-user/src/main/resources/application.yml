@@ -10,4 +10,4 @@ spring:
   application:
     name: learn-shop-admin-user #客户端名称
 
-words: 123,688,sldfjo,ioweur
+words: ${eureka.instance.hostname}

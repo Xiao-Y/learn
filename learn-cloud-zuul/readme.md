@@ -1,7 +1,7 @@
 路由网关(zuul)：主要用于集群，不必关心端口是多少，只要serviceId相同就可以通过路由表匹配
 
 访问：
-http://localhost:8762/core-order/testOrder/indexUser
+http://localhost:8771/core-order/testOrder/indexUser
 
 原理：
 通过路由表

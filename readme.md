@@ -1,6 +1,7 @@
 核心服务，端口：87**： <br/>
 learn-cloud-eureka  注册中心，端口：8761 <br/>
-learn-cloud-zuul    路由网关，端口：8762 <br/>
+learn-cloud-zuul    路由网关，端口：8771 <br/>
+learn-cloud-config  分布式配置中心，端口：8781 <br/>
 
 公用业务服务，端口：80**： <br/>
 learn-shop-public-common  公用组件，端口： <br/>
@@ -27,8 +28,8 @@ learn-shop-core-product   购物车服务，端口： <br/>
 
 访问：（通过路由） <br/>
 业务服务： <br/>
-http://localhost:8762/core-order #订单相关 <br/>
-http://localhost:8762/admin-user #用户相关 <br/>
+http://localhost:8771/core-order #订单相关 <br/>
+http://localhost:8771/admin-user #用户相关 <br/>
 
 
 注意： <br/>
@@ -36,6 +37,14 @@ http://localhost:8762/admin-user #用户相关 <br/>
 &nbsp;core-order: <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;path: /core-order/** <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;serviceId: learn-shop-core-order <br/>
+
+2.使用配置中心时， <br/>
+记得复制：bootstrap.yml到resources中 <br/>
+添加： <br/>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
 
 
 

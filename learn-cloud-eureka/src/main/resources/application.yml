@@ -1,9 +1,9 @@
 server:
-  port: 8761
+  port: ${eureka.server.port}
 
 eureka:
   instance:
-      hostname: localhost
+      hostname: ${eureka.instance.hostname}
   client:
     register-with-eureka: false #禁用客户端注册
     fetch-registry: false #禁用客户端注册
