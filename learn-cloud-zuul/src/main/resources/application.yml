@@ -1,17 +1,22 @@
+server:
+  port: 8762
+
+spring:
+  application:
+    name: cloud-zuul
+
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-server:
-  port: 8762
-spring:
-  application:
-    name: cloud-zuul
+
 zuul:
   routes:
+    #用户相关
     admin-user:
       path: /admin-user/**
       serviceId: learn-shop-admin-user
+    #订单相关
     core-order:
           path: /core-order/**
           serviceId: learn-shop-core-order
