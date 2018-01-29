@@ -2,11 +2,11 @@
 learn-cloud-eureka  注册中心，端口：8761 <br/>
 learn-cloud-zuul    路由网关，端口：8762 <br/>
 
-公用业务服务，端口：88**： <br/>
+公用业务服务，端口：80**： <br/>
 learn-shop-public-common  公用组件，端口： <br/>
 learn-shop-public-tools 公用工具，端口： <br/>
 
-后端业务服务，端口：80**： <br/>
+后端业务服务，端口：88**： <br/>
 learn-shop-admin-user  用户管理服务，端口：8801 <br/>
 learn-shop-admin-system  系统管理服务，端口： <br/>
 
