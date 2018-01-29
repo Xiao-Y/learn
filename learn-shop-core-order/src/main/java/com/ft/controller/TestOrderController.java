@@ -1,6 +1,6 @@
 package com.ft.controller;
 
-import com.ft.client.TestUserClient;
+import com.ft.remote.TestUserRemote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestOrderController {
 
     @Autowired
-    private TestUserClient testUserClient;
+    private TestUserRemote testUserRemote;
 
     @RequestMapping("/indexUser")
     public String indexUser() {
-        testUserClient.indexClient("testOrder");
         System.out.println("/testOrder/indexUser");
-        return "indexUser/";
+        return testUserRemote.indexClient("testOrder");
     }
 }

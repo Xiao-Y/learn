@@ -10,4 +10,8 @@ spring:
   application:
     name: learn-shop-core-order #客户端名称
 
+feign:
+  hystrix:
+    enabled: true
+
 words: 123,688,sldfjo,ioweur

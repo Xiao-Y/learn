@@ -9,10 +9,6 @@
         <module>learn-cloud-config</module>
         <module>learn-cloud-eureka</module>
         <module>learn-cloud-zuul</module>
-        <module>learn-cloud-hystrix</module>
-        <module>learn-cloud-feign</module>
-        <module>learn-cloud-gateway</module>
-        <module>learn-cloud-ribbon</module>
         <module>learn-shop-admin-system</module>
         <module>learn-shop-admin-user</module>
         <module>learn-shop-core-cart</module>

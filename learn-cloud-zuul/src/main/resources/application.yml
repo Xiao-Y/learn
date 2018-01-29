@@ -1,0 +1,17 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8762
+spring:
+  application:
+    name: cloud-zuul
+zuul:
+  routes:
+    admin-user:
+      path: /admin-user/**
+      serviceId: learn-shop-admin-user
+    core-order:
+          path: /core-order/**
+          serviceId: learn-shop-core-order

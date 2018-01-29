@@ -7,7 +7,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>learn-shop-leading-order</artifactId>
+    <artifactId>learn-shop-core-order</artifactId>
     <packaging>jar</packaging>
 
     <name>learn-shop-core-order</name>
@@ -22,6 +22,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
         <!-- Circuit Breaker: Hystrix Dashboard (断路器：hystrix 仪表盘) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -33,7 +37,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>learn-shop-leading-order</finalName>
+        <finalName>learn-shop-core-order</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
