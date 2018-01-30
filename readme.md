@@ -30,10 +30,16 @@ learn-shop-core-product   购物车服务，端口： <br/>
 
 
 访问：（通过路由） <br/>
+注册中心： <br/>
+http://localhost:8761/eureka <br/>
+
 业务服务： <br/>
 http://localhost:8771/core-order #订单相关 <br/>
 http://localhost:8771/admin-user #用户相关 <br/>
 
+熔断器： <br/>
+访问：http://localhost:<port>/hystrix <br>
+输入：http://localhost:<port>/hystrix.stream <br>
 
 注意： <br/>
 1.添加新服务时，要在learn-cloud-zuul中添加路由表 <br/>
@@ -43,11 +49,6 @@ http://localhost:8771/admin-user #用户相关 <br/>
 
 2.使用配置中心时， <br/>
 记得复制：bootstrap.yml到resources中 <br/>
-添加： <br/>
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-config</artifactId>
-</dependency>
 
 
 
