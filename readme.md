@@ -1,3 +1,6 @@
+所有配置文件都是从配置中心获取： <br/>
+配置文件：learn-cloud-config--->cloud-config-repo-->cloud-config-dev.properties <br/>
+
 核心服务，端口：87**： <br/>
 learn-cloud-eureka  注册中心，端口：8761 <br/>
 learn-cloud-zuul    路由网关，端口：8771 <br/>
@@ -19,8 +22,8 @@ learn-shop-core-product   购物车服务，端口： <br/>
 
 
 项目启动顺序： <br/>
-1.learn-cloud-eureka <br/>
-2.learn-cloud-config <br/>
+1.learn-cloud-config <br/>
+2.learn-cloud-eureka <br/>
 3.learn-cloud-zuul <br/>
 4.启动公用业务服务 <br/>
 5.启动业务服务 <br/>
