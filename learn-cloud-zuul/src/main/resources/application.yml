@@ -1,22 +1,22 @@
 server:
-  port: 8771
+  port: ${config.zuul.server.port}
 
 spring:
   application:
-    name: cloud-zuul
+    name: ${config.zuul.spring.application.name}
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
 
 zuul:
   routes:
     #用户相关
     admin-user:
       path: /admin-user/**
-      serviceId: learn-shop-admin-user
+      serviceId: ${config.admin.user.spring.application.name}
     #订单相关
     core-order:
           path: /core-order/**
-          serviceId: learn-shop-core-order
+          serviceId: ${config.core.order.spring.application.name}

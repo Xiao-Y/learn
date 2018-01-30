@@ -1,13 +1,13 @@
 server:
-  port: 8801
+  port: ${config.admin.user.server.port}
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
 
 spring:
   application:
-    name: learn-shop-admin-user #客户端名称
+    name: ${config.admin.user.spring.application.name} #客户端名称
 
-words: ${eureka.instance.hostname}
+words: ${config.eureka.instance.hostname}

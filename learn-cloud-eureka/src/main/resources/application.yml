@@ -1,14 +1,14 @@
 server:
-  port: ${eureka.server.port}
+  port: ${config.eureka.server.port}
 
 eureka:
   instance:
-      hostname: ${eureka.instance.hostname}
+      hostname: ${config.eureka.instance.hostname}
   client:
-    register-with-eureka: false #禁用客户端注册
-    fetch-registry: false #禁用客户端注册
+    register-with-eureka: ${config.eureka.client.register-with-eureka} #禁用客户端注册
+    fetch-registry: ${config.eureka.client.fetch-registry} #禁用客户端注册
     serviceUrl:
-          defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+          defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
   server:
-    enable-self-preservation: false #关闭自我保护
-    eviction-interval-timer-in-ms: 60000 #清理间隔（单位毫秒，默认是60*1000）
+    enable-self-preservation: ${config.server.enable-self-preservation} #关闭自我保护
+    eviction-interval-timer-in-ms: ${config.server.eviction-interval-timer-in-ms} #清理间隔（单位毫秒，默认是60*1000）

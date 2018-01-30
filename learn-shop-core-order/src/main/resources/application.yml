@@ -1,17 +1,17 @@
 server:
-  port: 8901
+  port: ${config.core.order.server.port}
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
 
 spring:
   application:
-    name: learn-shop-core-order #客户端名称
+    name: ${config.core.order.spring.application.name} #客户端名称
 
 feign:
   hystrix:
-    enabled: true
+    enabled: ${config.admin.user.feign.hystrix.enabled}
 
 words: 123,688,sldfjo,ioweur
