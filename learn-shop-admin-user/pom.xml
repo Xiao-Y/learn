@@ -12,8 +12,16 @@
     <name>learn-shop-admin-user</name>
     <url>http://maven.apache.org</url>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.ft</groupId>
+            <artifactId>learn-shop-public-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
-        <finalName>learn-shop-admin-user</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -12,6 +12,4 @@ spring:
 
 feign:
   hystrix:
-    enabled: ${config.admin.user.feign.hystrix.enabled}
-
-words: 123,688,sldfjo,ioweur
+    enabled: ${config.admin.user.feign.hystrix.enabled} #启动熔断器

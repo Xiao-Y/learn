@@ -13,15 +13,15 @@
     <url>http://maven.apache.org</url>
 
     <dependencies>
-        <!--增加eureka-server的依赖 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <groupId>com.ft</groupId>
+            <artifactId>learn-shop-public-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>learn-store-shop-web</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

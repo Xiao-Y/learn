@@ -23,4 +23,14 @@
             <artifactId>spring-cloud-config-server</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>learn-cloud-config</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

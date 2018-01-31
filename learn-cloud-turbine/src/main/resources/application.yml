@@ -1,0 +1,17 @@
+server:
+  port: ${config.turbine.server.port}
+
+spring:
+  application:
+    name: ${config.turbine.spring.application.name}
+
+turbine:
+  app-config: ${config.turbine.app-config} #配置Eureka中的serviceId列表，表明监控哪些服务
+  aggregator:
+    cluster-config: ${config.turbine.aggregator.cluster-config}
+  cluster-name-expression: ${config.turbine.cluster-name-expression}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${config.eureka.client.serviceUrl.defaultZone}

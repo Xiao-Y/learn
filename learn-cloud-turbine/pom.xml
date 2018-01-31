@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>learn</artifactId>
@@ -7,21 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-shop-core-cart</artifactId>
-    <packaging>jar</packaging>
-
-    <name>learn-shop-core-cart</name>
-    <url>http://maven.apache.org</url>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <artifactId>learn-cloud-turbine</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.ft</groupId>
             <artifactId>learn-shop-public-common</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <!-- 断路器仪表盘聚合 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-turbine</artifactId>
         </dependency>
     </dependencies>
 
