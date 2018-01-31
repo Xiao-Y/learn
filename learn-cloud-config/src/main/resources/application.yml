@@ -2,6 +2,8 @@ server:
   port: 8781
 
 spring:
+  application:
+    name: cloud-config #客户端名称
   cloud:
     config:
       server:
@@ -10,3 +12,8 @@ spring:
           search-paths: learn-cloud-config/cloud-config-repo #指定搜索路径，config-server会自动搜索根目录和指定目录（逗号分隔）下的文件
           #username: username #访问git仓库的用户名
           #password: password #访问git仓库的用户密码
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
