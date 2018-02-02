@@ -59,8 +59,8 @@ http://localhost:8771/admin-user #用户相关 <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;serviceId: learn-shop-core-order <br/>
 
 2.使用配置中心时， <br/>
-记得复制：bootstrap.yml到resources中 <br/>
-
+如果是learn-cloud-* pom中添加learn-cloud-common依赖<br/>
+如果是learn-shop-admin-* 和learn-shop-core-* pom中添加learn-shop-public-common依赖<br/>
 
 
 
