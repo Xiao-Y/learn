@@ -18,6 +18,10 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ft</groupId>
+            <artifactId>learn-cloud-common</artifactId>
+        </dependency>
         <!-- 注册中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

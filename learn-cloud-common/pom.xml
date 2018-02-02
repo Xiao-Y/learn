@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-shop-core-product</artifactId>
+    <artifactId>learn-cloud-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-shop-core-product</name>
+    <name>learn-cloud-common</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -19,18 +19,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ft</groupId>
-            <artifactId>learn-shop-public-common</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>

@@ -1,5 +1,10 @@
 所有配置文件都是从配置中心获取： <br/>
 配置文件：learn-cloud-config--->cloud-config-repo-->cloud-config-dev.properties <br/>
+修改后提交git后才能生效 <br/>
+
+公用组件<br/>
+learn-cloud-common  除learn-cloud-config所有的learn-cloud-* 都要依赖 <br/>
+learn-shop-public-common  依赖learn-cloud-common，所有的learn-shop-admin-* 和learn-shop-core-* 都要依赖<br/>
 
 核心服务，端口：87**： <br/>
 learn-cloud-eureka  注册中心，端口：8761 <br/>
@@ -8,7 +13,6 @@ learn-cloud-config  分布式配置中心，端口：8781 <br/>
 learn-cloud-turbine  熔断器控制聚合，端口：8791 <br/>
 
 公用业务服务，端口：80**： <br/>
-learn-shop-public-common  公用组件，端口： <br/>
 learn-shop-public-tools 公用工具，端口： <br/>
 
 后端业务服务，端口：88**： <br/>

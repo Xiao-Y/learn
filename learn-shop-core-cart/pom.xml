@@ -21,7 +21,6 @@
         <dependency>
             <groupId>com.ft</groupId>
             <artifactId>learn-shop-public-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

@@ -17,6 +17,7 @@
         <module>learn-shop-public-common</module>
         <module>learn-shop-public-tools</module>
         <module>learn-cloud-turbine</module>
+        <module>learn-cloud-common</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -42,6 +43,16 @@
                 <version>Edgware.SR1</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ft</groupId>
+                <artifactId>learn-shop-public-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ft</groupId>
+                <artifactId>learn-cloud-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
