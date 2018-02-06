@@ -27,7 +27,6 @@ public class TestOrderController {
         boolean flag = false;
         try {
             coreOrderProducer.sendOrderCar();
-            coreOrderProducer.timerMessageSource();
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.integration.annotation.InboundChannelAdapter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -34,4 +35,12 @@ public class CoreOrderProducer {
         messageChannel.send(MessageBuilder.withPayload(message).build());
         logger.info("【MQ发送内容】" + message);
     }
+
+    //轮训
+//    @InboundChannelAdapter(value = Source.OUTPUT)
+//    public String timerMessageSource() {
+//        String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+//        logger.info("publish message :"+format);
+//        return format;
+//    }
 }
