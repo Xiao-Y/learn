@@ -14,10 +14,6 @@
     <dependencies>
         <dependency>
             <groupId>com.ft</groupId>
-            <artifactId>learn-cloud-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ft</groupId>
             <artifactId>learn-shop-public-common</artifactId>
         </dependency>
         <!-- 断路器仪表盘聚合 -->

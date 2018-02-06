@@ -9,5 +9,29 @@ eureka:
 spring:
   application:
     name: ${config.admin.user.spring.application.name} #客户端名称
+  cloud:
+    stream:
+      binders:
+        learnMQ:
+          type: ${config.mq.type}
+          environment:
+            spring:
+              rabbitmq:
+                host: ${comfig.mq.host} #rabbitMQ服务器地址
+                port: ${config.mq.port}  #rabbitMQ服务器端口
+                username: ${config.mq.username}
+                password: ${config.mq.password}
+                virtual-host: ${config.mq.virtual-host}
+
+      bindings:
+        input: #channelName
+          binder: learnMQ
+          group: core-cart #默认情况下同一个队列的只能被同一个group的消费者消费
+          contentType: text/plain
+          destination: mydest #指定了消息获取的目的地，对应于MQ就是 exchange
+          consumer:
+            exchangeType: fanout #指定该主题的类型为广播模式
+            autoBindDlq: true #消费失败的消息放入dlq队列
+            republishToDlq: true
 
 words: ${config.eureka.instance.hostname}

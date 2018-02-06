@@ -1,5 +1,6 @@
 package com.ft.controller;
 
+import com.ft.producer.CoreOrderProducer;
 import com.ft.remote.TestUserRemote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +13,25 @@ public class TestOrderController {
     @Autowired
     private TestUserRemote testUserRemote;
 
+    @Autowired
+    private CoreOrderProducer coreOrderProducer;
+
     @RequestMapping("/indexUser")
     public String indexUser() {
         System.out.println("/testOrder/indexUser");
         return testUserRemote.indexClient("testOrder");
+    }
+
+    @RequestMapping("/sendMQ")
+    public boolean sendMQ() {
+        boolean flag = false;
+        try {
+            coreOrderProducer.sendOrderCar();
+            coreOrderProducer.timerMessageSource();
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 }

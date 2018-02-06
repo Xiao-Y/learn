@@ -1,5 +1,5 @@
 server:
-  port: ${config.core.order.server.port}
+  port: ${config.stream.server.port}
 
 eureka:
   client:
@@ -8,7 +8,7 @@ eureka:
 
 spring:
   application:
-    name: ${config.core.order.spring.application.name} #客户端名称
+    name: ${config.stream.spring.application.name}
   cloud:
     stream:
       binders:
@@ -24,10 +24,12 @@ spring:
                 virtual-host: ${config.mq.virtual-host}
 
       bindings:
-        output: #channelName
+        shop-core-cart: #channelName
           binder: learnMQ
+          group: core-cart #默认情况下同一个队列的只能被同一个group的消费者消费
+          contentType: text/plain
           destination: mydest #指定了消息获取的目的地，对应于MQ就是 exchange
-
-feign:
-  hystrix:
-    enabled: ${config.admin.user.feign.hystrix.enabled} #启动熔断器
+          consumer:
+            exchangeType: fanout #指定该主题的类型为广播模式
+            autoBindDlq: true #消费失败的消息放入dlq队列
+            republishToDlq: true
