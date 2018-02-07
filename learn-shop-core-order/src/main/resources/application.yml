@@ -24,9 +24,9 @@ spring:
                 virtual-host: ${config.mq.virtual-host}
 
       bindings:
-        output: #channelName
+        output: #channelName，生产者
           binder: learnMQ
-          destination: mydest #指定了消息获取的目的地，对应于MQ就是 exchange
+          destination: ${config.mq.orderToUser.orderStatus} #指定了消息获取的目的地，对应于MQ就是 exchange
 
 feign:
   hystrix:

@@ -18,7 +18,6 @@
         <module>learn-shop-public-tools</module>
         <module>learn-cloud-turbine</module>
         <module>learn-cloud-common</module>
-        <module>learn-cloud-stream</module>
     </modules>
     <packaging>pom</packaging>
 

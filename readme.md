@@ -52,6 +52,9 @@ http://localhost:8771/admin-user #用户相关 <br/>
 访问：http://http://localhost:8791/hystrix <br>
 输入：http://localhost:<port>/hystrix.stream <br>
 
+RabbitMQ: 管理页面 <br>
+http://localhost:15672 <br>
+
 注意： <br/>
 1.添加新服务时，要在learn-cloud-zuul中添加路由表 <br/>
 &nbsp;core-order: <br/>
@@ -59,8 +62,15 @@ http://localhost:8771/admin-user #用户相关 <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;serviceId: learn-shop-core-order <br/>
 
 2.使用配置中心时， <br/>
+配置中心启动时会向注册中心注册，这里注册中心还没启动会报异常，不用关心 <br/>
 如果是learn-cloud-* pom中添加learn-cloud-common依赖<br/>
-如果是learn-shop-admin-* 和learn-shop-core-* pom中添加learn-shop-public-common依赖<br/>
+如果是learn-shop-admin-* 和learn-shop-core-* pom中添加learn-shop-public-common依赖 <br/>
 
+3.项目需要启动RabbitMQ, rabbitmq-server.bat <br/>
+    添加新用户：admin 密码：admin123，修改admin用为超级管理员 <br/>
+    查询所有用户：rabbitmqctl.bat list_users  <br/>
+    添加新用户: rabbitmqctl.bat add_user  username password  <br/>
+    赋予用户权限：rabbitmqctl.bat set_user_tags username administrator <br/>
+    在admin中设定虚拟主机（virtual-host）为/learn-default <br/>
 
 
