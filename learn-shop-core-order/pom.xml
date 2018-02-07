@@ -18,10 +18,6 @@
             <groupId>com.ft</groupId>
             <artifactId>learn-shop-public-common</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

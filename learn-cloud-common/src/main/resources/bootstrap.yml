@@ -5,3 +5,16 @@ spring:
       label: master #指明远程仓库的分支
       profile: dev #dev开发环境配置文件 #test测试环境 #pro正式环境
       uri: http://localhost:8781/ #指明配置服务中心的网址
+
+    stream: #mq连接配置
+      binders:
+        learnMQ:
+          type: ${config.mq.type}
+          environment:
+            spring:
+              rabbitmq:
+                host: ${comfig.mq.host} #rabbitMQ服务器地址
+                port: ${config.mq.port}  #rabbitMQ服务器端口
+                username: ${config.mq.username}
+                password: ${config.mq.password}
+                virtual-host: ${config.mq.virtual-host}

@@ -22,6 +22,11 @@
             <groupId>com.ft</groupId>
             <artifactId>learn-cloud-common</artifactId>
         </dependency>
+        <!-- rabbit,用于配置中心文件修改通知和发送其它系统间通知 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+        </dependency>
         <!-- 注册中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -38,6 +43,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-hystrix</artifactId>
         </dependency>
+        <!-- 监控 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>

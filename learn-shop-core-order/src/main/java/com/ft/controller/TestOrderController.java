@@ -3,6 +3,7 @@ package com.ft.controller;
 import com.ft.producer.CoreOrderProducer;
 import com.ft.remote.TestUserRemote;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,8 @@ public class TestOrderController {
         return testUserRemote.indexClient("testOrder");
     }
 
-    @RequestMapping("/sendMQ")
+    //@RequestMapping("/sendMQ")
+    @GetMapping("/sendMQ")
     public boolean sendMQ() {
         boolean flag = false;
         try {
