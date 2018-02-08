@@ -1,10 +1,20 @@
 server:
   port: ${config.core.order.server.port}
 
+swagger: #接口注解文档
+  basepackage: com.ft.controller #扫描的包，必须要有 GetMapping，PostMapping...
+  service:
+    name: ${spring.application.name} #api名称
+    version: 1.0
+    developer: lyongtao123@126.com #api开发者
+    description: learn-shop 提供的RESTful APIs #api描述
+
 eureka:
   client:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
+  instance:
+      status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
 
 spring:
   application:
