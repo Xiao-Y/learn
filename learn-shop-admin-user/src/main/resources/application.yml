@@ -10,7 +10,18 @@ spring:
   application:
     name: ${config.admin.user.spring.application.name} #客户端名称
   cloud:
-    stream:
+    stream: #mq连接配置
+      binders:
+        learnMQ:
+          type: ${config.mq.type}
+          environment:
+            spring:
+              rabbitmq:
+                host: ${comfig.mq.host} #rabbitMQ服务器地址
+                port: ${config.mq.port}  #rabbitMQ服务器端口
+                username: ${config.mq.username}
+                password: ${config.mq.password}
+                virtual-host: ${config.mq.virtual-host}
       bindings:
         input: #channelName，消费者
           binder: learnMQ #使用名称为learnMQ的环境
@@ -21,5 +32,18 @@ spring:
             exchangeType: fanout #指定该主题的类型为广播模式
             autoBindDlq: true #消费失败的消息放入dlq队列
             republishToDlq: true
+  jpa: #JPA配置
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+#日志配置
+#logging:
+#  level:
+#    root: INFO
+#    org.hibernate: INFO
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
+#    com.itmuch.youran.persistence: ERROR
 #测试
 words: ${config.eureka.instance.hostname}
