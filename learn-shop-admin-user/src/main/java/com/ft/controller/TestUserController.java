@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Api(value = "用户操作TestUserController", tags = {"用户操作接口"})
+@Api(value = "TestUserController", description = "用户操作测试")
 @RestController
 @RequestMapping("/testUser")
 public class TestUserController {
@@ -26,6 +26,7 @@ public class TestUserController {
     @Autowired
     private CityService cityService;
 
+    @ApiOperation(value = "获取用户信息", notes = "用户信息测试")
     @GetMapping("/indexUser")
     public String indexUser(String name) {
         System.out.println(words);

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(value = "查询订单信息TestOrderController")
+@Api(value = "TestOrderController", description = "订单管理测试")
 @RestController
 @RequestMapping("/testOrder")
 public class TestOrderController {
@@ -20,14 +20,14 @@ public class TestOrderController {
     @Autowired
     private CoreOrderProducer coreOrderProducer;
 
-    @ApiOperation(value = "用于测试远程调用用户系统")
+    @ApiOperation(value = "调用用户系统", notes = "用于测试远程调用用户系统")
     @GetMapping("/indexUser")
     public String indexUser() {
         System.out.println("/testOrder/indexUser");
         return testUserRemote.indexClient("testOrder");
     }
 
-    @ApiOperation(value = "用于测试发送MQ消息")
+    @ApiOperation(value = "发送MQ消息", notes = "用于测试发送MQ消息")
     @GetMapping("/sendMQ")
     public boolean sendMQ() {
         boolean flag = false;

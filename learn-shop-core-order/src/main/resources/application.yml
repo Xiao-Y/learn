@@ -7,20 +7,20 @@ swagger: #接口注解文档
     name: ${spring.application.name} #api名称
     version: 1.0
     developer: lyongtao123@126.com #api开发者
-    description: learn-shop 提供的RESTful APIs #api描述
+    description: learn-shop 提供的Restful APIs #api描述
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
+      defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
   instance:
-      status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
+    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
 
 spring:
   application:
     name: ${config.core.order.spring.application.name} #客户端名称
   cloud:
-    stream:
+    stream: #mq连接配置
       binders:
         learnMQ:
           type: ${config.mq.type}
