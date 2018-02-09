@@ -58,6 +58,10 @@ http://localhost:15672 <br>
 Druid: 管理页面 <br>
 http://localhost:<port>/druid <br>
 
+Swagger2: 管理页面 <br>
+http://localhost:<port>/swagger-ui.html <br>
+或者进入注册中心点击实例链接直接查看<br/>
+
 注意： <br/>
 1.添加新服务时，要在learn-cloud-zuul中添加路由表 <br/>
 &nbsp;core-order: <br/>
