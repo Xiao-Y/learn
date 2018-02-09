@@ -80,4 +80,5 @@ http://localhost:<port>/swagger-ui.html <br>
     赋予用户权限：rabbitmqctl.bat set_user_tags username administrator <br/>
     在admin中设定虚拟主机（virtual-host）为/learn-default <br/>
 
-
+4.swagger2注解使用说明： <br/>
+https://www.jianshu.com/p/12f4394462d5 <br/>
