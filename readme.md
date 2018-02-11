@@ -14,6 +14,7 @@ learn-cloud-turbine  熔断器控制聚合，端口：8791 <br/>
 
 公用业务服务，端口：80**： <br/>
 learn-shop-public-tools 公用工具，端口： <br/>
+learn-shop-public-job 自动任务，端口：8011 <br/>
 
 后端业务服务，端口：88**： <br/>
 learn-shop-admin-user  用户管理服务，端口：8801 <br/>

@@ -6,22 +6,22 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 夸系统事务运行操作,记录待发布事件
+ * 夸系统事务运行操作,记录待处理事件
  *
  * @author liuyongtao
  * @create 2018-02-09 15:03
  */
 @Entity
-@Table(name = "sys_event_publish")
-public class SysEventPublish {
+@Table(name = "sys_event_process")
+public class SysEventProcess {
 
     @Id
-    private String id;
-    //事件状态, 枚举类型. 现在只有两个状态: 待发布(NEW), 已发布(PUBLISHED)
+    private String id; //与发布事件的id相同
+    //事件状态, 枚举类型. 现在只有两个状态: 待处理(NEW), 已处理(PUBLISHED)
     private String status;
-    //发布事件的服务器ip
+    //处理事件的服务器ip
     private String ip;
-    //发布事件的类名和处理方法名
+    //处理事件的类名和处理方法名
     private String className;
     //事件类型
     private String eventType;
@@ -98,7 +98,7 @@ public class SysEventPublish {
 
     @Override
     public String toString() {
-        return "SysEventPublish{" +
+        return "SysEventProcess{" +
                 "id='" + id + '\'' +
                 ", status='" + status + '\'' +
                 ", ip='" + ip + '\'' +
