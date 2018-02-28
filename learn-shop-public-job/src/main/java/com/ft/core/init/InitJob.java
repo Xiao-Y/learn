@@ -33,7 +33,7 @@ public class InitJob implements InitializingBean {
         try {
             ScheduleJobDto scheduleJobDto = new ScheduleJobDto();
             scheduleJobDto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus());
-            List<ScheduleJobDto> list = scheduleJobService.selectAll(scheduleJobDto);
+            List<ScheduleJobDto> list = scheduleJobService.findByJobStatus(scheduleJobDto);
             if (ToolsUtils.isNotEmpty(list)) {
                 quartzManager.addJobList(list);
             }

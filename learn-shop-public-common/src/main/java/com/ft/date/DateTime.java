@@ -1218,4 +1218,19 @@ public class DateTime extends Date implements Serializable {
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return format.format(cal.getTime());
     }
+
+    /**
+     * 时间格式化
+     *
+     * @param date
+     * @return
+     */
+    public static String getSimpleDateFormat(Date... date) {
+        Date currDate = new Date();
+        if (date != null && date.length > 0) {
+            currDate = date[0];
+        }
+        String message = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(currDate);
+        return message;
+    }
 }

@@ -3,6 +3,9 @@ package com.ft.model.expand;
 
 import com.ft.model.domain.ScheduleJobLogBase;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * 自动任务信息日志model模型<br>
  *
@@ -11,6 +14,8 @@ import com.ft.model.domain.ScheduleJobLogBase;
  * @Mail lyongtao123@126.com<br>
  * @date 2017-12-08 15:46:02
  */
+@Entity
+@Table(name = "sys_schedule_job_log")
 public class ScheduleJobLogDto extends ScheduleJobLogBase {
 
     public ScheduleJobLogDto() {
