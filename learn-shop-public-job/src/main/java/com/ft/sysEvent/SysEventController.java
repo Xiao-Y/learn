@@ -1,6 +1,6 @@
 package com.ft.sysEvent;
 
-import com.ft.mq.SysEvent.SysEventInterface;
+import com.ft.sysEvent.mq.SysEventInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

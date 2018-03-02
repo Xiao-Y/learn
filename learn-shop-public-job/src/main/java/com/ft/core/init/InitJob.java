@@ -18,8 +18,9 @@ import java.util.List;
  * @author liuyongtao
  * @date 2017年5月12日 下午6:44:08
  */
-@Service
-public class InitJob implements InitializingBean {
+//@Service
+//public class InitJob implements InitializingBean {
+public class InitJob {
     private static final Logger logger = Logger.getLogger(InitJob.class);
 
     @Autowired
@@ -27,7 +28,7 @@ public class InitJob implements InitializingBean {
     @Autowired
     private QuartzManager quartzManager;
 
-    @Override
+    //@Override
     public void afterPropertiesSet() throws Exception {
         logger.info("==============================初始化自动任务开始===========================");
         try {

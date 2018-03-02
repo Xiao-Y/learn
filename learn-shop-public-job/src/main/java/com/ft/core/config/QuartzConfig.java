@@ -13,8 +13,8 @@ import java.io.IOException;
  * @author liuyongtao
  * @create 2018-02-28 10:37
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 public class QuartzConfig {
 
     @Bean

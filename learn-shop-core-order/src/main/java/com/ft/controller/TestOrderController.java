@@ -2,6 +2,7 @@ package com.ft.controller;
 
 import com.ft.producer.CoreOrderProducer;
 import com.ft.remote.TestUserRemote;
+import com.ft.service.CoreOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class TestOrderController {
 
     @Autowired
     private CoreOrderProducer coreOrderProducer;
+    @Autowired
+    private CoreOrderService coreOrderService;
 
     @ApiOperation(value = "调用用户系统", notes = "用于测试远程调用用户系统")
     @GetMapping("/indexUser")
@@ -33,6 +36,19 @@ public class TestOrderController {
         boolean flag = false;
         try {
             coreOrderProducer.sendOrderCar();
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    @ApiOperation(value = "发送TxMQ消息", notes = "用于测试事务处理发送MQ消息")
+    @GetMapping("/sendTxMQ")
+    public boolean sendTxMQ() {
+        boolean flag = false;
+        try {
+            coreOrderService.sendOrderCar();
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -55,6 +55,10 @@ public class TaskUtils {
             }
             clazz = object.getClass();
             // 获取自动任务要执行的方法
+            Method[] methods = clazz.getMethods();
+            for (Method m : methods) {
+                System.out.println(m.getName());
+            }
             method = clazz.getDeclaredMethod(scheduleJob.getMethodName());
             if (method == null) {
                 throw new RuntimeException("任务名称 = [" + scheduleJob.getJobName() + "] 方法名设置错误！！！");

@@ -33,12 +33,12 @@ spring:
                 password: ${config.mq.password}
                 virtual-host: ${config.mq.virtual-host}
       bindings:
-        sysEventPublish: #channelName，生产者,系统事务处理,待发布
+        outSysEventPublish: #channelName，生产者,系统事务处理,待发布
           binder: learnMQ #使用名称为learnMQ的环境
           destination: ${config.mq.tx.SysEventPublish} #指定了消息获取的目的地，对应于MQ就是 exchange
         sysEventProcess: #channelName，生产者,系统事务处理,待处理
           binder: learnMQ #使用名称为learnMQ的环境
-          destination: ${config.mq.tx.SysEventProcess} #指定了消息获取的目的地，对应于MQ就是 exchange
+          destination: ${config.mq.tx.SysEventProcessBase} #指定了消息获取的目的地，对应于MQ就是 exchange
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true

@@ -1,8 +1,7 @@
-package com.ft.model;
+package com.ft.sysEvent.model.domain;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
 /**
@@ -11,9 +10,8 @@ import java.util.Date;
  * @author liuyongtao
  * @create 2018-02-09 15:03
  */
-@Entity
-@Table(name = "sys_event_process")
-public class SysEventProcess {
+@MappedSuperclass
+public class SysEventProcessBase {
 
     @Id
     private String id; //与发布事件的id相同
@@ -98,7 +96,7 @@ public class SysEventProcess {
 
     @Override
     public String toString() {
-        return "SysEventProcess{" +
+        return "SysEventProcessBase{" +
                 "id='" + id + '\'' +
                 ", status='" + status + '\'' +
                 ", ip='" + ip + '\'' +

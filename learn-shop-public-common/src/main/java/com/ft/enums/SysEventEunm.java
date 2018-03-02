@@ -7,7 +7,12 @@ import java.util.Objects;
  */
 public enum SysEventEunm {
 
-    status_new("NEW", "新事件"), status_published("PUBLISHED", "新事件");
+    status_new("NEW", "新事件"),
+    status_exception("EXCEPTION", "事件处理异常"),
+    status_publish("PUBLISH", "待发布"),
+    status_published("PUBLISHED", "已发布"),
+    status_process("PROCESS", "待处理"),
+    status_processed("PROCESSED", "已处理");
 
     private String statusCode;
     private String statusName;
@@ -31,5 +36,21 @@ public enum SysEventEunm {
             }
         }
         return null;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 }

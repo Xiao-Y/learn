@@ -39,6 +39,7 @@
         <quartz.version>2.2.1</quartz.version>
         <qrgen.version>2.0</qrgen.version>
         <commons-lang3.version>3.4</commons-lang3.version>
+        <fastjson.version>1.2.44</fastjson.version>
     </properties>
 
     <dependencyManagement>
@@ -99,6 +100,12 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

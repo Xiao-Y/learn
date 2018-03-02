@@ -1,4 +1,4 @@
-package com.ft.service.autoTask;
+package com.ft.autoTask;
 
 import com.ft.date.DateTime;
 import org.apache.log4j.Logger;
@@ -16,8 +16,9 @@ public class TestAutoTask {
         try {
             System.out.println("=====================" + TestAutoTask.class.getName() + "=====" + DateTime.getSimpleDateFormat() + "======================");
             //System.out.println(1/0);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+            logger.error(e);
         }
         //logger.info("=====================" + TestAutoTask.class.getName() + DateTime.getSimpleDateFormat() + "======================");
     }

@@ -3,6 +3,7 @@ package com.ft.service.impl;
 import com.ft.dao.TestRepository;
 import com.ft.model.TestModel;
 import com.ft.service.TestService;
+import com.ft.sysEvent.dao.SysEventPublishDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,11 @@ public class TestServiceImpl implements TestService {
     @Transactional
     @Override
     public void save(TestModel test) {
+        testRepository.save(test);
+    }
+
+    @Override
+    public void saveProcess(TestModel test) {
         testRepository.save(test);
     }
 
