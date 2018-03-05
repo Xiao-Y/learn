@@ -3,6 +3,7 @@ package com.ft.service;
 
 import com.ft.model.custom.JsonResult;
 import com.ft.model.expand.ScheduleJobDto;
+import org.quartz.JobExecutionContext;
 
 /**
  * 任务管理
@@ -61,4 +62,13 @@ public interface TaskManagerService {
      * @param scheduleJobDto
      */
     void immediateExecutionTask(ScheduleJobDto scheduleJobDto) throws Exception;
+
+    /**
+     * 插入自动任务中异常信息并且信息自动任务标识为异常
+     *
+     * @param jobExecutionContext
+     * @param exception           异常信息
+     * @throws Exception
+     */
+    void insertAutoTaskException(JobExecutionContext jobExecutionContext, Exception exception) throws Exception;
 }

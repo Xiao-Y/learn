@@ -1,6 +1,11 @@
 package com.ft.sysEvent;
 
+import com.ft.core.manager.QuartzManager;
+import com.ft.model.expand.ScheduleJobDto;
+import com.ft.service.TaskManagerService;
 import com.ft.sysEvent.mq.SysEventInterface;
+import com.netflix.discovery.converters.Auto;
+import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +31,29 @@ public class SysEventController {
 
     @Autowired
     private SysEventInterface sysEventInterface;
+    @Autowired
+    private TaskManagerService taskManagerService;
 
     @GetMapping("/sysEventSend")
     public void sysEventSend() {
         String message = "系统事件：测试 " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         sysEventInterface.outSysEventPublish().send(MessageBuilder.withPayload(message).build());
         logger.info("【MQ发送内容】" + message);
+    }
+
+    @GetMapping("/sysQuartz")
+    public void sysQuartz() {
+        ScheduleJobDto job = new ScheduleJobDto();
+        job.setJobId(6);
+        job.setJobGroup("test6_group");
+        job.setJobName("test6_name");
+        job.setCronExpression("0/2 * * * * ?");
+        job.setBeanClass("com.ft.autoTask.sysEvent.SysEventPublishAutoTask");
+        try {
+            taskManagerService.saveAutoTask(job);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.info("添加完毕...");
     }
 }

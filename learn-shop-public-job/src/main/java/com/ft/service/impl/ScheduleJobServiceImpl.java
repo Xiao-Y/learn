@@ -6,6 +6,7 @@ import com.ft.service.ScheduleJobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
+    @Transactional
     public void updateJobStatus(ScheduleJobDto dto) {
         ScheduleJobDto jobDto = scheduleJobDao.findOne(dto.getJobId());
         if (jobDto != null) {
@@ -42,16 +44,19 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
+    @Transactional
     public void updateByPrimaryKeySelective(ScheduleJobDto dto) {
         scheduleJobDao.save(dto);
     }
 
     @Override
+    @Transactional
     public void deleteByPrimaryKey(ScheduleJobDto dto) {
         scheduleJobDao.delete(dto.getJobId());
     }
 
     @Override
+    @Transactional
     public void insert(ScheduleJobDto dto) {
         scheduleJobDao.save(dto);
     }

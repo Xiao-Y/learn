@@ -4,8 +4,11 @@ package com.ft.service.impl;
 import com.ft.constant.MessageTipsCst;
 import com.ft.core.enumType.AutoTaskJobStatusEnum;
 import com.ft.core.manager.QuartzManager;
+import com.ft.generator.UUID;
 import com.ft.model.custom.JsonResult;
 import com.ft.model.expand.ScheduleJobDto;
+import com.ft.model.expand.ScheduleJobLogDto;
+import com.ft.service.ScheduleJobLogService;
 import com.ft.service.ScheduleJobService;
 import com.ft.service.TaskManagerService;
 import com.ft.utlis.BeanUtils;
@@ -13,9 +16,13 @@ import com.ft.utlis.ToolsUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobDetail;
 
+import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Date;
 
 @Service
@@ -27,7 +34,11 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Autowired
     private ScheduleJobService scheduleJobService;
 
+    @Autowired
+    private ScheduleJobLogService scheduleJobLogService;
+
     @Override
+    @Transactional
     public void updateJobStatus(ScheduleJobDto dto) throws Exception {
         ScheduleJobDto scheduleJobDto = scheduleJobService.selectByPrimaryKey(dto);
         if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(dto.getJobStatus())) {
@@ -39,6 +50,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
+    @Transactional
     public void deleteAutoTask(int jobId) throws Exception {
         ScheduleJobDto dto = new ScheduleJobDto();
         dto.setJobId(jobId);
@@ -48,6 +60,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
+    @Transactional
     public void saveAutoTask(ScheduleJobDto scheduleJobDto) throws Exception {
         Integer jobId = scheduleJobDto.getJobId();
         String jobStatus = scheduleJobDto.getJobStatus();
@@ -138,5 +151,26 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Override
     public void immediateExecutionTask(ScheduleJobDto scheduleJobDto) throws Exception {
         quartzManager.runAJobNow(scheduleJobDto);
+    }
+
+    @Override
+    public void insertAutoTaskException(JobExecutionContext jobExecutionContext, Exception exception) throws Exception {
+        ScheduleJobDto scheduleJob = (ScheduleJobDto) jobExecutionContext.getMergedJobDataMap().get("scheduleJob");
+        ScheduleJobDto jobdto = new ScheduleJobDto();
+        jobdto.setJobId(scheduleJob.getJobId());
+        jobdto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
+        scheduleJobService.updateJobStatus(jobdto);
+        if (exception != null) {
+            StringWriter sw = new StringWriter();
+            exception.printStackTrace(new PrintWriter(sw, true));
+            ScheduleJobLogDto logDto = new ScheduleJobLogDto();
+            logDto.setId(UUID.generate());
+            logDto.setJobId(scheduleJob.getJobId());
+            logDto.setJobGroup(scheduleJob.getJobGroup());
+            logDto.setJobName(scheduleJob.getJobName());
+            logDto.setCreateTime(new Date());
+            logDto.setInfo(sw.toString());
+            scheduleJobLogService.insert(logDto);
+        }
     }
 }

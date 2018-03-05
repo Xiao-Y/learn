@@ -1,12 +1,9 @@
 package com.ft.core.manager;
 
-import com.ft.core.enumType.AutoTaskJobConcurrentEnum;
-import com.ft.core.quartzJobFactory.QuartzJobFactory;
-import com.ft.core.quartzJobFactory.QuartzJobFactoryDisallowConcurrentExecution;
 import com.ft.model.expand.ScheduleJobDto;
 import org.apache.log4j.Logger;
-
 import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -17,11 +14,8 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
-import org.quartz.CronTrigger;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +51,7 @@ public class QuartzManager {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         GroupMatcher<JobKey> matcher = GroupMatcher.anyJobGroup();
         Set<JobKey> jobKeys = scheduler.getJobKeys(matcher);
-        List<ScheduleJobDto> jobList = new ArrayList<ScheduleJobDto>();
+        List<ScheduleJobDto> jobList = new ArrayList<>();
         for (JobKey jobKey : jobKeys) {
             List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
             for (Trigger trigger : triggers) {
@@ -91,7 +85,7 @@ public class QuartzManager {
     public List<ScheduleJobDto> getRunningJob() throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
-        List<ScheduleJobDto> jobList = new ArrayList<ScheduleJobDto>(executingJobs.size());
+        List<ScheduleJobDto> jobList = new ArrayList<>(executingJobs.size());
         for (JobExecutionContext executingJob : executingJobs) {
             ScheduleJobDto job = new ScheduleJobDto();
             JobDetail jobDetail = executingJob.getJobDetail();
@@ -213,21 +207,23 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:37
      */
-    public void addJob(ScheduleJobDto job) throws SchedulerException {
+    public void addJob(ScheduleJobDto job) throws Exception {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName(), job.getJobGroup());
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         // 不存在，创建一个
         if (null == trigger) {
-            Class<? extends Job> clazz;
-            if (AutoTaskJobConcurrentEnum.CONCURRENT_NOT.getIsConcurrent().equals(job.getIsConcurrent())) {
-                clazz = QuartzJobFactory.class;
-            } else {
-                clazz = QuartzJobFactoryDisallowConcurrentExecution.class;
-            }
+//            Class<? extends Job> clazz;
+//            if (AutoTaskJobConcurrentEnum.CONCURRENT_NOT.getIsConcurrent().equals(job.getIsConcurrent())) {
+//                clazz = QuartzJobFactory.class;
+//            } else {
+//                clazz = QuartzJobFactoryDisallowConcurrentExecution.class;
+//            }
             // 指定Job在Scheduler中所属组及名称
+            //JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();
+            Class<Job> clazz = (Class<Job>) Class.forName(job.getBeanClass());
             JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();
-            jobDetail.getJobDataMap().put("scheduleJob", job);
+            //jobDetail.getJobDataMap().put("scheduleJob", job);
             // 设置调度的时间规则
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             // 创建一个SimpleTrigger实例，指定该Trigger在Scheduler中所属组及名称
@@ -254,7 +250,7 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:37
      */
-    public void addJobList(List<ScheduleJobDto> list) throws SchedulerException {
+    public void addJobList(List<ScheduleJobDto> list) throws Exception {
         for (ScheduleJobDto job : list) {
             this.addJob(job);
         }
