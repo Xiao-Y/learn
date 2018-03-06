@@ -7,12 +7,15 @@ import java.util.Objects;
  */
 public enum SysEventEunm {
 
-    status_new("NEW", "新事件"),
-    status_exception("EXCEPTION", "事件处理异常"),
     status_publish("PUBLISH", "待发布"),
     status_published("PUBLISHED", "已发布"),
+    status_pub_exception("PUB_EXCEPTION", "事件发布异常"),
+
     status_process("PROCESS", "待处理"),
-    status_processed("PROCESSED", "已处理");
+    status_processed("PROCESSED", "已处理"),
+    status_pro_exception("PRO_EXCEPTION", "已处理-异常"),
+
+    status_fail("FAIL", "失败");
 
     private String statusCode;
     private String statusName;

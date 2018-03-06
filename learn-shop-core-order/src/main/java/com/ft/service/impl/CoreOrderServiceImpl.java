@@ -34,8 +34,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
         sysEventPublishDto.setUpdateDate(new Date());
         sysEventPublishDto.setEventType("66666");
         sysEventPublishDto.setId(UUID.generate());
-        sysEventPublishDto.setPayload("99999");
-        sysEventPublishDto.setStatus(SysEventEunm.status_new.getStatusCode());
+        sysEventPublishDto.setStatus(SysEventEunm.status_publish.getStatusCode());
         sysEventPublishService.save(sysEventPublishDto);
 
         System.out.println("业务执行完毕...");

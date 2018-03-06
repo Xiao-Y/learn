@@ -1,5 +1,6 @@
 package com.ft.sysEvent;
 
+import com.ft.core.enumType.AutoTaskJobStatusEnum;
 import com.ft.core.manager.QuartzManager;
 import com.ft.model.expand.ScheduleJobDto;
 import com.ft.service.TaskManagerService;
@@ -44,13 +45,27 @@ public class SysEventController {
     @GetMapping("/sysQuartz")
     public void sysQuartz() {
         ScheduleJobDto job = new ScheduleJobDto();
-        job.setJobId(6);
+        job.setJobId(3);
         job.setJobGroup("test6_group");
         job.setJobName("test6_name");
         job.setCronExpression("0/2 * * * * ?");
+        job.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus());
         job.setBeanClass("com.ft.autoTask.sysEvent.SysEventPublishAutoTask");
         try {
             taskManagerService.saveAutoTask(job);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ScheduleJobDto job2 = new ScheduleJobDto();
+        job2.setJobId(4);
+        job2.setJobGroup("test6_group");
+        job2.setJobName("test7_name");
+        job2.setCronExpression("0/2 * * * * ?");
+        job2.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus());
+        job2.setBeanClass("com.ft.autoTask.sysEvent.SysEventProcessAutoTask");
+        try {
+            taskManagerService.saveAutoTask(job2);
         } catch (Exception e) {
             e.printStackTrace();
         }

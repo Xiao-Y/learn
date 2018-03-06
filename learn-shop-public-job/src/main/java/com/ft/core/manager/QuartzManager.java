@@ -213,17 +213,10 @@ public class QuartzManager {
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         // 不存在，创建一个
         if (null == trigger) {
-//            Class<? extends Job> clazz;
-//            if (AutoTaskJobConcurrentEnum.CONCURRENT_NOT.getIsConcurrent().equals(job.getIsConcurrent())) {
-//                clazz = QuartzJobFactory.class;
-//            } else {
-//                clazz = QuartzJobFactoryDisallowConcurrentExecution.class;
-//            }
-            // 指定Job在Scheduler中所属组及名称
-            //JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();
             Class<Job> clazz = (Class<Job>) Class.forName(job.getBeanClass());
+            // 指定Job在Scheduler中所属组及名称
             JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();
-            //jobDetail.getJobDataMap().put("scheduleJob", job);
+            jobDetail.getJobDataMap().put("scheduleJob", job);
             // 设置调度的时间规则
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             // 创建一个SimpleTrigger实例，指定该Trigger在Scheduler中所属组及名称
