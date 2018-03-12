@@ -1,6 +1,7 @@
 package com.ft.service.impl;
 
 import com.ft.enums.SysEventEunm;
+import com.ft.enums.SysEventTypeEunm;
 import com.ft.generator.UUID;
 import com.ft.service.CoreOrderService;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
@@ -32,7 +33,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
         sysEventPublishDto.setClassName("123123");
         sysEventPublishDto.setCreateDate(new Date());
         sysEventPublishDto.setUpdateDate(new Date());
-        sysEventPublishDto.setEventType("66666");
+        sysEventPublishDto.setEventType(SysEventTypeEunm.Event_Type_orderToUser_test.getStatusCode());
         sysEventPublishDto.setId(UUID.generate());
         sysEventPublishDto.setStatus(SysEventEunm.status_publish.getStatusCode());
         sysEventPublishService.save(sysEventPublishDto);

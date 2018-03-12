@@ -3,6 +3,7 @@ package com.ft.consumer;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ft.enums.SysEventEunm;
+import com.ft.enums.SysEventTypeEunm;
 import com.ft.model.TestModel;
 import com.ft.service.TestService;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
@@ -38,25 +39,27 @@ public class TxSysEventProcessConsumer {
         logger.info("sysEventProcessMessage=====MQ消费: " + message);
         boolean flag = false;
         //消费
-        Map<String, String> jsonMap = JSON.parseObject(message, Map.class);
-        try {
-            TestModel test = new TestModel();
-            test.setAge(22);
-            test.setCreateDate(new Date());
-            test.setUpdateDate(new Date());
-            test.setName("billow");
-            testService.saveProcess(test);
-        } catch (Exception e) {
-            e.printStackTrace();
-            flag = true;
-        } finally {
-            SysEventPublishDto sysEventPublishDto = sysEventPublishService.findById(jsonMap.get("uuid"));
-            if (flag) {
-                sysEventPublishDto.setStatus(SysEventEunm.status_pro_exception.getStatusCode());
-            } else {
-                sysEventPublishDto.setStatus(SysEventEunm.status_processed.getStatusCode());
+        Map<String, Object> jsonMap = JSON.parseObject(message, Map.class);
+        if (SysEventTypeEunm.event_type_orderToUser_test.getStatusCode().equals(jsonMap.get("sysEventPublish"))) {
+            try {
+                TestModel test = new TestModel();
+                test.setAge(22);
+                test.setCreateDate(new Date());
+                test.setUpdateDate(new Date());
+                test.setName("billow");
+                testService.saveProcess(test);
+            } catch (Exception e) {
+                e.printStackTrace();
+                flag = true;
+            } finally {
+                SysEventPublishDto sysEventPublishDto = sysEventPublishService.findById(jsonMap.get("uuid").toString());
+                if (flag) {
+                    sysEventPublishDto.setStatus(SysEventEunm.status_pro_exception.getStatusCode());
+                } else {
+                    sysEventPublishDto.setStatus(SysEventEunm.status_processed.getStatusCode());
+                }
+                sysEventPublishService.update(sysEventPublishDto);
             }
-            sysEventPublishService.update(sysEventPublishDto);
         }
     }
 }

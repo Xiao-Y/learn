@@ -1,5 +1,6 @@
 package com.ft.sysEvent.model.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class SysEventPublishBase {
     //事件类型
     private String eventType;
     //事件内容
+    @Column(length = 1000)
     private String payload;
     //事件创建时候
     private Date createDate;
