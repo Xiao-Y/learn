@@ -39,11 +39,7 @@ public class TxSysEventProcessConsumer {
         boolean flag = false;
         //消费
         Map<String, String> jsonMap = JSON.parseObject(message, Map.class);
-        SysEventPublishDto sysEventPublishDto = sysEventPublishService.findById(jsonMap.get("uuid"));
-        sysEventPublishDto.setStatus(SysEventEunm.status_process.getStatusCode());
-        sysEventPublishService.update(sysEventPublishDto);
         try {
-
             TestModel test = new TestModel();
             test.setAge(22);
             test.setCreateDate(new Date());
@@ -54,6 +50,7 @@ public class TxSysEventProcessConsumer {
             e.printStackTrace();
             flag = true;
         } finally {
+            SysEventPublishDto sysEventPublishDto = sysEventPublishService.findById(jsonMap.get("uuid"));
             if (flag) {
                 sysEventPublishDto.setStatus(SysEventEunm.status_pro_exception.getStatusCode());
             } else {

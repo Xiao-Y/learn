@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * 查询出所有发送mq异常的，重新发送，如果再次失败
+ * 查询出所有发送mq异常的，重新发送，如果再次失败,则标记为失败
  *
  * @author liuyongtao
  * @create 2018-03-01 9:25
@@ -48,6 +48,8 @@ public class SysEventProcessAutoTask extends QuartzJobBean {
                     //2.发送MQ
                     sysEventInterface.outSysEventPublish().send(MessageBuilder.withPayload(dto.getPayload()).build());
                     logger.info("【MQ重新发送内容】" + dto.getPayload());
+                    dto.setStatus(SysEventEunm.status_published.getStatusCode());
+                    sysEventPublishService.update(dto);
                 } catch (Exception e) {
                     e.printStackTrace();
                     flag = true;

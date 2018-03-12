@@ -74,7 +74,7 @@ CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("xxxxx");
 
 
 
-
-
-
+业务A（发布）--插入：publish（业务）
+自动任务（获取）--publish--修改：published（发送MQ）----异常：pub-exception
+业务B（监听）--修改：processed-----异常：pro-exception
 
