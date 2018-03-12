@@ -33,11 +33,11 @@ public class CoreOrderServiceImpl implements CoreOrderService {
         sysEventPublishDto.setClassName("123123");
         sysEventPublishDto.setCreateDate(new Date());
         sysEventPublishDto.setUpdateDate(new Date());
-        sysEventPublishDto.setEventType(SysEventTypeEunm.Event_Type_orderToUser_test.getStatusCode());
+        sysEventPublishDto.setEventType(SysEventTypeEunm.event_type_orderToUser_test.getStatusCode());
         sysEventPublishDto.setId(UUID.generate());
         sysEventPublishDto.setStatus(SysEventEunm.status_publish.getStatusCode());
         sysEventPublishService.save(sysEventPublishDto);
 
-        System.out.println("业务执行完毕...");
+        logger.debug("业务执行完毕...");
     }
 }
