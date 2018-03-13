@@ -48,8 +48,13 @@ public class TestOrderController {
     public boolean sendTxMQ() {
         boolean flag = false;
         try {
-            coreOrderService.sendOrderCar();
-            flag = true;
+//            coreOrderService.sendOrderCar();
+//            flag = true;
+            for (int i = 0; i < 2000; i++) {
+                coreOrderService.sendOrderCar();
+                flag = true;
+                System.out.println(i);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

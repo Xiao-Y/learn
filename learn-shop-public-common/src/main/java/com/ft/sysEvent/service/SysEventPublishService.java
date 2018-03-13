@@ -23,4 +23,8 @@ public interface SysEventPublishService {
     void deleteById(String id);
 
     List<SysEventPublishDto> findByStatus(String status);
+
+    List<SysEventPublishDto> findByStatusAndCountLessThanEqual(String status, int count);
+
+    void removeSysEventPublishToEventPublishLog();
 }

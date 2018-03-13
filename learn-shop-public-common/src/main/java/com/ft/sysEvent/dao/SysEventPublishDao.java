@@ -11,5 +11,8 @@ import java.util.List;
  */
 public interface SysEventPublishDao extends JpaRepository<SysEventPublishDto, String> {
 
+
     List<SysEventPublishDto> findByStatus(String status);
+
+    List<SysEventPublishDto> findByStatusAndCountLessThanEqual(String status, int count);
 }

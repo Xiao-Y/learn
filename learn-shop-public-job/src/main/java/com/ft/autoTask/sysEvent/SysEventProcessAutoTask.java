@@ -1,11 +1,8 @@
 package com.ft.autoTask.sysEvent;
 
 import com.ft.enums.SysEventEunm;
-import com.ft.service.TaskManagerService;
-import com.ft.sysEvent.model.expand.SysEventProcessDto;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
 import com.ft.sysEvent.mq.SysEventInterface;
-import com.ft.sysEvent.service.SysEventProcessService;
 import com.ft.sysEvent.service.SysEventPublishService;
 import com.ft.utlis.ToolsUtils;
 import org.quartz.JobExecutionContext;
@@ -40,7 +37,7 @@ public class SysEventProcessAutoTask extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        List<SysEventPublishDto> sysEventPublishDtos = sysEventPublishService.findByStatus(SysEventEunm.status_pub_exception.getStatusCode());
+        List<SysEventPublishDto> sysEventPublishDtos = sysEventPublishService.findByStatusAndCountLessThanEqual(SysEventEunm.status_pub_exception.getStatusCode(), 3);
         if (ToolsUtils.isNotEmpty(sysEventPublishDtos)) {
             for (SysEventPublishDto dto : sysEventPublishDtos) {
                 boolean flag = false;
@@ -49,6 +46,7 @@ public class SysEventProcessAutoTask extends QuartzJobBean {
                     sysEventInterface.outSysEventPublish().send(MessageBuilder.withPayload(dto.getPayload()).build());
                     logger.info("【MQ重新发送内容】" + dto.getPayload());
                     dto.setStatus(SysEventEunm.status_published.getStatusCode());
+                    dto.setCount(dto.getCount() + 1);
                     sysEventPublishService.update(dto);
                 } catch (Exception e) {
                     e.printStackTrace();

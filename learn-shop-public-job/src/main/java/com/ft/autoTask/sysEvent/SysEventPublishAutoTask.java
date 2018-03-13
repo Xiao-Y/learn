@@ -65,10 +65,10 @@ public class SysEventPublishAutoTask extends QuartzJobBean {
                 try {
                     //0.将要发送mq的内容
                     String message = "系统事件：测试 " + DateTime.getSimpleDateFormat();
-                    Map<String, Object> jsonMap = new HashMap<>();
+                    Map<String, String> jsonMap = new HashMap<>();
                     jsonMap.put("uuid", dto.getId());
                     jsonMap.put("message", message);
-                    jsonMap.put("sysEventPublish", dto);
+                    jsonMap.put("sysEventPublish", JSON.toJSONString(dto));
                     String json = JSON.toJSONString(jsonMap);
 
                     //1.修改事件状态为已发布

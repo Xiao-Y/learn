@@ -31,6 +31,8 @@ public class SysEventPublishBase {
     private Date createDate;
     //事件修改时间
     private Date updateDate;
+    // 事务执行的次数
+    private int count;
 
     public String getId() {
         return id;
@@ -96,6 +98,14 @@ public class SysEventPublishBase {
         this.updateDate = updateDate;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     @Override
     public String toString() {
         return "SysEventPublishBase{" +
@@ -107,6 +117,7 @@ public class SysEventPublishBase {
                 ", payload='" + payload + '\'' +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
+                ", count=" + count +
                 '}';
     }
 }

@@ -12,6 +12,7 @@ import com.ft.sysEvent.service.SysEventPublishService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 
@@ -29,6 +30,9 @@ public class TxSysEventProcessConsumer {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Value("${server.port}")
+    public String port;
+
     @Autowired
     private TestService testService;
     @Autowired
@@ -39,8 +43,9 @@ public class TxSysEventProcessConsumer {
         logger.info("sysEventProcessMessage=====MQ消费: " + message);
         boolean flag = false;
         //消费
-        Map<String, Object> jsonMap = JSON.parseObject(message, Map.class);
-        if (SysEventTypeEunm.event_type_orderToUser_test.getStatusCode().equals(jsonMap.get("sysEventPublish"))) {
+        Map<String, String> jsonMap = JSON.parseObject(message, Map.class);
+        SysEventPublishDto sysEventPublish = JSONObject.parseObject(jsonMap.get("sysEventPublish"), SysEventPublishDto.class);
+        if (SysEventTypeEunm.event_type_orderToUser_test.getStatusCode().equals(sysEventPublish.getEventType())) {
             try {
                 TestModel test = new TestModel();
                 test.setAge(22);
@@ -58,6 +63,7 @@ public class TxSysEventProcessConsumer {
                 } else {
                     sysEventPublishDto.setStatus(SysEventEunm.status_processed.getStatusCode());
                 }
+                sysEventPublishDto.setIp(port);
                 sysEventPublishService.update(sysEventPublishDto);
             }
         }

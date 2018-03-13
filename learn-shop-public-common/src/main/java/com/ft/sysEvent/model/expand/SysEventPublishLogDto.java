@@ -13,6 +13,6 @@ import java.io.Serializable;
  * @create 2018-03-01 9:22
  */
 @Entity
-@Table(name = "sys_event_publish")
-public class SysEventPublishDto extends SysEventPublishBase implements Serializable {
+@Table(name = "sys_event_publish_log")
+public class SysEventPublishLogDto extends SysEventPublishBase implements Serializable {
 }
