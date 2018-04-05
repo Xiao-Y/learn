@@ -19,6 +19,8 @@ eureka:
 spring:
   application:
     name: ${config.admin.user.spring.application.name} #客户端名称
+  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
+    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   cloud:
     stream: #mq连接配置
       binders:

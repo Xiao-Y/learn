@@ -64,6 +64,7 @@ http://localhost:<port>/swagger-ui.html <br>
 或者进入注册中心点击实例链接直接查看<br/>
 
 注意： <br/>
+0.特别提醒：如果使用本地配置文件需要修改learn-cloud-config下的resources里面的application.yml的search-locations修改为本地路径<br/>
 1.添加新服务时，要在learn-cloud-zuul中添加路由表 <br/>
 &nbsp;core-order: <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;path: /core-order/** <br/>
