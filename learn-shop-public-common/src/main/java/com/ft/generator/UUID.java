@@ -97,7 +97,7 @@ public class UUID {
         return (int) System.currentTimeMillis();
     }
 
-    public static void main(String[] args) {
-        System.out.println(generate());
-    }
+//    public static void main(String[] args) {
+//        System.out.println(generate());
+//    }
 }

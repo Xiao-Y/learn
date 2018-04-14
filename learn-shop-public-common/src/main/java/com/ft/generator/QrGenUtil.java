@@ -281,10 +281,10 @@ public class QrGenUtil {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		QrGenUtil.zxingCodeCreate("我爱生煎包", "E:/aaa.jpg", null, "E:/aa.png");
-		Result result = QrGenUtil.zxingCodeAnalyze("E:/aaa.jpg");
-		System.out.println(result.toString());
-
-	}
+//	public static void main(String[] args) {
+//		QrGenUtil.zxingCodeCreate("我爱生煎包", "E:/aaa.jpg", null, "E:/aa.png");
+//		Result result = QrGenUtil.zxingCodeAnalyze("E:/aaa.jpg");
+//		System.out.println(result.toString());
+//
+//	}
 }

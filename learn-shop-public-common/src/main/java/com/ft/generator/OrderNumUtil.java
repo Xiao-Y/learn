@@ -44,31 +44,31 @@ public class OrderNumUtil {
         return finOrderNum;
     }
 
-    public static void main(String[] args) {
-        // 测试多线程调用订单号生成工具
-        try {
-            for (int i = 0; i < 200; i++) {
-                System.out.println(OrderNumUtil.makeOrderNum());
-                /*Thread t1 = new Thread(new Runnable() {
-                    public void run() {
-                        OrderNumUtil makeOrder = new OrderNumUtil();
-                        makeOrder.makeOrderNum("a");
-                    }
-                }, "at" + i);
-                t1.start();
-
-                Thread t2 = new Thread(new Runnable() {
-                    public void run() {
-                        OrderNumUtil makeOrder = new OrderNumUtil();
-                        makeOrder.makeOrderNum("b");
-                    }
-                }, "bt" + i);
-                t2.start();*/
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+//    public static void main(String[] args) {
+//        // 测试多线程调用订单号生成工具
+//        try {
+//            for (int i = 0; i < 200; i++) {
+//                System.out.println(OrderNumUtil.makeOrderNum());
+//                /*Thread t1 = new Thread(new Runnable() {
+//                    public void run() {
+//                        OrderNumUtil makeOrder = new OrderNumUtil();
+//                        makeOrder.makeOrderNum("a");
+//                    }
+//                }, "at" + i);
+//                t1.start();
+//
+//                Thread t2 = new Thread(new Runnable() {
+//                    public void run() {
+//                        OrderNumUtil makeOrder = new OrderNumUtil();
+//                        makeOrder.makeOrderNum("b");
+//                    }
+//                }, "bt" + i);
+//                t2.start();*/
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 }

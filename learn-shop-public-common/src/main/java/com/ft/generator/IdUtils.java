@@ -43,12 +43,12 @@ public class IdUtils {
 		return (hash & 0x7FFFFFFF);
 	}
 
-	public static void main(String[] args) {
-		Set<String> set = new HashSet<>();
-		for (int i = 0; i < 10000000; i++) {
-			set.add(createId(12));
-			System.out.println(i);
-		}
-		System.out.println(set.size());
-	}
+//	public static void main(String[] args) {
+//		Set<String> set = new HashSet<>();
+//		for (int i = 0; i < 10000000; i++) {
+//			set.add(createId(12));
+//			System.out.println(i);
+//		}
+//		System.out.println(set.size());
+//	}
 }

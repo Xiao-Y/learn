@@ -182,16 +182,16 @@ public class IDCardValidate {
 		}
 	}
 
-	/**
-	 * @param args
-	 * @throws ParseException
-	 */
-	public static void main(String[] args) throws ParseException {
-		String IDCardNum = "2209998308233333";
-		// String IDCardNum="210102198208264114";
-		// String IDCardNum = "500113198606245216";
-		// CommonUtil cc = new CommonUtil();
-		System.out.println(idCardValidate(IDCardNum));
-		// System.out.println(cc.isDate("1996-02-29"));
-	}
+//	/**
+//	 * @param args
+//	 * @throws ParseException
+//	 */
+//	public static void main(String[] args) throws ParseException {
+//		String IDCardNum = "2209998308233333";
+//		// String IDCardNum="210102198208264114";
+//		// String IDCardNum = "500113198606245216";
+//		// CommonUtil cc = new CommonUtil();
+//		System.out.println(idCardValidate(IDCardNum));
+//		// System.out.println(cc.isDate("1996-02-29"));
+//	}
 }

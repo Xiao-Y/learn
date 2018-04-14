@@ -1,12 +1,11 @@
 package com.ft.model;
 
-import sun.awt.SunHints;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -17,21 +16,21 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "t_test")
-public class TestModel {
+public class TestModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     private String name;
     private Integer age;
     private Date createDate;
     private Date updateDate;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

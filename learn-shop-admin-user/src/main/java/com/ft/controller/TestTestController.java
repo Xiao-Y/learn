@@ -33,7 +33,7 @@ public class TestTestController {
     @PutMapping("/testUpdate")
     public void update() {
         TestModel test = new TestModel();
-        test.setId(1);
+        test.setId(1L);
         test.setAge(24);
         test.setUpdateDate(new Date());
         testService.update(test);
