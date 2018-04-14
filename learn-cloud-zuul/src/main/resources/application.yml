@@ -18,5 +18,5 @@ zuul:
       serviceId: ${config.admin.user.spring.application.name}
     #订单相关
     core-order:
-          path: /core-order/**
-          serviceId: ${config.core.order.spring.application.name}
+      path: /core-order/**
+      serviceId: ${config.core.order.spring.application.name}
