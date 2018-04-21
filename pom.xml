@@ -101,11 +101,11 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>${commons-beanutils.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>commons-beanutils</groupId>-->
+                <!--<artifactId>commons-beanutils</artifactId>-->
+                <!--<version>${commons-beanutils.version}</version>-->
+            <!--</dependency>-->
 
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -128,7 +128,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>

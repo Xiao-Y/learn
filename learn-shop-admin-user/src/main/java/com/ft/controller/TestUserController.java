@@ -29,7 +29,7 @@ public class TestUserController {
     public String indexUser(String name) {
         System.out.println(words);
         System.out.println("indexUser: " + name);
-        return "indexUser";
+        return "indexUser:" + words;
     }
 
     @ApiOperation(value = "获取城市信息", notes = "查询出所有城市信息")

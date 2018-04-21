@@ -28,7 +28,9 @@ public class CoreOrderServiceImpl implements CoreOrderService {
 
     @Transactional
     public void sendOrderCar() {
+        //执行业务操作....
 
+        //添加远程要执行的事务
         SysEventPublishDto sysEventPublishDto = new SysEventPublishDto();
         sysEventPublishDto.setClassName("123123");
         sysEventPublishDto.setCreateDate(new Date());

@@ -6,8 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * 城市模型
@@ -17,7 +15,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "city")
-public class CityModel implements Serializable {
+public class CityModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,8 +25,6 @@ public class CityModel implements Serializable {
     @Column(name = "countryCode")
     private String countrycode;
     private String district;
-
-    List<TestModel> testModels;
 
     public Long getId() {
         return id;
@@ -70,14 +66,6 @@ public class CityModel implements Serializable {
         this.district = district;
     }
 
-    public List<TestModel> getTestModels() {
-        return testModels;
-    }
-
-    public void setTestModels(List<TestModel> testModels) {
-        this.testModels = testModels;
-    }
-
     @Override
     public String toString() {
         return "CityModel{" +
@@ -86,7 +74,6 @@ public class CityModel implements Serializable {
                 ", name='" + name + '\'' +
                 ", countrycode='" + countrycode + '\'' +
                 ", district='" + district + '\'' +
-                ", testModels=" + testModels +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 server:
-  port: ${config.admin.user.server.port}
+  #port: ${config.admin.user.server.port}
+  port: 8801
 
 swagger: #接口注解文档
   basepackage: com.ft.controller #扫描的包，必须要有 GetMapping，PostMapping...
@@ -67,4 +68,4 @@ spring:
 #    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
 #    com.itmuch.youran.persistence: ERROR
 #测试
-words: ${config.eureka.instance.hostname}
+words: ${server.port}

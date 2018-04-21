@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,7 +15,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "t_test")
-public class TestModel implements Serializable {
+public class TestModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

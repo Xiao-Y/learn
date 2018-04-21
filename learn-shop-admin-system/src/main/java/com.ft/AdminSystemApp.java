@@ -12,8 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 @EnableEurekaClient
 @SpringBootApplication
 @ServletComponentScan
-public class AdminUserApp {
-    public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
-        SpringApplication.run(AdminUserApp.class, args);
+public class AdminSystemApp {
+    public static void main(String[] args){
+        SpringApplication.run(AdminSystemApp.class, args);
     }
 }

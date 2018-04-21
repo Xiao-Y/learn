@@ -185,14 +185,14 @@ public class ToolsUtils {
         return dt;
     }
 
-    public static void main(String[] args) {
-
-        int i = 0;
-        while (i < 1000) {
-            System.out.println(getRandomNo());
-            i++;
-        }
-    }
+//    public static void main(String[] args) {
+//
+//        int i = 0;
+//        while (i < 1000) {
+//            System.out.println(getRandomNo());
+//            i++;
+//        }
+//    }
 
     /**
      * 文件压缩
