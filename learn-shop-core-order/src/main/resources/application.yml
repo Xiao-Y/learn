@@ -41,6 +41,11 @@ spring:
     loadbalancer:
       retry:
         enabled: true #开启重试机制
+  jpa: #JPA配置
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
 hystrix:
   command:

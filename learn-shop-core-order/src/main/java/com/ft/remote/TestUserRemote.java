@@ -2,6 +2,7 @@ package com.ft.remote;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -18,4 +19,13 @@ public interface TestUserRemote {
      */
     @GetMapping(value = "/testUser/indexUser")
     String indexClient(@RequestParam(value = "name") String name);
+
+    /**
+     * 保存用户信息
+     *
+     * @param name
+     * @return
+     */
+    @PostMapping("/testUser/saveUser")
+    String saveUser(String name);
 }

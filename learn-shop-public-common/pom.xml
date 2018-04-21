@@ -22,6 +22,10 @@
             <groupId>com.ft</groupId>
             <artifactId>learn-cloud-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ft</groupId>
+            <artifactId>learn-shop-public-tools</artifactId>
+        </dependency>
         <!-- rabbit,用于配置中心文件修改通知和发送其它系统间通知 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -81,19 +85,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
-        <!-- 二维码 -->
-        <dependency>
-            <groupId>net.glxn.qrgen</groupId>
-            <artifactId>javase</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <!--<dependency>-->
-        <!--<groupId>commons-beanutils</groupId>-->
-        <!--<artifactId>commons-beanutils</artifactId>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>

@@ -18,6 +18,12 @@
             <groupId>com.ft</groupId>
             <artifactId>learn-shop-public-common</artifactId>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.projectlombok</groupId>-->
+            <!--<artifactId>lombok</artifactId>-->
+            <!--<version>1.16.20</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>

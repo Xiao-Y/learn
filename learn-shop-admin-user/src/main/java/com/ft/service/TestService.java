@@ -1,6 +1,7 @@
 package com.ft.service;
 
 
+import com.ft.ResData.BaseResponse;
 import com.ft.model.TestModel;
 
 public interface TestService {
@@ -9,4 +10,6 @@ public interface TestService {
     void saveProcess(TestModel test);
 
     void update(TestModel test);
+
+    BaseResponse<TestModel> saveUser(TestModel testModel);
 }

@@ -1,5 +1,7 @@
 package com.ft.controller;
 
+import com.ft.ResData.BaseResponse;
+import com.ft.model.OrderModel;
 import com.ft.producer.CoreOrderProducer;
 import com.ft.remote.TestUserRemote;
 import com.ft.service.CoreOrderService;
@@ -59,5 +61,12 @@ public class TestOrderController {
             e.printStackTrace();
         }
         return flag;
+    }
+
+
+    @ApiOperation(value = "调用用户系统", notes = "用于测试远程调用用户系统带事务的")
+    @GetMapping("/saveUserAndOrder")
+    public BaseResponse<OrderModel> saveUserAndOrder() {
+        return coreOrderService.saveUserAndOrder();
     }
 }

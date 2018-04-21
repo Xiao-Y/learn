@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.ServletContext;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -135,7 +135,7 @@ public class ToolsUtils {
     /**
      * 获得给定年月的最后一天
      *
-     * @param firstDay
+     * @param startDate
      * @return
      */
     public static String getLastDayOfMonth(String startDate) {
@@ -276,86 +276,86 @@ public class ToolsUtils {
      * @param response
      * @throws Exception void Author Skify Jun 13, 2011
      */
-    public static void download(String filePath, String fileName, HttpServletResponse response) throws Exception {
-
-        // 转化为UTF-8避免文件名乱码
-        fileName = changeFileName(fileName);
-
-        response.reset();
-        response.setContentType("application/x-msdownload");
-        response.addHeader("Content-Disposition", "attachment;   filename=\"" + fileName + "\"");
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-        try {
-            bis = new BufferedInputStream(new FileInputStream(filePath));
-            bos = new BufferedOutputStream(response.getOutputStream());
-            byte[] buff = new byte[20480];
-            while ((bis.read(buff, 0, buff.length)) != -1) {
-                bos.write(buff, 0, buff.length);
-            }
-            bos.flush();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (Exception ne) {
-                throw ne;
-            }
-        }
-    }
-
-    /**
-     * 输出下载文件
-     *
-     * @param file
-     * @param fileName
-     * @param response
-     * @throws Exception void Author: Skify Apr 25, 2012
-     */
-    @SuppressWarnings("resource")
-    public static void download(File file, String fileName, HttpServletResponse response) throws Exception {
-
-        // 转化为UTF-8避免文件名乱码
-        fileName = changeFileName(fileName);
-
-        response.reset();
-        response.setContentType("application/x-msdownload");
-        response.addHeader("Content-Disposition", "attachment;   filename=\"" + fileName + "\"");
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-        try {
-            FileInputStream inputStream = new FileInputStream(file);
-            bos = new BufferedOutputStream(response.getOutputStream());
-            byte[] buff = new byte[20480];
-            while ((inputStream.read(buff, 0, buff.length)) != -1) {
-                bos.write(buff, 0, buff.length);
-            }
-            bos.flush();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (Exception ne) {
-                throw ne;
-            }
-        }
-    }
+//    public static void download(String filePath, String fileName, HttpServletResponse response) throws Exception {
+//
+//        // 转化为UTF-8避免文件名乱码
+//        fileName = changeFileName(fileName);
+//
+//        response.reset();
+//        response.setContentType("application/x-msdownload");
+//        response.addHeader("Content-Disposition", "attachment;   filename=\"" + fileName + "\"");
+//        BufferedInputStream bis = null;
+//        BufferedOutputStream bos = null;
+//        try {
+//            bis = new BufferedInputStream(new FileInputStream(filePath));
+//            bos = new BufferedOutputStream(response.getOutputStream());
+//            byte[] buff = new byte[20480];
+//            while ((bis.read(buff, 0, buff.length)) != -1) {
+//                bos.write(buff, 0, buff.length);
+//            }
+//            bos.flush();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw e;
+//        } finally {
+//            try {
+//                if (bis != null) {
+//                    bis.close();
+//                }
+//                if (bos != null) {
+//                    bos.close();
+//                }
+//            } catch (Exception ne) {
+//                throw ne;
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 输出下载文件
+//     *
+//     * @param file
+//     * @param fileName
+//     * @param response
+//     * @throws Exception void Author: Skify Apr 25, 2012
+//     */
+//    @SuppressWarnings("resource")
+//    public static void download(File file, String fileName, HttpServletResponse response) throws Exception {
+//
+//        // 转化为UTF-8避免文件名乱码
+//        fileName = changeFileName(fileName);
+//
+//        response.reset();
+//        response.setContentType("application/x-msdownload");
+//        response.addHeader("Content-Disposition", "attachment;   filename=\"" + fileName + "\"");
+//        BufferedInputStream bis = null;
+//        BufferedOutputStream bos = null;
+//        try {
+//            FileInputStream inputStream = new FileInputStream(file);
+//            bos = new BufferedOutputStream(response.getOutputStream());
+//            byte[] buff = new byte[20480];
+//            while ((inputStream.read(buff, 0, buff.length)) != -1) {
+//                bos.write(buff, 0, buff.length);
+//            }
+//            bos.flush();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw e;
+//        } finally {
+//            try {
+//                if (bis != null) {
+//                    bis.close();
+//                }
+//                if (bos != null) {
+//                    bos.close();
+//                }
+//            } catch (Exception ne) {
+//                throw ne;
+//            }
+//        }
+//    }
 
     /**
      * 统一修改文件名
@@ -1031,96 +1031,96 @@ public class ToolsUtils {
         return true;
     }
 
-    /**
-     * 保存上传的文件，返回文件名的字符串以“*”分隔
-     *
-     * @param imgUrls
-     * @param request
-     * @param realPath
-     * @return
-     */
-    public static String uploadFile(MultipartFile[] imgUrls, HttpServletRequest request, String realPath) {
-        String path = request.getSession().getServletContext().getRealPath(realPath);
-        // 获取图片的分割符
-        String imageSplit = ToolsUtils.getSystemConfigString(request, "imageUploadSplit");
-        StringBuffer buffer = new StringBuffer("");
-        for (MultipartFile m : imgUrls) {
-            // 获取文件的名称
-            String fileName = m.getOriginalFilename();
-            if (!StringUtils.isEmpty(fileName)) {
-                fileName = ToolsUtils.generateFileName(fileName);
-                File targetFile = new File(path, fileName);
-                // 文件路径不存在
-                if (!targetFile.exists()) {
-                    // 新建文件
-                    targetFile.mkdirs();
-                }
-                // 保存
-                try {
-                    m.transferTo(targetFile);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                // 拼接图片的名字，用于保存
-                buffer.append(fileName);
-                buffer.append(imageSplit);
-            }
-        }
-        String imgUrl = buffer.toString();
-        if (!StringUtils.isEmpty(imgUrl)) {
-            int index = imgUrl.lastIndexOf(imageSplit);
-            imgUrl = imgUrl.substring(0, index);
-        }
-        return imgUrl;
-    }
-
-    /**
-     * 删除图片
-     *
-     * @param realPath 图片路径
-     * @param imgUrls  图片名称字符串，可以为单个
-     * @date 2015年8月25日下午12:02:11
-     */
-    public static void deleteFile(HttpServletRequest request, String imgUrls, String realPath) {
-        // 获取图片的分割符
-        String imageSplit = ToolsUtils.getSystemConfigString(request, "imageSplit");
-        String path = request.getSession().getServletContext().getRealPath(realPath);
-        if (!StringUtils.isEmpty(imgUrls)) {
-            String[] imageNames = imgUrls.split(imageSplit);
-            for (String imageName : imageNames) {
-                File file = new File(path, imageName);
-                if (file.exists()) {
-                    file.delete();
-                }
-            }
-        }
-    }
-
-    /**
-     * 返回用户的IP地址
-     *
-     * @param request
-     * @return
-     */
-    public static String toIpAddr(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
+//    /**
+//     * 保存上传的文件，返回文件名的字符串以“*”分隔
+//     *
+//     * @param imgUrls
+//     * @param request
+//     * @param realPath
+//     * @return
+//     */
+//    public static String uploadFile(MultipartFile[] imgUrls, HttpServletRequest request, String realPath) {
+//        String path = request.getSession().getServletContext().getRealPath(realPath);
+//        // 获取图片的分割符
+//        String imageSplit = ToolsUtils.getSystemConfigString(request, "imageUploadSplit");
+//        StringBuffer buffer = new StringBuffer("");
+//        for (MultipartFile m : imgUrls) {
+//            // 获取文件的名称
+//            String fileName = m.getOriginalFilename();
+//            if (!StringUtils.isEmpty(fileName)) {
+//                fileName = ToolsUtils.generateFileName(fileName);
+//                File targetFile = new File(path, fileName);
+//                // 文件路径不存在
+//                if (!targetFile.exists()) {
+//                    // 新建文件
+//                    targetFile.mkdirs();
+//                }
+//                // 保存
+//                try {
+//                    m.transferTo(targetFile);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                // 拼接图片的名字，用于保存
+//                buffer.append(fileName);
+//                buffer.append(imageSplit);
+//            }
+//        }
+//        String imgUrl = buffer.toString();
+//        if (!StringUtils.isEmpty(imgUrl)) {
+//            int index = imgUrl.lastIndexOf(imageSplit);
+//            imgUrl = imgUrl.substring(0, index);
+//        }
+//        return imgUrl;
+//    }
+//
+//    /**
+//     * 删除图片
+//     *
+//     * @param realPath 图片路径
+//     * @param imgUrls  图片名称字符串，可以为单个
+//     * @date 2015年8月25日下午12:02:11
+//     */
+//    public static void deleteFile(HttpServletRequest request, String imgUrls, String realPath) {
+//        // 获取图片的分割符
+//        String imageSplit = ToolsUtils.getSystemConfigString(request, "imageSplit");
+//        String path = request.getSession().getServletContext().getRealPath(realPath);
+//        if (!StringUtils.isEmpty(imgUrls)) {
+//            String[] imageNames = imgUrls.split(imageSplit);
+//            for (String imageName : imageNames) {
+//                File file = new File(path, imageName);
+//                if (file.exists()) {
+//                    file.delete();
+//                }
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 返回用户的IP地址
+//     *
+//     * @param request
+//     * @return
+//     */
+//    public static String toIpAddr(HttpServletRequest request) {
+//        String ip = request.getHeader("X-Forwarded-For");
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getHeader("Proxy-Client-IP");
+//        }
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getHeader("WL-Proxy-Client-IP");
+//        }
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getHeader("HTTP_CLIENT_IP");
+//        }
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+//        }
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getRemoteAddr();
+//        }
+//        return ip;
+//    }
 
     /**
      * 穿透代理获取服务器真实ip
@@ -1179,19 +1179,19 @@ public class ToolsUtils {
         return properties;
     }
 
-    /**
-     * 从内存中，通过key获取系统属性的value
-     *
-     * @param request
-     * @param key     关键字
-     * @return value
-     */
-    public static String getSystemConfigString(HttpServletRequest request, String key) {
-        ServletContext sct = request.getServletContext();
-        Properties properties = (Properties) sct.getAttribute("SYSTEM_CONFIG");
-        String value = properties.getProperty(key);
-        return value;
-    }
+//    /**
+//     * 从内存中，通过key获取系统属性的value
+//     *
+//     * @param request
+//     * @param key     关键字
+//     * @return value
+//     */
+//    public static String getSystemConfigString(HttpServletRequest request, String key) {
+//        ServletContext sct = request.getServletContext();
+//        Properties properties = (Properties) sct.getAttribute("SYSTEM_CONFIG");
+//        String value = properties.getProperty(key);
+//        return value;
+//    }
 
     /**
      * 主要用于配置文件中数据的计算<br/>

@@ -36,6 +36,18 @@ public enum ResCodeEnum {
     }
 
     /**
+     * 成功
+     *
+     * @return
+     */
+    public static String OK = ResCodeEnum.RESCODE_SUCCESS.getStatusCode();
+    /**
+     * 失败
+     */
+    public static String FAIL = ResCodeEnum.RESCODE_OTHER_ERROR.getStatusCode();
+
+
+    /**
      * 通过statusCode获取statusName
      *
      * @param statusCode

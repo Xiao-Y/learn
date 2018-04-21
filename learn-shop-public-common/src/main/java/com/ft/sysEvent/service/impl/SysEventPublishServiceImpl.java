@@ -6,7 +6,7 @@ import com.ft.sysEvent.dao.SysEventPublishLogDao;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
 import com.ft.sysEvent.model.expand.SysEventPublishLogDto;
 import com.ft.sysEvent.service.SysEventPublishService;
-import com.ft.utlis.BeanUtils;
+
 import com.ft.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

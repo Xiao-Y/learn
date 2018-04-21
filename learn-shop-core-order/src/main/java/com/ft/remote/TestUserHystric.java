@@ -16,4 +16,10 @@ public class TestUserHystric implements TestUserRemote {
         System.out.println("TestUserHystric");
         return "sorry:" + name;
     }
+
+    @Override
+    public String saveUser(String name) {
+        System.out.println("TestUserHystric");
+        return "sorry:no save";
+    }
 }
