@@ -15,7 +15,8 @@ eureka:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
   instance:
-    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
+    #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
+    status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
 
 spring:
   application:

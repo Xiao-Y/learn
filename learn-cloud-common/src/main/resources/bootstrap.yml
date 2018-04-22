@@ -5,3 +5,12 @@ spring:
       label: master #指明远程仓库的分支
       profile: dev #dev 开发环境配置文件 #test 测试环境 #pro 正式环境
       uri: http://localhost:8781/ #指明配置服务中心的网址
+
+#日志配置
+#logging:
+#  level:
+#    root: INFO
+#    org.hibernate: INFO
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
+#    com.itmuch.youran.persistence: ERROR

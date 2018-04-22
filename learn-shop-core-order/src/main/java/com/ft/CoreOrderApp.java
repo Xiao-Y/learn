@@ -17,7 +17,7 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
  */
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients(basePackages={"com.ft.remote"})
+@EnableFeignClients //(basePackages={"com.ft.remote"})
 @EnableHystrixDashboard
 @EnableCircuitBreaker
 @EnableAutoConfiguration

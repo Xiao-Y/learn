@@ -8,13 +8,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用于接口文档
@@ -52,6 +58,7 @@ public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAwar
     private String description;
     private String version;
 
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(new String[]{"swagger-ui.html"})
                 .addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
@@ -61,12 +68,25 @@ public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAwar
 
     @Bean
     public Docket createRestApi() {
+
+        //添加head参数start
+        ParameterBuilder tokenPar = new ParameterBuilder();
+        List<Parameter> pars = new ArrayList<>();
+        tokenPar.name("x-access-token")
+                .description("令牌")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                .required(false)
+                .build();
+        pars.add(tokenPar.build());
+
         return (new Docket(DocumentationType.SWAGGER_2))
                 .apiInfo(this.apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(this.basePackage))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .globalOperationParameters(pars);
     }
 
     private ApiInfo apiInfo() {
@@ -78,6 +98,7 @@ public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAwar
                 .build();
     }
 
+    @Override
     public void setEnvironment(Environment environment) {
         this.propertyResolver = new RelaxedPropertyResolver(environment, null);
         this.basePackage = this.propertyResolver.getProperty("swagger.basepackage");
