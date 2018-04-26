@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>learn-shop-public-common</artifactId>
+    <artifactId>learn-shop-base-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>learn-shop-public-common</name>
+    <name>learn-shop-base-common</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -24,7 +24,11 @@
         </dependency>
         <dependency>
             <groupId>com.ft</groupId>
-            <artifactId>learn-shop-public-tools</artifactId>
+            <artifactId>learn-shop-base-tools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ft</groupId>
+            <artifactId>learn-shop-base-pojo</artifactId>
         </dependency>
         <!-- rabbit,用于配置中心文件修改通知和发送其它系统间通知 -->
         <dependency>
@@ -62,11 +66,6 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
-        <!-- spring-data-jap -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
         <!-- alidruid做数据源和监控 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -92,6 +91,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <!-- 非springboot启动工程使用 -->
             <plugin>

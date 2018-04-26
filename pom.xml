@@ -9,15 +9,20 @@
         <module>learn-cloud-config</module>
         <module>learn-cloud-eureka</module>
         <module>learn-cloud-zuul</module>
+        <module>learn-cloud-turbine</module>
+        <module>learn-cloud-common</module>
+
         <module>learn-shop-admin-system</module>
         <module>learn-shop-admin-user</module>
+
         <module>learn-shop-core-cart</module>
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
-        <module>learn-shop-public-common</module>
-        <module>learn-shop-public-tools</module>
-        <module>learn-cloud-turbine</module>
-        <module>learn-cloud-common</module>
+
+        <module>learn-shop-base-common</module>
+        <module>learn-shop-base-tools</module>
+        <module>learn-shop-base-pojo</module>
+
         <module>learn-shop-public-job</module>
     </modules>
     <packaging>pom</packaging>
@@ -41,6 +46,7 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <fastjson.version>1.2.44</fastjson.version>
+        <hutool.version>4.0.9</hutool.version>
     </properties>
 
     <dependencyManagement>
@@ -54,17 +60,22 @@
             </dependency>
             <dependency>
                 <groupId>com.ft</groupId>
-                <artifactId>learn-shop-public-common</artifactId>
+                <artifactId>learn-shop-base-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ft</groupId>
-                <artifactId>learn-shop-public-tools</artifactId>
+                <artifactId>learn-shop-base-tools</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ft</groupId>
                 <artifactId>learn-cloud-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ft</groupId>
+                <artifactId>learn-shop-base-pojo</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -107,17 +118,21 @@
                 <version>${commons-lang3.version}</version>
             </dependency>
             <!--<dependency>-->
-                <!--<groupId>commons-beanutils</groupId>-->
-                <!--<artifactId>commons-beanutils</artifactId>-->
-                <!--<version>${commons-beanutils.version}</version>-->
+            <!--<groupId>commons-beanutils</groupId>-->
+            <!--<artifactId>commons-beanutils</artifactId>-->
+            <!--<version>${commons-beanutils.version}</version>-->
             <!--</dependency>-->
-
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-
+            <!-- 工具类 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

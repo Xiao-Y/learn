@@ -1,5 +1,6 @@
 package com.ft.controller;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.ft.model.TestModel;
 import com.ft.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class TestTestController {
         test.setUpdateDate(new Date());
         test.setName("billow");
         testService.save(test);
+        ArrayUtil.isEmpty(ArrayUtil.newArray(3));
     }
 
     @PutMapping("/testUpdate")

@@ -4,7 +4,9 @@
 
 公用组件<br/>
 learn-cloud-common  除learn-cloud-config所有的learn-cloud-* 都要依赖 <br/>
-learn-shop-public-common  依赖learn-cloud-common，所有的learn-shop-admin-* 和learn-shop-core-* 都要依赖<br/>
+learn-shop-base-common  依赖learn-cloud-common，所有的learn-shop-admin-* 和learn-shop-core-* 都要依赖<br/>
+learn-shop-base-pojo  po和vo以及ex，所有的learn-shop-admin-* 和learn-shop-core-* 都要依赖<br/>
+learn-shop-base-tools 公用工具，端口： <br/>
 
 核心服务，端口：87**： <br/>
 learn-cloud-eureka  注册中心，端口：8761 <br/>
@@ -13,7 +15,6 @@ learn-cloud-config  分布式配置中心，端口：8781 <br/>
 learn-cloud-turbine  熔断器控制聚合，端口：8791 <br/>
 
 公用业务服务，端口：80**： <br/>
-learn-shop-public-tools 公用工具，端口： <br/>
 learn-shop-public-job 自动任务，端口：8011 <br/>
 
 后端业务服务，端口：88**： <br/>
@@ -73,7 +74,7 @@ http://localhost:<port>/swagger-ui.html <br>
 2.使用配置中心时， <br/>
 配置中心启动时会向注册中心注册，这里注册中心还没启动会报异常，不用关心 <br/>
 如果是learn-cloud-* pom中添加learn-cloud-common依赖<br/>
-如果是learn-shop-admin-* 和learn-shop-core-* pom中添加learn-shop-public-common依赖 <br/>
+如果是learn-shop-admin-* 和learn-shop-core-* pom中添加learn-shop-base-common依赖 <br/>
 
 3.项目需要启动RabbitMQ, rabbitmq-server.bat <br/>
     添加新用户：admin 密码：admin123，修改admin用为超级管理员 <br/>

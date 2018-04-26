@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.ft</groupId>
-            <artifactId>learn-shop-public-common</artifactId>
+            <artifactId>learn-shop-base-common</artifactId>
         </dependency>
         <!-- 断路器仪表盘聚合 -->
         <dependency>
