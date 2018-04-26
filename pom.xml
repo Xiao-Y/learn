@@ -5,6 +5,18 @@
     <groupId>com.ft</groupId>
     <artifactId>learn</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <developers>
+        <developer>
+            <name>billow</name>
+            <email>lyongtao123@126.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+
     <modules>
         <module>learn-cloud-config</module>
         <module>learn-cloud-eureka</module>
@@ -47,6 +59,7 @@
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <fastjson.version>1.2.44</fastjson.version>
         <hutool.version>4.0.9</hutool.version>
+        <lcn.last.version>4.1.0</lcn.last.version>
     </properties>
 
     <dependencyManagement>
@@ -132,6 +145,30 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+            <!-- 分布式事务 -->
+            <dependency>
+                <groupId>com.codingapi</groupId>
+                <artifactId>transaction-springcloud</artifactId>
+                <version>${lcn.last.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.codingapi</groupId>
+                <artifactId>tx-plugins-db</artifactId>
+                <version>${lcn.last.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

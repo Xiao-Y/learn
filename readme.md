@@ -34,6 +34,7 @@ learn-shop-core-product   购物车服务，端口： <br/>
     <li> learn-cloud-eureka </li>
     <li> learn-cloud-zuul </li>
     <li> learn-cloud-turbine </li>
+    <li> 事务管理中心服务(tx-lcn) </li>
     <li> 启动公用业务服务 </li>
     <li> 启动业务服务 </li>
 </ul>
@@ -85,3 +86,8 @@ http://localhost:<port>/swagger-ui.html <br>
 
 4.swagger2注解使用说明： <br/>
 https://www.jianshu.com/p/12f4394462d5 <br/>
+
+5.本系统事务依赖tx-lcn,(https://github.com/codingapi/tx-lcn) , <br/>
+示例代码查看 https://github.com/codingapi/springcloud-lcn-demo <br/>
+示例使用说明 https://github.com/codingapi/springcloud-lcn-demo/wiki <br/>
+启动运行TxManagerApplication, 然后访问 http://127.0.0.1:8899/index.html
