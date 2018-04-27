@@ -1,10 +1,11 @@
 package com.ft.controller;
 
 import com.ft.ResData.BaseResponse;
-import com.ft.model.OrderModel;
+
 import com.ft.producer.CoreOrderProducer;
 import com.ft.remote.TestUserRemote;
 import com.ft.service.CoreOrderService;
+import com.ft.vo.OrderVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,13 +67,13 @@ public class TestOrderController {
 
     @ApiOperation(value = "调用用户系统,使用Feign直接调用", notes = "用于测试远程调用用户系统带事务的")
     @GetMapping("/saveUserAndOrder")
-    public BaseResponse<OrderModel> saveUserAndOrder() {
+    public BaseResponse<OrderVo> saveUserAndOrder() {
         return coreOrderService.saveUserAndOrder();
     }
 
     @ApiOperation(value = "调用用户系统,使用Feign+分布式事务调用", notes = "用于测试远程调用用户系统带事务的")
     @GetMapping("/saveUserAndOrderTx")
-    public BaseResponse<OrderModel> saveUserAndOrderTx() {
+    public BaseResponse<OrderVo> saveUserAndOrderTx() {
         return coreOrderService.saveUserAndOrderTx();
     }
 }

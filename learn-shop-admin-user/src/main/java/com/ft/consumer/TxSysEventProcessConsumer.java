@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ft.enums.SysEventEunm;
 import com.ft.enums.SysEventTypeEunm;
-import com.ft.model.TestModel;
 import com.ft.service.TestService;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
 import com.ft.sysEvent.mq.SysEventInterface;
 import com.ft.sysEvent.service.SysEventPublishService;
+import com.ft.vo.TestVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +47,10 @@ public class TxSysEventProcessConsumer {
         SysEventPublishDto sysEventPublish = JSONObject.parseObject(jsonMap.get("sysEventPublish"), SysEventPublishDto.class);
         if (SysEventTypeEunm.event_type_orderToUser_test.getStatusCode().equals(sysEventPublish.getEventType())) {
             try {
-                TestModel test = new TestModel();
+                TestVo test = new TestVo();
                 test.setAge(22);
-                test.setCreateDate(new Date());
-                test.setUpdateDate(new Date());
+                test.setCreateTime(new Date());
+                test.setUpdateTime(new Date());
                 test.setName("billow");
                 testService.saveProcess(test);
             } catch (Exception e) {

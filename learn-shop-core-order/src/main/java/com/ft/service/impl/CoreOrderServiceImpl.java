@@ -3,16 +3,18 @@ package com.ft.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.codingapi.tx.annotation.TxTransaction;
 import com.ft.ResData.BaseResponse;
-import com.ft.dao.OrderRepository;
+import com.ft.dao.OrderDao;
 import com.ft.enums.ResCodeEnum;
 import com.ft.enums.SysEventEunm;
 import com.ft.enums.SysEventTypeEunm;
 import com.ft.generator.UUID;
-import com.ft.model.OrderModel;
+import com.ft.po.OrderPo;
 import com.ft.remote.TestUserRemote;
 import com.ft.service.CoreOrderService;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
 import com.ft.sysEvent.service.SysEventPublishService;
+import com.ft.utlis.BeanUtils;
+import com.ft.vo.OrderVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     @Autowired
     private SysEventPublishService sysEventPublishService;
     @Autowired
-    private OrderRepository orderDao;
+    private OrderDao orderDao;
     @Autowired
     private TestUserRemote testUserRemote;
 
@@ -41,7 +43,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     @Transactional(rollbackOn = Exception.class)
     public void sendOrderCar() {
         //执行业务操作....
-        this.save(new OrderModel());
+        this.save(new OrderVo());
 
         //添加远程要执行的事务
         SysEventPublishDto sysEventPublishDto = new SysEventPublishDto();
@@ -58,22 +60,23 @@ public class CoreOrderServiceImpl implements CoreOrderService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void save(OrderModel orderModel) {
-        orderModel.setProductName("袜子");
-        orderModel.setProductNo("123");
-        orderModel.setCreateCode("billow");
-        orderModel.setCreateTime(new Date());
-        orderModel.setUpdateCode("billow");
-        orderModel.setUpdateTime(new Date());
-        orderDao.save(orderModel);
+    public void save(OrderVo orderVo) {
+        orderVo.setProductName("袜子");
+        orderVo.setProductNo("123");
+        orderVo.setCreatorCode("billow");
+        orderVo.setCreateTime(new Date());
+        orderVo.setUpdaterCode("billow");
+        orderVo.setUpdateTime(new Date());
+        OrderPo orderPo = BeanUtils.convert(orderVo, OrderPo.class);
+        orderDao.save(orderPo);
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public BaseResponse<OrderModel> saveUserAndOrder() {
+    public BaseResponse<OrderVo> saveUserAndOrder() {
         //弊端：只能先本地事务再远程事务
-        this.save(new OrderModel());
-        BaseResponse<OrderModel> res = new BaseResponse<>(ResCodeEnum.OK);
+        this.save(new OrderVo());
+        BaseResponse<OrderVo> res = new BaseResponse<>(ResCodeEnum.OK);
         String jsonRes = testUserRemote.saveUser("testOrder");
         JSONObject jsonObject = JSONObject.parseObject(jsonRes);
         String resCode = jsonObject.get("resCode").toString();
@@ -87,12 +90,12 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     @Override
     @TxTransaction(isStart = true)
     @Transactional(rollbackOn = Exception.class)
-    public BaseResponse<OrderModel> saveUserAndOrderTx() {
+    public BaseResponse<OrderVo> saveUserAndOrderTx() {
         //远程事务已经提交后，本地异常，远程事务会回滚
-        BaseResponse<OrderModel> res = new BaseResponse<>(ResCodeEnum.OK);
+        BaseResponse<OrderVo> res = new BaseResponse<>(ResCodeEnum.OK);
 
         String jsonRes = testUserRemote.saveUser("testOrder");
-        this.save(new OrderModel());
+        this.save(new OrderVo());
 
         JSONObject jsonObject = JSONObject.parseObject(jsonRes);
         String resCode = jsonObject.get("resCode").toString();

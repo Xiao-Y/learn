@@ -2,14 +2,15 @@ package com.ft.service;
 
 
 import com.ft.ResData.BaseResponse;
-import com.ft.model.TestModel;
+
+import com.ft.vo.TestVo;
 
 public interface TestService {
-    void save(TestModel test);
+    void save(TestVo test);
 
-    void saveProcess(TestModel test);
+    void saveProcess(TestVo test);
 
-    void update(TestModel test);
+    void update(TestVo test);
 
-    BaseResponse<TestModel> saveUser(TestModel testModel);
+    BaseResponse<TestVo> saveUser(TestVo TestVo);
 }

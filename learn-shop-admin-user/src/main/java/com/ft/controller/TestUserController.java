@@ -2,10 +2,11 @@ package com.ft.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ft.ResData.BaseResponse;
-import com.ft.model.CityModel;
-import com.ft.model.TestModel;
+
 import com.ft.service.CityService;
 import com.ft.service.TestService;
+import com.ft.vo.CityVo;
+import com.ft.vo.TestVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +42,14 @@ public class TestUserController {
 
     @ApiOperation(value = "获取城市信息", notes = "查询出所有城市信息")
     @GetMapping("/findAll")
-    public List<CityModel> findAll(HttpServletRequest request) {
+    public List<CityVo> findAll(HttpServletRequest request) {
         return cityService.findAll(null);
     }
 
     @ApiOperation(value = "保存用户信息", notes = "远程调用保存用户信息测试")
     @PostMapping("/saveUser")
-    public BaseResponse<TestModel> saveUser(String name) {
-        BaseResponse<TestModel> res = testService.saveUser(new TestModel());
+    public BaseResponse<TestVo> saveUser(String name) {
+        BaseResponse<TestVo> res = testService.saveUser(new TestVo());
         System.out.println(JSONObject.toJSONString(res));
         return res;
     }

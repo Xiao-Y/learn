@@ -1,7 +1,8 @@
 package com.ft.service;
 
 import com.ft.ResData.BaseResponse;
-import com.ft.model.OrderModel;
+import com.ft.vo.OrderVo;
+
 
 /**
  * 订单处理
@@ -13,14 +14,14 @@ public interface CoreOrderService {
 
     void sendOrderCar();
 
-    void save(OrderModel orderModel);
+    void save(OrderVo OrderVo);
 
     /**
      * 用于测试远程调用用户系统带事务的
      *
      * @return
      */
-    BaseResponse<OrderModel> saveUserAndOrder();
+    BaseResponse<OrderVo> saveUserAndOrder();
 
-    BaseResponse<OrderModel> saveUserAndOrderTx();
+    BaseResponse<OrderVo> saveUserAndOrderTx();
 }

@@ -2,10 +2,13 @@ package com.ft.service.impl;
 
 import com.codingapi.tx.annotation.TxTransaction;
 import com.ft.ResData.BaseResponse;
-import com.ft.dao.TestRepository;
+import com.ft.dao.TestDao;
 import com.ft.enums.ResCodeEnum;
-import com.ft.model.TestModel;
+
+import com.ft.po.TestPo;
 import com.ft.service.TestService;
+import com.ft.utlis.BeanUtils;
+import com.ft.vo.TestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,37 +25,38 @@ import java.util.Date;
 public class TestServiceImpl implements TestService {
 
     @Autowired
-    private TestRepository testRepository;
+    private TestDao testDao;
 
     @Transactional
     @Override
-    public void save(TestModel test) {
-        testRepository.save(test);
+    public void save(TestVo test) {
+        testDao.save(test);
     }
 
     @Override
-    public void saveProcess(TestModel test) {
-        testRepository.save(test);
+    public void saveProcess(TestVo test) {
+        testDao.save(test);
     }
 
     @Transactional
     @Override
-    public void update(TestModel test) {
-        testRepository.save(test);
+    public void update(TestVo test) {
+        testDao.save(test);
     }
 
     @Override
     @TxTransaction
     @Transactional(rollbackOn = Exception.class)
-    public BaseResponse<TestModel> saveUser(TestModel testModel) {
-        BaseResponse<TestModel> res = new BaseResponse<>(ResCodeEnum.OK);
+    public BaseResponse<TestVo> saveUser(TestVo testVo) {
+        BaseResponse<TestVo> res = new BaseResponse<>(ResCodeEnum.OK);
         try {
-            testModel.setName("billow");
-            testModel.setAge(18);
-            testModel.setUpdateDate(new Date());
-            testModel.setCreateDate(new Date());
-            testRepository.save(testModel);
-            res.setResData(testModel);
+            testVo.setName("billow");
+            testVo.setAge(18);
+            testVo.setUpdateTime(new Date());
+            testVo.setCreateTime(new Date());
+            TestPo testPo = BeanUtils.convert(testVo, TestPo.class);
+            testDao.save(testPo);
+            res.setResData(testVo);
         } catch (Exception e) {
             e.printStackTrace();
             res.setResCode(ResCodeEnum.FAIL);

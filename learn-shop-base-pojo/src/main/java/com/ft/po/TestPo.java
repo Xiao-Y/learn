@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * 测试用
@@ -15,15 +15,13 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "t_test")
-public class TestPo {
+public class TestPo extends BasePo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private Integer age;
-    private Date createDate;
-    private Date updateDate;
 
     public Long getId() {
         return id;
@@ -47,32 +45,5 @@ public class TestPo {
 
     public void setAge(Integer age) {
         this.age = age;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    @Override
-    public String toString() {
-        return "TestPo{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                '}';
     }
 }

@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 城市模型
@@ -14,8 +15,8 @@ import javax.persistence.Table;
  * @create 2018-02-08 10:27
  */
 @Entity
-@Table(name = "city")
-public class CityPo {
+@Table(name = "t_city")
+public class CityPo extends BasePo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

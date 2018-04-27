@@ -1,6 +1,6 @@
 package com.ft.dao;
 
-import com.ft.model.TestModel;
+import com.ft.po.TestPo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author liuyongtao
  * @create 2018-02-11 9:43
  */
-public interface TestRepository extends JpaRepository<TestModel, Integer> {
+public interface TestDao extends JpaRepository<TestPo, Integer> {
 }

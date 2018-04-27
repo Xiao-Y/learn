@@ -1,8 +1,8 @@
 package com.ft.controller;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.ft.model.TestModel;
 import com.ft.service.TestService;
+import com.ft.vo.TestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,10 +23,10 @@ public class TestTestController {
 
     @PutMapping("/testSave")
     public void save() {
-        TestModel test = new TestModel();
+        TestVo test = new TestVo();
         test.setAge(22);
-        test.setCreateDate(new Date());
-        test.setUpdateDate(new Date());
+        test.setCreateTime(new Date());
+        test.setUpdateTime(new Date());
         test.setName("billow");
         testService.save(test);
         ArrayUtil.isEmpty(ArrayUtil.newArray(3));
@@ -34,10 +34,10 @@ public class TestTestController {
 
     @PutMapping("/testUpdate")
     public void update() {
-        TestModel test = new TestModel();
+        TestVo test = new TestVo();
         test.setId(1L);
         test.setAge(24);
-        test.setUpdateDate(new Date());
+        test.setUpdateTime(new Date());
         testService.update(test);
     }
 
