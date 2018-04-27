@@ -57,6 +57,7 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 8000 #Hystrix断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
+          strategy: SEMAPHORE
 
 feign: #远程连接
   hystrix: #熔断器配置
@@ -70,9 +71,9 @@ ribbon:
   MaxAutoRetriesNextServer: 5 #切换服务的次数(比如本次请求分配给9082处理，发现404，则切换分配给9081处理，如果还是404，则返回404给客户端）
 
 #txmanager地址
-tm:
-  manager:
-    url: http://127.0.0.1:8899/tx/manager/
+#tm:
+#  manager:
+#    url: http://127.0.0.1:8899/tx/manager/
 logging:
   level:
     com:

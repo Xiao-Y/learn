@@ -1,5 +1,6 @@
 package com.ft.service.impl;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.ft.ResData.BaseResponse;
 import com.ft.dao.TestRepository;
 import com.ft.enums.ResCodeEnum;
@@ -41,6 +42,8 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
+    @TxTransaction
+    @Transactional(rollbackOn = Exception.class)
     public BaseResponse<TestModel> saveUser(TestModel testModel) {
         BaseResponse<TestModel> res = new BaseResponse<>(ResCodeEnum.OK);
         try {

@@ -90,4 +90,67 @@ https://www.jianshu.com/p/12f4394462d5 <br/>
 5.本系统事务依赖tx-lcn,(https://github.com/codingapi/tx-lcn) , <br/>
 示例代码查看 https://github.com/codingapi/springcloud-lcn-demo <br/>
 示例使用说明 https://github.com/codingapi/springcloud-lcn-demo/wiki <br/>
-启动运行TxManagerApplication, 然后访问 http://127.0.0.1:8899/index.html
+TxClient使用说明：https://github.com/codingapi/tx-lcn/wiki/TxClient%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E <br/>
+启动运行TxManagerApplication, 然后访问 http://127.0.0.1:8899/index.html <br/>
+
+
+配置tx-manager的url地址。有两种方式  <br/>
+方式一： 使用默认方式是添加tx.properties文件，内容如下 <br/>
+
+url=http://127.0.0.1:8899/tx/manager/ <br/>
+
+方式二： 自定义url的配置. <br/>
+
+1.编写配置文件到application.properties文件下key tm.manager.url如: <br/>
+tm.manager.url=http://127.0.0.1:8899/tx/manager/。 <br/>
+
+2.复写读取配置文件的类TxManagerTxUrlService。 <br/>
+
+
+import com.codingapi.tx.config.service.TxManagerTxUrlService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class TxManagerTxUrlServiceImpl implements TxManagerTxUrlService{
+
+
+    @Value("${tm.manager.url}")
+    private String url;
+
+    @Override
+    public String getTxUrl() {
+        System.out.println("load tm.manager.url ");
+        return url;
+    }
+}
+
+如何将tx-manager的访问地址设置为服务发现的方式.<br/>
+复写TxManagerHttpRequestService自定义方法方式.
+
+
+import com.codingapi.tx.netty.service.TxManagerHttpRequestService;
+import com.lorne.core.framework.utils.http.HttpUtils;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class TxManagerHttpRequestServiceImpl implements TxManagerHttpRequestService{
+
+    @Override
+    public String httpGet(String url) {
+        System.out.println("httpGet-start");
+        String res = HttpUtils.get(url);
+        System.out.println("httpGet-end");
+        return res;
+    }
+
+    @Override
+    public String httpPost(String url, String params) {
+        System.out.println("httpPost-start");
+        String res = HttpUtils.post(url,params);
+        System.out.println("httpPost-end");
+        return res;
+    }
+}

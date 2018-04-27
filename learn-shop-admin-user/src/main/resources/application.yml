@@ -60,6 +60,15 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+#txmanager地址
+#tm:
+#  manager:
+#    url: http://127.0.0.1:8899/tx/manager/
+logging:
+  level:
+    com:
+      codingapi: debug
 #日志配置
 #logging:
 #  level:

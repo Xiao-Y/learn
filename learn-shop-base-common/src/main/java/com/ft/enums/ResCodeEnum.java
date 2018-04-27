@@ -41,10 +41,12 @@ public enum ResCodeEnum {
      * @return
      */
     public static String OK = ResCodeEnum.RESCODE_SUCCESS.getStatusCode();
+    public static String OK_NAME = ResCodeEnum.RESCODE_SUCCESS.getStatusName();
     /**
      * 失败
      */
     public static String FAIL = ResCodeEnum.RESCODE_OTHER_ERROR.getStatusCode();
+    public static String FAIL_NAME = ResCodeEnum.RESCODE_OTHER_ERROR.getStatusName();
 
 
     /**

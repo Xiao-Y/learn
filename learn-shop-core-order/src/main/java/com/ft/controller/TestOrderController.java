@@ -64,9 +64,15 @@ public class TestOrderController {
     }
 
 
-    @ApiOperation(value = "调用用户系统", notes = "用于测试远程调用用户系统带事务的")
+    @ApiOperation(value = "调用用户系统,使用Feign直接调用", notes = "用于测试远程调用用户系统带事务的")
     @GetMapping("/saveUserAndOrder")
     public BaseResponse<OrderModel> saveUserAndOrder() {
         return coreOrderService.saveUserAndOrder();
+    }
+
+    @ApiOperation(value = "调用用户系统,使用Feign+分布式事务调用", notes = "用于测试远程调用用户系统带事务的")
+    @GetMapping("/saveUserAndOrderTx")
+    public BaseResponse<OrderModel> saveUserAndOrderTx() {
+        return coreOrderService.saveUserAndOrderTx();
     }
 }

@@ -22,4 +22,5 @@ public interface CoreOrderService {
      */
     BaseResponse<OrderModel> saveUserAndOrder();
 
+    BaseResponse<OrderModel> saveUserAndOrderTx();
 }
