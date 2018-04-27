@@ -14,6 +14,7 @@
     <url>http://maven.apache.org</url>
 
     <dependencies>
+        <!-- 配置中心公共配置 -->
         <dependency>
             <groupId>com.ft</groupId>
             <artifactId>learn-cloud-common</artifactId>
