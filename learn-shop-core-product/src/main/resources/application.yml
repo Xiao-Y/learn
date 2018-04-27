@@ -22,4 +22,4 @@ spring:
 
 feign: #远程连接
   hystrix: #熔断器配置
-    enabled: ${config.admin.user.feign.hystrix.enabled} #启动熔断器
+    enabled: ${config.core.product.feign.hystrix.enabled} #启动熔断器

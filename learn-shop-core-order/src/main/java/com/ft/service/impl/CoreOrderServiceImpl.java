@@ -103,7 +103,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
         //测试分布式事务，如果远程成功，手动抛出异常
         if (ResCodeEnum.OK.equals(resCode)) {
             res.setResCode(ResCodeEnum.FAIL);
-            throw new RuntimeException(ResCodeEnum.FAIL_NAME);
+            //throw new RuntimeException(ResCodeEnum.FAIL_NAME);
         }
         return res;
     }

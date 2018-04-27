@@ -26,6 +26,11 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.ft</groupId>
+            <artifactId>learn-cloud-common</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.1991wangliang</groupId>
             <artifactId>lorne_core</artifactId>
             <version>1.0.0</version>
@@ -55,8 +60,8 @@
         </dependency>
         <!-- 注册中心 -->
         <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter-eureka</artifactId>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-eureka</artifactId>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
