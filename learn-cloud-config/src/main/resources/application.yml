@@ -26,5 +26,5 @@ spring:
     config:
       server:
         native:
-          #search-locations: D:/project/IDEAProjects/learn/learn-cloud-config/cloud-config-repo
-          search-locations: D:/GitHub/learn/learn-cloud-config/cloud-config-repo
+          search-locations: D:/project/IDEAProjects/learn/learn-cloud-config/cloud-config-repo
+          #search-locations: D:/GitHub/learn/learn-cloud-config/cloud-config-repo

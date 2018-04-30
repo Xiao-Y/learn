@@ -46,7 +46,7 @@ spring:
             exchangeType: fanout #指定该主题的类型为广播模式
             autoBindDlq: true #消费失败的消息放入dlq队列
             republishToDlq: true
-        inSysEventPublish: #channelName，消费者
+        inSysEventPublish: #channelName，消费者，事务消息队列
           binder: learnMQ #使用名称为learnMQ的环境
           group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
           contentType: text/plain
@@ -55,27 +55,13 @@ spring:
             exchangeType: fanout #指定该主题的类型为广播模式
             autoBindDlq: true #消费失败的消息放入dlq队列
             republishToDlq: true
+        sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
+          binder: learnMQ #使用名称为learnMQ的环境
+          destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: update
-
-#txmanager地址
-#tm:
-#  manager:
-#    url: http://127.0.0.1:8899/tx/manager/
-logging:
-  level:
-    com:
-      codingapi: debug
-#日志配置
-#logging:
-#  level:
-#    root: INFO
-#    org.hibernate: INFO
-#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-#    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
-#    com.itmuch.youran.persistence: ERROR
 #测试
 words: ${server.port}

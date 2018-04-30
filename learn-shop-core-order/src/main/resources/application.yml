@@ -16,6 +16,7 @@ eureka:
   instance:
     #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
     status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
+    prefer-ip-address: true
 
 spring:
   application:
@@ -38,7 +39,10 @@ spring:
       bindings:
         output: #channelName，生产者
           binder: learnMQ #使用名称为learnMQ的环境
-          destination: ${config.mq.orderToUser.orderStatus} #指定了消息获取的目的地，对应于MQ就是 exchange
+          destination: ${config.mq.orderToUser.orderStatus} #指定了消息投送的目的地，对应于MQ就是 exchange
+        sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
+          binder: learnMQ #使用名称为learnMQ的环境
+          destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
     loadbalancer:
       retry:
         enabled: true #开启重试机制

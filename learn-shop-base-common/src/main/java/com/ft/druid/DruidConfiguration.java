@@ -1,8 +1,8 @@
 package com.ft.druid;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.context.annotation.Bean;
@@ -17,19 +17,31 @@ import java.sql.SQLException;
  * @create 2018-02-08 8:43
  */
 @Configuration
-@EnableConfigurationProperties(DataSourceProperties.class)
+@ConditionalOnClass(DruidDataSource.class) //该注解的参数对应的类必须存在，否则不解析该注解修饰的配置类
+@EnableConfigurationProperties(DruidDSProperties.class) // 用于@Autowired注入
 public class DruidConfiguration {
 
-    @Bean(destroyMethod = "close", initMethod = "init")
-    @ConfigurationProperties("spring.datasource.*")
-    public DruidDataSource dataSource(DataSourceProperties properties) {
+    @Autowired
+    private DruidDSProperties druidDSProperties;
+
+    @Bean(name = "dataSource", destroyMethod = "close", initMethod = "init")
+    public DruidDataSource dataSource() {
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(properties.determineDriverClassName());
-        dataSource.setUrl(properties.determineUrl());
-        dataSource.setUsername(properties.determineUsername());
-        dataSource.setPassword(properties.determinePassword());
-        DatabaseDriver databaseDriver = DatabaseDriver
-                .fromJdbcUrl(properties.determineUrl());
+        dataSource.setDriverClassName(druidDSProperties.getDriverClassName());
+        dataSource.setUrl(druidDSProperties.getUrl());
+        dataSource.setUsername(druidDSProperties.getUsername());
+        dataSource.setPassword(druidDSProperties.getPassword());
+        dataSource.setInitialSize(druidDSProperties.getInitialSize());
+        dataSource.setMinIdle(druidDSProperties.getMinIdle());
+        dataSource.setMaxActive(druidDSProperties.getMaxActive());
+        dataSource.setMaxWait(druidDSProperties.getMaxWait());
+        dataSource.setTestOnReturn(druidDSProperties.getTestOnReturn());
+        dataSource.setPoolPreparedStatements(druidDSProperties.getPoolPreparedStatements());
+        dataSource.setMaxPoolPreparedStatementPerConnectionSize(druidDSProperties.getMaxPoolPreparedStatementPerConnectionSize());
+        dataSource.setTimeBetweenEvictionRunsMillis(druidDSProperties.getTimeBetweenEvictionRunsMillis());
+
+        dataSource.configFromPropety(druidDSProperties.toProperties());
+        DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(druidDSProperties.getUrl());
         String validationQuery = databaseDriver.getValidationQuery();
         if (validationQuery != null) {
             dataSource.setTestOnBorrow(true);

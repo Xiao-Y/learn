@@ -97,7 +97,12 @@
             <groupId>com.codingapi</groupId>
             <artifactId>tx-plugins-db</artifactId>
         </dependency>
-        <!-- 分布式事务 start -->
+
+        <!-- zipkin -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-stream</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
