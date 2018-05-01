@@ -9,6 +9,10 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
+  instance:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 zuul:
   routes:

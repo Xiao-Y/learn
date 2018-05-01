@@ -1,4 +1,4 @@
-package com.ft.druid;
+package com.ft;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -10,7 +10,8 @@ import java.util.Properties;
 @ConfigurationProperties(prefix = "druid.datasource")
 public class DruidDSProperties {
     private String type;
-    private String url;
+    //private String url;
+    private String zipkinUrl;
     private String username;
     private String password;
     private String driverClassName;
@@ -36,12 +37,12 @@ public class DruidDSProperties {
         this.type = type;
     }
 
-    public String getUrl() {
-        return url;
+    public String getZipkinUrl() {
+        return zipkinUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setZipkinUrl(String zipkinUrl) {
+        this.zipkinUrl = zipkinUrl;
     }
 
     public String getUsername() {
@@ -176,19 +177,9 @@ public class DruidDSProperties {
     public Properties toProperties() {
         Properties properties = new Properties();
         notNullAdd(properties, "testWhileIdle", this.testWhileIdle);
-        notNullAdd(properties, "testOnBorrow", this.testOnBorrow);
-        notNullAdd(properties, "validationQuery", this.validationQuery);
-        notNullAdd(properties, "filters", this.filters);
-
-//        notNullAdd(properties, "initialSize", this.initialSize);
-//        notNullAdd(properties, "minIdle", this.minIdle);
-//        notNullAdd(properties, "maxActive", this.maxActive);
-//        notNullAdd(properties, "maxWait", this.maxWait);
-//        notNullAdd(properties, "testOnReturn", this.testOnReturn);
-//        notNullAdd(properties, "timeBetweenEvictionRunsMillis", this.timeBetweenEvictionRunsMillis);
-//        notNullAdd(properties, "poolPreparedStatements", this.poolPreparedStatements);
-//        notNullAdd(properties, "maxPoolPreparedStatementPerConnectionSize", this.maxPoolPreparedStatementPerConnectionSize);
-//        notNullAdd(properties, "minEvictableIdleTimeMillis", this.minEvictableIdleTimeMillis);
+        notNullAdd(properties, "druid.testOnBorrow", this.testOnBorrow);
+        notNullAdd(properties, "druid.validationQuery", this.validationQuery);
+        notNullAdd(properties, "druid.filters", this.filters);
         return properties;
     }
 

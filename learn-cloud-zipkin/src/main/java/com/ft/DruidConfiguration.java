@@ -1,4 +1,4 @@
-package com.ft.druid;
+package com.ft;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class DruidConfiguration {
     public DruidDataSource dataSource() {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(druidDSProperties.getDriverClassName());
-        dataSource.setUrl(druidDSProperties.getUrl());
+        dataSource.setUrl(druidDSProperties.getZipkinUrl());
         dataSource.setUsername(druidDSProperties.getUsername());
         dataSource.setPassword(druidDSProperties.getPassword());
         dataSource.setInitialSize(druidDSProperties.getInitialSize());
@@ -43,7 +43,7 @@ public class DruidConfiguration {
 
         dataSource.configFromPropety(druidDSProperties.toProperties());
 
-        DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(druidDSProperties.getUrl());
+        DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(druidDSProperties.getZipkinUrl());
         String validationQuery = databaseDriver.getValidationQuery();
         if (validationQuery != null) {
             dataSource.setTestOnBorrow(true);

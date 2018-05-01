@@ -1,9 +1,18 @@
 server:
-  port: 9411
+  port: ${config.zipkin.server.port}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
+  instance:
+    status-page-url: http://localhost:${server.port}/zipkin/ # zipkin文档页面
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 spring:
   application:
-    name: cloud-zipkin
+    name: ${config.zipkin.spring.application.name}
   cloud:
     stream: #mq连接配置
       binders:
@@ -27,27 +36,10 @@ spring:
             autoBindDlq: true #消费失败的消息放入dlq队列
             republishToDlq: true
 
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/zipkin?useUnicode=true&characterEncoding=utf8&useSSL=true
-    username: root
-    password: root
-    initialize: true
-    continue-on-error: true
-
   sleuth:
-    enabled: false
+    enabled: false #不对自己采集
     sampler:
-      percentage: 1
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    status-page-url: http://localhost:${server.port}/zipkin/ # zipkin文档页面
-    prefer-ip-address: true
+      percentage: 0.1 #数据采集比例，为1是全采集，影响性能
 
 zipkin:
   storage: #表示zipkin数据存储方式是 mysql
