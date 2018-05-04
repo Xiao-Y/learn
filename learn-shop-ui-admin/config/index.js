@@ -40,7 +40,18 @@ module.exports = {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: true
+    cssSourceMap: true,
+    // 所有以/api 为前缀的请求将被代理到http://localhost:8771
+    // 即 /api/admin-user/getNav -> http://localhost:8771/admin-user/getNav
+    proxyTable: {
+      '/api': {
+        target: 'http://localhost:8771',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   },
 
   build: {
