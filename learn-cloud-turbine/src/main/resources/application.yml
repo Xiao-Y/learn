@@ -16,7 +16,6 @@ eureka:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
   instance:
-  instance:
 #   status-page-url: http://localhost:${server.port}/zipkin/ # zipkin文档页面
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
