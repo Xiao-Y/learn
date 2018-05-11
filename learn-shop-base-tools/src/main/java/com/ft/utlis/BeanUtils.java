@@ -17,15 +17,14 @@ import java.util.Map;
  * @date 2017年4月18日 下午3:52:31
  */
 @Component
-public class BeanUtils implements ApplicationContextAware {
+public class BeanUtils {
 
     private static ApplicationContext applicationContext;
 
     /**
      * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量
      */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         BeanUtils.applicationContext = applicationContext;
     }
 

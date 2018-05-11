@@ -97,11 +97,15 @@
             <groupId>com.codingapi</groupId>
             <artifactId>tx-plugins-db</artifactId>
         </dependency>
-
         <!-- zipkin -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-stream</artifactId>
+        </dependency>
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
         </dependency>
     </dependencies>
 
