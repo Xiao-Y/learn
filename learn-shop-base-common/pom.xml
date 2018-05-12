@@ -88,15 +88,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-        <!-- 分布式事务 start -->
-        <dependency>
-            <groupId>com.codingapi</groupId>
-            <artifactId>transaction-springcloud</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.codingapi</groupId>
-            <artifactId>tx-plugins-db</artifactId>
-        </dependency>
         <!-- zipkin -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

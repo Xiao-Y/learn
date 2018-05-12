@@ -24,6 +24,15 @@
             <!--<version>1.16.20</version>-->
             <!--<scope>provided</scope>-->
         <!--</dependency>-->
+        <!-- 分布式事务 start -->
+        <dependency>
+            <groupId>com.codingapi</groupId>
+            <artifactId>transaction-springcloud</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.codingapi</groupId>
+            <artifactId>tx-plugins-db</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

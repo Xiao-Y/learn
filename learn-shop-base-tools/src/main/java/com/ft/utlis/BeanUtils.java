@@ -44,6 +44,18 @@ public class BeanUtils {
     }
 
     /**
+     * 通过name和clazz返回指定的Bean
+     */
+    public static <T> T getBean(String name, Class<T> clazz) {
+        checkApplicationContext();
+        T bean = applicationContext.getBean(name, clazz);
+        if (bean == null) {
+            throw new NullBeanException(name);
+        }
+        return bean;
+    }
+
+    /**
      * 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
      * <p>
      * <br>

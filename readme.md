@@ -101,8 +101,19 @@ https://www.jianshu.com/p/12f4394462d5 <br/>
 TxClient使用说明：https://github.com/codingapi/tx-lcn/wiki/TxClient%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E <br/>
 启动运行TxManagerApplication, 然后访问 http://127.0.0.1:8899/index.html <br/>
 
+5.1 使用时添加<br/>
+<!-- 分布式事务 start -->
+        <dependency>
+            <groupId>com.codingapi</groupId>
+            <artifactId>transaction-springcloud</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.codingapi</groupId>
+            <artifactId>tx-plugins-db</artifactId>
+        </dependency>
 
-配置tx-manager的url地址。有两种方式  <br/>
+
+5.2 配置tx-manager的url地址。有两种方式  <br/>
 方式一： 使用默认方式是添加tx.properties文件，内容如下 <br/>
 
 url=http://127.0.0.1:8899/tx/manager/ <br/>
