@@ -10,7 +10,6 @@ eureka:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
   instance:
-  instance:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
@@ -24,3 +23,7 @@ zuul:
     core-order:
       path: /core-order/**
       serviceId: ${config.core.order.spring.application.name}
+    #商品相关
+    core-product:
+      path: /core-product/**
+      serviceId: ${config.core.product.spring.application.name}

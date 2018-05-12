@@ -1,5 +1,7 @@
 package com.ft.component;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.filters.route.FallbackProvider;
@@ -64,10 +66,12 @@ public class ServerFallback implements FallbackProvider {
 
             @Override
             public InputStream getBody() throws IOException {
-                Map<String, String> map = new HashMap<>();
-                map.put("resCode", "9999");
-                map.put("resMsg", "系统错误，请求失败");
-                return new ByteArrayInputStream(map.toString().getBytes("UTF-8"));
+                String resTimestamp = DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMddHHmmssSSS");
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("resCode", "9999");
+                jsonObject.put("resMsg", "系统服务异常，请求失败");
+                jsonObject.put("resTimestamp", resTimestamp);
+                return new ByteArrayInputStream(jsonObject.toJSONString().getBytes("UTF-8"));
             }
 
             @Override
@@ -87,10 +91,15 @@ public class ServerFallback implements FallbackProvider {
 
     @Override
     public ClientHttpResponse fallbackResponse(Throwable cause) {
-        if (cause != null && cause.getCause() != null) {
-            String reason = cause.getCause().getMessage();
-            logger.info("Excption {}", reason);
+        if (cause != null) {
+            String reason = cause.getMessage();
+            if (reason != null && reason.length() > 0) {
+                String[] split = reason.split(":");
+                logger.error("找不到{} 服务：{}", split[1], reason);
+                return fallbackResponse();
+            }
         }
+        logger.error("系统未知异常...");
         return fallbackResponse();
     }
 }
