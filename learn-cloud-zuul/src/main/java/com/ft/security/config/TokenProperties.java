@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "battcn.security.token")
+@ConfigurationProperties(prefix = "billow.security.token")
 public class TokenProperties {
     /**
      * {@link com.ft.security.token.Token} token的过期时间

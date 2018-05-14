@@ -3,12 +3,13 @@ package com.ft.security.token;
 import com.ft.context.UserContext;
 import com.ft.security.config.TokenProperties;
 import com.ft.security.enums.Scopes;
-import com.ft.security.token.Token;
 import com.ft.security.token.impl.AccessToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +19,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 /**
  * Token创建工厂类 {@link Token}.
  */
 @Component
 public class TokenFactory {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(TokenFactory.class);
 
     private final TokenProperties properties;
 
@@ -43,19 +45,18 @@ public class TokenFactory {
     public AccessToken createAccessToken(UserContext context) {
         Optional.ofNullable(context.getUsername()).orElseThrow(() -> new IllegalArgumentException("Cannot create Token without username"));
         Optional.ofNullable(context.getAuthorities()).orElseThrow(() -> new IllegalArgumentException("User doesn't have any privileges"));
-        Claims claims = Jwts.claims().setSubject(context.getUsername());
-        claims.put("scopes", context.getAuthorities().stream().map(Object::toString).collect(toList()));
+        Claims claims = Jwts.claims().setSubject(context.getUsername());//用户名
+        claims.put("scopes", context.getAuthorities().stream().map(Object::toString).collect(Collectors.toList()));
         LocalDateTime currentTime = LocalDateTime.now();
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuer(properties.getIssuer())
                 .setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
-                .setExpiration(Date.from(currentTime
-                        .plusMinutes(properties.getExpirationTime())
-                        .atZone(ZoneId.systemDefault()).toInstant()))
-                .signWith(SignatureAlgorithm.HS512, properties.getSigningKey())
+                //plusMinutes 加上几分钟。atZone将LocalDateTime转换为ZonedDateTime。toInstant将ZonedDateTime转换为Instant，并从中获取Date
+                .setExpiration(Date.from(currentTime.plusMinutes(properties.getExpirationTime()).atZone(ZoneId.systemDefault()).toInstant())) //过期时间
+                .signWith(SignatureAlgorithm.HS512, properties.getSigningKey())//采用HS512算法
                 .compact();
-        System.out.println(token);
+        LOGGER.debug("username:{},token:{}", context.getUsername(), token);
         return new AccessToken(token, claims);
     }
 

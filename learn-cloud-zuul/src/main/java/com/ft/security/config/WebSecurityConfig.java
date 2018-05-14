@@ -25,6 +25,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.List;
 
+/**
+ * 配置拦截器的主入口
+ *
+ * @author LiuYongTao
+ * @date 2018/5/14 8:58
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -36,9 +42,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String TOKEN_REFRESH_ENTRY_POINT = "/api/auth/refresh_token";
 
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
+    // 登陆成功时的处理器
     private final AuthenticationSuccessHandler successHandler;
+    // 登陆失败时的处理器
     private final AuthenticationFailureHandler failureHandler;
+    // 该类实现了用户登录的逻辑
     private final LoginAuthenticationProvider loginAuthenticationProvider;
+    // 该类实现了Token的逻辑
     private final TokenAuthenticationProvider tokenAuthenticationProvider;
     private final TokenExtractor tokenExtractor;
 
@@ -52,6 +62,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.tokenExtractor = tokenExtractor;
     }
 
+    /**
+     * 构建登陆时的过滤器
+     *
+     * @return com.ft.security.auth.login.LoginProcessingFilter
+     * @author LiuYongTao
+     * @date 2018/5/14 9:03
+     */
     private LoginProcessingFilter buildLoginProcessingFilter() throws Exception {
         LoginProcessingFilter filter = new LoginProcessingFilter(FORM_BASED_LOGIN_ENTRY_POINT, successHandler, failureHandler);
         filter.setAuthenticationManager(super.authenticationManager());
@@ -74,6 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
+        //配置用户登录过滤器
         auth.authenticationProvider(loginAuthenticationProvider);
         auth.authenticationProvider(tokenAuthenticationProvider);
     }
