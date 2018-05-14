@@ -35,3 +35,11 @@ billow:
       refresh-exp-time: 30 # 分钟 2880
       issuer: "" #签发者
       signing-key: billow #密钥
+
+# Logging configuration
+logging:
+  level:
+    org.springframework:
+      data: DEBUG
+      security: DEBUG
+    com.ft.security: DEBUG

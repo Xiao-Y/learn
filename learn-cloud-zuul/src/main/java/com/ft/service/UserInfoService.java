@@ -12,6 +12,6 @@ public class UserInfoService {
 
     public UserInfo findByName(String username) {
         //TODO 该处只是为了模拟查询数据库
-        return new UserInfo("test", "test");
+        return new UserInfo(username, "test");
     }
 }

@@ -29,6 +29,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * 测试数据为admin 和 test 密码随便
+ *
+ * @author LiuYongTao
+ * @date 2018/5/14 15:28
+ */
 @RestController
 public class AuthController {
 
