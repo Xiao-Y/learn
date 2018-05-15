@@ -1,6 +1,9 @@
 package com.ft.security;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -15,6 +18,13 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex)
             throws IOException, ServletException {
-        response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+        String resTimestamp = DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMddHHmmssSSS");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("resCode", HttpStatus.UNAUTHORIZED.value());
+        jsonObject.put("resMsg", ex.getMessage());
+        jsonObject.put("resTimestamp", resTimestamp);
+
+        response.getWriter().write(jsonObject.toJSONString());
+//        response.sendError(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
     }
 }

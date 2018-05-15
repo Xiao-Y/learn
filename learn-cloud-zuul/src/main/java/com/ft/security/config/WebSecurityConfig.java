@@ -26,7 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.List;
 
 /**
- * 配置拦截器的主入口
+ * 配置拦截器的主入口，一启动就加载的
  *
  * @author LiuYongTao
  * @date 2018/5/14 8:58
@@ -115,6 +115,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated() // Protected API End-points
                 //资源只能被拥有 ADMIN 角色的用户访问
                 .antMatchers(MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT).hasAnyRole(RoleEnum.ADMIN.desc())
+                .and()
+                .authorizeRequests()
+                .antMatchers("/**")
+                .authenticated()
                 .and()
                 .addFilterBefore(buildLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildTokenAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
