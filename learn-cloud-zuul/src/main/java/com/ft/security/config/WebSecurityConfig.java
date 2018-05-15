@@ -116,10 +116,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //资源只能被拥有 ADMIN 角色的用户访问
                 .antMatchers(MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT).hasAnyRole(RoleEnum.ADMIN.desc())
                 .and()
-                .authorizeRequests()
-                .antMatchers("/**")
-                .authenticated()
-                .and()
+//                .authorizeRequests()
+//                .antMatchers("/**")
+//                .authenticated() // 需要鉴权认证
+//                .and()
                 .addFilterBefore(buildLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildTokenAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
