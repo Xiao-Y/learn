@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: ${config.zuul.spring.application.name}
+  jpa: #JPA配置
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
 eureka:
   client:

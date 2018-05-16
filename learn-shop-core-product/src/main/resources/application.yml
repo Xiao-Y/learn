@@ -2,7 +2,7 @@ server:
   port: ${config.core.product.server.port}
 
 swagger: #接口注解文档
-  basepackage: com.ft.controller #扫描的包，必须要有 GetMapping，PostMapping...
+  basepackage: com.billow.controller #扫描的包，必须要有 GetMapping，PostMapping...
   service:
     name: ${spring.application.name} #api名称
     version: 1.0
