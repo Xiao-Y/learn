@@ -1,6 +1,6 @@
 package com.ft;
 
-import com.ft.utlis.BeanUtils;
+import com.ft.utlis.SpringContextUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -21,6 +21,6 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 @EnableCircuitBreaker
 public class CoreProductApp {
     public static void main(String[] args) {
-        BeanUtils.setApplicationContext(SpringApplication.run(CoreProductApp.class, args));
+        SpringContextUtil.setApplicationContext(SpringApplication.run(CoreProductApp.class, args));
     }
 }

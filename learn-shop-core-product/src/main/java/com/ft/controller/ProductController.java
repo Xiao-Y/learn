@@ -2,7 +2,7 @@ package com.ft.controller;
 
 import com.ft.ResData.BaseResponse;
 import com.ft.enums.ResCodeEnum;
-import com.ft.utlis.BeanUtils;
+import com.ft.utlis.SpringContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -31,7 +31,7 @@ public class ProductController {
         BaseResponse<String> response = new BaseResponse<>(ResCodeEnum.OK);
         opsForValue.set("name", "tom", 20, TimeUnit.SECONDS);
         try {
-            ProductController productController = BeanUtils.getBean("productController");
+            ProductController productController = SpringContextUtil.getBean("productController");
             response.setResData(productController.getClass().getName());
         } catch (Exception e) {
             response.setResCode(ResCodeEnum.FAIL);

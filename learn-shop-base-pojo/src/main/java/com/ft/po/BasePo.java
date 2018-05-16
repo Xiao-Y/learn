@@ -1,5 +1,7 @@
 package com.ft.po;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
@@ -11,12 +13,18 @@ import java.util.Date;
 public class BasePo extends BasePage {
 
     private String creatorCode;
-
     private Date createTime;
-
     private String updaterCode;
-
     private Date updateTime;
+    private Boolean validInd;
+
+    public Boolean getValidInd() {
+        return validInd;
+    }
+
+    public void setValidInd(Boolean validInd) {
+        this.validInd = validInd;
+    }
 
     public String getCreatorCode() {
         return creatorCode;
@@ -26,6 +34,7 @@ public class BasePo extends BasePage {
         this.creatorCode = creatorCode;
     }
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     public Date getCreateTime() {
         return createTime;
     }
@@ -42,6 +51,7 @@ public class BasePo extends BasePage {
         this.updaterCode = updaterCode;
     }
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     public Date getUpdateTime() {
         return updateTime;
     }

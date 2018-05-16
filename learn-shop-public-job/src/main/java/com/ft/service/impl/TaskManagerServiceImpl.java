@@ -11,11 +11,10 @@ import com.ft.model.expand.ScheduleJobLogDto;
 import com.ft.service.ScheduleJobLogService;
 import com.ft.service.ScheduleJobService;
 import com.ft.service.TaskManagerService;
-import com.ft.utlis.BeanUtils;
+import com.ft.utlis.SpringContextUtil;
 import com.ft.utlis.ToolsUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobDetail;
-
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,7 +114,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             // bean相关检查
             if (ToolsUtils.isNotEmpty(springId)) {
                 try {
-                    Object bean = BeanUtils.getBean(springId);
+                    Object bean = SpringContextUtil.getBean(springId);
                     clazz = bean.getClass();
                 } catch (Exception e) {
                     json.setType(MessageTipsCst.TYPE_ERROR);

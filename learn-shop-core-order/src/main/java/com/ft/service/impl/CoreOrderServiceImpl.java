@@ -13,7 +13,7 @@ import com.ft.remote.TestUserRemote;
 import com.ft.service.CoreOrderService;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
 import com.ft.sysEvent.service.SysEventPublishService;
-import com.ft.utlis.BeanUtils;
+import com.ft.utlis.PageUtil;
 import com.ft.vo.OrderVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +67,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
         orderVo.setCreateTime(new Date());
         orderVo.setUpdaterCode("billow");
         orderVo.setUpdateTime(new Date());
-        OrderPo orderPo = BeanUtils.convert(orderVo, OrderPo.class);
+        OrderPo orderPo = PageUtil.convert(orderVo, OrderPo.class);
         orderDao.save(orderPo);
     }
 

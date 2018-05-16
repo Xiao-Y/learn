@@ -5,13 +5,6 @@ import com.ft.proxy.ProxyInfo;
 import com.ft.proxy.ProxyInfoContext;
 import org.apache.commons.lang3.StringUtils;
 
-import org.springframework.web.multipart.MultipartFile;
-
-//import javax.servlet.ServletContext;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,6 +23,10 @@ import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+//import javax.servlet.ServletContext;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
 
 /**
  * 数据操作工具类
@@ -50,7 +47,6 @@ public class ToolsUtils {
      * @return 指定字段的结果
      * @date 2016年12月2日 下午2:45:37
      */
-    @SuppressWarnings("unchecked")
     public static <T, E> List<T> getListByFieldValue(List<E> list, String field) {
         List<T> fields = new ArrayList<>();
         for (E e : list) {
@@ -61,13 +57,8 @@ public class ToolsUtils {
                 f.setAccessible(true);
                 T object = (T) f.get(e);
                 fields.add(object);
-            } catch (SecurityException e1) {
-                e1.printStackTrace();
-            } catch (NoSuchFieldException e1) {
-                e1.printStackTrace();
-            } catch (IllegalArgumentException e1) {
-                e1.printStackTrace();
-            } catch (IllegalAccessException e1) {
+            } catch (SecurityException | NoSuchFieldException | IllegalArgumentException |
+                    IllegalAccessException e1) {
                 e1.printStackTrace();
             }
         }
@@ -185,21 +176,11 @@ public class ToolsUtils {
         return dt;
     }
 
-//    public static void main(String[] args) {
-//
-//        int i = 0;
-//        while (i < 1000) {
-//            System.out.println(getRandomNo());
-//            i++;
-//        }
-//    }
-
     /**
      * 文件压缩
      *
      * @param dir
      * @param zipfile
-     * @param DirectoryName
      * @return
      * @throws IOException
      */
@@ -609,7 +590,6 @@ public class ToolsUtils {
     /**
      * 获取系统时间，可传入DateTime.YEAR_TO_SECOND值定时间段，默认为DateTime.YEAR_TO_SECOND
      *
-     * @param timeSpan
      * @return DateTime Author: Skify Apr 13, 2012
      */
     public static DateTime getDateTimeNow() {
@@ -638,7 +618,6 @@ public class ToolsUtils {
     /**
      * 获取时间年月日时分秒毫秒14位+4位随机数
      *
-     * @param number
      * @return String Author Skify Aug 31, 2011
      */
     public static String getRandomNo() {
@@ -914,8 +893,8 @@ public class ToolsUtils {
     public static String emptyToString(String str) {
         if (isEmpty(str)) {
             return "";
-        } else
-            return str;
+        }
+        return str;
     }
 
     @SuppressWarnings("static-access")

@@ -1,20 +1,12 @@
 package com.ft.autoTask.sysEvent;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
-import com.ft.core.enumType.AutoTaskJobStatusEnum;
 import com.ft.date.DateTime;
 import com.ft.enums.SysEventEunm;
-import com.ft.generator.UUID;
-import com.ft.model.expand.ScheduleJobDto;
-import com.ft.model.expand.ScheduleJobLogDto;
-import com.ft.service.ScheduleJobLogService;
-import com.ft.service.ScheduleJobService;
 import com.ft.service.TaskManagerService;
 import com.ft.sysEvent.model.expand.SysEventPublishDto;
 import com.ft.sysEvent.mq.SysEventInterface;
 import com.ft.sysEvent.service.SysEventPublishService;
-import com.ft.utlis.BeanUtils;
 import com.ft.utlis.ToolsUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -26,9 +18,6 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

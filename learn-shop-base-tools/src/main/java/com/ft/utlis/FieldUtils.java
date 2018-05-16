@@ -41,6 +41,24 @@ public class FieldUtils {
         setValue(obj, "updateTime", date);
     }
 
+    /**
+     * 插入数据时，带有效标志的
+     *
+     * @param [obj, userCode]
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/5/16 8:45
+     */
+    public static void setCommonFieldByInsertWithValidInd(Object obj, String userCode) throws Exception {
+        Date date = new Date();
+        Boolean b = true;
+        setValue(obj, "creatorCode", userCode);
+        setValue(obj, "createTime", date);
+        setValue(obj, "updaterCode", userCode);
+        setValue(obj, "updateTime", date);
+        setValue(obj, "validInd", b);
+    }
+
     private static void setValue(Object obj, String FieldName, Object value) throws Exception {
         Field field = obj.getClass().getDeclaredField(FieldName);
         field.setAccessible(true);

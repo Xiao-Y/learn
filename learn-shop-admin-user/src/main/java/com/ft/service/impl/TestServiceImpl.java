@@ -7,7 +7,7 @@ import com.ft.enums.ResCodeEnum;
 
 import com.ft.po.TestPo;
 import com.ft.service.TestService;
-import com.ft.utlis.BeanUtils;
+import com.ft.utlis.PageUtil;
 import com.ft.vo.TestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class TestServiceImpl implements TestService {
             testVo.setAge(18);
             testVo.setUpdateTime(new Date());
             testVo.setCreateTime(new Date());
-            TestPo testPo = BeanUtils.convert(testVo, TestPo.class);
+            TestPo testPo = PageUtil.convert(testVo, TestPo.class);
             testDao.save(testPo);
             res.setResData(testVo);
         } catch (Exception e) {
