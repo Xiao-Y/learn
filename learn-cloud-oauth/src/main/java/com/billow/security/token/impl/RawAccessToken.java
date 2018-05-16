@@ -13,12 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 
-/**
- * 分析并且验证Token是否有效
- *
- * @author LiuYongTao
- * @date 2018/5/16 17:59
- */
 public class RawAccessToken implements Token {
 
     private static Logger logger = LoggerFactory.getLogger(RawAccessToken.class);

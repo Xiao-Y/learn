@@ -23,6 +23,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
+        <!-- 配置中心获取文件配置 -->
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-cloud-common</artifactId>
