@@ -3,8 +3,8 @@ package com.billow.security.config;
 
 import com.billow.pojo.enums.RoleEnum;
 import com.billow.security.RestAuthenticationEntryPoint;
+import com.billow.security.auth.login.LoginAuthenticationProcessingFilter;
 import com.billow.security.auth.login.LoginAuthenticationProvider;
-import com.billow.security.auth.login.LoginProcessingFilter;
 import com.billow.security.auth.token.SkipPathRequestMatcher;
 import com.billow.security.auth.token.TokenAuthenticationProcessingFilter;
 import com.billow.security.auth.token.TokenAuthenticationProvider;
@@ -65,12 +65,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 构建登陆时的过滤器
      *
-     * @return com.billow.security.auth.login.LoginProcessingFilter
+     * @return com.billow.security.auth.login.LoginAuthenticationProcessingFilter
      * @author LiuYongTao
      * @date 2018/5/14 9:03
      */
-    private LoginProcessingFilter buildLoginProcessingFilter() throws Exception {
-        LoginProcessingFilter filter = new LoginProcessingFilter(FORM_BASED_LOGIN_ENTRY_POINT, successHandler, failureHandler);
+    private LoginAuthenticationProcessingFilter buildLoginProcessingFilter() throws Exception {
+        LoginAuthenticationProcessingFilter filter = new LoginAuthenticationProcessingFilter(FORM_BASED_LOGIN_ENTRY_POINT, successHandler, failureHandler);
         filter.setAuthenticationManager(super.authenticationManager());
         return filter;
     }

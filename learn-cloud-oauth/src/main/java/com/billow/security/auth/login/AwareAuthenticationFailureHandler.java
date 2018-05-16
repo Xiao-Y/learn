@@ -18,6 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 登陆失败时的处理器
+ *
+ * @author LiuYongTao
+ * @date 2018/5/16 18:29
+ */
 @Component
 public class AwareAuthenticationFailureHandler implements AuthenticationFailureHandler {
     private final ObjectMapper mapper;

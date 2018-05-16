@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * 认证成功处理程序
+ * 登陆成功时的处理器
  */
 @Component
 public class AwareAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
