@@ -11,8 +11,9 @@ import com.ft.utlis.PageUtil;
 import com.ft.vo.TestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 
 /**
@@ -27,8 +28,8 @@ public class TestServiceImpl implements TestService {
     @Autowired
     private TestDao testDao;
 
-    @Transactional
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(TestVo test) {
         testDao.save(test);
     }
@@ -38,15 +39,15 @@ public class TestServiceImpl implements TestService {
         testDao.save(test);
     }
 
-    @Transactional
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void update(TestVo test) {
         testDao.save(test);
     }
 
     @Override
     @TxTransaction
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public BaseResponse<TestVo> saveUser(TestVo testVo) {
         BaseResponse<TestVo> res = new BaseResponse<>(ResCodeEnum.OK);
         try {

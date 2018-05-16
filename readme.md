@@ -172,3 +172,14 @@ public class TxManagerHttpRequestServiceImpl implements TxManagerHttpRequestServ
         return res;
     }
 }
+
+<br/>
+HTTP Method 与 CURD 数据处理操作对应<br/>
+
+POST Create 新增一个没有id的资源<br/>
+
+GET Read 取得一个资源<br/>
+
+PUT Update 更新一个资源。或新增一个含 id 资源(如果 id 不存在)<br/>
+
+DELETE Delete 删除一个资源<br/>

@@ -22,43 +22,44 @@ import java.io.Serializable;
 @Entity
 @Table(name = "t_order")
 public class OrderPo extends BasePo implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+
     private String productNo;
     private String productName;
     private Long userId;
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getProductNo() {
         return productNo;
     }
 
-    public void setProductNo(String productNo) {
+    public OrderPo setProductNo(String productNo) {
         this.productNo = productNo;
+        return this;
     }
 
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) {
+    public OrderPo setProductName(String productName) {
         this.productName = productName;
+        return this;
     }
 
     public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public OrderPo setUserId(Long userId) {
         this.userId = userId;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderPo{" +
+                "productNo='" + productNo + '\'' +
+                ", productName='" + productName + '\'' +
+                ", userId=" + userId +
+                "} " + super.toString();
     }
 }

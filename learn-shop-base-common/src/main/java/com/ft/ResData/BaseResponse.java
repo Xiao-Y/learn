@@ -18,6 +18,11 @@ public class BaseResponse<T> implements Serializable {
     private T resData;
     private Map<String, String> ext;
 
+    public BaseResponse() {
+        this.resCode = ResCodeEnum.OK;
+        this.resMsg = ResCodeEnum.OK_NAME;
+    }
+
     public BaseResponse(String resCode, String resMsg, String traceID, String spanID) {
         this.resCode = resCode;
         this.resMsg = resMsg;

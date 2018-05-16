@@ -11,6 +11,8 @@ import java.util.Date;
  */
 public class FieldUtils {
 
+    private static Class<?> basePo;
+
     /**
      * 插入数据时
      *
@@ -60,9 +62,23 @@ public class FieldUtils {
     }
 
     private static void setValue(Object obj, String FieldName, Object value) throws Exception {
-        Field field = obj.getClass().getDeclaredField(FieldName);
+
+        if (null == basePo) {
+            basePo = getBasePo(obj.getClass());
+        }
+        Field field = basePo.getDeclaredField(FieldName);
         field.setAccessible(true);
         field.set(obj, value);
     }
 
+    private static Class<?> getBasePo(Class<?> clazz) {
+        Class<?> basePo;
+        String simpleName = clazz.getSimpleName();
+        if ("BasePo".equals(simpleName)) {
+            return clazz;
+        } else {
+            basePo = getBasePo(clazz.getSuperclass());
+        }
+        return basePo;
+    }
 }

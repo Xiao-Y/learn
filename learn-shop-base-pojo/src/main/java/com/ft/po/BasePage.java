@@ -116,8 +116,12 @@ public abstract class BasePage {
 
     @Override
     public String toString() {
-        return "BaseModel [url=" + url + ", pageSize=" + pageSize + ", pageNo=" + pageNo + ", recordCount="
-                + recordCount + "]";
+        return "BasePage{" +
+                "url='" + url + '\'' +
+                ", pageSize=" + pageSize +
+                ", pageNo=" + pageNo +
+                ", recordCount=" + recordCount +
+                ", objectOrderBy='" + objectOrderBy + '\'' +
+                '}';
     }
-
 }

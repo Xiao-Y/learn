@@ -2,6 +2,9 @@ package com.ft.po;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
@@ -12,61 +15,80 @@ import java.util.Date;
 @MappedSuperclass
 public class BasePo extends BasePage {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String creatorCode;
-    private Date createTime;
     private String updaterCode;
-    private Date updateTime;
     private Boolean validInd;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date createTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date updateTime;
 
-    public Boolean getValidInd() {
-        return validInd;
+    public Long getId() {
+        return id;
     }
 
-    public void setValidInd(Boolean validInd) {
-        this.validInd = validInd;
+    public BasePo setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getCreatorCode() {
         return creatorCode;
     }
 
-    public void setCreatorCode(String creatorCode) {
+    public BasePo setCreatorCode(String creatorCode) {
         this.creatorCode = creatorCode;
-    }
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        return this;
     }
 
     public String getUpdaterCode() {
         return updaterCode;
     }
 
-    public void setUpdaterCode(String updaterCode) {
+    public BasePo setUpdaterCode(String updaterCode) {
         this.updaterCode = updaterCode;
+        return this;
     }
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    public Boolean getValidInd() {
+        return validInd;
+    }
+
+    public BasePo setValidInd(Boolean validInd) {
+        this.validInd = validInd;
+        return this;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public BasePo setCreateTime(Date createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public BasePo setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+        return this;
     }
 
     @Override
     public String toString() {
         return "BasePo{" +
-                "creatorCode='" + creatorCode + '\'' +
-                ", createTime=" + createTime +
+                "id=" + id +
+                ", creatorCode='" + creatorCode + '\'' +
                 ", updaterCode='" + updaterCode + '\'' +
+                ", validInd=" + validInd +
+                ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                '}';
+                "} " + super.toString();
     }
 }

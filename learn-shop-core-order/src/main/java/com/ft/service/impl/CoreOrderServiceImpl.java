@@ -19,8 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 
 /**
@@ -40,7 +41,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     private TestUserRemote testUserRemote;
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void sendOrderCar() {
         //执行业务操作....
         this.save(new OrderVo());
@@ -59,7 +60,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(OrderVo orderVo) {
         orderVo.setProductName("袜子");
         orderVo.setProductNo("123");
@@ -72,7 +73,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public BaseResponse<OrderVo> saveUserAndOrder() {
         //弊端：只能先本地事务再远程事务
         this.save(new OrderVo());
@@ -89,7 +90,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
 
     @Override
     @TxTransaction(isStart = true)
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public BaseResponse<OrderVo> saveUserAndOrderTx() {
         //远程事务已经提交后，本地异常，远程事务会回滚
         BaseResponse<OrderVo> res = new BaseResponse<>(ResCodeEnum.OK);

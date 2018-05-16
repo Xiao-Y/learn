@@ -23,6 +23,11 @@ spring:
   application:
     name: ${config.core.product.spring.application.name} #客户端名称
 
+  jpa: #JPA配置
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 feign: #远程连接
   hystrix: #熔断器配置
     enabled: ${config.core.product.feign.hystrix.enabled} #启动熔断器
