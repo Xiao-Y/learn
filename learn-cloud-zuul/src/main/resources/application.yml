@@ -47,4 +47,4 @@ logging:
     org.springframework:
       data: DEBUG
       security: DEBUG
-    com.ft.security: DEBUG
+    com.billow.security: DEBUG

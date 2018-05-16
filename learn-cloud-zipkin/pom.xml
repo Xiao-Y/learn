@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>learn</artifactId>
-        <groupId>com.ft</groupId>
+        <groupId>com.billow</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -20,7 +20,7 @@
     <dependencies>
         <!-- 配置中心 -->
         <dependency>
-            <groupId>com.ft</groupId>
+            <groupId>com.billow</groupId>
             <artifactId>learn-cloud-common</artifactId>
         </dependency>
         <!-- 注册中心 -->
