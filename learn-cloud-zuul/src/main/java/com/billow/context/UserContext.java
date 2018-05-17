@@ -15,7 +15,9 @@ public class UserContext {
     }
 
     public static UserContext create(String username, List<GrantedAuthority> authorities) {
-        if (StringUtils.isBlank(username)) throw new IllegalArgumentException("Username is blank: " + username);
+        if (StringUtils.isBlank(username)) {
+            throw new IllegalArgumentException("Username is blank: " + username);
+        }
         return new UserContext(username, authorities);
     }
 

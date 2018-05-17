@@ -8,21 +8,25 @@ import com.billow.security.auth.token.verifier.TokenVerifier;
 import com.billow.security.config.TokenProperties;
 import com.billow.security.config.WebSecurityConfig;
 import com.billow.security.exception.InvalidTokenException;
-import com.billow.security.token.TokenFactory;
 import com.billow.security.token.Token;
+import com.billow.security.token.TokenFactory;
 import com.billow.security.token.impl.RawAccessToken;
 import com.billow.security.token.impl.RefreshToken;
 import com.billow.service.UserInfoService;
 import com.billow.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +73,12 @@ public class AuthController {
     @GetMapping("/api/test2")
     public String test2() {
         return "test2";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/api/test4")
+    public String test4() {
+        return "test4";
     }
 
     @GetMapping("/manage/test3")

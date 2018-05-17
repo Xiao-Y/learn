@@ -26,7 +26,9 @@ import java.io.IOException;
 public class LoginAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
     private static Logger logger = LoggerFactory.getLogger(LoginAuthenticationProcessingFilter.class);
 
+    // AwareAuthenticationSuccessHandler
     private final AuthenticationSuccessHandler successHandler;
+    // AwareAuthenticationFailureHandler
     private final AuthenticationFailureHandler failureHandler;
 
     public LoginAuthenticationProcessingFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler,
@@ -40,9 +42,7 @@ public class LoginAuthenticationProcessingFilter extends AbstractAuthenticationP
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
         if (!HttpMethod.POST.name().equals(request.getMethod())) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Authentication method not supported. Request method: " + request.getMethod());
-            }
+            logger.debug("Authentication method not supported. Request method: " + request.getMethod());
             throw new AuthMethodNotSupportedException("Authentication method not supported");
         }
         String username = request.getParameter("username");
@@ -53,11 +53,12 @@ public class LoginAuthenticationProcessingFilter extends AbstractAuthenticationP
         }
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword());
+        // 调用合适的处理器，（public boolean supports(Class<?> authentication)）
         return this.getAuthenticationManager().authenticate(token);
     }
 
     /**
-     * 验证成功后的处理
+     * 在LoginAuthenticationProvider 处理完成后，成功后的处理
      *
      * @param [request, response, chain, authResult]
      * @return void
@@ -71,9 +72,9 @@ public class LoginAuthenticationProcessingFilter extends AbstractAuthenticationP
     }
 
     /**
-     * 验证失败后的处理
+     * 在LoginAuthenticationProvider 处理完成后，失败后的处理
      *
-     * @param [request, response, failed]
+     * @param failed 失败异常信息
      * @return void
      * @author LiuYongTao
      * @date 2018/5/17 8:47

@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -42,6 +43,18 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         this.encoder = encoder;
     }
 
+    /**
+     * 用于比较是否本处理器来处理，否则交与下一个处理器处理（责任链模式）
+     *
+     * @param authentication
+     * @return boolean
+     * @author LiuYongTao
+     * @date 2018/5/17 14:38
+     */
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -51,28 +64,25 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         // 获取用户信息
         UserInfo user = userService.findByName(username);
-        if (user == null) throw new UsernameNotFoundException("User not found: " + username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + username);
+        }
         if (Objects.equals(password, user.getPassword())) {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
         }
         // 获取角色信息
         List<UserRole> roles = roleService.getRoleByUser(user);
-        if (roles == null || roles.size() <= 0)
+        if (roles == null || roles.size() <= 0) {
             throw new InsufficientAuthenticationException("User has no roles assigned");
-
+        }
         // 转换角色信息到GrantedAuthority中
         List<GrantedAuthority> authorities = roles.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.authority()))
                 .collect(Collectors.toList());
-
+        // 构建user对象（用户名和权限）
         UserContext userContext = UserContext.create(user.getUserName(), authorities);
 
         return new UsernamePasswordAuthenticationToken(userContext, null, userContext.getAuthorities());
-    }
-
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
 }
 
