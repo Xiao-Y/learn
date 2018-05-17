@@ -45,7 +45,9 @@ public class AuthController {
     private final UserRoleService userRoleService;
 
     @Autowired
-    public AuthController(TokenProperties tokenProperties, TokenVerifier tokenVerifier, TokenFactory tokenFactory, TokenExtractor tokenExtractor, UserInfoService userInfoService, UserRoleService userRoleService) {
+    public AuthController(TokenProperties tokenProperties, TokenVerifier tokenVerifier,
+                          TokenFactory tokenFactory, TokenExtractor tokenExtractor,
+                          UserInfoService userInfoService, UserRoleService userRoleService) {
         this.tokenProperties = tokenProperties;
         this.tokenVerifier = tokenVerifier;
         this.tokenFactory = tokenFactory;
@@ -78,7 +80,8 @@ public class AuthController {
     public Token refreshToken(HttpServletRequest request) {
         String tokenPayload = tokenExtractor.extract(request.getHeader(WebSecurityConfig.TOKEN_HEADER_PARAM));
         RawAccessToken rawToken = new RawAccessToken(tokenPayload);
-        RefreshToken refreshToken = RefreshToken.create(rawToken, tokenProperties.getSigningKey()).orElseThrow(() -> new InvalidTokenException("Token验证失败"));
+        RefreshToken refreshToken = RefreshToken.create(rawToken, tokenProperties.getSigningKey())
+                .orElseThrow(() -> new InvalidTokenException("Token验证失败"));
 
         String jti = refreshToken.getJti();
         if (!tokenVerifier.verify(jti)) {
@@ -86,8 +89,10 @@ public class AuthController {
         }
 
         String subject = refreshToken.getSubject();
-        UserInfo user = Optional.ofNullable(userInfoService.findByName(subject)).orElseThrow(() -> new UsernameNotFoundException("用户未找到: " + subject));
-        List<UserRole> roles = Optional.ofNullable(userRoleService.getRoleByUser(user)).orElseThrow(() -> new InsufficientAuthenticationException("用户没有分配角色"));
+        UserInfo user = Optional.ofNullable(userInfoService.findByName(subject))
+                .orElseThrow(() -> new UsernameNotFoundException("用户未找到: " + subject));
+        List<UserRole> roles = Optional.ofNullable(userRoleService.getRoleByUser(user))
+                .orElseThrow(() -> new InsufficientAuthenticationException("用户没有分配角色"));
         List<GrantedAuthority> authorities = roles.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.authority()))
                 .collect(Collectors.toList());

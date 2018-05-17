@@ -9,6 +9,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 刷新token
+ *
+ * @author LiuYongTao
+ * @date 2018/5/17 8:55
+ */
 public class RefreshToken implements Token {
     private Jws<Claims> claims;
 

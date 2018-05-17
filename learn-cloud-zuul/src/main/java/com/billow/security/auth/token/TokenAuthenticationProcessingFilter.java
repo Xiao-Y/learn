@@ -42,6 +42,14 @@ public class TokenAuthenticationProcessingFilter extends AbstractAuthenticationP
         return getAuthenticationManager().authenticate(new AuthenticationToken(token));
     }
 
+    /**
+     * 验证成功后的处理
+     *
+     * @param [request, response, chain, authResult]
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/5/17 8:49
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
@@ -51,6 +59,14 @@ public class TokenAuthenticationProcessingFilter extends AbstractAuthenticationP
         chain.doFilter(request, response);
     }
 
+    /**
+     * 验证失败后的处理
+     *
+     * @param [request, response, failed]
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/5/17 8:49
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {

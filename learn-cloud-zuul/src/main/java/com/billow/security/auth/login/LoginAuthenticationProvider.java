@@ -49,15 +49,18 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         logger.debug("[authentication info] - [{}]", JSON.toJSONString(authentication));
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
+        // 获取用户信息
         UserInfo user = userService.findByName(username);
         if (user == null) throw new UsernameNotFoundException("User not found: " + username);
         if (Objects.equals(password, user.getPassword())) {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
         }
+        // 获取角色信息
         List<UserRole> roles = roleService.getRoleByUser(user);
         if (roles == null || roles.size() <= 0)
             throw new InsufficientAuthenticationException("User has no roles assigned");
 
+        // 转换角色信息到GrantedAuthority中
         List<GrantedAuthority> authorities = roles.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.authority()))
                 .collect(Collectors.toList());

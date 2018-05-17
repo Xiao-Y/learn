@@ -23,14 +23,14 @@ import java.io.IOException;
 /**
  * 登录处理过滤器
  */
-public class LoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
-    private static Logger logger = LoggerFactory.getLogger(LoginProcessingFilter.class);
+public class LoginAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
+    private static Logger logger = LoggerFactory.getLogger(LoginAuthenticationProcessingFilter.class);
 
     private final AuthenticationSuccessHandler successHandler;
     private final AuthenticationFailureHandler failureHandler;
 
-    public LoginProcessingFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler,
-                                 AuthenticationFailureHandler failureHandler) {
+    public LoginAuthenticationProcessingFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler,
+                                               AuthenticationFailureHandler failureHandler) {
         super(defaultProcessUrl);
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
@@ -56,12 +56,28 @@ public class LoginProcessingFilter extends AbstractAuthenticationProcessingFilte
         return this.getAuthenticationManager().authenticate(token);
     }
 
+    /**
+     * 验证成功后的处理
+     *
+     * @param [request, response, chain, authResult]
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/5/17 8:46
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         successHandler.onAuthenticationSuccess(request, response, authResult);
     }
 
+    /**
+     * 验证失败后的处理
+     *
+     * @param [request, response, failed]
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/5/17 8:47
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {

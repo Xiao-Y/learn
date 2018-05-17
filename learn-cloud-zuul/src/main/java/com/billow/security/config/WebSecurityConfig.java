@@ -4,7 +4,7 @@ package com.billow.security.config;
 import com.billow.pojo.enums.RoleEnum;
 import com.billow.security.RestAuthenticationEntryPoint;
 import com.billow.security.auth.login.LoginAuthenticationProvider;
-import com.billow.security.auth.login.LoginProcessingFilter;
+import com.billow.security.auth.login.LoginAuthenticationProcessingFilter;
 import com.billow.security.auth.token.SkipPathRequestMatcher;
 import com.billow.security.auth.token.TokenAuthenticationProcessingFilter;
 import com.billow.security.auth.token.TokenAuthenticationProvider;
@@ -65,12 +65,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 构建登陆时的过滤器
      *
-     * @return com.billow.security.auth.login.LoginProcessingFilter
+     * @return com.billow.security.auth.login.LoginAuthenticationProcessingFilter
      * @author LiuYongTao
      * @date 2018/5/14 9:03
      */
-    private LoginProcessingFilter buildLoginProcessingFilter() throws Exception {
-        LoginProcessingFilter filter = new LoginProcessingFilter(FORM_BASED_LOGIN_ENTRY_POINT, successHandler, failureHandler);
+    private LoginAuthenticationProcessingFilter buildLoginProcessingFilter() throws Exception {
+        LoginAuthenticationProcessingFilter filter = new LoginAuthenticationProcessingFilter(FORM_BASED_LOGIN_ENTRY_POINT, successHandler, failureHandler);
         filter.setAuthenticationManager(super.authenticationManager());
         return filter;
     }
@@ -91,7 +91,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        //配置用户登录过滤器
+        // 配置用户登录过滤器（无序的）
+        // （在进入到 AbstractAuthenticationProcessingFilter的实现类时会根据 AuthenticationProvider的实现类中的
+        // public boolean supports(Class<?> authentication)的方法返回值决定;
+        // 来选择使用那个处理器，如果true(匹配成功)就处理，false(匹配不成功)就使用下一个处理器）
         auth.authenticationProvider(loginAuthenticationProvider);
         auth.authenticationProvider(tokenAuthenticationProvider);
     }
@@ -116,15 +119,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //资源只能被拥有 ADMIN 角色的用户访问
                 .antMatchers(MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT).hasAnyRole(RoleEnum.ADMIN.desc())
                 .and()
-//                .authorizeRequests()
-//                .antMatchers("/**")
-//                .authenticated() // 需要鉴权认证
-//                .and()
+                // 注意添加Filter的先后顺序，会导致先后处理类不同
                 .addFilterBefore(buildLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildTokenAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // 禁用缓存
-        //http.headers().cacheControl();
     }
 }
 
