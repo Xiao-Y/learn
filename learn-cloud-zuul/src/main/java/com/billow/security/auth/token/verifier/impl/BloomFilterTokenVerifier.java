@@ -4,7 +4,7 @@ import com.billow.security.auth.token.verifier.TokenVerifier;
 import org.springframework.stereotype.Component;
 
 /**
- * Token验证过滤器
+ * 验证jti是否有交
  */
 @Component
 public class BloomFilterTokenVerifier implements TokenVerifier {

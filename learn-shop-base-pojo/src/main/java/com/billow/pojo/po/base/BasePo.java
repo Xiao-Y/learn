@@ -1,4 +1,4 @@
-package com.billow.pojo.po;
+package com.billow.pojo.po.base;
 
 import org.springframework.format.annotation.DateTimeFormat;
 

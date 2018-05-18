@@ -47,6 +47,12 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
         return new AuthenticationToken(context, context.getAuthorities());
     }
 
+    /**
+     * 用于判断是否执行本处理器处理
+     *
+     * @param authentication 判断标识
+     * @return trur 执行，false 不执行
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return (AuthenticationToken.class.isAssignableFrom(authentication));

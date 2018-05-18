@@ -1,4 +1,4 @@
-package com.billow.pojo.po;
+package com.billow.pojo.po.base;
 
 /**
  * 分布数据

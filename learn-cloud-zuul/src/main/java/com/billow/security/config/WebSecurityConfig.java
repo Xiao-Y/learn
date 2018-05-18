@@ -1,10 +1,9 @@
 package com.billow.security.config;
 
 
-import com.billow.pojo.enums.RoleEnum;
 import com.billow.security.RestAuthenticationEntryPoint;
-import com.billow.security.auth.login.LoginAuthenticationProvider;
 import com.billow.security.auth.login.LoginAuthenticationProcessingFilter;
+import com.billow.security.auth.login.LoginAuthenticationProvider;
 import com.billow.security.auth.token.SkipPathRequestMatcher;
 import com.billow.security.auth.token.TokenAuthenticationProcessingFilter;
 import com.billow.security.auth.token.TokenAuthenticationProvider;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -34,13 +32,14 @@ import java.util.List;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String TOKEN_HEADER_PARAM = "X-Authorization";
+    /**
+     * 登陆路径
+     */
     private static final String FORM_BASED_LOGIN_ENTRY_POINT = "/api/auth/login";
     private static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
-    private static final String TOKEN_BASED_AUTH_ENTRY_POINT_OTHER = "/**";
     private static final String MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT = "/manage/**";
     private static final String TOKEN_REFRESH_ENTRY_POINT = "/api/auth/refresh_token";
 
@@ -120,7 +119,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //需要鉴权认证
                 .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated() // Protected API End-points
                 //资源只能被拥有 ADMIN 角色的用户访问
-                .antMatchers(MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT).hasAnyRole(RoleEnum.ADMIN.desc())
+//                .antMatchers(MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT).hasAnyRole(RoleEnum.ADMIN.desc())
                 .anyRequest().permitAll()
                 .and()
                 // 注意添加Filter的先后顺序，会导致先后处理类不同

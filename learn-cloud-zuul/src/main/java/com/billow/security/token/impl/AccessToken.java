@@ -4,7 +4,7 @@ import com.billow.security.token.Token;
 import io.jsonwebtoken.Claims;
 
 /**
- * 验证Token
+ * Token信息,用于验证
  */
 public class AccessToken implements Token {
     private final String rawToken;

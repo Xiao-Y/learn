@@ -30,7 +30,7 @@ public class RawAccessToken implements Token {
     }
 
     /**
-     * 分析并且验证Token是否有效
+     * 将密文翻译回来
      *
      * @throws BadCredentialsException 如果验证请求被拒绝，则因为凭据无效 <br> 对于要抛出的异常，它意味着该帐户既不锁定也不禁用。 <br>
      * @throws ExpiredTokenException   过期的Token

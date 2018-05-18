@@ -66,6 +66,7 @@
         <spring.boot.redis.version>1.3.8.RELEASE</spring.boot.redis.version>
         <guava.version>19.0</guava.version>
         <netty.all.version>4.1.12.Final</netty.all.version>
+        <jjwt.version>0.7.0</jjwt.version>
     </properties>
 
     <dependencyManagement>
@@ -187,6 +188,12 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
                 <version>${netty.all.version}</version>
+            </dependency>
+            <!-- JWT token -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

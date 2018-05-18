@@ -1,5 +1,7 @@
 package com.billow.pojo.po;
 
+import com.billow.pojo.po.base.BasePo;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;

@@ -7,7 +7,7 @@ import com.billow.service.UserService;
 import com.billow.tools.utlis.FieldUtils;
 import com.billow.tools.utlis.PageUtil;
 import com.billow.pojo.vo.TestVo;
-import com.billow.pojo.vo.UserVo;
+import com.billow.pojo.vo.user.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

@@ -17,9 +17,9 @@ public class AuthenticationToken extends AbstractAuthenticationToken {
     private RawAccessToken rawAccessToken;
     private UserContext userContext;
 
-    public AuthenticationToken(RawAccessToken unsafeToken) {
+    public AuthenticationToken(RawAccessToken rawAccessToken) {
         super(null);
-        this.rawAccessToken = unsafeToken;
+        this.rawAccessToken = rawAccessToken;
         this.setAuthenticated(false);
     }
 
