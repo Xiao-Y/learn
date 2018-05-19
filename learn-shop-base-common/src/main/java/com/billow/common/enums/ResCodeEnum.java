@@ -25,6 +25,7 @@ public enum ResCodeEnum {
     RESCODE_IO_ERROR("0015", "IO操作异常"),
     RESCODE_MQ_ERROR("0016", "消息服务异常"),
     RESCODE_OTHER_ERROR("0017", "其它系统异常"),
+    RESCODE_SYSTEM_HYSTRIC("8888", "系统服务异常，熔断请求"),
     RESCODE_SYSTEM_ERROR("9999", "系统服务异常，请求失败");
 
 

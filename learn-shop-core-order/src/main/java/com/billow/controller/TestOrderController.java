@@ -1,6 +1,6 @@
 package com.billow.controller;
 
-import com.billow.common.ResData.BaseResponse;
+import com.billow.common.resData.BaseResponse;
 
 import com.billow.producer.CoreOrderProducer;
 import com.billow.remote.TestUserRemote;

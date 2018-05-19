@@ -1,7 +1,7 @@
 package com.billow.service.impl;
 
 import com.codingapi.tx.annotation.TxTransaction;
-import com.billow.common.ResData.BaseResponse;
+import com.billow.common.resData.BaseResponse;
 import com.billow.dao.TestDao;
 import com.billow.common.enums.ResCodeEnum;
 

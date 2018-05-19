@@ -38,7 +38,6 @@
 
         <module>learn-shop-public-job</module>
         <module>learn-shop-public-tx</module>
-        <module>learn-cloud-oauth</module>
     </modules>
     <packaging>pom</packaging>
 

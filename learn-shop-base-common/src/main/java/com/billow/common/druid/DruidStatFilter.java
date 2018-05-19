@@ -1,4 +1,4 @@
-package com.billow.config;
+package com.billow.common.druid;
 
 import com.alibaba.druid.support.http.WebStatFilter;
 

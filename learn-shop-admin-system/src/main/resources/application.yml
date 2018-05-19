@@ -1,6 +1,14 @@
 server:
-  #port: ${config.admin.user.server.port}
-  port: 8801
+  port: ${config.admin.system.server.port}
+  #port: 8811
+
+swagger: #接口注解文档
+  basepackage: com.billow.controller #扫描的包，必须要有 GetMapping，PostMapping...
+  service:
+    name: ${spring.application.name} #api名称
+    version: 1.0
+    developer: lyongtao123@126.com #api开发者
+    description: learn-shop 提供的Restful APIs #api描述
 
 eureka:
   client:
@@ -8,14 +16,14 @@ eureka:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
   instance:
     #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
-    #status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
+    status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 
 spring:
   application:
-    name: learn-cloud-oauth #${config.admin.user.spring.application.name} #客户端名称
+    name: ${config.admin.system.spring.application.name} #客户端名称
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   cloud:
@@ -40,3 +48,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+feign: #远程连接
+  hystrix: #熔断器配置
+    enabled: ${config.core.product.feign.hystrix.enabled} #启动熔断器

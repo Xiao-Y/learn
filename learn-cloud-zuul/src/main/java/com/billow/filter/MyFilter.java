@@ -21,16 +21,37 @@ public class MyFilter extends ZuulFilter {
 
     protected String getRemoteHost(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
+        if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            if (ip.indexOf(",") != -1) {
+                ip = ip.split(",")[0];
+            }
+        }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
+            LOG.debug("Proxy-Client-IP ip:{}", ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
+            LOG.debug("WL-Proxy-Client-IP ip:{}", ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+            LOG.debug("HTTP_CLIENT_IP ip:{}", ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            LOG.debug("HTTP_X_FORWARDED_FOR ip:{}", ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+            LOG.debug("X-Real-IP ip:{}", ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
+            LOG.debug("getRemoteAddr ip:{}", ip);
         }
-        LOG.debug("当前访问IP为：" + ip);
+        LOG.debug("当前访问IP为：{}", ip);
         return ip;
     }
 
@@ -39,7 +60,7 @@ public class MyFilter extends ZuulFilter {
         if (clientType == null || clientType.length() == 0 || "unknown".equalsIgnoreCase(clientType)) {
             clientType = "";
         }
-        LOG.debug("当前访问客户端类型为：" + clientType);
+        LOG.debug("当前访问客户端类型为：{}", clientType);
         return clientType;
     }
 

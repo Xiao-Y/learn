@@ -1,4 +1,4 @@
-package com.billow.common.ResData;
+package com.billow.common.resData;
 
 import com.billow.common.enums.ResCodeEnum;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -17,6 +17,10 @@ public class BaseResponse<T> implements Serializable {
     private String signature;
     private T resData;
     private Map<String, String> ext;
+
+    public static BaseResponse newBaseResponse() {
+        return new BaseResponse();
+    }
 
     public BaseResponse() {
         this.resCode = ResCodeEnum.OK;

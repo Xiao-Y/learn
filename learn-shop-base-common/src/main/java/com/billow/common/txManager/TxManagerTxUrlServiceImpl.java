@@ -1,4 +1,4 @@
-package com.billow.common.TxManager;
+package com.billow.common.txManager;
 
 import org.springframework.beans.factory.annotation.Value;
 

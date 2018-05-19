@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 
 /**
@@ -14,11 +15,11 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
  * @ EnableHystrixDashboard 开启熔断监控仪表盘
  * @ EnableCircuitBreaker 开启断路器
  */
-@SpringBootApplication
-@EnableEurekaClient
-@EnableFeignClients
+@EnableHystrix
 @EnableHystrixDashboard
-@EnableCircuitBreaker
+@EnableFeignClients
+@EnableEurekaClient
+@SpringBootApplication
 public class CoreProductApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(CoreProductApp.class, args));

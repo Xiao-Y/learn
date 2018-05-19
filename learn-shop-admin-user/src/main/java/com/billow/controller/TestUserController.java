@@ -2,7 +2,7 @@ package com.billow.controller;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.billow.common.ResData.BaseResponse;
+import com.billow.common.resData.BaseResponse;
 
 import com.billow.service.CityService;
 import com.billow.service.TestService;

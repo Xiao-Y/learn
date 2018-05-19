@@ -1,7 +1,9 @@
 package com.billow.controller;
 
-import com.billow.common.ResData.BaseResponse;
+import com.billow.common.resData.BaseResponse;
 import com.billow.common.enums.ResCodeEnum;
+import com.billow.common.whiteList.AdminSystemRemote;
+import com.billow.pojo.vo.sys.WhiteListVo;
 import com.billow.service.TestService;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.pojo.vo.TestVo;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,6 +35,9 @@ public class ProductController {
     private RedisTemplate redisTemplate;
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private AdminSystemRemote adminSystemRemote;
 
     @GetMapping("/setStringValue")
     public BaseResponse<String> setStringValue() {
@@ -106,5 +112,13 @@ public class ProductController {
             response.setResCode(ResCodeEnum.FAIL);
         }
         return response;
+    }
+
+    @GetMapping("/getTest")
+    public BaseResponse<List<WhiteListVo>> getTest() {
+        WhiteListVo vo = new WhiteListVo();
+        vo.setIp("127.0.0.1").setModule("learn-shop-core-product").setValidInd(true);
+        BaseResponse<List<WhiteListVo>> baseRes = adminSystemRemote.findWhiteListVos(vo);
+        return baseRes;
     }
 }
