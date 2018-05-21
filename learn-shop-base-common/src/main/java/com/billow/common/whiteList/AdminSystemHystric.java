@@ -17,7 +17,7 @@ import java.util.List;
 public class AdminSystemHystric implements AdminSystemRemote {
 
     @Override
-    public BaseResponse<List<WhiteListVo>> findWhiteListVos(WhiteListVo whiteListVo) {
+    public BaseResponse<List<WhiteListVo>> findWhiteListVos(String ip, String module, boolean validInd) {
         BaseResponse<List<WhiteListVo>> baseResponse = BaseResponse.newBaseResponse();
         baseResponse.setResCode(ResCodeEnum.RESCODE_SYSTEM_HYSTRIC.getStatusCode());
         return baseResponse;

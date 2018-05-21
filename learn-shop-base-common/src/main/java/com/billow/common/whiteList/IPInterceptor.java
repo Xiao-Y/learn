@@ -38,15 +38,18 @@ public class IPInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String clientIP = ServletUtil.getClientIP(request);
-        LOG.info("clientIP:{}", clientIP);
-        LOG.info("springApplicationName:{}", springApplicationName);
-
-        // 如果是system系统的由system自己控制
+//        String clientIP = ServletUtil.getClientIP(request);
+//        LOG.info("clientIP:{}", clientIP);
+//        LOG.info("springApplicationName:{}", springApplicationName);
+//
+//        // 如果是system系统的由system自己控制
 //        if (!"learn-shop-admin-system".equals(springApplicationName)) {
 //            WhiteListVo vo = new WhiteListVo();
 //            vo.setIp("127.0.0.1").setModule(springApplicationName).setValidInd(true);
-//            BaseResponse<List<WhiteListVo>> baseRes = adminSystemRemote.findWhiteListVos(vo);
+//            String ip = "127.0.0.1";
+//            String module = "learn-shop-core-product";
+//            boolean validInd = true;
+//            BaseResponse<List<WhiteListVo>> baseRes = adminSystemRemote.findWhiteListVos(ip, module, validInd);
 //            if (ResCodeEnum.OK.equals(baseRes.getResCode())) {
 //                List<WhiteListVo> listVos = baseRes.getResData();
 //                if (ToolsUtils.isNotEmpty(listVos)) {

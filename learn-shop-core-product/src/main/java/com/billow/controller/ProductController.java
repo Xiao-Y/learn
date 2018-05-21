@@ -118,7 +118,10 @@ public class ProductController {
     public BaseResponse<List<WhiteListVo>> getTest() {
         WhiteListVo vo = new WhiteListVo();
         vo.setIp("127.0.0.1").setModule("learn-shop-core-product").setValidInd(true);
-        BaseResponse<List<WhiteListVo>> baseRes = adminSystemRemote.findWhiteListVos(vo);
+        String ip = "127.0.0.1";
+        String module = "learn-shop-core-product";
+        boolean validInd = true;
+        BaseResponse<List<WhiteListVo>> baseRes = adminSystemRemote.findWhiteListVos(ip, module, validInd);
         return baseRes;
     }
 }
