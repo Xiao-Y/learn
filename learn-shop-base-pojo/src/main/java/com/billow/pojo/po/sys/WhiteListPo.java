@@ -4,6 +4,7 @@ import com.billow.pojo.po.base.BasePo;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * ip白名单
@@ -13,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sys_white_list")
-public class WhiteListPo extends BasePo {
+public class WhiteListPo extends BasePo implements Serializable{
     // ip
     private String ip;
     // 模块

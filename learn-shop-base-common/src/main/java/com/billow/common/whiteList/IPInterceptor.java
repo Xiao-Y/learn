@@ -6,13 +6,12 @@ import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.common.whiteList.service.WhiteListService;
 import com.billow.pojo.vo.sys.WhiteListVo;
-import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -35,21 +34,27 @@ public class IPInterceptor implements HandlerInterceptor {
     @Value("${spring.application.name}")
     private String springApplicationName;
 
-//    @Autowired
-//    private WhiteListService whiteListService;
+    @Autowired
+    private WhiteListService whiteListService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String clientIP = ServletUtil.getClientIP(request);
-        LOG.info("clientIP:{}", clientIP);
-        LOG.info("springApplicationName:{}", springApplicationName);
-        WhiteListService whiteListService = SpringContextUtil.getBean("whiteListServiceImpl");
-        List<WhiteListVo> whiteListVos = whiteListService.findByIpAndModuleAndValidInd(clientIP, springApplicationName, true);
+        LOG.info("springApplicationName:{}，clientIP:{}", springApplicationName, clientIP);
+        String key = springApplicationName + "." + clientIP;
+        List<WhiteListVo> whiteListVos;
+        whiteListVos = (List<WhiteListVo>) redisTemplate.opsForValue().get(key);
+        if (ToolsUtils.isEmpty(whiteListVos)) {
+            whiteListVos = whiteListService.findByIpAndModuleAndValidInd(clientIP, springApplicationName, true);
+            redisTemplate.opsForValue().set(key, whiteListVos);
+        }
 
         // 再白名单里面，可以通过访问
         if (ToolsUtils.isNotEmpty(whiteListVos)) {
-            whiteListVos.stream().forEach(item -> {
+            whiteListVos.forEach(item -> {
                 LOG.info("item:{}", item);
             });
             return true;
