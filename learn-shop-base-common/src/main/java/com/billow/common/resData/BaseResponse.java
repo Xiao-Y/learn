@@ -18,10 +18,6 @@ public class BaseResponse<T> implements Serializable {
     private T resData;
     private Map<String, String> ext;
 
-    public static BaseResponse newBaseResponse() {
-        return new BaseResponse();
-    }
-
     public BaseResponse() {
         this.resCode = ResCodeEnum.OK;
         this.resMsg = ResCodeEnum.OK_NAME;

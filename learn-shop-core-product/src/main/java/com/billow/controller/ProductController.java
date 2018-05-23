@@ -1,12 +1,12 @@
 package com.billow.controller;
 
-import com.billow.common.resData.BaseResponse;
 import com.billow.common.enums.ResCodeEnum;
-import com.billow.common.whiteList.AdminSystemRemote;
+import com.billow.common.resData.BaseResponse;
+import com.billow.pojo.vo.TestVo;
 import com.billow.pojo.vo.sys.WhiteListVo;
+import com.billow.remote.AdminSystemRemote;
 import com.billow.service.TestService;
 import com.billow.tools.utlis.SpringContextUtil;
-import com.billow.pojo.vo.TestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -35,7 +35,6 @@ public class ProductController {
     private RedisTemplate redisTemplate;
     @Autowired
     private TestService testService;
-
     @Autowired
     private AdminSystemRemote adminSystemRemote;
 

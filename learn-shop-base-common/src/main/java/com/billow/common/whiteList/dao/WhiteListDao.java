@@ -1,4 +1,4 @@
-package com.billow.dao;
+package com.billow.common.whiteList.dao;
 
 import com.billow.pojo.po.sys.WhiteListPo;
 import org.springframework.data.jpa.repository.JpaRepository;

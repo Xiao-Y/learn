@@ -1,4 +1,4 @@
-package com.billow.service;
+package com.billow.common.whiteList.service;
 
 import com.billow.pojo.vo.sys.WhiteListVo;
 

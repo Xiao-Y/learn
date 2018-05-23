@@ -3,17 +3,14 @@ package com.billow.controller;
 import com.billow.common.base.BaseController;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
+import com.billow.common.whiteList.service.WhiteListService;
 import com.billow.pojo.vo.sys.WhiteListVo;
-import com.billow.service.WhiteListService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

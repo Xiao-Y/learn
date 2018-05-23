@@ -2,21 +2,24 @@ package com.billow.common.whiteList;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
+import com.billow.common.whiteList.service.WhiteListService;
 import com.billow.pojo.vo.sys.WhiteListVo;
+import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -32,42 +35,34 @@ public class IPInterceptor implements HandlerInterceptor {
     @Value("${spring.application.name}")
     private String springApplicationName;
 
-    @Autowired
-    private AdminSystemRemote adminSystemRemote;
+//    @Autowired
+//    private WhiteListService whiteListService;
 
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String clientIP = ServletUtil.getClientIP(request);
-//        LOG.info("clientIP:{}", clientIP);
-//        LOG.info("springApplicationName:{}", springApplicationName);
-//
-//        // 如果是system系统的由system自己控制
-//        if (!"learn-shop-admin-system".equals(springApplicationName)) {
-//            WhiteListVo vo = new WhiteListVo();
-//            vo.setIp("127.0.0.1").setModule(springApplicationName).setValidInd(true);
-//            String ip = "127.0.0.1";
-//            String module = "learn-shop-core-product";
-//            boolean validInd = true;
-//            BaseResponse<List<WhiteListVo>> baseRes = adminSystemRemote.findWhiteListVos(ip, module, validInd);
-//            if (ResCodeEnum.OK.equals(baseRes.getResCode())) {
-//                List<WhiteListVo> listVos = baseRes.getResData();
-//                if (ToolsUtils.isNotEmpty(listVos)) {
-//                    listVos.stream().forEach(item -> {
-//                        LOG.info("item:{}", item);
-//                    });
-//                }
-//                return true;
-//            } else {
-//                response.setContentType("application/json; charset=utf-8");
-//                PrintWriter writer = response.getWriter();
-//                writer.print(JSONObject.toJSONString(baseRes, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat));
-//                writer.close();
-//                response.flushBuffer();
-//                return false;
-//            }
-//        }
-        return true;
+        String clientIP = ServletUtil.getClientIP(request);
+        LOG.info("clientIP:{}", clientIP);
+        LOG.info("springApplicationName:{}", springApplicationName);
+        WhiteListService whiteListService = SpringContextUtil.getBean("whiteListServiceImpl");
+        List<WhiteListVo> whiteListVos = whiteListService.findByIpAndModuleAndValidInd(clientIP, springApplicationName, true);
+
+        // 再白名单里面，可以通过访问
+        if (ToolsUtils.isNotEmpty(whiteListVos)) {
+            whiteListVos.stream().forEach(item -> {
+                LOG.info("item:{}", item);
+            });
+            return true;
+        }
+
+        //必须返回200, 否则远程调用出现异常
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+
+        BaseResponse<String> baseResponse = new BaseResponse<>(ResCodeEnum.RESCODE_FORBIDDEN.getStatusCode());
+        baseResponse.setTraceID(springApplicationName);
+        response.getWriter().write(JSONObject.toJSONString(baseResponse));
+        return false;
     }
 
     @Override

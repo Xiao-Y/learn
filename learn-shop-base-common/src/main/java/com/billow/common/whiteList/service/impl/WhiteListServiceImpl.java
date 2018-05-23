@@ -1,9 +1,9 @@
-package com.billow.service.impl;
+package com.billow.common.whiteList.service.impl;
 
-import com.billow.dao.WhiteListDao;
+import com.billow.common.whiteList.dao.WhiteListDao;
+import com.billow.common.whiteList.service.WhiteListService;
 import com.billow.pojo.po.sys.WhiteListPo;
 import com.billow.pojo.vo.sys.WhiteListVo;
-import com.billow.service.WhiteListService;
 import com.billow.tools.utlis.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
