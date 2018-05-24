@@ -2,6 +2,7 @@ package com.billow.common.whiteList;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.billow.common.enums.RdsKey;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.common.whiteList.service.WhiteListService;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -20,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * IP拦截器
@@ -37,26 +41,40 @@ public class IPInterceptor implements HandlerInterceptor {
     @Autowired
     private WhiteListService whiteListService;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String clientIP = ServletUtil.getClientIP(request);
-        LOG.info("springApplicationName:{}，clientIP:{}", springApplicationName, clientIP);
-        String key = springApplicationName + "." + clientIP;
+        StringBuilder key = new StringBuilder(RdsKey.WHITE_LIST.getKey());
+        key.append(springApplicationName);
+        key.append(":");
+        key.append(clientIP);
+        LOG.info("key：----> {}", key);
+
         List<WhiteListVo> whiteListVos;
-        whiteListVos = (List<WhiteListVo>) redisTemplate.opsForValue().get(key);
-        if (ToolsUtils.isEmpty(whiteListVos)) {
+
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        String json = ops.get(key.toString());
+        LOG.info("白名单：----> {}", json);
+
+        if (ToolsUtils.isEmpty(json)) {
             whiteListVos = whiteListService.findByIpAndModuleAndValidInd(clientIP, springApplicationName, true);
-            redisTemplate.opsForValue().set(key, whiteListVos);
+            // 白名单放入到redis 中，设置失效时间
+            ops.set(key.toString(), JSONObject.toJSONString(whiteListVos), 20, TimeUnit.SECONDS);
+        } else {
+            whiteListVos = JSONObject.parseObject(json, List.class);
         }
+
+        // 模糊查询，获取所有的白名单
+        Set<String> keys = redisTemplate.keys(RdsKey.WHITE_LIST.getKey() + "*");
+        keys.forEach(item -> LOG.info("deleteKey：----> {}", item));
+        // 删除所有查询出来的key （测试用）
+        redisTemplate.delete(keys);
 
         // 再白名单里面，可以通过访问
         if (ToolsUtils.isNotEmpty(whiteListVos)) {
-            whiteListVos.forEach(item -> {
-                LOG.info("item:{}", item);
-            });
             return true;
         }
 
