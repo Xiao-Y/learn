@@ -64,14 +64,14 @@ public class IPInterceptor implements HandlerInterceptor {
             // 白名单放入到redis 中，设置失效时间
             ops.set(key.toString(), JSONObject.toJSONString(whiteListVos), 20, TimeUnit.SECONDS);
         } else {
-            whiteListVos = JSONObject.parseObject(json, List.class);
+            whiteListVos = JSONObject.parseArray(json, WhiteListVo.class);
         }
 
         // 模糊查询，获取所有的白名单
         Set<String> keys = redisTemplate.keys(RdsKey.WHITE_LIST.getKey() + "*");
         keys.forEach(item -> LOG.info("deleteKey：----> {}", item));
         // 删除所有查询出来的key （测试用）
-        redisTemplate.delete(keys);
+//        redisTemplate.delete(keys);
 
         // 再白名单里面，可以通过访问
         if (ToolsUtils.isNotEmpty(whiteListVos)) {

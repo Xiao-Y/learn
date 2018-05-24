@@ -1,6 +1,8 @@
 package com.billow.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.billow.common.enums.ResCodeEnum;
+import com.billow.common.redis.RedisUtils;
 import com.billow.common.resData.BaseResponse;
 import com.billow.pojo.vo.TestVo;
 import com.billow.pojo.vo.sys.WhiteListVo;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +35,10 @@ import java.util.concurrent.TimeUnit;
 public class ProductController {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private RedisUtils redisUtils;
+
     @Autowired
     private TestService testService;
     @Autowired
@@ -40,9 +46,14 @@ public class ProductController {
 
     @GetMapping("/setStringValue")
     public BaseResponse<String> setStringValue() {
-        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+//        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         BaseResponse<String> response = new BaseResponse<>(ResCodeEnum.OK);
-        opsForValue.set("name", "tom", 20, TimeUnit.SECONDS);
+        redisUtils.setObj("name", "tom", 200, TimeUnit.SECONDS);
+        redisUtils.setString("nameString", "tom", 200, TimeUnit.SECONDS);
+
+        ArrayList<String> list = CollUtil.newArrayList("1", "qweq", "wer", "234d");
+        redisUtils.setObj("list", list);
+
         try {
             ProductController productController = SpringContextUtil.getBean("productController");
             response.setResData(productController.getClass().getName());
@@ -58,6 +69,12 @@ public class ProductController {
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         BaseResponse<String> response = new BaseResponse<>();
         response.setResData(opsForValue.get("name"));
+
+//        List<String> list = JSONObject.parseArray(opsForValue.get("list"), String.class);
+        System.out.println(redisUtils.getString("name"));
+        System.out.println(redisUtils.getString("nameString"));
+        System.out.println(redisUtils.getObj("list", List.class));
+        System.out.println(redisUtils.getArray("list", String.class));
         return response;
     }
 
