@@ -3,37 +3,32 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export const constantRouterMap = [
-  {
-    path: '/',
-    redirect: '/login',
-    hidden: true
+export const constantRouterMap = [{
+  path: '/',
+  redirect: '/login',
+  hidden: true
+}, {
+  path: '/login',
+  name: '登录页面',
+  hidden: true,
+  component: resolve => require(['../views/login/Login.vue'], resolve)
+}, {
+  path: '/Readme',
+  name: 'Readme',
+  index: 'Readme',
+  meta: {
+    title: 'Readme',
+    icon: 'el-icon-menu'
   },
-  {
-    path: '/login',
-    name: '登录页面',
-    hidden: true,
-    component: resolve => require(['../views/login/Login.vue'], resolve)
-  },
-  {
-    path: '/Readme',
-    // name: 'Readmehome',
-    index: 'Readme',
-    meta: {
-      title: 'Readme',
-      icon: 'el-icon-menu'
-    },
-    component: resolve => require(['../components/common/Home.vue'], resolve),
-    children: [
-      {
-        name: 'Readme',
-        path: '/',
-        meta: {title: 'Readme', icon: 'el-icon-menu'},
-        component: resolve => require(['../components/page/Readme.vue'], resolve)
-      }
-    ]
-  }
-]
+  component: resolve => require(['../components/common/Home.vue'], resolve),
+  children: [
+    {
+      name: 'Readme',
+      path: '/',
+      meta: {title: 'Readme', icon: 'el-icon-menu'},
+      component: resolve => require(['../components/page/Readme.vue'], resolve)
+    }]
+}]
 
 export default new Router({
   routes: constantRouterMap
@@ -50,15 +45,15 @@ export const asyncRouterMap = [{
   }, {
     name: 'role',
     path: 'role',
-    component: resolve => require(['../components/page/permission.vue'], resolve)
+    component: resolve => require(['../components/page/permission2.vue'], resolve)
   }, {
     name: 'auth',
     path: 'auth',
-    component: resolve => require(['../components/page/permission.vue'], resolve)
+    component: resolve => require(['../components/page/permission3.vue'], resolve)
   }, {
     name: 'args',
     path: 'args',
-    component: resolve => require(['../components/page/permission.vue'], resolve)
+    component: resolve => require(['../components/page/permission4.vue'], resolve)
   }, {
     name: 'dictionary',
     path: 'dictionary',
