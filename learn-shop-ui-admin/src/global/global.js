@@ -4,13 +4,13 @@ import themeArray from './themeArray'
 
 export const global = {
   /**
-         * 切换主题函数
-         */
+   * 切换主题函数
+   */
   changeTheme(themeValue) {
     // 切换主题导航背景色
     switch (themeValue) {
       case 'blue':
-      /* eslint-disable */
+        /* eslint-disable */
         $('.header').css('background-color', '#409eff')
         break
       case 'green':

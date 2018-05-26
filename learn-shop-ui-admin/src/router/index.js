@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Home from '../components/common/Home.vue'
 
 Vue.use(Router)
 
+// 静态路由
 export const constantRouterMap = [{
   path: '/',
   redirect: '/login',
@@ -20,24 +22,29 @@ export const constantRouterMap = [{
     title: 'Readme',
     icon: 'el-icon-menu'
   },
-  component: resolve => require(['../components/common/Home.vue'], resolve),
+  component: Home,
   children: [
     {
       name: 'Readme',
       path: '/',
       meta: {title: 'Readme', icon: 'el-icon-menu'},
-      component: resolve => require(['../components/page/Readme.vue'], resolve)
+      component: resolve => require(['../components/page/readme.vue'], resolve)
     }]
+}, {
+  path: '/error',
+  name: 'error',
+  component: Home,
+  children: [{
+    name: '404',
+    path: '404',
+    component: resolve => require(['../components/error/404.vue'], resolve)
+  }]
 }]
 
-export default new Router({
-  routes: constantRouterMap
-})
-// 异步挂载的路由
-// 动态需要根据权限加载的路由表
+// 异步挂载的路由（动态需要根据权限加载的路由表）
 export const asyncRouterMap = [{
   path: '/sys',
-  component: resolve => require(['../components/common/Home.vue'], resolve),
+  component: Home,
   children: [{
     name: 'sysinfo',
     path: 'sysinfo',
@@ -59,9 +66,8 @@ export const asyncRouterMap = [{
     path: 'dictionary',
     component: resolve => require(['../components/page/permission.vue'], resolve)
   }]
-}, {
-  path: '*',
-  redirect: '/404',
-  hidden: true
 }]
 
+export default new Router({
+  routes: constantRouterMap
+})

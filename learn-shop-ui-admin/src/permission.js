@@ -1,7 +1,7 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
-import { getToken } from '@/utils/auth' // 验权
+import {Message} from 'element-ui'
+import {getToken} from '@/utils/auth' // 验权
 
 const whiteList = ['/login', '/authredirect'] // 不重定向白名单
 
@@ -19,14 +19,14 @@ router.beforeEach((to, from, next) => {
           // console.log('roles?', roles)
           // console.log('menus', menus)
           store.dispatch('GenerateRoutes', data).then(() => { // 根据roles权限生成可访问的路由表
-            console.log('addrouters', store.getters.addRouters)
+            // console.log('addrouters', store.getters.addRouters)
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+            next({...to, replace: true}) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           })
         }).catch(() => {
           store.dispatch('FedLogOut').then(() => {
             Message.error('验证失败,请重新登录')
-            next({ path: '/login' })
+            next({path: '/login'})
           })
         })
       } else {

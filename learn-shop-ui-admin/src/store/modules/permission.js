@@ -31,31 +31,6 @@ import {asyncRouterMap, constantRouterMap} from '@/router'
 //   return accessedRouters
 // }
 
-function hasPermission(menus, route) {
-  if (route.path && route.children && route.children.length && route.children && route.children.length) {
-    menus.forEach(pmenu => {
-      var cflag = pmenu.children.some(cmenu => {
-        var flag = false;
-        var cmenusUrl = cmenu.path;
-        var basePath = route.path;
-
-        if (!flag) {
-          flag = route.children.some(cmenus => {
-            var url = basePath + "/" + cmenus.path;
-            return (cmenusUrl === url)
-          })
-          return flag;
-        }
-
-      })
-      if (cflag) {
-        return true;
-      }
-    })
-  }
-  return false;
-}
-
 function filterAsyncRouter(asyncRouterMap, menus) {
   const accessedRouters = asyncRouterMap.filter(route => {
     var flag = false;
@@ -112,6 +87,11 @@ const permission = {
         //   // accessedRouters = asyncRouterMap
         // }
         let accessedRouters = filterAsyncRouter(asyncRouterMap, menus)
+        // 最后添加404页面
+        accessedRouters.push({
+          path: '*',
+          redirect: '/error/404'
+        });
         console.log('accessedRouters', accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
         commit('SET_MENUS', menus)
