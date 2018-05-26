@@ -1,4 +1,4 @@
-package com.billow.controller.sysEvent;
+package com.billow.api.sysEvent;
 
 import com.billow.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.model.expand.ScheduleJobDto;

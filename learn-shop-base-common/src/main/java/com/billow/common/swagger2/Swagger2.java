@@ -37,7 +37,7 @@ public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAwar
 //        return new Docket(DocumentationType.SWAGGER_2)
 //                .apiInfo(apiInfo())
 //                .select()
-//                .apis(RequestHandlerSelectors.basePackage("com.billow.controller"))// 扫描该包下的所有需要在Swagger中展示的API，@ApiIgnore注解标注的除外
+//                .apis(RequestHandlerSelectors.basePackage("com.billow.api"))// 扫描该包下的所有需要在Swagger中展示的API，@ApiIgnore注解标注的除外
 //                .paths(PathSelectors.any())
 //                .build();
 //    }

@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * 权限
+ * 权限(菜单)
  *
  * @author liuyongtao
  * @create 2018-05-16 13:57

@@ -1,6 +1,6 @@
-package com.billow.controller;
+package com.billow.api;
 
-import com.billow.common.base.BaseController;
+import com.billow.common.base.BaseApi;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.common.whiteList.service.WhiteListService;
@@ -24,7 +24,7 @@ import java.util.List;
 @Api(value = "WhiteListController", description = "白名单")
 @RestController
 @RequestMapping("/whiteList")
-public class WhiteListController extends BaseController {
+public class WhiteListApi extends BaseApi {
 
     @Autowired
     private WhiteListService whiteListService;

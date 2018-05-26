@@ -28,7 +28,7 @@ export const constantRouterMap = [
       {
         name: 'Readme',
         path: '/',
-        meta: { title: 'Readme', icon: 'el-icon-menu' },
+        meta: {title: 'Readme', icon: 'el-icon-menu'},
         component: resolve => require(['../components/page/Readme.vue'], resolve)
       }
     ]
@@ -40,27 +40,33 @@ export default new Router({
 })
 // 异步挂载的路由
 // 动态需要根据权限加载的路由表
-export const asyncRouterMap = [
-  {
-    path: '/permission',
-    // name: 'permissionhome',
-    meta: {
-      title: 'permission',
-      icon: 'el-icon-setting',
-      roles: ['admin']
-    },
-    component: resolve => require(['../components/common/Home.vue'], resolve),
-    children: [
-      {
-        name: 'permission',
-        path: '/permission',
-        meta: {
-          title: 'permission', icon: 'el-icon-menu', roles: ['admin']
-        },
-        component: resolve => require(['../components/page/permission.vue'], resolve)
-      }
-    ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
-]
+export const asyncRouterMap = [{
+  path: '/sys',
+  component: resolve => require(['../components/common/Home.vue'], resolve),
+  children: [{
+    name: 'sysinfo',
+    path: 'sysinfo',
+    component: resolve => require(['../components/page/permission.vue'], resolve)
+  }, {
+    name: 'role',
+    path: 'role',
+    component: resolve => require(['../components/page/permission.vue'], resolve)
+  }, {
+    name: 'auth',
+    path: 'auth',
+    component: resolve => require(['../components/page/permission.vue'], resolve)
+  }, {
+    name: 'args',
+    path: 'args',
+    component: resolve => require(['../components/page/permission.vue'], resolve)
+  }, {
+    name: 'dictionary',
+    path: 'dictionary',
+    component: resolve => require(['../components/page/permission.vue'], resolve)
+  }]
+}, {
+  path: '*',
+  redirect: '/404',
+  hidden: true
+}]
 

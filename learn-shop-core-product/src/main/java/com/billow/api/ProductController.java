@@ -1,4 +1,4 @@
-package com.billow.controller;
+package com.billow.api;
 
 import cn.hutool.core.collection.CollUtil;
 import com.billow.common.enums.ResCodeEnum;
