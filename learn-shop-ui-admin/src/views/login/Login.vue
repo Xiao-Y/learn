@@ -1,63 +1,3 @@
-<style>
-
-  .head-log {
-    height: 200px;
-  }
-
-  .company-log {
-    width: 300px;
-  }
-
-  .login-wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
-  .ms-title {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    margin-top: -230px;
-    text-align: center;
-    font-size: 30px;
-    color: #fff;
-  }
-
-  .ms-login {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 300px;
-    height: 140px;
-    margin: -150px 0 0 -190px;
-    padding: 40px;
-    border-radius: 5px;
-    background: #fff;
-  }
-
-  .login-btn {
-    text-align: center;
-  }
-
-  .login-btn button {
-    width: 100%;
-    height: 36px;
-    color: #FFFFFF;
-    background-color: #00d1b2;
-  }
-
-  .login-btn button:hover {
-    color: #FFFFFF;
-    background-color: #00d1b2;
-  }
-
-  .user-defined-style {
-    top: 800px;
-  }
-
-</style>
-
 <template>
 
   <div class="login-wrap">
@@ -146,3 +86,62 @@
   }
 
 </script>
+<style>
+
+  .head-log {
+    height: 200px;
+  }
+
+  .company-log {
+    width: 300px;
+  }
+
+  .login-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ms-title {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    margin-top: -230px;
+    text-align: center;
+    font-size: 30px;
+    color: #fff;
+  }
+
+  .ms-login {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 300px;
+    height: 140px;
+    margin: -150px 0 0 -190px;
+    padding: 40px;
+    border-radius: 5px;
+    background: #fff;
+  }
+
+  .login-btn {
+    text-align: center;
+  }
+
+  .login-btn button {
+    width: 100%;
+    height: 36px;
+    color: #FFFFFF;
+    background-color: #00d1b2;
+  }
+
+  .login-btn button:hover {
+    color: #FFFFFF;
+    background-color: #00d1b2;
+  }
+
+  .user-defined-style {
+    top: 800px;
+  }
+
+</style>
