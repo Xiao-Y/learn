@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
+import {Message, MessageBox} from 'element-ui'
 import store from '../store'
-import { getToken } from '@/utils/auth'
+import {getToken} from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -23,11 +23,10 @@ service.interceptors.request.use(config => {
 })
 
 // respone拦截器
-service.interceptors.response.use(
-  response => {
-  /**
-  * code为非20000是抛错 可结合自己业务进行修改
-  */
+service.interceptors.response.use(response => {
+    /**
+     * code为非20000是抛错 可结合自己业务进行修改
+     */
     const res = response.data
     console.info('响应数据:', res)
     if (res.code !== 20000) {
