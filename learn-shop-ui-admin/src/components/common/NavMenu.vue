@@ -10,7 +10,7 @@
       </template>
 
       <template v-else>
-        <el-menu-item :key="menu.id" :index="menu.path" :route="menu.path">
+        <el-menu-item :key="menu.id" :index="menu.path">
           <i :class="menu.icon"></i>{{ generateTitle(menu.title) }}
         </el-menu-item>
       </template>
