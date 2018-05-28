@@ -28,7 +28,7 @@ export const constantRouterMap = [{
       name: 'Readme',
       path: '/',
       meta: {title: 'Readme', icon: 'el-icon-menu'},
-      component: resolve => require(['../components/page/readme.vue'], resolve)
+      component: resolve => require(['../views/test/readme.vue'], resolve)
     }]
 }, {
   path: '/error',
@@ -37,7 +37,7 @@ export const constantRouterMap = [{
   children: [{
     name: '404',
     path: '404',
-    component: resolve => require(['../components/error/404.vue'], resolve)
+    component: resolve => require(['../views/error/404.vue'], resolve)
   }]
 }]
 
@@ -48,23 +48,23 @@ export const asyncRouterMap = [{
   children: [{
     name: 'sysinfo',
     path: 'sysinfo',
-    component: resolve => require(['../components/page/permission.vue'], resolve)
+    component: resolve => require(['../views/test/permission.vue'], resolve)
   }, {
     name: 'role',
     path: 'role',
-    component: resolve => require(['../components/page/permission2.vue'], resolve)
+    component: resolve => require(['../views/test/permission2.vue'], resolve)
   }, {
     name: 'auth',
     path: 'auth',
-    component: resolve => require(['../components/page/permission3.vue'], resolve)
+    component: resolve => require(['../views/test/permission3.vue'], resolve)
   }, {
     name: 'args',
     path: 'args',
-    component: resolve => require(['../components/page/permission4.vue'], resolve)
+    component: resolve => require(['../views/test/permission4.vue'], resolve)
   }, {
     name: 'dictionary',
     path: 'dictionary',
-    component: resolve => require(['../components/common/Sidebar2.vue'], resolve)
+    component: resolve => require(['../components/common/Sidebar.vue'], resolve)
   }]
 }]
 

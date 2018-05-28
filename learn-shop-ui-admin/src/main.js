@@ -10,7 +10,7 @@ import { global } from '@/global/global'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import '@/permission' // permission control
+import '@/genRouter' // permission control
 Vue.use(Vuex)
 Vue.use(ElementUI, {
   size: 'medium', // set element-ui default size
