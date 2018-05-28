@@ -1,10 +1,10 @@
 <template>
   <div class="sidebar">
     <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened router>
-      <template v-for="menu in menusDisplay" v-if="!menu.hidden && menu.parentTitle">
+      <template v-for="menu in menusDisplay" v-if="!menu.hidden && menu.title">
         <template v-if="menu.children">
           <el-submenu :index="menu.id">
-            <template slot="title"><i :class="menu.icon"></i>{{ menu.parentTitle }}</template>
+            <template slot="title"><i :class="menu.icon"></i>{{ menu.title }}</template>
             <el-menu-item v-for="(subItem,index) in menu.children" :key="index" :index="subItem.path">
               <i :class="subItem.icon"></i>{{ generateTitle(subItem.title) }}
             </el-menu-item>

@@ -64,7 +64,7 @@ export const asyncRouterMap = [{
   }, {
     name: 'dictionary',
     path: 'dictionary',
-    component: resolve => require(['../components/page/permission.vue'], resolve)
+    component: resolve => require(['../components/common/Sidebar2.vue'], resolve)
   }]
 }]
 
