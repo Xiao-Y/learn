@@ -27,6 +27,8 @@ public class PermissionPo extends BasePo implements Serializable {
     private String url;
     //父节点id
     private Long pid;
+    // 图标
+    private String icon;
 
     /**
      * 权限名称
@@ -132,6 +134,15 @@ public class PermissionPo extends BasePo implements Serializable {
         return this;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public PermissionPo setIcon(String icon) {
+        this.icon = icon;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "PermissionPo{" +
@@ -140,6 +151,7 @@ public class PermissionPo extends BasePo implements Serializable {
                 ", descritpion='" + descritpion + '\'' +
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
+                ", icon='" + icon + '\'' +
                 "} " + super.toString();
     }
 }

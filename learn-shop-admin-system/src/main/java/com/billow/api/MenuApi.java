@@ -3,7 +3,10 @@ package com.billow.api;
 import com.billow.common.base.BaseApi;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
+import com.billow.pojo.ex.HomeEx;
 import com.billow.pojo.ex.MenuEx;
+import com.billow.pojo.vo.sys.PermissionVo;
+import com.billow.pojo.vo.sys.RoleVo;
 import com.billow.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,11 +33,18 @@ public class MenuApi extends BaseApi {
 
     @GetMapping("/indexMenus")
     @ApiOperation(value = "初始化菜单信息", notes = "初始化菜单信息")
-    public BaseResponse<List<MenuEx>> indexMenus() {
-        BaseResponse<List<MenuEx>> baseResponse = this.getBaseResponse();
+    public BaseResponse<HomeEx> indexMenus() {
+        BaseResponse<HomeEx> baseResponse = this.getBaseResponse();
         try {
-            List<MenuEx> menuExes = menuService.indexMenus();
-            baseResponse.setResData(menuExes);
+            PermissionVo ex = new PermissionVo();
+            String userCode = super.findUserCode();
+            List<RoleVo> roleVos = super.findRoleVos();
+            ex.setUserCode(userCode).setRoleVos(roleVos).setValidInd(true);
+            List<MenuEx> menuExes = menuService.indexMenus(ex);
+
+            HomeEx homeEx = new HomeEx();
+            homeEx.setMenus(menuExes).setRoleCodes(super.findRoleCodes());
+            baseResponse.setResData(homeEx);
         } catch (Exception e) {
             baseResponse.setResCode(ResCodeEnum.FAIL);
             this.getErrorInfo(e);

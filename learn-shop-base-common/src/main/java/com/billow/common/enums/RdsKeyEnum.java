@@ -6,17 +6,17 @@ package com.billow.common.enums;
  * @author LiuYongTao
  * @date 2018/5/24 9:52
  */
-public enum RdsKey {
+public enum RdsKeyEnum {
 
     /**
-     * "whiteList:", "白名单前缀"
+     * "whiteList:", "白名单前缀"，如 whiteList:springApplicationName:clientIP
      */
     WHITE_LIST("whiteList:", "白名单前缀");
 
     private String key;
     private String value;
 
-    RdsKey(String key, String value) {
+    RdsKeyEnum(String key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -25,7 +25,7 @@ public enum RdsKey {
         return key;
     }
 
-    public RdsKey setKey(String key) {
+    public RdsKeyEnum setKey(String key) {
         this.key = key;
         return this;
     }
@@ -34,7 +34,7 @@ public enum RdsKey {
         return value;
     }
 
-    public RdsKey setValue(String value) {
+    public RdsKeyEnum setValue(String value) {
         this.value = value;
         return this;
     }

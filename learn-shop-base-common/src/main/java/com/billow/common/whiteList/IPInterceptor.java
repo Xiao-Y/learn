@@ -2,7 +2,7 @@ package com.billow.common.whiteList;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.billow.common.enums.RdsKey;
+import com.billow.common.enums.RdsKeyEnum;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.common.whiteList.service.WhiteListService;
@@ -47,7 +47,7 @@ public class IPInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String clientIP = ServletUtil.getClientIP(request);
-        StringBuilder key = new StringBuilder(RdsKey.WHITE_LIST.getKey());
+        StringBuilder key = new StringBuilder(RdsKeyEnum.WHITE_LIST.getKey());
         key.append(springApplicationName);
         key.append(":");
         key.append(clientIP);
@@ -68,7 +68,7 @@ public class IPInterceptor implements HandlerInterceptor {
         }
 
         // 模糊查询，获取所有的白名单
-        Set<String> keys = redisTemplate.keys(RdsKey.WHITE_LIST.getKey() + "*");
+        Set<String> keys = redisTemplate.keys(RdsKeyEnum.WHITE_LIST.getKey() + "*");
         keys.forEach(item -> LOG.info("deleteKey：----> {}", item));
         // 删除所有查询出来的key （测试用）
 //        redisTemplate.delete(keys);

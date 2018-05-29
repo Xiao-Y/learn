@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -382,6 +383,13 @@ public class ToolsUtils {
         return false;
     }
 
+    public static <T> boolean isEmpty(Set<T> set) {
+        if (set == null || set.size() < 1) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isEmpty(String[] items) {
         if (items == null || items.length < 1) {
             return true;
@@ -393,18 +401,16 @@ public class ToolsUtils {
         return !isEmpty(list);
     }
 
+    public static <T> boolean isNotEmpty(Set<T> set) {
+        return !isEmpty(set);
+    }
+
     public static boolean isNotEmpty(String str) {
-        if (str != null && !"".equals(str.trim())) {
-            return true;
-        }
-        return false;
+        return !isEmpty(str);
     }
 
     public static boolean isNotEmpty(String[] items) {
-        if (items != null && items.length > 0) {
-            return true;
-        }
-        return false;
+        return !isEmpty(items);
     }
 
     /**

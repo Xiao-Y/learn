@@ -9,7 +9,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/menuApi': {  //
+        target: 'http://localhost:8811', //源地址
+        changeOrigin: true, //改变源
+        pathRewrite: {
+          '^/api': '' //路径重写
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

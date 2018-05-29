@@ -70,7 +70,7 @@
           if (valid) {
             this.$store.dispatch('LoginActions', this.loginForm).then(() => {
               this.loading = false
-              // alert('登录成功')
+//               alert('登录成功')
               localStorage.setItem('ms_username', this.loginForm.username)
               this.$router.push('/Readme')
             }).catch(() => {

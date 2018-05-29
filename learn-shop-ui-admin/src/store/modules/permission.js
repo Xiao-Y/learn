@@ -48,12 +48,11 @@ const permission = {
     }
   },
   actions: {
-    GenRoutesActions({
-                     commit
-                   }, data) {
+    GenRoutesActions({ commit }, { menus }) {
       return new Promise(resolve => {
         // const roles = data.roles
-        const menus = data.menus
+        // const menus = data.menus
+        console.info("GenRoutesActions.menus", menus)
         const accessedRouters = filterAsyncRouter(asyncRouterMap, menus)
         // 最后添加404页面
         accessedRouters.push({

@@ -30,8 +30,8 @@ const user = {
     LoginActions({commit}, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
-          const data = response.data
+        login(username, userInfo.password).then(res => {
+          const data = res.resData.userVo
           setToken(data.token)
           commit(types.SET_TOKEN, data.token)
           resolve()
@@ -44,12 +44,12 @@ const user = {
     // 获取用户信息
     GetInfoActions({commit, state}) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
-          const data = response.data
-          commit(types.SET_ROLES, data.roles)
+        getInfo(state.token).then(res => {
+          const data = res.resData
+          commit(types.SET_ROLES, data.roleCodes)
           commit(types.SET_NAME, data.name)
-          commit(types.SET_AVATAR, data.avatar)
-          resolve(response)
+          // commit(types.SET_AVATAR, data.avatar)
+          resolve(res)
         }).catch(error => {
           reject(error)
         })
@@ -71,7 +71,7 @@ const user = {
     },
 
     // 前端 登出
-    FedLogOut({commit}) {
+    FedLogOutActions({commit}) {
       return new Promise(resolve => {
         commit(types.SET_TOKEN, '')
         removeToken()

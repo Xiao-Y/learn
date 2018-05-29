@@ -13,11 +13,11 @@ router.beforeEach((to, from, next) => {
       if (store.getters.roles.length === 0) {
         // console.log('roles====0')
         store.dispatch('GetInfoActions').then(res => { // 拉取用户信息
-          var data = res.data
+          console.log('res.resData.homeEx', res.resData)
+          var data = res.resData
           // const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
           // const menus = res.data.menus
           // console.log('roles?', roles)
-          // console.log('menus', menus)
           store.dispatch('GenRoutesActions', data).then(() => { // 根据roles权限生成可访问的路由表
             // console.log('addrouters', store.getters.addRouters)
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表

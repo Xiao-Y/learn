@@ -2,6 +2,7 @@ package com.billow.common.base;
 
 import com.billow.common.resData.BaseResponse;
 import com.billow.pojo.ex.MenuEx;
+import com.billow.pojo.vo.sys.RoleVo;
 import com.billow.pojo.vo.user.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 公用control
@@ -38,8 +41,37 @@ public class BaseApi {
      * @author LiuYongTao
      * @date 2018/5/26 9:34
      */
-    protected UserVo userVo() {
+    protected UserVo findUserVo() {
         return new UserVo();
+    }
+
+    /**
+     * 获取用户的角色信息
+     *
+     * @return List<RoleVo>
+     * @author LiuYongTao
+     * @date 2018/5/29 11:35
+     */
+    protected List<RoleVo> findRoleVos() {
+        List<RoleVo> roleVos = new ArrayList<>();
+        RoleVo roleVo = new RoleVo();
+        roleVo.setId(1L);
+        roleVos.add(roleVo);
+        return roleVos;
+    }
+
+    /**
+     * 获取用户的角色CODE信息
+     *
+     * @return List<RoleVo>
+     * @author LiuYongTao
+     * @date 2018/5/29 11:35
+     */
+    protected List<String> findRoleCodes() {
+        List<String> roleCodes = new ArrayList<>();
+        roleCodes.add("admin");
+        roleCodes.add("billow");
+        return roleCodes;
     }
 
     /**
@@ -49,7 +81,7 @@ public class BaseApi {
      * @author LiuYongTao
      * @date 2018/5/26 9:34
      */
-    protected String userCode() {
+    protected String findUserCode() {
         return "billow";
     }
 
