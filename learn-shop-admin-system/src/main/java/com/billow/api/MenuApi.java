@@ -31,20 +31,35 @@ public class MenuApi extends BaseApi {
     @Autowired
     private MenuService menuService;
 
-    @GetMapping("/indexMenus")
+    @GetMapping("/homeMenus")
     @ApiOperation(value = "初始化菜单信息", notes = "初始化菜单信息")
-    public BaseResponse<HomeEx> indexMenus() {
+    public BaseResponse<HomeEx> homeMenus() {
         BaseResponse<HomeEx> baseResponse = this.getBaseResponse();
         try {
             PermissionVo ex = new PermissionVo();
             String userCode = super.findUserCode();
             List<RoleVo> roleVos = super.findRoleVos();
             ex.setUserCode(userCode).setRoleVos(roleVos).setValidInd(true);
-            List<MenuEx> menuExes = menuService.indexMenus(ex);
+            List<MenuEx> menuExes = menuService.homeMenus(ex);
 
             HomeEx homeEx = new HomeEx();
             homeEx.setMenus(menuExes);
             baseResponse.setResData(homeEx);
+        } catch (Exception e) {
+            baseResponse.setResCode(ResCodeEnum.FAIL);
+            this.getErrorInfo(e);
+        }
+        return baseResponse;
+    }
+
+    @GetMapping("/homeMenus")
+    @ApiOperation(value = "菜单管理信息", notes = "菜单管理信息")
+    public BaseResponse<List<MenuEx>> index(PermissionVo permissionVo) {
+        BaseResponse<List<MenuEx>> baseResponse = this.getBaseResponse();
+        try {
+            PermissionVo ex = new PermissionVo();
+            List<MenuEx> menuExes = menuService.findMenus(permissionVo);
+            baseResponse.setResData(menuExes);
         } catch (Exception e) {
             baseResponse.setResCode(ResCodeEnum.FAIL);
             this.getErrorInfo(e);

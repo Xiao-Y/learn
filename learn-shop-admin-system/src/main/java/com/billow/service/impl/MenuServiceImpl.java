@@ -33,7 +33,7 @@ public class MenuServiceImpl implements MenuService {
     private RolePermissionDao rolePermissionDao;
 
     @Override
-    public List<MenuEx> indexMenus(PermissionVo permissionVo) {
+    public List<MenuEx> homeMenus(PermissionVo permissionVo) {
         // 查询出该用户所有角色的所有的权限
         List<RoleVo> roleVos = permissionVo.getRoleVos();
         Set<Long> permissionIds = new HashSet<>();
@@ -50,6 +50,21 @@ public class MenuServiceImpl implements MenuService {
             return null;
         }
         // 查询父级菜单
+        List<PermissionPo> permissionPos = permissionDao.findByPidIsNullAndValidIndIsTrue();
+
+        // 转换父级菜单
+        List<MenuEx> pMenuExs = new ArrayList<>();
+        if (ToolsUtils.isNotEmpty(permissionPos)) {
+            this.permissionPosCoverMenuExs(permissionPos, pMenuExs, permissionIds);
+            // 递归查询子级菜单
+            this.childenMenus(pMenuExs, permissionIds);
+        }
+        return pMenuExs;
+    }
+
+    @Override
+    public List<MenuEx> findMenus(PermissionVo permissionVo) {
+        // 查询父级菜单
         List<PermissionPo> permissionPos;
         if (permissionVo.getValidInd()) {
             permissionPos = permissionDao.findByPidIsNullAndValidIndIsTrue();
@@ -60,9 +75,9 @@ public class MenuServiceImpl implements MenuService {
         // 转换父级菜单
         List<MenuEx> pMenuExs = new ArrayList<>();
         if (ToolsUtils.isNotEmpty(permissionPos)) {
-            this.permissionPosCoverMenuExs(permissionPos, pMenuExs, permissionIds);
+            this.permissionPosCoverMenuExs(permissionPos, pMenuExs, null);
             // 递归查询子级菜单
-            this.childenMenus(pMenuExs, permissionIds);
+            this.childenMenus(pMenuExs, null);
         }
         return pMenuExs;
     }
@@ -110,7 +125,7 @@ public class MenuServiceImpl implements MenuService {
     private void permissionPosCoverMenuExs(List<PermissionPo> permissionPos, List<MenuEx> pMenuExs, Set<Long> permissionIds) {
         permissionPos.forEach(item -> {
             // 如果没有权限直接抛弃
-            if (!permissionIds.contains(item.getId())) {
+            if (permissionIds != null && !permissionIds.contains(item.getId())) {
                 return;
             }
 
@@ -119,7 +134,9 @@ public class MenuServiceImpl implements MenuService {
                     .setPath(item.getUrl())
                     .setValidInd(item.getValidInd())
                     .setIcon(item.getIcon())
-                    .setTitle(item.getPermissionCode());
+                    .setPid(item.getPid())
+                    .setTitleCode(item.getPermissionCode())
+                    .setTitle(item.getPermissionName());
             pMenuExs.add(ex);
         });
     }

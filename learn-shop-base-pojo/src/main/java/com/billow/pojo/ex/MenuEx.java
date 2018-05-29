@@ -14,9 +14,17 @@ public class MenuEx {
      */
     private String id;
     /**
+     * 菜单父ID
+     */
+    private Long pid;
+    /**
      * 菜单标题
      */
     private String title;
+    /**
+     * 菜单标题CODE
+     */
+    private String titleCode;
     /**
      * 菜单路径
      */
@@ -88,11 +96,31 @@ public class MenuEx {
         return this;
     }
 
+    public String getTitleCode() {
+        return titleCode;
+    }
+
+    public MenuEx setTitleCode(String titleCode) {
+        this.titleCode = titleCode;
+        return this;
+    }
+
+    public Long getPid() {
+        return pid;
+    }
+
+    public MenuEx setPid(Long pid) {
+        this.pid = pid;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "MenuEx{" +
                 "id='" + id + '\'' +
+                ", pid=" + pid +
                 ", title='" + title + '\'' +
+                ", titleCode='" + titleCode + '\'' +
                 ", path='" + path + '\'' +
                 ", icon='" + icon + '\'' +
                 ", validInd=" + validInd +

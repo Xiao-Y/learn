@@ -15,7 +15,7 @@ export function getInfo(token) {
   return request({
     // url: '/user/info',
     baseURL: '',
-    url: '/menuApi/indexMenus',
+    url: '/menuApi/homeMenus',
     method: 'get',
     params: {token}
   })
