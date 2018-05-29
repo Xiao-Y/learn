@@ -60,7 +60,7 @@ export const asyncRouterMap = [{
   }, {
     name: 'args',
     path: 'args',
-    component: resolve => require(['../views/test/permission4.vue'], resolve)
+    component: resolve => require(['../views/sys/MenuMag.vue'], resolve)
   }, {
     name: 'dictionary',
     path: 'dictionary',

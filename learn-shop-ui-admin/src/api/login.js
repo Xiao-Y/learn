@@ -13,9 +13,9 @@ export function login(username, password) {
 
 export function getInfo(token) {
   return request({
-    // url: '/user/info',
-    baseURL: '',
-    url: '/menuApi/homeMenus',
+    url: '/user/info',
+    // baseURL: '',
+    // url: '/menuApi/homeMenus',
     method: 'get',
     params: {token}
   })
