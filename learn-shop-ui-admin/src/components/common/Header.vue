@@ -63,7 +63,7 @@ export default {
     handleCommand(command) {
       if (command === 'loginout') {
         localStorage.removeItem('ms_username')
-        this.$store.dispatch('LogOut').then(() => {
+        this.$store.dispatch('LogOutActions').then(() => {
           location.reload() // 为了重新实例化vue-router对象 避免bug
         })
       }

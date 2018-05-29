@@ -1,5 +1,6 @@
-import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import {login, logout, getInfo} from '@/api/login'
+import {getToken, setToken, removeToken} from '@/utils/auth'
+import types from '@/utils/mutationsType'
 
 const user = {
   state: {
@@ -10,29 +11,29 @@ const user = {
   },
 
   mutations: {
-    SET_TOKEN: (state, token) => {
+    [types.SET_TOKEN]: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, name) => {
+    [types.SET_NAME]: (state, name) => {
       state.name = name
     },
-    SET_AVATAR: (state, avatar) => {
+    [types.SET_AVATAR]: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
+    [types.SET_ROLES]: (state, roles) => {
       state.roles = roles
     }
   },
 
   actions: {
     // 登录
-    Login({ commit }, userInfo) {
+    LoginActions({commit}, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           const data = response.data
           setToken(data.token)
-          commit('SET_TOKEN', data.token)
+          commit(types.SET_TOKEN, data.token)
           resolve()
         }).catch(error => {
           reject(error)
@@ -41,13 +42,13 @@ const user = {
     },
 
     // 获取用户信息
-    GetInfo({ commit, state }) {
+    GetInfoActions({commit, state}) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
-          commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
+          commit(types.SET_ROLES, data.roles)
+          commit(types.SET_NAME, data.name)
+          commit(types.SET_AVATAR, data.avatar)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -56,11 +57,11 @@ const user = {
     },
 
     // 登出
-    LogOut({ commit, state }) {
+    LogOutActions({commit, state}) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
+          commit(types.SET_TOKEN, '')
+          commit(types.SET_ROLES, [])
           removeToken()
           resolve()
         }).catch(error => {
@@ -70,9 +71,9 @@ const user = {
     },
 
     // 前端 登出
-    FedLogOut({ commit }) {
+    FedLogOut({commit}) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
+        commit(types.SET_TOKEN, '')
         removeToken()
         resolve()
       })

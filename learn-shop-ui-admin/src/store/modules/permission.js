@@ -3,6 +3,8 @@ import {
   constantRouterMap
 } from '@/router'
 
+import types from '@/utils/mutationsType'
+
 function hasPermission(menus, url) {
   // console.info('url', url)
   // console.info('menus', menus)
@@ -36,19 +38,19 @@ const permission = {
     addRouters: []
   },
   mutations: {
-    SET_ROUTERS: (state, routers) => {
+    [types.SET_ROUTERS]: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
       console.log('state.routers', state.routers)
     },
-    SET_MENUS: (state, menus) => {
+    [types.SET_MENUS]: (state, menus) => {
       state.menus = menus
     }
   },
   actions: {
-    GenerateRoutes({
-      commit
-    }, data) {
+    GenRoutesActions({
+                     commit
+                   }, data) {
       return new Promise(resolve => {
         // const roles = data.roles
         const menus = data.menus
@@ -59,8 +61,8 @@ const permission = {
           redirect: '/error/404'
         })
         console.log('accessedRouters', accessedRouters)
-        commit('SET_ROUTERS', accessedRouters)
-        commit('SET_MENUS', menus)
+        commit(types.SET_ROUTERS, accessedRouters)
+        commit(types.SET_MENUS, menus)
         resolve()
       })
     }
