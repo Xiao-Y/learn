@@ -43,7 +43,7 @@ public class MenuApi extends BaseApi {
             List<MenuEx> menuExes = menuService.indexMenus(ex);
 
             HomeEx homeEx = new HomeEx();
-            homeEx.setMenus(menuExes).setRoleCodes(super.findRoleCodes());
+            homeEx.setMenus(menuExes);
             baseResponse.setResData(homeEx);
         } catch (Exception e) {
             baseResponse.setResCode(ResCodeEnum.FAIL);

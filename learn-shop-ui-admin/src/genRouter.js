@@ -10,10 +10,11 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/login') {
       next()
     } else {
-      if (store.getters.roles.length === 0) {
+      // console.log('store.getters',store.getters)
+      if (store.getters.menus.length === 0) {
         // console.log('roles====0')
         store.dispatch('GetInfoActions').then(res => { // 拉取用户信息
-          console.log('res.resData.homeEx', res.resData)
+          // console.log('res.resData.homeEx', res.resData)
           var data = res.resData
           // const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
           // const menus = res.data.menus

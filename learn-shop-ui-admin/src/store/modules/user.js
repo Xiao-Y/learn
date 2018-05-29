@@ -31,9 +31,10 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(res => {
-          const data = res.resData.userVo
+          const data = res.resData
           setToken(data.token)
           commit(types.SET_TOKEN, data.token)
+          commit(types.SET_ROLES, data.roleCodes)
           resolve()
         }).catch(error => {
           reject(error)
@@ -45,9 +46,9 @@ const user = {
     GetInfoActions({commit, state}) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(res => {
-          const data = res.resData
-          commit(types.SET_ROLES, data.roleCodes)
-          commit(types.SET_NAME, data.name)
+          // const data = res.resData
+          // commit(types.SET_ROLES, data.roleCodes)
+          // commit(types.SET_NAME, data.name)
           // commit(types.SET_AVATAR, data.avatar)
           resolve(res)
         }).catch(error => {

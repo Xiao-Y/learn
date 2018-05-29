@@ -35,13 +35,14 @@ function filterAsyncRouter(asyncRouterMap, menus) {
 const permission = {
   state: {
     routers: constantRouterMap,
-    addRouters: []
+    addRouters: [],
+    menus:[]
   },
   mutations: {
     [types.SET_ROUTERS]: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
-      console.log('state.routers', state.routers)
+      // console.log('state.routers', state.routers)
     },
     [types.SET_MENUS]: (state, menus) => {
       state.menus = menus
@@ -52,7 +53,7 @@ const permission = {
       return new Promise(resolve => {
         // const roles = data.roles
         // const menus = data.menus
-        console.info("GenRoutesActions.menus", menus)
+        // console.info("GenRoutesActions.menus", menus)
         const accessedRouters = filterAsyncRouter(asyncRouterMap, menus)
         // 最后添加404页面
         accessedRouters.push({
