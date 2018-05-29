@@ -16,7 +16,11 @@ import java.io.Serializable;
 @Table(name = "sys_permission")
 public class PermissionPo extends BasePo implements Serializable {
     //权限名称
-    private String name;
+    private String permissionName;
+    /**
+     * 权限CODE
+     */
+    private String permissionCode;
     //权限描述
     private String descritpion;
     //授权链接
@@ -29,18 +33,42 @@ public class PermissionPo extends BasePo implements Serializable {
      *
      * @return
      */
-    public String getName() {
-        return name;
+    public String getPermissionName() {
+        return permissionName;
     }
 
     /**
      * 权限名称
      *
-     * @param name
+     * @param permissionName
      * @return
      */
-    public PermissionPo setName(String name) {
-        this.name = name;
+    public PermissionPo setPermissionName(String permissionName) {
+        this.permissionName = permissionName;
+        return this;
+    }
+
+    /**
+     * 权限CODE
+     *
+     * @return java.lang.String
+     * @author LiuYongTao
+     * @date 2018/5/29 9:13
+     */
+    public String getPermissionCode() {
+        return permissionCode;
+    }
+
+    /**
+     * 权限CODE
+     *
+     * @param permissionCode
+     * @return com.billow.pojo.po.sys.PermissionPo
+     * @author LiuYongTao
+     * @date 2018/5/29 9:13
+     */
+    public PermissionPo setPermissionCode(String permissionCode) {
+        this.permissionCode = permissionCode;
         return this;
     }
 
@@ -107,10 +135,11 @@ public class PermissionPo extends BasePo implements Serializable {
     @Override
     public String toString() {
         return "PermissionPo{" +
-                "name='" + name + '\'' +
+                "permissionName='" + permissionName + '\'' +
+                ", permissionCode='" + permissionCode + '\'' +
                 ", descritpion='" + descritpion + '\'' +
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
-                '}';
+                "} " + super.toString();
     }
 }

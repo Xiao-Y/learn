@@ -19,7 +19,6 @@ public class UserPo extends BasePo implements Serializable {
     private String sex;
     // 年龄
     private Integer age;
-
     /**
      * 用户名
      *
