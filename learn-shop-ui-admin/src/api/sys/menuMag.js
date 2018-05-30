@@ -24,11 +24,8 @@ import request from '@/utils/request'
  * @param pid
  */
 export function findParentMenu(pid) {
-
   return request({
-    // baseURL: 'https://easy-mock.com/mock/5af2c3514b7b62162e8fc3cd/shop',
-    // url: '/menuApi/findParentMenu/' + pid,
-    url: 'menuApi/findParentMenu/' + pid,
+    url: 'admin-system/menuApi/findMenuById/' + pid,
     method: 'get'
   })
 }
@@ -38,14 +35,8 @@ export function findParentMenu(pid) {
  * @param pid
  */
 export function findMenus() {
-  // var url = 'api/menuApi/findMenus'
-  // axios.get(url).then((response) => {
-  //   return response.data
-  // })
   return request({
-    // baseURL: 'https://easy-mock.com/mock/5af2c3514b7b62162e8fc3cd/shop',
-    // baseURL: 'http://localhost:8080',
-    url: 'menuApi/findMenus',
+    url: 'admin-system/menuApi/findMenus',
     method: 'get'
   })
 }

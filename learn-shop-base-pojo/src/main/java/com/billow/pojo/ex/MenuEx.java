@@ -36,7 +36,7 @@ public class MenuEx {
     /**
      * 有效标志
      */
-    private boolean validInd;
+    private Boolean validInd;
     /**
      * 子级菜单
      */
@@ -87,11 +87,11 @@ public class MenuEx {
         return this;
     }
 
-    public boolean getValidInd() {
+    public Boolean getValidInd() {
         return validInd;
     }
 
-    public MenuEx setValidInd(boolean validInd) {
+    public MenuEx setValidInd(Boolean validInd) {
         this.validInd = validInd;
         return this;
     }

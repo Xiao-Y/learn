@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,6 +61,21 @@ public class MenuApi extends BaseApi {
             PermissionVo ex = new PermissionVo();
             List<MenuEx> menuExes = menuService.findMenus(permissionVo);
             baseResponse.setResData(menuExes);
+        } catch (Exception e) {
+            baseResponse.setResCode(ResCodeEnum.FAIL);
+            this.getErrorInfo(e);
+        }
+        return baseResponse;
+    }
+
+    @GetMapping("/findMenuById/{id}")
+    @ApiOperation(value = "根据id查询菜单信息", notes = "根据id查询菜单信息")
+    public BaseResponse<PermissionVo> findMenuById(@PathVariable("id") Long id) {
+        BaseResponse<PermissionVo> baseResponse = this.getBaseResponse();
+        try {
+            PermissionVo ex = menuService.findMenuById(id);
+            ex.setValidInd(null);
+            baseResponse.setResData(ex);
         } catch (Exception e) {
             baseResponse.setResCode(ResCodeEnum.FAIL);
             this.getErrorInfo(e);

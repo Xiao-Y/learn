@@ -25,4 +25,12 @@ public interface MenuService {
      * @date 2018/5/29 20:10
      */
     List<MenuEx> findMenus(PermissionVo permissionVo);
+
+    /**
+     * 根据id查询菜单信息
+     *
+     * @param id
+     * @return
+     */
+    PermissionVo findMenuById(Long id);
 }

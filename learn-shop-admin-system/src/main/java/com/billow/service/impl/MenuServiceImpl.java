@@ -82,6 +82,12 @@ public class MenuServiceImpl implements MenuService {
         return pMenuExs;
     }
 
+    @Override
+    public PermissionVo findMenuById(Long id) {
+        PermissionPo permissionPo = permissionDao.findOne(id);
+        return PageUtil.convert(permissionPo, PermissionVo.class);
+    }
+
     /**
      * 递归查询子级菜单
      *
@@ -95,7 +101,7 @@ public class MenuServiceImpl implements MenuService {
         pMenuExs.forEach(pitem -> {
             // 查询子级菜单
             List<PermissionPo> permissionPos;
-            if (pitem.getValidInd()) {
+            if (pitem.getValidInd() != null && pitem.getValidInd()) {
                 permissionPos = permissionDao.findByPidEqualsAndValidIndIsTrue(new Long(pitem.getId()));
             } else {
                 permissionPos = permissionDao.findByPidEquals(new Long(pitem.getId()));
@@ -132,7 +138,7 @@ public class MenuServiceImpl implements MenuService {
             MenuEx ex = new MenuEx();
             ex.setId(item.getId().toString())
                     .setPath(item.getUrl())
-                    .setValidInd(item.getValidInd())
+//                    .setValidInd(item.getValidInd())
                     .setIcon(item.getIcon())
                     .setPid(item.getPid())
                     .setTitleCode(item.getPermissionCode())
