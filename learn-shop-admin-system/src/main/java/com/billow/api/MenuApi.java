@@ -52,9 +52,9 @@ public class MenuApi extends BaseApi {
         return baseResponse;
     }
 
-    @GetMapping("/homeMenus")
+    @GetMapping("/findMenus")
     @ApiOperation(value = "菜单管理信息", notes = "菜单管理信息")
-    public BaseResponse<List<MenuEx>> index(PermissionVo permissionVo) {
+    public BaseResponse<List<MenuEx>> findMenus(PermissionVo permissionVo) {
         BaseResponse<List<MenuEx>> baseResponse = this.getBaseResponse();
         try {
             PermissionVo ex = new PermissionVo();
