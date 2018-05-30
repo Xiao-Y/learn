@@ -95,138 +95,148 @@
 </template>
 
 <script>
-  import {findParentMenu, findMenus} from '@/api/sys/menuMag'
-  import {Message} from 'element-ui'
+import { findParentMenu, findMenus } from "@/api/sys/menuMag";
+import { Message } from "element-ui";
+import axios from "axios";
 
-  export default {
-    data() {
-      return {
-        filterText: '', //过滤条件
-        activeNames: ['2', '3'], //折叠面板
-        parentMenusShow: false, //是否显示父级菜单
-        menu: { //本级菜单信息
-          id: '',
-          pid: '',
-          title: '',
-          titleCode: '',
-          path: '',
-          icon: '',
-          validInd: ''
-        },
-        parentMenu: { //父级菜单信息
-          id: '',
-          pid: '',
-          title: '',
-          titleCode: '',
-          path: '',
-          icon: '',
-          validInd: ''
-        },
-        defaultProps: { //设置数据绑定
-          children: 'children',
-          label: 'title'
-        },
-        menus: []
-      };
+export default {
+  data() {
+    return {
+      filterText: "", //过滤条件
+      activeNames: ["2", "3"], //折叠面板
+      parentMenusShow: false, //是否显示父级菜单
+      menu: {
+        //本级菜单信息
+        id: "",
+        pid: "",
+        title: "",
+        titleCode: "",
+        path: "",
+        icon: "",
+        validInd: ""
+      },
+      parentMenu: {
+        //父级菜单信息
+        id: "",
+        pid: "",
+        title: "",
+        titleCode: "",
+        path: "",
+        icon: "",
+        validInd: ""
+      },
+      defaultProps: {
+        //设置数据绑定
+        children: "children",
+        label: "title"
+      },
+      menus: []
+    };
+  },
+  created() {
+    // 初始化
+    this.findMenus();
+  },
+  methods: {
+    findMenus() {
+      //获取所有菜单
+      // findMenus().then(res => {
+      //   var menus = res.resData.menus;
+      //   this.menus = menus;
+      // })
+      var url = "api/menuApi/findMenus";
+      axios.get(url).then(res => {
+        console.info(res.resData);
+        // var menus = res.resData;
+        // this.menus = menus;
+      });
     },
-    created() { // 初始化
-      this.findMenus();
+    changeCheck(data) {
+      // 当前菜单信息
+      this.menu = data;
+      this.parentMenusShow = false;
     },
-    methods: {
-      findMenus() { //获取所有菜单
-        findMenus().then(res => {
-          var menus = res.resData.menus;
-          this.menus = menus;
-        })
-      },
-      changeCheck(data) { // 当前菜单信息
-        this.menu = data;
-        this.parentMenusShow = false;
-      },
-      filterNode(value, data) { // 过滤搜索
-        if (!value) return true;
-        return data.title.indexOf(value) !== -1;
-      },
-      findParentMenu() { //查看父菜单信息
-        var pid = this.menu.pid;
-        if (pid) {
-          pid = 22;
-          findParentMenu(pid).then(res => {
+    filterNode(value, data) {
+      // 过滤搜索
+      if (!value) return true;
+      return data.title.indexOf(value) !== -1;
+    },
+    findParentMenu() {
+      //查看父菜单信息
+      var pid = this.menu.pid;
+      if (pid) {
+        pid = 22;
+        findParentMenu(pid)
+          .then(res => {
             res.resData;
             this.parentMenusShow = true;
-          }).catch(error => {
-            Message.error(error)
           })
-        } else {
-          Message.error('请选择一个菜单')
-        }
-      },
-      addMenu() {
-
-      },
-      editMenu() {
-
-      },
-      delMenu() {
-
+          .catch(error => {
+            Message.error(error);
+          });
+      } else {
+        Message.error("请选择一个菜单");
       }
-
     },
-    watch: {
-      filterText(val) {
-        this.$refs.tree2.filter(val);
-      }
+    addMenu() {},
+    editMenu() {},
+    delMenu() {}
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree2.filter(val);
     }
   }
+};
 </script>
 
 <style scoped>
-  .el-row {
-    margin-bottom: 10px;
-  }
+.el-row {
+  margin-bottom: 10px;
+}
 
-  .el-form-item {
-    margin-bottom: 3px;
-  }
+.el-form-item {
+  margin-bottom: 3px;
+}
 
-  .buttons {
-    margin-top: 5px;
-  }
+.buttons {
+  margin-top: 5px;
+}
 
-  .sidebar {
-    display: block;
-    position: absolute;
-    width: 40%;
-    height: 380px;
-    left: 0;
-    top: 100px;
-    bottom: 0;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    /*background: #2E363F;*/
-  }
+.sidebar {
+  display: block;
+  position: absolute;
+  width: 40%;
+  height: 380px;
+  left: 0;
+  top: 100px;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  /*background: #2E363F;*/
+}
 
-  .sidebar > ul {
-    height: 100%;
-  }
+.sidebar > ul {
+  height: 100%;
+}
 
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  ::-webkit-scrollbar {
-    width: 3px; /*滚动条宽度*/
-    height: 3px; /*滚动条高度*/
-  }
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 3px; /*滚动条宽度*/
+  height: 3px; /*滚动条高度*/
+}
 
-  /*定义滚动条轨道 内阴影+圆角*/
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px; /*滚动条的背景区域的圆角*/
-    background-color: white; /*滚动条的背景颜色*/
-  }
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px; /*滚动条的背景区域的圆角*/
+  background-color: white; /*滚动条的背景颜色*/
+}
 
-  /*定义滑块 内阴影+圆角*/
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px; /*滚动条的圆角*/
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f; /*滚动条的背景颜色*/
-  }
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px; /*滚动条的圆角*/
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #2e363f; /*滚动条的背景颜色*/
+}
 </style>
