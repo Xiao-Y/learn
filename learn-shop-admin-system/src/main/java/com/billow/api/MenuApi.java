@@ -55,11 +55,10 @@ public class MenuApi extends BaseApi {
 
     @GetMapping("/findMenus")
     @ApiOperation(value = "菜单管理信息", notes = "菜单管理信息")
-    public BaseResponse<List<MenuEx>> findMenus(PermissionVo permissionVo) {
+    public BaseResponse<List<MenuEx>> findMenus() {
         BaseResponse<List<MenuEx>> baseResponse = this.getBaseResponse();
         try {
-            PermissionVo ex = new PermissionVo();
-            List<MenuEx> menuExes = menuService.findMenus(permissionVo);
+            List<MenuEx> menuExes = menuService.findMenus();
             baseResponse.setResData(menuExes);
         } catch (Exception e) {
             baseResponse.setResCode(ResCodeEnum.FAIL);

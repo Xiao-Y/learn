@@ -1,5 +1,6 @@
 <template>
 
+  <div>
   <el-row :gutter="10">
     <el-col :span="10">
       <el-collapse value="1">
@@ -21,7 +22,7 @@
           <el-row>
             <div class="buttons">
               <el-button type="success" size="mini" @click="findParentMenu">查看父菜单</el-button>
-              <el-button type="primary" size="mini" @click="addMenu">添加</el-button>
+              <el-button type="primary" size="mini" @click="dialogFormVisible = true">添加</el-button>
               <el-button type="warning" size="mini" @click="editMenu">修改</el-button>
               <el-button type="danger" size="mini" @click="delMenu">删除</el-button>
               <!--<el-button @click="getCheckedNodes">通过 node 获取</el-button>-->
@@ -98,12 +99,44 @@
       </el-collapse>
     </el-col>
   </el-row>
+
+  <!-- 菜单修改/添加dialog start -->
+  <el-dialog title="修改/添加" :visible.sync="dialogFormVisible">
+    <el-form :model="menu" size="small" label-width="100px">
+      <el-form-item label="父菜单标题">
+        <el-input v-model="menu.title" readonly></el-input>
+      </el-form-item>
+      <el-form-item label="菜单标题">
+        <el-input v-model="menu.title"></el-input>
+      </el-form-item>
+      <el-form-item label="菜单CODE">
+        <el-input v-model="menu.titleCode"></el-input>
+      </el-form-item>
+      <el-form-item label="菜单路径">
+        <el-input v-model="menu.path"></el-input>
+      </el-form-item>
+      <el-form-item label="菜单图标">
+        <el-input v-model="menu.icon"></el-input>
+      </el-form-item>
+      <!--<el-form-item label="活动区域" :label-width="formLabelWidth">-->
+        <!--<el-select v-model="form.region" placeholder="请选择活动区域">-->
+          <!--<el-option label="区域一" value="shanghai"></el-option>-->
+          <!--<el-option label="区域二" value="beijing"></el-option>-->
+        <!--</el-select>-->
+      <!--</el-form-item>-->
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- 菜单修改/添加dialog end -->
+  </div>
 </template>
 
 <script>
   import {findParentMenu, findMenus} from "@/api/sys/menuMag";
   import {Message} from "element-ui";
-  import axios from "axios";
 
   export default {
     data() {
@@ -111,6 +144,7 @@
         filterText: "", //过滤条件
         activeNames: ["2", "3"], //折叠面板
         parentMenusShow: false, //是否显示父级菜单
+        dialogFormVisible: false, //菜单修改/添加dialog
         menu: {
           //本级菜单信息
           id: "",

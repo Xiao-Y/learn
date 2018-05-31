@@ -19,12 +19,11 @@ public interface MenuService {
     /**
      * 菜单管理信息
      *
-     * @param permissionVo
      * @return java.util.List<com.billow.pojo.ex.MenuEx>
      * @author LiuYongTao
      * @date 2018/5/29 20:10
      */
-    List<MenuEx> findMenus(PermissionVo permissionVo);
+    List<MenuEx> findMenus();
 
     /**
      * 根据id查询菜单信息
