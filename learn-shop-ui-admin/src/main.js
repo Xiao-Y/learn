@@ -9,6 +9,7 @@ import i18n from './lang' // Internationalization
 import { global } from '@/global/global'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueUtils from '@/utils/vueUtils'
 
 import '@/genRouter' // permission control
 Vue.use(Vuex)
@@ -16,6 +17,9 @@ Vue.use(ElementUI, {
   size: 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
 })
+
+Vue.prototype.VueUtils = VueUtils;
+
 // 加载用户主题
 if (localStorage.getItem('themeValue')) {
   global.changeTheme(localStorage.getItem('themeValue'))

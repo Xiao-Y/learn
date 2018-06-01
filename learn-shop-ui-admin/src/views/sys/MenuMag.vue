@@ -101,12 +101,8 @@
     </el-row>
 
     <!-- 菜单修改/添加dialog start -->
-    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false"
-               :before-close = "cleanContent"
-               size="small">
-      <el-form :model="editMenu" :rules="rules22"  label-width="100px"
-               ref="editMenu"
-               :inline-message="true">
+    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false" size="small">
+      <el-form :model="editMenu" :rules="rules22" label-width="100px" ref="editMenu" :inline-message="true">
         <el-form-item label="父菜单标题">
           <el-col :span="18">
             <el-input v-model="editMenu.parentTtile" readonly></el-input>
@@ -127,7 +123,7 @@
             <el-input v-model="editMenu.path"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="菜单图标">
+        <el-form-item label="菜单图标" prop="icon">
           <el-col :span="18">
             <el-input v-model="editMenu.icon"></el-input>
           </el-col>
@@ -141,7 +137,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancledialog('editMenu')">取 消</el-button>
-        <el-button size="mini" type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button size="mini" type="primary" @click="submitMenu('editMenu')">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 菜单修改/添加dialog end -->
@@ -159,8 +155,34 @@
         activeNames: ["2", "3"], //折叠面板
         parentMenusShow: false, //是否显示父级菜单
         dialogFormVisible: false, //菜单修改/添加dialog
-        title: '',
-        menu: {//本级菜单信息
+        menu: null,//本级菜单信息
+        parentMenu: null,//父级菜单信息
+        editMenu: null, //添加修改菜单信息
+        defaultProps: {
+          //设置数据绑定
+          children: "children",
+          label: "title"
+        },
+        menus: [],
+        node: [], //正在操作的节点
+        optionType: '',// 操作类型
+        rules22: {// 校验
+          title: [{required: true, message: '请输入菜单名称', trigger: 'blur'}],
+          titleCode: [{required: true, message: '请输入菜单CODE', trigger: 'blur'}],
+          path: [{required: true, message: '请输入菜单路径', trigger: 'blur'}]
+        }
+      };
+    },
+    created() {
+      this.findMenus();// 初始化菜单树
+      this.initMenu();//本级菜单信息
+      this.initEditMenu();//父级菜单信息
+      this.initParentMenu();//添加修改菜单信息
+    },
+    methods: {
+      //本级菜单信息
+      initMenu() {
+        this.menu = {
           id: "",
           pid: "",
           title: "",
@@ -168,8 +190,11 @@
           path: "",
           icon: ""
 //          validInd: null
-        },
-        parentMenu: {//父级菜单信息
+        }
+      },
+      //父级菜单信息
+      initParentMenu() {
+        this.parentMenu = {
           id: "",
           pid: "",
           url: "",
@@ -182,8 +207,11 @@
           updaterCode: "",
           descritpion: "",
 //          validInd: null
-        },
-        editMenu: {//添加修改菜单信息
+        }
+      },
+      //添加修改菜单信息
+      initEditMenu() {
+        this.editMenu = {
           id: "",
           pid: "",
           title: "",
@@ -191,43 +219,26 @@
           parentTtile: "",
           path: "",
           icon: ""
-        },
-        defaultProps: {
-          //设置数据绑定
-          children: "children",
-          label: "title"
-        },
-        menus: [],
-        rules22: {// 校验
-          title: [{required: true, message: '请输入菜单名称', trigger: 'blur'}],
-          titleCode: [{required: true, message: '请输入菜单CODE', trigger: 'blur'}],
-          path: [{required: true, message: '请输入菜单路径', trigger: 'blur'}]
         }
-      };
-    },
-    created() {
-      // 初始化
-      this.findMenus();
-    },
-    methods: {
+      },
+      //获取所有菜单
       findMenus() {
-        //获取所有菜单
         findMenus().then(res => {
           this.menus = res.resData;
         })
       },
+      // 当前菜单信息
       changeCheck(data) {
-        // 当前菜单信息
-        this.menu = data;
+        this.menu = this.VueUtils.deepClone(data);
         this.parentMenusShow = false;
       },
+      // 过滤搜索
       filterNode(value, data) {
-        // 过滤搜索
         if (!value) return true;
         return data.title.indexOf(value) !== -1;
       },
+      //查看父菜单信息
       findParentMenu() {
-        //查看父菜单信息
         var pid = this.menu.pid;
         if (pid) {
           findParentMenu(pid).then(res => {
@@ -240,7 +251,8 @@
           Message.error("请选择一个菜单");
         }
       },
-      getIds: function (nodes, ids) {//递归查询出所有的节点id
+      //递归查询出所有的节点id
+      getIds: function (nodes, ids) {
         nodes.forEach(node => {
           if (node.children && node.children != null) {
             this.getIds(node.children, ids);
@@ -248,9 +260,10 @@
           ids.push(node.id);
         });
       },
+      // 添加菜单
       addMenuEvent() {
+        this.optionType = "add";
         var nodes = this.$refs.tree2.getCheckedNodes();
-        console.info(nodes)
         if (nodes.length != 1) {
           Message.error("请选择一个菜单");
           return;
@@ -259,19 +272,28 @@
         this.editMenu.pid = nodes[0].id;
         this.editMenu.parentTtile = nodes[0].title;
         this.dialogFormVisible = true;
+        // 当前操作的节点(用于后面提交)
+        this.node = nodes[0];
       },
+      // 修改菜单
       editMenuEvent() {
+        this.optionType = "edit";
         var nodes = this.$refs.tree2.getCheckedNodes();
         console.info(nodes)
         if (nodes.length != 1) {
           Message.error("请选择一个菜单");
           return;
         }
-        this.editMenu = this.menu;
-        this.editMenu.pid = nodes[0].id;
-        this.editMenu.parentTtile = nodes[0].title;
+        this.editMenu = this.VueUtils.deepClone(nodes[0]);
+//        console.info("nodes[0].pid",nodes[0].pid);
+        var parentNode = this.$refs.tree2.getNode(nodes[0].pid);
+//        console.info("parentNode",parentNode.data.title);
+        this.editMenu.parentTtile = parentNode.data.title;
         this.dialogFormVisible = true;
+        // 当前操作的节点(用于后面提交)
+        this.node = nodes[0];
       },
+      // 删除菜单
       delMenuEvent() {
         this.$confirm('此操作将删除该菜单及子菜单, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -288,8 +310,6 @@
               this.$refs.tree2.remove(node);
             })
           }
-
-//          console.info("this.menus", this.menus);
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -302,15 +322,40 @@
           });
         });
       },
-      cleanContent(done) {
-        done();
-      },
-      cancledialog(formRule){
+      // 取消
+      cancledialog(formRule) {
         this.$refs[formRule].resetFields();
         this.dialogFormVisible = false
+        this.initEditMenu();
+      },
+      // 提交
+      submitMenu(formRule) {
+        var editMenus = this.editMenu;
+        // todo ajax 远程调用成功后执行下面的
+        console.info("editMenus", editMenus)
+        // 前面点击后缓存后的节点
+        var data = this.node;
+        var copuEidtMenus = this.VueUtils.deepClone(editMenus);
+        if (this.optionType == "edit") { // 修改
+          data.title = copuEidtMenus.title;
+          data.titleCode = copuEidtMenus.titleCode;
+          data.path = copuEidtMenus.path;
+          data.icon = copuEidtMenus.icon;
+        } else { // 添加
+          if (!data.children) {
+            this.$set(data, 'children', []);
+          }
+          // 测试用，实际是后台保存成功后返回
+          copuEidtMenus.id = Math.ceil(Math.random() * 10);
+          data.children.push(copuEidtMenus);
+        }
+        this.$refs[formRule].resetFields();
+        this.dialogFormVisible = false
+        this.initEditMenu();
       }
     },
     watch: {
+      //通过 :filter-node-method,找到过滤方法
       filterText(val) {
         this.$refs.tree2.filter(val);
       }
