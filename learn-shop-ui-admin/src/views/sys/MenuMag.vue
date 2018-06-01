@@ -163,7 +163,7 @@
           children: "children",
           label: "title"
         },
-        menus: [],
+        menus: [],// 菜单树数据源
         node: [], //正在操作的节点
         optionType: '',// 操作类型
         rules22: {// 校验
@@ -229,7 +229,9 @@
       },
       // 当前菜单信息
       changeCheck(data) {
+//        console.info("data.pid",data.pid);
         this.menu = this.VueUtils.deepClone(data);
+//        console.info("menu.pid",this.menu.pid);
         this.parentMenusShow = false;
       },
       // 过滤搜索
@@ -239,7 +241,13 @@
       },
       //查看父菜单信息
       findParentMenu() {
-        var pid = this.menu.pid;
+        this.initParentMenu();
+        var nodes = this.$refs.tree2.getCheckedNodes();
+        if (nodes.length != 1) {
+          Message.error("请选择一个菜单");
+          return;
+        }
+        var pid = nodes[0].pid;
         if (pid) {
           findParentMenu(pid).then(res => {
             this.parentMenu = res.resData;
@@ -248,7 +256,7 @@
             Message.error(error);
           });
         } else {
-          Message.error("请选择一个菜单");
+          Message.error("菜单为顶级菜单");
         }
       },
       //递归查询出所有的节点id

@@ -1,5 +1,8 @@
 package com.billow.common.base;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.billow.common.enums.RdsKeyEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.pojo.ex.MenuEx;
 import com.billow.pojo.vo.sys.RoleVo;
@@ -98,10 +101,67 @@ public class BaseApi {
         return base;
     }
 
+    /**
+     * 错误信息日志
+     *
+     * @param e
+     */
     protected void getErrorInfo(Exception e) {
         e.printStackTrace();
         logger.error("ApplicationName：{}，InstanceId：{}",
                 this.getApplicationName(), this.getInstanceId(), e);
+    }
+
+    /**
+     * 向redis中添加值
+     *
+     * @param key    关键字
+     * @param object 数据源
+     */
+    protected void setRedisObject(String key, Object object) {
+        try {
+            redisTemplate.opsForValue().set(key, JSONObject.toJSONString(object));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取redis的值,普通类型
+     *
+     * @param key   关键字
+     * @param clazz 类型
+     * @param <T>
+     * @return
+     */
+    protected <T> T getRedisValue(String key, Class<T> clazz) {
+        T t = null;
+        try {
+            String json = redisTemplate.opsForValue().get(key);
+            t = JSONObject.parseObject(json, clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
+
+    /**
+     * 获取redis的值,List类型
+     *
+     * @param key   关键字
+     * @param clazz 类型
+     * @param <T>
+     * @return
+     */
+    protected <T> List<T> getRedisValues(String key, Class<T> clazz) {
+        List<T> ts = null;
+        try {
+            String json = redisTemplate.opsForValue().get(key);
+            ts = JSONObject.parseArray(json, clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ts;
     }
 
     public String getApplicationName() {

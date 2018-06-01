@@ -66,11 +66,6 @@ public class MenuServiceImpl implements MenuService {
     public List<MenuEx> findMenus() {
         // 查询父级菜单
         List<PermissionPo> permissionPos = permissionDao.findByPidIsNull();
-//        if (permissionVo.getValidInd()) {
-//            permissionPos = permissionDao.findByPidIsNullAndValidIndIsTrue();
-//        } else {
-//            permissionPos
-//        }
 
         // 转换父级菜单
         List<MenuEx> pMenuExs = new ArrayList<>();

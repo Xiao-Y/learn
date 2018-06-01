@@ -1,6 +1,10 @@
 package com.billow.api;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.billow.common.base.BaseApi;
+import com.billow.common.enums.RdsKeyEnum;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.pojo.ex.HomeEx;
@@ -8,6 +12,7 @@ import com.billow.pojo.ex.MenuEx;
 import com.billow.pojo.vo.sys.PermissionVo;
 import com.billow.pojo.vo.sys.RoleVo;
 import com.billow.service.MenuService;
+import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +63,12 @@ public class MenuApi extends BaseApi {
     public BaseResponse<List<MenuEx>> findMenus() {
         BaseResponse<List<MenuEx>> baseResponse = this.getBaseResponse();
         try {
-            List<MenuEx> menuExes = menuService.findMenus();
+            List<MenuEx> menuExes = super.getRedisValues(RdsKeyEnum.FIND_MENUS.getKey(), MenuEx.class);
+            if (ToolsUtils.isEmpty(menuExes)) {
+                menuExes = menuService.findMenus();
+                super.setRedisObject(RdsKeyEnum.FIND_MENUS.getKey(), menuExes);
+//                redisTemplate.opsForValue().set(RdsKeyEnum.FIND_MENUS.getKey(), JSONObject.toJSONString(menuExes));
+            }
             baseResponse.setResData(menuExes);
         } catch (Exception e) {
             baseResponse.setResCode(ResCodeEnum.FAIL);
@@ -72,7 +82,15 @@ public class MenuApi extends BaseApi {
     public BaseResponse<PermissionVo> findMenuById(@PathVariable("id") Long id) {
         BaseResponse<PermissionVo> baseResponse = this.getBaseResponse();
         try {
-            PermissionVo ex = menuService.findMenuById(id);
+            StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
+            key.append(":");
+            key.append(id.toString());
+            PermissionVo ex = super.getRedisValue(key.toString(), PermissionVo.class);
+            if (ex == null) {
+                ex = menuService.findMenuById(id);
+                super.setRedisObject(key.toString(), ex);
+            }
+
             ex.setValidInd(null);
             baseResponse.setResData(ex);
         } catch (Exception e) {
