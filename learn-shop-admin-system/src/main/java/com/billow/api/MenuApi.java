@@ -1,8 +1,5 @@
 package com.billow.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.billow.common.base.BaseApi;
 import com.billow.common.enums.RdsKeyEnum;
 import com.billow.common.enums.ResCodeEnum;
@@ -12,15 +9,19 @@ import com.billow.pojo.ex.MenuEx;
 import com.billow.pojo.vo.sys.PermissionVo;
 import com.billow.pojo.vo.sys.RoleVo;
 import com.billow.service.MenuService;
+import com.billow.tools.utlis.PageUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,7 +68,6 @@ public class MenuApi extends BaseApi {
             if (ToolsUtils.isEmpty(menuExes)) {
                 menuExes = menuService.findMenus();
                 super.setRedisObject(RdsKeyEnum.FIND_MENUS.getKey(), menuExes);
-//                redisTemplate.opsForValue().set(RdsKeyEnum.FIND_MENUS.getKey(), JSONObject.toJSONString(menuExes));
             }
             baseResponse.setResData(menuExes);
         } catch (Exception e) {
@@ -90,12 +90,35 @@ public class MenuApi extends BaseApi {
                 ex = menuService.findMenuById(id);
                 super.setRedisObject(key.toString(), ex);
             }
-
             ex.setValidInd(null);
             baseResponse.setResData(ex);
         } catch (Exception e) {
             baseResponse.setResCode(ResCodeEnum.FAIL);
             this.getErrorInfo(e);
+        }
+        return baseResponse;
+    }
+
+    @PostMapping("/saveOrUpdateMenu")
+    @ApiOperation(value = "修改、添加菜单信息", notes = "修改、添加菜单信息")
+    public BaseResponse<PermissionVo> saveOrUpdateMenu(@RequestBody PermissionVo permissionVo) {
+        BaseResponse<PermissionVo> baseResponse = this.getBaseResponse();
+        try {
+            permissionVo.setUpdaterCode(this.findUserCode());
+            PermissionVo vo = menuService.saveOrUpdateMenu(permissionVo);
+            baseResponse.setResData(vo);
+
+            try {
+                redisTemplate.delete(RdsKeyEnum.FIND_MENUS.getKey());
+                StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
+                key.append(":");
+                key.append(permissionVo.getId().toString());
+                super.setRedisObject(key.toString(), vo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            super.getErrorInfo(e);
         }
         return baseResponse;
     }

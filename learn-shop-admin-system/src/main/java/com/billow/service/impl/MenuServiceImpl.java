@@ -8,12 +8,14 @@ import com.billow.pojo.po.sys.PermissionPo;
 import com.billow.pojo.vo.sys.PermissionVo;
 import com.billow.pojo.vo.sys.RoleVo;
 import com.billow.service.MenuService;
+import com.billow.tools.utlis.FieldUtils;
 import com.billow.tools.utlis.PageUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,6 +83,23 @@ public class MenuServiceImpl implements MenuService {
     public PermissionVo findMenuById(Long id) {
         PermissionPo permissionPo = permissionDao.findOne(id);
         return PageUtil.convert(permissionPo, PermissionVo.class);
+    }
+
+    @Override
+    public PermissionVo saveOrUpdateMenu(PermissionVo permissionVo) throws Exception {
+        Long id = permissionVo.getId();
+        PermissionPo one;
+        if (null != id) {
+            one = permissionDao.findOne(id);
+            PageUtil.copyNonNullProperties(permissionVo, one);
+            one.setUpdateTime(new Date());
+        } else {
+            one = PageUtil.convert(permissionVo, PermissionPo.class);
+            FieldUtils.setCommonFieldByInsertWithValidInd(one, permissionVo.getUpdaterCode());
+        }
+        permissionDao.save(one);
+
+        return PageUtil.convert(one, PermissionVo.class);
     }
 
     /**

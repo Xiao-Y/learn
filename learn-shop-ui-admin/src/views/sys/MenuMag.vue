@@ -145,7 +145,7 @@
 </template>
 
 <script>
-  import {findParentMenu, findMenus} from "@/api/sys/menuMag";
+  import {findParentMenu, findMenus, saveOrUpdateMenu} from "@/api/sys/menuMag";
   import {Message} from "element-ui";
 
   export default {
@@ -339,27 +339,31 @@
       // 提交
       submitMenu(formRule) {
         var editMenus = this.editMenu;
-        // todo ajax 远程调用成功后执行下面的
-        console.info("editMenus", editMenus)
-        // 前面点击后缓存后的节点
-        var data = this.node;
-        var copuEidtMenus = this.VueUtils.deepClone(editMenus);
-        if (this.optionType == "edit") { // 修改
-          data.title = copuEidtMenus.title;
-          data.titleCode = copuEidtMenus.titleCode;
-          data.path = copuEidtMenus.path;
-          data.icon = copuEidtMenus.icon;
-        } else { // 添加
-          if (!data.children) {
-            this.$set(data, 'children', []);
+//        console.info("editMenus", editMenus)
+        saveOrUpdateMenu(editMenus).then(res => {
+          var resData = res.resData;
+
+          // 前面点击后缓存后的节点
+          var data = this.node;
+          var copuEidtMenus = this.VueUtils.deepClone(editMenus);
+          if (this.optionType == "edit") { // 修改
+            data.title = copuEidtMenus.title;
+            data.titleCode = copuEidtMenus.titleCode;
+            data.path = copuEidtMenus.path;
+            data.icon = copuEidtMenus.icon;
+          } else { // 添加
+            if (!data.children) {
+              this.$set(data, 'children', []);
+            }
+            //后台返回的
+            copuEidtMenus.id = resData.id;
+            data.children.push(copuEidtMenus);
           }
-          // 测试用，实际是后台保存成功后返回
-          copuEidtMenus.id = Math.ceil(Math.random() * 10);
-          data.children.push(copuEidtMenus);
-        }
-        this.$refs[formRule].resetFields();
-        this.dialogFormVisible = false
-        this.initEditMenu();
+          this.$refs[formRule].resetFields();
+          this.dialogFormVisible = false
+          this.initEditMenu();
+        });
+
       }
     },
     watch: {

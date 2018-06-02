@@ -32,4 +32,11 @@ public interface MenuService {
      * @return
      */
     PermissionVo findMenuById(Long id);
+
+    /**
+     * 修改、添加菜单信息
+     *
+     * @param permissionVo
+     */
+    PermissionVo saveOrUpdateMenu(PermissionVo permissionVo) throws Exception;
 }

@@ -40,3 +40,19 @@ export function findMenus() {
     method: 'get'
   })
 }
+
+export function saveOrUpdateMenu({id,pid, title, titleCode, path, icon}) {
+
+  return request({
+    url: 'admin-system/menuApi/saveOrUpdateMenu',
+    method: 'post',
+    data: {
+      id: id,
+      pid:pid,
+      permissionName: title,
+      permissionCode: titleCode,
+      url: path,
+      icon: icon
+    }
+  });
+}

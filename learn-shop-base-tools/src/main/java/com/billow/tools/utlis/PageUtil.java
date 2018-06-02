@@ -1,9 +1,15 @@
 package com.billow.tools.utlis;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Component;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 以静态变量保存Spring ApplicationContext, 可在任何代码任何地方任何时候中取出ApplicaitonContext.
@@ -52,5 +58,33 @@ public class PageUtil {
             }
         }
         return vos;
+    }
+
+    /**
+     * 将不为空值的属性从源对象中复制到目标对象中
+     *
+     * @param src    : 源对象
+     * @param target :目标对象
+     */
+    public static <SRC, TARGET> void copyNonNullProperties(SRC src, TARGET target) {
+        BeanUtils.copyProperties(src, target, getNullProperties(src));
+    }
+
+    /**
+     * 将为空的properties给找出来,然后返回出来
+     *
+     * @param src
+     * @return
+     */
+    private static  <SRC> String[] getNullProperties(SRC src) {
+        BeanWrapper srcBean = new BeanWrapperImpl(src);
+        PropertyDescriptor[] pds = srcBean.getPropertyDescriptors();
+        Set<String> emptyName = new HashSet<>();
+        for (PropertyDescriptor p : pds) {
+            Object srcValue = srcBean.getPropertyValue(p.getName());
+            if (srcValue == null) emptyName.add(p.getName());
+        }
+        String[] result = new String[emptyName.size()];
+        return emptyName.toArray(result);
     }
 }
