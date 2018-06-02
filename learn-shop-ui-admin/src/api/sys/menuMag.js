@@ -42,7 +42,6 @@ export function findMenus() {
 }
 
 export function saveOrUpdateMenu({id,pid, title, titleCode, path, icon}) {
-
   return request({
     url: 'admin-system/menuApi/saveOrUpdateMenu',
     method: 'post',
@@ -53,6 +52,16 @@ export function saveOrUpdateMenu({id,pid, title, titleCode, path, icon}) {
       permissionCode: titleCode,
       url: path,
       icon: icon
+    }
+  });
+}
+
+export function delMenuByIds(ids) {
+  return request({
+    url: 'admin-system/menuApi/delMenuByIds',
+    method: 'post',
+    data: {
+      ids
     }
   });
 }

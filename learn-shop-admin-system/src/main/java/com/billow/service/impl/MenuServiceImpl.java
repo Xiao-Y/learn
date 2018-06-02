@@ -13,6 +13,8 @@ import com.billow.tools.utlis.PageUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +29,7 @@ import java.util.Set;
  * @create 2018-05-26 9:54
  */
 @Service
+@Transactional(readOnly = true)
 public class MenuServiceImpl implements MenuService {
 
     @Autowired
@@ -86,6 +89,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo saveOrUpdateMenu(PermissionVo permissionVo) throws Exception {
         Long id = permissionVo.getId();
         PermissionPo one;
@@ -100,6 +104,12 @@ public class MenuServiceImpl implements MenuService {
         permissionDao.save(one);
 
         return PageUtil.convert(one, PermissionVo.class);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void delMenuByIds(Set<String> ids) {
+        ids.forEach(id -> permissionDao.delete(new Long(id)));
     }
 
     /**

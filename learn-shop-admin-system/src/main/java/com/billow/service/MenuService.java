@@ -4,6 +4,7 @@ import com.billow.pojo.ex.MenuEx;
 import com.billow.pojo.vo.sys.PermissionVo;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MenuService {
 
@@ -39,4 +40,11 @@ public interface MenuService {
      * @param permissionVo
      */
     PermissionVo saveOrUpdateMenu(PermissionVo permissionVo) throws Exception;
+
+    /**
+     * 通过ids 删除菜单信息
+     *
+     * @param ids
+     */
+    void delMenuByIds(Set<String> ids);
 }

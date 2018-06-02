@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单管理
@@ -53,8 +55,7 @@ public class MenuApi extends BaseApi {
             homeEx.setMenus(menuExes);
             baseResponse.setResData(homeEx);
         } catch (Exception e) {
-            baseResponse.setResCode(ResCodeEnum.FAIL);
-            this.getErrorInfo(e);
+            this.getErrorInfo(e, baseResponse);
         }
         return baseResponse;
     }
@@ -71,8 +72,7 @@ public class MenuApi extends BaseApi {
             }
             baseResponse.setResData(menuExes);
         } catch (Exception e) {
-            baseResponse.setResCode(ResCodeEnum.FAIL);
-            this.getErrorInfo(e);
+            this.getErrorInfo(e, baseResponse);
         }
         return baseResponse;
     }
@@ -93,8 +93,7 @@ public class MenuApi extends BaseApi {
             ex.setValidInd(null);
             baseResponse.setResData(ex);
         } catch (Exception e) {
-            baseResponse.setResCode(ResCodeEnum.FAIL);
-            this.getErrorInfo(e);
+            this.getErrorInfo(e, baseResponse);
         }
         return baseResponse;
     }
@@ -118,7 +117,33 @@ public class MenuApi extends BaseApi {
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            super.getErrorInfo(e);
+            this.getErrorInfo(e, baseResponse);
+        }
+        return baseResponse;
+    }
+
+    @PostMapping("/delMenuByIds")
+    @ApiOperation(value = "修改、添加菜单信息", notes = "修改、添加菜单信息")
+    public BaseResponse<PermissionVo> delMenuByIds(@RequestBody PermissionVo permissionVo) {
+        BaseResponse<PermissionVo> baseResponse = this.getBaseResponse();
+        try {
+            //防止重复id
+            Set<String> ids = permissionVo.getIds();
+            System.out.println(ids);
+            menuService.delMenuByIds(ids);
+            try {
+                redisTemplate.delete(RdsKeyEnum.FIND_MENUS.getKey());
+                for (String id : ids) {
+                    StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
+                    key.append(":");
+                    key.append(id);
+                    redisTemplate.delete(key.toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            this.getErrorInfo(e, baseResponse);
         }
         return baseResponse;
     }

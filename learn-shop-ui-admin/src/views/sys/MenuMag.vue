@@ -145,7 +145,7 @@
 </template>
 
 <script>
-  import {findParentMenu, findMenus, saveOrUpdateMenu} from "@/api/sys/menuMag";
+  import {findParentMenu, findMenus, saveOrUpdateMenu, delMenuByIds} from "@/api/sys/menuMag";
   import {Message} from "element-ui";
 
   export default {
@@ -272,16 +272,20 @@
       addMenuEvent() {
         this.optionType = "add";
         var nodes = this.$refs.tree2.getCheckedNodes();
-        if (nodes.length != 1) {
+        if (nodes.length > 1) {
           Message.error("请选择一个菜单");
           return;
+        } else if (nodes.length == 1) {
+          this.editMenu.pid = nodes[0].id;
+          this.editMenu.parentTtile = nodes[0].title;
+          // 当前操作的节点(用于后面提交)
+          this.node = nodes[0];
+        } else { //添加根节点
+          this.editMenu.parentTtile = '添加根节点';
+          this.node = null;
         }
-
-        this.editMenu.pid = nodes[0].id;
-        this.editMenu.parentTtile = nodes[0].title;
         this.dialogFormVisible = true;
-        // 当前操作的节点(用于后面提交)
-        this.node = nodes[0];
+
       },
       // 修改菜单
       editMenuEvent() {
@@ -314,14 +318,16 @@
             //递归查询出所有的节点id
             this.getIds(nodes, ids);
 //            console.info("ids[]", ids);
-            nodes.forEach(node => {
-              this.$refs.tree2.remove(node);
-            })
+            delMenuByIds(ids).then(res => {
+              nodes.forEach(node => {
+                this.$refs.tree2.remove(node);
+              })
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            });
           }
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
         }).catch((err) => {
           console.info(err)
           this.$message({
@@ -352,16 +358,24 @@
             data.path = copuEidtMenus.path;
             data.icon = copuEidtMenus.icon;
           } else { // 添加
-            if (!data.children) {
-              this.$set(data, 'children', []);
-            }
             //后台返回的
             copuEidtMenus.id = resData.id;
-            data.children.push(copuEidtMenus);
+            if (data) {
+              if (!data.children) {
+                this.$set(data, 'children', []);
+              }
+              data.children.push(copuEidtMenus);
+            } else {
+              this.menus.push(copuEidtMenus)
+            }
           }
           this.$refs[formRule].resetFields();
           this.dialogFormVisible = false
           this.initEditMenu();
+          this.$message({
+            type: 'success',
+            message: '提交成功!'
+          });
         });
 
       }

@@ -5,6 +5,7 @@ import com.billow.pojo.po.sys.PermissionPo;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 权限
@@ -14,6 +15,10 @@ import java.util.List;
  */
 public class PermissionVo extends PermissionPo implements Serializable {
 
+    /**
+     * 菜单ids，用于删除
+     */
+    Set<String> ids;
     /**
      * 角色集合
      */
@@ -38,6 +43,15 @@ public class PermissionVo extends PermissionPo implements Serializable {
 
     public PermissionVo setUserCode(String userCode) {
         this.userCode = userCode;
+        return this;
+    }
+
+    public Set<String> getIds() {
+        return ids;
+    }
+
+    public PermissionVo setIds(Set<String> ids) {
+        this.ids = ids;
         return this;
     }
 }

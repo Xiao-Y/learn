@@ -3,6 +3,7 @@ package com.billow.common.base;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.billow.common.enums.RdsKeyEnum;
+import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.pojo.ex.MenuEx;
 import com.billow.pojo.vo.sys.RoleVo;
@@ -107,6 +108,18 @@ public class BaseApi {
      * @param e
      */
     protected void getErrorInfo(Exception e) {
+        e.printStackTrace();
+        logger.error("ApplicationName：{}，InstanceId：{}",
+                this.getApplicationName(), this.getInstanceId(), e);
+    }
+
+    /**
+     * 错误信息日志
+     *
+     * @param e
+     */
+    protected void getErrorInfo(Exception e,BaseResponse baseResponse) {
+        baseResponse.setResCode(ResCodeEnum.FAIL);
         e.printStackTrace();
         logger.error("ApplicationName：{}，InstanceId：{}",
                 this.getApplicationName(), this.getInstanceId(), e);
