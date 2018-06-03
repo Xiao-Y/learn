@@ -44,7 +44,7 @@ export function findMenus() {
 export function saveOrUpdateMenu({id,pid, title, titleCode, path, icon}) {
   return request({
     url: 'admin-system/menuApi/saveOrUpdateMenu',
-    method: 'post',
+    method: 'put',
     data: {
       id: id,
       pid:pid,
@@ -59,7 +59,7 @@ export function saveOrUpdateMenu({id,pid, title, titleCode, path, icon}) {
 export function delMenuByIds(ids) {
   return request({
     url: 'admin-system/menuApi/delMenuByIds',
-    method: 'post',
+    method: 'delete',
     data: {
       ids
     }
