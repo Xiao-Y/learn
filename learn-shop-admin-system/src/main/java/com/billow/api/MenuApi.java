@@ -2,27 +2,24 @@ package com.billow.api;
 
 import com.billow.common.base.BaseApi;
 import com.billow.common.enums.RdsKeyEnum;
-import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.pojo.ex.HomeEx;
 import com.billow.pojo.ex.MenuEx;
 import com.billow.pojo.vo.sys.PermissionVo;
 import com.billow.pojo.vo.sys.RoleVo;
 import com.billow.service.MenuService;
-import com.billow.tools.utlis.PageUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -98,7 +95,7 @@ public class MenuApi extends BaseApi {
         return baseResponse;
     }
 
-    @PostMapping("/saveOrUpdateMenu")
+    @PutMapping("/saveOrUpdateMenu")
     @ApiOperation(value = "修改、添加菜单信息", notes = "修改、添加菜单信息")
     public BaseResponse<PermissionVo> saveOrUpdateMenu(@RequestBody PermissionVo permissionVo) {
         BaseResponse<PermissionVo> baseResponse = this.getBaseResponse();
@@ -111,7 +108,7 @@ public class MenuApi extends BaseApi {
                 redisTemplate.delete(RdsKeyEnum.FIND_MENUS.getKey());
                 StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
                 key.append(":");
-                key.append(permissionVo.getId().toString());
+                key.append(vo.getId().toString());
                 super.setRedisObject(key.toString(), vo);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -122,7 +119,7 @@ public class MenuApi extends BaseApi {
         return baseResponse;
     }
 
-    @PostMapping("/delMenuByIds")
+    @DeleteMapping("/delMenuByIds")
     @ApiOperation(value = "修改、添加菜单信息", notes = "修改、添加菜单信息")
     public BaseResponse<PermissionVo> delMenuByIds(@RequestBody PermissionVo permissionVo) {
         BaseResponse<PermissionVo> baseResponse = this.getBaseResponse();
