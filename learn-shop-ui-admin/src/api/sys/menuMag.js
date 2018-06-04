@@ -41,13 +41,22 @@ export function findMenus() {
   })
 }
 
-export function saveOrUpdateMenu({id,pid, title, titleCode, path, icon}) {
+/**
+ * 保存或者更新菜单信息
+ * @param id
+ * @param pid
+ * @param title
+ * @param titleCode
+ * @param path
+ * @param icon
+ */
+export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon}) {
   return request({
     url: 'admin-system/menuApi/saveOrUpdateMenu',
     method: 'post',
     data: {
       id: id,
-      pid:pid,
+      pid: pid,
       permissionName: title,
       permissionCode: titleCode,
       url: path,
@@ -56,10 +65,14 @@ export function saveOrUpdateMenu({id,pid, title, titleCode, path, icon}) {
   });
 }
 
+/**
+ * 删除菜单及关联信息
+ * @param ids
+ */
 export function delMenuByIds(ids) {
   return request({
     url: 'admin-system/menuApi/delMenuByIds',
-    method: 'post',
+    method: 'delete',
     data: {
       ids
     }

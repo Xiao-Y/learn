@@ -281,7 +281,7 @@
           // 当前操作的节点(用于后面提交)
           this.node = nodes[0];
         } else { //添加根节点
-          this.editMenu.parentTtile = '添加根节点';
+          this.editMenu.parentTtile = '根节点';
           this.node = null;
         }
         this.dialogFormVisible = true;
@@ -291,16 +291,20 @@
       editMenuEvent() {
         this.optionType = "edit";
         var nodes = this.$refs.tree2.getCheckedNodes();
-        console.info(nodes)
+//        console.info(nodes)
         if (nodes.length != 1) {
           Message.error("请选择一个菜单");
           return;
         }
         this.editMenu = this.VueUtils.deepClone(nodes[0]);
 //        console.info("nodes[0].pid",nodes[0].pid);
-        var parentNode = this.$refs.tree2.getNode(nodes[0].pid);
-//        console.info("parentNode",parentNode.data.title);
-        this.editMenu.parentTtile = parentNode.data.title;
+        if(nodes[0].pid != null){
+          var parentNode = this.$refs.tree2.getNode(nodes[0].pid);
+//          console.info("parentNode",parentNode);
+          this.editMenu.parentTtile = parentNode.data.title;
+        }else{
+          this.editMenu.parentTtile ='根节点';
+        }
         this.dialogFormVisible = true;
         // 当前操作的节点(用于后面提交)
         this.node = nodes[0];

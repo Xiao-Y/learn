@@ -109,7 +109,17 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delMenuByIds(Set<String> ids) {
-        ids.forEach(id -> permissionDao.delete(new Long(id)));
+        ids.forEach(id -> {
+            List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByPermissionId(new Long(id));
+            if (ToolsUtils.isNotEmpty(rolePermissionPos)) {
+                rolePermissionDao.deleteByPermissionId(new Long(id));
+            }
+
+            PermissionPo permissionPo = permissionDao.findOne(new Long(id));
+            if (null != permissionPo) {
+                permissionDao.delete(new Long(id));
+            }
+        });
     }
 
     /**

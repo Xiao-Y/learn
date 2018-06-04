@@ -14,6 +14,7 @@ import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -111,7 +112,7 @@ public class MenuApi extends BaseApi {
                 redisTemplate.delete(RdsKeyEnum.FIND_MENUS.getKey());
                 StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
                 key.append(":");
-                key.append(permissionVo.getId().toString());
+                key.append(vo.getId().toString());
                 super.setRedisObject(key.toString(), vo);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -122,14 +123,13 @@ public class MenuApi extends BaseApi {
         return baseResponse;
     }
 
-    @PostMapping("/delMenuByIds")
-    @ApiOperation(value = "修改、添加菜单信息", notes = "修改、添加菜单信息")
+    @DeleteMapping("/delMenuByIds")
+    @ApiOperation(value = "删除菜单及关联信息", notes = "删除菜单及关联信息")
     public BaseResponse<PermissionVo> delMenuByIds(@RequestBody PermissionVo permissionVo) {
         BaseResponse<PermissionVo> baseResponse = this.getBaseResponse();
         try {
             //防止重复id
             Set<String> ids = permissionVo.getIds();
-            System.out.println(ids);
             menuService.delMenuByIds(ids);
             try {
                 redisTemplate.delete(RdsKeyEnum.FIND_MENUS.getKey());
