@@ -1,11 +1,11 @@
 package com.billow.security.auth.login;
 
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.billow.context.UserContext;
-import com.billow.security.token.TokenFactory;
+import com.billow.resData.BaseResponse;
 import com.billow.security.token.Token;
+import com.billow.security.token.TokenFactory;
 import com.billow.security.token.impl.AccessToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 认证成功处理程序
@@ -42,14 +44,16 @@ public class AwareAuthenticationSuccessHandler implements AuthenticationSuccessH
         AccessToken accessToken = tokenFactory.createAccessToken(userContext);
         Token refreshToken = tokenFactory.createRefreshToken(userContext);
 
-        JSONObject tokenMap = new JSONObject();
+        BaseResponse<Map<String,Object>> baseResponse = new BaseResponse<>();
+        Map<String,Object> tokenMap = new HashMap<>();
         tokenMap.put("claims", accessToken.getClaims());
         tokenMap.put("token", accessToken.getToken());
         tokenMap.put("refreshToken", refreshToken.getToken());
-
+        baseResponse.setResData(tokenMap);
+//        JSONObject.toJSONString(baseResponse);
         response.setStatus(HttpStatus.OK.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        mapper.writeValue(response.getWriter(), tokenMap);
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        mapper.writeValue(response.getWriter(), baseResponse);
 
         clearAuthenticationAttributes(request);
     }

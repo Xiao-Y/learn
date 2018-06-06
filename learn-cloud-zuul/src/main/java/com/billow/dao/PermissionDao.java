@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface PermissionDao extends JpaRepository<PermissionPo, Long> {
 
-    @Query(name = "")
-    List<PermissionPo> findByUserId(int userId);
+//    List<PermissionPo> findByUserId(int userId);
 }

@@ -17,7 +17,7 @@ public enum RdsKeyEnum {
      */
     FIND_MENUS("findMenus", "菜单管理里面的菜单树"),
     /**
-     * "findMenuById", "菜单管理里面的菜单树"，如 menusMag
+     * "findMenuById", "菜单管理里面的菜单树"，如 findMenuById:id
      */
     FIND_MENU_BY_ID("findMenuById", "根据id查询菜单信息");
 

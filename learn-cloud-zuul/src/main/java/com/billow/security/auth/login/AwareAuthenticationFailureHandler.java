@@ -1,5 +1,7 @@
 package com.billow.security.auth.login;
 
+import com.billow.resData.BaseResponse;
+import com.billow.resData.ResCodeEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.billow.security.common.ErrorCode;
 import com.billow.security.common.ErrorResponse;
@@ -19,6 +21,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class AwareAuthenticationFailureHandler implements AuthenticationFailureHandler {
@@ -34,19 +38,34 @@ public class AwareAuthenticationFailureHandler implements AuthenticationFailureH
                                         AuthenticationException e) throws IOException, ServletException {
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        BaseResponse<Map<String,Object>> baseResponse = new BaseResponse<>();
+        baseResponse.setResCode(ResCodeEnum.RESCODE_UNAUTHORIZED.getStatusCode());
+        Map<String,Object> map = new HashMap<>();
+        map.put("message","Authentication failed");
+        map.put("errorCode",ErrorCode.AUTHENTICATION);
+        map.put("httpStatus",HttpStatus.UNAUTHORIZED);
+
 
         if (e instanceof BadCredentialsException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of("Invalid username or password", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+            map.put("message","Invalid username or password");
+//            mapper.writeValue(response.getWriter(), ErrorResponse.of("Invalid username or password", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
         } else if (e instanceof ExpiredTokenException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of("Token has expired", ErrorCode.JWT_TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED));
+            map.put("message","Token has expired");
+//            mapper.writeValue(response.getWriter(), ErrorResponse.of("Token has expired", ErrorCode.JWT_TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED));
         } else if (e instanceof AuthMethodNotSupportedException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+            map.put("message",e.getMessage());
+//            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
         }else if (e instanceof UsernameNotFoundException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+            map.put("message",e.getMessage());
+//            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
         }else if (e instanceof InsufficientAuthenticationException) {
-            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+            map.put("message",e.getMessage());
+//            mapper.writeValue(response.getWriter(), ErrorResponse.of(e.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
         }
-        mapper.writeValue(response.getWriter(), ErrorResponse.of("Authentication failed", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+        map.put("errorCode",ErrorCode.AUTHENTICATION);
+        map.put("httpStatus",HttpStatus.UNAUTHORIZED);
+        baseResponse.setResData(map);
+        mapper.writeValue(response.getWriter(), baseResponse);
     }
 }
