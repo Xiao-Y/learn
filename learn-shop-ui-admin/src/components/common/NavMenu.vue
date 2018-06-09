@@ -29,7 +29,7 @@ export default {
     return {};
   },
   created: function() {
-    console.info("navMenus", this.navMenus);
+//    console.info("navMenus", this.navMenus);
   },
   methods: {
     generateTitle

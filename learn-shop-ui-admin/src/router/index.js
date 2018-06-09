@@ -54,8 +54,8 @@ export const asyncRouterMap = [{
     path: 'role',
     component: resolve => require(['../views/test/permission2.vue'], resolve)
   }, {
-    name: 'auth',
-    path: 'auth',
+    name: 'redisMag',
+    path: 'redisMag',
     component: resolve => require(['../views/test/permission3.vue'], resolve)
   }, {
     name: 'args',
@@ -65,6 +65,10 @@ export const asyncRouterMap = [{
     name: 'dictionary',
     path: 'dictionary',
     component: resolve => require(['../components/common/Sidebar.vue'], resolve)
+  }, {
+    name: 'findMenus',
+    path: 'findMenus',
+    component: resolve => require(['../views/sys/MenuMag.vue'], resolve)
   }]
 }]
 

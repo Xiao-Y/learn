@@ -1,12 +1,12 @@
 var VueUtils = {
-  // /* ================ 深拷贝 ================ */
-  // deepClone: function (initalObj) {
-  //   var obj = {};
-  //   try {
-  //     obj = JSON.parse(JSON.stringify(initalObj));
-  //   }catch(e) {}
-  //   return obj;
-  // }
+  // /* ================ 深拷贝,对象中的方法不可用 ================ */
+  deepCloneJson: function (initalObj) {
+    var obj = {};
+    try {
+      obj = JSON.parse(JSON.stringify(initalObj));
+    }catch(e) {}
+    return obj;
+  },
 
   /* ================ 深拷贝 ================ */
   deepClone: function deepClone(initalObj, finalObj) {

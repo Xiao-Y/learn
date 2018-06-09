@@ -4,31 +4,61 @@ import {
 } from '@/router'
 
 import types from '@/utils/mutationsType'
+// import VueUtils from '@/utils/vueUtils'
 
-function hasPermission(menus, url) {
-  // console.info('url', url)
-  // console.info('menus', menus)
+// function hasPermission(menus, url) {
+//   // console.info('url', url)
+//   // console.info('menus', menus)
+//   for (var j in menus) {
+//     // console.info('menus[j]', menus[j])
+//     // console.info('menus[j].children', menus[j].children)
+//     if (menus[j].children) {
+//       // console.info('hasPermission')
+//       hasPermission(menus[j].children, url)
+//     } else {
+//       console.info('url', url)
+//       console.info('menus[j].path', menus[j].path)
+//       return url === menus[j].path
+//     }
+//   }
+// }
+
+// 该用户的所有权限
+var menuUrls = [];
+
+/**
+ * 递归出所有的url
+ * @param menus
+ */
+function genMenuUrls(menus) {
   for (var j in menus) {
-    // console.info('menus[j]', menus[j])
-    // console.info('menus[j].children', menus[j].children)
     if (menus[j].children) {
-      // console.info('hasPermission')
-      hasPermission(menus[j].children, url)
+      genMenuUrls(menus[j].children)
     } else {
-      // console.info('children.path', children.path)
-      return url === menus[j].path
+      menuUrls.push(menus[j].path);
     }
   }
 }
 
-function filterAsyncRouter(asyncRouterMap, menus) {
-  const accessedRouters = asyncRouterMap.filter(route => {
-    var basePath = route.path
-    for (var i in route.children) {
-      var url = basePath + '/' + route.children[i].path
-      return hasPermission(menus, url)
+function filterAsyncRouter(accessedRouters, menus) {
+  //递归出所有的url
+  genMenuUrls(menus);
+  // console.info('menuUrls', menuUrls)
+  for (var i = accessedRouters.length - 1; i >= 0; i--) {
+    var basePath = accessedRouters[i].path;
+    if (accessedRouters[i].children) {
+      for (var j = accessedRouters[i].children.length - 1; j >= 0; j--) {
+        var url = basePath + '/' + accessedRouters[i].children[j].path;
+        if (menuUrls.indexOf(url) == -1) {
+          accessedRouters[i].children.splice(j, 1);
+        }
+      }
+    } else {
+      if (menuUrls.indexOf(basePath) == -1) {
+        accessedRouters.splice(i, 1);
+      }
     }
-  })
+  }
   return accessedRouters
 }
 
@@ -36,7 +66,7 @@ const permission = {
   state: {
     routers: constantRouterMap,
     addRouters: [],
-    menus:[]
+    menus: []
   },
   mutations: {
     [types.SET_ROUTERS]: (state, routers) => {
@@ -49,7 +79,7 @@ const permission = {
     }
   },
   actions: {
-    GenRoutesActions({ commit }, { menus }) {
+    GenRoutesActions({commit}, {menus}) {
       return new Promise(resolve => {
         // const roles = data.roles
         // const menus = data.menus
@@ -60,7 +90,7 @@ const permission = {
           path: '*',
           redirect: '/error/404'
         })
-        console.log('accessedRouters', accessedRouters)
+        // console.log('accessedRouters', accessedRouters)
         commit(types.SET_ROUTERS, accessedRouters)
         commit(types.SET_MENUS, menus)
         resolve()
