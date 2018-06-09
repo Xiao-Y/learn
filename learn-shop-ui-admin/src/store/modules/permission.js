@@ -4,24 +4,6 @@ import {
 } from '@/router'
 
 import types from '@/utils/mutationsType'
-// import VueUtils from '@/utils/vueUtils'
-
-// function hasPermission(menus, url) {
-//   // console.info('url', url)
-//   // console.info('menus', menus)
-//   for (var j in menus) {
-//     // console.info('menus[j]', menus[j])
-//     // console.info('menus[j].children', menus[j].children)
-//     if (menus[j].children) {
-//       // console.info('hasPermission')
-//       hasPermission(menus[j].children, url)
-//     } else {
-//       console.info('url', url)
-//       console.info('menus[j].path', menus[j].path)
-//       return url === menus[j].path
-//     }
-//   }
-// }
 
 // 该用户的所有权限
 var menuUrls = [];
@@ -44,6 +26,7 @@ function filterAsyncRouter(accessedRouters, menus) {
   //递归出所有的url
   genMenuUrls(menus);
   // console.info('menuUrls', menuUrls)
+  // 反向移除，用户没有的权限从路由移除，定制新路由
   for (var i = accessedRouters.length - 1; i >= 0; i--) {
     var basePath = accessedRouters[i].path;
     if (accessedRouters[i].children) {
