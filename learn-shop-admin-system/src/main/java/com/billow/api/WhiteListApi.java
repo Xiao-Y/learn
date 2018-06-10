@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Api(value = "WhiteListController", description = "白名单")
 @RestController
-@RequestMapping("/whiteList")
+@RequestMapping("/whiteListApi")
 public class WhiteListApi extends BaseApi {
 
     @Autowired

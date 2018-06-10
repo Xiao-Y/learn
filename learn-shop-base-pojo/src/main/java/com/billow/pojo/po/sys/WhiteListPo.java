@@ -14,13 +14,24 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "sys_white_list")
-public class WhiteListPo extends BasePo implements Serializable{
+public class WhiteListPo extends BasePo implements Serializable {
     // ip
     private String ip;
     // 模块
     private String module;
+    // 端口
+    private String port;
     // 备注
     private String mark;
+
+    public String getPort() {
+        return port;
+    }
+
+    public WhiteListPo setPort(String port) {
+        this.port = port;
+        return this;
+    }
 
     public String getIp() {
         return ip;
@@ -54,7 +65,8 @@ public class WhiteListPo extends BasePo implements Serializable{
         return "WhiteListPo{" +
                 "ip='" + ip + '\'' +
                 ", module='" + module + '\'' +
+                ", port='" + port + '\'' +
                 ", mark='" + mark + '\'' +
-                "} " + super.toString();
+                '}';
     }
 }

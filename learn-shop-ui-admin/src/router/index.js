@@ -62,12 +62,12 @@ export const asyncRouterMap = [{
     path: 'args',
     component: resolve => require(['../views/sys/MenuMag.vue'], resolve)
   }, {
-    name: 'dictionary',
-    path: 'dictionary',
-    component: resolve => require(['../components/common/Sidebar.vue'], resolve)
+    name: 'whiteListApiWhiteListMag',
+    path: 'whiteListApi/whiteListMag',
+    component: resolve => require(['../views/sys/WhiteListMag.vue'], resolve)
   }, {
-    name: 'findMenus',
-    path: 'findMenus',
+    name: 'menuApiFindMenus',
+    path: 'menuApi/findMenus',
     component: resolve => require(['../views/sys/MenuMag.vue'], resolve)
   }]
 }]
