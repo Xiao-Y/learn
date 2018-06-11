@@ -4,7 +4,7 @@ server:
 eureka: #注册到注册中心
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://119.23.27.78:8761/eureka
   instance:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
@@ -12,22 +12,22 @@ eureka: #注册到注册中心
 spring:
   application:
     name: cloud-config #客户端名称
-# 从git获取配置文件
-#  cloud:
-#    config:
-#      server:
-#        git:
-#          uri: https://github.com/Xiao-Y/learn.git #配置git仓库地址
-#          search-paths: learn-cloud-config/cloud-config-repo #指定搜索路径，config-server会自动搜索根目录和指定目录（逗号分隔）下的文件
-          #username: username #访问git仓库的用户名
-          #password: password #访问git仓库的用户密码
-
-  #从本地获取配置文件
-  profiles:
-    active: native
+ 从git获取配置文件
   cloud:
     config:
       server:
-        native:
-          search-locations: D:/project/IDEAProjects/learn/learn-cloud-config/cloud-config-repo
-          #search-locations: D:/GitHub/learn/learn-cloud-config/cloud-config-repo
+        git:
+          uri: https://github.com/Xiao-Y/learn.git #配置git仓库地址
+          search-paths: learn-cloud-config/cloud-config-repo #指定搜索路径，config-server会自动搜索根目录和指定目录（逗号分隔）下的文件
+#          username: username #访问git仓库的用户名
+#          password: password #访问git仓库的用户密码
+
+  #从本地获取配置文件
+#  profiles:
+#    active: native
+#  cloud:
+#    config:
+#      server:
+#        native:
+#          search-locations: D:/project/IDEAProjects/learn/learn-cloud-config/cloud-config-repo
+#          #search-locations: D:/GitHub/learn/learn-cloud-config/cloud-config-repo
