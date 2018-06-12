@@ -46,60 +46,61 @@ public class IPInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String clientIP = ServletUtil.getClientIP(request);
-        StringBuilder key = new StringBuilder(RdsKeyEnum.WHITE_LIST.getKey());
-        key.append(springApplicationName);
-        key.append(":");
-        key.append(clientIP);
-        LOG.info("key：----> {}", key);
-
-        List<WhiteListVo> whiteListVos;
-
-        String json = null;
-        try {
-            json = redisTemplate.opsForValue().get(key.toString());
-            LOG.info("白名单：----> {}", json);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (ToolsUtils.isEmpty(json)) {
-            whiteListVos = whiteListService.findByIpAndModuleAndValidInd(clientIP, springApplicationName, true);
-            // 白名单放入到redis 中，设置失效时间
-//            ops.set(key.toString(), JSONObject.toJSONString(whiteListVos), 20, TimeUnit.SECONDS);
-            try {
-                redisTemplate.opsForValue().set(key.toString(), JSONObject.toJSONString(whiteListVos));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            whiteListVos = JSONObject.parseArray(json, WhiteListVo.class);
-        }
-
-
-        try {
-            // 模糊查询，获取所有的白名单
-            Set<String> keys = redisTemplate.keys(RdsKeyEnum.WHITE_LIST.getKey() + "*");
-            keys.forEach(item -> LOG.info("deleteKey：----> {}", item));
-            // 删除所有查询出来的key （测试用）
-//        redisTemplate.delete(keys);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // 再白名单里面，可以通过访问
-        if (ToolsUtils.isNotEmpty(whiteListVos)) {
-            return true;
-        }
-
-        //必须返回200, 否则远程调用出现异常
-        response.setStatus(HttpStatus.OK.value());
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-
-        BaseResponse<String> baseResponse = new BaseResponse<>(ResCodeEnum.RESCODE_FORBIDDEN.getStatusCode());
-        baseResponse.setTraceID(springApplicationName);
-        response.getWriter().write(JSONObject.toJSONString(baseResponse));
-        return false;
+//        String clientIP = ServletUtil.getClientIP(request);
+//        StringBuilder key = new StringBuilder(RdsKeyEnum.WHITE_LIST.getKey());
+//        key.append(springApplicationName);
+//        key.append(":");
+//        key.append(clientIP);
+//        LOG.info("key：----> {}", key);
+//
+//        List<WhiteListVo> whiteListVos;
+//
+//        String json = null;
+//        try {
+//            json = redisTemplate.opsForValue().get(key.toString());
+//            LOG.info("白名单：----> {}", json);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (ToolsUtils.isEmpty(json)) {
+//            whiteListVos = whiteListService.findByIpAndModuleAndValidInd(clientIP, springApplicationName, true);
+//            // 白名单放入到redis 中，设置失效时间
+////            ops.set(key.toString(), JSONObject.toJSONString(whiteListVos), 20, TimeUnit.SECONDS);
+//            try {
+//                redisTemplate.opsForValue().set(key.toString(), JSONObject.toJSONString(whiteListVos));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            whiteListVos = JSONObject.parseArray(json, WhiteListVo.class);
+//        }
+//
+//
+//        try {
+//            // 模糊查询，获取所有的白名单
+//            Set<String> keys = redisTemplate.keys(RdsKeyEnum.WHITE_LIST.getKey() + "*");
+//            keys.forEach(item -> LOG.info("deleteKey：----> {}", item));
+//            // 删除所有查询出来的key （测试用）
+////        redisTemplate.delete(keys);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        // 再白名单里面，可以通过访问
+//        if (ToolsUtils.isNotEmpty(whiteListVos)) {
+//            return true;
+//        }
+//
+//        //必须返回200, 否则远程调用出现异常
+//        response.setStatus(HttpStatus.OK.value());
+//        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+//
+//        BaseResponse<String> baseResponse = new BaseResponse<>(ResCodeEnum.RESCODE_FORBIDDEN.getStatusCode());
+//        baseResponse.setTraceID(springApplicationName);
+//        response.getWriter().write(JSONObject.toJSONString(baseResponse));
+//        return false;
+        return true;
     }
 
     @Override
