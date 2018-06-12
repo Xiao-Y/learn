@@ -12,7 +12,7 @@ eureka: #注册到注册中心
 spring:
   application:
     name: cloud-config #客户端名称
- 从git获取配置文件
+# 从git获取配置文件
   cloud:
     config:
       server:
