@@ -9,7 +9,7 @@ eureka:
     #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
     status-page-url: http://localhost:${server.port}/index.html # tx监控文档页面
     prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    instance-id: ${config.public.tx.instance.hostname}:${server.port}
 
 spring:
   application:
