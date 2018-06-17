@@ -53,7 +53,7 @@ public class TestOrderController {
         try {
 //            coreOrderService.sendOrderCar();
 //            flag = true;
-            for (int i = 0; i < 2000; i++) {
+            for (int i = 0; i < 500; i++) {
                 coreOrderService.sendOrderCar();
                 flag = true;
                 System.out.println(i);
