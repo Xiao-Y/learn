@@ -12,6 +12,9 @@ public class ConfigReader {
     @Value("${tm.socket.port}")
     private int socketPort;
 
+    @Value("${tm.socket.host:127.0.0.1}")
+    private String socketHost;
+
     @Value("${tm.socket.maxconnection}")
     private int socketMaxConnection;
 
@@ -101,6 +104,8 @@ public class ConfigReader {
 	public int getCompensateMaxWaitTime() {
 		return compensateMaxWaitTime;
 	}
-    
-    
+
+    public String getSocketHost() {
+        return socketHost;
+    }
 }

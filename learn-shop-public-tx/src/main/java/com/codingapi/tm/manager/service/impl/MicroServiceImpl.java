@@ -9,7 +9,6 @@ import com.codingapi.tm.model.TxState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.netflix.eureka.serviceregistry.EurekaRegistration;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,16 +26,10 @@ public class MicroServiceImpl implements MicroService {
 
     @Autowired
     private RestTemplate restTemplate;
-
     @Autowired
     private ConfigReader configReader;
-
-
     @Autowired
     private DiscoveryClient discoveryClient;
-
-//    @Autowired
-//    private EurekaRegistration eurekaRegistration;
 
     private boolean isIp(String ipAddress) {
         String ip = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
@@ -45,13 +38,12 @@ public class MicroServiceImpl implements MicroService {
         return matcher.matches();
     }
 
-
     @Override
     public TxState getState() {
         TxState state = new TxState();
-//        String ipAddress = eurekaRegistration.getHost();
         // 无法找到公网ip
-        String ipAddress = discoveryClient.getLocalServiceInstance().getHost();
+//        String ipAddress = discoveryClient.getLocalServiceInstance().getHost();
+        String ipAddress = configReader.getSocketHost();
         if (!isIp(ipAddress)) {
             ipAddress = "127.0.0.1";
         }
@@ -86,7 +78,6 @@ public class MicroServiceImpl implements MicroService {
         for (String url : urls) {
             try {
                 TxState state = restTemplate.getForObject(url + "/tx/manager/state", TxState.class);
-//                state.setIp("119.23.27.78");
                 states.add(state);
             } catch (Exception e) {
             }
