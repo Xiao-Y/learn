@@ -9,6 +9,7 @@ import com.codingapi.tm.model.TxState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.netflix.eureka.serviceregistry.EurekaRegistration;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,7 +35,8 @@ public class MicroServiceImpl implements MicroService {
     @Autowired
     private DiscoveryClient discoveryClient;
 
-
+//    @Autowired
+//    private EurekaRegistration eurekaRegistration;
 
     private boolean isIp(String ipAddress) {
         String ip = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
@@ -44,12 +46,13 @@ public class MicroServiceImpl implements MicroService {
     }
 
 
-
     @Override
     public TxState getState() {
         TxState state = new TxState();
+//        String ipAddress = eurekaRegistration.getHost();
+        // 无法找到公网ip
         String ipAddress = discoveryClient.getLocalServiceInstance().getHost();
-        if(!isIp(ipAddress)){
+        if (!isIp(ipAddress)) {
             ipAddress = "127.0.0.1";
         }
         state.setIp(ipAddress);
@@ -67,9 +70,9 @@ public class MicroServiceImpl implements MicroService {
         return state;
     }
 
-    private List<String> getServices(){
+    private List<String> getServices() {
         List<String> urls = new ArrayList<>();
-        List<ServiceInstance>  serviceInstances = discoveryClient.getInstances(tmKey);
+        List<ServiceInstance> serviceInstances = discoveryClient.getInstances(tmKey);
         for (ServiceInstance instanceInfo : serviceInstances) {
             urls.add(instanceInfo.getUri().toASCIIString());
         }
@@ -78,26 +81,27 @@ public class MicroServiceImpl implements MicroService {
 
     @Override
     public TxServer getServer() {
-        List<String> urls= getServices();
+        List<String> urls = getServices();
         List<TxState> states = new ArrayList<>();
-        for(String url:urls){
+        for (String url : urls) {
             try {
                 TxState state = restTemplate.getForObject(url + "/tx/manager/state", TxState.class);
+//                state.setIp("119.23.27.78");
                 states.add(state);
             } catch (Exception e) {
             }
 
         }
-        if(states.size()<=1) {
+        if (states.size() <= 1) {
             TxState state = getState();
             if (state.getMaxConnection() > state.getNowConnection()) {
                 return TxServer.format(state);
             } else {
                 return null;
             }
-        }else{
+        } else {
             //找默认数据
-            TxState state = getDefault(states,0);
+            TxState state = getDefault(states, 0);
             if (state == null) {
                 //没有满足的默认数据
                 return null;
