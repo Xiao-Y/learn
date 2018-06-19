@@ -1,7 +1,3 @@
-server:
-  port: ${config.admin.user.server.port}
-  #port: 8801
-
 swagger: #接口注解文档
   basepackage: com.billow.api #必须要有 GetMapping，PostMapping...
   service:
@@ -10,61 +6,13 @@ swagger: #接口注解文档
     developer: lyongtao123@126.com #api开发者
     description: learn-shop 提供的Restful APIs #api描述
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
-  instance:
-    #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
-    status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-
-
 spring:
   application:
     name: ${config.admin.user.spring.application.name} #客户端名称
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
-  cloud:
-    stream: #mq连接配置
-      binders:
-        learnMQ:
-          type: ${config.mq.type}
-          environment:
-            spring:
-              rabbitmq:
-                host: ${config.mq.host} #rabbitMQ服务器地址
-                port: ${config.mq.port}  #rabbitMQ服务器端口
-                username: ${config.mq.username}
-                password: ${config.mq.password}
-                virtual-host: ${config.mq.virtual-host}
-      bindings:
-        input: #channelName，消费者
-          binder: learnMQ #使用名称为learnMQ的环境
-          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
-          contentType: text/plain
-          destination: ${config.mq.orderToUser.orderStatus} #指定了消息获取的目的地，对应于MQ就是 exchange
-          consumer:
-            exchangeType: fanout #指定该主题的类型为广播模式
-            autoBindDlq: true #消费失败的消息放入dlq队列
-            republishToDlq: true
-        inSysEventPublish: #channelName，消费者，事务消息队列
-          binder: learnMQ #使用名称为learnMQ的环境
-          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
-          contentType: text/plain
-          destination: ${config.mq.tx.SysEventPublish} #指定了消息获取的目的地，对应于MQ就是 exchange
-          consumer:
-            exchangeType: fanout #指定该主题的类型为广播模式
-            autoBindDlq: true #消费失败的消息放入dlq队列
-            republishToDlq: true
-        sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
-          binder: learnMQ #使用名称为learnMQ的环境
-          destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: update
-#测试
-words: ${server.port}

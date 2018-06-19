@@ -1,5 +1,14 @@
 server:
-  port: 8811
+  port: ${config.admin.system.server.port}
+  #port: 8811
+
+swagger: #接口注解文档
+  basepackage: com.billow.api #必须要有 GetMapping，PostMapping...
+  service:
+    name: ${spring.application.name} #api名称
+    version: 1.0
+    developer: lyongtao123@126.com #api开发者
+    description: learn-shop 提供的Restful APIs #api描述
 
 eureka:
   client:
@@ -11,7 +20,12 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
+
 spring:
+  application:
+    name: ${config.admin.system.spring.application.name} #客户端名称
+  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
+    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   cloud:
     stream: #mq连接配置
       binders:
@@ -29,6 +43,11 @@ spring:
         sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
           binder: learnMQ #使用名称为learnMQ的环境
           destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
+  jpa: #JPA配置
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 feign: #远程连接
   hystrix: #熔断器配置
-    enabled: true #启动熔断器
+    enabled: ${config.core.product.feign.hystrix.enabled} #启动熔断器

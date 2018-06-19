@@ -29,11 +29,6 @@ spring:
         sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
           binder: learnMQ #使用名称为learnMQ的环境
           destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
-  jpa: #JPA配置
-    generate-ddl: false
-    show-sql: true
-    hibernate:
-      ddl-auto: update
 feign: #远程连接
   hystrix: #熔断器配置
     enabled: true #启动熔断器

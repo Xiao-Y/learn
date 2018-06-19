@@ -1,6 +1,3 @@
-server:
-  port: ${config.core.product.server.port}
-
 swagger: #接口注解文档
   basepackage: com.billow.api #必须要有 GetMapping，PostMapping...
   service:
@@ -9,25 +6,11 @@ swagger: #接口注解文档
     developer: lyongtao123@126.com #api开发者
     description: learn-shop 提供的Restful APIs #api描述
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-    #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
-    status-page-url: http://127.0.0.1:${server.port}/swagger-ui.html # api文档页面
-
 spring:
   application:
-    name: ${config.core.product.spring.application.name} #客户端名称
-
+    name: learn-shop-core-product #客户端名称
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: update
-feign: #远程连接
-  hystrix: #熔断器配置
-    enabled: ${config.core.product.feign.hystrix.enabled} #启动熔断器
