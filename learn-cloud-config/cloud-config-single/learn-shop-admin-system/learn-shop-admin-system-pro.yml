@@ -1,14 +1,6 @@
 server:
   port: 8811
 
-swagger: #接口注解文档
-  basepackage: com.billow.api #必须要有 GetMapping，PostMapping...
-  service:
-    name: ${spring.application.name} #api名称
-    version: 1.0
-    developer: lyongtao123@126.com #api开发者
-    description: learn-shop 提供的Restful APIs #api描述
-
 eureka:
   client:
     serviceUrl:
@@ -19,12 +11,7 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
-
 spring:
-  application:
-    name: learn-shop-admin-user #客户端名称
-  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   cloud:
     stream: #mq连接配置
       binders:
