@@ -1,7 +1,8 @@
 spring:
   cloud:
     config:
-      name: ${spring.application.name},sys-config-mq,sys-config-db,sys-config-lcn,sys-config-redis #文件名称的前缀
+#      name: ${spring.application.name},sys-config-mq,sys-config-db,sys-config-lcn,sys-config-redis #文件名称的前缀
+      name: cloud-config,sys-config-mq,sys-config-db,sys-config-lcn,sys-config-redis #文件名称的前缀
       label: master #指明远程仓库的分支
       profile: pro #dev 开发环境配置文件 #test 测试环境 #pro 正式环境
 #      uri: http://localhost:8781/ #指明配置服务中心的网址
