@@ -37,7 +37,8 @@
         <module>learn-shop-base-pojo</module>
 
         <module>learn-shop-public-job</module>
-        <module>learn-shop-public-tx</module>
+        <!--<module>learn-shop-public-tx</module>-->
+        <module>tx-manager</module>
     </modules>
     <packaging>pom</packaging>
 

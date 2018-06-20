@@ -12,7 +12,7 @@ eureka:
 
 spring:
   application:
-    name: ${config.zipkin.spring.application.name}
+    name: learn-cloud-zipkin
   cloud:
     stream: #mq连接配置
       binders:

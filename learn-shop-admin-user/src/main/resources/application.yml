@@ -8,7 +8,7 @@ swagger: #接口注解文档
 
 spring:
   application:
-    name: ${config.admin.user.spring.application.name} #客户端名称
+    name: learn-shop-admin-user #客户端名称
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置

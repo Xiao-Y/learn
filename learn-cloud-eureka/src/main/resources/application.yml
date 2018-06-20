@@ -1,6 +1,10 @@
 server:
   port: ${config.eureka.server.port}
 
+spring:
+  application:
+    name: learn-cloud-eureka
+
 eureka:
   instance:
       hostname: ${config.eureka.instance.hostname}

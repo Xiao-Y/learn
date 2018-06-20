@@ -49,7 +49,7 @@ hystrix:
 
 feign: #\u8FDC\u7A0B\u8FDE\u63A5
   hystrix: #\u7194\u65AD\u5668\u914D\u7F6E
-    enabled: ${config.core.order.feign.hystrix.enabled} #\u542F\u52A8\u7194\u65AD\u5668
+    enabled: true #\u542F\u52A8\u7194\u65AD\u5668
 
 ribbon:
   ConnectTimeout: 1000 #ribbon\u8BF7\u6C42\u8FDE\u63A5\u7684\u8D85\u65F6\u65F6\u95F4

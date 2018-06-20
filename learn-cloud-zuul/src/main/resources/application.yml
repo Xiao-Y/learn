@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: ${config.zuul.spring.application.name}
+    name: learn-cloud-zuul
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置
@@ -25,19 +25,19 @@ zuul:
     #系统相关
     admin-system:
       path: /admin-system/**
-      serviceId: ${config.admin.system.spring.application.name}
+      serviceId: learn-shop-admin-system
     #用户相关
     admin-user:
       path: /admin-user/**
-      serviceId: ${config.admin.user.spring.application.name}
+      serviceId: learn-shop-admin-user
     #订单相关
     core-order:
       path: /core-order/**
-      serviceId: ${config.core.order.spring.application.name}
+      serviceId: learn-shop-core-order
     #商品相关
     core-product:
       path: /core-product/**
-      serviceId: ${config.core.product.spring.application.name}
+      serviceId: learn-shop-core-product
 
 billow:
   security:
