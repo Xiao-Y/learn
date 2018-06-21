@@ -15,3 +15,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  cloud:
+    bus:
+      trace:
+        enabled: true #开启消息跟踪
+management:
+  security:
+    enabled: false #刷新时，关闭安全验证
