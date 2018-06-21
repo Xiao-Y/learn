@@ -48,4 +48,4 @@ spring:
           binder: learnMQ #使用名称为learnMQ的环境
           destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
 #测试
-words: ${server.port}
+words: 12312312
