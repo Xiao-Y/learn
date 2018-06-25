@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ public class TestUserController {
 
     @ApiOperation(value = "获取用户信息", notes = "用户信息测试")
     @GetMapping("/indexUser")
+    @RefreshScope
     public String indexUser(String name) {
         System.out.println(words);
         System.out.println("indexUser: " + name);
