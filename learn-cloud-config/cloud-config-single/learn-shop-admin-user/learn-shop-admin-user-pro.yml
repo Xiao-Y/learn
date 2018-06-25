@@ -28,7 +28,7 @@ spring:
       bindings:
         input: #channelName，消费者
           binder: learnMQ #使用名称为learnMQ的环境
-          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
+#          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
           contentType: text/plain
           destination: ${config.mq.orderToUser.orderStatus} #指定了消息获取的目的地，对应于MQ就是 exchange
           consumer:
@@ -37,7 +37,7 @@ spring:
             republishToDlq: true
         inSysEventPublish: #channelName，消费者，事务消息队列
           binder: learnMQ #使用名称为learnMQ的环境
-          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
+#          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
           contentType: text/plain
           destination: ${config.mq.tx.SysEventPublish} #指定了消息获取的目的地，对应于MQ就是 exchange
           consumer:
