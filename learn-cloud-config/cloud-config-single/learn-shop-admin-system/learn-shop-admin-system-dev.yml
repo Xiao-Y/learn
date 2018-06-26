@@ -11,24 +11,36 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
+#spring:
+#  cloud:
+#    stream: #mq连接配置
+#      binders:
+#        learnMQ:
+#          type: ${config.mq.type}
+#          environment:
+#            spring:
+#              rabbitmq:
+#                host: ${config.mq.host} #rabbitMQ服务器地址
+#                port: ${config.mq.port}  #rabbitMQ服务器端口
+#                username: ${config.mq.username}
+#                password: ${config.mq.password}
+#                virtual-host: ${config.mq.virtual-host}
+#      bindings:
+#        sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
+#          binder: learnMQ #使用名称为learnMQ的环境
+#          destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
+
 spring:
-  cloud:
-    stream: #mq连接配置
-      binders:
-        learnMQ:
-          type: ${config.mq.type}
-          environment:
-            spring:
-              rabbitmq:
-                host: ${config.mq.host} #rabbitMQ服务器地址
-                port: ${config.mq.port}  #rabbitMQ服务器端口
-                username: ${config.mq.username}
-                password: ${config.mq.password}
-                virtual-host: ${config.mq.virtual-host}
-      bindings:
-        sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
-          binder: learnMQ #使用名称为learnMQ的环境
-          destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
+  rabbitmq:
+    host: ${config.mq.host} #rabbitMQ服务器地址
+    port: ${config.mq.port}  #rabbitMQ服务器端口
+    username: ${config.mq.username}
+    password: ${config.mq.password}
+    virtual-host: ${config.mq.virtual-host}
+
 feign: #远程连接
   hystrix: #熔断器配置
     enabled: true #启动熔断器
+
+#测试
+words: 7777
