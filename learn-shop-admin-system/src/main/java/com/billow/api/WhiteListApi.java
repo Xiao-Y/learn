@@ -8,6 +8,8 @@ import com.billow.pojo.vo.sys.WhiteListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,8 @@ public class WhiteListApi extends BaseApi {
 
     @Autowired
     private WhiteListService whiteListService;
+    @Value("${words}")
+    private String words;
 
     /**
      * 根据ip和模块查询出有效白名单
@@ -48,6 +52,20 @@ public class WhiteListApi extends BaseApi {
         try {
             List<WhiteListVo> whiteListVos = whiteListService.findByIpAndModuleAndValidInd(ip, module, validInd);
             baseResponse.setResData(whiteListVos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResponse.setResCode(ResCodeEnum.FAIL);
+        }
+        return baseResponse;
+    }
+
+    @ApiOperation(value = "test", notes = "test")
+    @GetMapping("/test")
+    @RefreshScope
+    public BaseResponse<String> test() {
+        BaseResponse<String> baseResponse = new BaseResponse<>();
+        try {
+            baseResponse.setResData(words);
         } catch (Exception e) {
             e.printStackTrace();
             baseResponse.setResCode(ResCodeEnum.FAIL);
