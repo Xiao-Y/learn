@@ -1,12 +1,14 @@
 package com.billow.pojo.po.base;
 
+import java.io.Serializable;
+
 /**
  * 分布数据
  *
  * @author LiuYongTao
  * @date 2018/4/27 11:46
  */
-public abstract class BasePage {
+public abstract class BasePage implements Serializable {
 
     private String requestUrl; // 请求url
     private int pageSize = 10; // 每页要显示的记录数

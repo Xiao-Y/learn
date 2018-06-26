@@ -1,5 +1,6 @@
 package com.billow.consumer;
 
+import com.billow.pojo.vo.TestVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -23,6 +24,12 @@ public class AdminUserConsumer {
     @RabbitHandler
     @RabbitListener(queues = "${config.mq.orderToUser.orderStatus}")
     public void sinkMessage(String message) {
-        logger.info("MQ消费: " + message);
+        logger.info("MQ消费String: " + message);
+    }
+
+    @RabbitHandler
+    @RabbitListener(queues = "${config.mq.ts.test}")
+    public void sinkMessage(TestVo vo) {
+        logger.info("MQ消费VO: " + vo.toString());
     }
 }

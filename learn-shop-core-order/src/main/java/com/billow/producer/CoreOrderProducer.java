@@ -1,18 +1,11 @@
 package com.billow.producer;
 
 import com.billow.common.amqp.RabbitMqConfig;
+import com.billow.pojo.vo.TestVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.Output;
-import org.springframework.cloud.stream.messaging.Source;
-import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -36,8 +29,14 @@ public class CoreOrderProducer {
 
     public void sendOrderCar() {
         String message = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        amqpTemplate.convertAndSend(rabbitMqConfig.getOrderStatusQueue(), message);
+        amqpTemplate.convertAndSend(rabbitMqConfig.getOrderStatusQueue().getName(), message);
         logger.info("【MQ发送内容】" + message);
+    }
+
+    public void sendOrderCar(TestVo vo) {
+        vo.setCreatorCode("3333");
+        amqpTemplate.convertAndSend(rabbitMqConfig.getTestQueue().getName(), vo);
+        logger.info("【MQ发送内容】" + vo.toString());
     }
 
     //轮训

@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  * @create 2018-04-27 12:28
  */
 @MappedSuperclass
-public class BasePo extends BasePage {
+public class BasePo extends BasePage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

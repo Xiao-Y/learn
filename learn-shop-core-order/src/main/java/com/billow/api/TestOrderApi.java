@@ -1,7 +1,9 @@
 package com.billow.api;
 
+import com.billow.common.base.BaseApi;
 import com.billow.common.resData.BaseResponse;
 
+import com.billow.pojo.vo.TestVo;
 import com.billow.producer.CoreOrderProducer;
 import com.billow.remote.TestUserRemote;
 import com.billow.service.CoreOrderService;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @Api(value = "TestOrderController", description = "订单管理测试")
 @RestController
-@RequestMapping("/testOrder")
-public class TestOrderController {
+@RequestMapping("/testOrderApi")
+public class TestOrderApi extends BaseApi {
 
     @Autowired
     private TestUserRemote testUserRemote;
@@ -44,6 +48,20 @@ public class TestOrderController {
             e.printStackTrace();
         }
         return flag;
+    }
+
+    @ApiOperation(value = "发送MQ对象消息", notes = "用于测试发送MQ对象消息")
+    @GetMapping("/sendMQTest")
+    public BaseResponse<String> sendMQTest() {
+        BaseResponse<String> baseResponse = super.getBaseResponse();
+        try {
+            TestVo vo = new TestVo();
+            vo.setName("Billow").setAge(18).setCreateTime(new Date());
+            coreOrderProducer.sendOrderCar(vo);
+        } catch (Exception e) {
+            super.getErrorInfo(e, baseResponse);
+        }
+        return baseResponse;
     }
 
     @ApiOperation(value = "发送TxMQ消息", notes = "用于测试事务处理发送MQ消息")

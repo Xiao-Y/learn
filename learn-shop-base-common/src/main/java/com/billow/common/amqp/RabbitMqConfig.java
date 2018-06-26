@@ -18,31 +18,26 @@ public class RabbitMqConfig {
     private String sysEventPublishQueue;
     @Value("${config.mq.tx.SysEventProcess}")
     private String sysEventProcessQueue;
+    @Value("${config.mq.ts.test}")
+    private String testQueue;
 
     @Bean
-    public Queue orderStatusQueue() {
+    public Queue getOrderStatusQueue() {
         return new Queue(orderStatusQueue);
     }
 
     @Bean
-    public Queue sysEventPublishQueue() {
+    public Queue getSysEventPublishQueue() {
         return new Queue(sysEventPublishQueue);
     }
 
     @Bean
-    public Queue sysEventProcessQueue() {
+    public Queue getSysEventProcessQueue() {
         return new Queue(sysEventProcessQueue);
     }
 
-    public String getOrderStatusQueue() {
-        return orderStatusQueue;
-    }
-
-    public String getSysEventPublishQueue() {
-        return sysEventPublishQueue;
-    }
-
-    public String getSysEventProcessQueue() {
-        return sysEventProcessQueue;
+    @Bean
+    public Queue getTestQueue() {
+        return new Queue(testQueue);
     }
 }

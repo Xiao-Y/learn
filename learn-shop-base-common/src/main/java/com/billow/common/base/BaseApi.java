@@ -30,7 +30,7 @@ public class BaseApi {
 
     @Value("${spring.application.name}")
     protected String applicationName;
-    @Value("${eureka.instance.instance-id}")
+//    @Value("${eureka.instance.instance-id}")
     protected String instanceId;
 
     @Autowired
