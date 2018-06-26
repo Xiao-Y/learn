@@ -43,4 +43,4 @@ feign: #远程连接
     enabled: true #启动熔断器
 
 #测试
-words: 7777
+words: 9999
