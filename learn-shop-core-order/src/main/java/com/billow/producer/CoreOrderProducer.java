@@ -1,7 +1,12 @@
 package com.billow.producer;
 
+import com.billow.common.amqp.RabbitMqConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Output;
@@ -20,18 +25,18 @@ import java.util.Date;
  * @create 2018-02-06 16:45
  */
 @Component
-@EnableBinding(Source.class)
 public class CoreOrderProducer {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    @Output(Source.OUTPUT)
-    private MessageChannel messageChannel;
+    private AmqpTemplate amqpTemplate;
+    @Autowired
+    private RabbitMqConfig rabbitMqConfig;
 
     public void sendOrderCar() {
         String message = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        messageChannel.send(MessageBuilder.withPayload(message).build());
+        amqpTemplate.convertAndSend(rabbitMqConfig.getOrderStatusQueue(), message);
         logger.info("【MQ发送内容】" + message);
     }
 

@@ -13,10 +13,36 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfig {
 
     @Value("${config.mq.orderToUser.orderStatus}")
-    public String orderStatus;
+    private String orderStatusQueue;
+    @Value("${config.mq.tx.SysEventPublish}")
+    private String sysEventPublishQueue;
+    @Value("${config.mq.tx.SysEventProcess}")
+    private String sysEventProcessQueue;
 
     @Bean
     public Queue orderStatusQueue() {
-        return new Queue(orderStatus);
+        return new Queue(orderStatusQueue);
+    }
+
+    @Bean
+    public Queue sysEventPublishQueue() {
+        return new Queue(sysEventPublishQueue);
+    }
+
+    @Bean
+    public Queue sysEventProcessQueue() {
+        return new Queue(sysEventProcessQueue);
+    }
+
+    public String getOrderStatusQueue() {
+        return orderStatusQueue;
+    }
+
+    public String getSysEventPublishQueue() {
+        return sysEventPublishQueue;
+    }
+
+    public String getSysEventProcessQueue() {
+        return sysEventProcessQueue;
     }
 }
