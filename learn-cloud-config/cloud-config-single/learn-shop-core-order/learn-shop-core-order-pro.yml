@@ -8,8 +8,8 @@ eureka:
   instance:
     #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api\u6587\u6863\u9875\u9762
     status-page-url: http://localhost:${server.port}/swagger-ui.html # api\u6587\u6863\u9875\u9762
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+#    prefer-ip-address: true
+#    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 spring:
   cloud:
