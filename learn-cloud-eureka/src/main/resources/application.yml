@@ -7,12 +7,13 @@ spring:
 
 eureka:
   instance:
-      hostname: ${config.eureka.instance.hostname}
+    hostname: ${config.eureka.instance.hostname}
+#    prefer-ip-address: true
   client:
     register-with-eureka: ${config.eureka.client.register-with-eureka} #禁用客户端注册
     fetch-registry: ${config.eureka.client.fetch-registry} #禁用客户端注册
     serviceUrl:
-          defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
+      defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
   server:
     enable-self-preservation: ${config.server.enable-self-preservation} #关闭自我保护
     eviction-interval-timer-in-ms: ${config.server.eviction-interval-timer-in-ms} #清理间隔（单位毫秒，默认是60*1000）
