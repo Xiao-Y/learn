@@ -1,6 +1,7 @@
-package com.billow.config;
+package com.billow.common.amqp;
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,10 +11,12 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitMqConfig {
-    public static final String queueName = "springcloud-server-bus-rabbitmq";
+
+    @Value("${config.mq.orderToUser.orderStatus}")
+    public String orderStatus;
 
     @Bean
-    public Queue rabbitMqQueue() {
-        return new Queue(queueName);
+    public Queue orderStatusQueue() {
+        return new Queue(orderStatus);
     }
 }
