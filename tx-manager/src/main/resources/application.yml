@@ -3,9 +3,10 @@ eureka:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
   instance:
+    hostname: ${spring.cloud.client.ipAddress}
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
     status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/index.html # tx监控文档页面
-#    prefer-ip-address: true
-#    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 spring:
   application:

@@ -8,7 +8,9 @@ spring:
 eureka:
   instance:
     hostname: ${config.eureka.instance.hostname}
-#    prefer-ip-address: true
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port} # eureka监控页面
   client:
     register-with-eureka: ${config.eureka.client.register-with-eureka} #禁用客户端注册
     fetch-registry: ${config.eureka.client.fetch-registry} #禁用客户端注册
