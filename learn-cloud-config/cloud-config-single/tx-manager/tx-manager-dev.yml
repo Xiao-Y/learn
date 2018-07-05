@@ -14,7 +14,7 @@ tm:
     savemaxtime: 30 #该字段仅代表的事务模块数据的最大保存时间，补偿数据会永久保存。
   socket:
     port: 9999 #socket server Socket对外服务端口。TxManager的LCN协议的端口
-    host: ${config.tx.manager.instance.hostname} #socket server Socket对外服务端口。TxManager的LCN外服务IP
+    host: ${config.tx.manager.socket.host} #socket server Socket对外服务端口。TxManager的LCN外服务IP
     maxconnection: 100 #最大socket连接数。TxManager最大允许的建立连接数量
   #事务自动补偿 (true:开启，false:关闭)
   # 说明：
