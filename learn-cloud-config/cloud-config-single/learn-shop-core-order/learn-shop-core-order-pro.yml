@@ -6,10 +6,11 @@ eureka:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #\u6CE8\u518C\u4E2D\u5FC3\u5730\u5740
   instance:
-    #status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api\u6587\u6863\u9875\u9762
-    status-page-url: http://localhost:${server.port}/swagger-ui.html # api\u6587\u6863\u9875\u9762
-#    prefer-ip-address: true
-#    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    hostname: ${spring.cloud.client.ipAddress}
+    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api\u6587\u6863\u9875\u9762
+#    status-page-url: http://localhost:${server.port}/swagger-ui.html # api\u6587\u6863\u9875\u9762
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 spring:
   cloud:
