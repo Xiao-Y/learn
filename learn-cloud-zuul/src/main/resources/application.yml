@@ -38,6 +38,9 @@ zuul:
     core-product:
       path: /core-product/**
       serviceId: learn-shop-core-product
+    public-job:
+      path: /public-job/**
+      serviceId: learn-shop-public-job
 
 billow:
   security:

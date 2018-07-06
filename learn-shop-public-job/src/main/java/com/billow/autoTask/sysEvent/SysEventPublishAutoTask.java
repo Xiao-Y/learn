@@ -1,20 +1,19 @@
 package com.billow.autoTask.sysEvent;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.tools.date.DateTime;
+import com.billow.common.amqp.RabbitMqConfig;
 import com.billow.common.enums.SysEventEunm;
-import com.billow.service.TaskManagerService;
 import com.billow.common.sysEvent.model.expand.SysEventPublishDto;
-import com.billow.common.sysEvent.mq.SysEventInterface;
 import com.billow.common.sysEvent.service.SysEventPublishService;
+import com.billow.service.TaskManagerService;
+import com.billow.tools.date.DateTime;
 import com.billow.tools.utlis.ToolsUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,6 @@ import java.util.Map;
  * @create 2018-03-01 9:25
  */
 @Component
-@EnableBinding(SysEventInterface.class)
 public class SysEventPublishAutoTask extends QuartzJobBean {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -38,7 +36,9 @@ public class SysEventPublishAutoTask extends QuartzJobBean {
     private TaskManagerService taskManagerService;
 
     @Autowired
-    private SysEventInterface sysEventInterface;
+    private AmqpTemplate amqpTemplate;
+    @Autowired
+    private RabbitMqConfig rabbitMqConfig;
 
     @Autowired
     private SysEventPublishService sysEventPublishService;
@@ -66,7 +66,8 @@ public class SysEventPublishAutoTask extends QuartzJobBean {
                     sysEventPublishService.update(dto);
 
                     //2.发送MQ
-                    sysEventInterface.outSysEventPublish().send(MessageBuilder.withPayload(json).build());
+                    amqpTemplate.convertAndSend(rabbitMqConfig.getSysEventPublishQueue().getName(), json);
+//                    sysEventInterface.outSysEventPublish().send(MessageBuilder.withPayload(json).build());
                     logger.info("【MQ发送内容】" + json);
                 } catch (Exception e) {
                     e.printStackTrace();
