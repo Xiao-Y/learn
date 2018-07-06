@@ -1,5 +1,8 @@
 package com.billow.core.manager;
 
+import com.billow.core.config.QuartzJobFactory;
+import com.billow.core.config.QuartzJobFactoryDisallowConcurrentExecution;
+import com.billow.core.enumType.AutoTaskJobConcurrentEnum;
 import com.billow.model.expand.ScheduleJobDto;
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
@@ -34,7 +37,7 @@ public class QuartzManager {
 
     public final static Logger log = Logger.getLogger(QuartzManager.class);
 
-    @Autowired(required = false)
+    @Autowired
     private SchedulerFactoryBean schedulerFactoryBean;
 
     /**
@@ -213,7 +216,12 @@ public class QuartzManager {
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         // 不存在，创建一个
         if (null == trigger) {
-            Class<Job> clazz = (Class<Job>) Class.forName(job.getBeanClass());
+            Class<? extends Job> clazz;
+            if (AutoTaskJobConcurrentEnum.CONCURRENT_NOT.getIsConcurrent().equals(job.getIsConcurrent())) {
+                clazz = QuartzJobFactory.class;
+            } else {
+                clazz = QuartzJobFactoryDisallowConcurrentExecution.class;
+            }
             // 指定Job在Scheduler中所属组及名称
             JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();
             jobDetail.getJobDataMap().put("scheduleJob", job);
