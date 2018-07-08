@@ -1,4 +1,4 @@
-package com.billow.model.custom;
+package com.billow.pojo.ex;
 
 public class JsonResult {
     private boolean success = false;

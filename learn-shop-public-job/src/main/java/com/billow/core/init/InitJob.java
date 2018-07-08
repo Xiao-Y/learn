@@ -2,7 +2,7 @@ package com.billow.core.init;
 
 import com.billow.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.core.manager.QuartzManager;
-import com.billow.model.expand.ScheduleJobDto;
+import com.billow.pojo.vo.ScheduleJobVo;
 import com.billow.service.ScheduleJobService;
 import com.billow.tools.utlis.ToolsUtils;
 import org.apache.log4j.Logger;
@@ -32,9 +32,9 @@ public class InitJob implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         logger.info("==============================初始化自动任务开始===========================");
         try {
-            ScheduleJobDto scheduleJobDto = new ScheduleJobDto();
-            scheduleJobDto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus());
-            List<ScheduleJobDto> list = scheduleJobService.findByJobStatus(scheduleJobDto);
+            ScheduleJobVo scheduleJobVo = new ScheduleJobVo();
+            scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus());
+            List<ScheduleJobVo> list = scheduleJobService.findByJobStatus(scheduleJobVo);
             if (ToolsUtils.isNotEmpty(list)) {
                 quartzManager.addJobList(list);
             }

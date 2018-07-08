@@ -1,8 +1,10 @@
 package com.billow.service.impl;
 
 import com.billow.dao.ScheduleJobLogDao;
-import com.billow.model.expand.ScheduleJobLogDto;
+import com.billow.pojo.po.ScheduleJobLogPo;
+import com.billow.pojo.vo.ScheduleJobLogVo;
 import com.billow.service.ScheduleJobLogService;
+import com.billow.tools.utlis.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,8 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
 
     @Override
     @Transactional
-    public void insert(ScheduleJobLogDto logDto) {
-        scheduleJobLogDao.save(logDto);
+    public void insert(ScheduleJobLogVo logDto) {
+        ScheduleJobLogPo scheduleJobLogPo = PageUtil.convert(logDto, ScheduleJobLogPo.class);
+        scheduleJobLogDao.save(scheduleJobLogPo);
     }
 }

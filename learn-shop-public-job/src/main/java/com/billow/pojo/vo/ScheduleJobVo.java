@@ -1,24 +1,16 @@
-package com.billow.model.expand;
+package com.billow.pojo.vo;
 
 
-import com.billow.model.domain.ScheduleJobBase;
+import com.billow.pojo.po.ScheduleJobPo;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import java.io.Serializable;
 
 
-@Entity
-@Table(name = "sys_schedule_job")
-public class ScheduleJobDto extends ScheduleJobBase {
-
-    private static final long serialVersionUID = -4176943348870633258L;
+public class ScheduleJobVo extends ScheduleJobPo implements Serializable {
 
     //运行状态
-    @Transient
     private String statusName;
     //任务是否有状态,0-无（单线程），1-有（多线程）
-    @Transient
     private String isConcurrentName;
 
     /**

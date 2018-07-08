@@ -1,7 +1,13 @@
 package com.billow;
 
+import com.billow.pojo.po.TestPo;
+import com.billow.pojo.vo.TestVo;
+import com.billow.tools.utlis.ToolsUtils;
+
+import java.lang.reflect.Field;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class Test {
 
@@ -13,7 +19,33 @@ public class Test {
     static final String USER = "root";
     static final String PASS = "root";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+//        this.getConnectionTest();
+        TestPo test = new TestPo();
+        test.setName("123123");
+        test.setCreateTime(new Date());
+        reflectTest(test);
+    }
+
+
+    public static void reflectTest(TestPo test) throws Exception {
+        Class<? extends TestPo> clazz = test.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        if (ToolsUtils.isNotEmpty(fields)) {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Class<?> type = field.getType();
+                String fieldName = field.getName();
+                Object fieldValue = field.get(test);
+                System.out.println(type);
+                System.out.println(fieldName);
+                System.out.println(fieldValue);
+            }
+        }
+    }
+
+
+    private static void getConnectionTest() {
         java.sql.Connection conn = null;
         try {
             // 注册 JDBC 驱动

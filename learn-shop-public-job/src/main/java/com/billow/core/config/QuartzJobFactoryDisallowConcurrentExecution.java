@@ -1,6 +1,6 @@
 package com.billow.core.config;
 
-import com.billow.model.expand.ScheduleJobDto;
+import com.billow.pojo.vo.ScheduleJobVo;
 import com.billow.util.TaskUtils;
 import org.apache.log4j.Logger;
 
@@ -25,7 +25,7 @@ public class QuartzJobFactoryDisallowConcurrentExecution implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try {
-            ScheduleJobDto scheduleJob = (ScheduleJobDto) context.getMergedJobDataMap().get("scheduleJob");
+            ScheduleJobVo scheduleJob = (ScheduleJobVo) context.getMergedJobDataMap().get("scheduleJob");
             TaskUtils.invokMethod(scheduleJob);
         } catch (Exception e) {
             JobExecutionException ex = new JobExecutionException(e);

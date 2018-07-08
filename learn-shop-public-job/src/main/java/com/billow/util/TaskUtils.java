@@ -1,8 +1,8 @@
 package com.billow.util;
 
 import com.billow.core.enumType.AutoTaskJobStatusEnum;
-import com.billow.model.expand.ScheduleJobDto;
-import com.billow.model.expand.ScheduleJobLogDto;
+import com.billow.pojo.vo.ScheduleJobVo;
+import com.billow.pojo.vo.ScheduleJobLogVo;
 import com.billow.service.ScheduleJobLogService;
 import com.billow.service.ScheduleJobService;
 import com.billow.tools.generator.UUID;
@@ -34,7 +34,7 @@ public class TaskUtils {
      *
      * @param scheduleJob
      */
-    public static void invokMethod(ScheduleJobDto scheduleJob) throws Exception {
+    public static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
         Object object = null;
         Class<?> clazz = null;
         Method method = null;
@@ -66,17 +66,17 @@ public class TaskUtils {
         } finally {
             if (expFlag) {//发生异常停止这个自动任务，写异常日志
                 try {
-                    ScheduleJobDto dto = new ScheduleJobDto();
-                    dto.setJobId(scheduleJob.getJobId());
+                    ScheduleJobVo dto = new ScheduleJobVo();
+                    dto.setId(scheduleJob.getId());
                     dto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
                     ScheduleJobService scheduleJobService = SpringContextUtil.getBean("scheduleJobServiceImpl");
                     scheduleJobService.updateJobStatus(dto);
                     if (exception != null) {
                         StringWriter sw = new StringWriter();
                         exception.printStackTrace(new PrintWriter(sw, true));
-                        ScheduleJobLogDto logDto = new ScheduleJobLogDto();
-                        logDto.setId(UUID.generate());
-                        logDto.setJobId(scheduleJob.getJobId());
+                        ScheduleJobLogVo logDto = new ScheduleJobLogVo();
+//                        logDto.setId(UUID.generate());
+                        logDto.setId(scheduleJob.getId());
                         logDto.setJobGroup(scheduleJob.getJobGroup());
                         logDto.setJobName(scheduleJob.getJobName());
                         logDto.setCreateTime(new Date());

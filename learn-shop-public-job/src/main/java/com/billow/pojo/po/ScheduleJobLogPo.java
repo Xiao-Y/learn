@@ -1,9 +1,11 @@
-package com.billow.model.domain;
+package com.billow.pojo.po;
 
-import com.billow.model.base.BaseModel;
+import com.billow.pojo.base.BasePo;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,29 +19,12 @@ import java.util.Date;
  * @Mail lyongtao123@126.com<br>
  * @date 2017-12-08 15:46:02
  */
-@MappedSuperclass
-public class ScheduleJobLogBase extends BaseModel implements Serializable {
+@Entity
+@Table(name = "sys_schedule_job_log")
+public class ScheduleJobLogPo extends BasePo implements Serializable {
 
-    public ScheduleJobLogBase() {
-        super();
-    }
-
-    /**
-     * 主键构造器
-     *
-     * @param id
-     */
-    public ScheduleJobLogBase(String id) {
-        super();
-        this.id = id;
-    }
-
-    @Id
-    private String id;
     // 任务名称
     private String jobName;
-    // 创建时间
-    private Date createTime;
     // 任务分组
     private String jobGroup;
     // 自动任务id
@@ -67,28 +52,6 @@ public class ScheduleJobLogBase extends BaseModel implements Serializable {
      */
     public void setJobName(String jobName) {
         this.jobName = jobName;
-    }
-
-    /**
-     * 创建时间
-     *
-     * @return
-     * @author billow<br>
-     * @date: 2017-12-08 15:46:02
-     */
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-
-    /**
-     * 创建时间
-     *
-     * @param createTime
-     * @author billow<br>
-     * @date: 2017-12-08 15:46:02
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     /**
@@ -136,24 +99,6 @@ public class ScheduleJobLogBase extends BaseModel implements Serializable {
     }
 
     /**
-     * @return
-     * @author billow<br>
-     * @date: 2017-12-08 15:46:02
-     */
-    public String getId() {
-        return this.id;
-    }
-
-    /**
-     * @param id
-     * @author billow<br>
-     * @date: 2017-12-08 15:46:02
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
      * 错误信息
      *
      * @return
@@ -175,12 +120,4 @@ public class ScheduleJobLogBase extends BaseModel implements Serializable {
         this.info = info;
     }
 
-
-    /**
-     * 主键toString 非主键不允许添加
-     */
-    @Override
-    public String toString() {
-        return "PK[id = " + id + "]";
-    }
 }  

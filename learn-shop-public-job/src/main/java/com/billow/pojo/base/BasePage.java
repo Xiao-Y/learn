@@ -1,15 +1,19 @@
-package com.billow.model.base;
+package com.billow.pojo.base;
 
-public abstract class BaseModel {
+import java.io.Serializable;
 
-    private String url; // 请求url
+/**
+ * 分布数据
+ *
+ * @author LiuYongTao
+ * @date 2018/4/27 11:46
+ */
+public abstract class BasePage implements Serializable {
 
+    private String requestUrl; // 请求url
     private int pageSize = 10; // 每页要显示的记录数
-
-    private int pageNo = 1; // 当前页号
-
+    private int pageNo = 0; // 当前页号
     private int recordCount; // 总记录数
-
     private String objectOrderBy;
 
     public String getObjectOrderBy() {
@@ -27,19 +31,19 @@ public abstract class BaseModel {
      * @author XiaoY
      * @date: 2016年12月3日 下午3:57:19
      */
-    public String getUrl() {
-        return url;
+    public String getRequestUrl() {
+        return requestUrl;
     }
 
     /**
      * 请求url
      *
-     * @param url
+     * @param requestUrl
      * @author XiaoY
      * @date: 2016年12月3日 下午3:57:23
      */
-    public void setUrl(String url) {
-        this.url = url;
+    public void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
     }
 
     /**
@@ -110,8 +114,12 @@ public abstract class BaseModel {
 
     @Override
     public String toString() {
-        return "BaseModel [url=" + url + ", pageSize=" + pageSize + ", pageNo=" + pageNo + ", recordCount="
-                + recordCount + "]";
+        return "BasePage{" +
+                "requestUrl='" + requestUrl + '\'' +
+                ", pageSize=" + pageSize +
+                ", pageNo=" + pageNo +
+                ", recordCount=" + recordCount +
+                ", objectOrderBy='" + objectOrderBy + '\'' +
+                '}';
     }
-
 }

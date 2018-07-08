@@ -17,10 +17,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 菜单服务
@@ -46,9 +49,18 @@ public class MenuServiceImpl implements MenuService {
             roleVos.forEach(item -> {
                 List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(item.getId());
                 if (ToolsUtils.isNotEmpty(rolePermissionPos)) {
-                    rolePermissionPos.forEach(rolePermissionPo -> permissionIds.add(rolePermissionPo.getPermissionId()));
+                    rolePermissionPos.stream().forEach(rolePermissionPo -> permissionIds.add(rolePermissionPo.getPermissionId()));
                 }
             });
+        }
+        // TODO 测试用
+        if ("admin".equals(permissionVo.getUserCode())) {
+            List<PermissionPo> all = permissionDao.findAll();
+            if (ToolsUtils.isNotEmpty(all)) {
+                Set<Long> set = all.stream().map(m -> m.getId()).collect(Collectors.toSet());
+                permissionIds.clear();
+                permissionIds.addAll(set);
+            }
         }
         // 如果没有权限直接返回
         if (ToolsUtils.isEmpty(permissionIds)) {

@@ -1,6 +1,8 @@
 package com.billow.service;
 
-import com.billow.model.expand.ScheduleJobDto;
+import com.billow.pojo.po.ScheduleJobPo;
+import com.billow.pojo.vo.ScheduleJobVo;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,11 +20,11 @@ public interface ScheduleJobService {
      * <br>
      * added by liuyongtao<br>
      *
-     * @param scheduleJobDto
+     * @param scheduleJobVo
      * @return
      * @date 2017年5月12日 上午8:43:46
      */
-    List<ScheduleJobDto> findByJobStatus(ScheduleJobDto scheduleJobDto);
+    List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo);
 
     /**
      * 启用、禁用自动任务
@@ -35,13 +37,21 @@ public interface ScheduleJobService {
      * @return
      * @date 2017年5月11日 下午2:58:16
      */
-    void updateJobStatus(ScheduleJobDto dto);
+    void updateJobStatus(ScheduleJobVo dto);
 
-    ScheduleJobDto selectByPrimaryKey(ScheduleJobDto dto);
+    ScheduleJobVo selectByPrimaryKey(ScheduleJobVo dto);
 
-    void updateByPrimaryKeySelective(ScheduleJobDto dto);
+    void updateByPrimaryKeySelective(ScheduleJobVo dto);
 
-    void deleteByPrimaryKey(ScheduleJobDto dto);
+    void deleteByPrimaryKey(ScheduleJobVo dto);
 
-    void insert(ScheduleJobDto scheduleJobDto);
+    void insert(ScheduleJobVo scheduleJobVo);
+
+    /**
+     * 根据条件查询自动任务
+     *
+     * @param scheduleJobVo
+     * @return
+     */
+    Page<ScheduleJobPo> selectAll(ScheduleJobVo scheduleJobVo);
 }

@@ -70,6 +70,14 @@ export const asyncRouterMap = [{
     path: 'menuApi/findMenus',
     component: resolve => require(['../views/sys/MenuMag.vue'], resolve)
   }]
+}, {
+  path: '/job',
+  component: Home,
+  children: [{
+    name: 'autoTaskList',
+    path: 'autoTaskList',
+    component: resolve => require(['../views/job/autoTaskList.vue'], resolve)
+  }]
 }]
 
 export default new Router({

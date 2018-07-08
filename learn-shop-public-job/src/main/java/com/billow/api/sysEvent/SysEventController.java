@@ -1,7 +1,7 @@
 package com.billow.api.sysEvent;
 
 import com.billow.core.enumType.AutoTaskJobStatusEnum;
-import com.billow.model.expand.ScheduleJobDto;
+import com.billow.pojo.vo.ScheduleJobVo;
 import com.billow.service.TaskManagerService;
 import com.billow.common.sysEvent.mq.SysEventInterface;
 import org.slf4j.Logger;
@@ -41,8 +41,8 @@ public class SysEventController {
 
     @GetMapping("/sysQuartz")
     public void sysQuartz() {
-        ScheduleJobDto job = new ScheduleJobDto();
-        job.setJobId(3);
+        ScheduleJobVo job = new ScheduleJobVo();
+        job.setId(3L);
         job.setJobGroup("test6_group");
         job.setJobName("test6_name");
         job.setCronExpression("0/2 * * * * ?");
@@ -54,8 +54,8 @@ public class SysEventController {
             e.printStackTrace();
         }
 
-        ScheduleJobDto job2 = new ScheduleJobDto();
-        job2.setJobId(4);
+        ScheduleJobVo job2 = new ScheduleJobVo();
+        job2.setId(4L);
         job2.setJobGroup("test6_group");
         job2.setJobName("test7_name");
         job2.setCronExpression("0/2 * * * * ?");

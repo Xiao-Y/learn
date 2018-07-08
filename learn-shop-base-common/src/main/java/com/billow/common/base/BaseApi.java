@@ -86,7 +86,7 @@ public class BaseApi {
      * @date 2018/5/26 9:34
      */
     protected String findUserCode() {
-        return "billow";
+        return "admin";
     }
 
     /**

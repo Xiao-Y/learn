@@ -3,7 +3,7 @@ package com.billow.core.manager;
 import com.billow.core.config.QuartzJobFactory;
 import com.billow.core.config.QuartzJobFactoryDisallowConcurrentExecution;
 import com.billow.core.enumType.AutoTaskJobConcurrentEnum;
-import com.billow.model.expand.ScheduleJobDto;
+import com.billow.pojo.vo.ScheduleJobVo;
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -50,15 +50,15 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:17:27
      */
-    public List<ScheduleJobDto> getAllJob() throws SchedulerException {
+    public List<ScheduleJobVo> getAllJob() throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         GroupMatcher<JobKey> matcher = GroupMatcher.anyJobGroup();
         Set<JobKey> jobKeys = scheduler.getJobKeys(matcher);
-        List<ScheduleJobDto> jobList = new ArrayList<>();
+        List<ScheduleJobVo> jobList = new ArrayList<>();
         for (JobKey jobKey : jobKeys) {
             List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
             for (Trigger trigger : triggers) {
-                ScheduleJobDto job = new ScheduleJobDto();
+                ScheduleJobVo job = new ScheduleJobVo();
                 job.setJobName(jobKey.getName());
                 job.setJobGroup(jobKey.getGroup());
                 job.setDescription("触发器:" + trigger.getKey());
@@ -85,12 +85,12 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:17:48
      */
-    public List<ScheduleJobDto> getRunningJob() throws SchedulerException {
+    public List<ScheduleJobVo> getRunningJob() throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
-        List<ScheduleJobDto> jobList = new ArrayList<>(executingJobs.size());
+        List<ScheduleJobVo> jobList = new ArrayList<>(executingJobs.size());
         for (JobExecutionContext executingJob : executingJobs) {
-            ScheduleJobDto job = new ScheduleJobDto();
+            ScheduleJobVo job = new ScheduleJobVo();
             JobDetail jobDetail = executingJob.getJobDetail();
             JobKey jobKey = jobDetail.getKey();
             Trigger trigger = executingJob.getTrigger();
@@ -119,7 +119,7 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:17:56
      */
-    public void pauseJob(ScheduleJobDto scheduleJob) throws SchedulerException {
+    public void pauseJob(ScheduleJobVo scheduleJob) throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
         scheduler.pauseJob(jobKey);
@@ -135,7 +135,7 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:05
      */
-    public void resumeJob(ScheduleJobDto scheduleJob) throws SchedulerException {
+    public void resumeJob(ScheduleJobVo scheduleJob) throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
@@ -155,7 +155,7 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:12
      */
-    public void deleteJob(ScheduleJobDto scheduleJob) throws SchedulerException {
+    public void deleteJob(ScheduleJobVo scheduleJob) throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
         scheduler.deleteJob(jobKey);
@@ -171,7 +171,7 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:21
      */
-    public void runAJobNow(ScheduleJobDto scheduleJob) throws SchedulerException {
+    public void runAJobNow(ScheduleJobVo scheduleJob) throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
@@ -191,7 +191,7 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:28
      */
-    public void updateJobCron(ScheduleJobDto scheduleJob) throws SchedulerException {
+    public void updateJobCron(ScheduleJobVo scheduleJob) throws SchedulerException {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         TriggerKey triggerKey = TriggerKey.triggerKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
@@ -210,7 +210,7 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:37
      */
-    public void addJob(ScheduleJobDto job) throws Exception {
+    public void addJob(ScheduleJobVo job) throws Exception {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName(), job.getJobGroup());
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
@@ -251,8 +251,8 @@ public class QuartzManager {
      * @throws SchedulerException
      * @date 2017年5月7日 下午5:18:37
      */
-    public void addJobList(List<ScheduleJobDto> list) throws Exception {
-        for (ScheduleJobDto job : list) {
+    public void addJobList(List<ScheduleJobVo> list) throws Exception {
+        for (ScheduleJobVo job : list) {
             this.addJob(job);
         }
     }

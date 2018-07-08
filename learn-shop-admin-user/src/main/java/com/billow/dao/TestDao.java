@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author liuyongtao
  * @create 2018-02-11 9:43
  */
-public interface TestDao extends JpaRepository<TestPo, Integer> {
+public interface TestDao extends JpaRepository<TestPo, Long> {
 }

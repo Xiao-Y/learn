@@ -1,12 +1,14 @@
-package com.billow.model.domain;
+package com.billow.pojo.po;
 
 
-import com.billow.model.base.BaseModel;
+import com.billow.pojo.base.BasePo;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,18 +18,10 @@ import java.util.Date;
  * @author liuyongtao
  * @date 2017年5月8日 上午10:30:40
  */
-@MappedSuperclass
-public class ScheduleJobBase extends BaseModel implements Serializable {
+@Entity
+@Table(name = "sys_schedule_job")
+public class ScheduleJobPo extends BasePo implements Serializable {
 
-    private static final long serialVersionUID = 1526258179204692695L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer jobId;
-
-    private Date createTime;
-
-    private Date updateTime;
     /**
      * 任务名称
      */
@@ -176,58 +170,6 @@ public class ScheduleJobBase extends BaseModel implements Serializable {
     }
 
     /**
-     * 创建时间
-     * <p>
-     * <br>
-     * added by liuyongtao<br>
-     *
-     * @return
-     * @date 2017年5月7日 下午5:30:30
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * 创建时间
-     * <p>
-     * <br>
-     * added by liuyongtao<br>
-     *
-     * @param createTime
-     * @date 2017年5月7日 下午5:30:44
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /**
-     * 更新时间
-     * <p>
-     * <br>
-     * added by liuyongtao<br>
-     *
-     * @return
-     * @date 2017年5月7日 下午5:30:48
-     */
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    /**
-     * 更新时间
-     * <p>
-     * <br>
-     * added by liuyongtao<br>
-     *
-     * @param updateTime
-     * @date 2017年5月7日 下午5:30:57
-     */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    /**
      * 任务执行时调用哪个类的方法 包名+类名
      * <p>
      * <br>
@@ -311,35 +253,5 @@ public class ScheduleJobBase extends BaseModel implements Serializable {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
-    }
-
-    /**
-     * 任务id
-     *
-     * @param jobId
-     * @author XiaoY
-     * @date: 2017年5月6日 下午11:06:23
-     */
-    public void setJobId(Integer jobId) {
-        this.jobId = jobId;
-    }
-
-    /**
-     * 任务id
-     *
-     * @return
-     * @author XiaoY
-     * @date: 2017年5月6日 下午11:06:47
-     */
-    public Integer getJobId() {
-        return jobId;
-    }
-
-    /**
-     * 主键toString 非主键不允许添加
-     */
-    @Override
-    public String toString() {
-        return "PK[jobId = " + jobId + "]";
     }
 }

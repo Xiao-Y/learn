@@ -1,9 +1,15 @@
 package com.billow.service.impl;
 
 import com.billow.dao.ScheduleJobDao;
-import com.billow.model.expand.ScheduleJobDto;
+import com.billow.dao.specification.ScheduleJobSpec;
+import com.billow.pojo.po.ScheduleJobPo;
+import com.billow.pojo.vo.ScheduleJobVo;
 import com.billow.service.ScheduleJobService;
+import com.billow.tools.utlis.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,41 +29,51 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     private ScheduleJobDao scheduleJobDao;
 
     @Override
-    public List<ScheduleJobDto> findByJobStatus(ScheduleJobDto scheduleJobDto) {
-        return scheduleJobDao.findByJobStatus(scheduleJobDto.getJobStatus());
+    public List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo) {
+        List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findByJobStatusEquals(scheduleJobVo.getJobStatus());
+        return PageUtil.convert(scheduleJobPos, ScheduleJobVo.class);
     }
 
     @Override
     @Transactional
-    public void updateJobStatus(ScheduleJobDto dto) {
-        ScheduleJobDto jobDto = scheduleJobDao.findOne(dto.getJobId());
+    public void updateJobStatus(ScheduleJobVo vo) {
+        ScheduleJobPo jobDto = scheduleJobDao.findOne(vo.getId());
         if (jobDto != null) {
-            jobDto.setJobStatus(dto.getJobStatus());
+            jobDto.setJobStatus(vo.getJobStatus());
             jobDto.setUpdateTime(new Date());
             scheduleJobDao.save(jobDto);
         }
     }
 
     @Override
-    public ScheduleJobDto selectByPrimaryKey(ScheduleJobDto dto) {
-        return scheduleJobDao.findOne(dto.getJobId());
+    public ScheduleJobVo selectByPrimaryKey(ScheduleJobVo dto) {
+        ScheduleJobPo scheduleJobPo = scheduleJobDao.findOne(dto.getId());
+        return PageUtil.convert(scheduleJobPo, ScheduleJobVo.class);
     }
 
     @Override
     @Transactional
-    public void updateByPrimaryKeySelective(ScheduleJobDto dto) {
+    public void updateByPrimaryKeySelective(ScheduleJobVo dto) {
         scheduleJobDao.save(dto);
     }
 
     @Override
     @Transactional
-    public void deleteByPrimaryKey(ScheduleJobDto dto) {
-        scheduleJobDao.delete(dto.getJobId());
+    public void deleteByPrimaryKey(ScheduleJobVo dto) {
+        scheduleJobDao.delete(dto.getId());
     }
 
     @Override
     @Transactional
-    public void insert(ScheduleJobDto dto) {
+    public void insert(ScheduleJobVo dto) {
         scheduleJobDao.save(dto);
+    }
+
+    @Override
+    public Page<ScheduleJobPo> selectAll(ScheduleJobVo scheduleJobVo) {
+        Pageable pageable = new PageRequest(scheduleJobVo.getPageNo(), scheduleJobVo.getPageSize());
+        ScheduleJobSpec scheduleJobSpec = new ScheduleJobSpec(scheduleJobVo);
+        Page<ScheduleJobPo> page = scheduleJobDao.findAll(scheduleJobSpec, pageable);
+        return page;
     }
 }

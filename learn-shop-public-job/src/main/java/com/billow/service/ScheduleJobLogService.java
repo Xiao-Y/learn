@@ -1,7 +1,7 @@
 package com.billow.service;
 
 
-import com.billow.model.expand.ScheduleJobLogDto;
+import com.billow.pojo.vo.ScheduleJobLogVo;
 
 /**
  * 自动任务信息日志接口<br>
@@ -13,5 +13,5 @@ import com.billow.model.expand.ScheduleJobLogDto;
  */
 public interface ScheduleJobLogService {
 
-    void insert(ScheduleJobLogDto logDto);
+    void insert(ScheduleJobLogVo logDto);
 }

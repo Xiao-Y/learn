@@ -4,10 +4,10 @@ package com.billow.service.impl;
 import com.billow.common.constant.MessageTipsCst;
 import com.billow.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.core.manager.QuartzManager;
+import com.billow.pojo.vo.ScheduleJobVo;
 import com.billow.tools.generator.UUID;
-import com.billow.model.custom.JsonResult;
-import com.billow.model.expand.ScheduleJobDto;
-import com.billow.model.expand.ScheduleJobLogDto;
+import com.billow.pojo.ex.JsonResult;
+import com.billow.pojo.vo.ScheduleJobLogVo;
 import com.billow.service.ScheduleJobLogService;
 import com.billow.service.ScheduleJobService;
 import com.billow.service.TaskManagerService;
@@ -38,67 +38,67 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 
     @Override
     @Transactional
-    public void updateJobStatus(ScheduleJobDto dto) throws Exception {
-        ScheduleJobDto scheduleJobDto = scheduleJobService.selectByPrimaryKey(dto);
+    public void updateJobStatus(ScheduleJobVo dto) throws Exception {
+        ScheduleJobVo scheduleJobVo = scheduleJobService.selectByPrimaryKey(dto);
         if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(dto.getJobStatus())) {
-            quartzManager.addJob(scheduleJobDto);
+            quartzManager.addJob(scheduleJobVo);
         } else if (AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus().equals(dto.getJobStatus())) {
-            quartzManager.pauseJob(scheduleJobDto);
+            quartzManager.pauseJob(scheduleJobVo);
         }
         scheduleJobService.updateByPrimaryKeySelective(dto);
     }
 
     @Override
     @Transactional
-    public void deleteAutoTask(int jobId) throws Exception {
-        ScheduleJobDto dto = new ScheduleJobDto();
-        dto.setJobId(jobId);
-        ScheduleJobDto scheduleJobDto = scheduleJobService.selectByPrimaryKey(dto);
-        quartzManager.deleteJob(scheduleJobDto);
+    public void deleteAutoTask(Long jobId) throws Exception {
+        ScheduleJobVo dto = new ScheduleJobVo();
+        dto.setId(jobId);
+        ScheduleJobVo scheduleJobVo = scheduleJobService.selectByPrimaryKey(dto);
+        quartzManager.deleteJob(scheduleJobVo);
         scheduleJobService.deleteByPrimaryKey(dto);
     }
 
     @Override
     @Transactional
-    public void saveAutoTask(ScheduleJobDto scheduleJobDto) throws Exception {
-        Integer jobId = scheduleJobDto.getJobId();
-        String jobStatus = scheduleJobDto.getJobStatus();
+    public void saveAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
+        Long jobId = scheduleJobVo.getId();
+        String jobStatus = scheduleJobVo.getJobStatus();
         if (null == jobId) {// 表示添加
-            scheduleJobDto.setUpdateTime(new Date());
-            scheduleJobDto.setCreateTime(new Date());
-            scheduleJobService.insert(scheduleJobDto);
+            scheduleJobVo.setUpdateTime(new Date());
+            scheduleJobVo.setCreateTime(new Date());
+            scheduleJobService.insert(scheduleJobVo);
             if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
-                quartzManager.addJob(scheduleJobDto);
+                quartzManager.addJob(scheduleJobVo);
             }
         } else {// 表示更新
-            scheduleJobDto.setUpdateTime(new Date());
-            scheduleJobService.updateByPrimaryKeySelective(scheduleJobDto);
-            JobDetail jobDetail = quartzManager.getJobDetail(scheduleJobDto.getJobName(), scheduleJobDto.getJobGroup());
+            scheduleJobVo.setUpdateTime(new Date());
+            scheduleJobService.updateByPrimaryKeySelective(scheduleJobVo);
+            JobDetail jobDetail = quartzManager.getJobDetail(scheduleJobVo.getJobName(), scheduleJobVo.getJobGroup());
             if (jobDetail != null) {
                 if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
-                    quartzManager.addJob(scheduleJobDto);
+                    quartzManager.addJob(scheduleJobVo);
                 } else if (AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus().equals(jobStatus)) {
-                    quartzManager.pauseJob(scheduleJobDto);
+                    quartzManager.pauseJob(scheduleJobVo);
                 }
             } else {
                 if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
-                    quartzManager.addJob(scheduleJobDto);
+                    quartzManager.addJob(scheduleJobVo);
                 }
             }
         }
     }
 
     @Override
-    public JsonResult checkAutoTask(ScheduleJobDto scheduleJobDto) throws Exception {
+    public JsonResult checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
         JsonResult json = new JsonResult();
         json.setType(MessageTipsCst.TYPE_SUCCES);
         json.setMessage("");
 
-        String jobStatus = scheduleJobDto.getJobStatus();
-        String cronExpression = scheduleJobDto.getCronExpression();
-        String springId = scheduleJobDto.getSpringId();
-        String beanClass = scheduleJobDto.getBeanClass();
-        String methodName = scheduleJobDto.getMethodName();
+        String jobStatus = scheduleJobVo.getJobStatus();
+        String cronExpression = scheduleJobVo.getCronExpression();
+        String springId = scheduleJobVo.getSpringId();
+        String beanClass = scheduleJobVo.getBeanClass();
+        String methodName = scheduleJobVo.getMethodName();
 
         if (ToolsUtils.isNotEmpty(cronExpression)) {
             try {
@@ -148,23 +148,23 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
-    public void immediateExecutionTask(ScheduleJobDto scheduleJobDto) throws Exception {
-        quartzManager.runAJobNow(scheduleJobDto);
+    public void immediateExecutionTask(ScheduleJobVo scheduleJobVo) throws Exception {
+        quartzManager.runAJobNow(scheduleJobVo);
     }
 
     @Override
     public void insertAutoTaskException(JobExecutionContext jobExecutionContext, Exception exception) throws Exception {
-        ScheduleJobDto scheduleJob = (ScheduleJobDto) jobExecutionContext.getMergedJobDataMap().get("scheduleJob");
-        ScheduleJobDto jobdto = new ScheduleJobDto();
-        jobdto.setJobId(scheduleJob.getJobId());
+        ScheduleJobVo scheduleJob = (ScheduleJobVo) jobExecutionContext.getMergedJobDataMap().get("scheduleJob");
+        ScheduleJobVo jobdto = new ScheduleJobVo();
+        jobdto.setId(scheduleJob.getId());
         jobdto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
         scheduleJobService.updateJobStatus(jobdto);
         if (exception != null) {
             StringWriter sw = new StringWriter();
             exception.printStackTrace(new PrintWriter(sw, true));
-            ScheduleJobLogDto logDto = new ScheduleJobLogDto();
-            logDto.setId(UUID.generate());
-            logDto.setJobId(scheduleJob.getJobId());
+            ScheduleJobLogVo logDto = new ScheduleJobLogVo();
+//            logDto.setId(UUID.generate());
+            logDto.setId(scheduleJob.getId());
             logDto.setJobGroup(scheduleJob.getJobGroup());
             logDto.setJobName(scheduleJob.getJobName());
             logDto.setCreateTime(new Date());
