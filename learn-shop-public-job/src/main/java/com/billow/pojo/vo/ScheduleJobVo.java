@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 public class ScheduleJobVo extends ScheduleJobPo implements Serializable {
 
+    private static final long serialVersionUID = -549836299658030636L;
+
     //运行状态
     private String statusName;
     //任务是否有状态,0-无（单线程），1-有（多线程）

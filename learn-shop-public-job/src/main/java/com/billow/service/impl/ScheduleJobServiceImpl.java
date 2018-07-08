@@ -5,7 +5,7 @@ import com.billow.dao.specification.ScheduleJobSpec;
 import com.billow.pojo.po.ScheduleJobPo;
 import com.billow.pojo.vo.ScheduleJobVo;
 import com.billow.service.ScheduleJobService;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +31,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     public List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo) {
         List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findByJobStatusEquals(scheduleJobVo.getJobStatus());
-        return PageUtil.convert(scheduleJobPos, ScheduleJobVo.class);
+        return ConvertUtils.convert(scheduleJobPos, ScheduleJobVo.class);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     public ScheduleJobVo selectByPrimaryKey(ScheduleJobVo dto) {
         ScheduleJobPo scheduleJobPo = scheduleJobDao.findOne(dto.getId());
-        return PageUtil.convert(scheduleJobPo, ScheduleJobVo.class);
+        return ConvertUtils.convert(scheduleJobPo, ScheduleJobVo.class);
     }
 
     @Override

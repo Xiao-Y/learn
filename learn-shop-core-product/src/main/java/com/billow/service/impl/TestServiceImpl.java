@@ -5,7 +5,7 @@ import com.billow.pojo.po.TestPo;
 import com.billow.service.TestService;
 import com.billow.service.UserService;
 import com.billow.tools.utlis.FieldUtils;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.pojo.vo.TestVo;
 import com.billow.pojo.vo.user.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +38,16 @@ public class TestServiceImpl implements TestService {
         testVo.setAge(22);
         testVo.setName("billow");
         FieldUtils.setCommonFieldByInsertWithValidInd(testVo, "admin");
-        TestPo testPo = PageUtil.convert(testVo, TestPo.class);
+        TestPo testPo = ConvertUtils.convert(testVo, TestPo.class);
         testDao.save(testPo);
-        return PageUtil.convert(testPo, TestVo.class);
+        return ConvertUtils.convert(testPo, TestVo.class);
     }
 
     @Override
     public TestVo findTestById(Long id) throws Exception {
         TestPo testPo = testDao.findOne(id);
         testPo.setName("6666");
-        TestVo convert = PageUtil.convert(testPo, TestVo.class);
+        TestVo convert = ConvertUtils.convert(testPo, TestVo.class);
         return convert;
     }
 
@@ -63,7 +63,7 @@ public class TestServiceImpl implements TestService {
 //        testPo.setName("99229").setId(id);
         FieldUtils.setCommonFieldByUpdate(testPo, "adminUpdate");
         testDao.save(testPo);
-        return PageUtil.convert(testPo,TestVo.class);
+        return ConvertUtils.convert(testPo,TestVo.class);
     }
 
     @Override

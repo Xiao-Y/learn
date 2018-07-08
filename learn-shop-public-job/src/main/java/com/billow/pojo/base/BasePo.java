@@ -16,6 +16,8 @@ import java.util.Date;
 @MappedSuperclass
 public class BasePo extends BasePage implements Serializable {
 
+    private static final long serialVersionUID = 23124228303046053L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

@@ -4,7 +4,7 @@ import com.billow.dao.UserDao;
 import com.billow.pojo.po.user.UserPo;
 import com.billow.service.UserService;
 import com.billow.tools.utlis.FieldUtils;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.pojo.vo.user.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class UserServiceIpml implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void saveUser(UserVo userVo) throws Exception {
-        UserPo userPo = PageUtil.convert(userVo, UserPo.class);
+        UserPo userPo = ConvertUtils.convert(userVo, UserPo.class);
         FieldUtils.setCommonFieldByInsertWithValidInd(userPo, "admin");
         userDao.save(userPo);
     }

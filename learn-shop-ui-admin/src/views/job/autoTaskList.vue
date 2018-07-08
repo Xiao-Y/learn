@@ -104,10 +104,10 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage1"
+        :current-page.sync="scheduleJobFilter.currentPage"
         layout="total, prev, pager, next"
-        :page-size="100"
-        :total="1000">
+        :page-size="scheduleJobFilter.pageSize"
+        :total="scheduleJobFilter.recordCount">
       </el-pagination>
     </template>
   </div>
@@ -121,6 +121,13 @@
     data() {
       return {
         scheduleJobFilter: {
+          // 分页数据
+          currentPage: null,// 当前页号
+          pageNo: null,// 当前页码
+          recordCount: null, // 总记录数
+          pageSize: null,//每页要显示的记录数
+          totalPages: null,// 总页数
+          // 查询条件
           jobGroup: null,
           jobName: null,
           jobStatus: null,
@@ -128,7 +135,6 @@
           springId: null,
           methodName: null
         },
-        currentPage1: 2,
         tableData: []
       }
     },
@@ -140,7 +146,7 @@
       onQuery() {
         this.requestDataList();
       },
-      resetForm(scheduleJobFilter){
+      resetForm(scheduleJobFilter) {
         this.$refs[scheduleJobFilter].resetFields();
       },
       requestDataList() {
@@ -149,7 +155,13 @@
           var data = res.resData;
           // 填充数据
           this.tableData = data.content;
-        })
+
+          this.scheduleJobFilter.pageNo = data.number;
+          this.scheduleJobFilter.currentPage = data.number + 1;
+          this.scheduleJobFilter.recordCount = data.totalElements;
+          this.scheduleJobFilter.pageSize = data.size;
+          this.scheduleJobFilter.totalPages = data.totalPages;
+        });
 
       },
       handleCurrentChange() {

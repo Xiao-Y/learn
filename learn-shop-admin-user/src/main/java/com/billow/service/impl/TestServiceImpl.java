@@ -7,7 +7,7 @@ import com.billow.common.enums.ResCodeEnum;
 
 import com.billow.pojo.po.TestPo;
 import com.billow.service.TestService;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.pojo.vo.TestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,7 @@ public class TestServiceImpl implements TestService {
             testVo.setAge(18);
             testVo.setUpdateTime(new Date());
             testVo.setCreateTime(new Date());
-            TestPo testPo = PageUtil.convert(testVo, TestPo.class);
+            TestPo testPo = ConvertUtils.convert(testVo, TestPo.class);
             testDao.save(testPo);
             res.setResData(testVo);
         } catch (Exception e) {

@@ -1,13 +1,17 @@
 package com.billow;
 
 import com.billow.pojo.po.TestPo;
+import com.billow.pojo.vo.CityVo;
 import com.billow.pojo.vo.TestVo;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 
 import java.lang.reflect.Field;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Test {
 
@@ -21,12 +25,36 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 //        this.getConnectionTest();
-        TestPo test = new TestPo();
-        test.setName("123123");
-        test.setCreateTime(new Date());
-        reflectTest(test);
+
+//        TestPo test = new TestPo();
+//        test.setName("123123");
+//        test.setCreateTime(new Date());
+//        reflectTest(test);
+
+        convert();
     }
 
+    public static void convert() {
+        TestVo test = new TestVo();
+        test.setCreateTime(new Date());
+        test.setId(1L);
+        test.setName("123123");
+
+        CityVo cityVo = new CityVo();
+        cityVo.setName("RRRR");
+        test.setCityVo(cityVo);
+
+        List<CityVo> cityVos = new ArrayList<>();
+        CityVo cityVo2 = new CityVo();
+        cityVo2.setName("RRRR2222");
+        cityVos.add(cityVo);
+
+        test.setCityVos(cityVos);
+
+//        TestVo convert = Convert.convert(TestVo.class, test);
+        TestVo convert = ConvertUtils.convert(test,TestVo.class);
+        System.out.println(convert);
+    }
 
     public static void reflectTest(TestPo test) throws Exception {
         Class<? extends TestPo> clazz = test.getClass();

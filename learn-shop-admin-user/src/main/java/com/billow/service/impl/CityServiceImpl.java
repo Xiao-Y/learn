@@ -4,7 +4,7 @@ package com.billow.service.impl;
 import com.billow.dao.CityDao;
 import com.billow.pojo.po.CityPo;
 import com.billow.service.CityService;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.pojo.vo.CityVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class CityServiceImpl implements CityService {
     @Override
     public List<CityVo> findAll(CityVo cityVo) {
         List<CityPo> cityPos = cityDao.findAll();
-        List<CityVo> cityVos = PageUtil.convert(cityPos, CityVo.class);
+        List<CityVo> cityVos = ConvertUtils.convert(cityPos, CityVo.class);
         return cityVos;
     }
 }

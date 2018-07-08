@@ -18,7 +18,7 @@ import java.util.Set;
  * @date 2017年4月18日 下午3:52:31
  */
 @Component
-public class PageUtil {
+public class ConvertUtils {
 
     /**
      * po转vo深度复制（基本类型）

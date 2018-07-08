@@ -22,6 +22,7 @@ import java.util.Date;
 @Table(name = "sys_schedule_job")
 public class ScheduleJobPo extends BasePo implements Serializable {
 
+    private static final long serialVersionUID = 6347036356689325574L;
     /**
      * 任务名称
      */

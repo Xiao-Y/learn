@@ -1,8 +1,9 @@
 package com.billow.dao.specification;
 
+import com.billow.common.utils.QueryUtils;
 import com.billow.pojo.po.ScheduleJobPo;
 import com.billow.pojo.vo.ScheduleJobVo;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,47 +11,53 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 查询条件
+ */
 public class ScheduleJobSpec implements Specification<ScheduleJobPo> {
 
     private ScheduleJobPo scheduleJobPo;
 
     public ScheduleJobSpec(ScheduleJobVo scheduleJobVo) {
-        this.scheduleJobPo = PageUtil.convert(scheduleJobVo, ScheduleJobPo.class);
+        this.scheduleJobPo = ConvertUtils.convert(scheduleJobVo, ScheduleJobPo.class);
     }
 
     @Override
     public Predicate toPredicate(Root<ScheduleJobPo> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+        List<Predicate> all = new ArrayList<>();
 
-        List<Predicate> list = new ArrayList<>();
-        if (ToolsUtils.isNotEmpty(scheduleJobPo.getJobName())) {
-            list.add(criteriaBuilder.like(root.get("jobName").as(String.class), "%" + scheduleJobPo.getJobName() + "%"));
+        String jobName = scheduleJobPo.getJobName();
+        if (ToolsUtils.isNotEmpty(jobName)) {
+            scheduleJobPo.setJobName(null);
+            Predicate predicate = criteriaBuilder.like(root.get("jobName").as(String.class), QueryUtils.aLike(jobName));
+            all.add(predicate);
         }
 
-        Predicate[] p = new Predicate[list.size()];
-        return criteriaBuilder.and(list.toArray(p));
-
-    }
-
-    public List<Predicate> genPredicates(Root<ScheduleJobPo> root, CriteriaBuilder criteriaBuilder, ScheduleJobPo scheduleJobPo) throws Exception {
-        List<Predicate> list = new ArrayList<>();
-
-        Class<? extends ScheduleJobPo> clazz = scheduleJobPo.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-        if (ToolsUtils.isNotEmpty(fields)) {
-            for (Field field : fields) {
-                field.setAccessible(true);
-                Class<?> type = field.getType();
-                String fieldName = field.getName();
-                Object fieldValue = field.get(scheduleJobPo);
-                if (ToolsUtils.isNotEmpty(fieldValue)) {
-                    list.add(criteriaBuilder.equal(root.get(fieldName).as(type), fieldValue));
-                }
-            }
+        String jobGroup = scheduleJobPo.getJobGroup();
+        if (ToolsUtils.isNotEmpty(jobGroup)) {
+            scheduleJobPo.setJobGroup(null);
+            Predicate predicate = criteriaBuilder.like(root.get("jobGroup").as(String.class), QueryUtils.aLike(jobGroup));
+            all.add(predicate);
         }
-        return null;
+
+        String methodName = scheduleJobPo.getMethodName();
+        if (ToolsUtils.isNotEmpty(methodName)) {
+            scheduleJobPo.setMethodName(null);
+            Predicate predicate = criteriaBuilder.like(root.get("methodName").as(String.class), QueryUtils.aLike(methodName));
+            all.add(predicate);
+        }
+
+        List<Predicate> predicateList = QueryUtils.getPredicates(root, criteriaBuilder, scheduleJobPo);
+        if (ToolsUtils.isNotEmpty(predicateList)) {
+            all.addAll(predicateList);
+        }
+
+        Predicate[] predicates = new Predicate[all.size()];
+        all.toArray(predicates);
+        return criteriaBuilder.and(predicates);
+
     }
 }

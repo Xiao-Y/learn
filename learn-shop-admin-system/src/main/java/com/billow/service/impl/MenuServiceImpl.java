@@ -9,7 +9,7 @@ import com.billow.pojo.vo.sys.PermissionVo;
 import com.billow.pojo.vo.sys.RoleVo;
 import com.billow.service.MenuService;
 import com.billow.tools.utlis.FieldUtils;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -97,7 +95,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public PermissionVo findMenuById(Long id) {
         PermissionPo permissionPo = permissionDao.findOne(id);
-        return PageUtil.convert(permissionPo, PermissionVo.class);
+        return ConvertUtils.convert(permissionPo, PermissionVo.class);
     }
 
     @Override
@@ -107,15 +105,15 @@ public class MenuServiceImpl implements MenuService {
         PermissionPo one;
         if (null != id) {
             one = permissionDao.findOne(id);
-            PageUtil.copyNonNullProperties(permissionVo, one);
+            ConvertUtils.copyNonNullProperties(permissionVo, one);
             one.setUpdateTime(new Date());
         } else {
-            one = PageUtil.convert(permissionVo, PermissionPo.class);
+            one = ConvertUtils.convert(permissionVo, PermissionPo.class);
             FieldUtils.setCommonFieldByInsertWithValidInd(one, permissionVo.getUpdaterCode());
         }
         permissionDao.save(one);
 
-        return PageUtil.convert(one, PermissionVo.class);
+        return ConvertUtils.convert(one, PermissionVo.class);
     }
 
     @Override

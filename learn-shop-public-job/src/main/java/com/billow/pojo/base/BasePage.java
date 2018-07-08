@@ -10,10 +10,16 @@ import java.io.Serializable;
  */
 public abstract class BasePage implements Serializable {
 
+    private static final long serialVersionUID = 1716751981762447850L;
+
+    private static final Integer PAGE_SIZE = 10; // 每页要显示的记录数
+    private static final Integer PAGE_NO = 0; // 当前页号
+    private static final Integer RECORD_COUNT = 0; // 总记录数
+
     private String requestUrl; // 请求url
-    private int pageSize = 10; // 每页要显示的记录数
-    private int pageNo = 0; // 当前页号
-    private int recordCount; // 总记录数
+    private Integer pageSize = PAGE_SIZE; // 每页要显示的记录数
+    private Integer pageNo = PAGE_NO; // 当前页号
+    private Integer recordCount = RECORD_COUNT; // 总记录数
     private String objectOrderBy;
 
     public String getObjectOrderBy() {
@@ -53,7 +59,7 @@ public abstract class BasePage implements Serializable {
      * @author XiaoY
      * @date: 2016年12月3日 下午3:57:08
      */
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
@@ -64,8 +70,8 @@ public abstract class BasePage implements Serializable {
      * @author XiaoY
      * @date: 2016年12月3日 下午3:57:11
      */
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize == null ? PAGE_SIZE : pageSize;
     }
 
     /**
@@ -75,7 +81,7 @@ public abstract class BasePage implements Serializable {
      * @author XiaoY
      * @date: 2016年12月3日 下午3:56:44
      */
-    public int getPageNo() {
+    public Integer getPageNo() {
         return pageNo;
     }
 
@@ -86,8 +92,8 @@ public abstract class BasePage implements Serializable {
      * @author XiaoY
      * @date: 2016年12月3日 下午3:56:48
      */
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo == null ? PAGE_NO : pageNo;
     }
 
     /**
@@ -97,7 +103,7 @@ public abstract class BasePage implements Serializable {
      * @author XiaoY
      * @date: 2016年12月3日 下午3:56:56
      */
-    public int getRecordCount() {
+    public Integer getRecordCount() {
         return recordCount;
     }
 
@@ -108,8 +114,8 @@ public abstract class BasePage implements Serializable {
      * @author XiaoY
      * @date: 2016年12月3日 下午3:56:59
      */
-    public void setRecordCount(int recordCount) {
-        this.recordCount = recordCount;
+    public void setRecordCount(Integer recordCount) {
+        this.recordCount = recordCount == null ? RECORD_COUNT : recordCount;
     }
 
     @Override

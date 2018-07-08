@@ -13,7 +13,7 @@ import com.billow.remote.TestUserRemote;
 import com.billow.service.CoreOrderService;
 import com.billow.common.sysEvent.model.expand.SysEventPublishDto;
 import com.billow.common.sysEvent.service.SysEventPublishService;
-import com.billow.tools.utlis.PageUtil;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.pojo.vo.OrderVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
         orderVo.setCreateTime(new Date());
         orderVo.setUpdaterCode("billow");
         orderVo.setUpdateTime(new Date());
-        OrderPo orderPo = PageUtil.convert(orderVo, OrderPo.class);
+        OrderPo orderPo = ConvertUtils.convert(orderVo, OrderPo.class);
         orderDao.save(orderPo);
     }
 
