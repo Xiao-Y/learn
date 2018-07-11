@@ -6,8 +6,11 @@
       </el-breadcrumb>
     </div>
     <template>
-      <el-collapse>
+      <el-collapse v-model="activeNames">
         <el-collapse-item title="查询条件" name="1">
+          <template slot="title">
+            <b>查询条件</b><i class="el-icon-search"></i>
+          </template>
           <el-form :model="scheduleJobFilter" ref="scheduleJobFilter" :inline="true" label-width="130px" size="mini">
             <el-form-item label="任务分组" prop="jobGroup">
               <el-input v-model="scheduleJobFilter.jobGroup" placeholder="请输入内容"></el-input>
@@ -28,8 +31,8 @@
               <el-input v-model="scheduleJobFilter.methodName" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onQuery">查询</el-button>
-              <el-button type="warning" @click="resetForm('scheduleJobFilter')">清除</el-button>
+              <el-button type="primary" @click="onQuery" icon="el-icon-search">查询</el-button>
+              <el-button type="danger" @click="resetForm('scheduleJobFilter')" icon="el-icon-close">重置</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -82,18 +85,28 @@
         <el-table-column label="ID" prop="id" width="40"></el-table-column>
         <el-table-column label="任务分组" prop="jobGroup"></el-table-column>
         <el-table-column label="任务名称" prop="jobName"></el-table-column>
-        <el-table-column label="任务状态" prop="jobStatus" width="80"></el-table-column>
+        <el-table-column label="状态" prop="jobStatus" width="80">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.jobStatus === '1' ? 'success' : 'danger'"
+              disable-transitions>{{scope.row.jobStatus | jobStatusName}}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="描述" prop="description"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="130">
           <template slot-scope="scope">
             <el-button
+              icon="el-icon-edit"
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑
+              type="warning"
+              @click="handleEdit(scope.$index, scope.row)">
             </el-button>
             <el-button
+              icon="el-icon-delete"
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除
+              @click="handleDelete(scope.$index, scope.row)">
             </el-button>
           </template>
         </el-table-column>
@@ -104,8 +117,9 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="scheduleJobFilter.currentPage"
-        layout="total, prev, pager, next"
+        :current-page.sync="scheduleJobFilter.pageNo"
+        :page-sizes="[10, 20, 30, 40]"
+        layout="total,sizes, prev, pager, next"
         :page-size="scheduleJobFilter.pageSize"
         :total="scheduleJobFilter.recordCount">
       </el-pagination>
@@ -115,14 +129,13 @@
 
 
 <script>
-  import {requestDataList} from "@/api/job/jobMag";
+  import {LoadDataJobList} from "../../api/job/jobMag";
 
   export default {
     data() {
       return {
         scheduleJobFilter: {
           // 分页数据
-          currentPage: null,// 当前页号
           pageNo: null,// 当前页码
           recordCount: null, // 总记录数
           pageSize: null,//每页要显示的记录数
@@ -135,46 +148,62 @@
           springId: null,
           methodName: null
         },
-        tableData: []
+        tableData: [],
+        activeNames: ['1']
       }
     },
     created() {
       // 请数据殂
-      this.requestDataList();
+//      this.loadDataJobList();
     },
     methods: {
+      // 查询按钮
       onQuery() {
-        this.requestDataList();
+        // 从第1页开始
+        this.scheduleJobFilter.pageNo = 1;
+        // 请求数据
+        this.loadDataJobList();
+        // 关闭查询折叠栏
+        this.activeNames = [];
       },
+      // 清除查询条件
       resetForm(scheduleJobFilter) {
         this.$refs[scheduleJobFilter].resetFields();
       },
-      requestDataList() {
-        // 获取自动任务列表数据
-        requestDataList(this.scheduleJobFilter).then(res => {
+      // 请服务器数据（获取自动任务列表数据）
+      loadDataJobList() {
+        LoadDataJobList(this.scheduleJobFilter).then(res => {
           var data = res.resData;
           // 填充数据
           this.tableData = data.content;
-
-          this.scheduleJobFilter.pageNo = data.number;
-          this.scheduleJobFilter.currentPage = data.number + 1;
           this.scheduleJobFilter.recordCount = data.totalElements;
-          this.scheduleJobFilter.pageSize = data.size;
           this.scheduleJobFilter.totalPages = data.totalPages;
         });
 
       },
-      handleCurrentChange() {
-
+      // 翻页
+      handleCurrentChange(val) {
+        this.scheduleJobFilter.pageNo = val;
+        this.loadDataJobList();
       },
-      handleSizeChange() {
-
+      // 改变页面大小
+      handleSizeChange(val) {
+        this.scheduleJobFilter.pageSize = val;
+        this.loadDataJobList();
       },
       handleEdit(index, row) {
         console.log(index, row);
       },
       handleDelete(index, row) {
         console.log(index, row);
+      }
+
+    },
+    filters: {
+      jobStatusName(jobStatus) {
+//        row.tag = row.jobStatus;
+//        console.info("row.tag", row.tag);
+        return jobStatus === '1' ? '启用' : '停止';
       }
     }
   }

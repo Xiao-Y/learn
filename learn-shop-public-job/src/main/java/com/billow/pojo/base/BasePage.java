@@ -75,14 +75,14 @@ public abstract class BasePage implements Serializable {
     }
 
     /**
-     * 当前页号
+     * 当前页号(从0开始的，所以要-1)
      *
      * @return
      * @author XiaoY
      * @date: 2016年12月3日 下午3:56:44
      */
     public Integer getPageNo() {
-        return pageNo;
+        return pageNo - 1;
     }
 
     /**
