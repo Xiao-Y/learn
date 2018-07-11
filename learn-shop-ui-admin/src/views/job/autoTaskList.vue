@@ -7,32 +7,32 @@
     </div>
     <template>
       <el-collapse v-model="activeNames">
-        <el-collapse-item title="查询条件" name="1">
+        <el-collapse-item name="1">
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form :model="scheduleJobFilter" ref="scheduleJobFilter" :inline="true" label-width="130px" size="mini">
+          <el-form :model="queryFilter" ref="queryFilter" :inline="true" label-width="130px" size="mini">
             <el-form-item label="任务分组" prop="jobGroup">
-              <el-input v-model="scheduleJobFilter.jobGroup" placeholder="请输入内容"></el-input>
+              <el-input v-model="queryFilter.jobGroup" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="任务名称" prop="jobName">
-              <el-input v-model="scheduleJobFilter.jobName" placeholder="请输入内容"></el-input>
+              <el-input v-model="queryFilter.jobName" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="任务状态" prop="jobStatus">
-              <el-input v-model="scheduleJobFilter.jobStatus" placeholder="请输入内容"></el-input>
+              <el-input v-model="queryFilter.jobStatus" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="BeanClass" prop="beanClass">
-              <el-input v-model="scheduleJobFilter.beanClass" placeholder="请输入内容"></el-input>
+              <el-input v-model="queryFilter.beanClass" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="SpringId" prop="springId">
-              <el-input v-model="scheduleJobFilter.springId" placeholder="请输入内容"></el-input>
+              <el-input v-model="queryFilter.springId" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="执行方法" prop="methodName">
-              <el-input v-model="scheduleJobFilter.methodName" placeholder="请输入内容"></el-input>
+              <el-input v-model="queryFilter.methodName" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onQuery" icon="el-icon-search">查询</el-button>
-              <el-button type="danger" @click="resetForm('scheduleJobFilter')" icon="el-icon-close">重置</el-button>
+              <el-button type="danger" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -117,11 +117,11 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="scheduleJobFilter.pageNo"
+        :current-page.sync="queryFilter.pageNo"
         :page-sizes="[10, 20, 30, 40]"
         layout="total,sizes, prev, pager, next"
-        :page-size="scheduleJobFilter.pageSize"
-        :total="scheduleJobFilter.recordCount">
+        :page-size="queryFilter.pageSize"
+        :total="queryFilter.recordCount">
       </el-pagination>
     </template>
   </div>
@@ -134,7 +134,7 @@
   export default {
     data() {
       return {
-        scheduleJobFilter: {
+        queryFilter: {
           // 分页数据
           pageNo: null,// 当前页码
           recordCount: null, // 总记录数
@@ -160,35 +160,35 @@
       // 查询按钮
       onQuery() {
         // 从第1页开始
-        this.scheduleJobFilter.pageNo = 1;
+        this.queryFilter.pageNo = 1;
         // 请求数据
         this.loadDataJobList();
         // 关闭查询折叠栏
-        this.activeNames = [];
+//        this.activeNames = [];
       },
       // 清除查询条件
-      resetForm(scheduleJobFilter) {
-        this.$refs[scheduleJobFilter].resetFields();
+      resetForm(queryFilter) {
+        this.$refs[queryFilter].resetFields();
       },
       // 请服务器数据（获取自动任务列表数据）
       loadDataJobList() {
-        LoadDataJobList(this.scheduleJobFilter).then(res => {
+        LoadDataJobList(this.queryFilter).then(res => {
           var data = res.resData;
           // 填充数据
           this.tableData = data.content;
-          this.scheduleJobFilter.recordCount = data.totalElements;
-          this.scheduleJobFilter.totalPages = data.totalPages;
+          this.queryFilter.recordCount = data.totalElements;
+          this.queryFilter.totalPages = data.totalPages;
         });
 
       },
       // 翻页
       handleCurrentChange(val) {
-        this.scheduleJobFilter.pageNo = val;
+        this.queryFilter.pageNo = val;
         this.loadDataJobList();
       },
       // 改变页面大小
       handleSizeChange(val) {
-        this.scheduleJobFilter.pageSize = val;
+        this.queryFilter.pageSize = val;
         this.loadDataJobList();
       },
       handleEdit(index, row) {
