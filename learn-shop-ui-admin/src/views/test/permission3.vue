@@ -8,100 +8,44 @@
     <div class="ms-doc">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="秒" name="second">
-          <el-form ref="form" :model="form" label-width="5px">
-            <el-form-item>
-              <el-radio v-model="sradio" label="1">每秒 允许的通配符[, - * /]</el-radio>
-            </el-form-item>
-            <el-form-item>
-              <el-radio v-model="sradio" label="1">
-                周期从
-                <el-input-number v-model="num1" @change="handleChange" size="mini" :min="1" :max="60"
-                                 label="描述文字"></el-input-number>
-                -
-                <el-input-number v-model="num1" @change="handleChange" size="mini" :min="1" :max="60"
-                                 label="描述文字"></el-input-number>
-                秒
-              </el-radio>
-            </el-form-item>
-            <el-form-item>
-              <el-radio v-model="sradio" label="1">
-                从
-                <el-input-number v-model="num1" @change="handleChange" size="mini" :min="1" :max="60"
-                                 label="描述文字"></el-input-number>
-                秒开始,每
-                <el-input-number v-model="num1" @change="handleChange" size="mini" :min="1" :max="60"
-                                 label="描述文字"></el-input-number>
-                秒执行一次
-              </el-radio>
-            </el-form-item>
-            <el-form-item>
-              <el-radio v-model="sradio" label="1">
-                指定
-                <el-form-item>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                </el-form-item>
-                <el-form-item>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                  <el-checkbox v-model="checked">备选项</el-checkbox>
-                </el-form-item>
-              </el-radio>
-            </el-form-item>
-          </el-form>
+          <cron-select :unit="60" :tabLabel="tabLabel"></cron-select>
         </el-tab-pane>
-        <el-tab-pane label="分钟" name="minute">分钟</el-tab-pane>
-        <el-tab-pane label="小时" name="hour">小时</el-tab-pane>
+        <el-tab-pane label="分钟" name="minute">
+          <cron-select :unit="60" :tabLabel="tabLabel"></cron-select>
+        </el-tab-pane>
+        <el-tab-pane label="小时" name="hour">
+          <cron-select :unit="24" :tabLabel="tabLabel"></cron-select>
+        </el-tab-pane>
         <el-tab-pane label="日" name="day">日</el-tab-pane>
         <el-tab-pane label="月" name="month">月</el-tab-pane>
         <el-tab-pane label="周" name="week">周</el-tab-pane>
         <el-tab-pane label="年" name="year">年</el-tab-pane>
       </el-tabs>
-      <div class="ms-doc">
-        <h3>README.md</h3>
-        <article>
-          <h1>表达式</h1>
-
-        </article>
-      </div>
+      <cron-expr></cron-expr>
     </div>
-
   </div>
 </template>
 
 <script>
+
+  import cronSelect from "../../views/job/components/cronSelect"
+  import cronExpr from "../../views/job/components/cronExpr"
+
   export default {
+    components: {
+      cronSelect,
+      cronExpr
+    },
     data: function () {
       return {
         activeName: 'second',
-        sradio: "1",
-        num1: 1
+        tabLabel: null
       }
     },
     methods: {
-      handleClick() {
-
-      },
-      handleChange(){
-
-      },
-      checked(){
-
+      handleClick(tab, event) {
+        this.tabLabel = tab.label;
+        console.log(tab, event);
       }
     }
   }
@@ -161,5 +105,49 @@
   .ms-doc article p {
     margin-bottom: 15px;
     line-height: 1.5;
+  }
+
+  .el-row {
+    margin-bottom: 0px;
+
+  &
+  :last-child {
+    margin-bottom: 0;
+  }
+
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+
+  .bg-purple {
+    background: #d3dce6;
+  }
+
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+
+  .grid-content {
+    text-align: center;
+    line-height: 36px;
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
+  .grid-content-item {
+    text-align: left;
+    line-height: 36px;
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
   }
 </style>
