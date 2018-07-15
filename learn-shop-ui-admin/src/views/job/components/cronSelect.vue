@@ -1,37 +1,83 @@
 <template>
   <div>
     <el-form ref="form" label-width="5px">
-      <el-form-item>
+      <el-form-item v-if="reveal.indexOf('01') >= 0">
         <el-radio v-model="sradio" label="1">每{{tabLabel}} 允许的通配符[, - * /]</el-radio>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="reveal.indexOf('02') >= 0">
+        <el-radio v-model="sradio" label="1">不指定</el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('03') >= 0">
+        <el-radio v-model="sradio" label="1">每年</el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('04') >= 0">
         <el-radio v-model="sradio" label="1">
           周期从
-          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"
-                           label="描述文字"></el-input-number>
+          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"></el-input-number>
           -
-          <el-input-number v-model="end" @change="handleChange" size="mini" :min="1" :max="60"
-                           label="描述文字"></el-input-number>
+          <el-input-number v-model="end" @change="handleChange" size="mini" :min="1" :max="60"></el-input-number>
           {{tabLabel}}
         </el-radio>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="reveal.indexOf('05') >= 0">
         <el-radio v-model="sradio" label="1">
           从
-          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"
-                           label="描述文字"></el-input-number>
+          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"></el-input-number>
           {{tabLabel}}开始,每
-          <el-input-number v-model="end" @change="handleChange" size="mini" :min="1" :max="60"
-                           label="描述文字"></el-input-number>
+          <el-input-number v-model="end" @change="handleChange" size="mini" :min="1" :max="60"></el-input-number>
           {{tabLabel}}执行一次
         </el-radio>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="reveal.indexOf('06') >= 0">
+        <el-radio v-model="sradio" label="1">
+          每月
+          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"></el-input-number>
+          {{tabLabel}}号最近的那个工作日
+        </el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('07') >= 0">
+        <el-radio v-model="sradio" label="1">
+          本月最后一天
+        </el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('08') >= 0">
+        <el-radio v-model="sradio" label="1">
+          第
+          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"></el-input-number>
+          {{tabLabel}}周 的星期
+          <el-input-number v-model="end" @change="handleChange" size="mini" :min="1" :max="60"></el-input-number>
+          {{tabLabel}}
+        </el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('09') >= 0">
+        <el-radio v-model="sradio" label="1">
+          本月最后一个星期
+          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"></el-input-number>
+        </el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('10') >= 0">
+        <el-radio v-model="sradio" label="1">
+          周期 从{{tabLabel}}
+          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"></el-input-number>
+          -
+          <el-input-number v-model="end" @change="handleChange" size="mini" :min="1" :max="60"></el-input-number>
+        </el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('11') >= 0">
         <el-radio v-model="sradio" label="1">
           指定
           <el-form-item v-for="(item,index) in countArray" :key="index">
             <el-checkbox v-for="(item1,index1) in item" :key="index1">{{item1}}</el-checkbox>
           </el-form-item>
+        </el-radio>
+      </el-form-item>
+      <el-form-item v-if="reveal.indexOf('12') >= 0">
+        <el-radio v-model="sradio" label="1">
+          从
+          <el-input-number v-model="start" @change="handleChange" size="mini" :min="0" :max="60"></el-input-number>
+          日开始,每
+          <el-input-number v-model="end" @change="handleChange" size="mini" :min="1" :max="60"></el-input-number>
+          月执行一次
         </el-radio>
       </el-form-item>
     </el-form>
@@ -45,12 +91,13 @@
   export default {
     props: {
       unit: null, // 总单位数据
-      tabLabel:null
+      tabLabel: null,
+      reveal: null // 指定不显示的,默认全显示
     },
     data: function () {
       return {
         sradio: 1,
-        start: 0,
+        start: 1,
         end: 2,
         countArray: []
       }
