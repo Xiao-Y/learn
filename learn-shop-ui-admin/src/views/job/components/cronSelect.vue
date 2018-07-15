@@ -91,7 +91,9 @@
   export default {
     props: {
       unit: null, // 总单位数据
+      unitStart: null, // 单位起始值
       tabLabel: null,
+      tabName: null,
       reveal: null // 指定不显示的,默认全显示
     },
     data: function () {
@@ -111,6 +113,7 @@
        * 初始化单位数据
        */
       initCount() {
+        debugger;
         var count = parseInt(this.unit / NUM); // 整数
         var remainder = this.unit % NUM; // 余数
 
@@ -127,9 +130,6 @@
           }
         }
       },
-      handleClick() {
-
-      },
       handleChange() {
 
       },
@@ -143,10 +143,11 @@
        * @private
        */
       _initRow(row, remainder) {
+        debugger;
         var _this = this;
         var unit = [];
         for (var j = 0; j < remainder; j++) {
-          var temp = row * NUM + j;
+          var temp = row * NUM + j + this.unitStart;
           if (temp < 10) {
             temp = "0" + temp;
           }

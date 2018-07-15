@@ -8,25 +8,25 @@
     <div class="ms-doc">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="秒" name="second">
-          <cron-select :unit="60" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
+          <cron-select :unitStart="0" :unit="60" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
         </el-tab-pane>
         <el-tab-pane label="分钟" name="minute">
-          <cron-select :unit="60" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
+          <cron-select :unitStart="0" :unit="60" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
         </el-tab-pane>
         <el-tab-pane label="小时" name="hour">
-          <cron-select :unit="24" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
+          <cron-select :unitStart="0" :unit="24" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
         </el-tab-pane>
         <el-tab-pane label="日" name="day">
-          <cron-select :unit="31" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
+          <cron-select :unitStart="1" :unit="31" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
         </el-tab-pane>
         <el-tab-pane label="月" name="month">
-          <cron-select :unit="12" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
+          <cron-select :unitStart="1" :unit="12" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
         </el-tab-pane>
         <el-tab-pane label="周" name="week">
-          <cron-select :unit="7" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
+          <cron-select :unitStart="1" :unit="7" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
         </el-tab-pane>
         <el-tab-pane label="年" name="year">
-          <cron-select :unit="0" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
+          <cron-select :unitStart="0" :unit="0" :tabLabel="tabLabel" :reveal="reveal"></cron-select>
         </el-tab-pane>
       </el-tabs>
       <cron-expr></cron-expr>
@@ -47,23 +47,23 @@
     data: function () {
       return {
         activeName: 'second',
-        tabLabel: null,
+        tabLabel: '秒',
         reveal: ['01', '04', '05', '11'] // 指定显示的,默认全不显示
       }
     },
     methods: {
       handleClick(tab, event) {
         this.tabLabel = tab.label;
-        var name = tab.name;
-        if (name == 'second' || name == 'minute' || name == 'hour') {
+        var tabName = tab.name;
+        if (tabName == 'second' || tabName == 'minute' || tabName == 'hour') {
           this.reveal = ['01', '04', '05', '11'];
-        } else if (name == 'day') {
+        } else if (tabName == 'day') {
           this.reveal = ['01', '02', '04', '05', '06', '07', '11'];
-        } else if (name == 'month') {
+        } else if (tabName == 'month') {
           this.reveal = ['01', '02', '04', '12', '11'];
-        } else if (name == 'week') {
+        } else if (tabName == 'week') {
           this.reveal = ['01', '02', '08', '09', '10', '11'];
-        } else if (name == 'year') {
+        } else if (tabName == 'year') {
           this.reveal = ['01', '03', '04'];
         }
       }
