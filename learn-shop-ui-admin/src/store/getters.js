@@ -1,10 +1,12 @@
 const getters = {
   language: state => state.app.language,
 
-  token: state => state.user.token,
-  name: state => state.user.name,
-  avatar: state => state.user.avatar,
-  roles: state => state.user.roles,
+  token: state => state.loginHandle.token,
+  avatar: state => state.loginHandle.avatar,
+  roles: state => state.loginHandle.roles,
+  name: state => state.loginHandle.name,
+
+  // name: state => state.user.name,
 
   routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,

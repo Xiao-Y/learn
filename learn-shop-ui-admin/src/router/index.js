@@ -16,7 +16,6 @@ export const constantRouterMap = [{
   component: resolve => require(['../views/login/Login.vue'], resolve)
 }, {
   path: '/Readme',
-  name: 'Readme',
   index: 'Readme',
   meta: {
     title: 'Readme',

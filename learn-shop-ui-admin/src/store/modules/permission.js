@@ -3,7 +3,10 @@ import {
   constantRouterMap
 } from '@/router'
 
-import types from '@/utils/mutationsType'
+import {getPermission} from '@/api/permission'
+import VueUtils from '@/utils/vueUtils'
+
+import types from '@/store/mutationsType'
 
 // 该用户的所有权限
 var menuUrls = [];
@@ -25,7 +28,6 @@ function genMenuUrls(menus) {
 function filterAsyncRouter(accessedRouters, menus) {
   //递归出所有的url
   genMenuUrls(menus);
-  // console.info('menuUrls', menuUrls)
   // 反向移除，用户没有的权限从路由移除，定制新路由
   for (var i = accessedRouters.length - 1; i >= 0; i--) {
     var basePath = accessedRouters[i].path;
@@ -47,36 +49,36 @@ function filterAsyncRouter(accessedRouters, menus) {
 
 const permission = {
   state: {
-    routers: constantRouterMap,
+    routers: VueUtils.deepClone(constantRouterMap),
     addRouters: [],
     menus: []
   },
   mutations: {
     [types.SET_ROUTERS]: (state, routers) => {
       state.addRouters = routers
-      state.routers = constantRouterMap.concat(routers)
-      // console.log('state.routers', state.routers)
+      state.routers = VueUtils.deepClone(constantRouterMap.concat(routers))
     },
     [types.SET_MENUS]: (state, menus) => {
       state.menus = menus
     }
   },
   actions: {
-    GenRoutesActions({commit}, {menus}) {
-      return new Promise(resolve => {
-        // const roles = data.roles
-        // const menus = data.menus
-        // console.info("GenRoutesActions.menus", menus)
-        const accessedRouters = filterAsyncRouter(asyncRouterMap, menus)
-        // 最后添加404页面
-        accessedRouters.push({
-          path: '*',
-          redirect: '/error/404'
-        })
-        // console.log('accessedRouters', accessedRouters)
-        commit(types.SET_ROUTERS, accessedRouters)
-        commit(types.SET_MENUS, menus)
-        resolve()
+    GenRoutesActions({commit, state}) {
+      return new Promise((resolve, reject) => {
+        getPermission(state.token).then(res => {
+          var menus = VueUtils.deepClone(res.resData.menus);
+          const accessedRouters = filterAsyncRouter(asyncRouterMap, menus);
+          // 最后添加404页面
+          accessedRouters.push({
+            path: '*',
+            redirect: '/error/404'
+          });
+          commit(types.SET_ROUTERS, VueUtils.deepClone3(accessedRouters));
+          commit(types.SET_MENUS, menus);
+          resolve(res);
+        }).catch(error => {
+          reject(error);
+        });
       })
     }
   }

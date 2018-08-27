@@ -21,6 +21,7 @@ const messages = {
 
 const i18n = new VueI18n({
   locale: Cookies.get('language') || 'zh', // set locale
+  silentTranslationWarn: true, // 没有的key值不发出警告
   messages // set locale messages
 })
 

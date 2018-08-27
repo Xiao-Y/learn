@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import types from '@/utils/mutationsType'
+import types from '@/store/mutationsType'
 
 const app = {
   state: {
@@ -8,7 +8,7 @@ const app = {
   mutations: {
     [types.SET_LANGUAGE]: (state, language) => {
       state.language = language
-      Cookies.set('language', language)
+      Cookies.set('language', language);
     }
   },
   actions: {
