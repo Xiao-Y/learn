@@ -77,6 +77,14 @@ export const asyncRouterMap = [{
     path: 'autoTaskList',
     component: resolve => require(['../views/job/autoTaskList.vue'], resolve)
   }]
+}, {
+  path: '/product',
+  component: Home,
+  children: [{
+    name: 'findProductList',
+    path: 'findProductList',
+    component: resolve => require(['../views/product/productList.vue'], resolve)
+  }]
 }]
 
 export default new Router({

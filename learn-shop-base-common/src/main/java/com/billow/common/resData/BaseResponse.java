@@ -31,10 +31,7 @@ public class BaseResponse<T> implements Serializable {
     }
 
     public BaseResponse(String resCode, String traceID, String spanID) {
-        this.resCode = resCode;
-        this.resMsg = ResCodeEnum.getResCodeEnum(resCode);
-        this.traceID = traceID;
-        this.spanID = spanID;
+        this(resCode, ResCodeEnum.getResCodeEnum(resCode), traceID, spanID);
     }
 
     public BaseResponse(String resCode, String resMsg, T resData) {
