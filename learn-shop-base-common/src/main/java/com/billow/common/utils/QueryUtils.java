@@ -45,23 +45,56 @@ public class QueryUtils {
     }
 
     /**
+     * 获取查询条件（不为空的）,并且设置 po 中的 fieldName 为 null
+     *
+     * @param root
+     * @param criteriaBuilder
+     * @param po              数据源(只能是po)
+     * @param <T>
+     * @throws Exception
+     */
+    public static <T> void getPredicateLike(List<Predicate> predicates, Root<T> root, CriteriaBuilder criteriaBuilder, T po, String fieldName) {
+        // po主类的
+        Class<?> clazz = po.getClass();
+        boolean flag = getFieldValueLike(root, criteriaBuilder, po, predicates, clazz, fieldName);
+        if (!flag) {
+            // base类的
+            Class<?> superClazz = clazz.getSuperclass();
+            getFieldValueLike(root, criteriaBuilder, po, predicates, superClazz, fieldName);
+        }
+    }
+
+    /**
      * 获取查询条件（不为空的）
      *
      * @param root
      * @param criteriaBuilder
-     * @param po
+     * @param po              数据源(只能是po)
      * @param <T>
-     * @return
+     * @throws Exception
+     */
+    public static <T> void getPredicates(List<Predicate> list, Root<T> root, CriteriaBuilder criteriaBuilder, T po) {
+        // po主类的
+        Class<?> clazz = po.getClass();
+        getFieldsValueEqual(root, criteriaBuilder, po, list, clazz);
+        // base类的
+        Class<?> superClazz = clazz.getSuperclass();
+        getFieldsValueEqual(root, criteriaBuilder, po, list, superClazz);
+    }
+
+    /**
+     * 获取查询条件（不为空的）
+     *
+     * @param root
+     * @param criteriaBuilder
+     * @param po              数据源(只能是po)
+     * @param <T>
+     * @return List Predicate
      * @throws Exception
      */
     public static <T> List<Predicate> getPredicates(Root<T> root, CriteriaBuilder criteriaBuilder, T po) {
         List<Predicate> list = new ArrayList<>();
-        // po主类的
-        Class<?> clazz = po.getClass();
-        getFieldsValue(root, criteriaBuilder, po, list, clazz);
-        // base类的
-        Class<?> superClazz = clazz.getSuperclass();
-        getFieldsValue(root, criteriaBuilder, po, list, superClazz);
+        getPredicates(list, root, criteriaBuilder, po);
         return list;
     }
 
@@ -70,13 +103,13 @@ public class QueryUtils {
      *
      * @param root
      * @param criteriaBuilder
-     * @param po
-     * @param list
-     * @param clazz
+     * @param predicates
+     * @param po              数据源
+     * @param clazz           当前类或者基类
      * @param <T>
      * @throws IllegalAccessException
      */
-    private static <T> void getFieldsValue(Root<T> root, CriteriaBuilder criteriaBuilder, T po, List<Predicate> list, Class<?> clazz) {
+    private static <T> void getFieldsValueEqual(Root<T> root, CriteriaBuilder criteriaBuilder, T po, List<Predicate> predicates, Class<?> clazz) {
         try {
             Field[] fields = clazz.getDeclaredFields();
             if (ToolsUtils.isNotEmpty(fields)) {
@@ -89,14 +122,42 @@ public class QueryUtils {
                     Object fieldValue = field.get(po);
                     if (ToolsUtils.isNotEmpty(fieldValue)) {
                         Class<?> type = field.getType();
-
-                        list.add(criteriaBuilder.equal(root.get(fieldName).as(type), fieldValue));
+                        predicates.add(criteriaBuilder.equal(root.get(fieldName).as(type), fieldValue));
                     }
                 }
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 添加单个 Predicate 到 predicates，并且设置 po 中的 fieldName 为 null
+     *
+     * @param root
+     * @param criteriaBuilder
+     * @param predicates
+     * @param po              数据源
+     * @param clazz           当前类或者基类
+     * @param fieldName       获取的字段
+     * @param <T>
+     * @return 是否找到当前字段
+     */
+    private static <T> boolean getFieldValueLike(Root<T> root, CriteriaBuilder criteriaBuilder, T po, List<Predicate> predicates, Class<?> clazz, String fieldName) {
+        boolean flag = false;
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Object fieldValue = field.get(po);
+            flag = true;
+            if (ToolsUtils.isNotEmpty(fieldValue)) {
+                predicates.add(criteriaBuilder.like(root.get(fieldName).as(String.class), fieldValue.toString()));
+                field.set(po, null);
+            }
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 }
 

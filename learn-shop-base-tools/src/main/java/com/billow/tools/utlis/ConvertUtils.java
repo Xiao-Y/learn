@@ -6,6 +6,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Component;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +77,7 @@ public class ConvertUtils {
      * @param src
      * @return
      */
-    private static  <SRC> String[] getNullProperties(SRC src) {
+    private static <SRC> String[] getNullProperties(SRC src) {
         BeanWrapper srcBean = new BeanWrapperImpl(src);
         PropertyDescriptor[] pds = srcBean.getPropertyDescriptors();
         Set<String> emptyName = new HashSet<>();
@@ -86,5 +87,23 @@ public class ConvertUtils {
         }
         String[] result = new String[emptyName.size()];
         return emptyName.toArray(result);
+    }
+
+    /**
+     * List 转换为 Array
+     *
+     * @param list
+     * @param <T>
+     * @return
+     */
+    public static <T> T[] toArray(List<T> list, Class<T> clazz) {
+
+        if (ToolsUtils.isEmpty(list)) {
+            return (T[]) Array.newInstance(clazz, 0);
+        }
+
+        T[] t = (T[]) Array.newInstance(clazz, list.size());
+        list.toArray(t);
+        return t;
     }
 }

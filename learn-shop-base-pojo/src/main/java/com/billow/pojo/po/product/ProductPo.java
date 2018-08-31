@@ -30,7 +30,7 @@ public class ProductPo extends BasePoDefault implements Serializable {
     // 状态：0-无货，1-有货
     private String status;
     //销售数量
-    private int quantity;
+    private Integer quantity;
     //商品图片名称
     private String img;
 
@@ -115,11 +115,11 @@ public class ProductPo extends BasePoDefault implements Serializable {
         return this;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public ProductPo setQuantity(int quantity) {
+    public ProductPo setQuantity(Integer quantity) {
         this.quantity = quantity;
         return this;
     }
