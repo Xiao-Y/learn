@@ -182,9 +182,10 @@ public class MenuServiceImpl implements MenuService {
             MenuEx ex = new MenuEx();
             ex.setId(item.getId().toString())
                     .setPath(item.getUrl())
-//                    .setValidInd(item.getValidInd())
+                    .setValidInd(item.getValidInd())
                     .setIcon(item.getIcon())
                     .setPid(item.getPid())
+                    .setDisplay(item.getDisplay())
                     .setTitleCode(item.getPermissionCode())
                     .setTitle(item.getPermissionName());
             pMenuExs.add(ex);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="menu in navMenus" v-if="menu.title">
+    <template v-for="menu in navMenus" v-if="menu.title && menu.display === true">
 
       <template v-if="menu.children">
         <el-submenu :key="menu.id" :index="menu.id">
@@ -9,7 +9,7 @@
         </el-submenu>
       </template>
 
-      <template v-else>
+      <template v-else-if="menu.display === true">
         <el-menu-item :key="menu.id" :index="menu.path">
           <i :class="menu.icon"></i>{{ generateTitle(menu.title) }}
         </el-menu-item>

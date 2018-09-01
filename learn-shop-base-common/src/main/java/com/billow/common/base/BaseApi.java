@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 公用control
@@ -133,7 +134,7 @@ public class BaseApi {
      */
     protected void setRedisObject(String key, Object object) {
         try {
-            redisTemplate.opsForValue().set(key, JSONObject.toJSONString(object));
+            redisTemplate.opsForValue().set(key, JSONObject.toJSONString(object),5L, TimeUnit.SECONDS);
         } catch (Exception e) {
             e.printStackTrace();
         }

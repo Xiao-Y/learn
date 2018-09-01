@@ -38,6 +38,10 @@ public class MenuEx {
      */
     private Boolean validInd;
     /**
+     * 是否显示
+     */
+    private Boolean display;
+    /**
      * 子级菜单
      */
     private List<MenuEx> children;
@@ -114,6 +118,15 @@ public class MenuEx {
         return this;
     }
 
+    public Boolean getDisplay() {
+        return display;
+    }
+
+    public MenuEx setDisplay(Boolean display) {
+        this.display = display;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "MenuEx{" +
@@ -124,6 +137,7 @@ public class MenuEx {
                 ", path='" + path + '\'' +
                 ", icon='" + icon + '\'' +
                 ", validInd=" + validInd +
+                ", display=" + display +
                 ", children=" + children +
                 '}';
     }

@@ -49,8 +49,10 @@ export function findMenus() {
  * @param titleCode
  * @param path
  * @param icon
+ * @param validInd
+ * @param display
  */
-export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon}) {
+export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validInd, display}) {
   return request({
     url: 'admin-system/menuApi/saveOrUpdateMenu',
     method: 'put',
@@ -60,7 +62,9 @@ export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon}) {
       permissionName: title,
       permissionCode: titleCode,
       url: path,
-      icon: icon
+      icon: icon,
+      validInd: validInd,
+      display: display
     }
   });
 }

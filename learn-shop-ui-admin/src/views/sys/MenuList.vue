@@ -43,7 +43,10 @@
                 <el-input v-model="menu.icon" readonly></el-input>
               </el-form-item>
               <el-form-item label="有效标志">
-                <el-input v-model="menu.validInd" readonly></el-input>
+                <el-switch v-model="menu.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+              </el-form-item>
+              <el-form-item label="是否显示">
+                <el-switch v-model="menu.display" active-text="显示" inactive-text="隐藏" disabled></el-switch>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -61,7 +64,10 @@
                   <el-input v-model="parentMenu.icon" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="有效标志">
-                  <el-input v-model="parentMenu.validInd" readonly></el-input>
+                  <el-switch v-model="menu.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+                </el-form-item>
+                <el-form-item label="是否显示">
+                  <el-switch v-model="menu.display" active-text="显示" inactive-text="隐藏" disabled></el-switch>
                 </el-form-item>
               </el-form>
               <el-form ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
@@ -128,6 +134,16 @@
             <el-input v-model="editMenu.icon"></el-input>
           </el-col>
         </el-form-item>
+        <el-form-item label="有效标志">
+          <el-col :span="18">
+            <el-switch v-model="editMenu.validInd" active-text="有效" inactive-text="无效"></el-switch>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="是否显示">
+          <el-col :span="18">
+            <el-switch v-model="editMenu.display" active-text="显示" inactive-text="隐藏"></el-switch>
+          </el-col>
+        </el-form-item>
         <!--<el-form-item label="活动区域" :label-width="formLabelWidth">-->
         <!--<el-select v-model="form.region" placeholder="请选择活动区域">-->
         <!--<el-option label="区域一" value="shanghai"></el-option>-->
@@ -188,8 +204,9 @@
           title: "",
           titleCode: "",
           path: "",
-          icon: ""
-//          validInd: null
+          icon: "",
+          validInd: true,
+          display: true
         }
       },
       //父级菜单信息
@@ -206,7 +223,8 @@
           updateTime: "",
           updaterCode: "",
           descritpion: "",
-//          validInd: null
+          validInd: true,
+          display: true
         }
       },
       //添加修改菜单信息
@@ -218,7 +236,9 @@
           titleCode: "",
           parentTtile: "",
           path: "",
-          icon: ""
+          icon: "",
+          validInd: true,
+          display: true
         }
       },
       //获取所有菜单
@@ -298,12 +318,12 @@
         }
         this.editMenu = this.VueUtils.deepClone(nodes[0]);
 //        console.info("nodes[0].pid",nodes[0].pid);
-        if(nodes[0].pid != null){
+        if (nodes[0].pid != null) {
           var parentNode = this.$refs.tree2.getNode(nodes[0].pid);
 //          console.info("parentNode",parentNode);
           this.editMenu.parentTtile = parentNode.data.title;
-        }else{
-          this.editMenu.parentTtile ='根节点';
+        } else {
+          this.editMenu.parentTtile = '根节点';
         }
         this.dialogFormVisible = true;
         // 当前操作的节点(用于后面提交)
@@ -356,11 +376,14 @@
           // 前面点击后缓存后的节点
           var data = this.node;
           var copuEidtMenus = this.VueUtils.deepClone(editMenus);
+          debugger;
           if (this.optionType == "edit") { // 修改
             data.title = copuEidtMenus.title;
             data.titleCode = copuEidtMenus.titleCode;
             data.path = copuEidtMenus.path;
             data.icon = copuEidtMenus.icon;
+            data.validInd =  copuEidtMenus.validInd;
+            data.display =  copuEidtMenus.display;
           } else { // 添加
             //后台返回的
             copuEidtMenus.id = resData.id;

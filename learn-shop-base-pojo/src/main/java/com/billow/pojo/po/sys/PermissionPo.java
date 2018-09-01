@@ -17,9 +17,7 @@ import java.io.Serializable;
 public class PermissionPo extends BasePo implements Serializable {
     //权限名称
     private String permissionName;
-    /**
-     * 权限CODE
-     */
+    // 权限CODE
     private String permissionCode;
     //权限描述
     private String descritpion;
@@ -29,6 +27,8 @@ public class PermissionPo extends BasePo implements Serializable {
     private Long pid;
     // 图标
     private String icon;
+    // 是否显示
+    private Boolean display;
 
     /**
      * 权限名称
@@ -143,6 +143,15 @@ public class PermissionPo extends BasePo implements Serializable {
         return this;
     }
 
+    public Boolean getDisplay() {
+        return display;
+    }
+
+    public PermissionPo setDisplay(Boolean display) {
+        this.display = display;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "PermissionPo{" +
@@ -152,6 +161,7 @@ public class PermissionPo extends BasePo implements Serializable {
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
                 ", icon='" + icon + '\'' +
+                ", display=" + display +
                 "} " + super.toString();
     }
 }
