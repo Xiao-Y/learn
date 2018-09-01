@@ -18,7 +18,7 @@ var menuUrls = [];
 function genMenuUrls(menus) {
   for (var j in menus) {
     if (menus[j].children) {
-      genMenuUrls(menus[j].children)
+      genMenuUrls(menus[j].children);
     } else {
       menuUrls.push(menus[j].path);
     }

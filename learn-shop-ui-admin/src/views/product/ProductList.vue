@@ -186,6 +186,7 @@
         this.loadDataProductList();
       },
       handleEdit(index, row) {
+        this.$router.push({name: 'productEdit'});
         console.log(index, row);
       },
       handleDelete(index, row) {
