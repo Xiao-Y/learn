@@ -2,8 +2,6 @@ package com.billow.pojo.po.base;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -17,7 +15,6 @@ import java.util.Date;
 public class BasePoDefault extends BasePage implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String creatorCode;
     private String updaterCode;

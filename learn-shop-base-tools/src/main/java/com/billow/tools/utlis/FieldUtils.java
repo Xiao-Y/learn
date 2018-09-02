@@ -74,7 +74,7 @@ public class FieldUtils {
     private static Class<?> getBasePo(Class<?> clazz) {
         Class<?> basePo;
         String simpleName = clazz.getSimpleName();
-        if ("BasePo".equals(simpleName)) {
+        if ("BasePo".equals(simpleName) || "BasePoDefault".equals(simpleName)) {
             return clazz;
         } else {
             basePo = getBasePo(clazz.getSuperclass());

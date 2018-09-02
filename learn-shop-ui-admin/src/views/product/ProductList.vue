@@ -126,7 +126,7 @@
 
 
 <script>
-  import {LoadDataProductList} from "../../api/product/productMag";
+  import {LoadDataProductList, DeleteProductById} from "../../api/product/productMag";
 
   export default {
     data() {
@@ -186,11 +186,34 @@
         this.loadDataProductList();
       },
       handleEdit(index, row) {
-        this.$router.push({name: 'productEdit'});
-        console.log(index, row);
+        this.$router.push({
+          name: 'productEdit',
+          params: {
+            optionType: 'edit',
+            productEdit: row
+          }
+        });
       },
       handleDelete(index, row) {
-        console.log(index, row);
+        var _this = this;
+        _this.$confirm('此操作将删除该商品 '+ row.commodityName +' 信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          DeleteProductById(row.id).then(res => {
+            _this.tableData.splice(index, 1);
+            _this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          });
+        }).catch((err) => {
+          _this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       }
 
     },

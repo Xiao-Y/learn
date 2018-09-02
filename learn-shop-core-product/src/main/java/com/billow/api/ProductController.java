@@ -9,7 +9,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +38,48 @@ public class ProductController extends BaseApi {
         try {
             Page<ProductPo> productPos = productService.findProductList(productVo);
             baseResponse.setResData(productPos);
+        } catch (Exception e) {
+            this.getErrorInfo(e, baseResponse);
+        }
+        return baseResponse;
+    }
+
+    @ApiOperation("保存商品信息")
+    @PostMapping("/saveProduct")
+    public BaseResponse<ProductVo> saveProduct(@RequestBody ProductVo productVo) {
+        BaseResponse<ProductVo> baseResponse = super.getBaseResponse();
+        try {
+            String userCode = super.findUserCode();
+            productService.saveProduct(productVo, userCode);
+            baseResponse.setResData(productVo);
+        } catch (Exception e) {
+            this.getErrorInfo(e, baseResponse);
+        }
+        return baseResponse;
+    }
+
+    @ApiOperation("更新商品信息")
+    @PutMapping("/updateProduct")
+    public BaseResponse<ProductVo> updateProduct(@RequestBody ProductVo productVo) {
+        BaseResponse<ProductVo> baseResponse = super.getBaseResponse();
+        try {
+            String userCode = super.findUserCode();
+            productService.updateProduct(productVo, userCode);
+            baseResponse.setResData(productVo);
+        } catch (Exception e) {
+            this.getErrorInfo(e, baseResponse);
+        }
+        return baseResponse;
+    }
+
+    @ApiOperation("根据id删除商品信息")
+    @DeleteMapping("/deleteProductById/{id}")
+    public BaseResponse<ProductVo> deleteProductById(@PathVariable String id) {
+        BaseResponse<ProductVo> baseResponse = super.getBaseResponse();
+        try {
+            String userCode = super.findUserCode();
+            ProductVo productVo = productService.deleteProductById(id, userCode);
+            baseResponse.setResData(productVo);
         } catch (Exception e) {
             this.getErrorInfo(e, baseResponse);
         }

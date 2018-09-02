@@ -19,7 +19,7 @@ import java.util.Random;
  * ClassName:SequenceUtil <br/>
  * Description: 序列号生成工具. <br/>
  * Date:     2017年9月18日 下午2:10:30 <br/>
- * @author   liebin.zheng	 
+ * @author   billow	 
  */
 public class SequenceUtil {
 	
@@ -36,7 +36,7 @@ public class SequenceUtil {
      * 
      * @methodName:createSequenceByPrefix
      * @Description: 带前缀+日期+4位随机序号
-     * @author liebin.zheng
+     * @author billow
      * @date 2017年9月21日
      *
      */
@@ -49,7 +49,7 @@ public class SequenceUtil {
      * 
      * @methodName:createSequence
      * @Description: 日期+4位随机序号
-     * @author liebin.zheng
+     * @author billow
      * @date 2017年9月21日
      *
      */
@@ -62,7 +62,7 @@ public class SequenceUtil {
 	 * 
 	 * @methodName:createRandomSeqNo
 	 * @Description: 获取时间戳+百位顺序流水号
-	 * @author liebin.zheng
+	 * @author billow
 	 * @date 2017年9月18日
 	 *
 	 */
@@ -74,7 +74,7 @@ public class SequenceUtil {
 	 * 
 	 * @methodName:createRandomSeqNo2
 	 * @Description:  获取时间戳+百位随机流水号
-	 * @author liebin.zheng
+	 * @author billow
 	 * @date 2017年9月18日
 	 *
 	 */
@@ -87,7 +87,7 @@ public class SequenceUtil {
 	 * 
 	 * @methodName:generateSequencNum2
 	 * @Description: 获取百位随机流水号
-	 * @author liebin.zheng
+	 * @author billow
 	 * @date 2017年9月18日
 	 *
 	 */
@@ -114,7 +114,7 @@ public class SequenceUtil {
 	 * 
 	 * @methodName:generateSequencNum
 	 * @Description: 获取百位流水号
-	 * @author liebin.zheng
+	 * @author billow
 	 * @date 2017年9月18日
 	 */
 	public static String generateSequenceNum(){
@@ -144,7 +144,7 @@ public class SequenceUtil {
 	 * 
 	 * @methodName:generateSequencNum
 	 * @Description: 获取指定长度的随机流水号，length不能大于8位
-	 * @author liebin.zheng
+	 * @author billow
 	 * @date 2017年9月18日
 	 * 
 	 */
@@ -167,7 +167,7 @@ public class SequenceUtil {
 	 * @param currentMaxNo 当前最大编号
 	 * @param length 流水号的长度
 	 * @Description: 获取指定长度的顺序流水号
-	 * @author liebin.zheng
+	 * @author billow
 	 * @date 2017年9月18日
 	 * 
 	 */
@@ -198,7 +198,7 @@ public class SequenceUtil {
 	 * @param currentMaxNo 当前最大编号
 	 * @param length 流水号的长度
 	 * @Description: 获取指定长度的顺序流水号，前缀补0，最多12位顺序号
-	 * @author liebin.zheng
+	 * @author billow
 	 * @date 2017年9月18日
 	 * 
 	 */
