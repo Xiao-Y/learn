@@ -37,6 +37,18 @@
             <el-button @click="onReset('productInfo')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
+
+          <!--<el-upload-->
+            <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+            <!--list-type="picture-card"-->
+            <!--:show-file-list="true"-->
+            <!--:on-preview="handlePictureCardPreview"-->
+            <!--:on-remove="handleRemove">-->
+            <!--<i class="el-icon-plus"></i>-->
+          <!--</el-upload>-->
+          <!--<el-dialog :visible.sync="dialogVisible">-->
+            <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+          <!--</el-dialog>-->
         </el-form>
       </article>
     </div>
@@ -51,6 +63,8 @@
     data() {
       return {
         optionType: '', // 操作类型，edit,add
+//        dialogImageUrl: '',
+//        dialogVisible: false,
         productInfo: {
           commodityName: '',
           unitPrice: 0.00,
@@ -68,6 +82,13 @@
       this.optionType = this.$route.params.optionType;
     },
     methods: {
+//      handleRemove(file, fileList) {
+//        console.log(file, fileList);
+//      },
+//      handlePictureCardPreview(file) {
+//        this.dialogImageUrl = file.url;
+//        this.dialogVisible = true;
+//      },
       onSubmit() {
         var _this = this;
         if (_this.optionType === 'edit') {
