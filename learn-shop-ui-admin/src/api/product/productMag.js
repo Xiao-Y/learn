@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function LoadDataProductList(productFilter) {
   return request({
-    url: 'core-product/product/findProductList',
+    url: 'core-product/productApi/findProductList',
     method: 'post',
     data: Object.assign(productFilter)
   })
@@ -20,7 +20,7 @@ export function LoadDataProductList(productFilter) {
  */
 export function SaveProduct(data) {
   return request({
-    url: 'core-product/product/saveProduct',
+    url: 'core-product/productApi/saveProduct',
     method: 'post',
     data: Object.assign(data)
   });
@@ -33,7 +33,7 @@ export function SaveProduct(data) {
  */
 export function UpdateProduct(data) {
   return request({
-    url: 'core-product/product/updateProduct',
+    url: 'core-product/productApi/updateProduct',
     method: 'put',
     data: Object.assign(data)
   });
@@ -46,7 +46,7 @@ export function UpdateProduct(data) {
  */
 export function DeleteProductById(id) {
   return request({
-    url: 'core-product/product/deleteProductById/' + id,
+    url: 'core-product/productApi/deleteProductById/' + id,
     method: 'delete'
   });
 }

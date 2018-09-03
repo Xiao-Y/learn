@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api("商品相关操作")
 @RestController
-@RequestMapping("/product")
-public class ProductController extends BaseApi {
+@RequestMapping("/productApi")
+public class ProductApi extends BaseApi {
 
     @Autowired
     private ProductService productService;
