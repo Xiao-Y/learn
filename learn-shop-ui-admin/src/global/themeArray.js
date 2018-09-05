@@ -1,6 +1,6 @@
 // 主题文件数组
 const themeArray = [
-  'Span',
+  // 'Span',
   'Pagination',
   // 'Dialog',
   // 'Autocomplete',
