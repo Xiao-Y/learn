@@ -71,6 +71,10 @@ export const asyncRouterMap = [{
     path: 'productList/productEdit',
     name: 'productEdit',
     component: resolve => require(['../views/product/components/ProductEdit.vue'], resolve)
+  }, {
+    path: 'productList/productImageEdit',
+    name: 'productImageEdit',
+    component: resolve => require(['../views/product/components/ProductImageEdit.vue'], resolve)
   }]
 }]
 

@@ -376,7 +376,6 @@
           // 前面点击后缓存后的节点
           var data = this.node;
           var copuEidtMenus = this.VueUtils.deepClone(editMenus);
-          debugger;
           if (this.optionType == "edit") { // 修改
             data.title = copuEidtMenus.title;
             data.titleCode = copuEidtMenus.titleCode;

@@ -32,23 +32,6 @@
           <el-form-item label="销售数量" prop="quantity">
             <el-input v-model="productInfo.quantity" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="销售数量" prop="quantity">
-            <el-upload
-              action="admin-system/fileApi/uploadProductImage/12313"
-              list-type="picture-card"
-              :show-file-list="true"
-              :multiple="true"
-              :limit="3"
-              :on-exceed="handleExceed"
-              :on-preview="handlePictureCardPreview"
-              :before-remove="beforeRemove"
-              :on-remove="handleRemove">
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
-          </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="onSubmit">立即创建</el-button>
             <el-button @click="onReset('productInfo')">重置</el-button>
@@ -68,13 +51,11 @@
     data() {
       return {
         optionType: '', // 操作类型，edit,add
-        dialogImageUrl: '',
-        dialogVisible: false,
         productInfo: {
           commodityName: '',
           unitPrice: 0.00,
           spec: '',
-          status: false,
+          status: '1',
           grade: '一级',
           localityGrowth: '',
           packing: '',
@@ -83,24 +64,12 @@
       };
     },
     created() {
-      this.productInfo = this.$route.params.productEdit;
       this.optionType = this.$route.params.optionType;
+      if (this.optionType === 'edit') {
+        this.productInfo = this.$route.params.productEdit;
+      }
     },
     methods: {
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        console.info("file.url", file.url);
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
       onSubmit() {
         var _this = this;
         if (_this.optionType === 'edit') {

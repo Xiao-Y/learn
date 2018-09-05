@@ -22,6 +22,7 @@
               <el-input v-model="queryFilter.status" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item>
+              <el-button type="success" @click="handleAdd" icon="el-icon-plus">添加</el-button>
               <el-button type="primary" @click="onQuery" icon="el-icon-search">查询</el-button>
               <el-button type="danger" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
             </el-form-item>
@@ -91,13 +92,19 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="130">
+        <el-table-column label="操作" width="210">
           <template slot-scope="scope">
             <el-button
               icon="el-icon-edit"
               size="mini"
               type="warning"
               @click="handleEdit(scope.$index, scope.row)">
+            </el-button>
+            <el-button
+              icon="el-icon-picture"
+              size="mini"
+              type="info"
+              @click="handleImageEdit(scope.$index, scope.row)">
             </el-button>
             <el-button
               icon="el-icon-delete"
@@ -185,6 +192,15 @@
         this.queryFilter.pageSize = val;
         this.loadDataProductList();
       },
+      // 添加商品
+      handleAdd() {
+        this.$router.push({
+          name: 'productEdit',
+          params: {
+            optionType: 'add'
+          }
+        });
+      },
       handleEdit(index, row) {
         this.$router.push({
           name: 'productEdit',
@@ -194,9 +210,17 @@
           }
         });
       },
+      handleImageEdit(index, row) {
+        this.$router.push({
+          name: 'productImageEdit',
+          params: {
+            productInfo: row
+          }
+        });
+      },
       handleDelete(index, row) {
         var _this = this;
-        _this.$confirm('此操作将删除该商品 '+ row.commodityName +' 信息, 是否继续?', '提示', {
+        _this.$confirm('此操作将删除该商品 ' + row.commodityName + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
