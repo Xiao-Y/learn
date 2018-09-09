@@ -129,4 +129,18 @@ public class ProductApi extends BaseApi {
         }
         return baseResponse;
     }
+
+    @ApiOperation("通过图片id删除商品图片")
+    @DeleteMapping("/deleteProductImageById/{id}")
+    public BaseResponse<Boolean> deleteProductImageById(@PathVariable String id) throws Exception {
+        BaseResponse<Boolean> baseResponse = super.getBaseResponse();
+        try {
+            productService.deleteProductImageById(id);
+            baseResponse.setResData(true);
+        } catch (Exception e) {
+            baseResponse.setResData(false);
+            this.getErrorInfo(e, baseResponse);
+        }
+        return baseResponse;
+    }
 }

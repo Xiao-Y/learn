@@ -56,9 +56,21 @@ export function DeleteProductById(id) {
  * @param productId 商品id
  * @constructor
  */
-export function GetProuctImageById({productId}) {
+export function GetProuctImageByProductId({productId}) {
   return request({
     url: 'core-product/productApi/findProductImageByProductId/' + productId,
     method: 'get'
+  });
+}
+
+/**
+ * 通过图片id 删除商品图上
+ * @param id 图片id
+ * @constructor
+ */
+export function DeleteProductImageById(id) {
+  return request({
+    url: 'core-product/productApi/deleteProductImageById/' + id,
+    method: 'delete'
   });
 }

@@ -43,8 +43,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductPo> findProductList(ProductVo productVo) {
         Pageable pageable = new PageRequest(productVo.getPageNo(), productVo.getPageSize());
-//        ProductPo convert = ConvertUtils.convert(productVo, ProductPo.class);
-//        DefaultSpec<ProductPo> defaultSpec = new DefaultSpec<>(convert);
         productVo.setDeleFlag("1");
         Page<ProductPo> productPos = productDao.findAll(ProductSpec.byProductList(productVo), pageable);
         return productPos;
@@ -71,11 +69,21 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public ProductVo deleteProductById(String id, String userCode) throws Exception {
+        // 删除商品信息
         ProductPo productPo = productDao.findOne(id);
         ProductVo productVo = ConvertUtils.convert(productPo, ProductVo.class);
         productPo.setDeleFlag("0");
         FieldUtils.setCommonFieldByUpdate(productPo, userCode);
         productDao.save(productPo);
+        // 删除商品图片
+        List<ProductImagePo> productImagePos = productImageDao.findByProductIdAndValidInd(id, true);
+        if (ToolsUtils.isNotEmpty(productImagePos)) {
+            productImagePos.stream().forEach(item -> {
+                item.setValidInd(false);
+                FieldUtils.setCommonFieldByUpdate(item, userCode);
+            });
+            productImageDao.save(productImagePos);
+        }
         return productVo;
     }
 
@@ -99,6 +107,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductImageVo> findProductImageByProductId(String productId, ProductImageVo productImageVo) throws Exception {
         ProductImagePo productImagePo = ConvertUtils.convert(productImageVo, ProductImagePo.class);
         productImagePo.setProductId(productId);
+        productImagePo.setValidInd(true);
         DefaultSpec<ProductImagePo> defaultSpec = new DefaultSpec<>(productImagePo);
         List<ProductImagePo> productImagePos = productImageDao.findAll(defaultSpec, new Sort(Sort.Direction.ASC, "id"));
 
@@ -109,5 +118,15 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         return convert;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void deleteProductImageById(String id) throws Exception {
+        ProductImagePo productImagePo = productImageDao.findOne(id);
+        if (productImagePo != null) {
+            productImagePo.setValidInd(false);
+            productImageDao.save(productImagePo);
+        }
     }
 }

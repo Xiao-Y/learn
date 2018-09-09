@@ -16,12 +16,13 @@ public class FieldUtils {
     /**
      * 插入数据时
      *
-     * @param [obj, userCode]
+     * @param obj
+     * @param userCode
      * @return void
      * @author LiuYongTao
      * @date 2018/4/27 12:47
      */
-    public static void setCommonFieldByInsert(Object obj, String userCode) throws Exception {
+    public static void setCommonFieldByInsert(Object obj, String userCode) {
         Date date = new Date();
         setValue(obj, "creatorCode", userCode);
         setValue(obj, "createTime", date);
@@ -32,12 +33,13 @@ public class FieldUtils {
     /**
      * 更新数据时
      *
-     * @param [obj, userCode]
+     * @param obj
+     * @param userCode
      * @return void
      * @author LiuYongTao
      * @date 2018/4/27 12:47
      */
-    public static void setCommonFieldByUpdate(Object obj, String userCode) throws Exception {
+    public static void setCommonFieldByUpdate(Object obj, String userCode) {
         Date date = new Date();
         setValue(obj, "updaterCode", userCode);
         setValue(obj, "updateTime", date);
@@ -46,12 +48,13 @@ public class FieldUtils {
     /**
      * 插入数据时，带有效标志的
      *
-     * @param [obj, userCode]
+     * @param obj
+     * @param userCode
      * @return void
      * @author LiuYongTao
      * @date 2018/5/16 8:45
      */
-    public static void setCommonFieldByInsertWithValidInd(Object obj, String userCode) throws Exception {
+    public static void setCommonFieldByInsertWithValidInd(Object obj, String userCode) {
         Date date = new Date();
         Boolean b = true;
         setValue(obj, "creatorCode", userCode);
@@ -61,14 +64,18 @@ public class FieldUtils {
         setValue(obj, "validInd", b);
     }
 
-    private static void setValue(Object obj, String FieldName, Object value) throws Exception {
+    private static void setValue(Object obj, String FieldName, Object value) {
 
         if (null == basePo) {
             basePo = getBasePo(obj.getClass());
         }
-        Field field = basePo.getDeclaredField(FieldName);
-        field.setAccessible(true);
-        field.set(obj, value);
+        try {
+            Field field = basePo.getDeclaredField(FieldName);
+            field.setAccessible(true);
+            field.set(obj, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static Class<?> getBasePo(Class<?> clazz) {

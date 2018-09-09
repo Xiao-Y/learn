@@ -59,4 +59,11 @@ public interface ProductService {
      * @throws Exception
      */
     List<ProductImageVo> findProductImageByProductId(String productId, ProductImageVo productImageVo) throws Exception;
+
+    /**
+     * 通过图片id删除商品图片
+     *
+     * @param id 图片id
+     */
+    void deleteProductImageById(String id)throws Exception;
 }

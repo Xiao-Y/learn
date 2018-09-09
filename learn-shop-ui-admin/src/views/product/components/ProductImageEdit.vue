@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import {UpdateProduct, GetProuctImageById} from "../../../api/product/productMag";
+  import {UpdateProduct, GetProuctImageByProductId, DeleteProductImageById} from "../../../api/product/productMag";
 
   export default {
     data() {
@@ -57,9 +57,24 @@
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
       },
-      // 删除
+      // 删除商品图片
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+        DeleteProductImageById(file.id).then(res => {
+          var flag = res.resData;
+          if (flag) {
+            this.$message({
+              type: 'success',
+              message: file.name + ' 删除成功!'
+            });
+          } else {
+            fileList.push(file);
+            this.$message({
+              type: 'error',
+              message: file.name + ' 删除失败!'
+            });
+          }
+        });
+
       },
       // 上传后显示图片
       handlePictureCardPreview(file) {
@@ -67,16 +82,18 @@
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
+      // 显示商品图片
       initProudctImage() {
         var _this = this;
         var param = {
           productId: this.productInfo.id
         };
-        GetProuctImageById(param).then(res => {
+        GetProuctImageByProductId(param).then(res => {
           var data = res.resData;
           if (data) {
             for (var key in data) {
               var temp = {
+                id: data[key].id,
                 name: data[key].oldImageName,
                 url: data[key].imagePath
               };
