@@ -1,8 +1,11 @@
 package com.billow.service;
 
 import com.billow.pojo.po.product.ProductPo;
+import com.billow.pojo.vo.product.ProductImageVo;
 import com.billow.pojo.vo.product.ProductVo;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface ProductService {
 
@@ -39,4 +42,21 @@ public interface ProductService {
      */
     ProductVo deleteProductById(String id, String userCode) throws Exception;
 
+    /**
+     * 上传商品图片，保存图片信息
+     *
+     * @param productImageVo
+     * @param userCode
+     */
+    void uploadProductImage(ProductImageVo productImageVo, String userCode) throws Exception;
+
+    /**
+     * 通过商品id查询出商品图片
+     *
+     * @param productId      商品id
+     * @param productImageVo 查询条件
+     * @return
+     * @throws Exception
+     */
+    List<ProductImageVo> findProductImageByProductId(String productId, ProductImageVo productImageVo) throws Exception;
 }

@@ -5,7 +5,7 @@
       <article>
         <el-form label-width="100px" size="mini">
           <el-upload
-            action="admin-system/fileApi/uploadProductImage/12313"
+            :action="uploadProductImageUrl"
             list-type="picture-card"
             :show-file-list="true"
             :file-list="productImageList"
@@ -31,20 +31,21 @@
 </template>
 
 <script>
-  import {UpdateProduct} from "../../../api/product/productMag";
+  import {UpdateProduct, GetProuctImageById} from "../../../api/product/productMag";
 
   export default {
     data() {
       return {
         dialogVisible: false,
         dialogImageUrl: '',
+        uploadProductImageUrl: '', // 商品图上上传请求
         productImageList: [], // 图片列表
         productInfo: {} // 商品信息
       };
     },
     created() {
       this.productInfo = this.$route.params.productInfo;
-      console.info(this.productInfo);
+      this.uploadProductImageUrl = 'core-product/productApi/uploadProductImage/' + this.productInfo.id;
       this.initProudctImage();
     },
     methods: {
@@ -67,16 +68,22 @@
         this.dialogVisible = true;
       },
       initProudctImage() {
-//        GetProuctImageById(productInfo.id).then(res => {
-//
-//        });
-        this.productImageList = [{
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }, {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }];
+        var _this = this;
+        var param = {
+          productId: this.productInfo.id
+        };
+        GetProuctImageById(param).then(res => {
+          var data = res.resData;
+          if (data) {
+            for (var key in data) {
+              var temp = {
+                name: data[key].oldImageName,
+                url: data[key].imagePath
+              };
+              _this.productImageList.push(temp);
+            }
+          }
+        });
       },
       onReturn() {
         this.$router.back(-1);

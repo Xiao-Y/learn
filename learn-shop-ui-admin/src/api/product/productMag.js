@@ -50,3 +50,15 @@ export function DeleteProductById(id) {
     method: 'delete'
   });
 }
+
+/**
+ * 查询商品图片
+ * @param productId 商品id
+ * @constructor
+ */
+export function GetProuctImageById({productId}) {
+  return request({
+    url: 'core-product/productApi/findProductImageByProductId/' + productId,
+    method: 'get'
+  });
+}
