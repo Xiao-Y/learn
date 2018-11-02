@@ -2,8 +2,8 @@ package com.billow.autoTask.sysEvent;
 
 import com.billow.common.amqp.RabbitMqConfig;
 import com.billow.common.enums.SysEventEunm;
-import com.billow.common.sysEvent.model.expand.SysEventPublishDto;
-import com.billow.common.sysEvent.service.SysEventPublishService;
+import com.billow.common.business.sysEvent.model.expand.SysEventPublishDto;
+import com.billow.common.business.sysEvent.service.SysEventPublishService;
 import com.billow.tools.utlis.ToolsUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

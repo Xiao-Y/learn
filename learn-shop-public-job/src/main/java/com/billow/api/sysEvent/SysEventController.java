@@ -3,7 +3,7 @@ package com.billow.api.sysEvent;
 import com.billow.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.pojo.vo.ScheduleJobVo;
 import com.billow.service.TaskManagerService;
-import com.billow.common.sysEvent.mq.SysEventInterface;
+import com.billow.common.business.sysEvent.mq.SysEventInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

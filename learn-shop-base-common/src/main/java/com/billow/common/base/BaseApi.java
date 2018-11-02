@@ -1,13 +1,11 @@
 package com.billow.common.base;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.billow.common.enums.RdsKeyEnum;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
-import com.billow.pojo.ex.MenuEx;
-import com.billow.pojo.vo.sys.RoleVo;
-import com.billow.pojo.vo.user.UserVo;
+
+import com.billow.common.business.ex.RoleEx;
+import com.billow.common.business.ex.UserEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +44,8 @@ public class BaseApi {
      * @author LiuYongTao
      * @date 2018/5/26 9:34
      */
-    protected UserVo findUserVo() {
-        return new UserVo();
+    protected UserEx findUserVo() {
+        return new UserEx();
     }
 
     /**
@@ -57,9 +55,9 @@ public class BaseApi {
      * @author LiuYongTao
      * @date 2018/5/29 11:35
      */
-    protected List<RoleVo> findRoleVos() {
-        List<RoleVo> roleVos = new ArrayList<>();
-        RoleVo roleVo = new RoleVo();
+    protected List<RoleEx> findRoleVos() {
+        List<RoleEx> roleVos = new ArrayList<>();
+        RoleEx roleVo = new RoleEx();
         roleVo.setId(1L);
         roleVos.add(roleVo);
         return roleVos;

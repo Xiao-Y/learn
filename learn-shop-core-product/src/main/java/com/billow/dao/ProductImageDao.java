@@ -1,6 +1,6 @@
 package com.billow.dao;
 
-import com.billow.pojo.po.product.ProductImagePo;
+import com.billow.pojo.po.ProductImagePo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

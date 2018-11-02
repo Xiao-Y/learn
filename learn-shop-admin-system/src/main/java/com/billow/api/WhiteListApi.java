@@ -1,10 +1,10 @@
 package com.billow.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.common.business.whiteList.pojo.vo.WhiteListVo;
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
-import com.billow.common.whiteList.service.WhiteListService;
-import com.billow.pojo.vo.sys.WhiteListVo;
+import com.billow.common.business.whiteList.service.WhiteListService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

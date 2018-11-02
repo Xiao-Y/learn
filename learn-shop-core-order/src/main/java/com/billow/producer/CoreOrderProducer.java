@@ -1,7 +1,7 @@
 package com.billow.producer;
 
 import com.billow.common.amqp.RabbitMqConfig;
-import com.billow.pojo.vo.TestVo;
+import com.billow.pojo.vo.OrderVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -33,7 +33,7 @@ public class CoreOrderProducer {
         logger.info("【MQ发送内容】" + message);
     }
 
-    public void sendOrderCar(TestVo vo) {
+    public void sendOrderCar(OrderVo vo) {
         vo.setCreatorCode("3333");
         amqpTemplate.convertAndSend(rabbitMqConfig.getTestQueue().getName(), vo);
         logger.info("【MQ发送内容】" + vo.toString());

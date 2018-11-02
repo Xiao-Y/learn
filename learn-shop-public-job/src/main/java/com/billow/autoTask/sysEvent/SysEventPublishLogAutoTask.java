@@ -1,6 +1,6 @@
 package com.billow.autoTask.sysEvent;
 
-import com.billow.common.sysEvent.service.SysEventPublishService;
+import com.billow.common.business.sysEvent.service.SysEventPublishService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;

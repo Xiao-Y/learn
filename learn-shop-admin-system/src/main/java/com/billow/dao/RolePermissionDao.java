@@ -1,6 +1,6 @@
 package com.billow.dao;
 
-import com.billow.pojo.po.relation.RolePermissionPo;
+import com.billow.pojo.po.RolePermissionPo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

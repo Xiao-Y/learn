@@ -2,14 +2,13 @@ package com.billow.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import com.billow.common.base.DefaultSpec;
-import com.billow.common.utils.QueryUtils;
 import com.billow.dao.ProductDao;
 import com.billow.dao.ProductImageDao;
 import com.billow.dao.ProductSpec;
-import com.billow.pojo.po.product.ProductImagePo;
-import com.billow.pojo.po.product.ProductPo;
-import com.billow.pojo.vo.product.ProductImageVo;
-import com.billow.pojo.vo.product.ProductVo;
+import com.billow.pojo.po.ProductImagePo;
+import com.billow.pojo.po.ProductPo;
+import com.billow.pojo.vo.ProductImageVo;
+import com.billow.pojo.vo.ProductVo;
 import com.billow.service.ProductService;
 import com.billow.tools.generator.SequenceUtil;
 import com.billow.tools.utlis.ConvertUtils;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

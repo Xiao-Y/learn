@@ -1,8 +1,9 @@
 package com.billow.dao;
 
 import com.billow.common.utils.QueryUtils;
-import com.billow.pojo.po.product.ProductPo;
-import com.billow.pojo.vo.product.ProductVo;
+
+import com.billow.pojo.po.ProductPo;
+import com.billow.pojo.vo.ProductVo;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.data.jpa.domain.Specification;
 

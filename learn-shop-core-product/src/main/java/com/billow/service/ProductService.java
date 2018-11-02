@@ -1,8 +1,9 @@
 package com.billow.service;
 
-import com.billow.pojo.po.product.ProductPo;
-import com.billow.pojo.vo.product.ProductImageVo;
-import com.billow.pojo.vo.product.ProductVo;
+
+import com.billow.pojo.po.ProductPo;
+import com.billow.pojo.vo.ProductImageVo;
+import com.billow.pojo.vo.ProductVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -65,5 +66,5 @@ public interface ProductService {
      *
      * @param id 图片id
      */
-    void deleteProductImageById(String id)throws Exception;
+    void deleteProductImageById(String id) throws Exception;
 }

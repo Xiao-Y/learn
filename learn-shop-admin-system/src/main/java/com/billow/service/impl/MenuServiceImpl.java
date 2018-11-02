@@ -2,11 +2,12 @@ package com.billow.service.impl;
 
 import com.billow.dao.PermissionDao;
 import com.billow.dao.RolePermissionDao;
+
 import com.billow.pojo.ex.MenuEx;
-import com.billow.pojo.po.relation.RolePermissionPo;
-import com.billow.pojo.po.sys.PermissionPo;
-import com.billow.pojo.vo.sys.PermissionVo;
-import com.billow.pojo.vo.sys.RoleVo;
+import com.billow.pojo.po.PermissionPo;
+import com.billow.pojo.po.RolePermissionPo;
+import com.billow.pojo.vo.PermissionVo;
+import com.billow.pojo.vo.RoleVo;
 import com.billow.service.MenuService;
 import com.billow.tools.utlis.FieldUtils;
 import com.billow.tools.utlis.ConvertUtils;

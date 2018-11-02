@@ -1,15 +1,11 @@
 package com.billow.api;
 
-import cn.hutool.core.io.FileUtil;
 import com.billow.common.base.BaseApi;
 import com.billow.common.resData.BaseResponse;
-import com.billow.pojo.po.product.ProductPo;
-import com.billow.pojo.vo.product.ProductImageVo;
-import com.billow.pojo.vo.product.ProductVo;
+import com.billow.pojo.po.ProductPo;
+import com.billow.pojo.vo.ProductImageVo;
+import com.billow.pojo.vo.ProductVo;
 import com.billow.service.ProductService;
-import com.billow.tools.generator.SequenceUtil;
-import com.billow.tools.utlis.ConvertUtils;
-import com.billow.tools.utlis.FieldUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

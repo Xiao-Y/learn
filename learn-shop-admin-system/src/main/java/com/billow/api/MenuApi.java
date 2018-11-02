@@ -1,13 +1,16 @@
 package com.billow.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.common.business.ex.RoleEx;
 import com.billow.common.enums.RdsKeyEnum;
 import com.billow.common.resData.BaseResponse;
 import com.billow.pojo.ex.HomeEx;
+
 import com.billow.pojo.ex.MenuEx;
-import com.billow.pojo.vo.sys.PermissionVo;
-import com.billow.pojo.vo.sys.RoleVo;
+import com.billow.pojo.vo.PermissionVo;
+import com.billow.pojo.vo.RoleVo;
 import com.billow.service.MenuService;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +47,8 @@ public class MenuApi extends BaseApi {
         try {
             PermissionVo ex = new PermissionVo();
             String userCode = super.findUserCode();
-            List<RoleVo> roleVos = super.findRoleVos();
+            List<RoleEx> roleExs = super.findRoleVos();
+            List<RoleVo> roleVos = ConvertUtils.convert(roleExs, RoleVo.class);
             ex.setUserCode(userCode).setRoleVos(roleVos).setValidInd(true);
             List<MenuEx> menuExes = menuService.homeMenus(ex);
 

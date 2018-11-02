@@ -1,7 +1,7 @@
 package com.billow.service;
 
 import com.billow.pojo.ex.MenuEx;
-import com.billow.pojo.vo.sys.PermissionVo;
+import com.billow.pojo.vo.PermissionVo;
 
 import java.util.List;
 import java.util.Set;

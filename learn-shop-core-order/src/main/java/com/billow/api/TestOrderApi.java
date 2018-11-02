@@ -3,7 +3,6 @@ package com.billow.api;
 import com.billow.common.base.BaseApi;
 import com.billow.common.resData.BaseResponse;
 
-import com.billow.pojo.vo.TestVo;
 import com.billow.producer.CoreOrderProducer;
 import com.billow.remote.TestUserRemote;
 import com.billow.service.CoreOrderService;
@@ -55,8 +54,8 @@ public class TestOrderApi extends BaseApi {
     public BaseResponse<String> sendMQTest() {
         BaseResponse<String> baseResponse = super.getBaseResponse();
         try {
-            TestVo vo = new TestVo();
-            vo.setName("Billow").setAge(18).setCreateTime(new Date());
+            OrderVo vo = new OrderVo();
+            vo.setProductName("Billow").setProductNo("SSDFW1231").setCreateTime(new Date());
             coreOrderProducer.sendOrderCar(vo);
         } catch (Exception e) {
             super.getErrorInfo(e, baseResponse);

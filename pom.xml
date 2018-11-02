@@ -34,7 +34,6 @@
 
         <module>learn-shop-base-common</module>
         <module>learn-shop-base-tools</module>
-        <module>learn-shop-base-pojo</module>
 
         <module>learn-shop-public-job</module>
         <!--<module>learn-shop-public-tx</module>-->

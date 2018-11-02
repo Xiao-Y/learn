@@ -2,7 +2,7 @@ package com.billow.remote;
 
 import com.billow.common.enums.ResCodeEnum;
 import com.billow.common.resData.BaseResponse;
-import com.billow.pojo.vo.sys.WhiteListVo;
+import com.billow.pojo.re.WhiteListRe;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,8 +17,8 @@ import java.util.List;
 public class AdminSystemHystric implements AdminSystemRemote {
 
     @Override
-    public BaseResponse<List<WhiteListVo>> findWhiteListVos(String ip, String module, boolean validInd) {
-        BaseResponse<List<WhiteListVo>> baseResponse = new BaseResponse<>(ResCodeEnum.RESCODE_SYSTEM_HYSTRIC.getStatusCode());
+    public BaseResponse<List<WhiteListRe>> findWhiteListVos(String ip, String module, boolean validInd) {
+        BaseResponse<List<WhiteListRe>> baseResponse = new BaseResponse<>(ResCodeEnum.RESCODE_SYSTEM_HYSTRIC.getStatusCode());
         baseResponse.setTraceID("learn-shop-admin-system");
         return baseResponse;
     }
