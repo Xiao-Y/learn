@@ -31,6 +31,9 @@ public class ConvertUtils {
      * @return
      */
     public static <PO, VO> VO convert(PO po, Class<VO> voClass) {
+        if (po == null) {
+            return null;
+        }
         VO vo = null;
         try {
             vo = voClass.newInstance();

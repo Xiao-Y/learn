@@ -1,7 +1,7 @@
 package com.billow.zuul.security.auth.login;
 
+import com.billow.tools.resData.BaseResponse;
 import com.billow.zuul.context.UserContext;
-import com.billow.zuul.resData.BaseResponse;
 import com.billow.zuul.security.token.Token;
 import com.billow.zuul.security.token.TokenFactory;
 import com.billow.zuul.security.token.impl.AccessToken;

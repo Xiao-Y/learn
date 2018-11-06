@@ -1,9 +1,9 @@
 package com.billow.user.service.impl;
 
-import com.codingapi.tx.annotation.TxTransaction;
-import com.billow.common.resData.BaseResponse;
+//import com.codingapi.tx.annotation.TxTransaction;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.user.dao.TestDao;
-import com.billow.common.enums.ResCodeEnum;
+import com.billow.tools.enums.ResCodeEnum;
 
 import com.billow.user.pojo.po.TestPo;
 import com.billow.user.service.TestService;
@@ -46,7 +46,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    @TxTransaction
+//    @TxTransaction
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public BaseResponse<TestVo> saveUser(TestVo testVo) {
         BaseResponse<TestVo> res = new BaseResponse<>(ResCodeEnum.OK);

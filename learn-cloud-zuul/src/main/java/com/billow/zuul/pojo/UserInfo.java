@@ -6,8 +6,18 @@ package com.billow.zuul.pojo;
  */
 public class UserInfo {
 
+    private Long userId;
     private String userName;
     private String password;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public UserInfo setUserId(Long userId) {
+        this.userId = userId;
+        return this;
+    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -28,7 +38,8 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String userName, String password) {
+    public UserInfo(Long userId, String userName, String password) {
+        this.userId = userId;
         this.userName = userName;
         this.password = password;
     }

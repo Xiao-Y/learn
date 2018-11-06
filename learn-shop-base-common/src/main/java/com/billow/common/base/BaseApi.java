@@ -1,8 +1,8 @@
 package com.billow.common.base;
 
 import com.alibaba.fastjson.JSONObject;
-import com.billow.common.enums.ResCodeEnum;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.resData.BaseResponse;
 
 import com.billow.common.business.ex.RoleEx;
 import com.billow.common.business.ex.UserEx;

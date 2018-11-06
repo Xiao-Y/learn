@@ -1,7 +1,7 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.RoleService;
 import io.swagger.annotations.Api;

@@ -1,7 +1,7 @@
 package com.billow.order.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.resData.BaseResponse;
 
 import com.billow.order.producer.CoreOrderProducer;
 import com.billow.order.remote.TestUserRemote;

@@ -17,7 +17,7 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
         </dependency>
-        <!-- 分布式事务 start -->
+         <!--分布式事务 start-->
         <dependency>
             <groupId>com.codingapi</groupId>
             <artifactId>transaction-springcloud</artifactId>

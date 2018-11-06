@@ -18,14 +18,14 @@ public class AdminUserConsumer {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @RabbitHandler
-    @RabbitListener(queues = "${config.mq.orderToUser.orderStatus}")
+//    @RabbitHandler
+//    @RabbitListener(queues = "${config.mq.orderToUser.orderStatus}")
     public void sinkMessage(String message) {
         logger.info("MQ消费String: " + message);
     }
 
-    @RabbitHandler
-    @RabbitListener(queues = "${config.mq.ts.test}")
+//    @RabbitHandler
+//    @RabbitListener(queues = "${config.mq.ts.test}")
     public void sinkMessage(TestVo vo) {
         logger.info("MQ消费VO: " + vo.toString());
     }

@@ -1,7 +1,7 @@
 package com.billow.user.service;
 
 
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.resData.BaseResponse;
 
 import com.billow.user.pojo.vo.TestVo;
 

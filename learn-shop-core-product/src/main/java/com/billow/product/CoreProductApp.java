@@ -7,6 +7,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @ EnableEurekaClient 开启客户端发现
@@ -19,6 +20,7 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 @EnableFeignClients
 @EnableEurekaClient
 @SpringBootApplication
+@ComponentScan("com.billow")
 public class CoreProductApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(CoreProductApp.class, args));

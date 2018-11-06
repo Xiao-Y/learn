@@ -1,7 +1,7 @@
 package com.billow.user.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.user.pojo.vo.UserVo;
 import com.billow.user.service.UserService;
 import io.swagger.annotations.Api;

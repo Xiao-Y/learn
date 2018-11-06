@@ -1,6 +1,6 @@
 package com.billow.order.service;
 
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.order.pojo.vo.OrderVo;
 
 

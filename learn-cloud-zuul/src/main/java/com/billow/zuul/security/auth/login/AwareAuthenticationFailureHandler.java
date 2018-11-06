@@ -1,7 +1,8 @@
 package com.billow.zuul.security.auth.login;
 
-import com.billow.zuul.resData.BaseResponse;
-import com.billow.zuul.resData.ResCodeEnum;
+
+import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.zuul.security.common.ErrorCode;
 import com.billow.zuul.security.exception.AuthMethodNotSupportedException;
 import com.billow.zuul.security.exception.ExpiredTokenException;

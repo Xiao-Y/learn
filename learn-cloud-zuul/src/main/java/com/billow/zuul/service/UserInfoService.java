@@ -1,6 +1,11 @@
 package com.billow.zuul.service;
 
+import com.billow.tools.http.HttpUtils;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.zuul.pojo.UserInfo;
+import com.billow.zuul.pojo.re.UserRe;
+import com.billow.zuul.remote.user.UserRemote;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,12 +15,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserInfoService {
 
-    public UserInfo findByName(String username) {
-        //TODO 该处只是为了模拟查询数据库
-        if (!username.equals("test") && !username.equals("admin") && !username.equals("sa")) {
-            return null;
-        }
-        String password = username;
-        return new UserInfo(username, password);
+    @Autowired
+    private UserRemote userRemote;
+
+    public UserInfo findByName(String usercode) {
+        BaseResponse<UserRe> baseResponse = userRemote.findUserInfoByUsercode(usercode);
+        UserRe userRe = HttpUtils.getResData(baseResponse);
+        return new UserInfo(userRe.getId(), userRe.getUsername(), userRe.getPassword());
     }
 }

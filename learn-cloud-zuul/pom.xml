@@ -28,15 +28,41 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-cloud-common</artifactId>
         </dependency>
-        <!-- base-pojo -->
+        <!-- base-tools -->
         <dependency>
             <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-pojo</artifactId>
+            <artifactId>learn-shop-base-tools</artifactId>
         </dependency>
         <!-- 路由中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zuul</artifactId>
+        </dependency>
+        <!-- 远程连接 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+        <!-- Circuit Breaker: Hystrix Dashboard (断路器：hystrix 仪表盘) -->
+        <!-- 断路器 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
+        <!-- 监控 -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-actuator</artifactId>-->
+        <!--</dependency>-->
+        <!-- 断路器仪表盘 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+        </dependency>
+        <!-- 重试机制 ，必须配，否则重试不生效 -->
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
         </dependency>
         <!-- 认证、授权 -->
         <dependency>

@@ -1,7 +1,7 @@
 package com.billow.job.service.impl;
 
 
-import com.billow.common.constant.MessageTipsCst;
+import com.billow.tools.constant.MessageTipsCst;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.core.manager.QuartzManager;
 import com.billow.job.pojo.ex.JsonResult;

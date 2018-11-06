@@ -1,8 +1,8 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.common.enums.ResCodeEnum;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.resData.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.core.AmqpTemplate;

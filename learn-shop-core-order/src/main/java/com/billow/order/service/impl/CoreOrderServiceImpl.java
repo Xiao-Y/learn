@@ -6,14 +6,9 @@ import com.billow.order.pojo.vo.OrderVo;
 import com.billow.order.remote.TestUserRemote;
 import com.billow.order.service.CoreOrderService;
 import com.codingapi.tx.annotation.TxTransaction;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.order.dao.OrderDao;
-import com.billow.common.enums.ResCodeEnum;
-import com.billow.common.enums.SysEventEunm;
-import com.billow.common.enums.SysEventTypeEunm;
-import com.billow.tools.generator.UUID;
-import com.billow.common.business.sysEvent.model.expand.SysEventPublishDto;
-import com.billow.common.business.sysEvent.service.SysEventPublishService;
+import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.utlis.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +29,6 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private SysEventPublishService sysEventPublishService;
-    @Autowired
     private OrderDao orderDao;
     @Autowired
     private TestUserRemote testUserRemote;
@@ -47,14 +40,7 @@ public class CoreOrderServiceImpl implements CoreOrderService {
         this.save(new OrderVo());
 
         //添加远程要执行的事务
-        SysEventPublishDto sysEventPublishDto = new SysEventPublishDto();
-        sysEventPublishDto.setClassName("123123");
-        sysEventPublishDto.setCreateDate(new Date());
-        sysEventPublishDto.setUpdateDate(new Date());
-        sysEventPublishDto.setEventType(SysEventTypeEunm.event_type_orderToUser_test.getStatusCode());
-        sysEventPublishDto.setId(UUID.generate());
-        sysEventPublishDto.setStatus(SysEventEunm.status_publish.getStatusCode());
-        sysEventPublishService.save(sysEventPublishDto);
+
 
         logger.debug("业务执行完毕...");
     }

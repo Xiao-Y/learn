@@ -1,7 +1,7 @@
 package com.billow.product.remote;
 
-import com.billow.common.enums.ResCodeEnum;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.product.pojo.re.WhiteListRe;
 import org.springframework.stereotype.Component;
 

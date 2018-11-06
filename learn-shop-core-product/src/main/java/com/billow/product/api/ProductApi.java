@@ -1,7 +1,7 @@
 package com.billow.product.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.common.resData.BaseResponse;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.product.pojo.po.ProductPo;
 import com.billow.product.pojo.vo.ProductImageVo;
 import com.billow.product.pojo.vo.ProductVo;
