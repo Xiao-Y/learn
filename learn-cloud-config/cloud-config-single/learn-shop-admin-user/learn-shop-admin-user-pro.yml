@@ -11,42 +11,25 @@ eureka:
 #    status-page-url: http://localhost:${server.port}/swagger-ui.html # api文档页面
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-
+feign: #远程连接
+  hystrix: #熔断器配置
+    enabled: true #启动熔断器
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true #Hystrix\u662F\u5426\u542F\u7528\u8D85\u65F6\u65F6\u95F4
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000 #Hystrix\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u9ED8\u8BA4\u662F1s\uFF0C\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\u9700\u8981\u5927\u4E8Eribbon\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u4E0D\u7136\u4E0D\u4F1A\u89E6\u53D1\u91CD\u8BD5
+          strategy: SEMAPHORE
 spring:
-  cloud:
-    stream: #mq连接配置
-      binders:
-        learnMQ:
-          type: ${config.mq.type}
-          environment:
-            spring:
-              rabbitmq:
-                host: ${config.mq.host} #rabbitMQ服务器地址
-                port: ${config.mq.port}  #rabbitMQ服务器端口
-                username: ${config.mq.username}
-                password: ${config.mq.password}
-                virtual-host: ${config.mq.virtual-host}
-      bindings:
-        input: #channelName，消费者
-          binder: learnMQ #使用名称为learnMQ的环境
-          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
-          contentType: text/plain
-          destination: ${config.mq.orderToUser.orderStatus} #指定了消息获取的目的地，对应于MQ就是 exchange
-          consumer:
-            exchangeType: fanout #指定该主题的类型为广播模式
-            autoBindDlq: true #消费失败的消息放入dlq队列
-            republishToDlq: true
-        inSysEventPublish: #channelName，消费者，事务消息队列
-          binder: learnMQ #使用名称为learnMQ的环境
-          group: ${spring.application.name} #默认情况下同一个队列的只能被同一个group的消费者消费,用于集群
-          contentType: text/plain
-          destination: ${config.mq.tx.SysEventPublish} #指定了消息获取的目的地，对应于MQ就是 exchange
-          consumer:
-            exchangeType: fanout #指定该主题的类型为广播模式
-            autoBindDlq: true #消费失败的消息放入dlq队列
-            republishToDlq: true
-        sleuth: #channelName，生产者,用于链路调用信息收集（zipkin）
-          binder: learnMQ #使用名称为learnMQ的环境
-          destination: sleuth #指定了消息投送的目的地，对应于MQ就是 exchange
+  rabbitmq:
+    host: ${config.mq.host} #rabbitMQ服务器地址
+    port: ${config.mq.port}  #rabbitMQ服务器端口
+    username: ${config.mq.username}
+    password: ${config.mq.password}
+    virtual-host: ${config.mq.virtual-host}
 #测试
 words: 7777
