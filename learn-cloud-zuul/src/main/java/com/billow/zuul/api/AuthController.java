@@ -15,6 +15,7 @@ import com.billow.zuul.security.token.impl.RefreshToken;
 import com.billow.zuul.service.UserInfoService;
 import com.billow.zuul.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -66,16 +67,19 @@ public class AuthController {
         return "test1";
     }
 
+    @PreAuthorize("hasAuthority('TEST')")
     @GetMapping("/api/test2")
     public String test2() {
         return "test2";
     }
 
+    @PreAuthorize("hasAuthority('TEST')")
     @GetMapping("/api/test4")
     public String test4() {
         return "test4";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/manage/test3")
     public String test3() {
         return "test3";

@@ -1,4 +1,4 @@
-package com.billow.zuul.druid;
+package com.billow.auth.druid;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
@@ -58,8 +58,8 @@ public class DruidConfiguration {
             dataSource.setValidationQuery(validationQuery);
         }
         try {
-            //开启Druid的监控统计功能，mergeStat代替stat表示sql合并,wall表示防御SQL注入攻击
-            dataSource.setFilters(druidDSProperties.getFilters());
+            // 开启Druid的监控统计功能，mergeStat代替stat表示sql合并,wall表示防御SQL注入攻击
+            dataSource.setFilters("mergeStat,wall,log4j");
         } catch (SQLException e) {
             e.printStackTrace();
         }

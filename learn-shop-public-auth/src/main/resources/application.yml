@@ -1,0 +1,48 @@
+server:
+  port: 9999
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://119.23.27.78:8761/eureka/
+
+spring:
+  application:
+      name: learn-shop-public-auth
+  jpa: #JPA配置
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+      max-pool-prepared-statement-per-connection-size: 20
+      min-idle: 5
+      time-between-eviction-runs-millis: 20000
+      max-active: 20
+      test-while-idle: true
+      validation-query: SELECT 1 FROM DUAL
+      filters: stat,wall,log4j
+      type: com.alibaba.druid.pool.DruidDataSource
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      max-wait: 60000
+      url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=true
+      test-on-borrow: false
+      password: root
+      pool-prepared-statements: true
+      min-evictable-idle-time-millis: 300000
+      initial-size: 5
+      driver-class-name: com.mysql.jdbc.Driver
+      test-on-return: false
+      username: root
+  redis:
+    host: 119.23.27.78
+    port: 6379
+    password: requirepass12344321
+
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+
+logging.level.org.springframework.security: DEBUG
+logging.leve.org.springframework: DEBUG

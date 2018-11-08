@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,8 +31,9 @@ import java.util.List;
  * @author LiuYongTao
  * @date 2018/5/14 8:58
  */
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String TOKEN_HEADER_PARAM = "X-Authorization";
@@ -40,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private static final String FORM_BASED_LOGIN_ENTRY_POINT = "/api/auth/login";
     private static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
+    private static final String TOKEN_BASED_AUTH_ENTRY_POINT2 = "/**/userApi/**";
     private static final String MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT = "/manage/**";
     private static final String TOKEN_REFRESH_ENTRY_POINT = "/api/auth/refresh_token";
 
@@ -78,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private TokenAuthenticationProcessingFilter buildTokenAuthenticationProcessingFilter() throws Exception {
-        List<String> list = Lists.newArrayList(TOKEN_BASED_AUTH_ENTRY_POINT, MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT);
+        List<String> list = Lists.newArrayList(TOKEN_BASED_AUTH_ENTRY_POINT, MANAGE_TOKEN_BASED_AUTH_ENTRY_POINT,TOKEN_BASED_AUTH_ENTRY_POINT2);
         SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(list);
         TokenAuthenticationProcessingFilter filter = new TokenAuthenticationProcessingFilter(failureHandler, tokenExtractor, matcher);
         filter.setAuthenticationManager(super.authenticationManager());
