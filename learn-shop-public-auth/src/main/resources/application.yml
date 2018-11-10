@@ -35,9 +35,9 @@ spring:
       test-on-return: false
       username: root
   redis:
-    host: 119.23.27.78
+    host: 127.0.0.1
     port: 6379
-    password: requirepass12344321
+    password:
 
 security:
   oauth2:

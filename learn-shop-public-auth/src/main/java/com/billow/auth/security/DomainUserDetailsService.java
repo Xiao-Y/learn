@@ -33,6 +33,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         // 查询用户的权限
         Set<GrantedAuthority> userAuthotities = new HashSet<>();
         userAuthotities.add(new SimpleGrantedAuthority("query-demo"));
+//        return new User("admin", "$2a$10$XOVs4Z1YtPKqKwQVywG9j.xLAqXYRQLGZMGMrZDNbtl6pUC0Weteq", userAuthotities);
         return new User("admin", "admin", userAuthotities);
     }
 }
