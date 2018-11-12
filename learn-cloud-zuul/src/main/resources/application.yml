@@ -33,7 +33,15 @@ hystrix:
             timeoutInMilliseconds: 8000 #Hystrix\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u9ED8\u8BA4\u662F1s\uFF0C\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\u9700\u8981\u5927\u4E8Eribbon\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u4E0D\u7136\u4E0D\u4F1A\u89E6\u53D1\u91CD\u8BD5
           strategy: SEMAPHORE
 zuul:
+  #添加代理头
+  add-proxy-headers: true
+  #敏感头信息
+  sensitive-headers:
   routes:
+    #服务认证和授权
+    uaa:
+      path: /uaa/**
+      serviceId: learn-shop-public-auth
     #系统相关
     admin-system:
       path: /admin-system/**
@@ -53,26 +61,27 @@ zuul:
     public-job:
       path: /public-job/**
       serviceId: learn-shop-public-job
-    public-auth:
-        path: /public-auth/**
-        serviceId: learn-shop-public-auth
+
 security:
+  basic:
+    enabled: false
   oauth2:
     client:
-      access-token-uri: http://localhost:8771/uaa/oauth/token
-      user-authorization-uri: http://localhost:8771/uaa/oauth/authorize
-      client-id: webapp
+      access-token-uri: http://learn-shop-public-auth/uaa/oauth/token
+      user-authorization-uri: http://learn-shop-public-auth/uaa/oauth/authorize
     resource:
-      user-info-uri: http://localhost:8771/uaa/user
+      user-info-uri: http://learn-shop-public-auth/uaa/user
       prefer-token-info: false
-
-billow:
+management:
   security:
-    token:
-      expiration-time: 10 # 分钟 1440
-      refresh-exp-time: 30 # 分钟 2880
-      issuer: "" #签发者
-      signing-key: billow #密钥
+    enabled: false
+#billow:
+#  security:
+#    token:
+#      expiration-time: 10 # 分钟 1440
+#      refresh-exp-time: 30 # 分钟 2880
+#      issuer: "" #签发者
+#      signing-key: billow #密钥
 
 # Logging configuration
 logging:

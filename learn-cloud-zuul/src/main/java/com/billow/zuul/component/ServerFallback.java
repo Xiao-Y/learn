@@ -54,12 +54,12 @@ public class ServerFallback implements FallbackProvider {
 
             @Override
             public int getRawStatusCode() throws IOException {
-                return HttpStatus.OK.value();
+                return getStatusCode().value();
             }
 
             @Override
             public String getStatusText() throws IOException {
-                return HttpStatus.OK.getReasonPhrase();
+                return getStatusCode().getReasonPhrase();
             }
 
             @Override

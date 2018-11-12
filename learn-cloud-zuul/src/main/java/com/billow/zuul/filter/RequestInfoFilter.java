@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 过滤器
+ * 请求信息过滤器
  *
  * @author liuyongtao
  * @create 2018-01-29 9:47
  */
 @Component
-public class MyFilter extends ZuulFilter {
+public class RequestInfoFilter extends ZuulFilter {
 
-    private static Logger LOG = LoggerFactory.getLogger(MyFilter.class);
+    private static Logger LOG = LoggerFactory.getLogger(RequestInfoFilter.class);
 
     protected String getRemoteHost(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
