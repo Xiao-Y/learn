@@ -91,9 +91,13 @@ public class ServerFallback implements FallbackProvider {
     public ClientHttpResponse fallbackResponse(Throwable cause) {
         if (cause != null) {
             String reason = cause.getMessage();
+
             if (reason != null && reason.length() > 0) {
                 String[] split = reason.split(":");
                 logger.error("找不到{} 服务：{}", split[1], reason);
+                return fallbackResponse();
+            } else if (cause.getCause() != null) {
+                logger.error("系统异常：{}", cause.getCause().getLocalizedMessage());
                 return fallbackResponse();
             }
         }
