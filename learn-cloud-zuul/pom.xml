@@ -29,10 +29,10 @@
             <artifactId>learn-cloud-common</artifactId>
         </dependency>
         <!-- base-tools -->
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-tools</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.billow</groupId>-->
+            <!--<artifactId>learn-shop-base-tools</artifactId>-->
+        <!--</dependency>-->
         <!-- 路由中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -74,30 +74,30 @@
             <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
         <!-- alidruid做数据源和监控 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.alibaba</groupId>-->
+            <!--<artifactId>druid</artifactId>-->
+        <!--</dependency>-->
         <!-- mysql -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>mysql</groupId>-->
+            <!--<artifactId>mysql-connector-java</artifactId>-->
+        <!--</dependency>-->
         <!-- JWT token -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>io.jsonwebtoken</groupId>-->
+            <!--<artifactId>jjwt</artifactId>-->
+        <!--</dependency>-->
         <!-- json工具 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
         <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-redis</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-redis</artifactId>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>

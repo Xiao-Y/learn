@@ -38,10 +38,15 @@ spring:
       test-on-return: false
       username: root
   redis:
-    host: 127.0.0.1
+    host: 119.23.27.78
     port: 6379
-    password:
-
+    password: requirepass12344321
+    timeout: 0
+    pool:
+      maxActive: 10
+      max-wait: -1
+      max-idle: 5
+      min-idle: 0
 security:
   oauth2:
     resource:

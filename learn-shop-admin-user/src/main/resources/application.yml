@@ -20,6 +20,13 @@ spring:
     bus:
       trace:
         enabled: true #开启消息跟踪
+#安全配置
+security:
+  oauth2:
+    resource:
+      id: ${spring.application.name}
+      user-info-uri: http://localhost:8771/uaa/user
+      prefer-token-info: false
 management:
   security:
     enabled: false #刷新时，关闭安全验证

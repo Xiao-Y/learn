@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ public class TestUserController {
     @ApiOperation(value = "获取用户信息", notes = "用户信息测试")
     @GetMapping("/indexUser")
     @RefreshScope
+    @PreAuthorize("hasAuthority('query-demo')")
     public String indexUser(String name) {
         System.out.println(words);
         System.out.println("indexUser: " + name);
@@ -45,6 +47,7 @@ public class TestUserController {
 
     @ApiOperation(value = "获取城市信息", notes = "查询出所有城市信息")
     @GetMapping("/findAll")
+    @PreAuthorize("hasAuthority('query-findAll')")
     public List<CityVo> findAll(HttpServletRequest request) {
         return cityService.findAll(null);
     }
