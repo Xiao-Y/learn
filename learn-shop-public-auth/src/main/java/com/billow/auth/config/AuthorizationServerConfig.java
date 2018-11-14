@@ -1,8 +1,10 @@
 package com.billow.auth.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.billow.auth.config.tokenstore.TokenStoreType;
 import com.billow.auth.security.DomainUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -27,11 +29,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private RedisConnectionFactory connectionFactory;
-    @Autowired
     private DomainUserDetailsService domainUserDetailsService;
     @Autowired
     private DruidDataSource dataSource;
+    @Autowired
+    @Qualifier("redisTokenStoreType")
+    private TokenStoreType tokenStoreType;
 
 
     @Override
@@ -40,7 +43,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 // 若无，refresh_token会有UserDetailsService is required错误
                 .userDetailsService(domainUserDetailsService)
-                .tokenStore(redisTokenStore())
+                .tokenStore(tokenStoreType.getTokenStore())
                 .tokenServices(defaultTokenServices());
     }
 
@@ -54,28 +57,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.inMemory()
-//                .withClient("android")
-//                .scopes("xx")
-//                .secret("android")
-//                .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-//                .and()
-//                .withClient("webapp")
-//                .scopes("xx")
-//                .authorizedGrantTypes("implicit");
         clients.withClientDetails(clientDetails());
-    }
-
-    //token存储数据库
-//    @Bean
-//    public JdbcTokenStore jdbcTokenStore(){
-//        return new JdbcTokenStore(dataSource);
-//    }
-
-    // 保存在redis 中
-    @Bean
-    public RedisTokenStore redisTokenStore() {
-        return new RedisTokenStore(connectionFactory);
     }
 
     @Bean
@@ -92,7 +74,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public DefaultTokenServices defaultTokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(redisTokenStore());
+        tokenServices.setTokenStore(tokenStoreType.getTokenStore());
         tokenServices.setSupportRefreshToken(true);
         tokenServices.setClientDetailsService(clientDetails());
         tokenServices.setAccessTokenValiditySeconds(60 * 60 * 12); // token有效期自定义设置，默认12小时
