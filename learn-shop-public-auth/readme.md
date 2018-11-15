@@ -111,6 +111,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        // 客户端访问方式配置数据在数据库中
         clients.withClientDetails(clientDetails());
     }
 
@@ -305,6 +306,32 @@ public class UserController {
 }
 ```
 
+4、 oauth_client_details 为客户端访问方式
+```sql
+
+DROP TABLE IF EXISTS `oauth_client_details`;
+CREATE TABLE `oauth_client_details`  (
+  `client_id` varchar(48) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `resource_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `client_secret` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `scope` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `authorized_grant_types` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `web_server_redirect_uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `authorities` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `access_token_validity` int(11) NULL DEFAULT NULL,
+  `refresh_token_validity` int(11) NULL DEFAULT NULL,
+  `additional_information` varchar(4096) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `autoapprove` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`client_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of oauth_client_details
+-- ----------------------------
+INSERT INTO `oauth_client_details` VALUES ('app', NULL, 'app', 'app', 'password,refresh_token', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('webapp', NULL, 'webapp', 'app', 'authorization_code,password,refresh_token,client_credentials', NULL, NULL, NULL, NULL, NULL, NULL);
+
+```
 #### 二、修改：learn-cloud-zuul
 
 
@@ -461,8 +488,17 @@ public class TestUserController {
 
 ```
 
+#### 四、测试（使用 postmen）
 
-## 1. password 模式：
-### 1.1设置Authorization为 Basic Auth, Username为android，Password为android
-### 1.2.访问 ：
-http://localhost:9999/oauth/token?client_id=android&secret=android&scope=xx&grant_type=password&username=admin&password=admin
+1、 password 模式：
+
+![avatar](temp/01get_access_token.jpg)
+
+![avatar](temp/02get_access_token.jpg)
+
+![avatar](temp/03get_user_info.jpg)
+
+![avatar](temp/04test_indexUser.jpg)
+
+2、authorization_code 模式：
+

@@ -57,6 +57,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        // 客户端访问方式配置数据在数据库中
         clients.withClientDetails(clientDetails());
     }
 
