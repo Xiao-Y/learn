@@ -23,6 +23,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
 //                .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
+                .authorizeRequests()
+                // swagger start
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/images/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers("/configuration/ui").permitAll()
+                .antMatchers("/configuration/security").permitAll()
+                .and()
+                // swagger end
                 .requestMatcher(new OAuth2RequestedMatcher())
                 // 基于token，所以不需要session
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

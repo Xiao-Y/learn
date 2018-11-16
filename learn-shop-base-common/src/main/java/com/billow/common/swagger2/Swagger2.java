@@ -62,7 +62,7 @@ public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAwar
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(new String[]{"swagger-ui.html"})
                 .addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
-        registry.addResourceHandler(new String[]{"/webjars*"})
+        registry.addResourceHandler(new String[]{"/webjars/**"})
                 .addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
     }
 
@@ -72,10 +72,10 @@ public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAwar
         //添加head参数start
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("x-access-token")
-                .description("令牌")
+        tokenPar.name("access_token")
+                .description("请输入您的Access Token")
                 .modelRef(new ModelRef("string"))
-                .parameterType("header")
+                .parameterType("query")//参数类型支持header, cookie, body, query
                 .required(false)
                 .build();
         pars.add(tokenPar.build());
