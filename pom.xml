@@ -67,6 +67,7 @@
         <guava.version>19.0</guava.version>
         <netty.all.version>4.1.12.Final</netty.all.version>
         <jjwt.version>0.7.0</jjwt.version>
+        <commons-io.version>1.3.2</commons-io.version>
     </properties>
 
     <dependencyManagement>
@@ -194,6 +195,11 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
