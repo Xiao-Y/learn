@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * 所有的资源请求在路由之前进行前置过滤
  * 如果请求头不包含 Authorization参数值，直接拦截不再路由
  */
-@Component
+//@Component
 public class AccessFilter extends ZuulFilter {
 
     private static Logger logger = LoggerFactory.getLogger(AccessFilter.class);

@@ -1,5 +1,8 @@
 package com.billow.auth.config;
 
+import com.billow.auth.endpoint.TokenEmptyEntryPoint;
+import com.billow.auth.handler.TokenAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -7,22 +10,19 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-//    @Autowired
-//    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    @Autowired
+    private TokenEmptyEntryPoint tokenEmptyEntryPoint;
+    @Autowired
+    private TokenAccessDeniedHandler tokenAccessDeniedHandler;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-//                .authenticationEntryPoint(restAuthenticationEntryPoint)
-                .and()
                 .authorizeRequests()
                 // swagger start
                 .antMatchers("/swagger-ui.html").permitAll()
@@ -32,16 +32,15 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/configuration/ui").permitAll()
                 .antMatchers("/configuration/security").permitAll()
-                .and()
                 // swagger end
-                .requestMatcher(new OAuth2RequestedMatcher())
-                // 基于token，所以不需要session
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-                .authorizeRequests()
                 .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+                // 异常处理
+                .and().exceptionHandling()
+                // 不传令牌，令牌错误（失效）等
+                .authenticationEntryPoint(tokenEmptyEntryPoint)
+                // 令牌不能访问该资源 （403）异常等
+                .accessDeniedHandler(tokenAccessDeniedHandler)
+                .and().httpBasic();
     }
 
     /**
