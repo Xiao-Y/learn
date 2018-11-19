@@ -209,7 +209,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().and()
                 .csrf().disable()
                 .httpBasic();
     }
@@ -329,7 +328,7 @@ CREATE TABLE `oauth_client_details`  (
 -- Records of oauth_client_details
 -- ----------------------------
 INSERT INTO `oauth_client_details` VALUES ('app', NULL, 'app', 'app', 'password,refresh_token', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('webapp', NULL, 'webapp', 'app', 'authorization_code,password,refresh_token,client_credentials', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('webapp', NULL, 'webapp', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://baidu.com', NULL, NULL, NULL, NULL, NULL);
 
 ```
 #### 二、修改：learn-cloud-zuul
@@ -502,3 +501,27 @@ public class TestUserController {
 
 2、authorization_code 模式：
 
+
+2.1、在浏览器中访问：
+
+http://localhost:8771/uaa/oauth/authorize?response_type=code&client_id=webapp&redirect_uri=http://baidu.com&state=123
+
+获取 code
+
+![avatar](temp/05get_code1.jpg)
+
+![avatar](temp/06get_code2.jpg)
+
+![avatar](temp/07get_code3.jpg)
+
+2.2、postmen中post 访问：
+
+http://localhost:8771/uaa/oauth/token?client_id=webapp&grant_type=authorization_code&code=ukg0Vy&client_secret=webapp&redirect_uri=http://baidu.com
+
+获取 access_token
+
+![avatar](temp/08get_access_token.jpg)
+
+![avatar](temp/09get_user_info.jpg)
+
+![avatar](temp/10test_indexUser.jpg)
