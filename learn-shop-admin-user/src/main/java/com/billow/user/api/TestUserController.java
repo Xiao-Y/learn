@@ -47,7 +47,7 @@ public class TestUserController {
 
     @ApiOperation(value = "获取城市信息", notes = "查询出所有城市信息")
     @GetMapping("/findAll")
-    @PreAuthorize("hasAuthority('query-findAll')")
+    @PreAuthorize("hasAuthority('sys-menuList-index')")
     public List<CityVo> findAll(HttpServletRequest request) {
         return cityService.findAll(null);
     }
