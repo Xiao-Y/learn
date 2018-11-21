@@ -2,11 +2,14 @@ package com.billow.auth.security.config;
 
 import com.billow.auth.security.endpoint.TokenEmptyEntryPoint;
 import com.billow.auth.security.handler.TokenAccessDeniedHandler;
+import com.billow.auth.security.translator.TokenOauthWebResponseExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +22,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private TokenEmptyEntryPoint tokenEmptyEntryPoint;
     @Autowired
     private TokenAccessDeniedHandler tokenAccessDeniedHandler;
+    @Autowired
+    private TokenOauthWebResponseExceptionTranslator tokenOauthWebResponseExceptionTranslator;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -41,6 +46,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // 令牌不能访问该资源 （403）异常等
                 .accessDeniedHandler(tokenAccessDeniedHandler)
                 .and().httpBasic();
+    }
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        // 定义异常转换类生效
+        OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+        authenticationEntryPoint.setExceptionTranslator(tokenOauthWebResponseExceptionTranslator);
+        resources.authenticationEntryPoint(authenticationEntryPoint);
     }
 
     /**

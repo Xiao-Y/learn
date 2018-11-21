@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +30,18 @@ public class TokenEmptyEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
             throws IOException, ServletException {
-        String resCode = ResCodeEnum.RESCODE_NO_TOKEN_ERROR.getStatusCode();
-        String message = "Access token is empty";
-        BaseResponse baseResponse = SecurityUtils.getBaseResponse(resCode, message);
+        String resCode;
+        String message;
 
+        Throwable cause = e.getCause();
+        if (cause instanceof InvalidTokenException) {
+            resCode = ResCodeEnum.RESCODE_SIGNATURE_ERROR.getStatusCode();
+            message = ResCodeEnum.RESCODE_SIGNATURE_ERROR.getStatusName();
+        } else {
+            resCode = ResCodeEnum.RESCODE_NO_TOKEN_ERROR.getStatusCode();
+            message = ResCodeEnum.RESCODE_NO_TOKEN_ERROR.getStatusName();
+        }
+        BaseResponse baseResponse = SecurityUtils.getBaseResponse(resCode, message);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         mapper.writeValue(response.getWriter(), baseResponse);

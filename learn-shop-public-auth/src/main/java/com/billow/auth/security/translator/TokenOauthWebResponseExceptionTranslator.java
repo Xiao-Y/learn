@@ -1,6 +1,6 @@
 package com.billow.auth.security.translator;
 
-import com.billow.auth.security.exception.CustomOauthException;
+import com.billow.auth.security.exception.TokenOauthException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +17,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * 登陆失败的异常响应信息
+ * token 验证不通过的响应异常信息
  *
  * @author liuyongtao
  * @create 2018-11-20 16:56
  */
 @Component
-public class CustomOauthWebResponseExceptionTranslator implements WebResponseExceptionTranslator {
+public class TokenOauthWebResponseExceptionTranslator implements WebResponseExceptionTranslator {
 
     private ThrowableAnalyzer throwableAnalyzer = new DefaultThrowableAnalyzer();
 
@@ -64,7 +64,7 @@ public class CustomOauthWebResponseExceptionTranslator implements WebResponseExc
             headers.set("WWW-Authenticate", String.format("%s %s", OAuth2AccessToken.BEARER_TYPE, e.getSummary()));
         }
 
-        CustomOauthException exception = new CustomOauthException(e.getMessage(), e);
+        TokenOauthException exception = new TokenOauthException(e.getMessage(), e);
 
         ResponseEntity<OAuth2Exception> response = new ResponseEntity<>(exception, headers, HttpStatus.valueOf(status));
 
