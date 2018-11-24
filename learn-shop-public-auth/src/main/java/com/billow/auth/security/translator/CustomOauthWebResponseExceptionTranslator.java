@@ -31,31 +31,32 @@ public class CustomOauthWebResponseExceptionTranslator implements WebResponseExc
     public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
         // Try to extract a SpringSecurityException from the stacktrace
         Throwable[] causeChain = throwableAnalyzer.determineCauseChain(e);
-
         // 异常栈获取 OAuth2Exception 异常
         Exception ase = (OAuth2Exception) throwableAnalyzer.getFirstThrowableOfType(OAuth2Exception.class, causeChain);
-
         // 异常栈中有OAuth2Exception
         if (ase != null) {
             return handleOAuth2Exception((OAuth2Exception) ase);
         }
 
+//        ase = (AuthenticationException) throwableAnalyzer.getFirstThrowableOfType(InternalAuthenticationServiceException.class, causeChain);
+//        if (ase != null) {
+//            return handleOAuth2Exception(new UnauthorizedUserException(ase.getMessage(), ase));
+//        }
         ase = (AuthenticationException) throwableAnalyzer.getFirstThrowableOfType(AuthenticationException.class, causeChain);
         if (ase != null) {
-            return handleOAuth2Exception(new UnauthorizedUserException(e.getMessage(), e));
+            return handleOAuth2Exception(new UnauthorizedUserException(ase.getMessage(), ase));
         }
-
-//        ase = (AccessDeniedException) throwableAnalyzer.getFirstThrowableOfType(AccessDeniedException.class, causeChain);
-//        if (ase instanceof AccessDeniedException) {
-//            return handleOAuth2Exception(new ForbiddenException(ase.getMessage()));
-//        }
-
         // 不包含上述异常则服务器内部错误
-        return handleOAuth2Exception(new OAuth2Exception(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e));
+        return handleOAuth2Exception(new OAuth2Exception(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), ase));
+
+//        OAuth2Exception oAuth2Exception = (OAuth2Exception) e;
+////        return ResponseEntity
+////                .status(oAuth2Exception.getHttpErrorCode())
+////                .body(new CustomOauthException(oAuth2Exception.getMessage()));
+//        return handleOAuth2Exception(oAuth2Exception);
     }
 
     private ResponseEntity<OAuth2Exception> handleOAuth2Exception(OAuth2Exception e) throws IOException {
-
         int status = e.getHttpErrorCode();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Cache-Control", "no-store");
@@ -65,10 +66,7 @@ public class CustomOauthWebResponseExceptionTranslator implements WebResponseExc
         }
 
         CustomOauthException exception = new CustomOauthException(e.getMessage(), e);
-
         ResponseEntity<OAuth2Exception> response = new ResponseEntity<>(exception, headers, HttpStatus.valueOf(status));
-
         return response;
-
     }
 }

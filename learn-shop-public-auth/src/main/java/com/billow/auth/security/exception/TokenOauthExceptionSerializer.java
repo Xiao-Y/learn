@@ -6,7 +6,10 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +29,8 @@ public class TokenOauthExceptionSerializer extends StdSerializer<TokenOauthExcep
     @Override
     public void serialize(TokenOauthException value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
         BaseResponse<Map<String, Object>> baseResponse = new BaseResponse<>();
         baseResponse.setResCode(ResCodeEnum.RESCODE_SIGNATURE_ERROR.getStatusCode());
         baseResponse.setResMsg(ResCodeEnum.RESCODE_SIGNATURE_ERROR.getStatusName());
@@ -34,6 +39,7 @@ public class TokenOauthExceptionSerializer extends StdSerializer<TokenOauthExcep
         jsonObject.put("httpStatus", HttpStatus.BAD_REQUEST);
         jsonObject.put("errorCode", HttpStatus.BAD_REQUEST.value());
         jsonObject.put("message", value.getLocalizedMessage());
+        jsonObject.put("path", request.getServletPath());
 
         if (value.getAdditionalInformation() != null) {
             for (Map.Entry<String, String> entry : value.getAdditionalInformation().entrySet()) {

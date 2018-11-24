@@ -31,25 +31,16 @@ public class TokenOauthWebResponseExceptionTranslator implements WebResponseExce
     public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
         // Try to extract a SpringSecurityException from the stacktrace
         Throwable[] causeChain = throwableAnalyzer.determineCauseChain(e);
-
         // 异常栈获取 OAuth2Exception 异常
         Exception ase = (OAuth2Exception) throwableAnalyzer.getFirstThrowableOfType(OAuth2Exception.class, causeChain);
-
         // 异常栈中有OAuth2Exception
         if (ase != null) {
             return handleOAuth2Exception((OAuth2Exception) ase);
         }
-
         ase = (AuthenticationException) throwableAnalyzer.getFirstThrowableOfType(AuthenticationException.class, causeChain);
         if (ase != null) {
             return handleOAuth2Exception(new UnauthorizedUserException(e.getMessage(), e));
         }
-
-//        ase = (AccessDeniedException) throwableAnalyzer.getFirstThrowableOfType(AccessDeniedException.class, causeChain);
-//        if (ase instanceof AccessDeniedException) {
-//            return handleOAuth2Exception(new ForbiddenException(ase.getMessage()));
-//        }
-
         // 不包含上述异常则服务器内部错误
         return handleOAuth2Exception(new OAuth2Exception(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e));
     }
@@ -63,12 +54,8 @@ public class TokenOauthWebResponseExceptionTranslator implements WebResponseExce
         if (status == HttpStatus.UNAUTHORIZED.value() || (e instanceof InsufficientScopeException)) {
             headers.set("WWW-Authenticate", String.format("%s %s", OAuth2AccessToken.BEARER_TYPE, e.getSummary()));
         }
-
         TokenOauthException exception = new TokenOauthException(e.getMessage(), e);
-
         ResponseEntity<OAuth2Exception> response = new ResponseEntity<>(exception, headers, HttpStatus.valueOf(status));
-
         return response;
-
     }
 }

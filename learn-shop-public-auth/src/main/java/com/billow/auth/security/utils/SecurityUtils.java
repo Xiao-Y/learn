@@ -31,18 +31,20 @@ public final class SecurityUtils {
     /**
      * 拼装验证不通过时的返回信息
      *
-     * @param resCode 返回的代码
-     * @param message 返回的消息
+     * @param resCode    返回的代码
+     * @param httpStatus 错误状态码
+     * @param errorCode  错误状态说明
+     * @param message    返回的消息
      * @return com.billow.tools.resData.BaseResponse
      * @author LiuYongTao
      * @date 2018/11/19 11:00
      */
-    public static BaseResponse getBaseResponse(String resCode, String message) {
+    public static BaseResponse getBaseResponse(String resCode, int httpStatus, String errorCode, String message) {
         BaseResponse<Map<String, Object>> baseResponse = new BaseResponse<>();
         baseResponse.setResCode(resCode);
         Map<String, Object> map = new HashMap<>();
-        map.put("httpStatus", HttpStatus.UNAUTHORIZED);
-        map.put("errorCode", HttpStatus.UNAUTHORIZED.value());
+        map.put("httpStatus", httpStatus);
+        map.put("errorCode", errorCode);
         map.put("message", message);
         baseResponse.setResData(map);
         return baseResponse;

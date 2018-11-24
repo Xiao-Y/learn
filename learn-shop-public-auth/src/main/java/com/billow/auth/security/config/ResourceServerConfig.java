@@ -2,6 +2,7 @@ package com.billow.auth.security.config;
 
 import com.billow.auth.security.endpoint.TokenEmptyEntryPoint;
 import com.billow.auth.security.handler.TokenAccessDeniedHandler;
+import com.billow.auth.security.translator.CustomOauthWebResponseExceptionTranslator;
 import com.billow.auth.security.translator.TokenOauthWebResponseExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private TokenAccessDeniedHandler tokenAccessDeniedHandler;
     @Autowired
     private TokenOauthWebResponseExceptionTranslator tokenOauthWebResponseExceptionTranslator;
+    @Autowired
+    private CustomOauthWebResponseExceptionTranslator customOauthWebResponseExceptionTranslator;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -52,7 +55,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         // 定义异常转换类生效
         OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
-        authenticationEntryPoint.setExceptionTranslator(tokenOauthWebResponseExceptionTranslator);
+        authenticationEntryPoint.setExceptionTranslator(customOauthWebResponseExceptionTranslator);
         resources.authenticationEntryPoint(authenticationEntryPoint);
     }
 

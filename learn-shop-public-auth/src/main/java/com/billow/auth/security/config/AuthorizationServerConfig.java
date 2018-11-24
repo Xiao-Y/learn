@@ -2,6 +2,7 @@ package com.billow.auth.security.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.billow.auth.security.config.tokenstore.TokenStoreType;
+import com.billow.auth.security.endpoint.AuthExceptionEntryPoint;
 import com.billow.auth.security.translator.CustomOauthWebResponseExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +36,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private TokenStoreType tokenStoreType;
     @Autowired
     private CustomOauthWebResponseExceptionTranslator customOauthWebResponseExceptionTranslator;
+    @Autowired
+    private AuthExceptionEntryPoint authExceptionEntryPoint;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -52,7 +55,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         oauthServer
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
-                .allowFormAuthenticationForClients();
+                .allowFormAuthenticationForClients()
+                .authenticationEntryPoint(authExceptionEntryPoint);
     }
 
     @Override

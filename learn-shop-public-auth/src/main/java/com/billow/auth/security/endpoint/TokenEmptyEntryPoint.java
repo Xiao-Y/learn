@@ -31,18 +31,22 @@ public class TokenEmptyEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
             throws IOException, ServletException {
         String resCode;
-        String message;
+        int httpStatus;
+        String errorCode;
+        String message = e.getMessage();
 
         Throwable cause = e.getCause();
         if (cause instanceof InvalidTokenException) {
             resCode = ResCodeEnum.RESCODE_SIGNATURE_ERROR.getStatusCode();
-            message = ResCodeEnum.RESCODE_SIGNATURE_ERROR.getStatusName();
+            httpStatus = HttpStatus.UNAUTHORIZED.value();
+            errorCode = HttpStatus.UNAUTHORIZED.getReasonPhrase();
         } else {
             resCode = ResCodeEnum.RESCODE_NO_TOKEN_ERROR.getStatusCode();
-            message = ResCodeEnum.RESCODE_NO_TOKEN_ERROR.getStatusName();
+            httpStatus = HttpStatus.BAD_REQUEST.value();
+            errorCode = HttpStatus.BAD_REQUEST.getReasonPhrase();
         }
-        BaseResponse baseResponse = SecurityUtils.getBaseResponse(resCode, message);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        BaseResponse baseResponse = SecurityUtils.getBaseResponse(resCode, httpStatus, errorCode, message);
+        response.setStatus(httpStatus);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         mapper.writeValue(response.getWriter(), baseResponse);
     }

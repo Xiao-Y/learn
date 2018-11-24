@@ -27,14 +27,19 @@ hystrix:
     default:
       execution:
         timeout:
-          enabled: true #Hystrix\u662F\u5426\u542F\u7528\u8D85\u65F6\u65F6\u95F4
+          enabled: true #Hystrix 是否启用超时时间
         isolation:
           thread:
-            timeoutInMilliseconds: 80000 #Hystrix\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u9ED8\u8BA4\u662F1s\uFF0C\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\u9700\u8981\u5927\u4E8Eribbon\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u4E0D\u7136\u4E0D\u4F1A\u89E6\u53D1\u91CD\u8BD5
+            #Hystrix 断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
+            timeoutInMilliseconds: 50000
           strategy: SEMAPHORE
+# 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
+ribbon:
+  ReadTimeout: 50000
+  ConnectTimeout: 10000
 zuul:
   host:
-    socket-timeout-millis: 80000
+    socket-timeout-millis: 50000
     connect-timeout-millis: 10000
   #添加代理头
   add-proxy-headers: true
