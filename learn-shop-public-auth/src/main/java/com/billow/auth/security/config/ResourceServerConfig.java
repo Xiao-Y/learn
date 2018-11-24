@@ -25,8 +25,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private TokenAccessDeniedHandler tokenAccessDeniedHandler;
     @Autowired
     private TokenOauthWebResponseExceptionTranslator tokenOauthWebResponseExceptionTranslator;
-    @Autowired
-    private CustomOauthWebResponseExceptionTranslator customOauthWebResponseExceptionTranslator;
+//    @Autowired
+//    private CustomOauthWebResponseExceptionTranslator customOauthWebResponseExceptionTranslator;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -55,7 +55,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         // 定义异常转换类生效
         OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
-        authenticationEntryPoint.setExceptionTranslator(customOauthWebResponseExceptionTranslator);
+        authenticationEntryPoint.setExceptionTranslator(tokenOauthWebResponseExceptionTranslator);
         resources.authenticationEntryPoint(authenticationEntryPoint);
     }
 

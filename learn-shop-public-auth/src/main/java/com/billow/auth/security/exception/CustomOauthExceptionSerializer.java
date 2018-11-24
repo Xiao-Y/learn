@@ -35,8 +35,13 @@ public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauthExc
             baseResponse.setResCode(ResCodeEnum.RESCODE_NOT_FOUND_USER.getStatusCode());
             baseResponse.setResMsg(ResCodeEnum.RESCODE_NOT_FOUND_USER.getStatusName());
         } else if (HttpStatus.BAD_REQUEST.value() == value.getHttpErrorCode()) {
-            baseResponse.setResCode(ResCodeEnum.RESCODE_BAD_REQUEST.getStatusCode());
-            baseResponse.setResMsg(ResCodeEnum.RESCODE_BAD_REQUEST.getStatusName());
+            if ("Missing grant type".equals(value.getLocalizedMessage())) {
+                baseResponse.setResCode(ResCodeEnum.RESCODE_BAD_REQUEST.getStatusCode());
+                baseResponse.setResMsg(ResCodeEnum.RESCODE_BAD_REQUEST.getStatusName());
+            } else {
+                baseResponse.setResCode(ResCodeEnum.RESCODE_NOT_FOUND_USER.getStatusCode());
+                baseResponse.setResMsg(ResCodeEnum.RESCODE_NOT_FOUND_USER.getStatusName());
+            }
         } else {
             baseResponse.setResCode(ResCodeEnum.RESCODE_OTHER_ERROR.getStatusCode());
             baseResponse.setResMsg(ResCodeEnum.RESCODE_OTHER_ERROR.getStatusName());

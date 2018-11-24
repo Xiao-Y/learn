@@ -79,7 +79,7 @@ public enum ResCodeEnum {
      * "0017", "其它系统异常"
      */
     RESCODE_OTHER_ERROR("0017", "其它系统异常"),
-    RESCODE_NO_TOKEN_ERROR("0018", "token 为空异常"),
+    RESCODE_NO_TOKEN_ERROR("0018", "访问此资源需要令牌验证"),
     RESCODE_NOT_FOUND_USER("0019", "用户名或密码错误"),
     /**
      * "8888", "系统服务异常，熔断请求"

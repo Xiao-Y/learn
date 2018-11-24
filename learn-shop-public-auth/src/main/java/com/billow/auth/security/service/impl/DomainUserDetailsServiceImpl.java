@@ -50,7 +50,7 @@ public class DomainUserDetailsServiceImpl implements UserDetailsService {
         UserPo userPo = userDao.findUserInfoByUsercode(usercode);
         if (userPo == null) {
             logger.error("用户：{}，不存在！", usercode);
-            new UsernameNotFoundException("用户：" + usercode + "，不存在！");
+            return null;
         }
 
         Set<GrantedAuthority> userAuthotities = new HashSet<>();

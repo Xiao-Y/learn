@@ -35,7 +35,7 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         String resCode = ResCodeEnum.RESCODE_FORBIDDEN.getStatusCode();
-        String message = "Full authentication is required to access this resource";
+        String message = accessDeniedException.getMessage();
         BaseResponse baseResponse = SecurityUtils.getBaseResponse(resCode, message);
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

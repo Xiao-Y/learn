@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.billow.auth.security.config.tokenstore.TokenStoreType;
 import com.billow.auth.security.endpoint.AuthExceptionEntryPoint;
 import com.billow.auth.security.translator.CustomOauthWebResponseExceptionTranslator;
+import com.billow.auth.security.translator.TokenOauthWebResponseExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

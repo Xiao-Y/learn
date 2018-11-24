@@ -4,7 +4,9 @@ import com.billow.auth.security.exception.CustomOauthException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.DefaultThrowableAnalyzer;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InsufficientScopeException;
@@ -38,22 +40,12 @@ public class CustomOauthWebResponseExceptionTranslator implements WebResponseExc
             return handleOAuth2Exception((OAuth2Exception) ase);
         }
 
-//        ase = (AuthenticationException) throwableAnalyzer.getFirstThrowableOfType(InternalAuthenticationServiceException.class, causeChain);
-//        if (ase != null) {
-//            return handleOAuth2Exception(new UnauthorizedUserException(ase.getMessage(), ase));
-//        }
         ase = (AuthenticationException) throwableAnalyzer.getFirstThrowableOfType(AuthenticationException.class, causeChain);
         if (ase != null) {
             return handleOAuth2Exception(new UnauthorizedUserException(ase.getMessage(), ase));
         }
         // 不包含上述异常则服务器内部错误
         return handleOAuth2Exception(new OAuth2Exception(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), ase));
-
-//        OAuth2Exception oAuth2Exception = (OAuth2Exception) e;
-////        return ResponseEntity
-////                .status(oAuth2Exception.getHttpErrorCode())
-////                .body(new CustomOauthException(oAuth2Exception.getMessage()));
-//        return handleOAuth2Exception(oAuth2Exception);
     }
 
     private ResponseEntity<OAuth2Exception> handleOAuth2Exception(OAuth2Exception e) throws IOException {
