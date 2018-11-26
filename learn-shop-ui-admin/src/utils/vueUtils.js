@@ -1,6 +1,8 @@
+import md5 from 'js-md5'
+
 var VueUtils = {
   // /* ================ 深拷贝,不含有 function 可用 ================ */
-  deepCloneJson: function (initalObj) {
+  deepCloneJson: function(initalObj) {
     var obj = {};
     try {
       obj = JSON.parse(JSON.stringify(initalObj));
@@ -65,7 +67,7 @@ var VueUtils = {
    * @param 元素
    * @returns 元素类型
    */
-  getType: function (obj) {
+  getType: function(obj) {
     //tostring会返回对应不同的标签的构造函数
     var toString = Object.prototype.toString;
     var map = {
@@ -84,6 +86,14 @@ var VueUtils = {
       return 'element';
     }
     return map[toString.call(obj)];
+  },
+  /**
+   * md5 前端加密
+   * @param  需要加密的字符串
+   * @return 加密后的字符串
+   */
+  md5: function(string) {
+    return md5(string);
   }
 }
 

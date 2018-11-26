@@ -7,7 +7,10 @@ import store from '../store'
 import {
   getToken
 } from '@/utils/auth'
-import {showFullScreenLoading, tryHideFullScreenLoading} from '@/utils/loading'
+import {
+  showFullScreenLoading,
+  tryHideFullScreenLoading
+} from '@/utils/loading'
 
 // 创建axios实例
 const service = axios.create({
@@ -18,13 +21,14 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
-  console.info('请求参数:', config)
   if (config.showLoading) {
     showFullScreenLoading();
   }
   if (store.getters.token) {
+    config.params['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
+  console.info('请求参数:', config)
   return config
 }, error => {
   console.log(error) // for debug
@@ -40,7 +44,7 @@ service.interceptors.response.use(response => {
     }
     if (res.resCode !== '0000') {
       Message({
-        message: res.resMsg,
+        message: res.resCode + " " + res.resMsg,
         type: 'error',
         duration: 5 * 1000
       })

@@ -1,6 +1,14 @@
-import {login, logout} from '@/api/login'
-import {getToken, setToken, removeToken} from '@/utils/auth'
+import {
+  login,
+  logout
+} from '@/api/login'
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
 import types from '@/store/mutationsType'
+import VueUtils from '@/utils/vueUtils'
 
 const loginHandle = {
   state: {
@@ -27,10 +35,14 @@ const loginHandle = {
 
   actions: {
     // 登录
-    LoginActions({commit}, userInfo) {
+    LoginActions({
+      commit
+    }, userInfo) {
       const username = userInfo.username.trim();
+      const password = userInfo.password;
+      const rawPassword = VueUtils.md5(password);
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(res => {
+        login(username, rawPassword).then(res => {
           const data = res.resData;
           setToken(data.token);
           commit(types.SET_NAME, username);
@@ -44,7 +56,10 @@ const loginHandle = {
       })
     },
     // 登出
-    LogOutActions({commit, state}) {
+    LogOutActions({
+      commit,
+      state
+    }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit(types.SET_TOKEN, '');
@@ -58,7 +73,9 @@ const loginHandle = {
     },
 
     // 前端 登出
-    FedLogOutActions({commit}) {
+    FedLogOutActions({
+      commit
+    }) {
       return new Promise(resolve => {
         commit(types.SET_TOKEN, '');
         removeToken();

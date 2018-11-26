@@ -10,22 +10,33 @@ module.exports = {
     assetsSubDirectory: 'static', // 静态资源文件夹
     assetsPublicPath: '/', // 发布路径
     proxyTable: {
+      '/uaa': {
+        target: 'http://127.0.0.1:8771', // 接口的域名
+        changeOrigin: true // 如果接口跨域，需要进行这个参数配置
+      },
       '/admin-system': {
-        target: 'http://127.0.0.1:8811', // 接口的域名
+        target: 'http://127.0.0.1:8771', // 接口的域名
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
         pathRewrite: {
           '^/admin-system': '' //将前缀 '/api' 转为 ''
         }
       },
+      '/admin-user': {
+        target: 'http://127.0.0.1:8771', // 接口的域名
+        changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+        pathRewrite: {
+          '^/admin-user': '' //将前缀 '/api' 转为 ''
+        }
+      },
       '/public-job': {
-        target: 'http://127.0.0.1:8011', // 接口的域名
+        target: 'http://127.0.0.1:8771', // 接口的域名
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
         pathRewrite: {
           '^/public-job': '' //将前缀 '/api' 转为 ''
         }
       },
       '/core-product': {
-        target: 'http://127.0.0.1:8911', // 接口的域名
+        target: 'http://127.0.0.1:8771', // 接口的域名
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
         pathRewrite: {
           '^/core-product': '' //将前缀 '/api' 转为 ''

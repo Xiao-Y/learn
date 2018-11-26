@@ -1,5 +1,6 @@
 package com.billow.auth.security.config;
 
+import com.billow.tools.generator.Md5Encrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,8 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .anyRequest().authenticated()
-                .and()
-                .csrf().disable()
+                .and().csrf().disable()
+//                .formLogin().successHandler(loginAuthenticationSuccessHandler)
+//                .and()
                 .httpBasic();
     }
 
@@ -47,20 +49,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/favor.ioc");
     }
 
+    /**
+     * 密码校验
+     *
+     * @return org.springframework.security.crypto.password.PasswordEncoder
+     * @author LiuYongTao
+     * @date 2018/11/26 9:51
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         // 密码加密
         // return new BCryptPasswordEncoder();
         // 不加密密码
         return new PasswordEncoder() {
-
             @Override
-            public String encode(CharSequence charSequence) {
-                return charSequence.toString();
+            public String encode(CharSequence rawPassword) {
+                return rawPassword.toString();
             }
 
             @Override
-            public boolean matches(CharSequence charSequence, String s) {
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+//                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
                 return true;
             }
         };

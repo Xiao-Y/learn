@@ -10,6 +10,7 @@ import { global } from '@/global/global'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueUtils from '@/utils/vueUtils'
+import md5 from 'js-md5'
 
 import '@/genRouter' // permission control
 Vue.use(Vuex)
@@ -19,6 +20,7 @@ Vue.use(ElementUI, {
 })
 
 Vue.prototype.VueUtils = VueUtils;
+Vue.prototype.$md5 = md5;
 
 // 加载用户主题
 if (localStorage.getItem('themeValue')) {
