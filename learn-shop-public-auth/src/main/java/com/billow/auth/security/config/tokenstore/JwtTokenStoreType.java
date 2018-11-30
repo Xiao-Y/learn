@@ -18,17 +18,17 @@ public class JwtTokenStoreType implements TokenStoreType {
     public TokenStore getTokenStore() {
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
-
-    /**
-     * token 的生成器
-     *
-     * @return org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
-     * @author LiuYongTao
-     * @date 2018/11/14 15:37
-     */
-    private JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("123");
-        return converter;
-    }
+//
+//    /**
+//     * token 的生成器
+//     *
+//     * @return org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
+//     * @author LiuYongTao
+//     * @date 2018/11/14 15:37
+//     */
+//    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//        converter.setSigningKey("123");
+//        return converter;
+//    }
 }
