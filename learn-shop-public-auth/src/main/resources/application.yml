@@ -51,6 +51,9 @@ security:
   oauth2:
     resource:
       filter-order: 3
-
+auth:
+  security:
+    oauth2:
+      jwtSigningKey: billow
 logging.level.org.springframework.security: DEBUG
 logging.leve.org.springframework: DEBUG

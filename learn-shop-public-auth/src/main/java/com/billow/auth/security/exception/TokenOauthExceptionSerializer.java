@@ -36,8 +36,13 @@ public class TokenOauthExceptionSerializer extends StdSerializer<TokenOauthExcep
         baseResponse.setResMsg(ResCodeEnum.RESCODE_SIGNATURE_ERROR.getStatusName());
 
         Map<String, Object> jsonObject = new HashMap<>();
-        jsonObject.put("httpStatus", HttpStatus.BAD_REQUEST);
-        jsonObject.put("errorCode", HttpStatus.BAD_REQUEST.value());
+//        jsonObject.put("httpStatus", HttpStatus.BAD_REQUEST);
+//        jsonObject.put("errorCode", HttpStatus.BAD_REQUEST.value());
+//        jsonObject.put("message", value.getLocalizedMessage());
+//        jsonObject.put("path", request.getServletPath());
+
+        jsonObject.put("errorCode", value.getHttpErrorCode());
+        jsonObject.put("reasonPhrase", HttpStatus.valueOf(value.getHttpErrorCode()).getReasonPhrase());
         jsonObject.put("message", value.getLocalizedMessage());
         jsonObject.put("path", request.getServletPath());
 

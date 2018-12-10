@@ -48,8 +48,8 @@ public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauthExc
         }
 
         Map<String, Object> jsonObject = new HashMap<>();
-        jsonObject.put("httpStatus", value.getHttpErrorCode());
-        jsonObject.put("errorCode", HttpStatus.valueOf(value.getHttpErrorCode()).getReasonPhrase());
+        jsonObject.put("errorCode", value.getHttpErrorCode());
+        jsonObject.put("reasonPhrase", HttpStatus.valueOf(value.getHttpErrorCode()).getReasonPhrase());
         jsonObject.put("message", value.getLocalizedMessage());
         jsonObject.put("path", request.getServletPath());
 

@@ -1,19 +1,25 @@
 package com.billow.auth.security.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
+import com.billow.auth.properties.OAuth2Properties;
+import com.billow.auth.security.config.enhancer.CustomJwtAccessTokenConverter;
 import com.billow.auth.security.endpoint.TokenEmptyEntryPoint;
 import com.billow.auth.security.handler.TokenAccessDeniedHandler;
-import com.billow.auth.security.translator.CustomOauthWebResponseExceptionTranslator;
 import com.billow.auth.security.translator.TokenOauthWebResponseExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableResourceServer
@@ -25,8 +31,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private TokenAccessDeniedHandler tokenAccessDeniedHandler;
     @Autowired
     private TokenOauthWebResponseExceptionTranslator tokenOauthWebResponseExceptionTranslator;
-//    @Autowired
-//    private CustomOauthWebResponseExceptionTranslator customOauthWebResponseExceptionTranslator;
+    @Autowired
+    private DruidDataSource dataSource;
+    @Autowired
+    private OAuth2Properties oAuth2Properties;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -56,20 +64,32 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         // 定义异常转换类生效
         OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
         authenticationEntryPoint.setExceptionTranslator(tokenOauthWebResponseExceptionTranslator);
-        resources.authenticationEntryPoint(authenticationEntryPoint);
+        resources
+                .tokenStore(tokenStore())
+                .authenticationEntryPoint(authenticationEntryPoint);
     }
 
-    /**
-     * 定义OAuth2请求匹配器
-     */
-    private static class OAuth2RequestedMatcher implements RequestMatcher {
-        @Override
-        public boolean matches(HttpServletRequest request) {
-            String auth = request.getHeader("Authorization");
-            //判断来源请求是否包含oauth2授权信息,这里授权信息来源可能是头部的Authorization值以Bearer开头,或者是请求参数中包含access_token参数,满足其中一个则匹配成功
-            boolean haveOauth2Token = (auth != null) && auth.startsWith("Bearer");
-            boolean haveAccessToken = request.getParameter("access_token") != null;
-            return haveOauth2Token || haveAccessToken;
-        }
+    @Bean
+    @Primary
+    public ClientDetailsService clientDetails() {
+        return new JdbcClientDetailsService(dataSource);
+    }
+
+    @Bean
+    @Primary
+    public TokenStore tokenStore() {
+        // token存储,这里使用jwt方式存储
+        TokenStore tokenStore = new JwtTokenStore(accessTokenConverter());
+        return tokenStore;
+    }
+
+    @Bean
+    @Primary
+    public JwtAccessTokenConverter accessTokenConverter() {
+        // Token转换器必须与认证服务一致
+        CustomJwtAccessTokenConverter accessTokenConverter = new CustomJwtAccessTokenConverter();
+        // 测试用,授权服务使用相同的字符达到一个对称加密的效果,生产时候使用RSA非对称加密方式
+        accessTokenConverter.setSigningKey(oAuth2Properties.getJwtSigningKey());
+        return accessTokenConverter;
     }
 }

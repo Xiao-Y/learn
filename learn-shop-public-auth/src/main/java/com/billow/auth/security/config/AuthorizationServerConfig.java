@@ -1,7 +1,8 @@
 package com.billow.auth.security.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.billow.auth.security.config.tokenstore.TokenStoreType;
+import com.billow.auth.properties.OAuth2Properties;
+import com.billow.auth.security.config.enhancer.CustomJwtAccessTokenConverter;
 import com.billow.auth.security.endpoint.AuthExceptionEntryPoint;
 import com.billow.auth.security.translator.CustomOauthWebResponseExceptionTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 
 @Configuration
@@ -32,12 +35,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private DruidDataSource dataSource;
     @Autowired
-    @Qualifier("redisTokenStoreType")
-    private TokenStoreType tokenStoreType;
-    @Autowired
     private CustomOauthWebResponseExceptionTranslator customOauthWebResponseExceptionTranslator;
     @Autowired
     private AuthExceptionEntryPoint authExceptionEntryPoint;
+    @Autowired
+    private OAuth2Properties oAuth2Properties;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -45,8 +47,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 // 若无，refresh_token会有UserDetailsService is required错误
                 .userDetailsService(userDetailsService)
-                .tokenStore(tokenStoreType.getTokenStore())
-                .tokenServices(defaultTokenServices())
+                .tokenStore(tokenStore())
+                // jwt 使用,其它不使用
+                .accessTokenConverter(accessTokenConverter())
                 .exceptionTranslator(customOauthWebResponseExceptionTranslator);
     }
 
@@ -66,24 +69,26 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Bean
+    @Primary
+    //  客户端访问方式配置数据在数据库中
     public ClientDetailsService clientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
 
-    /**
-     * <p>注意，自定义TokenServices的时候，需要设置@Primary，否则报错，</p>
-     *
-     * @return
-     */
-    @Primary
     @Bean
-    public DefaultTokenServices defaultTokenServices() {
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(tokenStoreType.getTokenStore());
-        tokenServices.setSupportRefreshToken(true);
-        tokenServices.setClientDetailsService(clientDetails());
-        tokenServices.setAccessTokenValiditySeconds(60 * 60 * 12); // token有效期自定义设置，默认12小时
-        tokenServices.setRefreshTokenValiditySeconds(60 * 60 * 24 * 7);//默认30天，这里修改
-        return tokenServices;
+    @Primary
+    public JwtAccessTokenConverter accessTokenConverter() {
+        CustomJwtAccessTokenConverter accessTokenConverter = new CustomJwtAccessTokenConverter();
+        // 测试用,资源服务使用相同的字符达到一个对称加密的效果,生产时候使用RSA非对称加密方式
+        accessTokenConverter.setSigningKey(oAuth2Properties.getJwtSigningKey());
+        return accessTokenConverter;
+    }
+
+    @Bean
+    @Primary
+    public TokenStore tokenStore() {
+        // token 保存方式,更多保存方式查看 com.billow.auth.security.config.tokenstore
+        TokenStore tokenStore = new JwtTokenStore(accessTokenConverter());
+        return tokenStore;
     }
 }
