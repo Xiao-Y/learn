@@ -1,5 +1,8 @@
 package com.billow.auth.security.config.enhancer;
 
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -16,16 +19,17 @@ import java.util.Map;
  */
 public class CustomJwtAccessTokenConverter extends JwtAccessTokenConverter {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomJwtAccessTokenConverter.class);
+
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+        DefaultOAuth2AccessToken enhancedToken = (DefaultOAuth2AccessToken) super.enhance(accessToken, authentication);
+        logger.info(JSONObject.toJSONString(enhancedToken, true));
         //往jwt添加的自定义信息
         Map<String, Object> info = new HashMap<>();
-//        info.put("company", "imooc");
-//        info.put("product_code", "100");
-//        info.put("resCode", "0000");
-        info.put("blog", "https://Xiao-Y.github.io/");
-        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
-        OAuth2AccessToken enhancedToken = super.enhance(accessToken, authentication);
+        info.put("resCode", "1111");
+        info.put("github", "https://Xiao-Y.github.io/");
+        enhancedToken.setAdditionalInformation(info);
         return enhancedToken;
     }
 

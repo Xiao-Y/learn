@@ -25,7 +25,7 @@ service.interceptors.request.use(config => {
     showFullScreenLoading();
   }
   if (store.getters.token) {
-    config.params['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    //config.params['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
   console.info('请求参数:', config)
@@ -38,16 +38,29 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(response => {
     const res = response.data
-    console.info('响应数据:', res)
     if (response.config.showLoading) {
       tryHideFullScreenLoading();
     }
-    if (res.resCode !== '0000') {
+    if (res.resCode == '0000') { // 获取正常数据
+      console.info('响应数据:', res)
+      return response.data;
+    } else if (res.resCode == '1111') { // 获取token
+      // 构建返回页面数据
+      var data = {
+        resCode: res.resCode,
+        resData: {
+          token: res.access_token,
+          refToken: res.refresh_token
+        }
+      }
+      console.info('响应数据:', res);
+      return data;
+    } else {
       Message({
         message: res.resCode + " " + res.resMsg,
         type: 'error',
         duration: 5 * 1000
-      })
+      });
 
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
       if (res.resCode === 50008 || res.resCode === 50012 || res.resCode === 50014) {
@@ -57,13 +70,11 @@ service.interceptors.response.use(response => {
           type: 'warning'
         }).then(() => {
           store.dispatch('FedLogOutActions').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
+            location.reload(); // 为了重新实例化vue-router对象 避免bug
           })
         })
       }
-      return Promise.reject('error')
-    } else {
-      return response.data
+      return Promise.reject('error');
     }
   },
   error => {
