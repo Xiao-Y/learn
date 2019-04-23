@@ -56,4 +56,4 @@ auth:
     oauth2:
       jwtSigningKey: billow
 logging.level.org.springframework.security: DEBUG
-logging.leve.org.springframework: DEBUG
+logging.level.org.springframework: DEBUG
