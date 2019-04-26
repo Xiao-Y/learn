@@ -18,6 +18,12 @@
     </properties>
 
     <dependencies>
+        <!-- 统一认证受权模块 -->
+        <dependency>
+            <artifactId>auth-server</artifactId>
+            <groupId>com.billow</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- 注册中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -30,8 +36,8 @@
         </dependency>
         <!-- base-tools -->
         <!--<dependency>-->
-            <!--<groupId>com.billow</groupId>-->
-            <!--<artifactId>learn-shop-base-tools</artifactId>-->
+        <!--<groupId>com.billow</groupId>-->
+        <!--<artifactId>learn-shop-base-tools</artifactId>-->
         <!--</dependency>-->
         <!-- 路由中心 -->
         <dependency>
@@ -51,8 +57,8 @@
         </dependency>
         <!-- 监控 -->
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-actuator</artifactId>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-actuator</artifactId>-->
         <!--</dependency>-->
         <!-- 断路器仪表盘 -->
         <dependency>
@@ -64,40 +70,30 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
-        <!-- 认证、授权 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
-        </dependency>
         <!-- alidruid做数据源和监控 -->
-        <!--<dependency>-->
-            <!--<groupId>com.alibaba</groupId>-->
-            <!--<artifactId>druid</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
         <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- redis -->
         <!--<dependency>-->
-            <!--<groupId>mysql</groupId>-->
-            <!--<artifactId>mysql-connector-java</artifactId>-->
-        <!--</dependency>-->
-        <!-- JWT token -->
-        <!--<dependency>-->
-            <!--<groupId>io.jsonwebtoken</groupId>-->
-            <!--<artifactId>jjwt</artifactId>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-redis</artifactId>-->
         <!--</dependency>-->
         <!-- json工具 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-        <!-- redis -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-redis</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 
     <build>

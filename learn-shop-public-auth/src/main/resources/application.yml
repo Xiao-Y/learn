@@ -28,9 +28,9 @@ spring:
       type: com.alibaba.druid.pool.DruidDataSource
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
       max-wait: 60000
-      url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=true
+      url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
       test-on-borrow: false
-      password: root
+      password: ali-root
       pool-prepared-statements: true
       min-evictable-idle-time-millis: 300000
       initial-size: 5
@@ -48,9 +48,9 @@ spring:
       max-idle: 5
       min-idle: 0
 security:
-  oauth2:
-    resource:
-      filter-order: 3
+  basic:
+    enabled: false
+
 auth:
   security:
     oauth2:

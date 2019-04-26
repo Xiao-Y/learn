@@ -4,14 +4,33 @@ server:
 spring:
   application:
     name: learn-cloud-zuul
-  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
+#  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
+#    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: update
-
+  datasource:
+    max-pool-prepared-statement-per-connection-size: 20
+    min-idle: 5
+    time-between-eviction-runs-millis: 20000
+    max-active: 20
+    test-while-idle: true
+    validation-query: SELECT 1 FROM DUAL
+    filters: stat,wall,log4j
+    type: com.alibaba.druid.pool.DruidDataSource
+    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    max-wait: 60000
+    url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
+    test-on-borrow: false
+    pool-prepared-statements: true
+    min-evictable-idle-time-millis: 300000
+    initial-size: 5
+    driver-class-name: com.mysql.jdbc.Driver
+    test-on-return: false
+    username: root
+    password: ali-root
 eureka:
   client:
     serviceUrl:
@@ -41,10 +60,10 @@ zuul:
   host:
     socket-timeout-millis: 50000
     connect-timeout-millis: 10000
-  #添加代理头
-  add-proxy-headers: true
-  #敏感头信息
-  sensitive-headers:
+#  #添加代理头
+#  add-proxy-headers: false
+#  #敏感头信息
+#  sensitive-headers:
   routes:
     #服务认证和授权
     uaa:
@@ -69,20 +88,19 @@ zuul:
     public-job:
       path: /public-job/**
       serviceId: learn-shop-public-job
-
-security:
-  basic:
-    enabled: false
-  oauth2:
-    client:
-      access-token-uri: http://learn-shop-public-auth/uaa/oauth/token
-      user-authorization-uri: http://learn-shop-public-auth/uaa/oauth/authorize
-    resource:
-      user-info-uri: http://learn-shop-public-auth/uaa/user
-      prefer-token-info: false
-management:
-  security:
-    enabled: false
+#security:
+#  basic:
+#    enabled: false
+#  oauth2:
+#    client:
+#      access-token-uri: http://learn-shop-public-auth/uaa/oauth/token
+#      user-authorization-uri: http://learn-shop-public-auth/uaa/oauth/authorize
+#    resource:
+#      user-info-uri: http://learn-shop-public-auth/uaa/user
+#      prefer-token-info: false
+#management:
+#  security:
+#    enabled: false
 #billow:
 #  security:
 #    token:
@@ -90,14 +108,10 @@ management:
 #      refresh-exp-time: 30 # 分钟 2880
 #      issuer: "" #签发者
 #      signing-key: billow #密钥
-
+auth:
+  security:
+    oauth2:
+      jwtSigningKey: billow
 # Logging configuration
 logging:
-  level:
-    org.springframework:
-      data: DEBUG
-      security: DEBUG
-    com:
-      billow:
-        security: DEBUG
-        filter: DEBUG
+  level: DEBUG

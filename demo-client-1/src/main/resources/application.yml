@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  context-path: /client1
+
+security:
+  oauth2:
+    client:
+      client-id: webapp
+      client-secret: webapp
+      user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
+      access-token-uri: http://127.0.0.1:9999/oauth/token
+    resource:
+      jwt:
+        key-uri: http://127.0.0.1:9999/oauth/token_key
+
+logging:
+  level: debug

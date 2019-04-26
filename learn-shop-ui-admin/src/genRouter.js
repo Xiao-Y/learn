@@ -13,7 +13,10 @@ router.beforeEach((to, from, next) => {
       store.commit(types.SET_ROUTERS);
       next();
     } else {
-      if (store.getters.menus.length === 0) {
+      if (!store.getters.menus) {
+        Message.error('该用户没有配置权限');
+        next({path: '/login'})
+      } else if (store.getters.menus.length === 0) {
         // 获取用户信息
         // store.dispatch('GetInfoActions').then(res => { // 拉取用户信息
         //   var data = res.resData;

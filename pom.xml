@@ -39,6 +39,8 @@
         <!--<module>learn-shop-public-tx</module>-->
         <module>tx-manager</module>
         <module>learn-shop-public-auth</module>
+        <module>demo-client-1</module>
+        <module>auth-server</module>
     </modules>
     <packaging>pom</packaging>
 

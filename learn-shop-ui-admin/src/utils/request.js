@@ -25,8 +25,9 @@ service.interceptors.request.use(config => {
     showFullScreenLoading();
   }
   if (store.getters.token) {
-    //config.params['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    config.params['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    config.headers['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
   console.info('请求参数:', config)
   return config
