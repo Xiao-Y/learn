@@ -12,6 +12,6 @@ security:
     resource:
       jwt:
         key-uri: http://127.0.0.1:9999/oauth/token_key
-
+      user-info-uri: http://127.0.0.1:9999/user #获取用户信息的地址
 logging:
   level: debug

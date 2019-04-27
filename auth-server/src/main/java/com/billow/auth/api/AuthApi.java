@@ -9,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpoint;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -21,28 +23,39 @@ import java.io.UnsupportedEncodingException;
  * @author LiuYongTao
  * @date 2018/11/15 14:32
  */
-@RestController
-public class UserApi {
+@FrameworkEndpoint
+public class AuthApi {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserApi.class);
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private OAuth2Properties oAuth2Properties;
 
     @GetMapping("/user")
-    public Object getCurrentUser1(Authentication authentication, HttpServletRequest request) throws UnsupportedEncodingException {
-        LOGGER.info("【SecurityOauth2Application】 getCurrentUser1 authenticaiton={}", JSONObject.toJSONString(authentication));
+    public Object getCurrentUser(Authentication authentication, HttpServletRequest request) throws UnsupportedEncodingException {
+        logger.info("authenticaiton={}", JSONObject.toJSONString(authentication));
         String header = request.getHeader("Authorization");
         String token = StringUtils.substringAfter(header, "bearer ");
+        logger.info("token={}", token);
         String access_token = request.getParameter("access_token");
-
+        logger.info("access_token={}", access_token);
         Claims claims = Jwts.parser()
                 .setSigningKey(oAuth2Properties.getJwtSigningKey().getBytes("UTF-8"))
                 .parseClaimsJws(access_token).getBody();
         String blog = claims.get("blog", String.class);
-        LOGGER.info("【SecurityOauth2Application】 getCurrentUser1 blog={}", blog);
+        logger.info("blog={}", blog);
 
         return authentication;
+    }
+
+    /**
+     * 认证页面
+     *
+     * @return ModelAndView
+     */
+    @GetMapping("/authentication/require")
+    public ModelAndView require() {
+        return new ModelAndView("/login.html");
     }
 
 //    public Principal user(Principal user) {

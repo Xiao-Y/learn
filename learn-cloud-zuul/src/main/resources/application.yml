@@ -60,15 +60,18 @@ zuul:
   host:
     socket-timeout-millis: 50000
     connect-timeout-millis: 10000
-#  #添加代理头
-#  add-proxy-headers: false
+#  add-host-header: true
+##  #添加代理头
+#  add-proxy-headers: true
 #  #敏感头信息
-#  sensitive-headers:
+  sensitive-headers:
   routes:
     #服务认证和授权
     uaa:
       path: /uaa/**
       serviceId: learn-shop-public-auth
+#      strip-prefix: true
+#      custom-sensitive-headers: true
     #系统相关
     admin-system:
       path: /admin-system/**
@@ -108,10 +111,6 @@ zuul:
 #      refresh-exp-time: 30 # 分钟 2880
 #      issuer: "" #签发者
 #      signing-key: billow #密钥
-auth:
-  security:
-    oauth2:
-      jwtSigningKey: billow
 # Logging configuration
 logging:
   level: DEBUG

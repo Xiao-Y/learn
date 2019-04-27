@@ -35,7 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .formLogin().loginPage("/authentication/require")
+                .formLogin()
+                .loginPage("/authentication/require")
                 .loginProcessingUrl("/authentication/form")
                 .permitAll()
                 .successHandler(customerAuthenticationSuccessRedirectHandler)

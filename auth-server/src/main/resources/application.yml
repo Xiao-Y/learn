@@ -1,8 +1,0 @@
-security:
-  basic:
-    enabled: false
-
-auth:
-  security:
-    oauth2:
-      jwtSigningKey: billow
