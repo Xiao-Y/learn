@@ -23,10 +23,12 @@ spring:
 #安全配置
 security:
   oauth2:
+    client:
+      client-id: webapp
+      client-secret: webapp
+      user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
+      access-token-uri: http://127.0.0.1:9999/oauth/token
     resource:
-      id: ${spring.application.name}
-      user-info-uri: http://localhost:8771/uaa/user
-      prefer-token-info: false
-management:
-  security:
-    enabled: false #刷新时，关闭安全验证
+      jwt:
+        key-uri: http://127.0.0.1:9999/oauth/token_key
+      user-info-uri: http://127.0.0.1:9999/user #获取用户信息的地址

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 
 /**
  * 查询用户信息
@@ -31,22 +32,22 @@ public class AuthApi {
     @Autowired
     private OAuth2Properties oAuth2Properties;
 
-    @GetMapping("/user")
-    public Object getCurrentUser(Authentication authentication, HttpServletRequest request) throws UnsupportedEncodingException {
-        logger.info("authenticaiton={}", JSONObject.toJSONString(authentication));
-        String header = request.getHeader("Authorization");
-        String token = StringUtils.substringAfter(header, "bearer ");
-        logger.info("token={}", token);
-        String access_token = request.getParameter("access_token");
-        logger.info("access_token={}", access_token);
-        Claims claims = Jwts.parser()
-                .setSigningKey(oAuth2Properties.getJwtSigningKey().getBytes("UTF-8"))
-                .parseClaimsJws(access_token).getBody();
-        String blog = claims.get("blog", String.class);
-        logger.info("blog={}", blog);
-
-        return authentication;
-    }
+//    @GetMapping("/user")
+//    public Object getCurrentUser(Authentication authentication, HttpServletRequest request) throws UnsupportedEncodingException {
+//        logger.info("authenticaiton={}", JSONObject.toJSONString(authentication));
+//        String header = request.getHeader("Authorization");
+//        String token = StringUtils.substringAfter(header, "bearer ");
+//        logger.info("token={}", token);
+//        String access_token = request.getParameter("access_token");
+//        logger.info("access_token={}", access_token);
+//        Claims claims = Jwts.parser()
+//                .setSigningKey(oAuth2Properties.getJwtSigningKey().getBytes("UTF-8"))
+//                .parseClaimsJws(access_token).getBody();
+//        String blog = claims.get("blog", String.class);
+//        logger.info("blog={}", blog);
+//
+//        return authentication;
+//    }
 
     /**
      * 认证页面
@@ -58,7 +59,8 @@ public class AuthApi {
         return new ModelAndView("/login.html");
     }
 
-//    public Principal user(Principal user) {
-//        return user;
-//    }
+    @GetMapping("/user")
+    public Principal user(Principal user) {
+        return user;
+    }
 }

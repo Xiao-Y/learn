@@ -6,31 +6,31 @@ spring:
     name: learn-cloud-zuul
 #  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
 #    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
-  jpa: #JPA配置
-    generate-ddl: false
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  datasource:
-    max-pool-prepared-statement-per-connection-size: 20
-    min-idle: 5
-    time-between-eviction-runs-millis: 20000
-    max-active: 20
-    test-while-idle: true
-    validation-query: SELECT 1 FROM DUAL
-    filters: stat,wall,log4j
-    type: com.alibaba.druid.pool.DruidDataSource
-    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-    max-wait: 60000
-    url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
-    test-on-borrow: false
-    pool-prepared-statements: true
-    min-evictable-idle-time-millis: 300000
-    initial-size: 5
-    driver-class-name: com.mysql.jdbc.Driver
-    test-on-return: false
-    username: root
-    password: ali-root
+#  jpa: #JPA配置
+#    generate-ddl: false
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#  datasource:
+#    max-pool-prepared-statement-per-connection-size: 20
+#    min-idle: 5
+#    time-between-eviction-runs-millis: 20000
+#    max-active: 20
+#    test-while-idle: true
+#    validation-query: SELECT 1 FROM DUAL
+#    filters: stat,wall,log4j
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#    max-wait: 60000
+#    url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
+#    test-on-borrow: false
+#    pool-prepared-statements: true
+#    min-evictable-idle-time-millis: 300000
+#    initial-size: 5
+#    driver-class-name: com.mysql.jdbc.Driver
+#    test-on-return: false
+#    username: root
+#    password: ali-root
 eureka:
   client:
     serviceUrl:
@@ -38,20 +38,20 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-feign: #远程连接
-  hystrix: #熔断器配置
-    enabled: true #启动熔断器
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          enabled: true #Hystrix 是否启用超时时间
-        isolation:
-          thread:
-            #Hystrix 断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
-            timeoutInMilliseconds: 50000
-          strategy: SEMAPHORE
+#feign: #远程连接
+#  hystrix: #熔断器配置
+#    enabled: true #启动熔断器
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        timeout:
+#          enabled: true #Hystrix 是否启用超时时间
+#        isolation:
+#          thread:
+#            #Hystrix 断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
+#            timeoutInMilliseconds: 50000
+#          strategy: SEMAPHORE
 # 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
 ribbon:
   ReadTimeout: 50000
@@ -64,18 +64,20 @@ zuul:
 ##  #添加代理头
 #  add-proxy-headers: true
 #  #敏感头信息
-  sensitive-headers:
+#  sensitive-headers:
+#  ignored-services: "*"
   routes:
-    #服务认证和授权
-    uaa:
-      path: /uaa/**
-      serviceId: learn-shop-public-auth
+#    #服务认证和授权
+#    uaa:
+#      path: /uaa/**
+#      serviceId: learn-shop-public-auth
 #      strip-prefix: true
 #      custom-sensitive-headers: true
     #系统相关
     admin-system:
       path: /admin-system/**
-      serviceId: learn-shop-admin-system
+#      serviceId: learn-shop-admin-system
+      url: http://127.0.0.1:8811
     #用户相关
     admin-user:
       path: /admin-user/**
@@ -114,3 +116,32 @@ zuul:
 # Logging configuration
 logging:
   level: DEBUG
+
+proxy:
+  auth:
+    routes:
+      admin-system: oauth2
+security:
+#  basic:
+#    enabled: false
+  oauth2:
+    client:
+      access-token-uri: http://localhost:9999/oauth/token #令牌端点
+      user-authorization-uri: http://localhost:9999/oauth/authorize #授权端点
+      client-id: webapp #OAuth2客户端ID
+      client-secret: webapp #OAuth2客户端密钥
+    resource:
+      jwt:
+        key-uri: http://127.0.0.1:9999/oauth/token_key
+      prefer-token-info: false
+      userInfoUri: http://localhost:8811/user
+
+#security:
+#  oauth2:
+#    client:
+#      accessTokenUri: http://localhost:7070/authserver/oauth/token
+#      userAuthorizationUri: http://localhost:7070/authserver/oauth/authorize
+#      clientId: second2
+#      clientSecret: passwordforauthserver
+#    resource:
+#      userInfoUri: http://localhost:7070/authserver/user

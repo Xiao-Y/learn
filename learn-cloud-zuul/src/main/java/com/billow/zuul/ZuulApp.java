@@ -9,12 +9,12 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 
-@EnableHystrix
-@EnableHystrixDashboard
-@EnableFeignClients
+//@EnableHystrix
+//@EnableHystrixDashboard
+//@EnableFeignClients
 @EnableZuulProxy
 @EnableEurekaClient
-@SpringBootApplication(scanBasePackages = {"com.billow.zuul", "com.billow.auth"})
+@SpringBootApplication
 public class ZuulApp {
 
     public static void main(String[] args) {

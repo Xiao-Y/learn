@@ -21,6 +21,7 @@ spring:
         enabled: true #开启消息跟踪
 
 security:
+  sessions: NEVER
   oauth2:
     client:
       client-id: webapp
@@ -30,7 +31,9 @@ security:
     resource:
       jwt:
         key-uri: http://127.0.0.1:9999/oauth/token_key
-      user-info-uri: http://127.0.0.1:9999/user #获取用户信息的地址
+      user-info-uri: http://127.0.0.1:8811/user
+  basic:
+    enabled: false #获取用户信息的地址
 #      access-token-uri: http://learn-shop-public-auth/uaa/oauth/token #请求令牌的地址
 #      user-authorization-uri: http://learn-shop-public-auth/uaa/oauth/authorize #请求认证的地址
 #    resource:
@@ -41,3 +44,19 @@ security:
 #management:
 #  security:
 #    enabled: false #刷新时，关闭安全验证
+
+#security:
+#  sessions: NEVER
+#  oauth2:
+#    resource:
+#      jwt:
+#        keyValue: |
+#            -----BEGIN PUBLIC KEY-----
+#            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhiiifKv6Otf5PyqIE+LQ
+#            EiJRRh6q8piPY9Okq+RfRu9Bue0D8hq7aFxcgkLZ6Bg9CAS+w1KdaE5MMeOCVVxv
+#            rpRETzVpAsh6GL5nBc679jSqMzjr3V4uty46ilL4VHKSxlZh5Nmz5EMHPI5iwpNs
+#            8U5n3QiwsTk514FXad54xPSPH3i/pDzGSZHrVcwDVaOKn7gFiIqP86vkJB47JZv8
+#            T6P5RK7Rj06zoG45DMGWG3DQv6o1/Jm4IJQWj0AUD3bSHqzXkPr7qyMYvkE4kyMH
+#            6aVAsAYMxilZFlJMv2b8N883gdi3LEeOJo8zZr5IWyyROfepdeOL7UkAXddAj+dL
+#            WQIDAQAB
+#            -----END PUBLIC KEY-----

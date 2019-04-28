@@ -15,15 +15,15 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//    @Autowired
-//    private UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
     @Autowired
     private AuthenticationSuccessHandler customerAuthenticationSuccessRedirectHandler;
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
 
     //不定义没有password grant_type
     @Override
@@ -39,9 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/authentication/require")
                 .loginProcessingUrl("/authentication/form")
                 .permitAll()
-                .successHandler(customerAuthenticationSuccessRedirectHandler)
+//                .successHandler(customerAuthenticationSuccessRedirectHandler)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/login**").permitAll()
                 .anyRequest().authenticated();
     }
 

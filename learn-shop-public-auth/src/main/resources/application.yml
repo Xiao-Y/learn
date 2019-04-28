@@ -18,39 +18,52 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-      max-pool-prepared-statement-per-connection-size: 20
-      min-idle: 5
-      time-between-eviction-runs-millis: 20000
-      max-active: 20
-      test-while-idle: true
-      validation-query: SELECT 1 FROM DUAL
-      filters: stat,wall,log4j
-      type: com.alibaba.druid.pool.DruidDataSource
-      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      max-wait: 60000
-      url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
-      test-on-borrow: false
-      password: ali-root
-      pool-prepared-statements: true
-      min-evictable-idle-time-millis: 300000
-      initial-size: 5
-      driver-class-name: com.mysql.jdbc.Driver
-      test-on-return: false
-      username: root
-  redis:
-    host: 119.23.27.78
-    port: 6379
-    password: requirepass12344321
-    timeout: 0
-    pool:
-      maxActive: 10
-      max-wait: -1
-      max-idle: 5
-      min-idle: 0
+    max-pool-prepared-statement-per-connection-size: 20
+    min-idle: 5
+    time-between-eviction-runs-millis: 20000
+    max-active: 20
+    test-while-idle: true
+    validation-query: SELECT 1 FROM DUAL
+    filters: stat,wall,log4j
+    type: com.alibaba.druid.pool.DruidDataSource
+    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    max-wait: 60000
+    url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
+    test-on-borrow: false
+    password: ali-root
+    pool-prepared-statements: true
+    min-evictable-idle-time-millis: 300000
+    initial-size: 5
+    driver-class-name: com.mysql.jdbc.Driver
+    test-on-return: false
+    username: root
+#  redis:
+#    host: 119.23.27.78
+#    port: 6379
+#    password: requirepass12344321
+#    timeout: 0
+#    pool:
+#      maxActive: 10
+#      max-wait: -1
+#      max-idle: 5
+#      min-idle: 0
 security:
   basic:
     enabled: false
 
+feign: #远程连接
+  hystrix: #熔断器配置
+    enabled: true #启动熔断器
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true #Hystrix\u662F\u5426\u542F\u7528\u8D85\u65F6\u65F6\u95F4
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000 #Hystrix\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u9ED8\u8BA4\u662F1s\uFF0C\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\u9700\u8981\u5927\u4E8Eribbon\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u4E0D\u7136\u4E0D\u4F1A\u89E6\u53D1\u91CD\u8BD5
+          strategy: SEMAPHORE
 auth:
   security:
     oauth2:

@@ -8,6 +8,8 @@ import com.billow.auth.pojo.po.PermissionPo;
 import com.billow.auth.pojo.po.RolePermissionPo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
+import com.billow.auth.remote.UserRemote;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.HashSet;
 import java.util.List;
@@ -74,4 +77,21 @@ public class DomainUserDetailsServiceImpl implements UserDetailsService {
         }
         return new User(userPo.getUsercode(), userPo.getPassword(), userAuthotities);
     }
+
+//    @Service
+//    public class DomainUserDetailsServiceImpl implements UserDetailsService {
+//
+//        protected final Logger logger = LoggerFactory.getLogger(getClass());
+//
+//        @Autowired
+//        private UserRemote userRemote;
+//
+//        @Override
+//        public UserDetails loadUserByUsername(String usercode) throws UsernameNotFoundException {
+//            BaseResponse<UserDetails> baseResponse = userRemote.loadUserByUsername(usercode);
+//            UserDetails resData = baseResponse.getResData();
+//            Assert.notNull(resData, usercode + "，没有查询到用户信息");
+//            return resData;
+//        }
+//    }
 }
