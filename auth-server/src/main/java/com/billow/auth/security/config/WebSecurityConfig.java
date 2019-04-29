@@ -39,10 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/authentication/require")
                 .loginProcessingUrl("/authentication/form")
                 .permitAll()
-//                .successHandler(customerAuthenticationSuccessRedirectHandler)
+                .successHandler(customerAuthenticationSuccessRedirectHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login**").permitAll()
+                .antMatchers("/", "/login**", "/webjars/**").permitAll()
                 .anyRequest().authenticated();
     }
 

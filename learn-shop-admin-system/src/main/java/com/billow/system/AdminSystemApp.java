@@ -22,6 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan("com.billow")
+@EnableOAuth2Sso
 public class AdminSystemApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(AdminSystemApp.class, args));

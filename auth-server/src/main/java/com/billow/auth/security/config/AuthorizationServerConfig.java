@@ -26,33 +26,35 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import javax.sql.DataSource;
 
 
+@Order(6)
 @Configuration
 @EnableAuthorizationServer
-@Order(6)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private DataSource dataSource;
-    @Autowired
     private CustomOauthWebResponseExceptionTranslator customOauthWebResponseExceptionTranslator;
     @Autowired
     private AuthExceptionEntryPoint authExceptionEntryPoint;
     @Autowired
-    private OAuth2Properties oAuth2Properties;
+    private ClientDetailsService clientDetails;
+    @Autowired
+    private JwtAccessTokenConverter accessTokenConverter;
+    @Autowired
+    private TokenStore tokenStore;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-//                .authenticationManager(authenticationManager)
+                .authenticationManager(authenticationManager)
                 // 若无，refresh_token会有UserDetailsService is required错误
                 .userDetailsService(userDetailsService)
-                .tokenStore(tokenStore())
+                .tokenStore(tokenStore)
                 // jwt 使用,其它不使用
-                .accessTokenConverter(accessTokenConverter());
-//                .exceptionTranslator(customOauthWebResponseExceptionTranslator);
+                .accessTokenConverter(accessTokenConverter)
+                .exceptionTranslator(customOauthWebResponseExceptionTranslator);
     }
 
     @Override
@@ -67,32 +69,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         // 客户端访问方式配置数据在数据库中
-        clients.withClientDetails(clientDetails());
-    }
-
-    @Bean
-    @Primary
-    //  客户端访问方式配置数据在数据库中
-    public ClientDetailsService clientDetails() {
-        return new JdbcClientDetailsService(dataSource);
-    }
-
-    @Bean
-    @Primary
-    public JwtAccessTokenConverter accessTokenConverter() {
-//        CustomJwtAccessTokenConverter accessTokenConverter = new CustomJwtAccessTokenConverter();
-        // 测试用,资源服务使用相同的字符达到一个对称加密的效果,生产时候使用RSA非对称加密方式
-//        accessTokenConverter.setSigningKey(oAuth2Properties.getJwtSigningKey());
-        JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        accessTokenConverter.setSigningKey(oAuth2Properties.getJwtSigningKey());
-        return accessTokenConverter;
-    }
-
-//    @Bean
-//    @Primary
-    public TokenStore tokenStore() {
-        // token 保存方式,更多保存方式查看 com.billow.auth.security.config.tokenstore
-        TokenStore tokenStore = new JwtTokenStore(accessTokenConverter());
-        return tokenStore;
+        clients.withClientDetails(clientDetails);
     }
 }

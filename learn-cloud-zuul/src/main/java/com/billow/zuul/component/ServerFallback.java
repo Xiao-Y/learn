@@ -21,7 +21,7 @@ import java.io.InputStream;
  * @author liuyongtao
  * @create 2018-05-12 17:39
  */
-//@Component
+@Component
 public class ServerFallback implements FallbackProvider {
 
     private final Logger logger = LoggerFactory.getLogger(ServerFallback.class);

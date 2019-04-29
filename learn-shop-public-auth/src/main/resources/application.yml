@@ -1,5 +1,6 @@
 server:
   port: 9999
+  context-path: /uaa #同时作为授权和资源服务器时，必须要配置一个路径
 
 eureka:
   client:

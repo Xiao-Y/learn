@@ -75,6 +75,8 @@ public class DomainUserDetailsServiceImpl implements UserDetailsService {
                 }
             });
         }
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("admin");
+        userAuthotities.add(simpleGrantedAuthority);
         return new User(userPo.getUsercode(), userPo.getPassword(), userAuthotities);
     }
 
