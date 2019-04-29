@@ -34,7 +34,7 @@ import java.util.Set;
  * @date 2018/11/20 15:19
  */
 @Service
-public class DomainUserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

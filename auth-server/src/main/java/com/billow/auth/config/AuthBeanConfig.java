@@ -2,7 +2,9 @@ package com.billow.auth.config;
 
 import com.billow.auth.properties.OAuth2Properties;
 import com.billow.auth.security.config.enhancer.CustomJwtAccessTokenConverter;
-import com.billow.auth.service.impl.DefaultUserDetailsService;
+import com.billow.auth.service.PermissionService;
+import com.billow.auth.service.impl.DefaultPermissionServiceImpl;
+import com.billow.auth.service.impl.DefaultUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +28,13 @@ public class AuthBeanConfig {
     @Bean
     @ConditionalOnMissingBean
     public UserDetailsService userDetailsService() {
-        return new DefaultUserDetailsService();
+        return new DefaultUserDetailsServiceImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public PermissionService permissionService() {
+        return new DefaultPermissionServiceImpl();
     }
 
     @Bean

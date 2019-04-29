@@ -45,7 +45,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(antMatchersPermitAll()).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest()
+                .access("@permissionService.hasPermission(request,authentication)")
                 // 异常处理
                 .and().exceptionHandling()
                 // 不传令牌，令牌错误（失效）等

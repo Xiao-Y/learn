@@ -7,9 +7,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
- * 默认不实现,用于提示用户自己实现
+ * 查询用户信息。默认不实现,用于提示用户自己实现
+ *
+ * @author LiuYongTao
+ * @date 2019/4/29 18:05
  */
-public class DefaultUserDetailsService implements UserDetailsService {
+public class DefaultUserDetailsServiceImpl implements UserDetailsService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
