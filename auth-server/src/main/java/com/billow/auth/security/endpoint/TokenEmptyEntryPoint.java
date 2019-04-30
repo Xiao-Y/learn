@@ -20,12 +20,7 @@ import java.io.IOException;
 @Component
 public class TokenEmptyEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper mapper;
-
-    @Autowired
-    public TokenEmptyEntryPoint(ObjectMapper mapper) {
-        this.mapper = mapper;
-    }
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)

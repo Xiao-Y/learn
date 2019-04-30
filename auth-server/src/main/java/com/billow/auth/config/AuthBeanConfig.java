@@ -1,12 +1,13 @@
 package com.billow.auth.config;
 
-import com.billow.auth.properties.OAuth2Properties;
+import com.billow.auth.properties.SecurityProperties;
 import com.billow.auth.security.config.enhancer.CustomJwtAccessTokenConverter;
 import com.billow.auth.service.PermissionService;
 import com.billow.auth.service.impl.DefaultPermissionServiceImpl;
 import com.billow.auth.service.impl.DefaultUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -20,10 +21,11 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import javax.sql.DataSource;
 
 @Configuration
+@EnableConfigurationProperties(SecurityProperties.class)
 public class AuthBeanConfig {
 
     @Autowired
-    private OAuth2Properties oAuth2Properties;
+    private SecurityProperties securityProperties;
 
     @Bean
     @ConditionalOnMissingBean
@@ -57,7 +59,8 @@ public class AuthBeanConfig {
         // Token转换器必须与认证服务一致
         CustomJwtAccessTokenConverter accessTokenConverter = new CustomJwtAccessTokenConverter();
         // 测试用,授权服务使用相同的字符达到一个对称加密的效果,生产时候使用RSA非对称加密方式
-        accessTokenConverter.setSigningKey(oAuth2Properties.getJwtSigningKey());
+        String jwtSigningKey = securityProperties.getOauth2().getJwtSigningKey();
+        accessTokenConverter.setSigningKey(jwtSigningKey);
         return accessTokenConverter;
     }
 }

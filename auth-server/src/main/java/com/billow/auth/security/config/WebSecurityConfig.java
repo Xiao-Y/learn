@@ -1,7 +1,7 @@
 package com.billow.auth.security.config;
 
+import com.billow.auth.security.provider.AuthorizeConfigManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
@@ -18,7 +19,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private AuthenticationSuccessHandler customerAuthenticationSuccessRedirectHandler;
+    private AuthenticationSuccessHandler authenticationSuccessRedirectHandler;
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
+    private AuthorizeConfigManager authorizeConfigManager;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -34,16 +39,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
                 .formLogin()
                 .loginPage("/authentication/require")
                 .loginProcessingUrl("/authentication/form")
                 .permitAll()
-                .successHandler(customerAuthenticationSuccessRedirectHandler)
+                .successHandler(authenticationSuccessRedirectHandler)
+                .failureHandler(authenticationFailureHandler)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/", "/login**", "/webjars/**").permitAll()
-                .anyRequest().authenticated();
+                .csrf().disable();
+
+        authorizeConfigManager.config(http.authorizeRequests());
     }
 
     /**

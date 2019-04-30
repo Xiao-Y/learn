@@ -31,6 +31,7 @@ public class CustomOauthWebResponseExceptionTranslator implements WebResponseExc
 
     @Override
     public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
+        System.out.println("00000000000000000000000000");
         e.printStackTrace();
         // Try to extract a SpringSecurityException from the stacktrace
         Throwable[] causeChain = throwableAnalyzer.determineCauseChain(e);

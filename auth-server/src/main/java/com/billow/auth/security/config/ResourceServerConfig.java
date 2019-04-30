@@ -1,30 +1,21 @@
 package com.billow.auth.security.config;
 
-import com.billow.auth.properties.OAuth2Properties;
-import com.billow.auth.security.config.enhancer.CustomJwtAccessTokenConverter;
+import com.billow.auth.security.endpoint.AuthExceptionEntryPoint;
 import com.billow.auth.security.endpoint.TokenEmptyEntryPoint;
 import com.billow.auth.security.handler.TokenAccessDeniedHandler;
 import com.billow.auth.security.translator.TokenOauthWebResponseExceptionTranslator;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -39,14 +30,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private TokenOauthWebResponseExceptionTranslator tokenOauthWebResponseExceptionTranslator;
     @Autowired
     private TokenStore tokenStore;
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessRedirectHandler;
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(antMatchersPermitAll()).permitAll()
-                .anyRequest()
-                .access("@permissionService.hasPermission(request,authentication)")
                 // 异常处理
                 .and().exceptionHandling()
                 // 不传令牌，令牌错误（失效）等

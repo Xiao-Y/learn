@@ -39,7 +39,7 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
         int httpStatus = HttpStatus.UNAUTHORIZED.value();
         String errorCode = HttpStatus.UNAUTHORIZED.getReasonPhrase();
         BaseResponse baseResponse = SecurityUtils.getBaseResponse(resCode, httpStatus, errorCode, message);
-
+        response.setContentType("application/json;charset=UTF-8");
         response.setStatus(httpStatus);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         mapper.writeValue(response.getWriter(), baseResponse);

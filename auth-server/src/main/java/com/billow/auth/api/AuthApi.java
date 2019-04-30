@@ -1,7 +1,7 @@
 package com.billow.auth.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.billow.auth.properties.OAuth2Properties;
+import com.billow.auth.properties.SecurityProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +32,7 @@ public class AuthApi {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OAuth2Properties oAuth2Properties;
+    private SecurityProperties securityProperties;
 
 //    @GetMapping("/user")
 //    public Object getCurrentUser(Authentication authentication, HttpServletRequest request) throws UnsupportedEncodingException {
