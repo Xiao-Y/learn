@@ -47,7 +47,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usercode) throws UsernameNotFoundException {
-
+        logger.debug("查询用户：{} 的信息...",usercode);
         List<RolePo> rolePos = new ArrayList<>();
         List<PermissionPo> permissionPos = new ArrayList<>();
         // 查询用户信息

@@ -51,6 +51,9 @@ spring:
 security:
   basic:
     enabled: false
+#  oauth2:
+#    resource:
+#      filter-order: 3
 
 feign: #远程连接
   hystrix: #熔断器配置

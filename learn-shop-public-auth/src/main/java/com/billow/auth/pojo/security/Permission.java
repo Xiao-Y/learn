@@ -1,12 +1,14 @@
 package com.billow.auth.pojo.security;
 
+import java.io.Serializable;
+
 /**
  * 权限信息
  *
  * @author liuyongtao
  * @create 2019-04-30 11:24
  */
-public class Permission {
+public class Permission implements Serializable{
     //权限名称
     private String permissionName;
     // 权限CODE

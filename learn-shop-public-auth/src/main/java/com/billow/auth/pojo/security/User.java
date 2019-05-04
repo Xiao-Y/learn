@@ -1,12 +1,14 @@
 package com.billow.auth.pojo.security;
 
+import java.io.Serializable;
+
 /**
  * 用户信息
  *
  * @author liuyongtao
  * @create 2019-04-30 11:23
  */
-public class User {
+public class User implements Serializable {
     // 用户名
     private String username;
     // 用户code

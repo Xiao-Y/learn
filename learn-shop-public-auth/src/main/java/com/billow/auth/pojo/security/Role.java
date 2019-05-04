@@ -1,12 +1,14 @@
 package com.billow.auth.pojo.security;
 
+import java.io.Serializable;
+
 /**
  * 角色信息
  *
  * @author liuyongtao
  * @create 2019-04-30 11:24
  */
-public class Role {
+public class Role implements Serializable {
     /**
      * 角色名称
      */
