@@ -7,13 +7,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 
-@Configuration
-@EnableResourceServer
-public class SecurityResourceServerConfig extends ResourceServerConfigurerAdapter {
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().disable();
-        http.authorizeRequests().anyRequest().authenticated();
-    }
-}
+//@Configuration
+//@EnableResourceServer
+//public class SecurityResourceServerConfig extends ResourceServerConfigurerAdapter {
+//
+//    @Override
+//    public void configure(HttpSecurity http) throws Exception {
+//        http.httpBasic().disable();
+//        http.authorizeRequests().anyRequest().authenticated();
+//    }
+//}

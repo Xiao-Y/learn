@@ -106,6 +106,16 @@ public class OAuth2ServerConfig {
                     //.authorities("oauth2")
                     .redirectUris("http://127.0.0.1:8080/client1/login")
                     .accessTokenValiditySeconds(1200)
+                    .refreshTokenValiditySeconds(50000)
+                    .and()
+                    .withClient("learn-shop-admin-system")
+                    .secret("learn-shop-admin-system")
+                    .resourceIds(DEMO_RESOURCE_ID)
+                    .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password", "implicit")
+                    .scopes("all")
+                    //.authorities("oauth2")
+                    .redirectUris("http://127.0.0.1:8811/learn-shop-admin-system/login")
+                    .accessTokenValiditySeconds(1200)
                     .refreshTokenValiditySeconds(50000);
         }
 
