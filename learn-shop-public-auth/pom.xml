@@ -3,13 +3,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>learn</artifactId>
-        <groupId>com.billow</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.1.RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.billow</groupId>
     <artifactId>learn-shop-public-auth</artifactId>
+    <version>1.0.0.RELEASE</version>
     <packaging>jar</packaging>
 
     <name>learn-shop-public-auth</name>
@@ -17,101 +20,125 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <jjwt.version>0.7.0</jjwt.version>
+        <alibaba.druid.version>1.0.11</alibaba.druid.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-tools</artifactId>
-        </dependency>
         <!--<dependency>-->
-            <!--<artifactId>auth-server</artifactId>-->
             <!--<groupId>com.billow</groupId>-->
+            <!--<artifactId>learn-shop-base-tools</artifactId>-->
             <!--<version>1.0-SNAPSHOT</version>-->
         <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<artifactId>auth-server</artifactId>-->
+        <!--<groupId>com.billow</groupId>-->
+        <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-eureka</artifactId>-->
+        <!--</dependency>-->
         <!-- 远程连接 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-feign</artifactId>-->
+        <!--</dependency>-->
         <!-- Circuit Breaker: Hystrix Dashboard (断路器：hystrix 仪表盘) -->
         <!-- 断路器 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-hystrix</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-hystrix</artifactId>-->
+        <!--</dependency>-->
         <!-- 监控 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-actuator</artifactId>-->
+        <!--</dependency>-->
         <!-- 断路器仪表盘 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>-->
+        <!--</dependency>-->
         <!-- 重试机制 ，必须配，否则重试不生效 -->
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.retry</groupId>-->
+        <!--<artifactId>spring-retry</artifactId>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-web</artifactId>-->
+        <!--</dependency>-->
 
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
             <!--<artifactId>spring-boot-starter-data-redis</artifactId>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-envers</artifactId>-->
+        <!--<groupId>org.hibernate</groupId>-->
+        <!--<artifactId>hibernate-envers</artifactId>-->
         <!--</dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
-        <!-- json工具 -->
         <!--<dependency>-->
             <!--<groupId>com.alibaba</groupId>-->
-            <!--<artifactId>fastjson</artifactId>-->
+            <!--<artifactId>druid</artifactId>-->
+            <!--<version>${alibaba.druid.version}</version>-->
         <!--</dependency>-->
+        <!-- json工具 -->
+        <!--<dependency>-->
+        <!--<groupId>com.alibaba</groupId>-->
+        <!--<artifactId>fastjson</artifactId>-->
+        <!--</dependency>-->
+        <!-- 注意是starter,自动配置 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- 不是starter,手动配置 -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>2.3.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 将token存储在redis中 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-data</artifactId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>1.0.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
     </dependencies>
 

@@ -21,7 +21,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@Component
+//@Component
 public class JwtTokenFilter extends UsernamePasswordAuthenticationFilter {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -29,7 +29,7 @@ public class JwtTokenFilter extends UsernamePasswordAuthenticationFilter {
     @Autowired
     private SecurityProperties securityProperties;
 
-    @Autowired
+//    @Autowired
     private JwtTokenUtils jwtTokenUtils;
     @Autowired
     private UserDetailsService customUserDetailsServiceImpl;

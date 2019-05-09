@@ -21,12 +21,29 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 
 @RestController
 public class DemoController {
 
+//    @GetMapping("/user")
+//    public Authentication user(Authentication authentication) {
+//        return authentication;
+//    }
+
     @GetMapping("/user")
-    public Authentication user(Authentication authentication) {
-        return authentication;
+    public Principal user(Principal principal) {
+        return principal;
+    }
+
+    @GetMapping("/test1/getTest1")
+    public String getTest(){
+        return "test";
+    }
+
+    @GetMapping("/test2/getTest2")
+    public String getTest2(){
+        return "test";
     }
 }

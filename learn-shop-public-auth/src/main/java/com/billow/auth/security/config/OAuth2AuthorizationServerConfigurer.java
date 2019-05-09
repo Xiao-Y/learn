@@ -2,6 +2,7 @@ package com.billow.auth.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -13,23 +14,26 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
-@Configuration
-@EnableAuthorizationServer
+//@Configuration
+//@EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private TokenStore jwtTokenStore;
-    @Autowired
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
+//    @Autowired
+//    private TokenStore jwtTokenStore;
+//    @Autowired
+//    private JwtAccessTokenConverter jwtAccessTokenConverter;
     @Autowired
     private ClientDetailsService clientDetailsService;
 
     @Autowired
     private UserDetailsService customUserDetailsServiceImpl;
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
 
 
     @Override
@@ -37,11 +41,12 @@ public class OAuth2AuthorizationServerConfigurer extends AuthorizationServerConf
         // 指定认证管理器
         endpoints.authenticationManager(authenticationManager)
                 // 指定token 的保存方式
-                .tokenStore(jwtTokenStore)
+//                .tokenStore(jwtTokenStore)
+                .tokenStore(new RedisTokenStore(redisConnectionFactory))
                 // 指定查询用户信息的实现接口
-                .userDetailsService(customUserDetailsServiceImpl)
+                .userDetailsService(customUserDetailsServiceImpl);
                 // token 的生成方式
-                .accessTokenConverter(jwtAccessTokenConverter);
+//                .accessTokenConverter(jwtAccessTokenConverter);
     }
 
     @Override
@@ -69,7 +74,8 @@ public class OAuth2AuthorizationServerConfigurer extends AuthorizationServerConf
 //                .tokenKeyAccess("permitAll()")
 //                .checkTokenAccess("isAuthenticated()")
 //                .allowFormAuthenticationForClients();
-        oauthServer.tokenKeyAccess("isAuthenticated()");
+        oauthServer.allowFormAuthenticationForClients()
+                .tokenKeyAccess("isAuthenticated()");
     }
 
 }

@@ -11,7 +11,6 @@ import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
 import com.billow.auth.pojo.security.CustomUserDetails;
-import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  * @author LiuYongTao
  * @date 2018/11/20 15:19
  */
-@Service
+//@Service
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -58,13 +59,13 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         }
         // 查询角色信息
         List<UserRolePo> userRolePos = userRoleDao.findRoleIdByUserId(userPo.getId());
-        if (ToolsUtils.isEmpty(userRolePos)) {
+        if (CollectionUtils.isEmpty(userRolePos)) {
             logger.error("用户：{}，未分配角色！", usercode);
             throw new UsernameNotFoundException("用户：" + usercode + "，未分配角色");
         }
         userRolePos.stream().forEach(ur -> {
             Long roleId = ur.getRoleId();
-            RolePo rolePo = roleDao.findOne(roleId);
+            RolePo rolePo = roleDao.getOne(roleId);
             if (rolePo == null) {
                 logger.error("用户：{}，roleId:{},未查询到信息！", usercode, roleId);
             } else {
@@ -72,20 +73,20 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
             }
             // 查询权限信息
             List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(roleId);
-            if (ToolsUtils.isEmpty(rolePermissionPos)) {
+            if (CollectionUtils.isEmpty(rolePermissionPos)) {
                 logger.error("用户：{}，角色：{}，未分配权限！", usercode, rolePo.getRoleName());
             } else {
                 rolePermissionPos.stream().forEach(rp -> {
-                    PermissionPo permissionPo = permissionDao.findOne(rp.getPermissionId());
+                    PermissionPo permissionPo = permissionDao.getOne(rp.getPermissionId());
                     if (permissionPo == null) {
-                        logger.error("用户：{}，角色：{}，permissionId:{},未查询到信息！", usercode, rolePo.getRoleName(), permissionPo.getId());
+                        logger.error("用户：{}，角色：{}，permissionId:{},未查询到信息！", usercode, rolePo.getRoleName(), rp.getId());
                     } else {
                         permissionPos.add(permissionPo);
                     }
                 });
             }
         });
-        if (ToolsUtils.isEmpty(permissionPos)) {
+        if (CollectionUtils.isEmpty(permissionPos)) {
             logger.error("用户：{}，未分配权限！", usercode);
             throw new UsernameNotFoundException("用户：" + usercode + "，未分配权限");
         }

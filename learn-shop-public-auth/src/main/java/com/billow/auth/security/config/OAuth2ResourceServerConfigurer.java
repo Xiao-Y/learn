@@ -10,8 +10,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
-@Configuration
-@EnableResourceServer
+//@Configuration
+//@EnableResourceServer
 public class OAuth2ResourceServerConfigurer extends ResourceServerConfigurerAdapter {
 
     @Autowired

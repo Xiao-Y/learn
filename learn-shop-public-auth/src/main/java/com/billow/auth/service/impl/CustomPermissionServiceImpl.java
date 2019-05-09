@@ -1,15 +1,15 @@
 package com.billow.auth.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
+//import com.alibaba.fastjson.JSONObject;
 import com.billow.auth.pojo.security.CustomUserDetails;
 import com.billow.auth.pojo.security.Permission;
 import com.billow.auth.security.service.PermissionService;
-import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
  * @author liuyongtao
  * @create 2019-04-29 18:11
  */
-@Service("permissionService")
+//@Service("permissionService")
 public class CustomPermissionServiceImpl implements PermissionService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -28,12 +28,12 @@ public class CustomPermissionServiceImpl implements PermissionService {
 
     @Override
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-        logger.info("learn-shop-public-auth---->hasPermission:{}", JSONObject.toJSONString(authentication));
+//        logger.info("learn-shop-public-auth---->hasPermission:{}", JSONObject.toJSONString(authentication));
         boolean isPermission = false;
         Object principal = authentication.getPrincipal();
         if (principal instanceof CustomUserDetails) {
             List<Permission> permissions = ((CustomUserDetails) principal).getPermissions();
-            if (ToolsUtils.isNotEmpty(permissions)) {
+            if (!CollectionUtils.isEmpty(permissions)) {
                 for (Permission permission : permissions) {
                     if (antPathMatcher.match(permission.getUrl(), request.getRequestURI())) {
                         isPermission = true;

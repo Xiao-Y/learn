@@ -3,6 +3,7 @@ package com.billow.auth.security;
 import com.billow.auth.security.properties.OAuth2Properties;
 import com.billow.auth.security.properties.SecurityProperties;
 import com.billow.auth.security.utils.JwtTokenUtils;
+import io.jsonwebtoken.impl.crypto.MacSigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +22,8 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityBeanConfig {
 
-    @Autowired
-    private DataSource dataSource;
+//    @Autowired
+//    private DataSource dataSource;
     @Autowired
     private SecurityProperties securityProperties;
 
@@ -43,38 +44,38 @@ public class SecurityBeanConfig {
 //        return new JdbcClientDetailsService(dataSource);
 //    }
 
-    /**
-     * 密码校验
-     *
-     * @return org.springframework.security.crypto.password.PasswordEncoder
-     * @author LiuYongTao
-     * @date 2018/11/26 9:51
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // 密码加密
-        // return new BCryptPasswordEncoder();
-        // 不加密密码
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return rawPassword.toString();
-            }
+//    /**
+//     * 密码校验
+//     *
+//     * @return org.springframework.security.crypto.password.PasswordEncoder
+//     * @author LiuYongTao
+//     * @date 2018/11/26 9:51
+//     */
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        // 密码加密
+//        // return new BCryptPasswordEncoder();
+//        // 不加密密码
+//        return new PasswordEncoder() {
+//            @Override
+//            public String encode(CharSequence rawPassword) {
+//                return rawPassword.toString();
+//            }
+//
+//            @Override
+//            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+////                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
+//                return true;
+//            }
+//        };
+//    }
 
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-//                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
-                return true;
-            }
-        };
-    }
-
-    @Bean
-    public JwtTokenUtils jwtTokenUtils() {
-        OAuth2Properties oauth2 = securityProperties.getOauth2();
-        String jwtSigningKey = oauth2.getJwtSigningKey();
-        //过期时长，单位为秒,可以通过配置写入。
-        int expiration = oauth2.getExpiration();
-        return new JwtTokenUtils(jwtSigningKey, expiration);
-    }
+//    @Bean
+//    public JwtTokenUtils jwtTokenUtils() {
+//        OAuth2Properties oauth2 = securityProperties.getOauth2();
+//        String jwtSigningKey = oauth2.getJwtSigningKey();
+//        //过期时长，单位为秒,可以通过配置写入。
+//        int expiration = oauth2.getExpiration();
+//        return new JwtTokenUtils(jwtSigningKey, expiration);
+//    }
 }

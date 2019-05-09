@@ -3,7 +3,8 @@ package com.billow.auth.pojo.security;
 import com.billow.auth.pojo.po.PermissionPo;
 import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
-import com.billow.tools.utlis.ConvertUtils;
+import com.billow.auth.utils.ConvertUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
