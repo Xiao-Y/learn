@@ -22,7 +22,7 @@ public class DefaultAuthorizeConfigProvider implements AuthorizeConfigProvider {
 
     @Override
     public boolean config(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry config) {
-        config.antMatchers("/", "/login**", "/webjars/**")
+        config.antMatchers("/", "/login1**", "/webjars/**")
                 .permitAll();
         return false;
     }

@@ -51,7 +51,7 @@ public class SecurityController {
      */
     @GetMapping("/authentication/require")
     public ModelAndView require() {
-        return new ModelAndView("/login.html");
+        return new ModelAndView("/login/index.html");
     }
 
     @ResponseBody

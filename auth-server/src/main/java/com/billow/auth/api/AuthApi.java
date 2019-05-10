@@ -58,7 +58,7 @@ public class AuthApi {
      */
     @GetMapping("/authentication/require")
     public ModelAndView require() {
-        return new ModelAndView("/login.html");
+        return new ModelAndView("/login1.html");
     }
 
     @ResponseBody

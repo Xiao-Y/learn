@@ -7,10 +7,10 @@ Vue.use(Router)
 // 静态路由
 export const constantRouterMap = [{
   path: '/',
-  redirect: '/login',
+  redirect: '/login1',
   hidden: true
 }, {
-  path: '/login',
+  path: '/login1',
   name: '登录页面',
   hidden: true,
   component: resolve => require(['../views/login/Login.vue'], resolve)

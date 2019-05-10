@@ -949,7 +949,7 @@
      * formToArray() gathers form element data into an array of objects that can
      * be passed to any of the following ajax functions: $.get, $.post, or load.
      * Each object in the array has both a 'name' and 'value' property.  An example of
-     * an array for a simple login form might be:
+     * an array for a simple login1 form might be:
      *
      * [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
      *

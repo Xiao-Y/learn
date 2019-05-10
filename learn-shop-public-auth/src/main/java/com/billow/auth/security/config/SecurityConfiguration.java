@@ -7,6 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -90,7 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http
                 .requestMatchers()
-                .antMatchers("/oauth/**", "/authentication/**", "/login/**", "/logout/**")
+                .antMatchers("/oauth/**", "/authentication/**", "/login1/**", "/logout/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/oauth/**").authenticated()
@@ -110,5 +111,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 ////                .permitAll();
 //        http.logout().permitAll();
 //        http.authorizeRequests().antMatchers("/oauth/authorize").permitAll();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/resources/**");
     }
 }

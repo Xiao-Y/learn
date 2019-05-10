@@ -33,7 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 //        // @formatter:off
 //        http
 //                .requestMatchers()
-//                .antMatchers("/oauth/**", "/authentication/**", "/login/**", "/logout/**")
+//                .antMatchers("/oauth/**", "/authentication/**", "/login1/**", "/logout/**")
 //                .and()
 //                .authorizeRequests()
 //                .antMatchers("/oauth/**").authenticated()
