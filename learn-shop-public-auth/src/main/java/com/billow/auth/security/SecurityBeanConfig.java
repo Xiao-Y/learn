@@ -1,9 +1,6 @@
 package com.billow.auth.security;
 
-import com.billow.auth.security.properties.OAuth2Properties;
 import com.billow.auth.security.properties.SecurityProperties;
-import com.billow.auth.security.utils.JwtTokenUtils;
-import io.jsonwebtoken.impl.crypto.MacSigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -22,8 +18,8 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityBeanConfig {
 
-//    @Autowired
-//    private DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
     @Autowired
     private SecurityProperties securityProperties;
 
@@ -35,47 +31,38 @@ public class SecurityBeanConfig {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("123");
+        converter.setSigningKey(securityProperties.getOauth2().getJwtSigningKey());
         return converter;
     }
 
-//    @Bean
-//    public ClientDetailsService clientDetailsService(){
-//        return new JdbcClientDetailsService(dataSource);
-//    }
+    @Bean
+    public ClientDetailsService clientDetailsService() {
+        return new JdbcClientDetailsService(dataSource);
+    }
 
-//    /**
-//     * 密码校验
-//     *
-//     * @return org.springframework.security.crypto.password.PasswordEncoder
-//     * @author LiuYongTao
-//     * @date 2018/11/26 9:51
-//     */
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        // 密码加密
-//        // return new BCryptPasswordEncoder();
-//        // 不加密密码
-//        return new PasswordEncoder() {
-//            @Override
-//            public String encode(CharSequence rawPassword) {
-//                return rawPassword.toString();
-//            }
-//
-//            @Override
-//            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-////                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
-//                return true;
-//            }
-//        };
-//    }
+    /**
+     * 密码校验
+     *
+     * @return org.springframework.security.crypto.password.PasswordEncoder
+     * @author LiuYongTao
+     * @date 2018/11/26 9:51
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // 密码加密
+        // return new BCryptPasswordEncoder();
+        // 不加密密码
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return rawPassword.toString();
+            }
 
-//    @Bean
-//    public JwtTokenUtils jwtTokenUtils() {
-//        OAuth2Properties oauth2 = securityProperties.getOauth2();
-//        String jwtSigningKey = oauth2.getJwtSigningKey();
-//        //过期时长，单位为秒,可以通过配置写入。
-//        int expiration = oauth2.getExpiration();
-//        return new JwtTokenUtils(jwtSigningKey, expiration);
-//    }
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+//                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
+                return true;
+            }
+        };
+    }
 }

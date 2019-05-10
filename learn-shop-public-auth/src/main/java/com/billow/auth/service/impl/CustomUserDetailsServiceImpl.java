@@ -30,7 +30,7 @@ import java.util.List;
  * @author LiuYongTao
  * @date 2018/11/20 15:19
  */
-//@Service
+@Service
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());

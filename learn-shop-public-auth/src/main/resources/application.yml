@@ -1,14 +1,5 @@
 server:
   port: 9999
-#  context-path: /uaa #同时作为授权和资源服务器时，必须要配置一个路径
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://119.23.27.78:8761/eureka/
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
 
 spring:
   application:
@@ -19,24 +10,24 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-#    max-pool-prepared-statement-per-connection-size: 20
-#    min-idle: 5
-#    time-between-eviction-runs-millis: 20000
-#    max-active: 20
-#    test-while-idle: true
-#    validation-query: SELECT 1 FROM DUAL
-#    filters: stat,wall,log4j
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-#    max-wait: 60000
+    max-pool-prepared-statement-per-connection-size: 20
+    min-idle: 5
+    time-between-eviction-runs-millis: 20000
+    max-active: 20
+    test-while-idle: true
+    validation-query: SELECT 1 FROM DUAL
+    filters: stat,wall,slf4j #开启Druid的监控统计功能，mergeStat代替stat表示sql合并,wall表示防御SQL注入攻击
+    type: com.alibaba.druid.pool.DruidDataSource
+    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    max-wait: 60000
     url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
-#    test-on-borrow: false
+    test-on-borrow: false
     password: ali-root
-#    pool-prepared-statements: true
-#    min-evictable-idle-time-millis: 300000
-#    initial-size: 5
+    pool-prepared-statements: true
+    min-evictable-idle-time-millis: 300000
+    initial-size: 5
     driver-class-name: com.mysql.jdbc.Driver
-#    test-on-return: false
+    test-on-return: false
     username: root
 #  redis:
 #    host: 119.23.27.78
@@ -48,26 +39,7 @@ spring:
 #      max-wait: -1
 #      max-idle: 5
 #      min-idle: 0
-#security:
-#  basic:
-#    enabled: false
-#  oauth2:
-#    resource:
-#      filter-order: 3
 
-feign: #远程连接
-  hystrix: #熔断器配置
-    enabled: true #启动熔断器
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          enabled: true #Hystrix\u662F\u5426\u542F\u7528\u8D85\u65F6\u65F6\u95F4
-        isolation:
-          thread:
-            timeoutInMilliseconds: 8000 #Hystrix\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u9ED8\u8BA4\u662F1s\uFF0C\u65AD\u8DEF\u5668\u7684\u8D85\u65F6\u65F6\u95F4\u9700\u8981\u5927\u4E8Eribbon\u7684\u8D85\u65F6\u65F6\u95F4\uFF0C\u4E0D\u7136\u4E0D\u4F1A\u89E6\u53D1\u91CD\u8BD5
-          strategy: SEMAPHORE
 auth:
   security:
     oauth2:
@@ -75,14 +47,14 @@ auth:
 logging.level.org.springframework.security: DEBUG
 logging.level.org.springframework: DEBUG
 
-security:
-  oauth2:
-    client:
-      client-id: webapp
-      client-secret: webapp
-      user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
-      access-token-uri: http://127.0.0.1:9999/oauth/token
-    resource:
-      jwt:
-        key-uri: http://127.0.0.1:9999/oauth/token_key
-      user-info-uri: http://127.0.0.1:9999/user #获取用户信息的地址
+#security:
+#  oauth2:
+#    client:
+#      client-id: webapp
+#      client-secret: webapp
+#      user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
+#      access-token-uri: http://127.0.0.1:9999/oauth/token
+#    resource:
+#      jwt:
+#        key-uri: http://127.0.0.1:9999/oauth/token_key
+#      user-info-uri: http://127.0.0.1:9999/user #获取用户信息的地址

@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 @Configuration
 public class OAuth2ServerConfig {
 
-    private static final String DEMO_RESOURCE_ID = "order";
+//    private static final String DEMO_RESOURCE_ID = "order";
 
 
     @Order(6)
@@ -31,7 +31,9 @@ public class OAuth2ServerConfig {
 
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
-            resources.resourceId(DEMO_RESOURCE_ID).stateless(true);
+            resources
+//                    .resourceId(DEMO_RESOURCE_ID)
+                    .stateless(true);
         }
 
         @Override
@@ -58,71 +60,70 @@ public class OAuth2ServerConfig {
         private TokenStore jwtTokenStore;
         @Autowired
         private JwtAccessTokenConverter jwtAccessTokenConverter;
-//        @Autowired
-//        private ClientDetailsService clientDetailsService;
+        @Autowired
+        private ClientDetailsService clientDetailsService;
 
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
-//            // 客户端访问方式配置数据在数据库中
-//            clients.withClientDetails(clientDetailsService);
+            // 客户端访问方式配置数据在数据库中
+            clients.withClientDetails(clientDetailsService);
 
 //        password 方案一：明文存储，用于测试，不能用于生产
 //        String finalSecret = "123456";
 //        password 方案二：用 BCrypt 对密码编码
 //        String finalSecret = new BCryptPasswordEncoder().encode("123456");
             // password 方案三：支持多种编码，通过密码的前缀区分编码方式
-            String finalSecret = "123456";//"{bcrypt}"+new BCryptPasswordEncoder().encode("123456");
-            //配置两个客户端,一个用于password认证一个用于client认证
-            clients.inMemory().withClient("client_1")
-                    .resourceIds(DEMO_RESOURCE_ID)
-                    .authorizedGrantTypes("client_credentials", "refresh_token")
-                    .scopes("select")
-                    .authorities("oauth2")
-                    .secret(finalSecret)
-                    .and().withClient("client_2")
-                    .resourceIds(DEMO_RESOURCE_ID)
-                    .authorizedGrantTypes("password", "refresh_token")
-                    .scopes("select")
-                    .authorities("oauth2")
-                    .secret(finalSecret)
-                    .and()
-                    .withClient("client_code")
-                    .resourceIds(DEMO_RESOURCE_ID)
-                    .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password", "implicit")
-                    .scopes("all")
-                    .secret(finalSecret)
-                    //.authorities("oauth2")
-                    .redirectUris("http://www.baidu.com")
-                    .accessTokenValiditySeconds(1200)
-                    .refreshTokenValiditySeconds(50000)
-                    .and()
-                    .withClient("webapp")
-                    .resourceIds(DEMO_RESOURCE_ID)
-                    .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password", "implicit")
-                    .scopes("all")
-                    .secret("webapp")
-                    //.authorities("oauth2")
-                    .redirectUris("http://127.0.0.1:8080/client1/login")
-                    .accessTokenValiditySeconds(1200)
-                    .refreshTokenValiditySeconds(50000)
-                    .and()
-                    .withClient("learn-shop-admin-system")
-                    .secret("learn-shop-admin-system")
-                    .resourceIds(DEMO_RESOURCE_ID)
-                    .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password", "implicit")
-                    .scopes("all")
-                    //.authorities("oauth2")
-                    .redirectUris("http://127.0.0.1:8811/learn-shop-admin-system/login")
-                    .accessTokenValiditySeconds(1200)
-                    .refreshTokenValiditySeconds(50000);
+//            String finalSecret = "123456";//"{bcrypt}"+new BCryptPasswordEncoder().encode("123456");
+//            //配置两个客户端,一个用于password认证一个用于client认证
+//            clients.inMemory().withClient("client_1")
+//                    .resourceIds(DEMO_RESOURCE_ID)
+//                    .authorizedGrantTypes("client_credentials", "refresh_token")
+//                    .scopes("select")
+//                    .authorities("oauth2")
+//                    .secret(finalSecret)
+//                    .and().withClient("client_2")
+//                    .resourceIds(DEMO_RESOURCE_ID)
+//                    .authorizedGrantTypes("password", "refresh_token")
+//                    .scopes("select")
+//                    .authorities("oauth2")
+//                    .secret(finalSecret)
+//                    .and()
+//                    .withClient("client_code")
+//                    .resourceIds(DEMO_RESOURCE_ID)
+//                    .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password", "implicit")
+//                    .scopes("all")
+//                    .secret(finalSecret)
+//                    //.authorities("oauth2")
+//                    .redirectUris("http://www.baidu.com")
+//                    .accessTokenValiditySeconds(1200)
+//                    .refreshTokenValiditySeconds(50000)
+//                    .and()
+//                    .withClient("webapp")
+//                    .resourceIds(DEMO_RESOURCE_ID)
+//                    .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password", "implicit")
+//                    .scopes("all")
+//                    .secret("webapp")
+//                    //.authorities("oauth2")
+//                    .redirectUris("http://127.0.0.1:8080/client1/login")
+//                    .accessTokenValiditySeconds(1200)
+//                    .refreshTokenValiditySeconds(50000)
+//                    .and()
+//                    .withClient("learn-shop-admin-system")
+//                    .secret("learn-shop-admin-system")
+//                    .resourceIds(DEMO_RESOURCE_ID)
+//                    .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password", "implicit")
+//                    .scopes("all")
+//                    //.authorities("oauth2")
+//                    .redirectUris("http://127.0.0.1:8811/learn-shop-admin-system/login")
+//                    .accessTokenValiditySeconds(1200)
+//                    .refreshTokenValiditySeconds(50000);
         }
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
             endpoints
-//                    .tokenStore(new RedisTokenStore(redisConnectionFactory))
                     .tokenStore(jwtTokenStore)
                     .accessTokenConverter(jwtAccessTokenConverter)
                     .authenticationManager(authenticationManager)

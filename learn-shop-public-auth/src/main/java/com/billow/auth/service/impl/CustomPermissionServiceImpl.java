@@ -20,7 +20,7 @@ import java.util.List;
  * @author liuyongtao
  * @create 2019-04-29 18:11
  */
-//@Service("permissionService")
+@Service("permissionService")
 public class CustomPermissionServiceImpl implements PermissionService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());

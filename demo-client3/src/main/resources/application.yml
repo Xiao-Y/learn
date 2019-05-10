@@ -5,8 +5,8 @@ server:
 security:
   oauth2:
     client:
-      client-id: webapp
-      client-secret: webapp
+      client-id: client1
+      client-secret: client1
       user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
       access-token-uri: http://127.0.0.1:9999/oauth/token
     resource:
