@@ -17,33 +17,22 @@
 
 package com.billow.controller;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
 
 
 @RestController
+@RequestMapping("/api")
 public class DemoController {
 
-//    @GetMapping("/user")
-//    public Authentication user(Authentication authentication) {
-//        return authentication;
-//    }
-
-    @GetMapping("/user")
-    public Principal user(Principal principal) {
-        return principal;
-    }
-
-    @GetMapping("/test1/getTest1")
-    public String getTest(){
+    @GetMapping("/test/getTest1")
+    public String getTest() {
         return "test";
     }
 
-    @GetMapping("/test2/getTest2")
-    public String getTest2(){
+    @GetMapping("/test/getTest2")
+    public String getTest2() {
         return "test";
     }
 }

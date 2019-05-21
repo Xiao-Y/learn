@@ -25,7 +25,7 @@ import java.util.Date;
  */
 @Api(value = "WhiteListController", description = "白名单")
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api")
 @RabbitListener(queues = "${config.mq.orderToUser.orderStatus}")
 @RefreshScope
 public class TestApi extends BaseApi {
@@ -63,6 +63,19 @@ public class TestApi extends BaseApi {
     @ApiOperation(value = "getWords", notes = "getWords")
     @GetMapping("/getWords")
     public BaseResponse<String> getWords() {
+        BaseResponse<String> baseResponse = new BaseResponse<>();
+        try {
+            baseResponse.setResData(words);
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResponse.setResCode(ResCodeEnum.FAIL);
+        }
+        return baseResponse;
+    }
+
+    @ApiOperation(value = "getWords", notes = "getWords")
+    @GetMapping("/getWords2")
+    public BaseResponse<String> getWords2() {
         BaseResponse<String> baseResponse = new BaseResponse<>();
         try {
             baseResponse.setResData(words);

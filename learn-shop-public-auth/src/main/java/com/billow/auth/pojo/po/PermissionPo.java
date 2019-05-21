@@ -1,6 +1,7 @@
 package com.billow.auth.pojo.po;
 
 
+
 import com.billow.auth.pojo.BasePo;
 
 import javax.persistence.Entity;

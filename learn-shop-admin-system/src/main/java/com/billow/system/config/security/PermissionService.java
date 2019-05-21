@@ -1,10 +1,11 @@
-package com.billow.auth.service.impl;
+package com.billow.system.config.security;
 
-import com.billow.auth.service.PermissionService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +17,14 @@ import java.util.Collection;
  * @author liuyongtao
  * @create 2019-04-29 18:11
  */
-public class CustomPermissionServiceImpl implements PermissionService {
+@Service("permissionService")
+public class PermissionService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    @Override
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-
         boolean isPermission = false;
 
         Object principal = authentication.getPrincipal();

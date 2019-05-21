@@ -1,4 +1,4 @@
-package com.billow.auth.security.service;
+package com.billow.auth.service;
 
 import org.springframework.security.core.Authentication;
 
