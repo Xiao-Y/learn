@@ -11,8 +11,11 @@ module.exports = {
     assetsPublicPath: '/', // 发布路径
     proxyTable: {
       '/uaa': {
-        target: 'http://127.0.0.1:8771', // 接口的域名
-        changeOrigin: true // 如果接口跨域，需要进行这个参数配置
+        target: 'http://127.0.0.1:9999', // 接口的域名
+        changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+        pathRewrite: {
+          '^/uaa': '' //将前缀 '/api' 转为 ''
+        }
       },
       '/admin-system': {
         target: 'http://127.0.0.1:8771', // 接口的域名

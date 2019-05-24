@@ -1,4 +1,6 @@
-import {Loading} from 'element-ui'
+import {
+  Loading
+} from 'element-ui'
 
 let needLoadingRequestCount = 0
 

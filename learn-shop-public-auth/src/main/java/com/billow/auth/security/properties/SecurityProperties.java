@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SecurityProperties {
 
     private OAuth2Properties oauth2 = new OAuth2Properties();
+    private ClientProperties client = new ClientProperties();
 
     public OAuth2Properties getOauth2() {
         return oauth2;
@@ -19,6 +20,15 @@ public class SecurityProperties {
 
     public SecurityProperties setOauth2(OAuth2Properties oauth2) {
         this.oauth2 = oauth2;
+        return this;
+    }
+
+    public ClientProperties getClient() {
+        return client;
+    }
+
+    public SecurityProperties setClient(ClientProperties client) {
+        this.client = client;
         return this;
     }
 }

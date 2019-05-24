@@ -29,11 +29,11 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     test-on-return: false
     username: root
-#  redis:
-#    host: 119.23.27.78
-#    port: 6379
-#    password: requirepass12344321
-#    timeout: 0
+  redis:
+    host: 119.23.27.78
+    port: 6379
+    password: requirepass12344321
+    timeout: 5000
 #    pool:
 #      maxActive: 10
 #      max-wait: -1
@@ -44,6 +44,12 @@ auth:
   security:
     oauth2:
       jwtSigningKey: billow
+    client:
+      client-id: app
+      client-secret: app
+      grant-type: password
+      access-token-uri: http://127.0.0.1:9999/oauth/token
+
 logging.level.org.springframework.security: DEBUG
 logging.level.org.springframework: DEBUG
 

@@ -25,7 +25,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatcher("/**")
                 .authorizeRequests()
                 .antMatchers("/api/**")
-                .access("@permissionService.hasPermission(request,authentication)");
+                .access("@permissionService.hasPermission(request,authentication)")
+                .anyRequest()
+                .permitAll();
 
         JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(resourceServerTokenServices);
         http.addFilterBefore(jwtAuthenticationFilter, SecurityContextPersistenceFilter.class);

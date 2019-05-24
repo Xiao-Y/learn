@@ -1,15 +1,23 @@
 import Cookies from 'js-cookie'
+const AccessTokenKey = 'AccessToken'
+const RefreshTokenKey = 'RefreshToken'
 
-const TokenKey = 'token'
+export function getAccessToken() {
+  var accessToken = Cookies.get(AccessTokenKey);
+  return accessToken
+}
 
-export function getToken() {
-  return Cookies.get(TokenKey)
+export function getRefresToken() {
+  var refreshToken = Cookies.get(RefreshTokenKey);
+  return refreshToken
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  Cookies.set(AccessTokenKey, token.accessToken);
+  Cookies.set(RefreshTokenKey, token.refreshToken);
 }
 
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  Cookies.remove(AccessTokenKey);
+  Cookies.remove(RefreshTokenKey);
 }

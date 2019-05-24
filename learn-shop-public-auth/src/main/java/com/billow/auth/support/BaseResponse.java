@@ -1,6 +1,5 @@
-package com.billow.tools.resData;
+package com.billow.auth.support;
 
-import com.billow.tools.enums.ResCodeEnum;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.Serializable;
@@ -74,6 +73,12 @@ public class BaseResponse<T> implements Serializable {
         this.resCode = resCode;
         this.resMsg = ResCodeEnum.getResCodeEnum(resCode);
     }
+
+    public void setResCode(ResCodeEnum resCodeEnum) {
+        this.resCode = resCodeEnum.getStatusCode();
+        this.resMsg = resCodeEnum.getStatusName();
+    }
+
 
     public String getResMsg() {
         return this.resMsg;

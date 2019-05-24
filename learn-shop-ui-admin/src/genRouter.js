@@ -1,21 +1,21 @@
 import router from './router'
 import store from './store'
 import {Message} from 'element-ui'
-import {getToken} from '@/utils/auth' // 验权
+import {getAccessToken} from '@/utils/auth' // 验权
 
 import types from '@/store/mutationsType'
 
-const whiteList = ['/login1', '/authredirect'] // 不重定向白名单
+const whiteList = ['/login', '/authredirect'] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
-  if (getToken()) { // 判断是否有token
-    if (to.path === '/login1') {
+  if (getAccessToken()) { // 判断是否有token
+    if (to.path === '/login') {
       store.commit(types.SET_ROUTERS);
       next();
     } else {
       if (!store.getters.menus) {
         Message.error('该用户没有配置权限');
-        next({path: '/login1'})
+        next({path: '/login'})
       } else if (store.getters.menus.length === 0) {
         // 获取用户信息
         // store.dispatch('GetInfoActions').then(res => { // 拉取用户信息
@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
           store.dispatch('FedLogOutActions').then(() => {
             Message.error('获取路由失败,请重新登录');
             store.commit(types.SET_ROUTERS);
-            next({path: '/login1'})
+            next({path: '/login'})
           });
         });
       } else {
@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       store.commit(types.SET_ROUTERS);
-      next('/login1');
+      next('/login');
     }
   }
 });

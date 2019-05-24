@@ -1,10 +1,8 @@
 import {
   login,
   logout
-} from '@/api/login1'
+} from '@/api/login'
 import {
-  getToken,
-  setToken,
   removeToken
 } from '@/utils/auth'
 import types from '@/store/mutationsType'
@@ -12,7 +10,7 @@ import VueUtils from '@/utils/vueUtils'
 
 const loginHandle = {
   state: {
-    token: '',
+    token: [],
     name: '',
     avatar: '',
     roles: []
@@ -40,14 +38,13 @@ const loginHandle = {
     }, userInfo) {
       const username = userInfo.username.trim();
       const password = userInfo.password;
-      const rawPassword = VueUtils.md5(password);
+      //   const rawPassword = VueUtils.md5(password);
       return new Promise((resolve, reject) => {
-        login(username, rawPassword).then(res => {
+        login(username, password).then(res => {
           const data = res.resData;
-          setToken(data.token);
           commit(types.SET_NAME, username);
           commit(types.SET_AVATAR, username);
-          commit(types.SET_TOKEN, data.token);
+          commit(types.SET_TOKEN, data);
           commit(types.SET_ROLES, data.roleCodes);
           resolve();
         }).catch(error => {

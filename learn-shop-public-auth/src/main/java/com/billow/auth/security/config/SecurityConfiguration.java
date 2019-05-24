@@ -91,10 +91,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http
                 .requestMatchers()
-                .antMatchers("/oauth/**", "/authentication/**", "/login1/**", "/logout/**")
+                .antMatchers("/oauth/**", "/authentication/**", "/login/**", "/logout/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/oauth/**").authenticated()
+                .antMatchers("/login").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/authentication/require")

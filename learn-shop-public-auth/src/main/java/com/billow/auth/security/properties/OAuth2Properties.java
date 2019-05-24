@@ -34,7 +34,6 @@ public class OAuth2Properties {
     }
 
     public String getTokenHeader() {
-        Assert.notNull(tokenHeader, "tokenHeader 不能为空，请配置 auth.security.oauth2.tokenHeader");
         return tokenHeader;
     }
 

@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+/* eslint-disable indent */
 import axios from 'axios'
 import {
   Message,
@@ -5,8 +7,9 @@ import {
 } from 'element-ui'
 import store from '../store'
 import {
-  getToken
-} from '@/utils/auth'
+  getAccessToken,
+  setToken
+} from './auth'
 import {
   showFullScreenLoading,
   tryHideFullScreenLoading
@@ -24,10 +27,8 @@ service.interceptors.request.use(config => {
   if (config.showLoading) {
     showFullScreenLoading();
   }
-  if (store.getters.token) {
-    config.params['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-    config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-    config.headers['access_token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+  if (getAccessToken()) {
+    config.headers['Authorization'] = "Bearer " + getAccessToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
   console.info('请求参数:', config)
   return config
@@ -39,22 +40,22 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(response => {
     const res = response.data
+    console.info('响应数据:', res)
     if (response.config.showLoading) {
       tryHideFullScreenLoading();
     }
-    if (res.resCode == '0000') { // 获取正常数据
-      console.info('响应数据:', res)
+    if (res.resCode === '0000') { // 获取正常数据
       return response.data;
     } else if (res.resCode == '1111') { // 获取token
       // 构建返回页面数据
       var data = {
         resCode: res.resCode,
         resData: {
-          token: res.access_token,
-          refToken: res.refresh_token
+          accessToken: res.resData.accessToken,
+          refreshToken: res.resData.refreshToken
         }
       }
-      console.info('响应数据:', res);
+      setToken(data.resData);
       return data;
     } else {
       Message({
