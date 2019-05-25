@@ -33,12 +33,27 @@ public class BaseResponse<T> implements Serializable {
         this.ext = ext;
     }
 
+    public BaseResponse(ResCodeEnum resCodeEnum, String traceID, String spanID,
+                        String signature, T resData, Map<String, String> ext) {
+        this.resCode = resCodeEnum.getStatusCode();
+        this.resMsg = resCodeEnum.getStatusName();
+        this.traceID = traceID;
+        this.spanID = spanID;
+        this.signature = signature;
+        this.resData = resData;
+        this.ext = ext;
+    }
+
     public BaseResponse(ResCodeEnum resCodeEnum) {
         this(resCodeEnum.getStatusCode(), resCodeEnum.getStatusName());
     }
 
+    public BaseResponse(ResCodeEnum resCodeEnum, T resData) {
+        this(resCodeEnum.getStatusCode(), resCodeEnum.getStatusName(), resData);
+    }
+
     public BaseResponse(String resCode, String resMsg) {
-        this(resCode, resMsg, null, null, null, null, null);
+        this(resCode, resMsg, null);
     }
 
     public BaseResponse(String resCode) {
@@ -46,7 +61,11 @@ public class BaseResponse<T> implements Serializable {
     }
 
     public BaseResponse(String resCode, T resData) {
-        this(resCode, ResCodeEnum.getResCodeEnum(resCode), null, null, null, resData, null);
+        this(resCode, ResCodeEnum.getResCodeEnum(resCode), resData);
+    }
+
+    public BaseResponse(String resCode, String resMsg, T resData) {
+        this(resCode, resMsg, null, null, null, resData, null);
     }
 
     public Map<String, String> getExt() {
@@ -78,7 +97,6 @@ public class BaseResponse<T> implements Serializable {
         this.resCode = resCodeEnum.getStatusCode();
         this.resMsg = resCodeEnum.getStatusName();
     }
-
 
     public String getResMsg() {
         return this.resMsg;
@@ -120,6 +138,14 @@ public class BaseResponse<T> implements Serializable {
         this.resData = resData;
     }
 
+    public static BaseResponse success(Object body) {
+        return new BaseResponse(ResCodeEnum.RESCODE_SUCCESS, body);
+    }
+
+    public static BaseResponse fail(Object body) {
+        return new BaseResponse(ResCodeEnum.RESCODE_OTHER_ERROR, body);
+    }
+    
     @Override
     public String toString() {
         return "BaseResponse{" +

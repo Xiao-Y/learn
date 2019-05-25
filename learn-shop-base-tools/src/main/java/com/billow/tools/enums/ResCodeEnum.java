@@ -12,6 +12,10 @@ public enum ResCodeEnum {
      */
     RESCODE_SUCCESS("0000", "成功"),
     /**
+     * "1111", "成功获取令牌"
+     */
+    RESCODE_ASSESS_TOKEN("1111", "成功获取令牌"),
+    /**
      * "0001", "报文不可解析"
      */
     RESCODE_BAD_REQUEST("0001", "报文不可解析"),

@@ -14,5 +14,7 @@ security:
 #        key-uri: http://127.0.0.1:9999/oauth/token_key
       user-info-uri: http://127.0.0.1:9999/user
       prefer-token-info: false #获取用户信息的地址
-logging:
-  level: debug
+
+logging.level.org.springframework.security: DEBUG
+logging.level.org.springframework: DEBUG
+logging.level.com.billow: DEBUG

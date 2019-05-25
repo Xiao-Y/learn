@@ -17,7 +17,12 @@
 
 package com.billow.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,13 +31,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class DemoController {
 
-    @GetMapping("/test/getTest1")
+    @GetMapping("/test1/getTest1")
     public String getTest() {
         return "test";
     }
 
-    @GetMapping("/test/getTest2")
-    public String getTest2() {
-        return "test";
+    @GetMapping("/test/getTest2/{id}")
+    public String getTest2(@PathVariable(required = false) String id) throws Exception {
+        if ("1".equals(id)) {
+            throw new RuntimeException("发生了异常：99999DDDDDD");
+        }
+        return "test2";
+    }
+
+    @GetMapping("/test/getTest3")
+    public Authentication getTest3() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication;
+    }
+
+    @GetMapping("/test/getTest4")
+    public void getTest4() {
+        System.out.println("void");
     }
 }
