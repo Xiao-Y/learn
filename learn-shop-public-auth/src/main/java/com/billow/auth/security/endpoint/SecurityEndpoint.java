@@ -101,6 +101,12 @@ public class SecurityEndpoint {
         return oAuth2Authentication;
     }
 
+    /**
+     * 用于前后分离时登陆
+     *
+     * @param userPo
+     * @return
+     */
     @ResponseBody
     @PostMapping("/login")
     public BaseResponse login(@RequestBody UserPo userPo) {
@@ -125,7 +131,7 @@ public class SecurityEndpoint {
             String clientId = client.getClientId();
             Assert.notNull(clientId, "clientId 不能为空,请配置 auth.security.client.clientId");
 
-            //        String url = "http://127.0.0.1:9999/oauth/token?grant_type=password&username=admin&password=123456&client_id=app";
+            // String url = "http://127.0.0.1:9999/oauth/token?grant_type=password&username=admin&password=123456&client_id=app";
             String url = "%s?grant_type=%s&username=%s&password=%s&client_id=%s";
             String trgUrl = String.format(url, accessTokenUri, grantType, username, password, clientId);
 
@@ -137,8 +143,8 @@ public class SecurityEndpoint {
             ResponseEntity<OAuth2AccessToken> accessTokenEntity = restTemplate.postForEntity(trgUrl, entity, OAuth2AccessToken.class);
             OAuth2AccessToken oAuth2AccessToken = accessTokenEntity.getBody();
 
-            System.out.println(oAuth2AccessToken.getValue());
-            System.out.println(oAuth2AccessToken.getRefreshToken().getValue());
+            logger.info("token:{}", oAuth2AccessToken.getValue());
+            logger.info("accessToken:{}", oAuth2AccessToken.getRefreshToken().getValue());
 
             Map<String, String> result = new HashMap<>();
             result.put("accessToken", oAuth2AccessToken.getValue());
@@ -146,11 +152,9 @@ public class SecurityEndpoint {
             baseResponse.setResData(result);
             baseResponse.setResCode(ResCodeEnum.RESCODE_ASSESS_TOKEN);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("登陆异常：{}", e);
             baseResponse.setResCode(ResCodeEnum.RESCODE_NOT_FOUND_USER);
         }
-
-
         return baseResponse;
     }
 }

@@ -1,6 +1,8 @@
 package com.billow.common.global.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.billow.tools.enums.ResCodeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
@@ -31,6 +33,7 @@ import java.util.Map;
  * @apiNote: 全局异常处理(用于在还未进入到 controller 中发生的异常)
  * @see BasicErrorController
  */
+@Slf4j
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class GlobalErrorController extends AbstractErrorController {
@@ -69,11 +72,11 @@ public class GlobalErrorController extends AbstractErrorController {
     }
 
     @RequestMapping(produces = "text/html")
-    public ModelAndView errorHtml(HttpServletRequest request,
-                                  HttpServletResponse response) {
+    public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
         HttpStatus status = getStatus(request);
         Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(
                 request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+        log.error(JSONObject.toJSONString(model));
         response.setStatus(status.value());
         ModelAndView modelAndView = resolveErrorView(request, response, status, model);
         return (modelAndView == null ? new ModelAndView("error", model) : modelAndView);
@@ -85,6 +88,7 @@ public class GlobalErrorController extends AbstractErrorController {
         Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
 //        HttpStatus status = getStatus(request);
         body.put("resCode", ResCodeEnum.RESCODE_FORBIDDEN);
+        log.error(JSONObject.toJSONString(body));
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
@@ -95,8 +99,7 @@ public class GlobalErrorController extends AbstractErrorController {
      * @param produces the media type produced (or {@code MediaType.ALL})
      * @return if the stacktrace attribute should be included
      */
-    protected boolean isIncludeStackTrace(HttpServletRequest request,
-                                          MediaType produces) {
+    protected boolean isIncludeStackTrace(HttpServletRequest request, MediaType produces) {
         IncludeStacktrace include = getErrorProperties().getIncludeStacktrace();
         if (include == IncludeStacktrace.ALWAYS) {
             return true;

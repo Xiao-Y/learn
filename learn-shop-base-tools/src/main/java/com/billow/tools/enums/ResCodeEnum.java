@@ -16,23 +16,6 @@ public enum ResCodeEnum {
      */
     RESCODE_ASSESS_TOKEN("1111", "成功获取令牌"),
     /**
-     * "1005", "签名校验错误"
-     */
-    RESCODE_SIGNATURE_ERROR("1001", "签名校验错误"),
-    /**
-     * "1006", "权限校验未通过"
-     */
-    RESCODE_UNAUTHORIZED("1002", "权限校验未通过"),
-    /**
-     * "1003", "无相关权限"
-     */
-    RESCODE_FORBIDDEN("1003", "无相关权限"),
-    /**
-     * "1004", "访问此资源需要令牌验证"
-     */
-    RESCODE_NO_TOKEN_ERROR("1004", "访问此资源需要令牌验证"),
-
-    /**
      * "0001", "报文不可解析"
      */
     RESCODE_BAD_REQUEST("0001", "报文不可解析"),
@@ -48,7 +31,14 @@ public enum ResCodeEnum {
      * "0004", "当前服务不可用"
      */
     RESCODE_SERVICE_UNREACHABLE("0004", "当前服务不可用"),
-
+    /**
+     * "0005", "签名校验错误"
+     */
+    RESCODE_SIGNATURE_ERROR("0005", "签名校验错误"),
+    /**
+     * "0006", "权限校验未通过"
+     */
+    RESCODE_UNAUTHORIZED("0006", "权限校验未通过"),
     /**
      * "0007", "无法查询到相关信息或查询结果为空"
      */
@@ -57,7 +47,10 @@ public enum ResCodeEnum {
      * "0008", "网络超时"
      */
     RESCODE_TIMEOUT("0008", "网络超时"),
-
+    /**
+     * "0009", "无相关权限"
+     */
+    RESCODE_FORBIDDEN("0009", "无相关权限"),
     /**
      * "0010", "不符合相关业务规则"
      */
@@ -90,6 +83,13 @@ public enum ResCodeEnum {
      * "0017", "其它系统异常"
      */
     RESCODE_OTHER_ERROR("0017", "其它系统异常"),
+    /**
+     * "0018", "访问此资源需要令牌验证"
+     */
+    RESCODE_NO_TOKEN_ERROR("0018", "访问此资源需要令牌验证"),
+    /**
+     * "0019", "用户名或密码错误"
+     */
     RESCODE_NOT_FOUND_USER("0019", "用户名或密码错误"),
     /**
      * "8888", "系统服务异常，熔断请求"

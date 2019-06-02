@@ -58,7 +58,7 @@ public class MenuApi extends BaseApi {
     @GetMapping("/findMenus")
     @ApiOperation(value = "菜单管理信息", notes = "菜单管理信息")
     public List<MenuEx> findMenus() {
-        List<MenuEx> menuExes = super.getRedisValues(RdsKeyEnum.FIND_MENUS.getKey(), MenuEx.class);
+        List<MenuEx> menuExes = super.getRedisValues(RdsKeyEnum.FIND_MENUS, MenuEx.class);
         if (ToolsUtils.isEmpty(menuExes)) {
             menuExes = menuService.findMenus();
             super.setRedisObject(RdsKeyEnum.FIND_MENUS.getKey(), menuExes);
