@@ -1,7 +1,8 @@
 package com.billow.system.service;
 
 import com.billow.system.pojo.ex.MenuEx;
-import com.billow.system.pojo.vo.PermissionVo;
+import com.billow.system.pojo.vo.MenuVo;
+import com.billow.system.pojo.vo.MenuVo;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ public interface MenuService {
      * @author LiuYongTao
      * @date 2018/5/26 10:01
      */
-    List<MenuEx> homeMenus(PermissionVo permissionVo);
+    List<MenuEx> homeMenus(MenuVo menuVo);
 
     /**
      * 菜单管理信息
@@ -32,14 +33,14 @@ public interface MenuService {
      * @param id
      * @return
      */
-    PermissionVo findMenuById(Long id);
+    MenuVo findMenuById(Long id);
 
     /**
      * 修改、添加菜单信息
      *
-     * @param permissionVo
+     * @param menuVo
      */
-    PermissionVo saveOrUpdateMenu(PermissionVo permissionVo) throws Exception;
+    MenuVo saveOrUpdateMenu(MenuVo menuVo) throws Exception;
 
     /**
      * 通过ids 删除菜单信息

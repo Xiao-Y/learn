@@ -3,8 +3,6 @@ package com.billow.system.api;
 import com.billow.common.base.BaseApi;
 import com.billow.system.pojo.vo.WhiteListVo;
 import com.billow.system.service.WhiteListService;
-import com.billow.tools.enums.ResCodeEnum;
-import com.billow.tools.resData.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +39,10 @@ public class WhiteListApi extends BaseApi {
      */
     @ApiOperation(value = "获取有效的白名单信息", notes = "根据ip和模块获取有效的白名单信息")
     @GetMapping("/findWhiteListVos/{ip}/{module}/{validInd}")
-    public BaseResponse<List<WhiteListVo>> findWhiteListVos(@PathVariable("ip") String ip,
-                                                            @PathVariable("module") String module,
-                                                            @PathVariable("validInd") boolean validInd) {
-        BaseResponse<List<WhiteListVo>> baseResponse = new BaseResponse<>();
-        try {
-            List<WhiteListVo> whiteListVos = whiteListService.findByIpAndModuleAndValidInd(ip, module, validInd);
-            baseResponse.setResData(whiteListVos);
-        } catch (Exception e) {
-            e.printStackTrace();
-            baseResponse.setResCode(ResCodeEnum.FAIL);
-        }
-        return baseResponse;
+    public List<WhiteListVo> findWhiteListVos(@PathVariable("ip") String ip,
+                                              @PathVariable("module") String module,
+                                              @PathVariable("validInd") boolean validInd) {
+        List<WhiteListVo> whiteListVos = whiteListService.findByIpAndModuleAndValidInd(ip, module, validInd);
+        return whiteListVos;
     }
 }

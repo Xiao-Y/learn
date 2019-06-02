@@ -29,9 +29,9 @@ public class PermissionService {
 
         Object principal = authentication.getPrincipal();
         logger.info("===>>> principal:{}", principal);
-        if ("admin".equals(principal)) {
-            return true;
-        }
+//        if ("admin".equals(principal)) {
+//            return true;
+//        }
 
         String contextPath = request.getContextPath();
         logger.info("request.getContextPath:{}", contextPath);

@@ -1,20 +1,12 @@
-package com.billow.advice;
+package com.billow.common.global.advice;
 
 import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.exception.GlobalException;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.ConversionNotSupportedException;
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.io.IOException;
 
 /**
  * Created by billow.
@@ -30,6 +22,12 @@ import java.io.IOException;
 public class GlobalExceptionHandler {
 
     private static final String logExceptionFormat = "Capture Exception By GlobalExceptionHandler: Code: %s ,Detail: %s";
+
+    //运行时异常
+    @ExceptionHandler(GlobalException.class)
+    public BaseResponse runtimeExceptionHandler(GlobalException ex) {
+        return resultFormat(ex.getResCodeEnum(), ex);
+    }
 
 //    //运行时异常
 //    @ExceptionHandler(RuntimeException.class)

@@ -1,7 +1,7 @@
 import router from './router'
 import store from './store'
 import {Message} from 'element-ui'
-import {getAccessToken} from '@/utils/auth' // 验权
+import {getAccessToken} from './utils/auth' // 验权
 
 import types from '@/store/mutationsType'
 

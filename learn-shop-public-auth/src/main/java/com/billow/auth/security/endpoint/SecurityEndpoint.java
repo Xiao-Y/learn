@@ -72,6 +72,13 @@ public class SecurityEndpoint {
         return new ModelAndView("/login/index.html");
     }
 
+    /**
+     * 获取用户信息
+     *
+     * @param request
+     * @param response
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/user")
     public Authentication user(ServletRequest request, ServletResponse response) {
@@ -133,9 +140,9 @@ public class SecurityEndpoint {
             System.out.println(oAuth2AccessToken.getValue());
             System.out.println(oAuth2AccessToken.getRefreshToken().getValue());
 
-            Map<String,String> result = new HashMap<>();
-            result.put("accessToken",oAuth2AccessToken.getValue());
-            result.put("refreshToken",oAuth2AccessToken.getRefreshToken().getValue());
+            Map<String, String> result = new HashMap<>();
+            result.put("accessToken", oAuth2AccessToken.getValue());
+            result.put("refreshToken", oAuth2AccessToken.getRefreshToken().getValue());
             baseResponse.setResData(result);
             baseResponse.setResCode(ResCodeEnum.RESCODE_ASSESS_TOKEN);
         } catch (Exception e) {

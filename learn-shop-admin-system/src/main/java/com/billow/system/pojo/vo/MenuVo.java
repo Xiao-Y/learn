@@ -1,6 +1,7 @@
 package com.billow.system.pojo.vo;
 
 
+import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.PermissionPo;
 
 import java.io.Serializable;
@@ -8,15 +9,15 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 权限
+ * 菜单
  *
  * @author liuyongtao
- * @create 2018-05-26 10:15
+ * @create 2018-05-0:15
  */
-public class PermissionVo extends PermissionPo implements Serializable {
+public class MenuVo extends MenuPo implements Serializable {
 
     /**
-     * 权限ids，用于删除
+     * 菜单ids，用于删除
      */
     Set<String> ids;
     /**
@@ -32,7 +33,7 @@ public class PermissionVo extends PermissionPo implements Serializable {
         return roleVos;
     }
 
-    public PermissionVo setRoleVos(List<RoleVo> roleVos) {
+    public MenuVo setRoleVos(List<RoleVo> roleVos) {
         this.roleVos = roleVos;
         return this;
     }
@@ -41,7 +42,7 @@ public class PermissionVo extends PermissionPo implements Serializable {
         return userCode;
     }
 
-    public PermissionVo setUserCode(String userCode) {
+    public MenuVo setUserCode(String userCode) {
         this.userCode = userCode;
         return this;
     }
@@ -50,7 +51,7 @@ public class PermissionVo extends PermissionPo implements Serializable {
         return ids;
     }
 
-    public PermissionVo setIds(Set<String> ids) {
+    public MenuVo setIds(Set<String> ids) {
         this.ids = ids;
         return this;
     }

@@ -13,5 +13,5 @@ public interface UserDao extends JpaRepository<UserPo, Long> {
      * @author LiuYongTao
      * @date 2018/11/5 16:09
      */
-    UserPo findUserInfoByUsercode(String userCode);
+    UserPo findUserInfoByUsercodeAndValidIndIsTrue(String userCode);
 }

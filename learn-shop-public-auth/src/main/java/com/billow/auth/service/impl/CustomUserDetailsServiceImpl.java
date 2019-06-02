@@ -1,16 +1,14 @@
 package com.billow.auth.service.impl;
 
-import com.billow.auth.dao.PermissionDao;
 import com.billow.auth.dao.RoleDao;
-import com.billow.auth.dao.RolePermissionDao;
 import com.billow.auth.dao.UserDao;
 import com.billow.auth.dao.UserRoleDao;
 import com.billow.auth.pojo.po.PermissionPo;
-import com.billow.auth.pojo.po.RolePermissionPo;
 import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
 import com.billow.auth.service.PermissionService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +55,13 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
         // 查询用户信息
-        UserPo userPo = userDao.findUserInfoByUsercode(usercode);
+        UserPo userPo = userDao.findUserInfoByUsercodeAndValidIndIsTrue(usercode);
         if (userPo == null) {
             logger.error("用户：{}，不存在！", usercode);
             throw new UsernameNotFoundException("用户：" + usercode + "，不存在");
         }
         // 查询角色信息
-        List<UserRolePo> userRolePos = userRoleDao.findRoleIdByUserId(userPo.getId());
+        List<UserRolePo> userRolePos = userRoleDao.findRoleIdByUserIdAndValidIndIsTrue(userPo.getId());
         if (CollectionUtils.isEmpty(userRolePos)) {
             logger.error("用户：{}，未分配角色！", usercode);
             throw new UsernameNotFoundException("用户：" + usercode + "，未分配角色");
@@ -77,6 +75,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
             }
             Set<PermissionPo> permissionByRole = permissionService.findPermissionByRole(rolePo.get());
             List<SimpleGrantedAuthority> collect = permissionByRole.stream()
+                    .filter(f -> !StringUtils.isBlank(f.getUrl()))
                     .map(m -> new SimpleGrantedAuthority(m.getUrl()))
                     .collect(Collectors.toList());
             authorities.addAll(collect);

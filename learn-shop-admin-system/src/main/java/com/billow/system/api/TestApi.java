@@ -41,18 +41,11 @@ public class TestApi extends BaseApi {
 
     @ApiOperation(value = "sendMQ", notes = "sendMQ")
     @GetMapping("/sendMQ")
-    public BaseResponse<String> sendMQ() {
-        BaseResponse<String> baseResponse = new BaseResponse<>();
-        try {
-            String context = "wqh say hello " + new Date();
-            logger.info("发送消息=========》》{}》》{}", orderStatus, context);
-            this.amqpTemplate.convertAndSend(orderStatus, context);
-            baseResponse.setResData(context);
-        } catch (Exception e) {
-            e.printStackTrace();
-            baseResponse.setResCode(ResCodeEnum.FAIL);
-        }
-        return baseResponse;
+    public String sendMQ() {
+        String context = "wqh say hello " + new Date();
+        logger.info("发送消息=========》》{}》》{}", orderStatus, context);
+        this.amqpTemplate.convertAndSend(orderStatus, context);
+        return context;
     }
 
     @RabbitHandler

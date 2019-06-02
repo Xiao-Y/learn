@@ -1,12 +1,12 @@
 package com.billow.system.service.impl;
 
-import com.billow.system.dao.PermissionDao;
-import com.billow.system.dao.RolePermissionDao;
+import com.billow.system.dao.MenuDao;
+import com.billow.system.dao.RoleMenuDao;
 
 import com.billow.system.pojo.ex.MenuEx;
-import com.billow.system.pojo.po.PermissionPo;
-import com.billow.system.pojo.po.RolePermissionPo;
-import com.billow.system.pojo.vo.PermissionVo;
+import com.billow.system.pojo.po.MenuPo;
+import com.billow.system.pojo.po.RoleMenuPo;
+import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
 import com.billow.tools.utlis.FieldUtils;
@@ -35,45 +35,45 @@ import java.util.stream.Collectors;
 public class MenuServiceImpl implements MenuService {
 
     @Autowired
-    private PermissionDao permissionDao;
+    private MenuDao menuDao;
     @Autowired
-    private RolePermissionDao rolePermissionDao;
+    private RoleMenuDao roleMenuDao;
 
     @Override
-    public List<MenuEx> homeMenus(PermissionVo permissionVo) {
+    public List<MenuEx> homeMenus(MenuVo menuVo) {
         // 查询出该用户所有角色的所有的权限
-        List<RoleVo> roleVos = permissionVo.getRoleVos();
-        Set<Long> permissionIds = new HashSet<>();
+        List<RoleVo> roleVos = menuVo.getRoleVos();
+        Set<Long> menuIds = new HashSet<>();
         if (ToolsUtils.isNotEmpty(roleVos)) {
             roleVos.forEach(item -> {
-                List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(item.getId());
-                if (ToolsUtils.isNotEmpty(rolePermissionPos)) {
-                    rolePermissionPos.stream().forEach(rolePermissionPo -> permissionIds.add(rolePermissionPo.getPermissionId()));
+                List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(item.getId());
+                if (ToolsUtils.isNotEmpty(roleMenuPos)) {
+                    roleMenuPos.stream().forEach(roleMenuPo -> menuIds.add(roleMenuPo.getMenuId()));
                 }
             });
         }
         // TODO 测试用
-        if ("admin".equals(permissionVo.getUserCode())) {
-            List<PermissionPo> all = permissionDao.findAll();
+        if ("admin".equals(menuVo.getUserCode())) {
+            List<MenuPo> all = menuDao.findAll();
             if (ToolsUtils.isNotEmpty(all)) {
                 Set<Long> set = all.stream().map(m -> m.getId()).collect(Collectors.toSet());
-                permissionIds.clear();
-                permissionIds.addAll(set);
+                menuIds.clear();
+                menuIds.addAll(set);
             }
         }
         // 如果没有权限直接返回
-        if (ToolsUtils.isEmpty(permissionIds)) {
+        if (ToolsUtils.isEmpty(menuIds)) {
             return null;
         }
         // 查询父级菜单
-        List<PermissionPo> permissionPos = permissionDao.findByPidIsNullAndValidIndIsTrue();
+        List<MenuPo> menuPos = menuDao.findByPidIsNullAndValidIndIsTrue();
 
         // 转换父级菜单
         List<MenuEx> pMenuExs = new ArrayList<>();
-        if (ToolsUtils.isNotEmpty(permissionPos)) {
-            this.permissionPosCoverMenuExs(permissionPos, pMenuExs, permissionIds);
+        if (ToolsUtils.isNotEmpty(menuPos)) {
+            this.menuPosCoverMenuExs(menuPos, pMenuExs, menuIds);
             // 递归查询子级菜单
-            this.childenMenus(pMenuExs, permissionIds);
+            this.childenMenus(pMenuExs, menuIds);
         }
         return pMenuExs;
     }
@@ -81,12 +81,12 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<MenuEx> findMenus() {
         // 查询父级菜单
-        List<PermissionPo> permissionPos = permissionDao.findByPidIsNull();
+        List<MenuPo> menuPos = menuDao.findByPidIsNull();
 
         // 转换父级菜单
         List<MenuEx> pMenuExs = new ArrayList<>();
-        if (ToolsUtils.isNotEmpty(permissionPos)) {
-            this.permissionPosCoverMenuExs(permissionPos, pMenuExs, null);
+        if (ToolsUtils.isNotEmpty(menuPos)) {
+            this.menuPosCoverMenuExs(menuPos, pMenuExs, null);
             // 递归查询子级菜单
             this.childenMenus(pMenuExs, null);
         }
@@ -94,41 +94,41 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public PermissionVo findMenuById(Long id) {
-        PermissionPo permissionPo = permissionDao.findOne(id);
-        return ConvertUtils.convert(permissionPo, PermissionVo.class);
+    public MenuVo findMenuById(Long id) {
+        MenuPo menuPo = menuDao.findOne(id);
+        return ConvertUtils.convert(menuPo, MenuVo.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public PermissionVo saveOrUpdateMenu(PermissionVo permissionVo) throws Exception {
-        Long id = permissionVo.getId();
-        PermissionPo one;
+    public MenuVo saveOrUpdateMenu(MenuVo menuVo) throws Exception {
+        Long id = menuVo.getId();
+        MenuPo one;
         if (null != id) {
-            one = permissionDao.findOne(id);
-            ConvertUtils.copyNonNullProperties(permissionVo, one);
+            one = menuDao.findOne(id);
+            ConvertUtils.copyNonNullProperties(menuVo, one);
             one.setUpdateTime(new Date());
         } else {
-            one = ConvertUtils.convert(permissionVo, PermissionPo.class);
-            FieldUtils.setCommonFieldByInsertWithValidInd(one, permissionVo.getUpdaterCode());
+            one = ConvertUtils.convert(menuVo, MenuPo.class);
+            FieldUtils.setCommonFieldByInsertWithValidInd(one, menuVo.getUpdaterCode());
         }
-        permissionDao.save(one);
+        menuDao.save(one);
 
-        return ConvertUtils.convert(one, PermissionVo.class);
+        return ConvertUtils.convert(one, MenuVo.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delMenuByIds(Set<String> ids) {
         ids.forEach(id -> {
-            List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByPermissionId(new Long(id));
-            if (ToolsUtils.isNotEmpty(rolePermissionPos)) {
-                rolePermissionDao.deleteByPermissionId(new Long(id));
+            List<RoleMenuPo> roleMenuPos = roleMenuDao.findByMenuId(new Long(id));
+            if (ToolsUtils.isNotEmpty(roleMenuPos)) {
+                roleMenuDao.deleteByMenuId(new Long(id));
             }
 
-            PermissionPo permissionPo = permissionDao.findOne(new Long(id));
-            if (null != permissionPo) {
-                permissionDao.delete(new Long(id));
+            MenuPo menuPo = menuDao.findOne(new Long(id));
+            if (null != menuPo) {
+                menuDao.delete(new Long(id));
             }
         });
     }
@@ -137,46 +137,46 @@ public class MenuServiceImpl implements MenuService {
      * 递归查询子级菜单
      *
      * @param pMenuExs
-     * @param permissionIds 用户所拥有的权限
+     * @param menuIds 用户所拥有的权限
      * @return void
      * @author LiuYongTao
      * @date 2018/5/29 14:48
      */
-    private void childenMenus(List<MenuEx> pMenuExs, Set<Long> permissionIds) {
+    private void childenMenus(List<MenuEx> pMenuExs, Set<Long> menuIds) {
         pMenuExs.forEach(pitem -> {
             // 查询子级菜单
-            List<PermissionPo> permissionPos;
+            List<MenuPo> menuPos;
             if (pitem.getValidInd() != null && pitem.getValidInd()) {
-                permissionPos = permissionDao.findByPidEqualsAndValidIndIsTrue(new Long(pitem.getId()));
+                menuPos = menuDao.findByPidEqualsAndValidIndIsTrue(new Long(pitem.getId()));
             } else {
-                permissionPos = permissionDao.findByPidEquals(new Long(pitem.getId()));
+                menuPos = menuDao.findByPidEquals(new Long(pitem.getId()));
             }
 
-            if (ToolsUtils.isNotEmpty(permissionPos)) {
+            if (ToolsUtils.isNotEmpty(menuPos)) {
                 // 转换子级菜单
                 List<MenuEx> cMenuExs = new ArrayList<>();
-                this.permissionPosCoverMenuExs(permissionPos, cMenuExs, permissionIds);
+                this.menuPosCoverMenuExs(menuPos, cMenuExs, menuIds);
                 pitem.setChildren(cMenuExs);
                 // 递归查询子级菜单
-                this.childenMenus(cMenuExs, permissionIds);
+                this.childenMenus(cMenuExs, menuIds);
             }
         });
     }
 
     /**
-     * PermissionPos 转换成 MenuExs
+     * MenuPos 转换成 MenuExs
      *
-     * @param permissionPos
+     * @param menuPos
      * @param pMenuExs
-     * @param permissionIds 用户所拥有的权限
+     * @param menuIds 用户所拥有的权限
      * @return void
      * @author LiuYongTao
      * @date 2018/5/29 14:55
      */
-    private void permissionPosCoverMenuExs(List<PermissionPo> permissionPos, List<MenuEx> pMenuExs, Set<Long> permissionIds) {
-        permissionPos.forEach(item -> {
+    private void menuPosCoverMenuExs(List<MenuPo> menuPos, List<MenuEx> pMenuExs, Set<Long> menuIds) {
+        menuPos.forEach(item -> {
             // 如果没有权限直接抛弃
-            if (permissionIds != null && !permissionIds.contains(item.getId())) {
+            if (menuIds != null && !menuIds.contains(item.getId())) {
                 return;
             }
 
@@ -187,8 +187,8 @@ public class MenuServiceImpl implements MenuService {
                     .setIcon(item.getIcon())
                     .setPid(item.getPid())
                     .setDisplay(item.getDisplay())
-                    .setTitleCode(item.getPermissionCode())
-                    .setTitle(item.getPermissionName());
+                    .setTitleCode(item.getMenuCode())
+                    .setTitle(item.getMenuName());
             pMenuExs.add(ex);
         });
     }

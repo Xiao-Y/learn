@@ -21,7 +21,7 @@ import java.util.Set;
  * @author liuyongtao
  * @create 2019-05-23 19:34
  */
-@Component
+//@Component
 public class initRolePermission implements InitializingBean {
 
     @Autowired

@@ -82,7 +82,7 @@ public class CustomPermissionServiceImpl implements PermissionService {
         }
 
         rolePermissionPos.stream().forEach(rp -> {
-            Optional<PermissionPo> permissionPo = permissionDao.findById(rp.getPermissionId());
+            Optional<PermissionPo> permissionPo = permissionDao.findByIdAndValidIndIsTrue(rp.getPermissionId());
             if (!permissionPo.isPresent()) {
                 logger.warn("角色：{}，permissionId:{},未查询到信息！", rolePo.getRoleName(), rp.getId());
                 return;
