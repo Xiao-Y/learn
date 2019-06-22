@@ -51,6 +51,10 @@ export const asyncRouterMap = [{
     name: 'menuListIndex',
     path: 'menuList/index',
     component: resolve => require(['../views/sys/MenuList.vue'], resolve)
+  }, {
+    name: 'roleListIndex',
+    path: 'roleList/index',
+    component: resolve => require(['../views/sys/RoleList.vue'], resolve)
   }]
 }, {
   path: '/job',

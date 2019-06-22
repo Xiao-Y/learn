@@ -4,7 +4,7 @@
     <div class="head-log">
       <img class="company-log" src="../../static/images/common/company-log.png" alt="公司log"/>
     </div>
-    <div class="ms-title">自动化装逼系统</div>
+    <div class="ms-title">权限管理系统</div>
     <div class="ms-login">
       <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0px" class="demo-ruleForm">
         <el-form-item prop="username">

@@ -9,10 +9,10 @@ import java.security.Principal;
  * @author liuyongtao
  * @create 2019-04-28 17:33
  */
-@RestController
+//@RestController
 public class UserApi {
 
-    @RequestMapping("/user")
+//    @RequestMapping("/user")
     public Principal user(Principal user) {
         return user;
     }

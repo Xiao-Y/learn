@@ -11,7 +11,7 @@ import java.io.Serializable;
 public abstract class BasePage implements Serializable {
 
     private static final Integer PAGE_SIZE = 10; // 每页要显示的记录数
-    private static final Integer PAGE_NO = 0; // 当前页号
+    private static final Integer PAGE_NO = 1; // 当前页号
     private static final Integer RECORD_COUNT = 0; // 总记录数
 
     private String requestUrl; // 请求url
@@ -73,7 +73,7 @@ public abstract class BasePage implements Serializable {
     }
 
     /**
-     * 当前页号(从0开始的，所以要-1)
+     * 当前页号(从1开始的，所以要-1)
      *
      * @return
      * @author XiaoY
@@ -91,7 +91,9 @@ public abstract class BasePage implements Serializable {
      * @date: 2016年12月3日 下午3:56:48
      */
     public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
+        if (pageNo != null) {
+            this.pageNo = pageNo;
+        }
     }
 
     /**
