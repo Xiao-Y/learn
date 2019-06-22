@@ -3,8 +3,11 @@ swagger: #接口注解文档
   service:
     name: ${spring.application.name} #api名称
     version: 1.0
-    developer: lyongtao123@126.com #api开发者
     description: learn-shop 提供的Restful APIs #api描述
+    contact:
+      developer: billow #api开发者
+      url: https://github.com/Xiao-Y/learn
+      email: lyongtao123@126.com #api开发者
 
 spring:
   application:

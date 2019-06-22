@@ -1,4 +1,4 @@
-package com.billow.common.swagger2;
+package com.billow.zuul.config;
 
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
@@ -32,25 +32,6 @@ import java.util.List;
 @EnableSwagger2 // 启用Swagger2
 public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAware {
 
-    //    @Bean
-//    public Docket createRestApi() {// 创建API基本信息
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .apiInfo(apiInfo())
-//                .select()
-//                .apis(RequestHandlerSelectors.basePackage("com.billow.api"))// 扫描该包下的所有需要在Swagger中展示的API，@ApiIgnore注解标注的除外
-//                .paths(PathSelectors.any())
-//                .build();
-//    }
-//
-//    // 创建API的基本信息，这些信息会在Swagger UI中进行显示
-//    private ApiInfo apiInfo() {
-//        return new ApiInfoBuilder()
-//                .title("learn 中使用Swagger2构建RESTful APIs")// API 标题
-//                .description("learn-shop 提供的RESTful APIs")// API描述
-//                .contact("lyongtao123@126.com")// 联系人
-//                .version("1.0")// 版本号
-//                .build();
-//    }
     private String basePackage;
     private String developer;
     private String url;

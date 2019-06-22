@@ -13,9 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -33,6 +37,8 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private AntPathMatcher matcher = new AntPathMatcher();
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         // 判断支持的类型，因为我们定义的BaseResponseVo 里面的data可能是任何类型，这里就不判断统一放过
@@ -49,6 +55,15 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
             log.info("返回的类型：void");
         } else {
             log.info("返回的类型：{}", body.getClass().getName());
+        }
+
+        ServletServerHttpRequest httpRequest = (ServletServerHttpRequest) request;
+        HttpServletRequest servletRequest = httpRequest.getServletRequest();
+        String requestURI = servletRequest.getRequestURI();
+        log.info("请求的方法URI：{}", requestURI);
+        if (matcher.match("", requestURI)
+                || matcher.match("/v2/api-docs", requestURI)) {
+            return body;
         }
 
         BaseResponse baseResponse;
