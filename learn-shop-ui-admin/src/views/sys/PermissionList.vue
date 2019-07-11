@@ -42,8 +42,8 @@
     <el-row>
       <template>
         <el-table :data="tableData" border style="width: 100%">
-          <el-table-column label="权限名称" prop="permissionName"></el-table-column>
-          <el-table-column label="权限CODE" prop="permissionCode"></el-table-column>
+          <el-table-column label="权限名称" prop="permissionName" width="150"></el-table-column>
+          <el-table-column label="权限CODE" prop="permissionCode" width="150"></el-table-column>
           <el-table-column label="授权链接" prop="url"></el-table-column>
           <el-table-column label="权限描述" prop="descritpion"></el-table-column>
           <el-table-column label="系统模块" prop="systemModule">
@@ -53,6 +53,7 @@
                 multiple
                 filterable
                 default-first-option
+                disabled
                 placeholder="请选择文章标签">
                 <el-option
                   v-for="item in systemModuleSelect"
@@ -84,12 +85,18 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="150">
+          <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
-                <el-button @click="handleDelete(scope.$index, scope.row)" type="danger" size="mini"
+              <el-tooltip class="item" effect="dark" content="设置为无效" placement="top-start">
+                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini"
                            :disabled="!scope.row.validInd">
-                  <i class="el-icon-delete"></i></el-button>
+                  <i class="el-icon-warning"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                <el-button @click="handleDelete(scope.$index, scope.row)" type="danger" size="mini">
+                  <i class="el-icon-delete"></i>
+                </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="修改" placement="top-start">
                 <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="mini">
@@ -121,7 +128,7 @@
 
 <script>
   //  import {Message} from "element-ui";
-  import {LoadDataPermissionList, DeletePermissionById} from "../../api/sys/permissionMag";
+  import {LoadDataPermissionList, DeletePermissionById, ProhibitPermissionById} from "../../api/sys/permissionMag";
   import {LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
 
   export default {
@@ -163,7 +170,7 @@
       resetForm(queryFilter) {
         this.$refs[queryFilter].resetFields();
       },
-      // 请服务器数据（获取自动任务列表数据）
+      // 请服务器数据（获取权限列表数据）
       LoadDataPermissionList() {
         LoadDataPermissionList(this.queryFilter).then(res => {
           var data = res.resData;
@@ -208,6 +215,27 @@
           }
         });
       },
+      handleProhibit(index, row) {
+        var _this = this;
+        _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          ProhibitPermissionById(row.id).then(res => {
+            row.validInd = res.resData.validInd;
+            _this.$message({
+              type: 'success',
+              message: '禁用成功!'
+            });
+          });
+        }).catch((err) => {
+          _this.$message({
+            type: 'info',
+            message: '已取消禁用'
+          });
+        });
+      },
       handleDelete(index, row) {
         var _this = this;
         _this.$confirm('此操作将删除该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
@@ -216,8 +244,7 @@
           type: 'warning'
         }).then(() => {
           DeletePermissionById(row.id).then(res => {
-            // _this.tableData.splice(index, 1);
-            row.validInd = false;
+            _this.tableData.splice(index, 1);
             _this.$message({
               type: 'success',
               message: '删除成功!'
@@ -229,12 +256,6 @@
             message: '已取消删除'
           });
         });
-      }
-
-    },
-    filters: {
-      permissionStatusName(permissionStatus) {
-        return permissionStatus === '1' ? '有货' : '无货';
       }
     }
   }

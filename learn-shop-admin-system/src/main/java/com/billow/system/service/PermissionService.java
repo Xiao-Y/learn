@@ -58,4 +58,14 @@ public interface PermissionService {
      * @date 2019/7/10 18:01
      */
     void updatePermission(PermissionVo permissionVo);
+
+    /**
+     * 根据ID禁用权限
+     *
+     * @param id
+     * @return com.billow.system.pojo.vo.PermissionVo
+     * @author LiuYongTao
+     * @date 2019/7/11 17:12
+     */
+    PermissionVo prohibitPermissionById(Long id);
 }

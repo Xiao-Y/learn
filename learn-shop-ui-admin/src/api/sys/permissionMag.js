@@ -52,3 +52,14 @@ export function DeletePermissionById(id) {
     method: 'delete'
   });
 }
+/**
+ * 根据id禁用权限信息
+ * @param id
+ * @constructor
+ */
+export function ProhibitPermissionById(id) {
+  return request({
+    url: baseUrl + '/prohibitPermissionById/' + id,
+    method: 'put'
+  });
+}

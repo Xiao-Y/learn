@@ -41,7 +41,7 @@
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column label="角色名称" prop="roleName"></el-table-column>
           <el-table-column label="角色CODE" prop="roleCode"></el-table-column>
-          <el-table-column label="角色描述" prop="descritpion"></el-table-column>  
+          <el-table-column label="角色描述" prop="descritpion"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="props">
               <el-table :data="props.row.children" stripe style="width: 100%">
@@ -54,16 +54,29 @@
                 <el-table-column label="更新时间">
                   <template slot-scope="scope">
                     <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
-                  </template>  
-                </el-table-column>  
+                  </template>
+                </el-table-column>
                 <el-table-column label="创建人" prop="creatorCode"></el-table-column>
               </el-table>
             </template>
-          </el-table-column>      
-          <el-table-column fixed="right" label="操作" width="100">
+          </el-table-column>
+          <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-              <el-button type="text" size="small">编辑</el-button>
+              <el-tooltip class="item" effect="dark" content="设置为无效" placement="top-start">
+                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini"
+                           :disabled="!scope.row.validInd">
+                  <i class="el-icon-warning"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                <el-button @click="handleDelete(scope.$index, scope.row)" type="danger" size="mini">
+                  <i class="el-icon-delete"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="修改" placement="top-start">
+                <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="mini">
+                  <i class="el-icon-edit"></i></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -89,7 +102,6 @@
 </template>
 
 <script>
-//  import {Message} from "element-ui";
   import {LoadDataRoleList, DeleteRoleById} from "../../api/sys/roleMag";
 
   export default {
@@ -133,13 +145,13 @@
         LoadDataRoleList(this.queryFilter).then(res => {
           var data = res.resData;
           // 填充数据
-          if(data.content){
-            for(var ind in data.content){
+          if (data.content) {
+            for (var ind in data.content) {
               var childrenData = [];
               if (data.content[ind]) {
                 childrenData.push(data.content[ind]);
               }
-              this.$set(data.content[ind],'children',childrenData);
+              this.$set(data.content[ind], 'children', childrenData);
             }
           }
           console.info(data.content);
@@ -183,6 +195,27 @@
           params: {
             productInfo: row
           }
+        });
+      },
+      handleProhibit(index, row) {
+        var _this = this;
+        _this.$confirm('此操作将删除该商品 ' + row.commodityName + ' 信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          DeleteRoleById(row.id).then(res => {
+            _this.tableData.splice(index, 1);
+            _this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          });
+        }).catch((err) => {
+          _this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
         });
       },
       handleDelete(index, row) {

@@ -11,7 +11,6 @@ import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.service.PermissionService;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +91,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo deletePermissionById(Long id) {
         PermissionPo permissionPo = permissionDao.findOne(id);
-        permissionPo.setValidInd(false);
-        permissionDao.save(permissionPo);
+        permissionDao.delete(id);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
     }
 
@@ -109,5 +107,13 @@ public class PermissionServiceImpl implements PermissionService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updatePermission(PermissionVo permissionVo) {
         this.savePermission(permissionVo);
+    }
+
+    @Override
+    public PermissionVo prohibitPermissionById(Long id) {
+        PermissionPo permissionPo = permissionDao.findOne(id);
+        permissionPo.setValidInd(false);
+        permissionDao.save(permissionPo);
+        return ConvertUtils.convert(permissionPo, PermissionVo.class);
     }
 }

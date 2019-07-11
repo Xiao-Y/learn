@@ -44,6 +44,13 @@ public class PermissionApi {
         return permissionVo;
     }
 
+    @ApiOperation("根据ID禁用权限")
+    @PutMapping("/prohibitPermissionById/{id}")
+    public PermissionVo prohibitPermissionById(@PathVariable Long id) {
+        PermissionVo permissionVo = permissionService.prohibitPermissionById(id);
+        return permissionVo;
+    }
+
     @ApiOperation("添加权限信息")
     @PostMapping("/savePermission")
     public PermissionVo savePermission(@RequestBody PermissionVo permissionVo) {

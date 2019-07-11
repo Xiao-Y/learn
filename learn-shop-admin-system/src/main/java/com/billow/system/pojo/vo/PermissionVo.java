@@ -2,8 +2,11 @@ package com.billow.system.pojo.vo;
 
 
 import com.billow.system.pojo.po.PermissionPo;
+import com.billow.tools.utlis.ToolsUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +33,7 @@ public class PermissionVo extends PermissionPo implements Serializable {
     /**
      * 拆分下拉多选
      */
-    private List<String> systemModules;
+    private List<String> systemModules = new ArrayList<>();
 
     public List<RoleVo> getRoleVos() {
         return roleVos;
@@ -65,6 +68,9 @@ public class PermissionVo extends PermissionPo implements Serializable {
 
     public PermissionVo setSystemModules(List<String> systemModules) {
         this.systemModules = systemModules;
+        if (ToolsUtils.isNotEmpty(systemModules)) {
+            this.setSystemModule(StringUtils.join(systemModules, ","));
+        }
         return this;
     }
 }
