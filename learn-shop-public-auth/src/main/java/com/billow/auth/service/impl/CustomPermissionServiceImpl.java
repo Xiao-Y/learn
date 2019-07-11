@@ -5,10 +5,16 @@ import com.billow.auth.dao.RolePermissionDao;
 import com.billow.auth.pojo.po.PermissionPo;
 import com.billow.auth.pojo.po.RolePermissionPo;
 import com.billow.auth.pojo.po.RolePo;
+import com.billow.auth.pojo.vo.PermissionVo;
 import com.billow.auth.service.PermissionService;
+import com.billow.auth.utils.ConvertUtils;
+import com.billow.auth.utils.DefaultSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +38,7 @@ import java.util.Set;
 public class CustomPermissionServiceImpl implements PermissionService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Autowired
@@ -90,6 +97,15 @@ public class CustomPermissionServiceImpl implements PermissionService {
             permissionPos.add(permissionPo.get());
         });
 
+        return permissionPos;
+    }
+
+    @Override
+    public Page<PermissionPo> findPermissionList(PermissionVo permissionVo) {
+        PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
+        DefaultSpec<PermissionPo> defaultSpec = new DefaultSpec<>(convert);
+        Pageable pageable = PageRequest.of(permissionVo.getPageNo(), permissionVo.getPageSize());
+        Page<PermissionPo> permissionPos = permissionDao.findAll(defaultSpec, pageable);
         return permissionPos;
     }
 }

@@ -26,6 +26,8 @@
         <alibaba.druid.version>1.0.11</alibaba.druid.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <fastjson.version>1.2.44</fastjson.version>
+        <lombok.version>1.16.14</lombok.version>
+        <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
     </properties>
 
     <dependencies>
@@ -86,11 +88,23 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.slf4j</groupId>-->
-        <!--<artifactId>log4j-over-slf4j</artifactId>-->
-        <!--<version>1.7.25</version>-->
-        <!--</dependency>-->
+        <!-- swagger2 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

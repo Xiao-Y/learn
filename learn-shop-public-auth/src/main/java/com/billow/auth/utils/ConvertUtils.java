@@ -1,4 +1,4 @@
-package com.billow.tools.utlis;
+package com.billow.auth.utils;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -37,31 +37,7 @@ public class ConvertUtils {
         VO vo = null;
         try {
             vo = voClass.newInstance();
-            org.springframework.beans.BeanUtils.copyProperties(po, vo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return vo;
-    }
-
-    /**
-     * po转vo深度复制（基本类型）
-     *
-     * @param po
-     * @param vo
-     * @param <PO>
-     * @param <VO>
-     * @return
-     */
-    public static <PO, VO> VO convert(PO po, VO vo) {
-        if (po == null) {
-            return vo;
-        }
-        if (vo == null) {
-            throw new RuntimeException("VO 不能为空");
-        }
-        try {
-            org.springframework.beans.BeanUtils.copyProperties(po, vo);
+            BeanUtils.copyProperties(po, vo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +55,7 @@ public class ConvertUtils {
      */
     public static <PO, VO> List<VO> convert(List<PO> pos, Class<VO> voClass) {
         List<VO> vos = null;
-        if (ToolsUtils.isNotEmpty(pos)) {
+        if (pos != null && pos.size() > 0) {
             vos = new ArrayList<>();
             for (PO po : pos) {
                 vos.add(convert(po, voClass));
@@ -127,7 +103,7 @@ public class ConvertUtils {
      */
     public static <T> T[] toArray(List<T> list, Class<T> clazz) {
 
-        if (ToolsUtils.isEmpty(list)) {
+        if (list != null && list.size() > 0) {
             return (T[]) Array.newInstance(clazz, 0);
         }
 

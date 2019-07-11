@@ -1,7 +1,13 @@
 package com.billow.common.base.pojo;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,18 +20,23 @@ import java.util.Date;
  * @create 2018-04-27 12:28
  */
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BasePo extends BasePage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @CreatedBy
     private String creatorCode;
+    @LastModifiedBy
     private String updaterCode;
-    private Boolean validInd;
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
     private Date createTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @LastModifiedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
     private Date updateTime;
+    private Boolean validInd;
 
     public Long getId() {
         return id;

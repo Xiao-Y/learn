@@ -25,12 +25,9 @@ public class PermissionPo extends BasePo implements Serializable {
     private String descritpion;
     //授权链接
     private String url;
-    //父节点id
-    private Long pid;
-    // 图标
-    private String icon;
-    // 是否显示
-    private Boolean display;
+    // 系统模块
+    private String systemModule;
+
 
     /**
      * 权限名称
@@ -116,54 +113,12 @@ public class PermissionPo extends BasePo implements Serializable {
         return this;
     }
 
-    /**
-     * 父节点id
-     *
-     * @return
-     */
-    public Long getPid() {
-        return pid;
+    public String getSystemModule() {
+        return systemModule;
     }
 
-    /**
-     * 父节点id
-     *
-     * @param pid
-     * @return
-     */
-    public PermissionPo setPid(Long pid) {
-        this.pid = pid;
+    public PermissionPo setSystemModule(String systemModule) {
+        this.systemModule = systemModule;
         return this;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public PermissionPo setIcon(String icon) {
-        this.icon = icon;
-        return this;
-    }
-
-    public Boolean getDisplay() {
-        return display;
-    }
-
-    public PermissionPo setDisplay(Boolean display) {
-        this.display = display;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "PermissionPo{" +
-                "permissionName='" + permissionName + '\'' +
-                ", permissionCode='" + permissionCode + '\'' +
-                ", descritpion='" + descritpion + '\'' +
-                ", url='" + url + '\'' +
-                ", pid=" + pid +
-                ", icon='" + icon + '\'' +
-                ", display=" + display +
-                "} " + super.toString();
     }
 }

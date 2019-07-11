@@ -146,7 +146,7 @@ public class BaseResponse<T> implements Serializable {
     public static BaseResponse fail(Object body) {
         return new BaseResponse(ResCodeEnum.RESCODE_OTHER_ERROR, body);
     }
-    
+
     @Override
     public String toString() {
         return "BaseResponse{" +

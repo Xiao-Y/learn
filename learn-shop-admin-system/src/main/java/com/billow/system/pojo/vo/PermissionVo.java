@@ -27,6 +27,10 @@ public class PermissionVo extends PermissionPo implements Serializable {
      * 当前用户名
      */
     private String userCode;
+    /**
+     * 拆分下拉多选
+     */
+    private List<String> systemModules;
 
     public List<RoleVo> getRoleVos() {
         return roleVos;
@@ -52,6 +56,15 @@ public class PermissionVo extends PermissionPo implements Serializable {
 
     public PermissionVo setIds(Set<String> ids) {
         this.ids = ids;
+        return this;
+    }
+
+    public List<String> getSystemModules() {
+        return systemModules;
+    }
+
+    public PermissionVo setSystemModules(List<String> systemModules) {
+        this.systemModules = systemModules;
         return this;
     }
 }

@@ -34,7 +34,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @RequestMapping("/menuApi")
-@Api(value = "MenuApi", description = "菜单管理")
+@Api(value = "菜单管理")
 public class MenuApi extends BaseApi {
 
     @Autowired

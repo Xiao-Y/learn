@@ -33,6 +33,7 @@ service.interceptors.request.use(config => {
   console.info('请求参数:', config)
   return config
 }, error => {
+  tryHideFullScreenLoading();
   console.log(error) // for debug
   Promise.reject(error)
 })
@@ -83,8 +84,12 @@ service.interceptors.response.use(response => {
   error => {
     tryHideFullScreenLoading();
     console.log("erro:",error) // for debug
+    var message = error;
+    if(error.response){
+      message = error.response.status + " " + error.response.statusText;
+    }
     Message({
-      message: error,
+      message: message,
       type: 'error',
       duration: 5 * 1000
     })

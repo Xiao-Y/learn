@@ -10,6 +10,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,6 +22,7 @@ import java.security.Principal;
  * @ EnableHystrixDashboard 开启熔断监控仪表盘
  * @ EnableHystrix 开启断路器
  */
+@EnableJpaAuditing
 @EnableHystrix
 @EnableHystrixDashboard
 @EnableFeignClients

@@ -1,6 +1,6 @@
 package com.billow.system.service.impl;
 
-import com.billow.common.utils.DefaultSpec;
+import com.billow.common.base.DefaultSpec;
 import com.billow.system.dao.RoleDao;
 import com.billow.system.dao.UserRoleDao;
 import com.billow.system.pojo.po.RolePo;

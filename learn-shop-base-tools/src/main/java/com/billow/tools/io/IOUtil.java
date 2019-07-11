@@ -1,5 +1,8 @@
 package com.billow.tools.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,11 +12,10 @@ import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.apache.log4j.Logger;
 
 
 public class IOUtil {
-	private static final Logger logger = Logger.getLogger(IOUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
 	/**

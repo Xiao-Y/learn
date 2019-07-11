@@ -59,8 +59,8 @@ export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validIn
     data: {
       id: id,
       pid: pid,
-      permissionName: title,
-      permissionCode: titleCode,
+      menuName: title,
+      menuCode: titleCode,
       url: path,
       icon: icon,
       validInd: validInd,

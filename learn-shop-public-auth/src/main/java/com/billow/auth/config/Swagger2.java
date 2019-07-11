@@ -1,4 +1,4 @@
-package com.billow.common.swagger2;
+package com.billow.auth.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

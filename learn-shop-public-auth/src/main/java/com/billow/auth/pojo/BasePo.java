@@ -14,7 +14,7 @@ import java.util.Date;
  * @create 2018-04-27 12:28
  */
 @MappedSuperclass
-public class BasePo implements Serializable {
+public class BasePo extends BasePage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

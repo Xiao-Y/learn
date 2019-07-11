@@ -55,10 +55,10 @@
             <el-collapse-item title="父菜单信息" name="3">
               <el-form :inline="true" ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
                 <el-form-item label="菜单标题">
-                  <el-input v-model="parentMenu.permissionName" readonly></el-input>
+                  <el-input v-model="parentMenu.menuName" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="菜单CODE">
-                  <el-input v-model="parentMenu.permissionCode" readonly></el-input>
+                  <el-input v-model="parentMenu.menuCode" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="菜单图标">
                   <el-input v-model="parentMenu.icon" readonly></el-input>
@@ -216,8 +216,8 @@
           pid: "",
           url: "",
           icon: "",
-          permissionName: "",
-          permissionCode: "",
+          menuName: "",
+          menuCode: "",
           createTime: "",
           creatorCode: "",
           updateTime: "",

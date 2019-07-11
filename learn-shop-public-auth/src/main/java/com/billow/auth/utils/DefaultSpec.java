@@ -1,4 +1,4 @@
-package com.billow.common.utils;
+package com.billow.auth.utils;
 
 import org.springframework.data.jpa.domain.Specification;
 

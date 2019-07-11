@@ -27,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/roleApi")
-@Api(value = "RoleApi", description = "角色信息")
+@Api(value = "角色信息")
 public class RoleApi extends BaseApi {
 
     @Autowired

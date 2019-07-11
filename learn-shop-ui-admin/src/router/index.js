@@ -55,6 +55,14 @@ export const asyncRouterMap = [{
     name: 'roleListIndex',
     path: 'roleList/index',
     component: resolve => require(['../views/sys/RoleList.vue'], resolve)
+  }, {
+    name: 'permissionListIndex',
+    path: 'permissionList/index',
+    component: resolve => require(['../views/sys/PermissionList.vue'], resolve)
+  }, {
+    name: 'permissionEdit',
+    path: 'permissionList/permissionEdit',
+    component: resolve => require(['../views/sys/components/PermissionEdit.vue'], resolve)
   }]
 }, {
   path: '/job',
@@ -68,16 +76,16 @@ export const asyncRouterMap = [{
   path: '/product',
   component: Home,
   children: [{
-    path: 'productList/index',
     name: 'productListIndex',
+    path: 'productList/index',
     component: resolve => require(['../views/product/ProductList.vue'], resolve)
   }, {
-    path: 'productList/productEdit',
     name: 'productEdit',
+    path: 'productList/productEdit',
     component: resolve => require(['../views/product/components/ProductEdit.vue'], resolve)
   }, {
-    path: 'productList/productImageEdit',
     name: 'productImageEdit',
+    path: 'productList/productImageEdit',
     component: resolve => require(['../views/product/components/ProductImageEdit.vue'], resolve)
   }]
 }]

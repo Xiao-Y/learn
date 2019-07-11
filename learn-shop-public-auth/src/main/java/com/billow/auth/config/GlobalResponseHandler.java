@@ -1,12 +1,10 @@
-package com.billow.common.global.advice;
+package com.billow.auth.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.billow.tools.enums.ResCodeEnum;
-import com.billow.tools.resData.BaseResponse;
+import com.billow.auth.support.BaseResponse;
+import com.billow.auth.support.ResCodeEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -33,8 +31,6 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     private AntPathMatcher matcher = new AntPathMatcher();
 
     @Override
@@ -59,8 +55,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         HttpServletRequest servletRequest = httpRequest.getServletRequest();
         String requestURI = servletRequest.getRequestURI();
         log.info("请求的方法URI：{}", requestURI);
-        if (matcher.match("", requestURI)
-                || matcher.match("/**/v2/api-docs", requestURI)) {
+        if (!matcher.match("/**/*Api/**", requestURI)) {
             return body;
         }
 

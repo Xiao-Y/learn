@@ -107,7 +107,7 @@ public class MenuServiceImpl implements MenuService {
         if (null != id) {
             one = menuDao.findOne(id);
             ConvertUtils.copyNonNullProperties(menuVo, one);
-            one.setUpdateTime(new Date());
+//            one.setUpdateTime(new Date());
         } else {
             one = ConvertUtils.convert(menuVo, MenuPo.class);
             FieldUtils.setCommonFieldByInsertWithValidInd(one, menuVo.getUpdaterCode());

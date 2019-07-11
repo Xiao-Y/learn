@@ -64,7 +64,8 @@ Druid: 管理页面 <br>
 http://localhost:<port>/druid <br>
 
 Swagger2: 管理页面 <br>
-http://localhost:<port>/swagger-ui.html <br>
+http://localhost:<port>/swagger-ui.html（查看单个） <br>
+http://localhost:8771/swagger-ui.html（查看聚合） <br>
 或者进入注册中心点击实例链接直接查看<br/>
 
 LCN: 分布式事务管理中心页面 <br>

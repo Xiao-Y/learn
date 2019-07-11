@@ -1,12 +1,8 @@
 package com.billow.zuul.config;
 
-import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.context.EnvironmentAware;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -30,24 +26,22 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2 // 启用Swagger2
-public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAware {
+public class Swagger2 {
 
+    @Value("${swagger.basepackage}")
     private String basePackage;
-    private String developer;
-    private String url;
-    private String email;
+    @Value("${swagger.service.name}")
     private String serviceName;
-    private RelaxedPropertyResolver propertyResolver;
+    @Value("${swagger.service.description}")
     private String description;
+    @Value("${swagger.service.version}")
     private String version;
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(new String[]{"swagger-ui.html"})
-                .addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
-        registry.addResourceHandler(new String[]{"/webjars/**"})
-                .addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
-    }
+    @Value("${swagger.service.contact.developer}")
+    private String developer;
+    @Value("${swagger.service.contact.url}")
+    private String url;
+    @Value("${swagger.service.contact.email}")
+    private String email;
 
     @Bean
     public Docket createRestApi() {
@@ -79,17 +73,5 @@ public class Swagger2 extends WebMvcConfigurerAdapter implements EnvironmentAwar
                 .contact(new Contact(this.developer, this.url, this.email))
                 .version(version)
                 .build();
-    }
-
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, null);
-        this.basePackage = this.propertyResolver.getProperty("swagger.basepackage");
-        this.serviceName = this.propertyResolver.getProperty("swagger.service.name");
-        this.description = this.propertyResolver.getProperty("swagger.service.description");
-        this.version = this.propertyResolver.getProperty("swagger.service.version");
-        this.developer = this.propertyResolver.getProperty("swagger.service.contact.developer");
-        this.url = this.propertyResolver.getProperty("swagger.service.contact.url");
-        this.email = this.propertyResolver.getProperty("swagger.service.contact.email");
     }
 }

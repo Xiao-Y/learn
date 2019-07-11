@@ -17,8 +17,8 @@ import java.util.Collection;
  * @author liuyongtao
  * @create 2019-04-29 18:11
  */
-@Service("permissionService")
-public class PermissionService {
+@Service("authService")
+public class AuthService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

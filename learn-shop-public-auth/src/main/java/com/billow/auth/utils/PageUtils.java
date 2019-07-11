@@ -1,18 +1,4 @@
-package com.billow.common.utils;
-
-import com.billow.tools.utlis.ConvertUtils;
-import com.billow.tools.utlis.ToolsUtils;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.util.Assert;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+package com.billow.auth.utils;
 
 /**
  * Created by billow.
@@ -43,6 +29,4 @@ public class PageUtils {
 //
 //        return pageVo;
 //    }
-
-    
 }
