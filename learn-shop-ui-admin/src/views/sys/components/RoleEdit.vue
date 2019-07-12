@@ -14,7 +14,7 @@
                 ref="tree2"
                 :highlight-current="true"
                 :props="defaultProps"
-                :check-strictly="false"
+                :check-strictly="true"
                 :expand-on-click-node="false"
                 :filter-node-method="filterNode"
                 :default-checked-keys="initMenuChecked"
@@ -170,9 +170,9 @@ export default {
       // 选种的菜单
       this.menuChecked = this.$refs.tree2.getCheckedNodes().map(m => m.id);
       // 半先种的父级菜单
-      this.menuChecked = this.menuChecked.concat(
-        this.$refs.tree2.getHalfCheckedNodes().map(m => m.id)
-      );
+      // this.menuChecked = this.menuChecked.concat(
+      //   this.$refs.tree2.getHalfCheckedNodes().map(m => m.id)
+      // );
     },
     //加载下拉列表
     LoadSysDataDictionary(fieldType) {
@@ -210,7 +210,6 @@ export default {
           this.initMenuChecked = res.resData;
         });
       }
-      console.info('this.initMenuChecked',this.initMenuChecked);
       // 加载菜单
       findMenus().then(res => {
         this.menus = res.resData;
@@ -231,7 +230,7 @@ export default {
           type: "success",
           message: "保存成功!"
         });
-        // _this.$router.back(-1);
+        _this.$router.back(-1);
       });
     },
     onReturn() {
