@@ -25,4 +25,14 @@ public interface RoleService {
      * @return
      */
     Page<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception;
+
+    /**
+     * 根据角色ID查询权限ID
+     *
+     * @param roleId 角色ID
+     * @return java.util.List<java.lang.Long>
+     * @author LiuYongTao
+     * @date 2019/7/12 11:37
+     */
+    List<Long> findPermissionByRoleId(Long roleId) throws Exception;
 }

@@ -56,6 +56,10 @@ export const asyncRouterMap = [{
     path: 'roleList/index',
     component: resolve => require(['../views/sys/RoleList.vue'], resolve)
   }, {
+    name: 'roleEdit',
+    path: 'roleList/roleEdit',
+    component: resolve => require(['../views/sys/components/RoleEdit.vue'], resolve)
+  }, {
     name: 'permissionListIndex',
     path: 'permissionList/index',
     component: resolve => require(['../views/sys/PermissionList.vue'], resolve)

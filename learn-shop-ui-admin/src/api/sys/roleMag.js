@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 
+const baseUrl = 'admin-system/roleApi';
+
 /**
  * 根据条件查询商品信息
  * @param roleFilter
@@ -7,9 +9,21 @@ import request from '@/utils/request'
  */
 export function LoadDataRoleList(roleFilter) {
   return request({
-    url: 'admin-system/roleApi/findRoleList',
+    url: baseUrl + '/findRoleList',
     method: 'post',
     data: Object.assign(roleFilter)
+  })
+}
+
+/**
+ * 根据角色ID查询权限ID
+ * @param roleFilter
+ * @constructor
+ */
+export function LoadDataPermissionIdList(roleId) {
+  return request({
+    url: baseUrl + '/findPermissionByRoleId/' + roleId,
+    method: 'get'
   })
 }
 

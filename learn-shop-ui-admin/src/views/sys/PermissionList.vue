@@ -43,7 +43,7 @@
       <template>
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column label="权限名称" prop="permissionName" width="150"></el-table-column>
-          <el-table-column label="权限CODE" prop="permissionCode" width="150"></el-table-column>
+<!--          <el-table-column label="权限CODE" prop="permissionCode" width="150"></el-table-column>-->
           <el-table-column label="授权链接" prop="url"></el-table-column>
           <el-table-column label="权限描述" prop="descritpion"></el-table-column>
           <el-table-column label="系统模块" prop="systemModule">
@@ -78,6 +78,9 @@
                 </el-form-item>
                 <el-form-item label="更新时间">
                   <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
+                </el-form-item>
+                <el-form-item label="权限CODE">
+                  <span>{{ scope.row.permissionCode }}</span>
                 </el-form-item>
                 <el-form-item label="是否有效">
                   <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>

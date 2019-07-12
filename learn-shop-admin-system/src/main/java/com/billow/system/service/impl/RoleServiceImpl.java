@@ -2,7 +2,9 @@ package com.billow.system.service.impl;
 
 import com.billow.common.base.DefaultSpec;
 import com.billow.system.dao.RoleDao;
+import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.dao.UserRoleDao;
+import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.po.UserRolePo;
 import com.billow.system.pojo.vo.RoleVo;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户角色信息
@@ -31,6 +34,8 @@ public class RoleServiceImpl implements RoleService {
     private UserRoleDao userRoleDao;
     @Autowired
     private RoleDao roleDao;
+    @Autowired
+    private RolePermissionDao rolePermissionDao;
 
     @Override
     public List<RoleVo> findRoleListInfoByUserId(Long userId) {
@@ -52,5 +57,12 @@ public class RoleServiceImpl implements RoleService {
         Pageable pageable = new PageRequest(roleVo.getPageNo(), roleVo.getPageSize());
         Page<RolePo> rolePos = roleDao.findAll(defaultSpec, pageable);
         return rolePos;
+    }
+
+    @Override
+    public List<Long> findPermissionByRoleId(Long roleId) throws Exception {
+        // 查询权限信息
+        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(roleId);
+        return rolePermissionPos.stream().map(m -> m.getPermissionId()).collect(Collectors.toList());
     }
 }

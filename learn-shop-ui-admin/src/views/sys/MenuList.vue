@@ -161,7 +161,7 @@
 </template>
 
 <script>
-  import {findParentMenu, findMenus, saveOrUpdateMenu, delMenuByIds} from "@/api/sys/menuMag";
+  import {findParentMenu, findMenus, saveOrUpdateMenu, delMenuByIds} from "../../api/sys/menuMag";
   import {Message} from "element-ui";
 
   export default {

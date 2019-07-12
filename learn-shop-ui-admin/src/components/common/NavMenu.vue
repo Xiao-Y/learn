@@ -5,6 +5,9 @@
       <template v-if="menu.children">
         <el-submenu :key="menu.id" :index="menu.id">
           <template slot="title"><i :class="menu.icon"></i>{{ generateTitle(menu.title) }}</template>
+          <el-menu-item :key="menu.id" :index="menu.path" v-if="menu.path && menu.display === true">
+            <i :class="menu.icon"></i>{{ generateTitle(menu.title) }}
+          </el-menu-item>
           <nav-menu :navMenus="menu.children"></nav-menu>
         </el-submenu>
       </template>

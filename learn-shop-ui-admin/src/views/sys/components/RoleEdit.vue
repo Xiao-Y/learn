@@ -1,0 +1,288 @@
+<template>
+  <div>
+    <el-row :gutter="10">
+      <el-col :span="10">
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="菜单树" name="0">
+            <el-input placeholder="输入关键字进行过滤" size="mini" v-model="filterMenu"></el-input>
+            <div class="sidebar">
+              <el-tree show-checkbox default-expand-all node-key="id" :data="menus"
+                       ref="tree2" :highlight-current="true" :props="defaultProps" :check-strictly="true"
+                       :filter-node-method="filterNode">
+              </el-tree>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
+
+      <el-col :span="14">
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="角色信息" name="1">
+            <el-form :inline="true" ref="roleInfo" label-width="80px" :model="roleInfo" size="mini">
+              <el-form-item label="角色名称" prop="roleName">
+                <el-input v-model="roleInfo.roleName"></el-input>
+              </el-form-item>
+              <el-form-item label="角色CODE" prop="roleCode">
+                <el-input v-model="roleInfo.roleCode"></el-input>
+              </el-form-item>
+              <el-form-item label="角色描述" prop="descritpion">
+                <el-input v-model="roleInfo.descritpion"></el-input>
+              </el-form-item>
+              <el-form-item label="是否有效" prop="validInd">
+                <el-switch v-model="roleInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
+              </el-form-item>
+            </el-form>
+          </el-collapse-item>
+
+          <el-collapse-item title="权限信息" name="2">
+            <el-input v-model="filterPermission" size="mini" placeholder="输入关键字进行过滤"/>
+            <el-table ref="tableDataTemp" :data="tableDataTemp" border height="500"
+                      @selection-change="handleSelectionChange" row-key="id">
+              <el-table-column type="selection" width="35" prop="checked" reserve-selection></el-table-column>
+              <el-table-column label="权限名称" prop="permissionName" width="150"></el-table-column>
+              <el-table-column label="授权链接" prop="url"></el-table-column>
+              <el-table-column type="expand" label="详细" width="50">
+                <template slot-scope="scope">
+                  <el-form label-position="left" inline class="demo-table-expand">
+                    <el-form-item label="创建人">
+                      <span>{{ scope.row.creatorCode }}</span>
+                    </el-form-item>
+                    <el-form-item label="更新人">
+                      <span>{{ scope.row.updaterCode }}</span>
+                    </el-form-item>
+                    <el-form-item label="创建时间">
+                      <el-date-picker type="datetime" v-model="scope.row.createTime" readonly></el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="更新时间">
+                      <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="是否有效">
+                      <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+                    </el-form-item>
+                    <el-form-item label="权限CODE">
+                      <span>{{ scope.row.permissionCode }}</span>
+                    </el-form-item>
+                    <el-form-item label="系统模块">
+                      <el-select
+                        v-model="scope.row.systemModules"
+                        multiple
+                        filterable
+                        default-first-option
+                        disabled
+                        placeholder="请选择文章标签">
+                        <el-option
+                          v-for="item in systemModuleSelect"
+                          :key="item.id"
+                          :label="item.fieldDisplay"
+                          :value="item.fieldValue">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="权限描述">
+                      <span>{{ scope.row.descritpion }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
+    </el-row>
+    <el-button type="primary" @click="onSubmit" size="mini">保存</el-button>
+    <el-button @click="onReset('roleInfo')" size="mini">重置</el-button>
+    <el-button @click="onReturn" size="mini">返回</el-button>
+  </div>
+</template>
+
+<script>
+  import {SavePermission, LoadDataPermissionListAll} from "../../../api/sys/permissionMag";
+  import {findMenus} from "../../../api/sys/menuMag";
+  import {LoadSysDataDictionary} from "../../../api/sys/DataDictionaryMag";
+  import {LoadDataPermissionIdList} from "../../../api/sys/roleMag";
+
+  export default {
+    data() {
+      return {
+        activeNames: ['0', '1', '2'],
+        filterMenu: '',// 菜单树过滤
+        filterPermission: '',// 权限过滤
+        defaultProps: {
+          //设置数据绑定
+          children: "children",
+          label: "title"
+        },
+        roleInfo: {
+          roleName: '',
+          roleCode: '',
+          descritpion: '',
+          validInd: true
+        },
+        systemModuleSelect: [],// 系统模块下拉列表
+        tableData: [],// 原始权限列表
+        tableDataTemp: [],// 过滤后的权限列表
+        permissionChecked: [],// 被选种的权限ID
+        menus: []// 菜单树数据源
+      };
+    },
+    created() {
+      console.info("this.$route.params.roleEdit",this.$route.params.roleEdit);
+      this.roleInfo = this.$route.params.roleEdit;
+      console.info("this.roleInfo",this.roleInfo);
+      // 初始化菜单树
+      this.findMenus();
+      // 获取权限列表数据
+      this.LoadDataPermissionListAll();
+      // 加载系统模块的下拉
+      this.LoadSysDataDictionary('SystemModule');
+    },
+    methods: {
+      //加载下拉列表
+      LoadSysDataDictionary(fieldType) {
+        LoadSysDataDictionary(fieldType).then(res => {
+          this.systemModuleSelect = res.resData;
+        });
+      },
+      // 请服务器数据（获取权限列表数据）
+      LoadDataPermissionListAll() {
+        LoadDataPermissionListAll(this.queryFilter).then(res => {
+          this.tableData = res.resData;
+          this.tableDataTemp = this.tableData;
+          console.info("this.roleInfo.roleId",this.roleInfo.roleId);
+          // 如果是修改的时候
+          if (this.roleInfo.id) {
+            LoadDataPermissionIdList(this.roleInfo.id).then(res => {
+              // 设置选种状态
+              this.tableData.forEach(item => {
+                this.$refs.tableDataTemp.toggleRowSelection(item, res.resData.includes(item.id));
+              });
+            });
+          }
+        });
+      },
+      //获取所有菜单
+      findMenus() {
+        findMenus().then(res => {
+          this.menus = res.resData;
+        })
+      },
+      // 过滤搜索
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.title.indexOf(value) !== -1;
+      },
+      onSubmit() {
+        var _this = this;
+        SavePermission(_this.permissionInfo).then(res => {
+          _this.$message({
+            type: 'success',
+            message: '保存成功!'
+          });
+
+          _this.$router.back(-1);
+        });
+      },
+      onReturn() {
+        this.$router.back(-1);
+      },
+      onReset(roleInfo) {
+        this.$refs[roleInfo].resetFields();
+      },
+      handleSelectionChange(row) {
+        this.permissionChecked = row.map(item => item.id);
+        // console.info(this.permissionChecked);
+      }
+    },
+    watch: {
+      //通过 :filter-node-method,找到过滤方法
+      filterMenu(val) {
+        this.$refs.tree2.filter(val);
+      },
+      filterPermission(val) {
+        this.tableDataTemp = this.tableData.filter(data => {
+          if (!val) {
+            return true;
+          }
+          if (data.permissionName) {
+            return data.permissionName.includes(val);
+          } else if (data.permissionCode) {
+            return data.permissionCode.includes(val);
+          } else if (data.url.toLowerCase()) {
+            return data.url.includes(val.toLowerCase());
+          }
+        })
+      }
+    }
+  };
+</script>
+
+<style scoped>
+  .ms-doc {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  .ms-doc h3 {
+    padding: 9px 10px 10px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 17px;
+    background-color: #f5f5f5;
+    border: 1px solid #d8d8d8;
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+  }
+
+  .ms-doc article {
+    padding: 10px;
+    word-wrap: break-word;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+
+  /*.ms-doc article h1 {*/
+  /*font-size: 32px;*/
+  /*padding-bottom: 10px;*/
+  /*margin-bottom: 15px;*/
+  /*border-bottom: 1px solid #ddd;*/
+  /*}*/
+
+  /*.ms-doc article h2 {*/
+  /*margin: 24px 0 16px;*/
+  /*font-weight: 600;*/
+  /*line-height: 1.25;*/
+  /*padding-bottom: 7px;*/
+  /*font-size: 24px;*/
+  /*border-bottom: 1px solid #eee;*/
+  /*}*/
+
+  /*.ms-doc article p {*/
+  /*margin-bottom: 15px;*/
+  /*line-height: 1.5;*/
+  /*}*/
+
+  .ms-doc article .el-checkbox {
+    margin-bottom: 5px;
+  }
+
+  .el-form-item {
+    margin-bottom: 3px;
+  }
+
+  .demo-table-expand {
+    font-size: 0;
+  }
+
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>

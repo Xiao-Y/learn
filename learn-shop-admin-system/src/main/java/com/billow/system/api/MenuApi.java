@@ -100,7 +100,7 @@ public class MenuApi extends BaseApi {
     }
 
     @DeleteMapping("/delMenuByIds")
-    @ApiOperation(value = "修改、添加菜单信息", notes = "修改、添加菜单信息")
+    @ApiOperation(value = "删除菜单信息", notes = "删除菜单信息")
     public MenuVo delMenuByIds(@RequestBody MenuVo menuVo) {
         //防止重复id
         Set<String> ids = menuVo.getIds();

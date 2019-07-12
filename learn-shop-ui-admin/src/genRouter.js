@@ -33,6 +33,7 @@ router.beforeEach((to, from, next) => {
           // 动态添加可访问路由表
           router.addRoutes(store.getters.addRouters);
           // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+          // console.info(store.getters.addRouters);
           next({...to, replace: true});
         }).catch((error) => {
           console.info(error);

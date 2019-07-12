@@ -36,6 +36,9 @@
         </el-collapse-item>
       </el-collapse>
     </el-row>
+    <el-tooltip class="item" effect="dark" content="添加" placement="top-start">
+      <el-button @click="handleAdd()" type="primary" size="mini"><i class="el-icon-plus"></i></el-button>
+    </el-tooltip>
     <el-row>
       <template>
         <el-table :data="tableData" border style="width: 100%">
@@ -43,21 +46,24 @@
           <el-table-column label="角色CODE" prop="roleCode"></el-table-column>
           <el-table-column label="角色描述" prop="descritpion"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
-            <template slot-scope="props">
-              <el-table :data="props.row.children" stripe style="width: 100%">
-                <el-table-column label="创建时间">
-                  <template slot-scope="scope">
-                    <el-date-picker type="datetime" v-model="scope.row.createTime" readonly></el-date-picker>
-                  </template>
-                </el-table-column>
-                <el-table-column label="创建人" prop="creatorCode"></el-table-column>
-                <el-table-column label="更新时间">
-                  <template slot-scope="scope">
-                    <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
-                  </template>
-                </el-table-column>
-                <el-table-column label="创建人" prop="creatorCode"></el-table-column>
-              </el-table>
+            <template slot-scope="scope">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-form-item label="创建人">
+                  <span>{{ scope.row.creatorCode }}</span>
+                </el-form-item>
+                <el-form-item label="更新人">
+                  <span>{{ scope.row.updaterCode }}</span>
+                </el-form-item>
+                <el-form-item label="创建时间">
+                  <el-date-picker type="datetime" v-model="scope.row.createTime" readonly></el-date-picker>
+                </el-form-item>
+                <el-form-item label="更新时间">
+                  <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
+                </el-form-item>
+                <el-form-item label="是否有效">
+                  <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+                </el-form-item>
+              </el-form>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
@@ -144,17 +150,17 @@
       LoadDataRoleList() {
         LoadDataRoleList(this.queryFilter).then(res => {
           var data = res.resData;
-          // 填充数据
-          if (data.content) {
-            for (var ind in data.content) {
-              var childrenData = [];
-              if (data.content[ind]) {
-                childrenData.push(data.content[ind]);
-              }
-              this.$set(data.content[ind], 'children', childrenData);
-            }
-          }
-          console.info(data.content);
+          // // 填充数据
+          // if (data.content) {
+          //   for (var ind in data.content) {
+          //     var childrenData = [];
+          //     if (data.content[ind]) {
+          //       childrenData.push(data.content[ind]);
+          //     }
+          //     this.$set(data.content[ind], 'children', childrenData);
+          //   }
+          // }
+          // console.info(data.content);
           this.tableData = data.content;
           this.queryFilter.recordCount = data.totalElements;
           this.queryFilter.totalPages = data.totalPages;
@@ -174,7 +180,7 @@
       // 添加商品
       handleAdd() {
         this.$router.push({
-          name: 'productEdit',
+          name: 'roleEdit',
           params: {
             optionType: 'add'
           }
@@ -182,10 +188,10 @@
       },
       handleEdit(index, row) {
         this.$router.push({
-          name: 'productEdit',
+          name: 'roleEdit',
           params: {
             optionType: 'edit',
-            productEdit: row
+            roleEdit: row
           }
         });
       },
@@ -276,5 +282,20 @@
     border-radius: 10px; /*滚动条的圆角*/
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: #2e363f; /*滚动条的背景颜色*/
+  }
+
+  .demo-table-expand {
+    font-size: 0;
+  }
+
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
   }
 </style>

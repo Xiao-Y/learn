@@ -45,4 +45,10 @@ public class RoleApi extends BaseApi {
         List<RoleVo> roleVoList = roleService.findRoleListInfoByUserId(userId);
         return roleVoList;
     }
+
+    @ApiOperation("根据角色ID查询权限ID")
+    @GetMapping("/findPermissionByRoleId/{roleId}")
+    public List<Long> findPermissionByRoleId(@PathVariable("roleId") Long roleId) throws Exception {
+        return roleService.findPermissionByRoleId(roleId);
+    }
 }

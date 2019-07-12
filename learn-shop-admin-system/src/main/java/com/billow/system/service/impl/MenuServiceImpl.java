@@ -41,7 +41,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuEx> homeMenus(MenuVo menuVo) {
-        // 查询出该用户所有角色的所有的权限
+        // 查询出该用户所有角色的所有的菜单
         List<RoleVo> roleVos = menuVo.getRoleVos();
         Set<Long> menuIds = new HashSet<>();
         if (ToolsUtils.isNotEmpty(roleVos)) {

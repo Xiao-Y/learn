@@ -17,10 +17,9 @@ var menuUrls = [];
  */
 function genMenuUrls(menus) {
   for (var j in menus) {
+    menuUrls.push(menus[j].path);
     if (menus[j].children) {
       genMenuUrls(menus[j].children);
-    } else {
-      menuUrls.push(menus[j].path);
     }
   }
 }
@@ -28,6 +27,7 @@ function genMenuUrls(menus) {
 function filterAsyncRouter(accessedRouters, menus) {
   //递归出所有的url
   genMenuUrls(menus);
+  // console.info('menuUrls:',menuUrls);
   // 反向移除，用户没有的权限从路由移除，定制新路由
   for (var i = accessedRouters.length - 1; i >= 0; i--) {
     var basePath = accessedRouters[i].path;

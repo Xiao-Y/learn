@@ -22,6 +22,7 @@ import request from '@/utils/request'
 /**
  * 获取父菜单信息
  * @param pid
+ * @constructor
  */
 export function findParentMenu(pid) {
   return request({
@@ -33,6 +34,7 @@ export function findParentMenu(pid) {
 /**
  * 获取父菜单信息
  * @param pid
+ * @constructor
  */
 export function findMenus() {
   return request({
@@ -51,6 +53,7 @@ export function findMenus() {
  * @param icon
  * @param validInd
  * @param display
+ * @constructor
  */
 export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validInd, display}) {
   return request({
@@ -72,6 +75,7 @@ export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validIn
 /**
  * 删除菜单及关联信息
  * @param ids
+ * @constructor
  */
 export function delMenuByIds(ids) {
   return request({

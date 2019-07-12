@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,5 +116,19 @@ public class PermissionServiceImpl implements PermissionService {
         permissionPo.setValidInd(false);
         permissionDao.save(permissionPo);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
+    }
+
+    @Override
+    public List<PermissionVo> findPermissionAll() {
+        PermissionPo permissionPo = new PermissionPo();
+        permissionPo.setValidInd(true);
+        DefaultSpec<PermissionPo> defaultSpec = new DefaultSpec<>(permissionPo);
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        List<PermissionPo> permissionPos = permissionDao.findAll(defaultSpec, sort);
+        List<PermissionVo> permissionVos = new ArrayList<>();
+        permissionPos.stream().forEach(f -> {
+            permissionVos.add(this.convertToPermissionVo(f));
+        });
+        return permissionVos;
     }
 }

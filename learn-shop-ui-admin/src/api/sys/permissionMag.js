@@ -1,6 +1,17 @@
 import request from '@/utils/request'
 
-const baseUrl = 'admin-system/permission';
+const baseUrl = 'admin-system/permissionApi';
+
+/**
+ * 查询所有权限信息
+ * @constructor
+ */
+export function LoadDataPermissionListAll() {
+  return request({
+    url: baseUrl + '/findPermissionAll',
+    method: 'get'
+  })
+}
 
 /**
  * 根据条件查询权限信息
@@ -52,6 +63,7 @@ export function DeletePermissionById(id) {
     method: 'delete'
   });
 }
+
 /**
  * 根据id禁用权限信息
  * @param id

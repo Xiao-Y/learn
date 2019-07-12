@@ -35,6 +35,11 @@ public class PermissionVo extends PermissionPo implements Serializable {
      */
     private List<String> systemModules = new ArrayList<>();
 
+    /**
+     * 是否选种
+     */
+    private boolean checked;
+
     public List<RoleVo> getRoleVos() {
         return roleVos;
     }
@@ -68,9 +73,19 @@ public class PermissionVo extends PermissionPo implements Serializable {
 
     public PermissionVo setSystemModules(List<String> systemModules) {
         this.systemModules = systemModules;
+        // 转换数据结构,用于保存
         if (ToolsUtils.isNotEmpty(systemModules)) {
             this.setSystemModule(StringUtils.join(systemModules, ","));
         }
+        return this;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public PermissionVo setChecked(boolean checked) {
+        this.checked = checked;
         return this;
     }
 }

@@ -5,6 +5,7 @@ import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.PermissionVo;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Set;
 
 public interface PermissionService {
@@ -68,4 +69,13 @@ public interface PermissionService {
      * @date 2019/7/11 17:12
      */
     PermissionVo prohibitPermissionById(Long id);
+
+    /**
+     * 查询权限列表
+     *
+     * @return java.util.List<com.billow.system.pojo.vo.PermissionVo>
+     * @author LiuYongTao
+     * @date 2019/7/11 19:40
+     */
+    List<PermissionVo> findPermissionAll();
 }
