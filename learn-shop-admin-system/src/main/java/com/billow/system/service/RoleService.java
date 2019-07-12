@@ -35,4 +35,24 @@ public interface RoleService {
      * @date 2019/7/12 11:37
      */
     List<Long> findPermissionByRoleId(Long roleId) throws Exception;
+
+    /**
+     * 根据角色ID查询菜单ID
+     *
+     * @param roleId
+     * @return java.util.List<java.lang.String>
+     * @author LiuYongTao
+     * @date 2019/7/12 15:17
+     */
+    List<String> findMenuByRoleId(Long roleId) throws Exception;
+
+    /**
+     * 保存角色信息、角色菜单和角色权限
+     *
+     * @param roleVo
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/7/12 17:50
+     */
+    void saveRole(RoleVo roleVo);
 }

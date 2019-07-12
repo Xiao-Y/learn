@@ -28,13 +28,26 @@ export function LoadDataPermissionIdList(roleId) {
 }
 
 /**
+ * 根据角色ID查询菜单ID
+ * @param roleFilter
+ * @constructor
+ */
+export function LoadDataMenuIdList(roleId) {
+  return request({
+    url: baseUrl + '/findMenuByRoleId/' + roleId,
+    method: 'get'
+  })
+}
+
+/**
  * 保存商品信息
  * @param data
  * @constructor
  */
-export function SaveProduct(data) {
+export function SaveRole(data) {
+  // console.info(Object.assign(data));
   return request({
-    url: 'core-product/productApi/saveProduct',
+    url: baseUrl + '/saveRole',
     method: 'post',
     data: Object.assign(data)
   });

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色信息
@@ -50,5 +51,18 @@ public class RoleApi extends BaseApi {
     @GetMapping("/findPermissionByRoleId/{roleId}")
     public List<Long> findPermissionByRoleId(@PathVariable("roleId") Long roleId) throws Exception {
         return roleService.findPermissionByRoleId(roleId);
+    }
+
+    @ApiOperation("根据角色ID查询菜单ID")
+    @GetMapping("/findMenuByRoleId/{roleId}")
+    public List<String> findMenuByRoleId(@PathVariable("roleId") Long roleId) throws Exception {
+        return roleService.findMenuByRoleId(roleId);
+    }
+
+    @ApiOperation("保存角色信息、角色菜单和角色权限")
+    @PostMapping("/saveRole")
+    public RoleVo saveRole(@RequestBody RoleVo roleVo) throws Exception {
+        roleService.saveRole(roleVo);
+        return null;
     }
 }

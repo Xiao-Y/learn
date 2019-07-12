@@ -111,6 +111,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo prohibitPermissionById(Long id) {
         PermissionPo permissionPo = permissionDao.findOne(id);
         permissionPo.setValidInd(false);
