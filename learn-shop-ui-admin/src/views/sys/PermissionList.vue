@@ -202,19 +202,19 @@
       handleAdd() {
         this.$router.push({
           name: 'permissionEdit',
-          params: {
+          query: {
             optionType: 'add',
-            systemModuleSelect: this.systemModuleSelect
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
           }
         });
       },
       handleEdit(index, row) {
         this.$router.push({
           name: 'permissionEdit',
-          params: {
+          query: {
             optionType: 'edit',
-            permissionEdit: row,
-            systemModuleSelect: this.systemModuleSelect
+            permissionEdit: JSON.stringify(row),
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
           }
         });
       },

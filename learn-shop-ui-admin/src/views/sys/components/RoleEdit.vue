@@ -157,8 +157,8 @@
       };
     },
     created() {
-      if(this.$route.params.optionType === 'edit'){
-        this.roleInfo = this.$route.params.roleEdit;
+      if(this.$route.query.optionType === 'edit'){
+        this.roleInfo = JSON.parse(this.$route.query.roleEdit);
       }
       // 初始化菜单树
       this.findMenus();

@@ -189,9 +189,9 @@
       handleEdit(index, row) {
         this.$router.push({
           name: 'roleEdit',
-          params: {
+          query: {
             optionType: 'edit',
-            roleEdit: row
+            roleEdit: JSON.stringify(row)
           }
         });
       },

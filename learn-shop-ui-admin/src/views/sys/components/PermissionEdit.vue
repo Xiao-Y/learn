@@ -68,10 +68,10 @@
       };
     },
     created() {
-      this.optionType = this.$route.params.optionType;
-      this.systemModuleSelect = this.$route.params.systemModuleSelect;
+      this.optionType = this.$route.query.optionType;
+      this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
       if (this.optionType === 'edit') {
-        this.permissionInfo = this.$route.params.permissionEdit;
+        this.permissionInfo = JSON.parse(this.$route.query.permissionEdit);
       }
     },
     methods: {
