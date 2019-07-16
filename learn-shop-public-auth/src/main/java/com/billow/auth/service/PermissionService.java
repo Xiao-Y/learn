@@ -12,15 +12,15 @@ import java.util.Set;
 
 public interface PermissionService {
 
-    /**
-     * 判断用户是否有权限
-     *
-     * @param [request, authentication]
-     * @return boolean
-     * @author LiuYongTao
-     * @date 2019/5/23 20:07
-     */
-    boolean hasPermission(HttpServletRequest request, Authentication authentication);
+//    /**
+//     * 判断用户是否有权限
+//     *
+//     * @param [request, authentication]
+//     * @return boolean
+//     * @author LiuYongTao
+//     * @date 2019/5/23 20:07
+//     */
+//    boolean hasPermission(HttpServletRequest request, Authentication authentication);
 
     /**
      * 通过角色令牌,查询角色的权限集合

@@ -39,42 +39,42 @@ public class CustomPermissionServiceImpl implements PermissionService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private AntPathMatcher antPathMatcher = new AntPathMatcher();
+//    private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Autowired
     private PermissionDao permissionDao;
     @Autowired
     private RolePermissionDao rolePermissionDao;
 
-    @Override
-    public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
+//    @Override
+//    public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
 
-        boolean isPermission = false;
-
-        Object principal = authentication.getPrincipal();
-        logger.info("===>>> principal:{}", principal);
-        if ("admin".equals(principal)) {
-            return true;
-        }
-
-        String contextPath = request.getContextPath();
-        logger.info("request.getContextPath:{}", contextPath);
-        String targetURI = request.getRequestURI();
-        logger.info("<<<=== targetURI:{}", targetURI);
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        if (authorities != null && authorities.size() > 0) {
-            for (GrantedAuthority authority : authorities) {
-                String sourceURI = contextPath + authority.getAuthority();
-                logger.info("===>>> sourceURI:{}", sourceURI);
-                if (antPathMatcher.match(sourceURI, targetURI)) {
-                    isPermission = true;
-                    break;
-                }
-            }
-        }
-        return isPermission;
-    }
+//        boolean isPermission = false;
+//
+//        Object principal = authentication.getPrincipal();
+//        logger.info("===>>> principal:{}", principal);
+//        if ("admin".equals(principal)) {
+//            return true;
+//        }
+//
+//        String contextPath = request.getContextPath();
+//        logger.info("request.getContextPath:{}", contextPath);
+//        String targetURI = request.getRequestURI();
+//        logger.info("<<<=== targetURI:{}", targetURI);
+//
+//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//        if (authorities != null && authorities.size() > 0) {
+//            for (GrantedAuthority authority : authorities) {
+//                String sourceURI = contextPath + authority.getAuthority();
+//                logger.info("===>>> sourceURI:{}", sourceURI);
+//                if (antPathMatcher.match(sourceURI, targetURI)) {
+//                    isPermission = true;
+//                    break;
+//                }
+//            }
+//        }
+//        return isPermission;
+//    }
 
     @Override
     public Set<PermissionPo> findPermissionByRole(RolePo rolePo) {

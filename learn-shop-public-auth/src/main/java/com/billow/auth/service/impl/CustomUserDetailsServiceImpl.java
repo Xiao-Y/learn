@@ -3,12 +3,10 @@ package com.billow.auth.service.impl;
 import com.billow.auth.dao.RoleDao;
 import com.billow.auth.dao.UserDao;
 import com.billow.auth.dao.UserRoleDao;
-import com.billow.auth.pojo.po.PermissionPo;
 import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
 import com.billow.auth.service.PermissionService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 查询登陆用户信息
@@ -42,12 +39,8 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     private UserRoleDao userRoleDao;
     @Autowired
     private RoleDao roleDao;
-    //    @Autowired
-//    private RolePermissionDao rolePermissionDao;
 //    @Autowired
-//    private PermissionDao permissionDao;
-    @Autowired
-    private PermissionService permissionService;
+//    private PermissionService permissionService;
 
     @Override
     public UserDetails loadUserByUsername(String usercode) throws UsernameNotFoundException {
@@ -73,12 +66,13 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
                 logger.error("用户：{}，roleId:{},未查询到信息！", usercode, roleId);
                 return;
             }
-            Set<PermissionPo> permissionByRole = permissionService.findPermissionByRole(rolePo.get());
-            List<SimpleGrantedAuthority> collect = permissionByRole.stream()
-                    .filter(f -> !StringUtils.isBlank(f.getUrl()))
-                    .map(m -> new SimpleGrantedAuthority(m.getUrl()))
-                    .collect(Collectors.toList());
-            authorities.addAll(collect);
+//            Set<PermissionPo> permissionByRole = permissionService.findPermissionByRole(rolePo.get());
+//            List<SimpleGrantedAuthority> collect = permissionByRole.stream()
+//                    .filter(f -> !StringUtils.isBlank(f.getUrl()))
+//                    .map(m -> new SimpleGrantedAuthority(m.getUrl()))
+//                    .collect(Collectors.toList());
+//            authorities.addAll(collect);
+            authorities.add(new SimpleGrantedAuthority(rolePo.get().getRoleCode()));
         });
         if (CollectionUtils.isEmpty(authorities)) {
             logger.error("用户：{}，未分配权限！", usercode);

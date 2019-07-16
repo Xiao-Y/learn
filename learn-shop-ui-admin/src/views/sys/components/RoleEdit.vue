@@ -138,6 +138,7 @@
           label: "title"
         },
         roleInfo: {
+          id:"",
           roleName: "",
           roleCode: "",
           descritpion: "",
@@ -156,7 +157,9 @@
       };
     },
     created() {
-      this.roleInfo = this.$route.params.roleEdit;
+      if(this.$route.params.optionType === 'edit'){
+        this.roleInfo = this.$route.params.roleEdit;
+      }
       // 初始化菜单树
       this.findMenus();
       // 获取权限列表数据

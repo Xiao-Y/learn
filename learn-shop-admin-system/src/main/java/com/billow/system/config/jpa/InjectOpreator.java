@@ -5,14 +5,15 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * 给Bean中的 @CreatedBy  @LastModifiedBy 注入操作人
+ *
+ * @author LiuYongTao
+ * @date 2019/7/16 14:29
+ */
 @Configuration
 public class InjectOpreator implements AuditorAware<String> {
 
-    /**
-     * 给Bean中的 @CreatedBy  @LastModifiedBy 注入操作人
-     *
-     * @return
-     */
     @Override
     public String getCurrentAuditor() {
 

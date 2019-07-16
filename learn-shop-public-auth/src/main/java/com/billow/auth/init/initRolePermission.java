@@ -10,6 +10,7 @@ import com.billow.auth.service.PermissionService;
 import com.billow.auth.utils.RedisUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Set;
  * @author liuyongtao
  * @create 2019-05-23 19:34
  */
-//@Component
+@Component
 public class initRolePermission implements InitializingBean {
 
     @Autowired
@@ -36,7 +37,7 @@ public class initRolePermission implements InitializingBean {
         List<RolePo> rolePos = roleDao.findAll();
         for (RolePo rolePo : rolePos) {
             Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
-            redisUtils.setObj(rolePo.getRoleCode(), permissionPos);
+            redisUtils.setObj("ROLE:" + rolePo.getRoleCode(), permissionPos);
         }
     }
 }
