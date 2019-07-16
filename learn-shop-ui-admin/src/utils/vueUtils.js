@@ -2,7 +2,7 @@ import md5 from 'js-md5'
 
 var VueUtils = {
   // /* ================ 深拷贝,不含有 function 可用 ================ */
-  deepCloneJson: function(initalObj) {
+  deepCloneJson: function (initalObj) {
     var obj = {};
     try {
       obj = JSON.parse(JSON.stringify(initalObj));
@@ -67,7 +67,7 @@ var VueUtils = {
    * @param 元素
    * @returns 元素类型
    */
-  getType: function(obj) {
+  getType: function (obj) {
     //tostring会返回对应不同的标签的构造函数
     var toString = Object.prototype.toString;
     var map = {
@@ -92,8 +92,51 @@ var VueUtils = {
    * @param  需要加密的字符串
    * @return 加密后的字符串
    */
-  md5: function(string) {
+  md5: function (string) {
     return md5(string);
+  },
+  /**
+   * 查询指定节点的所有父级菜单
+   * @param menuData 数据源
+   * @param currentNodeParentId 当前节点的父ID
+   * @returns {Array} 返回所有父级节点数据，包含自己在最后一位
+   */
+  getParent: function (menuData, currentNodeParentId) {
+    var arrRes = [];
+    if (menuData.length == 0) {
+      if (!!currentNodeParentId) {
+        arrRes.unshift(menuData);
+      }
+      return arrRes;
+    }
+    let rev = (data, nodeId) => {
+      for (var i = 0, length = data.length; i < length; i++) {
+        let node = data[i];
+        if (node.id == nodeId) {
+          arrRes.unshift(node)
+          rev(menuData, node.pid);
+          break;
+        } else {
+          if (!!node.children) {
+            rev(node.children, nodeId);
+          }
+        }
+      }
+      return arrRes;
+    };
+    arrRes = rev(menuData, currentNodeParentId);
+    return arrRes;
+  },
+  /**
+   * 查询指定节点的所有父级菜单
+   * @param menuData 数据源
+   * @param currentNodeId 当前节点
+   * @returns {Array} 返回所有父级节点数据
+   */
+  getParentByCurrentNodeId: function (menuData, currentNodeId) {
+    var nodeData = this.getParent(menuData, currentNodeId);
+    nodeData.pop();
+    return nodeData;
   }
 }
 

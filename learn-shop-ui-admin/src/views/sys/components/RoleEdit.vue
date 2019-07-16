@@ -11,13 +11,12 @@
                 default-expand-all
                 node-key="id"
                 :data="menus"
-                ref="tree2"
+                ref="menuTree"
                 :highlight-current="true"
                 :props="defaultProps"
-                :check-strictly="true"
+                :check-strictly="false"
                 :expand-on-click-node="false"
                 :filter-node-method="filterNode"
-                :default-checked-keys="initMenuChecked"
                 @check-change="changeMenuTree"
               ></el-tree>
             </div>
@@ -45,7 +44,7 @@
           </el-collapse-item>
 
           <el-collapse-item title="权限信息" name="2">
-            <el-input v-model="filterPermission" size="mini" placeholder="输入关键字进行过滤" />
+            <el-input v-model="filterPermission" size="mini" placeholder="输入关键字进行过滤"/>
             <el-table
               ref="tableDataTemp"
               :data="tableDataTemp"
@@ -118,200 +117,229 @@
 </template>
 
 <script>
-import {
-  SavePermission,
-  LoadDataPermissionListAll
-} from "../../../api/sys/permissionMag";
-import { findMenus } from "../../../api/sys/menuMag";
-import { LoadSysDataDictionary } from "../../../api/sys/DataDictionaryMag";
-import {
-  LoadDataPermissionIdList,
-  LoadDataMenuIdList,
-  SaveRole
-} from "../../../api/sys/roleMag";
+  import {
+    LoadDataPermissionListAll
+  } from "../../../api/sys/permissionMag";
+  import {findMenus} from "../../../api/sys/menuMag";
+  import {LoadSysDataDictionary} from "../../../api/sys/DataDictionaryMag";
+  import {
+    LoadDataPermissionIdList,
+    LoadDataMenuIdList,
+    SaveRole
+  } from "../../../api/sys/roleMag";
 
-export default {
-  data() {
-    return {
-      activeNames: ["0", "1", "2"],
-      filterMenu: "", // 菜单树过滤
-      filterPermission: "", // 权限过滤
-      defaultProps: {
-        //设置数据绑定
-        children: "children",
-        label: "title"
-      },
-      roleInfo: {
-        roleName: "",
-        roleCode: "",
-        descritpion: "",
-        validInd: true
-      },
-      systemModuleSelect: [], // 系统模块下拉列表
-      tableData: [], // 原始权限列表
-      tableDataTemp: [], // 过滤后的权限列表
-      permissionChecked: [], // 被选种的权限ID
-      menuChecked: [], // 被选种的菜单ID
-      initMenuChecked: [], // 初始化被选种的菜单ID
-      menus: [] // 菜单树数据源
-    };
-  },
-  created() {
-    this.roleInfo = this.$route.params.roleEdit;
-    // 初始化菜单树
-    this.findMenus();
-    // 获取权限列表数据
-    this.LoadDataPermissionListAll();
-    // 加载系统模块的下拉
-    this.LoadSysDataDictionary("SystemModule");
-  },
-  methods: {
-    changeMenuTree() {
-      // 选种的菜单
-      this.menuChecked = this.$refs.tree2.getCheckedNodes().map(m => m.id);
-      // 半先种的父级菜单
-      // this.menuChecked = this.menuChecked.concat(
-      //   this.$refs.tree2.getHalfCheckedNodes().map(m => m.id)
-      // );
+  export default {
+    data() {
+      return {
+        activeNames: ["0", "1", "2"],
+        defaultProps: {
+          //设置数据绑定
+          children: "children",
+          label: "title"
+        },
+        roleInfo: {
+          roleName: "",
+          roleCode: "",
+          descritpion: "",
+          validInd: true
+        },
+        tableData: [], // 原始权限列表
+        tableDataTemp: [], // 过滤后的权限列表
+        filterPermission: "", // 权限过滤
+        systemModuleSelect: [], // 系统模块下拉列表
+        permissionChecked: [], // 被选种的权限ID
+        loadPermissionCheckedFlag: false,// 是否初始化加载被选种的权限
+        menus: [], // 菜单树数据源
+        filterMenu: "", // 菜单树过滤
+        menuChecked: [], // 被选种的菜单ID
+        loadMenuCheckedFlag: false// 是否初始化加载被选种的菜单
+      };
     },
-    //加载下拉列表
-    LoadSysDataDictionary(fieldType) {
-      LoadSysDataDictionary(fieldType).then(res => {
-        this.systemModuleSelect = res.resData;
-      });
+    created() {
+      this.roleInfo = this.$route.params.roleEdit;
+      // 初始化菜单树
+      this.findMenus();
+      // 获取权限列表数据
+      this.LoadDataPermissionListAll();
+      // 加载系统模块的下拉
+      this.LoadSysDataDictionary("SystemModule");
     },
-    // 请服务器数据（获取权限列表数据）
-    LoadDataPermissionListAll() {
-      LoadDataPermissionListAll(this.queryFilter).then(res => {
-        this.tableData = res.resData;
-        this.tableDataTemp = this.tableData;
-        // 如果是修改的时候
-        if (this.roleInfo.id) {
-          // 加载权限选种状态
-          LoadDataPermissionIdList(this.roleInfo.id).then(res => {
-            // 设置选种状态
-            this.tableData.forEach(item => {
-              this.$refs.tableDataTemp.toggleRowSelection(
-                item,
-                res.resData.includes(item.id)
-              );
-            });
+    methods: {
+      // 收集选种和半选种的所有菜单id
+      changeMenuTree() {
+        // 选种的菜单
+        this.menuChecked = this.$refs.menuTree.getCheckedNodes().map(m => m.id);
+        // 半先种的父级菜单
+        this.menuChecked = this.menuChecked.concat(
+          this.$refs.menuTree.getHalfCheckedNodes().map(m => m.id)
+        );
+      },
+      //加载下拉列表
+      LoadSysDataDictionary(fieldType) {
+        LoadSysDataDictionary(fieldType).then(res => {
+          this.systemModuleSelect = res.resData;
+        });
+      },
+      // 获取权限列表数据
+      LoadDataPermissionListAll() {
+        LoadDataPermissionListAll(this.queryFilter).then(res => {
+          this.tableData = res.resData;
+          this.tableDataTemp = this.tableData;
+          // 如果是修改的时候
+          if (this.roleInfo.id) {
+            // 加载权限选种状态
+            this.loadPermissionCheckedFlag = true;
+          }
+        });
+      },
+      //获取所有菜单
+      findMenus() {
+        var _this = this;
+        // 加载菜单
+        findMenus().then(res => {
+          _this.menus = res.resData;
+          // 如果是修改的时候
+          if (this.roleInfo.id) {
+            // 加载菜单选种状态
+            this.loadMenuCheckedFlag = true;
+          }
+        });
+      },
+      // 过滤搜索
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.title.indexOf(value) !== -1;
+      },
+      onSubmit() {
+        var _this = this;
+        var roleInfo = _this.roleInfo;
+        roleInfo['permissionChecked'] = _this.permissionChecked;
+        roleInfo['menuChecked'] = _this.menuChecked;
+        SaveRole(roleInfo).then(res => {
+          _this.$message({
+            type: "success",
+            message: "保存成功!"
           });
-        }
-      });
+          _this.$router.back(-1);
+        });
+      },
+      onReturn() {
+        this.$router.back(-1);
+      },
+      onReset(roleInfo) {
+        this.$refs[roleInfo].resetFields();
+      },
+      handleSelectionChange(row) {
+        this.permissionChecked = row.map(item => item.id);
+      }
     },
-    //获取所有菜单
-    findMenus() {
-      // 如果是修改的时候
-      if (this.roleInfo.id) {
+    watch: {
+      //通过 :filter-node-method,找到过滤方法
+      filterMenu(val) {
+        this.$refs.menuTree.filter(val);
+      },
+      filterPermission(val) {
+        this.tableDataTemp = this.tableData.filter(data => {
+          if (!val) {
+            return true;
+          }
+          if (data.permissionName) {
+            return data.permissionName.includes(val);
+          } else if (data.permissionCode) {
+            return data.permissionCode.includes(val);
+          } else if (data.url.toLowerCase()) {
+            return data.url.includes(val.toLowerCase());
+          }
+        });
+      },
+      loadPermissionCheckedFlag(val) {
+        if (!val) {
+          return;
+        }
+        // 加载权限选种状态
+        LoadDataPermissionIdList(this.roleInfo.id).then(res => {
+          // 设置选种状态
+          this.tableData.forEach(item => {
+            this.$refs.tableDataTemp.toggleRowSelection(
+              item,
+              res.resData.includes(item.id)
+            );
+          });
+        });
+      },
+      loadMenuCheckedFlag(val) {
+        if (!val) {
+          return;
+        }
         // 加载菜单选种状态
         LoadDataMenuIdList(this.roleInfo.id).then(res => {
-          // 设置选种状态
-          this.initMenuChecked = res.resData;
+          // 需要移除的父级ids,因为菜单树会自己关联
+          let deleteMenuIds = new Set();
+          var checkedMenu = res.resData;
+          // 构建出所有需要移除的父级ids
+          for (let i = 0; i < checkedMenu.length; i++) {
+            var menuParentIds = this.VueUtils.getParentByCurrentNodeId(this.menus, checkedMenu[i]).map(m => m.id);
+            // 返回的父级id
+            menuParentIds.forEach(f => deleteMenuIds.add(f));
+          }
+          // 移除父级所有id
+          deleteMenuIds.forEach(id => {
+            checkedMenu.splice(checkedMenu.indexOf(id), 1);
+          });
+          // 设置菜单树选种
+          this.$refs.menuTree.setCheckedKeys(checkedMenu);
         });
       }
-      // 加载菜单
-      findMenus().then(res => {
-        this.menus = res.resData;
-      });
-    },
-    // 过滤搜索
-    filterNode(value, data) {
-      if (!value) return true;
-      return data.title.indexOf(value) !== -1;
-    },
-    onSubmit() {
-      var _this = this;
-      var roleInfo = _this.roleInfo;
-      roleInfo['permissionChecked'] = _this.permissionChecked;
-      roleInfo['menuChecked'] = _this.menuChecked;
-      SaveRole(roleInfo).then(res => {
-        _this.$message({
-          type: "success",
-          message: "保存成功!"
-        });
-        _this.$router.back(-1);
-      });
-    },
-    onReturn() {
-      this.$router.back(-1);
-    },
-    onReset(roleInfo) {
-      this.$refs[roleInfo].resetFields();
-    },
-    handleSelectionChange(row) {
-      this.permissionChecked = row.map(item => item.id);
     }
-  },
-  watch: {
-    //通过 :filter-node-method,找到过滤方法
-    filterMenu(val) {
-      this.$refs.tree2.filter(val);
-    },
-    filterPermission(val) {
-      this.tableDataTemp = this.tableData.filter(data => {
-        if (!val) {
-          return true;
-        }
-        if (data.permissionName) {
-          return data.permissionName.includes(val);
-        } else if (data.permissionCode) {
-          return data.permissionCode.includes(val);
-        } else if (data.url.toLowerCase()) {
-          return data.url.includes(val.toLowerCase());
-        }
-      });
-    }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.ms-doc {
-  width: 70%;
-  margin: 0 auto;
-}
+  .ms-doc {
+    width: 70%;
+    margin: 0 auto;
+  }
 
-.ms-doc h3 {
-  padding: 9px 10px 10px;
-  margin: 0;
-  font-size: 14px;
-  line-height: 17px;
-  background-color: #f5f5f5;
-  border: 1px solid #d8d8d8;
-  border-bottom: 0;
-  border-radius: 3px 3px 0 0;
-}
+  .ms-doc h3 {
+    padding: 9px 10px 10px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 17px;
+    background-color: #f5f5f5;
+    border: 1px solid #d8d8d8;
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+  }
 
-.ms-doc article {
-  padding: 10px;
-  word-wrap: break-word;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
+  .ms-doc article {
+    padding: 10px;
+    word-wrap: break-word;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
 
-.ms-doc article .el-checkbox {
-  margin-bottom: 5px;
-}
+  .ms-doc article .el-checkbox {
+    margin-bottom: 5px;
+  }
 
-.el-form-item {
-  margin-bottom: 3px;
-}
+  .el-form-item {
+    margin-bottom: 3px;
+  }
 
-.demo-table-expand {
-  font-size: 0;
-}
+  .demo-table-expand {
+    font-size: 0;
+  }
 
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
-}
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
 
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 </style>

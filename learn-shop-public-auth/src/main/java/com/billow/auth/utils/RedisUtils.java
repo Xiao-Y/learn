@@ -32,8 +32,8 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public void setString(String key, String value) {
-        Assert.notNull(key);
-        Assert.notNull(value);
+        Assert.notNull(key, "key 不能为空");
+        Assert.notNull(value, "value 不能为空");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, value);
@@ -49,9 +49,9 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public void setString(String key, String value, long l, TimeUnit timeUnit) {
-        Assert.notNull(key);
-        Assert.notNull(value);
-        Assert.notNull(timeUnit);
+        Assert.notNull(key, "key 不能为空");
+        Assert.notNull(value, "value 不能为空");
+        Assert.notNull(timeUnit, "timeUnit 不能为空");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, value, l, timeUnit);
@@ -67,8 +67,8 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public <T> void setObj(String key, T value) {
-        Assert.notNull(key);
-        Assert.notNull(value);
+        Assert.notNull(key, "key 不能为空");
+        Assert.notNull(value, "value 不能为空");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, JSONObject.toJSONString(value));
@@ -84,9 +84,9 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public <T> void setObj(String key, T value, long l, TimeUnit timeUnit) {
-        Assert.notNull(key);
-        Assert.notNull(value);
-        Assert.notNull(timeUnit);
+        Assert.notNull(key, "key 不能为空");
+        Assert.notNull(value, "value 不能为空");
+        Assert.notNull(timeUnit, "timeUnit 不能为空");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, JSONObject.toJSONString(value), l, timeUnit);
