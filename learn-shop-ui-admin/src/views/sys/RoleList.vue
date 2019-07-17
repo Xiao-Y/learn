@@ -180,7 +180,7 @@
       // 添加商品
       handleAdd() {
         this.$router.push({
-          name: 'roleEdit',
+          name: 'sysRoleEdit',
           params: {
             optionType: 'add'
           }
@@ -188,7 +188,7 @@
       },
       handleEdit(index, row) {
         this.$router.push({
-          name: 'roleEdit',
+          name: 'sysRoleEdit',
           query: {
             optionType: 'edit',
             roleEdit: JSON.stringify(row)

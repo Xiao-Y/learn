@@ -195,7 +195,7 @@
       // 添加商品
       handleAdd() {
         this.$router.push({
-          name: 'productEdit',
+          name: 'proProductEdit',
           params: {
             optionType: 'add'
           }
@@ -203,7 +203,7 @@
       },
       handleEdit(index, row) {
         this.$router.push({
-          name: 'productEdit',
+          name: 'proProductEdit',
           params: {
             optionType: 'edit',
             productEdit: row
@@ -212,7 +212,7 @@
       },
       handleImageEdit(index, row) {
         this.$router.push({
-          name: 'productImageEdit',
+          name: 'proProductImageEdit',
           params: {
             productInfo: row
           }

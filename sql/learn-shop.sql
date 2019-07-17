@@ -11,62 +11,11 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 15/07/2019 09:59:05
+ Date: 17/07/2019 09:54:40
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for cp_product
--- ----------------------------
-DROP TABLE IF EXISTS `cp_product`;
-CREATE TABLE `cp_product`  (
-  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `commodity_info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `commodity_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `dele_flag` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `grade` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `locality_growth` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `packing` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `quantity` int(11) NULL DEFAULT NULL,
-  `spec` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `unit_price` decimal(19, 2) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of cp_product
--- ----------------------------
-INSERT INTO `cp_product` VALUES ('201906210536153674243', '2019-06-21 17:36:15', 'admin', '2019-06-21 17:36:15', 'admin', b'1', 'string', 'string', '1', 'string', 'string', 'string', 'string', 0, 'string', 'string', 0.00);
-INSERT INTO `cp_product` VALUES ('201906210537006565635', '2019-06-21 17:37:01', 'admin', '2019-06-21 17:37:01', 'admin', b'1', 'string', 'string', '1', 'string', 'string', 'string', 'string', 0, 'string', 'string', 0.00);
-
--- ----------------------------
--- Table structure for cp_product_image
--- ----------------------------
-DROP TABLE IF EXISTS `cp_product_image`;
-CREATE TABLE `cp_product_image`  (
-  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `content_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `image_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `new_image_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `old_image_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `product_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `seq_no` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for hibernate_sequence
@@ -129,32 +78,32 @@ CREATE TABLE `r_role_menu`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 68 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_menu
 -- ----------------------------
-INSERT INTO `r_role_menu` VALUES (37, 1, 1, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (38, 1, 2, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (39, 1, 3, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (40, 1, 4, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (41, 1, 11, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (42, 1, 14, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (43, 1, 12, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (44, 1, 13, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (45, 1, 5, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (46, 1, 6, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (47, 1, 7, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (48, 1, 8, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (49, 1, 9, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (50, 1, 10, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (51, 1, 16, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (62, 2, 11, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (63, 2, 14, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (64, 2, 10, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (65, 2, 2, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (66, 2, 7, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (67, 2, 8, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (71, 2, 11, '2019-07-16 17:03:59', 'admin', '2019-07-16 17:03:59', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (72, 2, 14, '2019-07-16 17:03:59', 'admin', '2019-07-16 17:03:59', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (73, 2, 2, '2019-07-16 17:03:59', 'admin', '2019-07-16 17:03:59', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (78, 3, 1, '2019-07-16 17:15:34', 'admin', '2019-07-16 17:15:34', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (79, 3, 4, '2019-07-16 17:15:34', 'admin', '2019-07-16 17:15:34', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (80, 3, 2, '2019-07-16 17:15:34', 'admin', '2019-07-16 17:15:34', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (96, 1, 1, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (97, 1, 2, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (98, 1, 3, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (99, 1, 4, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (100, 1, 11, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (101, 1, 14, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (102, 1, 12, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (103, 1, 13, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (104, 1, 5, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (105, 1, 6, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (106, 1, 7, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (107, 1, 8, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (108, 1, 9, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (109, 1, 10, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (110, 1, 16, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_role_permission
@@ -170,31 +119,33 @@ CREATE TABLE `r_role_permission`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 94 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_permission
 -- ----------------------------
-INSERT INTO `r_role_permission` VALUES (66, 1, 1, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (67, 1, 4, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (68, 1, 5, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (69, 1, 6, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (70, 1, 7, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (71, 1, 8, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (72, 1, 9, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (73, 1, 12, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (74, 1, 13, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (75, 1, 14, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (76, 1, 15, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (77, 1, 16, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (78, 1, 17, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (79, 1, 18, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (80, 1, 19, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (81, 1, 20, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (82, 1, 21, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (83, 1, 22, '2019-07-14 17:33:33', 'admin', '2019-07-14 17:33:33', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (92, 2, 4, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (93, 2, 5, '2019-07-15 09:53:38', 'admin', '2019-07-15 09:53:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (96, 2, 4, '2019-07-16 17:03:59', 'admin', '2019-07-16 17:03:59', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (97, 2, 5, '2019-07-16 17:03:59', 'admin', '2019-07-16 17:03:59', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (100, 3, 1, '2019-07-16 17:15:34', 'admin', '2019-07-16 17:15:34', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (101, 3, 4, '2019-07-16 17:15:34', 'admin', '2019-07-16 17:15:34', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (119, 1, 1, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (120, 1, 4, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (121, 1, 5, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (122, 1, 7, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (123, 1, 8, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (124, 1, 9, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (125, 1, 12, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (126, 1, 13, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (127, 1, 14, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (128, 1, 15, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (129, 1, 16, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (130, 1, 17, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (131, 1, 18, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (132, 1, 19, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (133, 1, 20, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (134, 1, 21, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (135, 1, 22, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (136, 1, 6, '2019-07-16 17:16:49', 'admin', '2019-07-16 17:16:49', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_user_role
@@ -263,25 +214,25 @@ CREATE TABLE `sys_menu`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES (1, '/Readme', 'Readme', 'Readme', NULL, b'1', NULL, NULL, '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (2, '', 'sys', '系统管理', NULL, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-06-03 21:47:42', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (3, '/sys/whiteList/index', 'whiteListIndex', '白名单', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:47:44', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (4, '/sys/menuList/index', 'menuListIndex', '菜单管理', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (3, '/sys/whiteList/index', 'sysWhiteListIndex', '白名单', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:47:44', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (4, '/sys/menuList/index', 'sysMenuListIndex', '菜单管理', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (5, '', 'job', '自动任务', NULL, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (6, '/job/autoTaskList/index', '', '自动任务', 5, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:48:16', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (7, '', 'product', '产品管理', NULL, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (8, '/product/productList/index', '', '产品管理', 7, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:48:33', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (9, '/product/productList/productEdit', '', '修改产品信息', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:24', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (10, '/product/productList/productImageEdit', '', '修改产品图片', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:53', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (11, '/sys/roleList/index', 'roleListIndex', '角色管理', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (12, '/sys/permissionList/index', 'permissionListIndex', '权限管理', 2, b'1', '', NULL, '2019-07-10 15:22:05', 'admin', '2019-07-10 15:40:23', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (13, '/sys/permissionList/permissionEdit', 'permissionEdit', '修改权限信息', 12, b'0', '', NULL, '2019-07-10 17:42:20', 'admin', '2019-07-10 17:42:20', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (14, '/sys/roleList/roleEdit', 'roleEdit', '修改角色信息', 11, b'0', '', NULL, '2019-07-11 18:00:41', 'admin', '2019-07-11 18:00:41', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (6, '/job/autoTaskList/index', 'jobAutoTaskListIndex', '自动任务', 5, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:48:16', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (7, '', 'pro', '产品管理', NULL, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (8, '/product/productList/index', 'proProductListIndex', '产品管理', 7, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:48:33', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (9, '/product/productList/productEdit', 'proProductEdit', '修改产品信息', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:24', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (10, '/product/productList/productImageEdit', 'proProductImageEdit', '修改产品图片', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:53', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (11, '/sys/roleList/index', 'sysRoleListIndex', '角色管理', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (12, '/sys/permissionList/index', 'sysPermissionListIndex', '权限管理', 2, b'1', '', NULL, '2019-07-10 15:22:05', 'admin', '2019-07-10 15:40:23', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (13, '/sys/permissionList/permissionEdit', 'sysPermissionEdit', '修改权限信息', 12, b'0', '', NULL, '2019-07-10 17:42:20', 'admin', '2019-07-10 17:42:20', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (14, '/sys/roleList/roleEdit', 'sysRoleEdit', '修改角色信息', 11, b'0', '', NULL, '2019-07-11 18:00:41', 'admin', '2019-07-11 18:00:41', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (16, '/Readme2', 'Readme2', 'Readme2', NULL, b'1', '', NULL, '2019-07-14 17:14:34', 'admin', '2019-07-14 17:43:55', 'admin', b'1');
 
 -- ----------------------------
@@ -352,100 +303,6 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, '2019-04-23 15:40:22', 'admin', '2019-04-23 15:40:25', 'admin', b'1', 'admin', 'ADMIN', 'admin');
 INSERT INTO `sys_role` VALUES (2, '2019-04-23 15:40:22', 'admin', '2019-04-23 15:40:25', 'admin', b'1', 'custom', 'custom', 'custom');
-
--- ----------------------------
--- Table structure for sys_white_list
--- ----------------------------
-DROP TABLE IF EXISTS `sys_white_list`;
-CREATE TABLE `sys_white_list`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `mark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `module` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `port` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for t_city
--- ----------------------------
-DROP TABLE IF EXISTS `t_city`;
-CREATE TABLE `t_city`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `country_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `district` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `population` bigint(20) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for t_order
--- ----------------------------
-DROP TABLE IF EXISTS `t_order`;
-CREATE TABLE `t_order`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `product_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `product_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `user_id` bigint(20) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for t_test
--- ----------------------------
-DROP TABLE IF EXISTS `t_test`;
-CREATE TABLE `t_test`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `age` int(11) NULL DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for u_user
--- ----------------------------
-DROP TABLE IF EXISTS `u_user`;
-CREATE TABLE `u_user`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `age` int(11) NULL DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `sex` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `usercode` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of u_user
--- ----------------------------
-INSERT INTO `u_user` VALUES (1, '2019-04-23 15:26:47', 'admin', '2019-04-23 15:26:53', 'admin', b'1', 28, '123456', NULL, NULL, 'liuyongtao', 'liuyongtao');
-INSERT INTO `u_user` VALUES (2, '2019-04-23 15:26:47', 'admin', '2019-04-23 15:26:53', 'admin', b'1', 28, '123456', NULL, NULL, 'admin', 'admin');
+INSERT INTO `sys_role` VALUES (3, '2019-07-16 17:08:53', 'admin', '2019-07-16 17:08:53', 'admin', b'1', '测试使用', 'TEST', 'test');
 
 SET FOREIGN_KEY_CHECKS = 1;

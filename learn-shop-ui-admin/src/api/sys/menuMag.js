@@ -86,3 +86,18 @@ export function delMenuByIds(ids) {
     }
   });
 }
+
+/**
+ * 通过token 获取菜单信息
+ * @param token
+ * @constructor
+ */
+export function getHomeMenus(token) {
+  return request({
+    url: 'admin-system/menuApi/homeMenus',
+    method: 'get',
+    params: {
+      token
+    }
+  })
+}

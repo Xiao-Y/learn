@@ -201,7 +201,7 @@
       // 添加权限
       handleAdd() {
         this.$router.push({
-          name: 'permissionEdit',
+          name: 'sysPermissionEdit',
           query: {
             optionType: 'add',
             systemModuleSelect: JSON.stringify(this.systemModuleSelect)
@@ -210,7 +210,7 @@
       },
       handleEdit(index, row) {
         this.$router.push({
-          name: 'permissionEdit',
+          name: 'sysPermissionEdit',
           query: {
             optionType: 'edit',
             permissionEdit: JSON.stringify(row),

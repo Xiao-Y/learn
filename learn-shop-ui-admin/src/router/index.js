@@ -39,32 +39,34 @@ export const constantRouterMap = [{
   }]
 }];
 
-// 异步挂载的路由（动态需要根据权限加载的路由表）
+// 异步挂载的路由（动态需要根据权限加载的路由表,
+// 路由的 name = parentPath + childrenPath。必须要唯一，
+// 要与sys_menu 中的 menu_code 一至，不然路由加载不出来）
 export const asyncRouterMap = [{
   path: '/sys',
   component: Home,
   children: [{
-    name: 'whiteListIndex',
+    name: 'sysWhiteListIndex',
     path: 'whiteList/index',
     component: resolve => require(['../views/sys/WhiteList.vue'], resolve)
   }, {
-    name: 'menuListIndex',
+    name: 'sysMenuListIndex',
     path: 'menuList/index',
     component: resolve => require(['../views/sys/MenuList.vue'], resolve)
   }, {
-    name: 'roleListIndex',
+    name: 'sysRoleListIndex',
     path: 'roleList/index',
     component: resolve => require(['../views/sys/RoleList.vue'], resolve)
   }, {
-    name: 'roleEdit',
+    name: 'sysRoleEdit',
     path: 'roleList/roleEdit',
     component: resolve => require(['../views/sys/components/RoleEdit.vue'], resolve)
   }, {
-    name: 'permissionListIndex',
+    name: 'sysPermissionListIndex',
     path: 'permissionList/index',
     component: resolve => require(['../views/sys/PermissionList.vue'], resolve)
   }, {
-    name: 'permissionEdit',
+    name: 'sysPermissionEdit',
     path: 'permissionList/permissionEdit',
     component: resolve => require(['../views/sys/components/PermissionEdit.vue'], resolve)
   }]
@@ -72,23 +74,23 @@ export const asyncRouterMap = [{
   path: '/job',
   component: Home,
   children: [{
-    name: 'autoTaskListIndex',
+    name: 'jobAutoTaskListIndex',
     path: 'autoTaskList/index',
     component: resolve => require(['../views/job/AutoTaskList.vue'], resolve)
   }]
 }, {
-  path: '/product',
+  path: '/pro',
   component: Home,
   children: [{
-    name: 'productListIndex',
+    name: 'proProductListIndex',
     path: 'productList/index',
     component: resolve => require(['../views/product/ProductList.vue'], resolve)
   }, {
-    name: 'productEdit',
+    name: 'proProductEdit',
     path: 'productList/productEdit',
     component: resolve => require(['../views/product/components/ProductEdit.vue'], resolve)
   }, {
-    name: 'productImageEdit',
+    name: 'proProductImageEdit',
     path: 'productList/productImageEdit',
     component: resolve => require(['../views/product/components/ProductImageEdit.vue'], resolve)
   }]
