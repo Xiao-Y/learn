@@ -104,7 +104,7 @@ public class CustomPermissionServiceImpl implements PermissionService {
     public Page<PermissionPo> findPermissionList(PermissionVo permissionVo) {
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
         DefaultSpec<PermissionPo> defaultSpec = new DefaultSpec<>(convert);
-        Pageable pageable = PageRequest.of(permissionVo.getPageNo(), permissionVo.getPageSize());
+        Pageable pageable = new PageRequest(permissionVo.getPageNo(), permissionVo.getPageSize());
         Page<PermissionPo> permissionPos = permissionDao.findAll(defaultSpec, pageable);
         return permissionPos;
     }

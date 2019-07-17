@@ -15,7 +15,7 @@ spring:
   application:
     name: learn-cloud-zuul
 #  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-#    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
+#    static-locations: file:///D:/GitHub/learn/learn-shop-ui-admin/dist
 eureka:
   client:
     serviceUrl:
@@ -37,12 +37,10 @@ zuul:
 #  #敏感头信息
   sensitive-headers:
   routes:
-#    #服务认证和授权
-#    uaa:
-#      path: /auth-server/**
-#      serviceId: learn-shop-public-auth
-##      strip-prefix: false
-#      custom-sensitive-headers: true
+    #服务认证和授权
+    public-auth:
+      path: /public-auth/**
+      serviceId: learn-shop-public-auth
     #系统相关
     admin-system:
       path: /admin-system/**

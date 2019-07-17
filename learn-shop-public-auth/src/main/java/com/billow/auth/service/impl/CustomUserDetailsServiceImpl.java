@@ -61,8 +61,8 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         }
         userRolePos.stream().forEach(ur -> {
             Long roleId = ur.getRoleId();
-            Optional<RolePo> rolePo = roleDao.findById(roleId);
-            if (!rolePo.isPresent()) {
+            RolePo rolePo = roleDao.findOne(roleId);
+            if (rolePo == null) {
                 logger.error("用户：{}，roleId:{},未查询到信息！", usercode, roleId);
                 return;
             }
@@ -72,7 +72,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 //                    .map(m -> new SimpleGrantedAuthority(m.getUrl()))
 //                    .collect(Collectors.toList());
 //            authorities.addAll(collect);
-            authorities.add(new SimpleGrantedAuthority(rolePo.get().getRoleCode()));
+            authorities.add(new SimpleGrantedAuthority(rolePo.getRoleCode()));
         });
         if (CollectionUtils.isEmpty(authorities)) {
             logger.error("用户：{}，未分配权限！", usercode);
