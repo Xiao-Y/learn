@@ -7,9 +7,18 @@
           <el-collapse-item title="菜单树" name="1">
             <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
             <div class="sidebar">
-              <el-tree show-checkbox default-expand-all node-key="id" :data="menus"
-                       ref="tree2" :highlight-current="true" :props="defaultProps" :check-strictly="true"
-                       @node-click="changeCheck" @check="changeCheck" :filter-node-method="filterNode">
+              <el-tree show-checkbox
+                       default-expand-all
+                       node-key="id"
+                       :data="menus"
+                       ref="tree2"
+                       :expand-on-click-node = "false"
+                       :highlight-current="true"
+                       :props="defaultProps"
+                       :check-strictly="true"
+                       @node-click="changeCheck"
+                       @check="changeCheck"
+                       :filter-node-method="filterNode">
               </el-tree>
             </div>
           </el-collapse-item>

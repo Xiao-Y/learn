@@ -2,43 +2,26 @@
   <div>
     <el-row>
       <el-collapse value="1">
-        <el-collapse-item title="查询条件" name="1">
-          <!-- <el-form :inline="true" :model="queryFilter" class="demo-form-inline">
+        <el-collapse-item name="1">
+          <template slot="title">
+            <b>查询条件</b><i class="el-icon-search"></i>
+          </template>
+          <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline">
             <el-row>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
+              <el-form-item label="角色名称" prop="roleName">
+                <el-input v-model="queryFilter.roleName" placeholder="权限名称"></el-input>
               </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
-              </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
-              </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
-              </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
-              </el-form-item>
-              <el-form-item label="活动区域">
-                <el-select v-model="queryForm.region" placeholder="活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
+              <el-form-item label="角色CODE" prop="roleCode">
+                <el-input v-model="queryFilter.roleCode" placeholder="权限CODE"></el-input>
               </el-form-item>
             </el-row>
-            <el-row>
-              <div class="buttons">
-                <el-button type="primary" size="mini" @click="onQuery">查询</el-button>
-              </div>
-            </el-row>
-          </el-form> -->
+          </el-form>
         </el-collapse-item>
       </el-collapse>
     </el-row>
-    <el-tooltip class="item" effect="dark" content="添加" placement="top-start">
-      <el-button @click="handleAdd()" type="primary" size="mini"><i class="el-icon-plus"></i></el-button>
-    </el-tooltip>
+    <el-button type="success" size="mini" @click="handleAdd" icon="el-icon-plus">添加</el-button>
+    <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search">查询</el-button>
+    <el-button type="danger" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
     <el-row>
       <template>
         <el-table :data="tableData" border style="width: 100%">
@@ -120,9 +103,8 @@
           pageSize: null,//每页要显示的记录数
           totalPages: null,// 总页数
           // 查询条件
-          commodityName: null,
-          localityGrowth: null,
-          status: null
+          roleName: null,
+          roleCode: null
         },
         tableData: [],
         activeNames: ['1']
@@ -136,7 +118,7 @@
       // 查询按钮
       onQuery() {
         // 从第1页开始
-        // this.queryFilter.pageNo = 1;
+        this.queryFilter.pageNo = 1;
         // 请求数据
         this.LoadDataRoleList();
         // 关闭查询折叠栏

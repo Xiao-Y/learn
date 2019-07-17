@@ -2,48 +2,48 @@
   <div>
     <el-row>
       <el-collapse value="1">
-        <el-collapse-item title="查询条件" name="1">
-          <!-- <el-form :inline="true" :model="queryFilter" class="demo-form-inline">
+        <el-collapse-item name="1">
+          <template slot="title">
+            <b>查询条件</b><i class="el-icon-search"></i>
+          </template>
+          <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
+              <el-form-item label="权限名称" prop="permissionName">
+                <el-input v-model="queryFilter.permissionName" placeholder="权限名称"></el-input>
               </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
+              <el-form-item label="权限CODE" prop="permissionCode">
+                <el-input v-model="queryFilter.permissionCode" placeholder="权限CODE"></el-input>
               </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
+              <el-form-item label="授权链接" prop="url">
+                <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
               </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
-              </el-form-item>
-              <el-form-item label="审批人">
-                <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
-              </el-form-item>
-              <el-form-item label="活动区域">
-                <el-select v-model="queryForm.region" placeholder="活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
+              <el-form-item label="系统模块" prop="systemModules">
+                <el-select
+                  v-model="queryFilter.systemModules"
+                  multiple
+                  filterable
+                  default-first-option
+                  placeholder="请选择系统模块">
+                  <el-option
+                    v-for="item in systemModuleSelect"
+                    :key="item.id"
+                    :label="item.fieldDisplay"
+                    :value="item.fieldValue">
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-row>
-            <el-row>
-              <div class="buttons">
-                <el-button type="primary" size="mini" @click="onQuery">查询</el-button>
-              </div>
-            </el-row>
-          </el-form> -->
+          </el-form>
         </el-collapse-item>
       </el-collapse>
     </el-row>
-    <el-tooltip class="item" effect="dark" content="添加" placement="top-start">
-      <el-button @click="handleAdd()" type="primary" size="mini"><i class="el-icon-plus"></i></el-button>
-    </el-tooltip>
+    <el-button type="success" size="mini" @click="handleAdd" icon="el-icon-plus">添加</el-button>
+    <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search">查询</el-button>
+    <el-button type="danger" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
     <el-row>
       <template>
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column label="权限名称" prop="permissionName" width="150"></el-table-column>
-<!--          <el-table-column label="权限CODE" prop="permissionCode" width="150"></el-table-column>-->
           <el-table-column label="授权链接" prop="url"></el-table-column>
           <el-table-column label="权限描述" prop="descritpion"></el-table-column>
           <el-table-column label="系统模块" prop="systemModule">
@@ -130,7 +130,6 @@
 </template>
 
 <script>
-  //  import {Message} from "element-ui";
   import {LoadDataPermissionList, DeletePermissionById, ProhibitPermissionById} from "../../api/sys/permissionMag";
   import {LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
 
@@ -144,9 +143,10 @@
           pageSize: null,//每页要显示的记录数
           totalPages: null,// 总页数
           // 查询条件
-          commodityName: null,
-          localityGrowth: null,
-          status: null
+          permissionName: null,
+          permissionCode: null,
+          systemModule: null,
+          url: null
         },
         tableData: [],
         activeNames: ['1'],
@@ -163,7 +163,7 @@
       // 查询按钮
       onQuery() {
         // 从第1页开始
-        // this.queryFilter.pageNo = 1;
+        this.queryFilter.pageNo = 1;
         // 请求数据
         this.LoadDataPermissionList();
         // 关闭查询折叠栏

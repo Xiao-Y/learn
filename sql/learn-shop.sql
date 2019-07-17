@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 17/07/2019 09:54:40
+ Date: 17/07/2019 11:41:11
 */
 
 SET NAMES utf8mb4;
@@ -225,10 +225,10 @@ INSERT INTO `sys_menu` VALUES (3, '/sys/whiteList/index', 'sysWhiteListIndex', '
 INSERT INTO `sys_menu` VALUES (4, '/sys/menuList/index', 'sysMenuListIndex', '菜单管理', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (5, '', 'job', '自动任务', NULL, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (6, '/job/autoTaskList/index', 'jobAutoTaskListIndex', '自动任务', 5, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:48:16', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (7, '', 'pro', '产品管理', NULL, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (8, '/product/productList/index', 'proProductListIndex', '产品管理', 7, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:48:33', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (9, '/product/productList/productEdit', 'proProductEdit', '修改产品信息', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:24', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (10, '/product/productList/productImageEdit', 'proProductImageEdit', '修改产品图片', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:53', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (7, '', 'pro', '产品系统', NULL, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-07-17 11:22:59', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (8, '/pro/productList/index', 'proProductListIndex', '产品管理', 7, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:48:33', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (9, '/pro/productList/productEdit', 'proProductEdit', '修改产品信息', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:24', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (10, '/pro/productList/productImageEdit', 'proProductImageEdit', '修改产品图片', 8, b'0', '', '', '2019-04-23 15:41:51', 'admin', '2019-05-27 13:50:53', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (11, '/sys/roleList/index', 'sysRoleListIndex', '角色管理', 2, b'1', '', '', '2019-04-23 15:41:51', 'admin', '2019-04-23 15:42:00', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (12, '/sys/permissionList/index', 'sysPermissionListIndex', '权限管理', 2, b'1', '', NULL, '2019-07-10 15:22:05', 'admin', '2019-07-10 15:40:23', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (13, '/sys/permissionList/permissionEdit', 'sysPermissionEdit', '修改权限信息', 12, b'0', '', NULL, '2019-07-10 17:42:20', 'admin', '2019-07-10 17:42:20', 'admin', b'1');
@@ -262,7 +262,7 @@ CREATE TABLE `sys_permission`  (
 -- ----------------------------
 INSERT INTO `sys_permission` VALUES (1, '查询订单', NULL, '/api/order/**', '3', '查询定单相关', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:00:00', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (2, '测试', '测试', '/api/test/**', '1', '测试', b'0', '2019-04-23 15:41:51', '', '2019-07-12 14:00:15', 'admin', NULL, NULL, NULL);
-INSERT INTO `sys_permission` VALUES (3, '测试', '测试', '/api/getWords', '1', '测试', b'0', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:00:23', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (3, '测试', '测试', '/api/getWords', '1,3', '测试', b'0', '2019-04-23 15:41:51', 'admin', '2019-07-17 10:42:32', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (4, '初始化菜单信息', NULL, '/menuApi/homeMenus', '1', '初始化菜单信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:01:05', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (5, '菜单管理信息', NULL, '/menuApi/findMenus', '1', '菜单管理信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:01:15', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (6, '根据id查询菜单信息', NULL, '/menuApi/findMenuById/**', '1', '根据id查询菜单信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:01:27', 'admin', NULL, NULL, NULL);

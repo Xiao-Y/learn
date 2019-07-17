@@ -44,8 +44,6 @@ function filterAsyncRouter(accessedRouters, menus) {
       for (var j = accessedRouters[i].children.length - 1; j >= 0; j--) {
         // var url = basePath + '/' + accessedRouters[i].children[j].path;
         var routerName = accessedRouters[i].children[j].name;
-        console.info("routerName:", routerName);
-        console.info("menuCodes:", menuCodes);
         if (menuCodes.indexOf(routerName) == -1) {
           accessedRouters[i].children.splice(j, 1);
         }

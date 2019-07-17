@@ -1,17 +1,12 @@
 <template>
   <div>
-    <div class="crumbs">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item><i class="el-icon-setting"></i>商品列表</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
-    <template>
+    <el-row>
       <el-collapse v-model="activeNames">
         <el-collapse-item name="1">
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form :model="queryFilter" ref="queryFilter" :inline="true" label-width="130px" size="mini">
+          <el-form :model="queryFilter" ref="queryFilter" :inline="true" size="mini">
             <el-form-item label="商品名称" prop="commodityName">
               <el-input v-model="queryFilter.commodityName" placeholder="请输入内容"></el-input>
             </el-form-item>
@@ -21,14 +16,14 @@
             <el-form-item label="是否有货" prop="jobStatus">
               <el-input v-model="queryFilter.status" placeholder="请输入内容"></el-input>
             </el-form-item>
-            <el-form-item>
-              <el-button type="success" @click="handleAdd" icon="el-icon-plus">添加</el-button>
-              <el-button type="primary" @click="onQuery" icon="el-icon-search">查询</el-button>
-              <el-button type="danger" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
-            </el-form-item>
           </el-form>
         </el-collapse-item>
       </el-collapse>
+    </el-row>
+    <el-button type="success" size="mini" @click="handleAdd" icon="el-icon-plus">添加</el-button>
+    <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search">查询</el-button>
+    <el-button type="danger" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
+    <el-row>
       <el-table :data="tableData" border style="width:100%">
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -115,19 +110,21 @@
           </template>
         </el-table-column>
       </el-table>
-    </template>
-    <template style="margin-bottom: 20px">
-      <el-pagination
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="queryFilter.pageNo"
-        :page-sizes="[10, 20, 30, 40]"
-        layout="total,sizes, prev, pager, next"
-        :page-size="queryFilter.pageSize"
-        :total="queryFilter.recordCount">
-      </el-pagination>
-    </template>
+    </el-row>
+    <el-row>
+      <template style="margin-bottom: 20px">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="queryFilter.pageNo"
+          :page-sizes="[10, 20, 30, 40]"
+          layout="total,sizes, prev, pager, next"
+          :page-size="queryFilter.pageSize"
+          :total="queryFilter.recordCount">
+        </el-pagination>
+      </template>
+    </el-row>
   </div>
 </template>
 
@@ -251,11 +248,31 @@
 
 <style scoped>
   .el-row {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
   .el-form-item {
     margin-bottom: 3px;
+  }
+
+  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+  ::-webkit-scrollbar {
+    width: 3px; /*滚动条宽度*/
+    height: 3px; /*滚动条高度*/
+  }
+
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px; /*滚动条的背景区域的圆角*/
+    background-color: white; /*滚动条的背景颜色*/
+  }
+
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px; /*滚动条的圆角*/
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #2e363f; /*滚动条的背景颜色*/
   }
 
   .demo-table-expand {
@@ -263,7 +280,7 @@
   }
 
   .demo-table-expand label {
-    width: 20px;
+    width: 90px;
     color: #99a9bf;
   }
 

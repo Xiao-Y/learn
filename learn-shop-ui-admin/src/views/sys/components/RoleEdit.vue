@@ -54,24 +54,24 @@
               row-key="id"
             >
               <el-table-column type="selection" width="35" prop="checked" reserve-selection></el-table-column>
-              <el-table-column label="权限名称" prop="permissionName" width="150"></el-table-column>
+              <el-table-column label="权限名称" prop="permissionName" width="300"></el-table-column>
               <el-table-column label="授权链接" prop="url"></el-table-column>
               <el-table-column type="expand" label="详细" width="50">
                 <template slot-scope="scope">
                   <el-form label-position="left" inline class="demo-table-expand">
-                    <el-form-item label="创建人">
+                    <el-form-item label="创建人：">
                       <span>{{ scope.row.creatorCode }}</span>
                     </el-form-item>
-                    <el-form-item label="更新人">
+                    <el-form-item label="更新人：">
                       <span>{{ scope.row.updaterCode }}</span>
                     </el-form-item>
-                    <el-form-item label="创建时间">
+                    <el-form-item label="创建时间：">
                       <el-date-picker type="datetime" v-model="scope.row.createTime" readonly></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="更新时间">
+                    <el-form-item label="更新时间：">
                       <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="是否有效">
+                    <el-form-item label="是否有效：">
                       <el-switch
                         v-model="scope.row.validInd"
                         active-text="有效"
@@ -79,10 +79,10 @@
                         disabled
                       ></el-switch>
                     </el-form-item>
-                    <el-form-item label="权限CODE">
+                    <el-form-item label="权限CODE：">
                       <span>{{ scope.row.permissionCode }}</span>
                     </el-form-item>
-                    <el-form-item label="系统模块">
+                    <el-form-item label="系统模块：">
                       <el-select
                         v-model="scope.row.systemModules"
                         multiple
@@ -99,7 +99,7 @@
                         ></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="权限描述">
+                    <el-form-item label="权限描述：">
                       <span>{{ scope.row.descritpion }}</span>
                     </el-form-item>
                   </el-form>
