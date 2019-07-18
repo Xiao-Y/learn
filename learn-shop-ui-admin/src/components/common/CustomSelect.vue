@@ -105,6 +105,7 @@
       }
     },
     watch: {
+      // 有时第一次加载的时候 created 中 datasource 为空，以下同理
       datasource: function (newVal, oldVal) {
         console.info("watch 加载数据源字典：", newVal);
         this.currentSource = newVal;

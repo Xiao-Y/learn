@@ -41,7 +41,6 @@
           <el-table-column label="系统模块" prop="systemModule">
             <template slot-scope="scope">
               <custom-select v-model="scope.row.systemModules"
-                             :field-type="SystemModule"
                              :datasource="systemModuleSelect"
                              :value-key="scope.row.permissionCode"
                              placeholder="请选择系统模块"
