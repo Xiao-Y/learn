@@ -116,8 +116,8 @@
     </el-row>
 
     <!-- 菜单修改/添加dialog start -->
-    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false" size="small">
-      <el-form :model="editMenu" :rules="rules22" label-width="100px" ref="editMenu" :inline-message="true">
+    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+      <el-form :model="editMenu" :rules="rules22" label-width="130px" ref="editMenu" :inline-message="true">
         <el-form-item label="父菜单标题">
           <el-col :span="18">
             <el-input v-model="editMenu.parentTtile" readonly></el-input>
@@ -153,12 +153,6 @@
             <el-switch v-model="editMenu.display" active-text="显示" inactive-text="隐藏"></el-switch>
           </el-col>
         </el-form-item>
-        <!--<el-form-item label="活动区域" :label-width="formLabelWidth">-->
-        <!--<el-select v-model="form.region" placeholder="请选择活动区域">-->
-        <!--<el-option label="区域一" value="shanghai"></el-option>-->
-        <!--<el-option label="区域二" value="beijing"></el-option>-->
-        <!--</el-select>-->
-        <!--</el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancledialog('editMenu')">取 消</el-button>

@@ -11,9 +11,9 @@
 </template>
 
 <script>
-  import vHead from './Header.vue'
-  import vSidebar from './Sidebar.vue'
-  import store from '@/store'
+  import vHead from '../../components/common/Header.vue'
+  import vSidebar from '../../components/common/Sidebar.vue'
+  import store from '../../store'
 
   export default {
     components: {
