@@ -83,21 +83,13 @@
                       <span>{{ scope.row.permissionCode }}</span>
                     </el-form-item>
                     <el-form-item label="系统模块：">
-                      <el-select
-                        v-model="scope.row.systemModules"
-                        multiple
-                        filterable
-                        default-first-option
-                        disabled
-                        placeholder="请选择文章标签"
-                      >
-                        <el-option
-                          v-for="item in systemModuleSelect"
-                          :key="item.id"
-                          :label="item.fieldDisplay"
-                          :value="item.fieldValue"
-                        ></el-option>
-                      </el-select>
+                      <custom-select v-model="scope.row.systemModules"
+                                     :datasource="systemModuleSelect"
+                                     :value-key="scope.row.permissionCode"
+                                     placeholder="请选择系统模块"
+                                     disabled
+                                     multiple>
+                      </custom-select>
                     </el-form-item>
                     <el-form-item label="权限描述：">
                       <span>{{ scope.row.descritpion }}</span>
@@ -127,8 +119,12 @@
     LoadDataMenuIdList,
     SaveRole
   } from "../../../api/sys/roleMag";
+  import CustomSelect from '../../../components/common/CustomSelect.vue';
 
   export default {
+    components: {
+      CustomSelect
+    },
     data() {
       return {
         activeNames: ["0", "1", "2"],
@@ -138,7 +134,7 @@
           label: "title"
         },
         roleInfo: {
-          id:"",
+          id: "",
           roleName: "",
           roleCode: "",
           descritpion: "",
@@ -157,7 +153,7 @@
       };
     },
     created() {
-      if(this.$route.query.optionType === 'edit'){
+      if (this.$route.query.optionType === 'edit') {
         this.roleInfo = JSON.parse(this.$route.query.roleEdit);
       }
       // 初始化菜单树

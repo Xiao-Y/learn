@@ -18,19 +18,11 @@
                 <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
               </el-form-item>
               <el-form-item label="系统模块" prop="systemModules">
-                <el-select
-                  v-model="queryFilter.systemModules"
-                  multiple
-                  filterable
-                  default-first-option
-                  placeholder="请选择系统模块">
-                  <el-option
-                    v-for="item in systemModuleSelect"
-                    :key="item.id"
-                    :label="item.fieldDisplay"
-                    :value="item.fieldValue">
-                  </el-option>
-                </el-select>
+                <custom-select v-model="queryFilter.systemModules"
+                               :datasource="systemModuleSelect"
+                               placeholder="请选择系统模块"
+                               multiple>
+                </custom-select>
               </el-form-item>
             </el-row>
           </el-form>
@@ -48,20 +40,13 @@
           <el-table-column label="权限描述" prop="descritpion"></el-table-column>
           <el-table-column label="系统模块" prop="systemModule">
             <template slot-scope="scope">
-              <el-select
-                v-model="scope.row.systemModules"
-                multiple
-                filterable
-                default-first-option
-                disabled
-                placeholder="请选择文章标签">
-                <el-option
-                  v-for="item in systemModuleSelect"
-                  :key="item.id"
-                  :label="item.fieldDisplay"
-                  :value="item.fieldValue">
-                </el-option>
-              </el-select>
+              <custom-select v-model="scope.row.systemModules"
+                             :field-type="SystemModule"
+                             :datasource="systemModuleSelect"
+                             :value-key="scope.row.permissionCode"
+                             placeholder="请选择系统模块"
+                             multiple>
+              </custom-select>
             </template>
           </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
@@ -132,8 +117,12 @@
 <script>
   import {LoadDataPermissionList, DeletePermissionById, ProhibitPermissionById} from "../../api/sys/permissionMag";
   import {LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
+  import CustomSelect from '../../components/common/CustomSelect.vue';
 
   export default {
+    components: {
+      CustomSelect
+    },
     data() {
       return {
         queryFilter: {
@@ -150,14 +139,15 @@
         },
         tableData: [],
         activeNames: ['1'],
-        systemModuleSelect: []
+        systemModuleSelect: [],
+        SystemModule: 'SystemModule'
       }
     },
     created() {
-      // 请数据殂
-      this.LoadDataPermissionList();
       // 加载系统模块的下拉
       this.LoadSysDataDictionary('SystemModule');
+      // 请数据殂
+      this.LoadDataPermissionList();
     },
     methods: {
       // 查询按钮

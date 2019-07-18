@@ -15,19 +15,11 @@
           </el-form-item>
           <el-form-item label="系统模块" prop="systemModules">
             <template slot-scope="scope">
-              <el-select
-                v-model="permissionInfo.systemModules"
-                multiple
-                filterable
-                default-first-option
-                placeholder="请选择系统模块">
-                <el-option
-                  v-for="item in systemModuleSelect"
-                  :key="item.id"
-                  :label="item.fieldDisplay"
-                  :value="item.fieldValue">
-                </el-option>
-              </el-select>
+              <custom-select v-model="permissionInfo.systemModules"
+                             :datasource="systemModuleSelect"
+                             placeholder="请选择系统模块"
+                             multiple>
+              </custom-select>
             </template>
           </el-form-item>
           <el-form-item label="权限描述" prop="descritpion">
@@ -50,8 +42,12 @@
 
 <script>
   import {SavePermission, UpdatePermission} from "../../../api/sys/permissionMag";
+  import CustomSelect from '../../../components/common/CustomSelect.vue';
 
   export default {
+    components: {
+      CustomSelect
+    },
     data() {
       return {
         optionType: '', // 操作类型，edit,add
