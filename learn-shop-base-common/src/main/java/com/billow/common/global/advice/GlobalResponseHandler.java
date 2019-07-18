@@ -75,11 +75,13 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
                 resCode = ResCodeEnum.RESCODE_OTHER_ERROR;
             }
             baseResponse = new BaseResponse(resCode);
+            baseResponse.setRequestUrl(map.get("path") + "");
         } else {
             baseResponse = BaseResponse.success(body);
         }
 
-        log.debug("\n响应参数：{} ", JSON.toJSONString(baseResponse));
+//        baseResponse.setRequestUrl()
+        log.info("\n响应参数：{} ", JSON.toJSONString(baseResponse));
 
         // 处理返回值是String的情况
         if (body instanceof String) {

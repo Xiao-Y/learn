@@ -17,6 +17,7 @@ public class BaseResponse<T> implements Serializable {
     private String signature;
     private T resData;
     private Map<String, String> ext;
+    private String requestUrl;
 
     public BaseResponse() {
         this.resCode = ResCodeEnum.OK;
@@ -147,6 +148,15 @@ public class BaseResponse<T> implements Serializable {
         return new BaseResponse(ResCodeEnum.RESCODE_OTHER_ERROR, body);
     }
 
+    public String getRequestUrl() {
+        return requestUrl;
+    }
+
+    public BaseResponse<T> setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "BaseResponse{" +
@@ -158,6 +168,7 @@ public class BaseResponse<T> implements Serializable {
                 ", signature='" + signature + '\'' +
                 ", resData=" + resData +
                 ", ext=" + ext +
+                ", requestUrl='" + requestUrl + '\'' +
                 '}';
     }
 }
