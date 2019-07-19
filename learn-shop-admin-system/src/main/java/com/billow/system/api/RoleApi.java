@@ -64,6 +64,6 @@ public class RoleApi extends BaseApi {
     @PostMapping("/saveRole")
     public RoleVo saveRole(@RequestBody RoleVo roleVo) throws Exception {
         roleService.saveRole(roleVo);
-        return null;
+        return roleVo;
     }
 }

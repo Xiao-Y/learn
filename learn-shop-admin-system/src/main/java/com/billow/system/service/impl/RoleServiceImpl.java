@@ -94,7 +94,7 @@ public class RoleServiceImpl implements RoleService {
         if (id != null) {
             RolePo one = roleDao.findOne(id);
             // 更新角色CODE
-            commonRolePermissionRedis.updateRoleCode(one.getRoleCode(), roleVo.getRoleCode());
+            commonRolePermissionRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
         }
 
         roleDao.save(rolePo);

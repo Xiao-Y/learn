@@ -79,7 +79,8 @@
               type: 'success',
               message: '更新成功!'
             });
-
+            //传递一个map，permissionInfo 是 key，resData 是 value
+            this.EventBusUtils.send('permissionInfo', res.resData);
             _this.$router.back(-1);
           });
         } else { // add
@@ -88,12 +89,12 @@
               type: 'success',
               message: '保存成功!'
             });
-
             _this.$router.back(-1);
           });
         }
       },
       onReturn() {
+        //调用router回退页面
         this.$router.back(-1);
       },
       onReset(permissionInfo) {

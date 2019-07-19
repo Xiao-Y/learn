@@ -8,6 +8,9 @@ import types from '@/store/mutationsType'
 const whiteList = ['/login', '/authredirect'] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
+  // console.info("to:",to);
+  // console.info("from:",from);
+  // console.info("next:",next);
   if (getAccessToken()) { // 判断是否有token
     if (to.path === '/login') {
       store.commit(types.SET_ROUTERS);

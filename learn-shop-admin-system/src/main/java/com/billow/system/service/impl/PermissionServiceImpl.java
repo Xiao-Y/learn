@@ -104,8 +104,8 @@ public class PermissionServiceImpl implements PermissionService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void savePermission(PermissionVo permissionVo) {
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
-        permissionDao.save(convert);
-        ConvertUtils.convert(convert, permissionVo);
+        PermissionPo save = permissionDao.save(convert);
+        ConvertUtils.convert(save, permissionVo);
     }
 
     @Override

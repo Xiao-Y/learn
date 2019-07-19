@@ -219,6 +219,7 @@
             type: "success",
             message: "保存成功!"
           });
+          this.EventBusUtils.send('roleInfo', res.resData);
           _this.$router.back(-1);
         });
       },

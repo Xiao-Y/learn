@@ -80,12 +80,12 @@
     created() {
       // 当没有外部数据源并且fieldType不为空时，查询数据字典
       if (this.datasource == null && this.fieldType != null) {
-        console.info("查询数据字典 fieldType：", this.fieldType);
+        // console.info("查询数据字典 fieldType：", this.fieldType);
         this.LoadSysDataDictionary(this.fieldType);
       }
       // 当数据源中有数据时，加载数据源
       if (this.datasource && this.datasource.length > 0) {
-        console.info("created 加载数据源字典：", this.datasource);
+        // console.info("created 加载数据源字典：", this.datasource);
         this.currentSource = this.datasource;
       }
       this.currentValue = this.systemModules;
@@ -107,11 +107,11 @@
     watch: {
       // 有时第一次加载的时候 created 中 datasource 为空，以下同理
       datasource: function (newVal, oldVal) {
-        console.info("watch 加载数据源字典：", newVal);
+        // console.info("watch 加载数据源字典：", newVal);
         this.currentSource = newVal;
       },
       systemModules:function (newVal, oldVal) {
-        console.info("watch systemModules：", newVal);
+        // console.info("watch systemModules：", newVal);
         this.currentValue = newVal;
       }
     }

@@ -31,7 +31,8 @@
     </el-row>
     <el-button type="success" size="mini" @click="handleAdd" icon="el-icon-plus">添加</el-button>
     <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search">查询</el-button>
-    <el-button type="danger" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
+    <el-button type="info" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
+    <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
     <el-row>
       <template>
         <el-table :data="tableData" border style="width: 100%">
@@ -148,6 +149,14 @@
       // 请数据殂
       this.LoadDataPermissionList();
     },
+    //每次激活时
+    activated() {
+      // 根据key名获取传递回来的参数，data 就是 map
+      this.EventBusUtils.receive('permissionInfo', function (data) {
+        var index = this.tableData.findIndex(f => f.id === data.id);
+        this.tableData.splice(index, 1, data);
+      }.bind(this));
+    },
     methods: {
       // 查询按钮
       onQuery() {
@@ -171,22 +180,6 @@
           this.queryFilter.totalPages = data.totalPages;
         });
       },
-      //加载下拉列表
-      LoadSysDataDictionary(fieldType) {
-        LoadSysDataDictionary(fieldType).then(res => {
-          this.systemModuleSelect = res.resData;
-        });
-      },
-      // 翻页
-      handleCurrentChange(val) {
-        this.queryFilter.pageNo = val;
-        this.LoadDataPermissionList();
-      },
-      // 改变页面大小
-      handleSizeChange(val) {
-        this.queryFilter.pageSize = val;
-        this.LoadDataPermissionList();
-      },
       // 添加权限
       handleAdd() {
         this.$router.push({
@@ -197,6 +190,10 @@
           }
         });
       },
+      refresh() {
+        // 请数据殂
+        this.LoadDataPermissionList();
+      },
       handleEdit(index, row) {
         this.$router.push({
           name: 'sysPermissionEdit',
@@ -205,27 +202,6 @@
             permissionEdit: JSON.stringify(row),
             systemModuleSelect: JSON.stringify(this.systemModuleSelect)
           }
-        });
-      },
-      handleProhibit(index, row) {
-        var _this = this;
-        _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          ProhibitPermissionById(row.id).then(res => {
-            row.validInd = res.resData.validInd;
-            _this.$message({
-              type: 'success',
-              message: '禁用成功!'
-            });
-          });
-        }).catch((err) => {
-          _this.$message({
-            type: 'info',
-            message: '已取消禁用'
-          });
         });
       },
       handleDelete(index, row) {
@@ -246,6 +222,43 @@
           _this.$message({
             type: 'info',
             message: '已取消删除'
+          });
+        });
+      },
+      //加载下拉列表
+      LoadSysDataDictionary(fieldType) {
+        LoadSysDataDictionary(fieldType).then(res => {
+          this.systemModuleSelect = res.resData;
+        });
+      },
+      // 翻页
+      handleCurrentChange(val) {
+        this.queryFilter.pageNo = val;
+        this.LoadDataPermissionList();
+      },
+      // 改变页面大小
+      handleSizeChange(val) {
+        this.queryFilter.pageSize = val;
+        this.LoadDataPermissionList();
+      },
+      handleProhibit(index, row) {
+        var _this = this;
+        _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          ProhibitPermissionById(row.id).then(res => {
+            row.validInd = res.resData.validInd;
+            _this.$message({
+              type: 'success',
+              message: '禁用成功!'
+            });
+          });
+        }).catch((err) => {
+          _this.$message({
+            type: 'info',
+            message: '已取消禁用'
           });
         });
       }

@@ -114,6 +114,14 @@
       // 请数据殂
       this.LoadDataRoleList();
     },
+    //每次激活时
+    activated() {
+      // 根据key名获取传递回来的参数，data 就是 map
+      this.EventBusUtils.receive('roleInfo', function (data) {
+        var index = this.tableData.findIndex(f => f.id === data.id);
+        this.tableData.splice(index, 1, data);
+      }.bind(this));
+    },
     methods: {
       // 查询按钮
       onQuery() {
