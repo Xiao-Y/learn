@@ -1,16 +1,12 @@
-package com.billow.auth.init;
+package com.billow.system.init;
 
-import com.billow.auth.dao.PermissionDao;
-import com.billow.auth.dao.RoleDao;
-import com.billow.auth.dao.RolePermissionDao;
-import com.billow.auth.pojo.po.PermissionPo;
-import com.billow.auth.pojo.po.RolePermissionPo;
-import com.billow.auth.pojo.po.RolePo;
-import com.billow.auth.service.PermissionService;
-import com.billow.auth.utils.RedisUtils;
+import com.billow.common.redis.RedisUtils;
+import com.billow.system.dao.RoleDao;
+import com.billow.system.pojo.po.PermissionPo;
+import com.billow.system.pojo.po.RolePo;
+import com.billow.system.service.PermissionService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

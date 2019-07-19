@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author liuyongtao
  * @create 2018-11-05 15:11
  */
-@Api(value = "UserApi", description = "用户信息操作")
+@Api(value = "用户信息操作")
 @RestController
 @RequestMapping("/userApi")
 public class UserApi extends BaseApi {

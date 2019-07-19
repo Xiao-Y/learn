@@ -1,7 +1,5 @@
 package com.billow.auth.config;
 
-import com.billow.auth.service.PermissionService;
-import com.billow.auth.service.impl.CustomPermissionServiceImpl;
 import com.billow.auth.service.impl.CustomUserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -14,12 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  */
 @Configuration
 public class RbacBeanConfig {
-
-    @Bean
-    @ConditionalOnMissingBean(PermissionService.class)
-    public PermissionService permissionService() {
-        return new CustomPermissionServiceImpl();
-    }
 
     @Bean
     @ConditionalOnMissingBean(UserDetailsService.class)

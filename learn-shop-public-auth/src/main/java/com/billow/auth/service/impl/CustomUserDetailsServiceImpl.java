@@ -6,7 +6,6 @@ import com.billow.auth.dao.UserRoleDao;
 import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
-import com.billow.auth.service.PermissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -39,8 +37,6 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     private UserRoleDao userRoleDao;
     @Autowired
     private RoleDao roleDao;
-//    @Autowired
-//    private PermissionService permissionService;
 
     @Override
     public UserDetails loadUserByUsername(String usercode) throws UsernameNotFoundException {
@@ -66,12 +62,6 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
                 logger.error("用户：{}，roleId:{},未查询到信息！", usercode, roleId);
                 return;
             }
-//            Set<PermissionPo> permissionByRole = permissionService.findPermissionByRole(rolePo.get());
-//            List<SimpleGrantedAuthority> collect = permissionByRole.stream()
-//                    .filter(f -> !StringUtils.isBlank(f.getUrl()))
-//                    .map(m -> new SimpleGrantedAuthority(m.getUrl()))
-//                    .collect(Collectors.toList());
-//            authorities.addAll(collect);
             authorities.add(new SimpleGrantedAuthority(rolePo.getRoleCode()));
         });
         if (CollectionUtils.isEmpty(authorities)) {

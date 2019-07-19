@@ -1,6 +1,6 @@
-package com.billow.common.global.advice;
+package com.billow.aop.global.advice;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
@@ -81,7 +81,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         }
 
 //        baseResponse.setRequestUrl()
-        log.info("\n响应参数：{} ", JSON.toJSONString(baseResponse));
+        log.info("\n响应参数：{} ", JSONObject.toJSONString(baseResponse));
 
         // 处理返回值是String的情况
         if (body instanceof String) {

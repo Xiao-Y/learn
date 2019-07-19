@@ -65,7 +65,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Page<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception {
-        DefaultSpec<RolePo> defaultSpec = new DefaultSpec<>(roleVo);
+        RolePo rolePo = ConvertUtils.convert(roleVo, RolePo.class);
+        DefaultSpec<RolePo> defaultSpec = new DefaultSpec<>(rolePo);
         Pageable pageable = new PageRequest(roleVo.getPageNo(), roleVo.getPageSize());
         Page<RolePo> rolePos = roleDao.findAll(defaultSpec, pageable);
         return rolePos;

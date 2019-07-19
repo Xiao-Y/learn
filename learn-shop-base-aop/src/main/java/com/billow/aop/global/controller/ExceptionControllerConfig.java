@@ -1,4 +1,4 @@
-package com.billow.common.global.controller;
+package com.billow.aop.global.controller;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;

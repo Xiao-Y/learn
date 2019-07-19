@@ -72,7 +72,7 @@ auth:
       access-token-uri: http://127.0.0.1:9999/oauth/token
 
 logging.level.org.springframework.security: DEBUG
-logging.level.org.springframework: DEBUG
+#logging.level.org.springframework: DEBUG
 
 #security:
 #  oauth2:

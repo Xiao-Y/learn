@@ -34,6 +34,7 @@
 
         <module>learn-shop-base-common</module>
         <module>learn-shop-base-tools</module>
+        <module>learn-shop-base-aop</module>
 
         <module>learn-shop-public-job</module>
         <!--<module>learn-shop-public-tx</module>-->
@@ -99,7 +100,7 @@
             </dependency>
             <dependency>
                 <groupId>com.billow</groupId>
-                <artifactId>learn-shop-base-pojo</artifactId>
+                <artifactId>learn-shop-base-aop</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

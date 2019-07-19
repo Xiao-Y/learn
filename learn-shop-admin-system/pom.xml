@@ -17,6 +17,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-aop</artifactId>
+        </dependency>
         <!-- 认证、授权 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

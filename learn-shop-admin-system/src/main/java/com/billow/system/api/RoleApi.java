@@ -41,6 +41,7 @@ public class RoleApi extends BaseApi {
         return page;
     }
 
+    @ApiOperation("根据角色ID查询角色信息")
     @GetMapping("/findRolesInfoByUserId/{userId}")
     public List<RoleVo> findRolesInfoByUserId(@PathVariable("userId") Long userId) {
         List<RoleVo> roleVoList = roleService.findRoleListInfoByUserId(userId);
