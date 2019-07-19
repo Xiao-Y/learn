@@ -11,18 +11,20 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueUtils from '@/utils/vueUtils'
 import md5 from 'js-md5'
-import EventBusUtils from '@/utils/eventBusUtils'
+
+import VueBus from 'vue-bus' // 消息总线
 
 import '@/genRouter' // permission control
-Vue.use(Vuex)
+
+Vue.use(Vuex);
 Vue.use(ElementUI, {
   size: 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
-})
+});
+Vue.use(VueBus);
 
 Vue.prototype.VueUtils = VueUtils;
 Vue.prototype.$md5 = md5;
-Vue.prototype.EventBusUtils = EventBusUtils;
 
 // 加载用户主题
 if (localStorage.getItem('themeValue')) {

@@ -80,7 +80,7 @@
               message: '更新成功!'
             });
             //传递一个map，permissionInfo 是 key，resData 是 value
-            this.EventBusUtils.send('permissionInfo', res.resData);
+            this.$bus.emit('permissionInfo', res.resData);
             _this.$router.back(-1);
           });
         } else { // add
