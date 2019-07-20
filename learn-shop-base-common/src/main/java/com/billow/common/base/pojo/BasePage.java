@@ -80,6 +80,9 @@ public abstract class BasePage implements Serializable {
      * @date: 2016年12月3日 下午3:56:44
      */
     public Integer getPageNo() {
+        if (pageNo == null) {
+            return null;
+        }
         return pageNo - 1;
     }
 

@@ -3,6 +3,7 @@ package com.billow.system.service.impl;
 import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.vo.PermissionVo;
+import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,8 @@ public class CommonRolePermissionRedis {
         }
         List<PermissionVo> permissionVos = redisUtils.getArray("ROLE:" + oldRoleCode, PermissionVo.class);
         this.deleteRoleByRoleCode(oldRoleCode);
-        redisUtils.setObj("ROLE:" + newRoleCode, permissionVos);
+        List<PermissionPo> pos = ConvertUtils.convertIgnoreBase(permissionVos, PermissionPo.class);
+        redisUtils.setObj("ROLE:" + newRoleCode, pos);
     }
 
     /**
@@ -66,7 +68,10 @@ public class CommonRolePermissionRedis {
         Set<String> roleKeys = redisTemplate.keys("ROLE:*");
         roleKeys.stream().forEach(f -> {
             List<PermissionVo> permissionVos = redisUtils.getArray(f, PermissionVo.class);
-            List<PermissionVo> voList = permissionVos.stream().filter(fi -> !fi.getId().equals(id)).collect(Collectors.toList());
+            List<PermissionVo> voList = permissionVos.stream()
+                    .filter(fi -> !fi.getId().equals(id))
+                    .map(m -> ConvertUtils.convertIgnoreBase(m, PermissionVo.class))
+                    .collect(Collectors.toList());
             redisUtils.setObj(f, voList);
         });
     }
@@ -83,8 +88,10 @@ public class CommonRolePermissionRedis {
         Set<String> roleKeys = redisTemplate.keys("ROLE:*");
         roleKeys.stream().forEach(f -> {
             List<PermissionVo> permissionVos = redisUtils.getArray(f, PermissionVo.class);
-            List<PermissionVo> voList = permissionVos.stream().filter(fi -> !fi.getId().equals(permissionVo.getId())).collect(Collectors.toList());
-            voList.add(permissionVo);
+            List<PermissionPo> voList = permissionVos.stream()
+                    .filter(fi -> !fi.getId().equals(permissionVo.getId()))
+                    .map(m -> ConvertUtils.convertIgnoreBase(m, PermissionPo.class))
+                    .collect(Collectors.toList());
             redisUtils.setObj(f, voList);
         });
     }
@@ -99,6 +106,7 @@ public class CommonRolePermissionRedis {
      * @date 2019/7/16 16:57
      */
     public void updateRolePermissionByRoleCode(List<PermissionPo> permissionPos, String roleCode) {
-        redisUtils.setObj("ROLE:" + roleCode, permissionPos);
+        List<PermissionPo> pos = ConvertUtils.convertIgnoreBase(permissionPos, PermissionPo.class);
+        redisUtils.setObj("ROLE:" + roleCode, pos);
     }
 }

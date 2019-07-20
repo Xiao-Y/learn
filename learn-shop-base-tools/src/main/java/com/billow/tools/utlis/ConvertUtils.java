@@ -22,6 +22,57 @@ import java.util.Set;
 public class ConvertUtils {
 
     /**
+     * po转vo深度复制,不复制 BasePO,BasePage（id 除外）
+     *
+     * @param po
+     * @param voClass
+     * @param <PO>
+     * @param <VO>
+     * @return
+     */
+    public static <PO, VO> VO convertIgnoreBase(PO po, Class<VO> voClass) {
+        if (po == null) {
+            return null;
+        }
+        VO vo = null;
+        try {
+            vo = voClass.newInstance();
+            String[] ignoreProperties = {FieldUtils.CREATE_TIME, FieldUtils.CREATOR_CODE,
+                    FieldUtils.UPDATER_CODE, FieldUtils.UPDATE_TIME, FieldUtils.VALID_IND
+            };
+            org.springframework.beans.BeanUtils.copyProperties(po, vo, ignoreProperties);
+            FieldUtils.setValue(vo, FieldUtils.REQUEST_URL, null);
+            FieldUtils.setValue(vo, FieldUtils.PAGE_SIZE, null);
+            FieldUtils.setValue(vo, FieldUtils.PAGE_NO, null);
+            FieldUtils.setValue(vo, FieldUtils.RECORD_COUNT, null);
+            FieldUtils.setValue(vo, FieldUtils.OBJECT_ORDER_BY, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vo;
+    }
+
+    /**
+     * po转vo深度复制,不复制 BasePO,BasePage（id 除外）
+     *
+     * @param pos
+     * @param voClass
+     * @param <PO>
+     * @param <VO>
+     * @return
+     */
+    public static <PO, VO> List<VO> convertIgnoreBase(List<PO> pos, Class<VO> voClass) {
+        List<VO> vos = null;
+        if (ToolsUtils.isNotEmpty(pos)) {
+            vos = new ArrayList<>();
+            for (PO po : pos) {
+                vos.add(convertIgnoreBase(po, voClass));
+            }
+        }
+        return vos;
+    }
+
+    /**
      * po转vo深度复制（基本类型）
      *
      * @param po

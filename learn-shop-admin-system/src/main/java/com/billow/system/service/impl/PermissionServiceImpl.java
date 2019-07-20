@@ -65,7 +65,8 @@ public class PermissionServiceImpl implements PermissionService {
                 logger.warn("角色：{}，permissionId:{},未查询到信息！", rolePo.getRoleName(), rp.getId());
                 return;
             }
-            permissionPos.add(permissionPo.get());
+            PermissionPo po = ConvertUtils.convertIgnoreBase(permissionPo.get(), PermissionPo.class);
+            permissionPos.add(po);
         });
 
         return permissionPos;
