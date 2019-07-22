@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class CommonRolePermissionRedis {
 
+    public final static String ROLE_PERMISSION_KEY = "ROLE:PERMISSION:";
+
     @Autowired
     private RedisUtils redisUtils;
     @Autowired
@@ -39,10 +41,10 @@ public class CommonRolePermissionRedis {
         if (newRoleCode.equals(oldRoleCode)) {
             return;
         }
-        List<PermissionVo> permissionVos = redisUtils.getArray("ROLE:" + oldRoleCode, PermissionVo.class);
+        List<PermissionVo> permissionVos = redisUtils.getArray(ROLE_PERMISSION_KEY + oldRoleCode, PermissionVo.class);
         this.deleteRoleByRoleCode(oldRoleCode);
         List<PermissionPo> pos = ConvertUtils.convertIgnoreBase(permissionVos, PermissionPo.class);
-        redisUtils.setObj("ROLE:" + newRoleCode, pos);
+        redisUtils.setObj(ROLE_PERMISSION_KEY + newRoleCode, pos);
     }
 
     /**
@@ -54,7 +56,7 @@ public class CommonRolePermissionRedis {
      * @date 2019/7/16 15:09
      */
     public void deleteRoleByRoleCode(String roleCode) {
-        redisTemplate.delete("ROLE:" + roleCode);
+        redisTemplate.delete(ROLE_PERMISSION_KEY + roleCode);
     }
 
     /**
@@ -65,7 +67,7 @@ public class CommonRolePermissionRedis {
      * @date 2019/7/16 15:02
      */
     public void deleteRolePermissionById(Long id) {
-        Set<String> roleKeys = redisTemplate.keys("ROLE:*");
+        Set<String> roleKeys = redisTemplate.keys(ROLE_PERMISSION_KEY + "*");
         roleKeys.stream().forEach(f -> {
             List<PermissionVo> permissionVos = redisUtils.getArray(f, PermissionVo.class);
             List<PermissionVo> voList = permissionVos.stream()
@@ -85,7 +87,7 @@ public class CommonRolePermissionRedis {
      * @date 2019/7/16 16:46
      */
     public void updatePermissionById(PermissionVo permissionVo) {
-        Set<String> roleKeys = redisTemplate.keys("ROLE:*");
+        Set<String> roleKeys = redisTemplate.keys(ROLE_PERMISSION_KEY + "*");
         roleKeys.stream().forEach(f -> {
             List<PermissionVo> permissionVos = redisUtils.getArray(f, PermissionVo.class);
             List<PermissionPo> voList = permissionVos.stream()
@@ -107,6 +109,6 @@ public class CommonRolePermissionRedis {
      */
     public void updateRolePermissionByRoleCode(List<PermissionPo> permissionPos, String roleCode) {
         List<PermissionPo> pos = ConvertUtils.convertIgnoreBase(permissionPos, PermissionPo.class);
-        redisUtils.setObj("ROLE:" + roleCode, pos);
+        redisUtils.setObj(ROLE_PERMISSION_KEY + roleCode, pos);
     }
 }

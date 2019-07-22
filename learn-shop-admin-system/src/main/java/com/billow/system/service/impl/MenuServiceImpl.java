@@ -5,7 +5,9 @@ import com.billow.system.dao.RoleMenuDao;
 
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
+import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RoleMenuPo;
+import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
@@ -131,6 +133,16 @@ public class MenuServiceImpl implements MenuService {
                 menuDao.delete(new Long(id));
             }
         });
+    }
+
+    @Override
+    public Set<MenuPo> findMenuByRole(RolePo rolePo) {
+        List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(rolePo.getId());
+        Set<MenuPo> menuPos = roleMenuPos.stream().map(m -> {
+            MenuPo menuPo = menuDao.findOne(m.getMenuId());
+            return ConvertUtils.convertIgnoreBase(menuPo, MenuPo.class);
+        }).collect(Collectors.toSet());
+        return menuPos;
     }
 
     /**

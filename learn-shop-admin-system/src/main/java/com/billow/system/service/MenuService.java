@@ -1,6 +1,8 @@
 package com.billow.system.service;
 
 import com.billow.system.pojo.ex.MenuEx;
+import com.billow.system.pojo.po.MenuPo;
+import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.MenuVo;
 
@@ -48,4 +50,14 @@ public interface MenuService {
      * @param ids
      */
     void delMenuByIds(Set<String> ids);
+
+    /**
+     * 根据角色查询出菜单信息
+     *
+     * @param rolePo
+     * @return java.util.Set<com.billow.system.pojo.po.MenuPo>
+     * @author LiuYongTao
+     * @date 2019/7/22 17:55
+     */
+    Set<MenuPo> findMenuByRole(RolePo rolePo);
 }

@@ -24,8 +24,8 @@ public class MenuPo extends BasePo implements Serializable {
     private String menuCode;
     //菜单描述
     private String descritpion;
-    //菜单链接
-    private String url;
+//    //菜单链接
+//    private String url;
     //父节点id
     private Long pid;
     // 图标
