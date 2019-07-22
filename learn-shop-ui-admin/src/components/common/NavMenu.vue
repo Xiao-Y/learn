@@ -2,7 +2,7 @@
   <div>
     <template v-for="menu in navMenus" v-if="menu.title && menu.display === true">
 
-      <template v-if="menu.children">
+      <template v-if="menu.children && menu.isChildrenDisplay === true">
         <el-submenu :key="menu.id" :index="menu.id">
           <template slot="title"><i :class="menu.icon"></i>{{ generateTitle(menu.title) }}</template>
           <el-menu-item :key="menu.id" :index="menu.path" v-if="menu.path && menu.display === true">

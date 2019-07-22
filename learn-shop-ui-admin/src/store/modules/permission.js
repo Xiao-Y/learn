@@ -18,10 +18,28 @@ var menuCodes = [];
  */
 function genMenuCodes(menus) {
   for (var j in menus) {
-    // menuUrls.push(menus[j].path);
     menuCodes.push(menus[j].titleCode);
     if (menus[j].children) {
       genMenuCodes(menus[j].children);
+    }
+  }
+}
+
+/**
+ * 递归设置访问的URL
+ * @param menus
+ * @constructor
+ */
+function setMenuUrl(menus, router, routerPath) {
+  for (var j in menus) {
+    if (menus[j].titleCode === router.name && menus[j].pid != null) {
+      menus[j].path = routerPath;
+      break;
+    } else if (menus[j].children) {
+      setMenuUrl(menus[j].children, router, routerPath);
+    }else if((menus[j].children == null || menus[j].children.length < 1) && menus[j].titleCode === router.name){
+      menus[j].path = routerPath;
+      break;
     }
   }
 }
@@ -36,21 +54,26 @@ function genMenuCodes(menus) {
 function filterAsyncRouter(accessedRouters, menus) {
   //递归出所有的Code
   genMenuCodes(menus);
-  // console.info('menuCodes:',menuCodes);
   // 反向移除，用户没有的权限从路由移除，定制新路由
   for (var i = accessedRouters.length - 1; i >= 0; i--) {
-    var basePath = accessedRouters[i].path;
-    if (accessedRouters[i].children) {
+    // var basePath = accessedRouters[i].path;
+    var baseRouterName = accessedRouters[i].name;
+    if (accessedRouters[i].children && accessedRouters[i].children.length > 0) {
       for (var j = accessedRouters[i].children.length - 1; j >= 0; j--) {
         // var url = basePath + '/' + accessedRouters[i].children[j].path;
         var routerName = accessedRouters[i].children[j].name;
         if (menuCodes.indexOf(routerName) == -1) {
           accessedRouters[i].children.splice(j, 1);
+        } else {
+          var url =  accessedRouters[i].path + '/' + accessedRouters[i].children[j].path;
+          setMenuUrl(menus, accessedRouters[i].children[j], url);
         }
       }
     } else {
-      if (menuCodes.indexOf(basePath) == -1) {
+      if (menuCodes.indexOf(baseRouterName) == -1) {
         accessedRouters.splice(i, 1);
+      }else{
+        setMenuUrl(menus, accessedRouters[i], accessedRouters[i].path);
       }
     }
   }

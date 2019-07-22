@@ -45,6 +45,10 @@ public class MenuEx {
      * 子级菜单
      */
     private List<MenuEx> children;
+    /**
+     * 是否有子菜单显示
+     */
+    private Boolean isChildrenDisplay;
 
     public String getId() {
         return id;
@@ -127,6 +131,15 @@ public class MenuEx {
         return this;
     }
 
+    public Boolean getIsChildrenDisplay() {
+        return isChildrenDisplay;
+    }
+
+    public MenuEx setIsChildrenDisplay(Boolean isChildrenDisplay) {
+        this.isChildrenDisplay = isChildrenDisplay;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "MenuEx{" +
@@ -139,6 +152,7 @@ public class MenuEx {
                 ", validInd=" + validInd +
                 ", display=" + display +
                 ", children=" + children +
+                ", isChildrenDisplay=" + isChildrenDisplay +
                 '}';
     }
 }

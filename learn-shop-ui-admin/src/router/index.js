@@ -15,20 +15,6 @@ export const constantRouterMap = [{
   hidden: true,
   component: resolve => require(['../views/login/Login.vue'], resolve)
 }, {
-  path: '/Readme',
-  index: 'Readme',
-  meta: {
-    title: 'Readme',
-    icon: 'el-icon-menu'
-  },
-  component: Home,
-  children: [{
-    name: 'Readme',
-    path: '/',
-    meta: {title: 'Readme', icon: 'el-icon-menu'},
-    component: resolve => require(['../views/test/readme.vue'], resolve)
-  }]
-}, {
   path: '/error',
   name: 'error',
   component: Home,
@@ -40,10 +26,26 @@ export const constantRouterMap = [{
 }];
 
 // 异步挂载的路由（动态需要根据权限加载的路由表,
-// 路由的 name = parentPath + childrenPath。必须要唯一，
-// 要与sys_menu 中的 menu_code 一至，不然路由加载不出来）
+// 子路由的 name = parentPath + childrenPath。必须要唯一，要与 sys_menu 中的 menu_code 一致，不然路由加载不出来）
+
 export const asyncRouterMap = [{
+  path: '/readme',
+  index: 'readme',
+  name: 'readme',
+  meta: {
+    title: 'Readme',
+    icon: 'el-icon-menu'
+  },
+  component: Home,
+  children: [{
+    path: 'index',
+    name: 'readmeIndex',
+    meta: {title: 'Readme', icon: 'el-icon-menu'},
+    component: resolve => require(['../views/test/readme.vue'], resolve)
+  }]
+},{
   path: '/sys',
+  name:'sys',
   component: Home,
   children: [{
     name: 'sysWhiteListIndex',
@@ -78,6 +80,7 @@ export const asyncRouterMap = [{
   }]
 }, {
   path: '/job',
+  name: 'job',
   component: Home,
   children: [{
     name: 'jobAutoTaskListIndex',
@@ -86,6 +89,7 @@ export const asyncRouterMap = [{
   }]
 }, {
   path: '/pro',
+  name: 'pro',
   component: Home,
   children: [{
     name: 'proProductListIndex',
@@ -102,6 +106,7 @@ export const asyncRouterMap = [{
   }]
 }, {
   path: '/user',
+  name: 'user',
   component: Home,
   children: [{
     name: 'userPermissionListIndex',

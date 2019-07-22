@@ -8,7 +8,7 @@
     <div id="content">
       <ul class="nav">
         <li class="home">
-          <router-link to="/Readme">返回首页</router-link>
+          <router-link to="/readme/index">返回首页</router-link>
         </li>
         <li class="site_map">
           <a href="#" @click="goBack">返回上页</a>

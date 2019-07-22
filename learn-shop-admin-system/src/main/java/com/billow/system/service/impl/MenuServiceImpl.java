@@ -137,7 +137,7 @@ public class MenuServiceImpl implements MenuService {
      * 递归查询子级菜单
      *
      * @param pMenuExs
-     * @param menuIds 用户所拥有的权限
+     * @param menuIds  用户所拥有的权限
      * @return void
      * @author LiuYongTao
      * @date 2018/5/29 14:48
@@ -156,6 +156,8 @@ public class MenuServiceImpl implements MenuService {
                 // 转换子级菜单
                 List<MenuEx> cMenuExs = new ArrayList<>();
                 this.menuPosCoverMenuExs(menuPos, cMenuExs, menuIds);
+                // 过滤出是子菜单的数据
+                menuPos.stream().filter(f -> f.getDisplay()).forEach(f -> pitem.setIsChildrenDisplay(true));
                 pitem.setChildren(cMenuExs);
                 // 递归查询子级菜单
                 this.childenMenus(cMenuExs, menuIds);
@@ -168,7 +170,7 @@ public class MenuServiceImpl implements MenuService {
      *
      * @param menuPos
      * @param pMenuExs
-     * @param menuIds 用户所拥有的权限
+     * @param menuIds  用户所拥有的权限
      * @return void
      * @author LiuYongTao
      * @date 2018/5/29 14:55
@@ -182,7 +184,7 @@ public class MenuServiceImpl implements MenuService {
 
             MenuEx ex = new MenuEx();
             ex.setId(item.getId().toString())
-                    .setPath(item.getUrl())
+                    .setPath("")
                     .setValidInd(item.getValidInd())
                     .setIcon(item.getIcon())
                     .setPid(item.getPid())
