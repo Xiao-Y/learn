@@ -55,9 +55,9 @@ public interface MenuService {
      * 根据角色查询出菜单信息
      *
      * @param rolePo
-     * @return java.util.Set<com.billow.system.pojo.po.MenuPo>
+     * @return java.util.Set<com.billow.system.pojo.ex.MenuEx>
      * @author LiuYongTao
      * @date 2019/7/22 17:55
      */
-    Set<MenuPo> findMenuByRole(RolePo rolePo);
+    Set<MenuEx> findMenuByRole(RolePo rolePo);
 }

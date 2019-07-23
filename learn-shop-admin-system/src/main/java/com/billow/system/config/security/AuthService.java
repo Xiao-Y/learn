@@ -2,6 +2,7 @@ package com.billow.system.config.security;
 
 
 import com.billow.common.redis.RedisUtils;
+import com.billow.system.service.redis.CommonRolePermissionRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class AuthService {
         if (authorities != null && authorities.size() > 0) {
             for (GrantedAuthority authority : authorities) {
                 // 查询 redis 中的角色权限
-                List<PermissionVo> permissionVos = redisUtils.getArray("ROLE:" + authority.getAuthority(), PermissionVo.class);
+                List<PermissionVo> permissionVos = redisUtils.getArray(CommonRolePermissionRedis.ROLE_PERMISSION_KEY + authority.getAuthority(), PermissionVo.class);
                 for (PermissionVo permissionVo : permissionVos) {
                     String sourceURI = contextPath + permissionVo.getUrl();
                     logger.info("===>>> sourceURI:{}", sourceURI);

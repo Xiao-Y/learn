@@ -6,8 +6,7 @@ import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.PermissionService;
-import com.billow.system.service.impl.CommonRolePermissionRedis;
-import org.springframework.beans.factory.InitializingBean;
+import com.billow.system.service.redis.CommonRolePermissionRedis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

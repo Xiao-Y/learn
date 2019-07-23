@@ -14,6 +14,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +26,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 菜单管理
@@ -45,8 +52,18 @@ public class MenuApi extends BaseApi {
     public HomeEx homeMenus() {
         MenuVo ex = new MenuVo();
         String userCode = super.findUserCode();
-        List<RoleEx> roleExs = super.findRoleVos();
-        List<RoleVo> roleVos = ConvertUtils.convert(roleExs, RoleVo.class);
+
+        List<RoleVo> roleVos = new ArrayList<>();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        if (ToolsUtils.isNotEmpty(authorities)) {
+            roleVos = authorities.stream().map(m -> {
+                RoleVo roleVo = new RoleVo();
+                roleVo.setRoleCode(((GrantedAuthority) m).getAuthority());
+                return roleVo;
+            }).collect(Collectors.toList());
+        }
         ex.setUserCode(userCode).setRoleVos(roleVos).setValidInd(true);
         List<MenuEx> menuExes = menuService.homeMenus(ex);
 

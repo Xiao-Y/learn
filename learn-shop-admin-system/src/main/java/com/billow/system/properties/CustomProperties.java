@@ -1,6 +1,8 @@
 package com.billow.system.properties;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * 约定的配置信息
@@ -8,17 +10,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author liuyongtao
  * @create 2019-04-30 9:08
  */
+@Data
+@Component
 @ConfigurationProperties(prefix = "custom")
 public class CustomProperties {
 
     private SecurityProperties security = new SecurityProperties();
 
-    public SecurityProperties getSecurity() {
-        return security;
-    }
+    private MenuProperties menu = new MenuProperties();
 
-    public CustomProperties setSecurity(SecurityProperties security) {
-        this.security = security;
-        return this;
-    }
 }

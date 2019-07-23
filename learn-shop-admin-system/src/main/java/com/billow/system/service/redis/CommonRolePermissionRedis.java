@@ -1,4 +1,4 @@
-package com.billow.system.service.impl;
+package com.billow.system.service.redis;
 
 import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.po.PermissionPo;
@@ -94,6 +94,7 @@ public class CommonRolePermissionRedis {
                     .filter(fi -> !fi.getId().equals(permissionVo.getId()))
                     .map(m -> ConvertUtils.convertIgnoreBase(m, PermissionPo.class))
                     .collect(Collectors.toList());
+            voList.add(ConvertUtils.convertIgnoreBase(permissionVo, PermissionPo.class));
             redisUtils.setObj(f, voList);
         });
     }

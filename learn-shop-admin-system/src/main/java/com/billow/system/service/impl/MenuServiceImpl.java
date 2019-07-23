@@ -2,16 +2,15 @@ package com.billow.system.service.impl;
 
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.RoleMenuDao;
-
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
-import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RoleMenuPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
+import com.billow.system.properties.CustomProperties;
 import com.billow.system.service.MenuService;
-import com.billow.tools.utlis.FieldUtils;
+import com.billow.system.service.redis.CommonRoleMenuRedis;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,11 +38,24 @@ public class MenuServiceImpl implements MenuService {
     private MenuDao menuDao;
     @Autowired
     private RoleMenuDao roleMenuDao;
+    @Autowired
+    private CommonRoleMenuRedis commonRoleMenuRedis;
+    @Autowired
+    private CustomProperties customProperties;
 
     @Override
     public List<MenuEx> homeMenus(MenuVo menuVo) {
         // 查询出该用户所有角色的所有的菜单
         List<RoleVo> roleVos = menuVo.getRoleVos();
+        if (ToolsUtils.isEmpty(roleVos)) {
+            return null;
+        }
+        // 先从 redis 中查询
+        if (customProperties.getMenu().isReadCache()) {
+            List<MenuEx> pMenuExs = commonRoleMenuRedis.findMenusByRoles(roleVos);
+            return pMenuExs;
+        }
+
         Set<Long> menuIds = new HashSet<>();
         if (ToolsUtils.isNotEmpty(roleVos)) {
             roleVos.forEach(item -> {
@@ -109,10 +120,11 @@ public class MenuServiceImpl implements MenuService {
         if (null != id) {
             one = menuDao.findOne(id);
             ConvertUtils.copyNonNullProperties(menuVo, one);
-//            one.setUpdateTime(new Date());
+            // 更新 redis 中的菜单信息
+            commonRoleMenuRedis.updateMeunById(one);
         } else {
+            menuVo.setValidInd(true);
             one = ConvertUtils.convert(menuVo, MenuPo.class);
-            FieldUtils.setCommonFieldByInsertWithValidInd(one, menuVo.getUpdaterCode());
         }
         menuDao.save(one);
 
@@ -133,14 +145,15 @@ public class MenuServiceImpl implements MenuService {
                 menuDao.delete(new Long(id));
             }
         });
+        commonRoleMenuRedis.deleteRoleMenuById(ids);
     }
 
     @Override
-    public Set<MenuPo> findMenuByRole(RolePo rolePo) {
+    public Set<MenuEx> findMenuByRole(RolePo rolePo) {
         List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(rolePo.getId());
-        Set<MenuPo> menuPos = roleMenuPos.stream().map(m -> {
+        Set<MenuEx> menuPos = roleMenuPos.stream().map(m -> {
             MenuPo menuPo = menuDao.findOne(m.getMenuId());
-            return ConvertUtils.convertIgnoreBase(menuPo, MenuPo.class);
+            return commonRoleMenuRedis.menuPoCoverMenuex(menuPo);
         }).collect(Collectors.toSet());
         return menuPos;
     }
@@ -193,16 +206,7 @@ public class MenuServiceImpl implements MenuService {
             if (menuIds != null && !menuIds.contains(item.getId())) {
                 return;
             }
-
-            MenuEx ex = new MenuEx();
-            ex.setId(item.getId().toString())
-                    .setPath("")
-                    .setValidInd(item.getValidInd())
-                    .setIcon(item.getIcon())
-                    .setPid(item.getPid())
-                    .setDisplay(item.getDisplay())
-                    .setTitleCode(item.getMenuCode())
-                    .setTitle(item.getMenuName());
+            MenuEx ex = commonRoleMenuRedis.menuPoCoverMenuex(item);
             pMenuExs.add(ex);
         });
     }

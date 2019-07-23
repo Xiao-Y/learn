@@ -9,6 +9,7 @@ import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.service.PermissionService;
+import com.billow.system.service.redis.CommonRolePermissionRedis;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
