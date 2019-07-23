@@ -1,7 +1,7 @@
 <template>
   <div class="header_container">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/readme/index' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="$route.name != 'readmeIndex'" :to="{ path: '/readme/index' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>{{$route.meta.title}}</el-breadcrumb-item>
       <!-- <el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item> -->
     </el-breadcrumb>

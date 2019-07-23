@@ -32,10 +32,6 @@ export const asyncRouterMap = [{
   path: '/readme',
   index: 'readme',
   name: 'readme',
-  meta: {
-    title: 'Readme',
-    icon: 'el-icon-menu'
-  },
   component: Home,
   children: [{
     path: 'index',
