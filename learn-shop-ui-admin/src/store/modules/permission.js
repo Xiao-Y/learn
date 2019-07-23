@@ -3,7 +3,7 @@ import {
   constantRouterMap
 } from '@/router'
 
-import {getHomeMenus} from '../../api/sys/menuMag'
+import { getHomeMenus } from '../../api/sys/menuMag'
 import VueUtils from '@/utils/vueUtils'
 
 import types from '@/store/mutationsType'
@@ -32,12 +32,18 @@ function genMenuCodes(menus) {
  */
 function setMenuUrl(menus, router, routerPath) {
   for (var j in menus) {
+    // 设置路由的 title 和 icon
+    if (menus[j].titleCode === router.name) {
+      var source = { meta: { title: menus[j].title, icon: menus[j].icon } };
+      Object.assign(router, source);
+    }
+    // 设置非顶级菜单的
     if (menus[j].titleCode === router.name && menus[j].pid != null) {
       menus[j].path = routerPath;
       break;
-    } else if (menus[j].children) {
+    } else if (menus[j].children) { // 设置有子菜单的
       setMenuUrl(menus[j].children, router, routerPath);
-    }else if((menus[j].children == null || menus[j].children.length < 1) && menus[j].titleCode === router.name){
+    } else if ((menus[j].children == null || menus[j].children.length < 1) && menus[j].titleCode === router.name) {// 设置没有子菜单的
       menus[j].path = routerPath;
       break;
     }
@@ -65,14 +71,14 @@ function filterAsyncRouter(accessedRouters, menus) {
         if (menuCodes.indexOf(routerName) == -1) {
           accessedRouters[i].children.splice(j, 1);
         } else {
-          var url =  accessedRouters[i].path + '/' + accessedRouters[i].children[j].path;
+          var url = accessedRouters[i].path + '/' + accessedRouters[i].children[j].path;
           setMenuUrl(menus, accessedRouters[i].children[j], url);
         }
       }
     } else {
       if (menuCodes.indexOf(baseRouterName) == -1) {
         accessedRouters.splice(i, 1);
-      }else{
+      } else {
         setMenuUrl(menus, accessedRouters[i], accessedRouters[i].path);
       }
     }
@@ -96,7 +102,7 @@ const permission = {
     }
   },
   actions: {
-    GenRoutesActions({commit, state}) {
+    GenRoutesActions({ commit, state }) {
       return new Promise((resolve, reject) => {
         getHomeMenus(state.token).then(res => {
           var menus = VueUtils.deepClone(res.resData.menus);
