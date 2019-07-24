@@ -158,6 +158,11 @@ public class MenuServiceImpl implements MenuService {
         return menuPos;
     }
 
+    @Override
+    public Integer countMenuCodeByMenuCode(String menuCode) {
+        return menuDao.countByMenuCodeIsAndValidIndIsTrue(menuCode);
+    }
+
     /**
      * 递归查询子级菜单
      *

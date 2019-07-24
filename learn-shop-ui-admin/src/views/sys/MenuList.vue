@@ -12,7 +12,7 @@
                        node-key="id"
                        :data="menus"
                        ref="tree2"
-                       :expand-on-click-node = "false"
+                       :expand-on-click-node="false"
                        :highlight-current="true"
                        :props="defaultProps"
                        :check-strictly="true"
@@ -45,9 +45,9 @@
               <el-form-item label="菜单CODE">
                 <el-input v-model="menu.titleCode" readonly></el-input>
               </el-form-item>
-              <el-form-item label="菜单路径">
+              <!-- <el-form-item label="菜单路径">
                 <el-input v-model="menu.path" readonly></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="菜单图标">
                 <el-input v-model="menu.icon" readonly></el-input>
               </el-form-item>
@@ -80,9 +80,9 @@
                 </el-form-item>
               </el-form>
               <el-form ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
-                <el-form-item label="菜单路径">
+                <!-- <el-form-item label="菜单路径">
                   <el-input v-model="parentMenu.url" readonly style="width: 450px"></el-input>
-                </el-form-item>
+                </el-form-item> -->
               </el-form>
               <el-form :inline="true" ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
                 <el-form-item label="创建人">
@@ -130,14 +130,14 @@
         </el-form-item>
         <el-form-item label="菜单CODE" prop="titleCode">
           <el-col :span="18">
-            <el-input v-model="editMenu.titleCode"></el-input>
+            <el-input v-model="editMenu.titleCode" placeholder="必须与路由中的name相同并唯一"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="菜单路径" prop="path">
+        <!-- <el-form-item label="菜单路径" prop="path">
           <el-col :span="18">
             <el-input v-model="editMenu.path"></el-input>
           </el-col>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="菜单图标" prop="icon">
           <el-col :span="18">
             <el-input v-model="editMenu.icon"></el-input>
@@ -156,7 +156,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="cancledialog('editMenu')">取 消</el-button>
-        <el-button size="mini" type="primary" @click="submitMenu('editMenu')">确 定</el-button>
+        <el-button size="mini" type="primary" @click="validSubmie('editMenu')">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 菜单修改/添加dialog end -->
@@ -164,7 +164,13 @@
 </template>
 
 <script>
-  import {findParentMenu, findMenus, saveOrUpdateMenu, delMenuByIds} from "../../api/sys/menuMag";
+  import {
+    findParentMenu,
+    findMenus,
+    saveOrUpdateMenu,
+    delMenuByIds,
+    CheckMenuCode
+  } from "../../api/sys/menuMag";
   import {Message} from "element-ui";
 
   export default {
@@ -187,8 +193,7 @@
         optionType: '',// 操作类型
         rules22: {// 校验
           title: [{required: true, message: '请输入菜单名称', trigger: 'blur'}],
-          titleCode: [{required: true, message: '请输入菜单CODE', trigger: 'blur'}],
-          path: [{required: true, message: '请输入菜单路径', trigger: 'blur'}]
+          titleCode: [{validator: this.checkMenuCode, trigger: 'blur'}]
         }
       };
     },
@@ -206,7 +211,7 @@
           pid: "",
           title: "",
           titleCode: "",
-          path: "",
+          // path: "",
           icon: "",
           validInd: true,
           display: true
@@ -217,7 +222,7 @@
         this.parentMenu = {
           id: "",
           pid: "",
-          url: "",
+          // url: "",
           icon: "",
           menuName: "",
           menuCode: "",
@@ -238,7 +243,7 @@
           title: "",
           titleCode: "",
           parentTtile: "",
-          path: "",
+          // path: "",
           icon: "",
           validInd: true,
           display: true
@@ -369,6 +374,17 @@
         this.dialogFormVisible = false
         this.initEditMenu();
       },
+      // 验证后提交
+      validSubmie(formRule) {
+        var _this = this;
+        this.$refs[formRule].validate((valid) => {
+          if (valid) {
+            _this.submitMenu(formRule);
+          } else {
+            return false;
+          }
+        });
+      },
       // 提交
       submitMenu(formRule) {
         var editMenus = this.editMenu;
@@ -382,10 +398,10 @@
           if (this.optionType == "edit") { // 修改
             data.title = copuEidtMenus.title;
             data.titleCode = copuEidtMenus.titleCode;
-            data.path = copuEidtMenus.path;
+            // data.path = copuEidtMenus.path;
             data.icon = copuEidtMenus.icon;
-            data.validInd =  copuEidtMenus.validInd;
-            data.display =  copuEidtMenus.display;
+            data.validInd = copuEidtMenus.validInd;
+            data.display = copuEidtMenus.display;
           } else { // 添加
             //后台返回的
             copuEidtMenus.id = resData.id;
@@ -406,7 +422,29 @@
             message: '提交成功!'
           });
         });
-
+      },
+      // 对 MenuCode 校验
+      checkMenuCode(rule, value, callback) {
+        if(value === ''){
+          callback(new Error("菜单CODE不能为空"));
+          return false;
+        }
+        if (this.optionType == "edit") {
+          var nodes = this.$refs.tree2.getCheckedNodes();
+          var oldTitleCode = nodes[0].titleCode;
+          // 与旧的相同，说明没有修改过
+          if (oldTitleCode === value) {
+            return true;
+          }
+        }
+        CheckMenuCode(value).then(res => {
+          var resData = res.resData;
+          if (resData >= 1) {
+            callback(new Error("菜单CODE已经存在"));
+          } else {
+            callback();
+          }
+        });
       }
     },
     watch: {

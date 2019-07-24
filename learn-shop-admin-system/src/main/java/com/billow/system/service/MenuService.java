@@ -60,4 +60,14 @@ public interface MenuService {
      * @date 2019/7/22 17:55
      */
     Set<MenuEx> findMenuByRole(RolePo rolePo);
+
+    /**
+     * 查询 menuCode 的个数
+     *
+     * @param menuCode
+     * @return java.lang.Integer
+     * @author LiuYongTao
+     * @date 2019/7/24 14:10
+     */
+    Integer countMenuCodeByMenuCode(String menuCode);
 }

@@ -1,23 +1,6 @@
 import request from '@/utils/request'
 
-// export function login1(username, password) {
-//   return request({
-//     url: '/user/login1',
-//     method: 'post',
-//     data: {
-//       username,
-//       password
-//     }
-//   })
-// }
-
-// export function getInfo(pid) {
-//   return request({
-//     url: '/menuApi/findParentMenu/' + pid,
-//     method: 'get',
-//     params: {token}
-//   })
-// }
+const baseUrl = 'admin-system/menuApi';
 
 /**
  * 获取父菜单信息
@@ -26,7 +9,7 @@ import request from '@/utils/request'
  */
 export function findParentMenu(pid) {
   return request({
-    url: 'admin-system/menuApi/findMenuById/' + pid,
+    url: baseUrl + '/findMenuById/' + pid,
     method: 'get'
   })
 }
@@ -38,7 +21,7 @@ export function findParentMenu(pid) {
  */
 export function findMenus() {
   return request({
-    url: 'admin-system/menuApi/findMenus',
+    url: baseUrl + '/findMenus',
     method: 'get'
   })
 }
@@ -57,7 +40,7 @@ export function findMenus() {
  */
 export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validInd, display}) {
   return request({
-    url: 'admin-system/menuApi/saveOrUpdateMenu',
+    url: baseUrl + '/saveOrUpdateMenu',
     method: 'put',
     data: {
       id: id,
@@ -79,7 +62,7 @@ export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validIn
  */
 export function delMenuByIds(ids) {
   return request({
-    url: 'admin-system/menuApi/delMenuByIds',
+    url: baseUrl + '/delMenuByIds',
     method: 'delete',
     data: {
       ids
@@ -94,10 +77,22 @@ export function delMenuByIds(ids) {
  */
 export function getHomeMenus(token) {
   return request({
-    url: 'admin-system/menuApi/homeMenus',
+    url: baseUrl + '/homeMenus',
     method: 'get',
     params: {
       token
     }
+  })
+}
+
+/**
+ * 查询 menuCode 是否重复
+ * @param menuCode
+ * @constructor
+ */
+export function CheckMenuCode(menuCode) {
+  return request({
+    url: baseUrl + '/checkMenuCode/' + menuCode,
+    method: 'get'
   })
 }

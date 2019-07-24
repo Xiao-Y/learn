@@ -1,6 +1,7 @@
 package com.billow.system.dao;
 
 import com.billow.system.pojo.po.MenuPo;
+import com.billow.tools.utlis.StringUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -45,4 +46,14 @@ public interface MenuDao extends JpaRepository<MenuPo, Long> {
      * @date 2018/5/26 10:12
      */
     List<MenuPo> findByPidEqualsAndValidIndIsTrue(Long pid);
+
+    /**
+     * 查询 menuCode 的个数
+     *
+     * @param menuCode
+     * @return java.lang.Integer
+     * @author LiuYongTao
+     * @date 2019/7/24 14:16
+     */
+    Integer countByMenuCodeIsAndValidIndIsTrue(String menuCode);
 }
