@@ -32,5 +32,7 @@ public class MenuPo extends BasePo implements Serializable {
     private String icon;
     // 是否显示
     private Boolean display;
+    // 显示的位置
+    private Double sortField;
 
 }

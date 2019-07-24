@@ -45,9 +45,9 @@
               <el-form-item label="菜单CODE">
                 <el-input v-model="menu.titleCode" readonly></el-input>
               </el-form-item>
-              <!-- <el-form-item label="菜单路径">
-                <el-input v-model="menu.path" readonly></el-input>
-              </el-form-item> -->
+              <el-form-item label="菜单位置">
+                <el-input v-model="menu.sortField" readonly></el-input>
+              </el-form-item>
               <el-form-item label="菜单图标">
                 <el-input v-model="menu.icon" readonly></el-input>
               </el-form-item>
@@ -80,9 +80,9 @@
                 </el-form-item>
               </el-form>
               <el-form ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
-                <!-- <el-form-item label="菜单路径">
-                  <el-input v-model="parentMenu.url" readonly style="width: 450px"></el-input>
-                </el-form-item> -->
+                <el-form-item label="菜单位置">
+                  <el-input v-model="parentMenu.sortField" readonly style="width: 450px"></el-input>
+                </el-form-item>
               </el-form>
               <el-form :inline="true" ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
                 <el-form-item label="创建人">
@@ -133,11 +133,11 @@
             <el-input v-model="editMenu.titleCode" placeholder="必须与路由中的name相同并唯一"></el-input>
           </el-col>
         </el-form-item>
-        <!-- <el-form-item label="菜单路径" prop="path">
+        <el-form-item label="菜单位置" prop="sortField">
           <el-col :span="18">
-            <el-input v-model="editMenu.path"></el-input>
+            <el-input-number v-model="editMenu.sortField" :min="0"></el-input-number>
           </el-col>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="菜单图标" prop="icon">
           <el-col :span="18">
             <el-input v-model="editMenu.icon"></el-input>
@@ -211,7 +211,7 @@
           pid: "",
           title: "",
           titleCode: "",
-          // path: "",
+          sortField: null,
           icon: "",
           validInd: true,
           display: true
@@ -222,7 +222,7 @@
         this.parentMenu = {
           id: "",
           pid: "",
-          // url: "",
+          sortField: null,
           icon: "",
           menuName: "",
           menuCode: "",
@@ -243,7 +243,7 @@
           title: "",
           titleCode: "",
           parentTtile: "",
-          // path: "",
+          sortField: null,
           icon: "",
           validInd: true,
           display: true
@@ -398,7 +398,7 @@
           if (this.optionType == "edit") { // 修改
             data.title = copuEidtMenus.title;
             data.titleCode = copuEidtMenus.titleCode;
-            // data.path = copuEidtMenus.path;
+            data.sortField = copuEidtMenus.sortField;
             data.icon = copuEidtMenus.icon;
             data.validInd = copuEidtMenus.validInd;
             data.display = copuEidtMenus.display;
@@ -434,7 +434,7 @@
           var oldTitleCode = nodes[0].titleCode;
           // 与旧的相同，说明没有修改过
           if (oldTitleCode === value) {
-            return true;
+            callback();
           }
         }
         CheckMenuCode(value).then(res => {

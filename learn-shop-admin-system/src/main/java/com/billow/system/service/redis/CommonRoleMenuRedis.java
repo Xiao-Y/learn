@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -141,7 +142,7 @@ public class CommonRoleMenuRedis {
             this.findChildren(all, menuEx);
             menuExes.add(menuEx);
         });
-
+        menuExes.sort(Comparator.comparingDouble(MenuEx::getSortField));
         return menuExes;
     }
 
@@ -160,6 +161,7 @@ public class CommonRoleMenuRedis {
                 .collect(Collectors.toList());
 
         if (ToolsUtils.isNotEmpty(collect)) {
+            collect.sort(Comparator.comparingDouble(MenuEx::getSortField));
             menuEx.setChildren(collect);
             collect.stream().filter(f -> f.getDisplay()).forEach(f -> menuEx.setIsChildrenDisplay(true));
             collect.stream().forEach(f -> this.findChildren(all, f));
@@ -176,14 +178,15 @@ public class CommonRoleMenuRedis {
      */
     public MenuEx menuPoCoverMenuex(MenuPo item) {
         MenuEx ex = new MenuEx();
-        ex.setId(item.getId().toString())
-                .setPath("")
-                .setValidInd(item.getValidInd())
-                .setIcon(item.getIcon())
-                .setPid(item.getPid())
-                .setDisplay(item.getDisplay())
-                .setTitleCode(item.getMenuCode())
-                .setTitle(item.getMenuName());
+        ex.setId(item.getId().toString());
+        ex.setPath("");
+        ex.setValidInd(item.getValidInd());
+        ex.setIcon(item.getIcon());
+        ex.setPid(item.getPid());
+        ex.setDisplay(item.getDisplay());
+        ex.setTitleCode(item.getMenuCode());
+        ex.setTitle(item.getMenuName());
+        ex.setSortField(item.getSortField());
         return ex;
     }
 }

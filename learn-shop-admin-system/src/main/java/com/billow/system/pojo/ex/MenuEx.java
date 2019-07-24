@@ -1,5 +1,7 @@
 package com.billow.system.pojo.ex;
 
+import lombok.Data;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,7 @@ import java.util.List;
  * @author liuyongtao
  * @create 2018-05-26 9:30
  */
+@Data
 public class MenuEx {
     /**
      * 菜单ID
@@ -49,110 +52,9 @@ public class MenuEx {
      * 是否有子菜单显示
      */
     private Boolean isChildrenDisplay;
+    /**
+     * 显示的位置
+     */
+    private Double sortField;
 
-    public String getId() {
-        return id;
-    }
-
-    public MenuEx setId(String id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public MenuEx setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public MenuEx setPath(String path) {
-        this.path = path;
-        return this;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public MenuEx setIcon(String icon) {
-        this.icon = icon;
-        return this;
-    }
-
-    public List<MenuEx> getChildren() {
-        return children;
-    }
-
-    public MenuEx setChildren(List<MenuEx> children) {
-        this.children = children;
-        return this;
-    }
-
-    public Boolean getValidInd() {
-        return validInd;
-    }
-
-    public MenuEx setValidInd(Boolean validInd) {
-        this.validInd = validInd;
-        return this;
-    }
-
-    public String getTitleCode() {
-        return titleCode;
-    }
-
-    public MenuEx setTitleCode(String titleCode) {
-        this.titleCode = titleCode;
-        return this;
-    }
-
-    public Long getPid() {
-        return pid;
-    }
-
-    public MenuEx setPid(Long pid) {
-        this.pid = pid;
-        return this;
-    }
-
-    public Boolean getDisplay() {
-        return display;
-    }
-
-    public MenuEx setDisplay(Boolean display) {
-        this.display = display;
-        return this;
-    }
-
-    public Boolean getIsChildrenDisplay() {
-        return isChildrenDisplay;
-    }
-
-    public MenuEx setIsChildrenDisplay(Boolean isChildrenDisplay) {
-        this.isChildrenDisplay = isChildrenDisplay;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "MenuEx{" +
-                "id='" + id + '\'' +
-                ", pid=" + pid +
-                ", title='" + title + '\'' +
-                ", titleCode='" + titleCode + '\'' +
-                ", path='" + path + '\'' +
-                ", icon='" + icon + '\'' +
-                ", validInd=" + validInd +
-                ", display=" + display +
-                ", children=" + children +
-                ", isChildrenDisplay=" + isChildrenDisplay +
-                '}';
-    }
 }

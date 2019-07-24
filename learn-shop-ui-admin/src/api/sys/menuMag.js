@@ -38,7 +38,7 @@ export function findMenus() {
  * @param display
  * @constructor
  */
-export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validInd, display}) {
+export function saveOrUpdateMenu({id, pid, title, titleCode, sortField, icon, validInd, display}) {
   return request({
     url: baseUrl + '/saveOrUpdateMenu',
     method: 'put',
@@ -47,7 +47,7 @@ export function saveOrUpdateMenu({id, pid, title, titleCode, path, icon, validIn
       pid: pid,
       menuName: title,
       menuCode: titleCode,
-      url: path,
+      sortField: sortField,
       icon: icon,
       validInd: validInd,
       display: display
