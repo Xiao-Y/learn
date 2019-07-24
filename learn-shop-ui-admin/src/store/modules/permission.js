@@ -34,9 +34,9 @@ function setMenuUrl(menus, router, routerPath) {
   for (var j in menus) {
     // 设置路由的 title 和 icon
     if (menus[j].titleCode === router.name) {
-      var meta = router.meta ? router.meta : {meta:{}};
+      var meta = router.meta ? router.meta : {};
       Object.assign(meta, { title: menus[j].title, icon: menus[j].icon });
-      Object.assign(router, meta);
+      Object.assign(router, { meta: meta });
     }
     // 设置非顶级菜单的
     if (menus[j].titleCode === router.name && menus[j].pid != null) {
@@ -84,6 +84,7 @@ function filterAsyncRouter(accessedRouters, menus) {
       }
     }
   }
+  console.info(accessedRouters);
   return accessedRouters
 }
 

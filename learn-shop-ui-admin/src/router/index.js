@@ -36,7 +36,6 @@ export const asyncRouterMap = [{
   children: [{
     path: 'index',
     name: 'readmeIndex',
-    meta: {title: 'Readme', icon: 'el-icon-menu'},
     component: resolve => require(['../views/test/readme.vue'], resolve)
   }]
 },{

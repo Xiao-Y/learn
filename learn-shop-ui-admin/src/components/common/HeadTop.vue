@@ -9,22 +9,22 @@
 </template>
 
 <script>
-
-  export default {
-    data: function () {
-      return {}
-    }
-  }
+export default {
+  data: function() {
+    return {};
+  },
+  methods: {}
+};
 </script>
 
 <style lang="less">
-  .header_container{
-    background-color: #EFF2F7;
-    height: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 20px;
-    top: 0px;
-  }
+.header_container {
+  background-color: #eff2f7;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  top: 0px;
+}
 </style>
