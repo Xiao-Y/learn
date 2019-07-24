@@ -8,7 +8,7 @@
     <div id="content">
       <ul class="nav">
         <li class="home">
-          <router-link to="/readme/index">返回首页</router-link>
+          <router-link to="/home/index">返回首页</router-link>
         </li>
         <li class="site_map">
           <a href="#" @click="goBack">返回上页</a>
@@ -28,7 +28,7 @@
     },
     methods: {
       goBack() {
-        window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/Readme')
+        window.history.length > 1 ? this.$router.go(-1) : this.$router.push({name:'homeIndex'})
       }
     }
   }

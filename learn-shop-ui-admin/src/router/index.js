@@ -29,14 +29,14 @@ export const constantRouterMap = [{
 // 子路由的 name = parentPath + childrenPath。必须要唯一，要与 sys_menu 中的 menu_code 一致，不然路由加载不出来）
 
 export const asyncRouterMap = [{
-  path: '/readme',
-  index: 'readme',
-  name: 'readme',
+  path: '/home',
+  index: 'home',
+  name: 'home',
   component: Home,
   children: [{
     path: 'index',
-    name: 'readmeIndex',
-    component: resolve => require(['../views/test/readme.vue'], resolve)
+    name: 'homeIndex',
+    component: resolve => require(['../views/home/HomeIndex.vue'], resolve)
   }]
 },{
   path: '/sys',
