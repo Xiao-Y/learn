@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import requestUtils from '../../utils/requestUtils'
 
 const baseUrl = 'admin-system/dataDictionaryApi';
 
@@ -7,9 +7,5 @@ const baseUrl = 'admin-system/dataDictionaryApi';
  * @param roleFilter
  * @constructor
  */
-export function LoadSysDataDictionary(fieldType) {
-  return request({
-    url: baseUrl + '/findDataDictionary/adminSystem/' + fieldType,
-    method: 'get'
-  })
-}
+export const LoadSysDataDictionary = fieldType => requestUtils.get(baseUrl + '/findDataDictionary/adminSystem/' + fieldType);
+

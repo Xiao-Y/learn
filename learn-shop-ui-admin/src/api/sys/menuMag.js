@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import requestUtils from '../../utils/requestUtils'
 
 const baseUrl = 'admin-system/menuApi';
 
@@ -7,24 +7,14 @@ const baseUrl = 'admin-system/menuApi';
  * @param pid
  * @constructor
  */
-export function findParentMenu(pid) {
-  return request({
-    url: baseUrl + '/findMenuById/' + pid,
-    method: 'get'
-  })
-}
+export const findParentMenu = pid => requestUtils.get(baseUrl + '/findMenuById/' + pid);
 
 /**
  * 获取父菜单信息
  * @param pid
  * @constructor
  */
-export function findMenus() {
-  return request({
-    url: baseUrl + '/findMenus',
-    method: 'get'
-  })
-}
+export const findMenus = () => requestUtils.get(baseUrl + '/findMenus');
 
 /**
  * 保存或者更新菜单信息
@@ -38,61 +28,34 @@ export function findMenus() {
  * @param display
  * @constructor
  */
-export function saveOrUpdateMenu({id, pid, title, titleCode, sortField, icon, validInd, display}) {
-  return request({
-    url: baseUrl + '/saveOrUpdateMenu',
-    method: 'put',
-    data: {
-      id: id,
-      pid: pid,
-      menuName: title,
-      menuCode: titleCode,
-      sortField: sortField,
-      icon: icon,
-      validInd: validInd,
-      display: display
-    }
-  });
-}
+export const saveOrUpdateMenu = (id, pid, title, titleCode, sortField, icon, validInd, display) => requestUtils.put(baseUrl + '/saveOrUpdateMenu', {
+  id: id,
+  pid: pid,
+  menuName: title,
+  menuCode: titleCode,
+  sortField: sortField,
+  icon: icon,
+  validInd: validInd,
+  display: display
+});
 
 /**
  * 删除菜单及关联信息
  * @param ids
  * @constructor
  */
-export function delMenuByIds(ids) {
-  return request({
-    url: baseUrl + '/delMenuByIds',
-    method: 'delete',
-    data: {
-      ids
-    }
-  });
-}
+export const delMenuByIds = ids => requestUtils.del(baseUrl + '/delMenuByIds', {ids});
 
 /**
  * 通过token 获取菜单信息
  * @param token
  * @constructor
  */
-export function getHomeMenus(token) {
-  return request({
-    url: baseUrl + '/homeMenus',
-    method: 'get',
-    params: {
-      token
-    }
-  })
-}
+export const getHomeMenus = token => requestUtils.get(baseUrl + '/homeMenus?token=' + token);
 
 /**
  * 查询 menuCode 是否重复
  * @param menuCode
  * @constructor
  */
-export function CheckMenuCode(menuCode) {
-  return request({
-    url: baseUrl + '/checkMenuCode/' + menuCode,
-    method: 'get'
-  })
-}
+export const CheckMenuCode = menuCode => requestUtils.get(baseUrl + '/checkMenuCode/' + menuCode);
