@@ -28,15 +28,15 @@ export const findMenus = () => requestUtils.get(baseUrl + '/findMenus');
  * @param display
  * @constructor
  */
-export const saveOrUpdateMenu = (id, pid, title, titleCode, sortField, icon, validInd, display) => requestUtils.put(baseUrl + '/saveOrUpdateMenu', {
-  id: id,
-  pid: pid,
-  menuName: title,
-  menuCode: titleCode,
-  sortField: sortField,
-  icon: icon,
-  validInd: validInd,
-  display: display
+export const saveOrUpdateMenu = editMenus => requestUtils.put(baseUrl + '/saveOrUpdateMenu', {
+  id: editMenus.id,
+  pid: editMenus.pid,
+  menuName: editMenus.title,
+  menuCode: editMenus.titleCode,
+  sortField: editMenus.sortField,
+  icon: editMenus.icon,
+  validInd: editMenus.validInd,
+  display: editMenus.display
 });
 
 /**

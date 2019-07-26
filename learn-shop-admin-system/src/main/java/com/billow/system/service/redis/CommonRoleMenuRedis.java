@@ -142,7 +142,7 @@ public class CommonRoleMenuRedis {
             this.findChildren(all, menuEx);
             menuExes.add(menuEx);
         });
-        menuExes.sort(Comparator.comparingDouble(MenuEx::getSortField));
+        menuExes.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));
         return menuExes;
     }
 
@@ -161,7 +161,7 @@ public class CommonRoleMenuRedis {
                 .collect(Collectors.toList());
 
         if (ToolsUtils.isNotEmpty(collect)) {
-            collect.sort(Comparator.comparingDouble(MenuEx::getSortField));
+            collect.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));
             menuEx.setChildren(collect);
             collect.stream().filter(f -> f.getDisplay()).forEach(f -> menuEx.setIsChildrenDisplay(true));
             collect.stream().forEach(f -> this.findChildren(all, f));

@@ -47,6 +47,10 @@ custom:
   menu:
     read-cache: true #菜单优先从缓存中读出
     write-cache: true #菜单写入缓存中
+  common:
+    word-resource-dandler: /displayImag # 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/
+    word-img-path: D:/temp-rainy/ # 图片保存的路径
+
 
 # 显示 sql 的查询参数
 logging:

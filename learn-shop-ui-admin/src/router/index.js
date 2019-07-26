@@ -108,6 +108,14 @@ export const asyncRouterMap = [{
     path: 'permissionList/index',
     component: resolve => require(['../views/sys/PermissionList.vue'], resolve)
   }]
+},{
+  path: '/edit',
+  name: 'edit',
+  component: Home,children: [{
+    name: 'editMarkdown',
+    path: 'markdown',
+    component: resolve => require(['../views/edit/Markdown.vue'], resolve)
+  }]
 }]
 
 export default new Router({

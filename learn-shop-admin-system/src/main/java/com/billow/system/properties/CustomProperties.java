@@ -19,4 +19,6 @@ public class CustomProperties {
 
     private MenuProperties menu = new MenuProperties();
 
+    private CommonProperties common = new CommonProperties();
+
 }

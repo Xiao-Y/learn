@@ -51,7 +51,15 @@ var RequestUtils = {
       url: url,
       method: 'post',
       data: data
-    })
+    });
+  },
+  upload: function (url, formdata) {
+    return request({
+      headers: {'Content-Type': 'multipart/form-data'},
+      url: url,
+      method: 'post',
+      data: formdata
+    });
   }
 
 }

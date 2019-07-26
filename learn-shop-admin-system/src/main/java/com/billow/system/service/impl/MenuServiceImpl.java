@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -189,7 +190,7 @@ public class MenuServiceImpl implements MenuService {
                 this.menuPosCoverMenuExs(menuPos, cMenuExs, menuIds);
                 // 过滤出是子菜单的数据
                 menuPos.stream().filter(f -> f.getDisplay()).forEach(f -> pitem.setIsChildrenDisplay(true));
-                cMenuExs.sort(Comparator.comparingDouble(MenuEx::getSortField));
+                cMenuExs.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));
                 pitem.setChildren(cMenuExs);
                 // 递归查询子级菜单
                 this.childenMenus(cMenuExs, menuIds);
@@ -216,6 +217,6 @@ public class MenuServiceImpl implements MenuService {
             MenuEx ex = commonRoleMenuRedis.menuPoCoverMenuex(item);
             pMenuExs.add(ex);
         });
-        pMenuExs.sort(Comparator.comparingDouble(MenuEx::getSortField));
+        pMenuExs.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));
     }
 }
