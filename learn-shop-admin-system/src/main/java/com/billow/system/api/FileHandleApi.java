@@ -41,8 +41,12 @@ public class FileHandleApi {
     public List<FileHandleEx> upload(@RequestParam("file") List<MultipartFile> files) throws IOException {
         CommonProperties common = customProperties.getCommon();
         String wordResourceDandler = common.getWordResourceDandler();
+        String wordImgPath = common.getWordImgPath();
         String sub = ".";
 
+        if(!FileUtil.exist(wordImgPath)){
+            FileUtil.mkdir(wordImgPath);
+        }
         List<FileHandleEx> list = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             MultipartFile multipartFile = files.get(i);
@@ -50,7 +54,7 @@ public class FileHandleApi {
             String last = StringUtils.substringAfterLast(multipartFile.getOriginalFilename(), sub);
             String newFileName = SequenceUtil.createSequenceBySuffix(sub + last);
 
-            String filePath = common.getWordImgPath() + newFileName;
+            String filePath = wordImgPath + newFileName;
             FileUtil.writeFromStream(multipartFile.getInputStream(), filePath);
 
             FileHandleEx ex = new FileHandleEx();
