@@ -41,12 +41,21 @@ public class FileHandleApi {
     public List<FileHandleEx> upload(@RequestParam("file") List<MultipartFile> files) throws IOException {
         CommonProperties common = customProperties.getCommon();
         String wordResourceDandler = common.getWordResourceDandler();
-        String wordImgPath = common.getWordImgPath();
+
+        String wordImgPath;
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {  //如果是Windows系统
+            wordImgPath = common.getWin().getWordImgPath();
+        } else {
+            wordImgPath = common.getLinux().getWordImgPath();
+        }
+
         String sub = ".";
 
-        if(!FileUtil.exist(wordImgPath)){
+        if (!FileUtil.exist(wordImgPath)) {
             FileUtil.mkdir(wordImgPath);
         }
+
         List<FileHandleEx> list = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             MultipartFile multipartFile = files.get(i);

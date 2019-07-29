@@ -22,9 +22,13 @@ public class CustomWebAppConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         CommonProperties common = customProperties.getCommon();
-        String wordImgPath = common.getWordImgPath();
-        String wordResourceDandler = common.getWordResourceDandler();
-        registry.addResourceHandler(wordResourceDandler + "/**")
-                .addResourceLocations("file:" + wordImgPath);
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {  //如果是Windows系统
+            registry.addResourceHandler(common.getWordResourceDandler() + "/**")
+                    .addResourceLocations("file:" + common.getWin().getWordImgPath());
+        } else {//linux 和mac
+            registry.addResourceHandler(common.getWordResourceDandler() + "/**")
+                    .addResourceLocations("file:" + common.getLinux().getWordImgPath());
+        }
     }
 }
