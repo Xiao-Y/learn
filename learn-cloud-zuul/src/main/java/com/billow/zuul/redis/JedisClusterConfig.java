@@ -1,4 +1,4 @@
-package com.billow.common.redis;
+package com.billow.zuul.redis;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

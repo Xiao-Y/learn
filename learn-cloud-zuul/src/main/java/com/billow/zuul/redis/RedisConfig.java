@@ -1,4 +1,4 @@
-package com.billow.common.redis;
+package com.billow.zuul.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
