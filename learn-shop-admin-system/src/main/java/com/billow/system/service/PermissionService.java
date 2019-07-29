@@ -14,7 +14,7 @@ public interface PermissionService {
      * 通过角色令牌,查询角色的权限集合
      *
      * @param rolePo
-     * @return java.util.List<com.billow.auth.pojo.po.PermissionPo>
+     * @return java.util.List<com.billow.auth.pojo.vo.PermissionVo>
      * @author LiuYongTao
      * @date 2019/5/23 20:07
      */

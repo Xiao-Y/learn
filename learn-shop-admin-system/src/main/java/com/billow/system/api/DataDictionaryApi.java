@@ -36,9 +36,9 @@ public class DataDictionaryApi extends BaseApi {
         return dataDictionaryVos;
     }
 
-    @PostMapping("/findDataDictionaryByCondition")
-    public List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionaryVo dataDictionaryVo) throws Exception {
-        List<DataDictionaryVo> dataDictionaryVos = dataDictionaryService.findDataDictionaryByCondition(dataDictionaryVo);
-        return dataDictionaryVos;
-    }
+//    @PostMapping("/findDataDictionaryByCondition")
+//    public List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionaryVo dataDictionaryVo) throws Exception {
+//        List<DataDictionaryVo> dataDictionaryVos = dataDictionaryService.findDataDictionaryByCondition(dataDictionaryVo);
+//        return dataDictionaryVos;
+//    }
 }

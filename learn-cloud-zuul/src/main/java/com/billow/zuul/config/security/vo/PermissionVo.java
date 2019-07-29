@@ -1,4 +1,4 @@
-package com.billow.system.config.security;
+package com.billow.zuul.config.security.vo;
 
 import lombok.Data;
 

@@ -29,10 +29,10 @@
             <artifactId>learn-cloud-common</artifactId>
         </dependency>
         <!-- base-tools -->
-        <!--<dependency>-->
-        <!--<groupId>com.billow</groupId>-->
-        <!--<artifactId>learn-shop-base-tools</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-tools</artifactId>
+        </dependency>
         <!-- 路由中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -94,6 +94,10 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -43,6 +43,7 @@ import java.io.IOException;
 public class JWTAuthenticationFilter extends GenericFilterBean {
 
     public static final String SPRING_SECURITY_CONTEXT_KEY = "SPRING_SECURITY_CONTEXT";
+    public static final String LOGIN = "/public-auth/login";
     private String springSecurityContextKey = SPRING_SECURITY_CONTEXT_KEY;
 
     private TokenExtractor tokenExtractor = new BearerTokenExtractor();
@@ -61,7 +62,11 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-
+        // 登陆页面不处理
+        if (LOGIN.equals(req.getRequestURI())) {
+            filterChain.doFilter(req, res);
+            return;
+        }
         try {
             // 获取请求中中的 Authorization 或者 access_token 中的 token
             Authentication authentication = tokenExtractor.extract(req);

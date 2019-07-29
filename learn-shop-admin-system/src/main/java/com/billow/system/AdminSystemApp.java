@@ -3,8 +3,8 @@ package com.billow.system;
 import com.billow.tools.utlis.SpringContextUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+//import org.springframework.boot.autoconfigure.security.SecurityProperties;
+//import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
@@ -29,7 +29,7 @@ import java.security.Principal;
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan("com.billow")
-@EnableConfigurationProperties(SecurityProperties.class)
+//@EnableConfigurationProperties(SecurityProperties.class)
 public class AdminSystemApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(AdminSystemApp.class, args));

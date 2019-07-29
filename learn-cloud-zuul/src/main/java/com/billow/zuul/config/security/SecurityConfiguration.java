@@ -24,7 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/*Api/**")
+                .antMatchers("/**/*Api/**")
                 .access("@authService.hasPermission(request,authentication)")
                 .anyRequest()
                 .permitAll()
