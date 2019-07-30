@@ -99,7 +99,8 @@
   import {
     LoadDataUserList,
     DeleteUserById,
-    ProhibitUserById
+    ProhibitUserById,
+    LoadRoleIdsByUserId
   } from "../../api/user/userMag";
   import {
     LoadSelectRoleList
@@ -248,9 +249,13 @@
       // 加载指定用户的角色信息
       loadUserRole(row, expandedRows){
         if(!row.roleIds){
+          Object.assign(row,{roleIds:[]});
+          LoadRoleIdsByUserId(row.id).then(res=>{
+            var roleIds = res.resData.roleIds;
+            console.info("roleIds:",roleIds);
+            Object.assign(row,{roleIds:['1']});
+          });
           console.info("222--->>>",row.roleIds);
-
-          Object.assign(row,{roleIds:['2']})
         }
       }
     }

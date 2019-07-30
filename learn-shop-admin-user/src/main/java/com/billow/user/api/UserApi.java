@@ -61,6 +61,12 @@ public class UserApi extends BaseApi {
         return userService.deleteUserById(id);
     }
 
+    @ApiOperation("根据id查询有效的用户角色")
+    @GetMapping("/findRoleIdsByUserId/{id}")
+    public UserVo findRoleIdsByUserId(@PathVariable("id") Long id) {
+        return userService.findRoleIdsByUserId(id);
+    }
+
 
 //    /**
 //     * 根据用户名查询出用户信息

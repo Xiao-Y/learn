@@ -2,8 +2,11 @@ package com.billow.user.service.impl;
 
 import com.billow.common.jpa.DefaultSpec;
 import com.billow.tools.utlis.ConvertUtils;
+import com.billow.tools.utlis.ToolsUtils;
 import com.billow.user.dao.UserDao;
+import com.billow.user.dao.UserRoleDao;
 import com.billow.user.pojo.po.UserPo;
+import com.billow.user.pojo.po.UserRolePo;
 import com.billow.user.pojo.vo.UserVo;
 import com.billow.user.service.UserService;
 import org.slf4j.Logger;
@@ -13,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户信息操作
@@ -27,8 +33,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
-//    @Autowired
-//    private UserRoleDao userRoleDao;
+    @Autowired
+    private UserRoleDao userRoleDao;
 //    @Autowired
 //    private RolePermissionDao rolePermissionDao;
 //    @Autowired
@@ -104,5 +110,17 @@ public class UserServiceImpl implements UserService {
             userDao.save(userPo);
         }
         return ConvertUtils.convert(userPo, UserVo.class);
+    }
+
+    @Override
+    public UserVo findRoleIdsByUserId(Long id) {
+        UserVo userVo = new UserVo();
+        userVo.setId(id);
+        List<UserRolePo> userRolePos = userRoleDao.findByUserIdIsAndValidIndIsTrue(id);
+        if (ToolsUtils.isNotEmpty(userRolePos)) {
+            List<Long> collect = userRolePos.stream().map(m -> m.getRoleId()).collect(Collectors.toList());
+            userVo.setRoleIds(collect);
+        }
+        return userVo;
     }
 }

@@ -45,3 +45,10 @@ export const ProhibitUserById = id => requestUtils.del(baseUrl + '/prohibitUserB
  * @constructor
  */
 export const DeleteUserById = id => requestUtils.del(baseUrl + '/deleteUserById/' + id);
+
+/**
+ * 根据id查询有效的用户角色
+ * @param id
+ * @constructor
+ */
+export const LoadRoleIdsByUserId = id => requestUtils.get(baseUrl + '/findRoleIdsByUserId/' + id);
