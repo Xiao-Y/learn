@@ -22,34 +22,30 @@ public interface ProductService {
      * 保存商品信息
      *
      * @param productVo
-     * @param userCode
      */
-    void saveProduct(ProductVo productVo, String userCode) throws Exception;
+    void saveProduct(ProductVo productVo) throws Exception;
 
     /**
      * 更新商品信息
      *
      * @param productVo
-     * @param userCode
      * @throws Exception
      */
-    void updateProduct(ProductVo productVo, String userCode) throws Exception;
+    void updateProduct(ProductVo productVo) throws Exception;
 
     /**
      * 根据id删除商品信息
      *
      * @param id
-     * @param userCode
      */
-    ProductVo deleteProductById(String id, String userCode) throws Exception;
+    ProductVo deleteProductById(String id) throws Exception;
 
     /**
      * 上传商品图片，保存图片信息
      *
      * @param productImageVo
-     * @param userCode
      */
-    void uploadProductImage(ProductImageVo productImageVo, String userCode) throws Exception;
+    void uploadProductImage(ProductImageVo productImageVo) throws Exception;
 
     /**
      * 通过商品id查询出商品图片

@@ -12,7 +12,6 @@ import com.billow.product.pojo.vo.ProductVo;
 import com.billow.product.service.ProductService;
 import com.billow.tools.generator.SequenceUtil;
 import com.billow.tools.utlis.ConvertUtils;
-import com.billow.tools.utlis.FieldUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -48,37 +47,34 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void saveProduct(ProductVo productVo, String userCode) throws Exception {
+    public void saveProduct(ProductVo productVo) throws Exception {
         productVo.setId(SequenceUtil.createSequence());
+        productVo.setValidInd(true);
         productVo.setDeleFlag("1");
-        FieldUtils.setCommonFieldByInsertWithValidInd(productVo, userCode);
         ProductPo convert = ConvertUtils.convert(productVo, ProductPo.class);
         productDao.save(convert);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateProduct(ProductVo productVo, String userCode) throws Exception {
-        FieldUtils.setCommonFieldByUpdate(productVo, userCode);
+    public void updateProduct(ProductVo productVo) throws Exception {
         ProductPo convert = ConvertUtils.convert(productVo, ProductPo.class);
         productDao.save(convert);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public ProductVo deleteProductById(String id, String userCode) throws Exception {
+    public ProductVo deleteProductById(String id) throws Exception {
         // 删除商品信息
         ProductPo productPo = productDao.findOne(id);
         ProductVo productVo = ConvertUtils.convert(productPo, ProductVo.class);
         productPo.setDeleFlag("0");
-        FieldUtils.setCommonFieldByUpdate(productPo, userCode);
         productDao.save(productPo);
         // 删除商品图片
         List<ProductImagePo> productImagePos = productImageDao.findByProductIdAndValidInd(id, true);
         if (ToolsUtils.isNotEmpty(productImagePos)) {
             productImagePos.stream().forEach(item -> {
                 item.setValidInd(false);
-                FieldUtils.setCommonFieldByUpdate(item, userCode);
             });
             productImageDao.save(productImagePos);
         }
@@ -87,9 +83,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void uploadProductImage(ProductImageVo productImageVo, String userCode) throws Exception {
+    public void uploadProductImage(ProductImageVo productImageVo) throws Exception {
         // 保存图片信息
-        FieldUtils.setCommonFieldByInsertWithValidInd(productImageVo, userCode);
+        productImageVo.setValidInd(true);
         productImageVo.setId(SequenceUtil.createSequence());
         String newFileName = SequenceUtil.createSequenceBySuffix(".jpg");
         productImageVo.setNewImageName(newFileName);

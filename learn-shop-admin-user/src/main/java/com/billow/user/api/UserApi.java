@@ -1,7 +1,6 @@
 package com.billow.user.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.tools.resData.BaseResponse;
 import com.billow.user.pojo.vo.UserVo;
 import com.billow.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -35,15 +34,9 @@ public class UserApi extends BaseApi {
      * @date 2018/11/5 15:18
      */
     @GetMapping("/findUserInfoByUsercode/{userCode}")
-    public BaseResponse<UserVo> findUserInfoByUsercode(@PathVariable("userCode") String userCode) {
-        BaseResponse<UserVo> baseResponse = super.getBaseResponse();
-        try {
-            UserVo userVo = userService.findUserInfoByUsercode(userCode);
-            baseResponse.setResData(userVo);
-        } catch (Exception e) {
-            super.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public UserVo findUserInfoByUsercode(@PathVariable("userCode") String userCode) {
+        UserVo userVo = userService.findUserInfoByUsercode(userCode);
+        return userVo;
     }
 
     /**
@@ -55,14 +48,8 @@ public class UserApi extends BaseApi {
      * @date 2019/4/28 9:27
      */
     @GetMapping("/loadUserByUsername/{userCode}")
-    public BaseResponse<UserDetails> loadUserByUsername(@PathVariable("userCode") String userCode) {
-        BaseResponse<UserDetails> baseResponse = super.getBaseResponse();
-        try {
-            UserDetails userDetails = userService.loadUserByUsername(userCode);
-            baseResponse.setResData(userDetails);
-        } catch (Exception e) {
-            super.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public UserDetails loadUserByUsername(@PathVariable("userCode") String userCode) {
+        UserDetails userDetails = userService.loadUserByUsername(userCode);
+        return userDetails;
     }
 }

@@ -1,8 +1,6 @@
 package com.billow.common.base;
 
 import com.alibaba.fastjson.JSONObject;
-import com.billow.common.business.ex.RoleEx;
-import com.billow.common.business.ex.UserEx;
 import com.billow.tools.enums.RdsKeyEnum;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -36,93 +33,6 @@ public class BaseApi {
     protected HttpServletRequest request;
     @Autowired
     protected RedisTemplate<String, String> redisTemplate;
-
-    /**
-     * 获取用户对象
-     *
-     * @return com.billow.pojo.vo.user.UserVo
-     * @author LiuYongTao
-     * @date 2018/5/26 9:34
-     */
-    protected UserEx findUserVo() {
-        return new UserEx();
-    }
-
-    /**
-     * 获取用户的角色信息
-     *
-     * @return List<RoleVo>
-     * @author LiuYongTao
-     * @date 2018/5/29 11:35
-     */
-    protected List<RoleEx> findRoleVos() {
-        List<RoleEx> roleVos = new ArrayList<>();
-        RoleEx roleVo = new RoleEx();
-        roleVo.setId(1L);
-        roleVos.add(roleVo);
-        return roleVos;
-    }
-
-    /**
-     * 获取用户的角色CODE信息
-     *
-     * @return List<RoleVo>
-     * @author LiuYongTao
-     * @date 2018/5/29 11:35
-     */
-    protected List<String> findRoleCodes() {
-        List<String> roleCodes = new ArrayList<>();
-        roleCodes.add("admin");
-        roleCodes.add("billow");
-        return roleCodes;
-    }
-
-    /**
-     * 获取用户名
-     *
-     * @return java.lang.String
-     * @author LiuYongTao
-     * @date 2018/5/26 9:34
-     */
-    protected String findUserCode() {
-        return "admin";
-    }
-
-    /**
-     * 获取基类返回数据
-     *
-     * @return T
-     * @author LiuYongTao
-     * @date 2018/5/26 9:40
-     */
-    protected <T> BaseResponse<T> getBaseResponse() {
-        BaseResponse<T> base = new BaseResponse<>();
-        base.setTraceID(this.getApplicationName());
-        return base;
-    }
-
-    /**
-     * 错误信息日志
-     *
-     * @param e
-     */
-    protected void getErrorInfo(Exception e) {
-        e.printStackTrace();
-        logger.error("ApplicationName：{}，InstanceId：{}",
-                this.getApplicationName(), this.getInstanceId(), e);
-    }
-
-    /**
-     * 错误信息日志
-     *
-     * @param e
-     */
-    protected void getErrorInfo(Exception e, BaseResponse baseResponse) {
-        baseResponse.setResCode(ResCodeEnum.FAIL);
-        e.printStackTrace();
-        logger.error("ApplicationName：{}，InstanceId：{}",
-                this.getApplicationName(), this.getInstanceId(), e);
-    }
 
     /**
      * 向redis中添加值

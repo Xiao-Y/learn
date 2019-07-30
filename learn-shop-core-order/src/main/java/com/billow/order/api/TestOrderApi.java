@@ -1,12 +1,11 @@
 package com.billow.order.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.tools.resData.BaseResponse;
-
+import com.billow.order.pojo.vo.OrderVo;
 import com.billow.order.producer.CoreOrderProducer;
 import com.billow.order.remote.TestUserRemote;
 import com.billow.order.service.CoreOrderService;
-import com.billow.order.pojo.vo.OrderVo;
+import com.billow.tools.resData.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,16 +50,11 @@ public class TestOrderApi extends BaseApi {
 
     @ApiOperation(value = "发送MQ对象消息", notes = "用于测试发送MQ对象消息")
     @GetMapping("/sendMQTest")
-    public BaseResponse<String> sendMQTest() {
-        BaseResponse<String> baseResponse = super.getBaseResponse();
-        try {
-            OrderVo vo = new OrderVo();
-            vo.setProductName("Billow").setProductNo("SSDFW1231").setCreateTime(new Date());
-            coreOrderProducer.sendOrderCar(vo);
-        } catch (Exception e) {
-            super.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public String sendMQTest() {
+        OrderVo vo = new OrderVo();
+        vo.setProductName("Billow").setProductNo("SSDFW1231").setCreateTime(new Date());
+        coreOrderProducer.sendOrderCar(vo);
+        return "SSDFW1231";
     }
 
     @ApiOperation(value = "发送TxMQ消息", notes = "用于测试事务处理发送MQ消息")

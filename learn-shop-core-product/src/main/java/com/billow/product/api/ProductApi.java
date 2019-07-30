@@ -1,7 +1,6 @@
 package com.billow.product.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.tools.resData.BaseResponse;
 import com.billow.product.pojo.po.ProductPo;
 import com.billow.product.pojo.vo.ProductImageVo;
 import com.billow.product.pojo.vo.ProductVo;
@@ -39,104 +38,59 @@ public class ProductApi extends BaseApi {
 
     @ApiOperation("根据条件查询商品信息")
     @PostMapping("/findProductList")
-    public BaseResponse<Page<ProductPo>> findProductList(@RequestBody ProductVo productVo) {
-        BaseResponse<Page<ProductPo>> baseResponse = super.getBaseResponse();
-        try {
-            Page<ProductPo> productPos = productService.findProductList(productVo);
-            baseResponse.setResData(productPos);
-        } catch (Exception e) {
-            this.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public Page<ProductPo> findProductList(@RequestBody ProductVo productVo) {
+        Page<ProductPo> productPos = productService.findProductList(productVo);
+        return productPos;
     }
 
     @ApiOperation("保存商品信息")
     @PostMapping("/saveProduct")
-    public BaseResponse<ProductVo> saveProduct(@RequestBody ProductVo productVo) {
-        BaseResponse<ProductVo> baseResponse = super.getBaseResponse();
-        try {
-            String userCode = super.findUserCode();
-            productService.saveProduct(productVo, userCode);
-            baseResponse.setResData(productVo);
-        } catch (Exception e) {
-            this.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public ProductVo saveProduct(@RequestBody ProductVo productVo) throws Exception{
+        productService.saveProduct(productVo);
+        return productVo;
     }
 
     @ApiOperation("更新商品信息")
     @PutMapping("/updateProduct")
-    public BaseResponse<ProductVo> updateProduct(@RequestBody ProductVo productVo) {
-        BaseResponse<ProductVo> baseResponse = super.getBaseResponse();
-        try {
-            String userCode = super.findUserCode();
-            productService.updateProduct(productVo, userCode);
-            baseResponse.setResData(productVo);
-        } catch (Exception e) {
-            this.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public ProductVo updateProduct(@RequestBody ProductVo productVo) throws Exception {
+        productService.updateProduct(productVo);
+        return productVo;
     }
 
     @ApiOperation("根据id删除商品信息")
     @DeleteMapping("/deleteProductById/{id}")
-    public BaseResponse<ProductVo> deleteProductById(@PathVariable String id) {
-        BaseResponse<ProductVo> baseResponse = super.getBaseResponse();
-        try {
-            String userCode = super.findUserCode();
-            ProductVo productVo = productService.deleteProductById(id, userCode);
-            baseResponse.setResData(productVo);
-        } catch (Exception e) {
-            this.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public ProductVo deleteProductById(@PathVariable String id) throws Exception {
+        ProductVo productVo = productService.deleteProductById(id);
+        return productVo;
     }
 
     @ApiOperation("上传商品图片，保存图片信息")
     @PostMapping("/uploadProductImage/{productId}")
-    public BaseResponse<ProductImageVo> uploadProductImage(@PathVariable String productId,
-                                                           @RequestParam("file") MultipartFile multipartFile,
-                                                           ProductImageVo productImageVo) throws Exception {
-        BaseResponse<ProductImageVo> baseResponse = super.getBaseResponse();
-        try {
-            String userCode = super.findUserCode();
-            productImageVo.setProductId(productId);
-            productImageVo.setOldImageName(multipartFile.getOriginalFilename());
-            productImageVo.setContentType(multipartFile.getContentType());
-            productImageVo.setInputStream(multipartFile.getInputStream());
-            productService.uploadProductImage(productImageVo, userCode);
-        } catch (Exception e) {
-            this.getErrorInfo(e, baseResponse);
-        }
+    public ProductImageVo uploadProductImage(@PathVariable String productId,
+                                             @RequestParam("file") MultipartFile multipartFile,
+                                             ProductImageVo productImageVo) throws Exception {
+        productImageVo.setProductId(productId);
+        productImageVo.setOldImageName(multipartFile.getOriginalFilename());
+        productImageVo.setContentType(multipartFile.getContentType());
+        productImageVo.setInputStream(multipartFile.getInputStream());
+        productService.uploadProductImage(productImageVo);
+
         productImageVo.setInputStream(null);
-        return baseResponse;
+        return productImageVo;
     }
 
     @ApiOperation("通过商品id查询出商品图片")
     @GetMapping("/findProductImageByProductId/{productId}")
-    public BaseResponse<List<ProductImageVo>> findProductImageByProductId(@PathVariable String productId,
-                                                                          ProductImageVo productImageVo) throws Exception {
-        BaseResponse<List<ProductImageVo>> baseResponse = super.getBaseResponse();
-        try {
-            List<ProductImageVo> productImageVos = productService.findProductImageByProductId(productId, productImageVo);
-            baseResponse.setResData(productImageVos);
-        } catch (Exception e) {
-            this.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public List<ProductImageVo> findProductImageByProductId(@PathVariable String productId,
+                                                            ProductImageVo productImageVo) throws Exception {
+        List<ProductImageVo> productImageVos = productService.findProductImageByProductId(productId, productImageVo);
+        return productImageVos;
     }
 
     @ApiOperation("通过图片id删除商品图片")
     @DeleteMapping("/deleteProductImageById/{id}")
-    public BaseResponse<Boolean> deleteProductImageById(@PathVariable String id) throws Exception {
-        BaseResponse<Boolean> baseResponse = super.getBaseResponse();
-        try {
-            productService.deleteProductImageById(id);
-            baseResponse.setResData(true);
-        } catch (Exception e) {
-            baseResponse.setResData(false);
-            this.getErrorInfo(e, baseResponse);
-        }
-        return baseResponse;
+    public Boolean deleteProductImageById(@PathVariable String id) throws Exception {
+        productService.deleteProductImageById(id);
+        return true;
     }
 }
