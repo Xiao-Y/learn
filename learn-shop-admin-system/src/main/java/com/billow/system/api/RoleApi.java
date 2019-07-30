@@ -1,6 +1,8 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.system.pojo.ex.DataDictionaryEx;
+import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.RoleService;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 角色信息
@@ -79,5 +80,11 @@ public class RoleApi extends BaseApi {
     @DeleteMapping("/deleteRoleById/{roleId}")
     public RoleVo deleteRoleById(@PathVariable("roleId") Long roleId){
         return roleService.deleteRoleById(roleId);
+    }
+
+    @ApiOperation("加载下拉列表角色信息")
+    @GetMapping("/findSelectRole")
+    public List<DataDictionaryEx> findSelectRole(){
+        return roleService.findSelectRole();
     }
 }

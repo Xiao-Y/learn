@@ -1,6 +1,6 @@
 package com.billow.job.dao.specification;
 
-import com.billow.common.utils.QueryUtils;
+import com.billow.common.jpa.utils.QueryUtils;
 import com.billow.job.pojo.po.ScheduleJobPo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.tools.utlis.ConvertUtils;

@@ -1,7 +1,6 @@
-package com.billow.common.base;
+package com.billow.common.jpa;
 
-import com.billow.common.utils.QueryUtils;
-import com.billow.tools.utlis.ConvertUtils;
+import com.billow.common.jpa.utils.QueryUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

@@ -2,6 +2,7 @@ package com.billow.zuul.config.security;
 
 
 import com.billow.tools.constant.DictionaryType;
+import com.billow.tools.utlis.ToolsUtils;
 import com.billow.zuul.config.security.vo.DataDictionaryVo;
 import com.billow.zuul.config.security.vo.PermissionVo;
 import com.billow.zuul.redis.RedisUtils;
@@ -70,19 +71,27 @@ public class AuthService {
                 // 查询 redis 中的角色权限
                 List<PermissionVo> permissionVos = redisUtils.getArray(PERMISSION + authority.getAuthority(), PermissionVo.class);
                 for (PermissionVo permissionVo : permissionVos) {
-                    String[] split = permissionVo.getSystemModule().split(",");
-                    for (String s : split) {
-                        String sourceURI = "/" + dictionaryMap.get(new Long(s)) + permissionVo.getUrl();
+                    if (ToolsUtils.isEmpty(permissionVo.getSystemModule())) {
+                        String sourceURI = permissionVo.getUrl();
                         logger.info("===>>> sourceURI:{}", sourceURI);
                         if (antPathMatcher.match(sourceURI, targetURI)) {
                             logger.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);
-                            isPermission = true;
-                            break;
+                            return true;
+                        }
+                    } else {
+                        String[] split = permissionVo.getSystemModule().split(",");
+                        for (String s : split) {
+                            String sourceURI = "/" + dictionaryMap.get(new Long(s)) + permissionVo.getUrl();
+                            logger.info("===>>> sourceURI:{}", sourceURI);
+                            if (antPathMatcher.match(sourceURI, targetURI)) {
+                                logger.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);
+                                return true;
+                            }
                         }
                     }
                 }
             }
         }
-        return isPermission;
+        return false;
     }
 }

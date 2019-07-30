@@ -104,9 +104,16 @@ export const asyncRouterMap = [{
   name: 'user',
   component: Home,
   children: [{
-    name: 'userPermissionListIndex',
-    path: 'permissionList/index',
-    component: resolve => require(['../views/sys/PermissionList.vue'], resolve)
+    name: 'userUserListIndex',
+    path: 'userList/index',
+    meta:{
+      keepAlive: true
+    },
+    component: resolve => require(['../views/user/UserList.vue'], resolve)
+  }, {
+    name: 'userUserEdit',
+    path: 'userList/userEdit',
+    component: resolve => require(['../views/user/components/UserEdit.vue'], resolve)
   }]
 },{
   path: '/edit',

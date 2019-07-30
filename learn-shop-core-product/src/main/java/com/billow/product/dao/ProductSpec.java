@@ -1,6 +1,6 @@
 package com.billow.product.dao;
 
-import com.billow.common.utils.QueryUtils;
+import com.billow.common.jpa.utils.QueryUtils;
 
 import com.billow.product.pojo.po.ProductPo;
 import com.billow.product.pojo.vo.ProductVo;

@@ -1,4 +1,4 @@
-package com.billow.common.utils;
+package com.billow.common.jpa.utils;
 
 /**
  * Created by billow.

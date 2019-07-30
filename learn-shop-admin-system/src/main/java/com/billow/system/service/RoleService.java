@@ -1,5 +1,7 @@
 package com.billow.system.service;
 
+import com.billow.system.pojo.ex.DataDictionaryEx;
+import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.RoleVo;
 import org.springframework.data.domain.Page;
@@ -75,4 +77,14 @@ public interface RoleService {
      * @date 2019/7/30 9:56
      */
     RoleVo deleteRoleById(Long roleId);
+
+    /**
+     * 查询角色信息
+     *
+     * @return java.util.List<com.billow.system.pojo.ex.DataDictionaryEx>
+     * @author LiuYongTao
+     * @date 2019/7/30 17:19
+     */
+    List<DataDictionaryEx> findSelectRole();
+
 }

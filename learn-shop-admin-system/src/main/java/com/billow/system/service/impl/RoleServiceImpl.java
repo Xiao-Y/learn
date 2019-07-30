@@ -1,12 +1,14 @@
 package com.billow.system.service.impl;
 
-import com.billow.common.base.DefaultSpec;
+import com.billow.common.jpa.DefaultSpec;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RoleDao;
 import com.billow.system.dao.RoleMenuDao;
 import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.dao.UserRoleDao;
+import com.billow.system.pojo.ex.DataDictionaryEx;
+import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RoleMenuPo;
@@ -228,6 +230,15 @@ public class RoleServiceImpl implements RoleService {
         commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
 
         return ConvertUtils.convert(one, RoleVo.class);
+    }
+
+    @Override
+    public List<DataDictionaryEx> findSelectRole() {
+        List<SelectRoleQuery> selectRole = roleDao.findSelectRole();
+        List<DataDictionaryEx> collect = selectRole.stream().map(m -> {
+            return new DataDictionaryEx(m.getId(), m.getRoleName() + "-" + m.getRoleCode(), m.getId().toString());
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }

@@ -44,3 +44,10 @@ export const ProhibitRoleById = id => requestUtils.put(baseUrl + '/prohibitRoleB
  * @constructor
  */
 export const DeleteRoleById = id => requestUtils.del(baseUrl + '/deleteRoleById/' + id);
+
+/**
+ * 加载下拉列表角色信息
+ * @param roleFilter
+ * @constructor
+ */
+export const LoadSelectRoleList = roleFilter => requestUtils.get(baseUrl + '/findSelectRole');

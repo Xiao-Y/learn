@@ -1,4 +1,4 @@
-package com.billow.system.config.jpa;
+package com.billow.common.jpa;
 
 import com.billow.common.business.UserTools;
 import org.springframework.beans.factory.annotation.Autowired;

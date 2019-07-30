@@ -1,6 +1,6 @@
 package com.billow.job.dao.specification;
 
-import com.billow.common.utils.QueryUtils;
+import com.billow.common.jpa.utils.QueryUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline">
+          <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
               <el-form-item label="角色名称" prop="roleName">
                 <el-input v-model="queryFilter.roleName" placeholder="角色名称"></el-input>
@@ -21,7 +21,8 @@
     </el-row>
     <el-button type="success" size="mini" @click="handleAdd" icon="el-icon-plus">添加</el-button>
     <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search">查询</el-button>
-    <el-button type="danger" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
+    <el-button type="info" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
+    <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
     <el-row>
       <template>
         <el-table :data="tableData" border style="width: 100%">
@@ -139,6 +140,10 @@
       // 清除查询条件
       resetForm(queryFilter) {
         this.$refs[queryFilter].resetFields();
+      },
+      refresh() {
+        // 刷新数据
+        this.LoadDataRoleList();
       },
       // 请服务器数据（获取自动任务列表数据）
       LoadDataRoleList() {

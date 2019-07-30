@@ -49,6 +49,7 @@ zuul:
     #用户相关
     admin-user:
       path: /admin-user/**
+      strip-prefix: false
       serviceId: learn-shop-admin-user
     #订单相关
     core-order:

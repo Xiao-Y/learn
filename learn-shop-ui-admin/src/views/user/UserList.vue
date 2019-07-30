@@ -8,21 +8,11 @@
           </template>
           <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
-              <el-form-item label="权限名称" prop="permissionName">
-                <el-input v-model="queryFilter.permissionName" placeholder="权限名称"></el-input>
+              <el-form-item label="用户名称" prop="username">
+                <el-input v-model="queryFilter.username" placeholder="用户名称"></el-input>
               </el-form-item>
-              <el-form-item label="权限CODE" prop="permissionCode">
-                <el-input v-model="queryFilter.permissionCode" placeholder="权限CODE"></el-input>
-              </el-form-item>
-              <el-form-item label="授权链接" prop="url">
-                <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
-              </el-form-item>
-              <el-form-item label="系统模块" prop="systemModules">
-                <custom-select v-model="queryFilter.systemModules"
-                               :datasource="systemModuleSelect"
-                               placeholder="请选择系统模块"
-                               multiple>
-                </custom-select>
+              <el-form-item label="用户CODE" prop="usercode">
+                <el-input v-model="queryFilter.usercode" placeholder="用户CODE"></el-input>
               </el-form-item>
             </el-row>
           </el-form>
@@ -35,23 +25,15 @@
     <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
     <el-row>
       <template>
-        <el-table :data="tableData" border style="width: 100%">
-          <el-table-column label="权限名称" prop="permissionName" width="150"></el-table-column>
-          <el-table-column label="授权链接" prop="url"></el-table-column>
-          <el-table-column label="权限描述" prop="descritpion"></el-table-column>
-          <el-table-column label="系统模块" prop="systemModule">
-            <template slot-scope="scope">
-              <custom-select v-model="scope.row.systemModules"
-                             :datasource="systemModuleSelect"
-                             :value-key="scope.row.permissionCode"
-                             disabled
-                             placeholder="请选择系统模块"
-                             multiple>
-              </custom-select>
-            </template>
-          </el-table-column>
+        <el-table border stripe style="width: 100%"
+          @expand-change="loadUserRole"
+          row-key="id"
+          :data="tableData">
+          <el-table-column label="用户名称" prop="username"></el-table-column>
+          <el-table-column label="用户CODE" prop="usercode"></el-table-column>
+          <el-table-column label="用户描述" prop="descritpion"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
-            <template slot-scope="scope">
+            <template slot-scope="scope" >
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="创建人">
                   <span>{{ scope.row.creatorCode }}</span>
@@ -65,11 +47,16 @@
                 <el-form-item label="更新时间">
                   <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
                 </el-form-item>
-                <el-form-item label="权限CODE">
-                  <span>{{ scope.row.permissionCode }}</span>
-                </el-form-item>
                 <el-form-item label="是否有效">
                   <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+                </el-form-item>
+                <el-form-item label="是否有效">
+                  <custom-select
+                    :datasource="selectRole"
+                    v-model="scope.row.roleIds"
+                    :value-key="scope.row.usercode"
+                    placeholder="请选择系统模块" multiple>
+                  </custom-select>
                 </el-form-item>
               </el-form>
             </template>
@@ -77,8 +64,7 @@
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" content="设置为无效" placement="top-start">
-                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini"
-                           :disabled="!scope.row.validInd">
+                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini" :disabled="!scope.row.validInd">
                   <i class="el-icon-warning"></i>
                 </el-button>
               </el-tooltip>
@@ -99,15 +85,9 @@
     <el-row>
       <template>
         <div class="block">
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="queryFilter.pageNo"
-            :page-sizes="[10, 20, 30, 40]"
-            layout="total,sizes, prev, pager, next"
-            :page-size="queryFilter.pageSize"
-            :total="queryFilter.recordCount">
+          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page.sync="queryFilter.pageNo" :page-sizes="[10, 20, 30, 40]" layout="total,sizes, prev, pager, next"
+            :page-size="queryFilter.pageSize" :total="queryFilter.recordCount">
           </el-pagination>
         </div>
       </template>
@@ -116,8 +96,14 @@
 </template>
 
 <script>
-  import {LoadDataPermissionList, DeletePermissionById, ProhibitPermissionById} from "../../api/sys/permissionMag";
-  import {LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
+  import {
+    LoadDataUserList,
+    DeleteUserById,
+    ProhibitUserById
+  } from "../../api/user/userMag";
+  import {
+    LoadSelectRoleList
+  } from "../../api/sys/roleMag";
   import CustomSelect from '../../components/common/CustomSelect.vue';
 
   export default {
@@ -128,39 +114,31 @@
       return {
         queryFilter: {
           // 分页数据
-          pageNo: null,// 当前页码
+          pageNo: null, // 当前页码
           recordCount: null, // 总记录数
-          pageSize: null,//每页要显示的记录数
-          totalPages: null,// 总页数
+          pageSize: null, //每页要显示的记录数
+          totalPages: null, // 总页数
           // 查询条件
-          permissionName: null,
-          permissionCode: null,
-          systemModule: null,
-          url: null
+          username: null,
+          usercode: null
         },
         tableData: [],
         activeNames: ['1'],
-        systemModuleSelect: [],
-        SystemModule: 'SystemModule'
+        selectRole: [] // 角色下拉列表
       }
     },
     created() {
-      // 加载系统模块的下拉
-      this.LoadSysDataDictionary('SystemModule');
-      // 请数据殂
-      this.LoadDataPermissionList();
+      this.loadSelectRoleList();
+      // 请数据
+      this.loadDataUserList();
     },
     //每次激活时
     activated() {
-      // 根据key名获取传递回来的参数，data 就是 map
-      this.$bus.once('permissionInfo', function (data) {
-        var index = this.tableData.findIndex(f => f.id === data.id);
-        if (index != -1) {// 更新
-          this.tableData.splice(index, 1, data);
-        } else {// 添加
-          this.tableData.push(data);
-        }
-      }.bind(this));
+      var _this = this;
+      this.$bus.on('userInfo', function(data) {
+        var index = _this.tableData.findIndex(f => f.id === data.id);
+        _this.tableData.splice(index, 1, data);
+      });
     },
     methods: {
       // 查询按钮
@@ -168,55 +146,85 @@
         // 从第1页开始
         this.queryFilter.pageNo = 1;
         // 请求数据
-        this.LoadDataPermissionList();
+        this.loadDataUserList();
         // 关闭查询折叠栏
-//        this.activeNames = [];
+        //        this.activeNames = [];
       },
       // 清除查询条件
       resetForm(queryFilter) {
         this.$refs[queryFilter].resetFields();
       },
-      // 请服务器数据（获取权限列表数据）
-      LoadDataPermissionList() {
-        LoadDataPermissionList(this.queryFilter).then(res => {
+      refresh() {
+        // 刷新数据
+        this.loadDataUserList();
+      },
+      // 请服务器数据（获取自动任务列表数据）
+      loadDataUserList() {
+        LoadDataUserList(this.queryFilter).then(res => {
           var data = res.resData;
           this.tableData = data.content;
           this.queryFilter.recordCount = data.totalElements;
           this.queryFilter.totalPages = data.totalPages;
         });
+
       },
-      // 添加权限
+      // 翻页
+      handleCurrentChange(val) {
+        this.queryFilter.pageNo = val;
+        this.loadDataUserList();
+      },
+      // 改变页面大小
+      handleSizeChange(val) {
+        this.queryFilter.pageSize = val;
+        this.loadDataUserList();
+      },
+      // 添加用户
       handleAdd() {
         this.$router.push({
-          name: 'sysPermissionEdit',
-          query: {
-            optionType: 'add',
-            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+          name: 'userUserEdit',
+          params: {
+            optionType: 'add'
           }
         });
-      },
-      refresh() {
-        // 刷新数据
-        this.LoadDataPermissionList();
       },
       handleEdit(index, row) {
         this.$router.push({
-          name: 'sysPermissionEdit',
+          name: 'userUserEdit',
           query: {
             optionType: 'edit',
-            permissionEdit: JSON.stringify(row),
-            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+            userEdit: JSON.stringify(row)
           }
         });
       },
-      handleDelete(index, row) {
+      handleProhibit(index, row) {
         var _this = this;
-        _this.$confirm('此操作将删除该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
+        _this.$confirm('此操作将禁用该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          DeletePermissionById(row.id).then(res => {
+          ProhibitUserById(row.id).then(res => {
+            row.validInd = res.resData.validInd;
+            _this.$message({
+              type: 'success',
+              message: '禁用成功!'
+            });
+          });
+        }).catch((err) => {
+          _this.$message({
+            type: 'info',
+            message: '已取消禁用'
+          });
+        });
+      },
+      handleDelete(index, row) {
+        var _this = this;
+        _this.$confirm('此操作将删除该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          DeleteUserById(row.id).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
               type: 'success',
@@ -230,42 +238,20 @@
           });
         });
       },
-      //加载下拉列表
-      LoadSysDataDictionary(fieldType) {
-        LoadSysDataDictionary(fieldType).then(res => {
-          this.systemModuleSelect = res.resData;
+      // 加载角色信息的下拉列表
+      loadSelectRoleList() {
+        LoadSelectRoleList().then(res => {
+          this.selectRole = res.resData;
+          console.info(res.resData);
         });
       },
-      // 翻页
-      handleCurrentChange(val) {
-        this.queryFilter.pageNo = val;
-        this.LoadDataPermissionList();
-      },
-      // 改变页面大小
-      handleSizeChange(val) {
-        this.queryFilter.pageSize = val;
-        this.LoadDataPermissionList();
-      },
-      handleProhibit(index, row) {
-        var _this = this;
-        _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          ProhibitPermissionById(row.id).then(res => {
-            row.validInd = res.resData.validInd;
-            _this.$message({
-              type: 'success',
-              message: '禁用成功!'
-            });
-          });
-        }).catch((err) => {
-          _this.$message({
-            type: 'info',
-            message: '已取消禁用'
-          });
-        });
+      // 加载指定用户的角色信息
+      loadUserRole(row, expandedRows){
+        if(!row.roleIds){
+          console.info("222--->>>",row.roleIds);
+
+          Object.assign(row,{roleIds:['2']})
+        }
       }
     }
   }
@@ -282,22 +268,28 @@
 
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
   ::-webkit-scrollbar {
-    width: 3px; /*滚动条宽度*/
-    height: 3px; /*滚动条高度*/
+    width: 3px;
+    /*滚动条宽度*/
+    height: 3px;
+    /*滚动条高度*/
   }
 
   /*定义滚动条轨道 内阴影+圆角*/
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px; /*滚动条的背景区域的圆角*/
-    background-color: white; /*滚动条的背景颜色*/
+    border-radius: 10px;
+    /*滚动条的背景区域的圆角*/
+    background-color: white;
+    /*滚动条的背景颜色*/
   }
 
   /*定义滑块 内阴影+圆角*/
   ::-webkit-scrollbar-thumb {
-    border-radius: 10px; /*滚动条的圆角*/
+    border-radius: 10px;
+    /*滚动条的圆角*/
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f; /*滚动条的背景颜色*/
+    background-color: #2e363f;
+    /*滚动条的背景颜色*/
   }
 
   .demo-table-expand {

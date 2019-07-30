@@ -1,16 +1,13 @@
 package com.billow.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.billow.common.base.DefaultSpec;
-import com.billow.system.dao.DataDictionaryDao;
+import com.billow.common.jpa.DefaultSpec;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RolePermissionDao;
-import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.PermissionVo;
-import com.billow.system.service.DataDictionaryService;
 import com.billow.system.service.PermissionService;
 import com.billow.system.service.redis.CommonRolePermissionRedis;
 import com.billow.tools.utlis.ConvertUtils;
@@ -27,7 +24,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
