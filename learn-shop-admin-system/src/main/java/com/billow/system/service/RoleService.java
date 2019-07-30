@@ -55,4 +55,24 @@ public interface RoleService {
      * @date 2019/7/12 17:50
      */
     void saveRole(RoleVo roleVo);
+
+    /**
+     * 根据id禁用角色信息
+     *
+     * @param roleId
+     * @return com.billow.system.pojo.vo.RoleVo
+     * @author LiuYongTao
+     * @date 2019/7/30 9:56
+     */
+    RoleVo prohibitRoleById(Long roleId);
+
+    /**
+     * 根据id删除角色信息
+     *
+     * @param roleId
+     * @return com.billow.system.pojo.vo.RoleVo
+     * @author LiuYongTao
+     * @date 2019/7/30 9:56
+     */
+    RoleVo deleteRoleById(Long roleId);
 }

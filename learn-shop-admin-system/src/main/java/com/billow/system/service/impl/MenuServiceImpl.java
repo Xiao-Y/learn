@@ -71,7 +71,10 @@ public class MenuServiceImpl implements MenuService {
         if ("admin".equals(menuVo.getUserCode())) {
             List<MenuPo> all = menuDao.findAll();
             if (ToolsUtils.isNotEmpty(all)) {
-                Set<Long> set = all.stream().map(m -> m.getId()).collect(Collectors.toSet());
+                Set<Long> set = all.stream()
+                        .filter(f -> f.getValidInd())
+                        .map(m -> m.getId())
+                        .collect(Collectors.toSet());
                 menuIds.clear();
                 menuIds.addAll(set);
             }

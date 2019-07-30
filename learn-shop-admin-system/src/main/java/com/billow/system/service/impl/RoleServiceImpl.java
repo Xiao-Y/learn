@@ -19,7 +19,6 @@ import com.billow.system.service.redis.CommonRoleMenuRedis;
 import com.billow.system.service.redis.CommonRolePermissionRedis;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -102,19 +101,27 @@ public class RoleServiceImpl implements RoleService {
         Long id = rolePo.getId();
         if (id != null) {
             RolePo one = roleDao.findOne(id);
-            // 更新角色CODE
-            commonRolePermissionRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
-            commonRoleMenuRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
+            // 如果是无效状态时，删除redis 中的信息
+            if (!rolePo.getValidInd()) {
+                commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+                commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+            } else {
+                // 更新角色CODE
+                commonRolePermissionRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
+                commonRoleMenuRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
+            }
         }
 
         roleDao.save(rolePo);
 
+        ConvertUtils.convert(rolePo, roleVo);
+
         if (id != null) {
             // 删除原始的关联菜单数据
-            List<RoleMenuPo> delRoleMenus = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(roleVo.getId());
+            List<RoleMenuPo> delRoleMenus = roleMenuDao.findByRoleId(roleVo.getId());
             roleMenuDao.deleteInBatch(delRoleMenus);
             // 删除原始的关联权限数据
-            List<RolePermissionPo> delrolePermissions = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(roleVo.getId());
+            List<RolePermissionPo> delrolePermissions = rolePermissionDao.findByRoleId(roleVo.getId());
             rolePermissionDao.deleteInBatch(delrolePermissions);
         }
         // 用于更新 redis 中的角色对应的菜单信息
@@ -129,8 +136,10 @@ public class RoleServiceImpl implements RoleService {
             return roleMenuPo;
         }).collect(Collectors.toList());
         roleMenuDao.save(roleMenuPos);
-        // 更新指定角色的菜单信息
-        commonRoleMenuRedis.updateRoleMenuByRoleCode(newMenuPos, rolePo.getRoleCode());
+        if (rolePo.getValidInd()) {
+            // 更新指定角色的菜单信息
+            commonRoleMenuRedis.updateRoleMenuByRoleCode(newMenuPos, rolePo.getRoleCode());
+        }
 
         // 用于更新 redis 中的角色对应的权限信息
         List<PermissionPo> newPermissionPos = new ArrayList<>();
@@ -145,7 +154,80 @@ public class RoleServiceImpl implements RoleService {
             return rolePermissionPo;
         }).collect(Collectors.toList());
         rolePermissionDao.save(rolePermissionPos);
-        // 更新指定角色的权限信息
-        commonRolePermissionRedis.updateRolePermissionByRoleCode(newPermissionPos, rolePo.getRoleCode());
+        if (rolePo.getValidInd()) {
+            // 更新指定角色的权限信息
+            commonRolePermissionRedis.updateRolePermissionByRoleCode(newPermissionPos, rolePo.getRoleCode());
+        }
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public RoleVo prohibitRoleById(Long roleId) {
+        RolePo one = roleDao.findOne(roleId);
+        // 如果不存在，直接构建一个新的返回
+        if (one == null) {
+            RoleVo roleVo = new RoleVo();
+            roleVo.setId(roleId).setValidInd(false);
+            // 删除 redis 信息
+            commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+            // 删除 redis 信息
+            commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+            return roleVo;
+        }
+        // 更新角色为无效
+        one.setValidInd(false);
+        roleDao.save(one);
+
+        // 更新该角色的权限为无效
+        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(roleId);
+        for (RolePermissionPo rolePermissionPo : rolePermissionPos) {
+            rolePermissionPo.setValidInd(false);
+        }
+        rolePermissionDao.save(rolePermissionPos);
+        // 删除 redis 信息
+        commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+
+        // 更新该角色的菜单为无效
+        List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(roleId);
+        for (RoleMenuPo roleMenuPo : roleMenuPos) {
+            roleMenuPo.setValidInd(false);
+        }
+        roleMenuDao.save(roleMenuPos);
+        // 删除 redis 信息
+        commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+
+
+        return ConvertUtils.convert(one, RoleVo.class);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public RoleVo deleteRoleById(Long roleId) {
+        RolePo one = roleDao.findOne(roleId);
+        // 如果不存在，直接构建一个新的返回
+        if (one == null) {
+            RoleVo roleVo = new RoleVo();
+            roleVo.setId(roleId).setValidInd(false);
+            // 删除 redis 信息
+            commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+            // 删除 redis 信息
+            commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+            return roleVo;
+        }
+        // 删除角色
+        roleDao.delete(one);
+
+        // 删除该角色的权限
+        rolePermissionDao.deleteByRoleId(roleId);
+        // 删除 redis 信息
+        commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+
+        // 删除该角色的菜单
+        roleMenuDao.deleteByRoleId(roleId);
+        // 删除 redis 信息
+        commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+
+        return ConvertUtils.convert(one, RoleVo.class);
+    }
+
 }

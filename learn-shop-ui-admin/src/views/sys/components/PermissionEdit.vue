@@ -79,7 +79,7 @@
               type: 'success',
               message: '更新成功!'
             });
-            //传递一个map，permissionInfo 是 key，resData 是 value
+            //传递一个map，updatePermission 是 key，resData 是 value
             this.$bus.emit('permissionInfo', res.resData);
             _this.$router.back(-1);
           });
@@ -89,6 +89,8 @@
               type: 'success',
               message: '保存成功!'
             });
+            //传递一个map，addPermission 是 key，resData 是 value
+            this.$bus.emit('permissionInfo', res.resData);
             _this.$router.back(-1);
           });
         }

@@ -15,17 +15,37 @@ public interface RolePermissionDao extends JpaRepository<RolePermissionPo, Long>
      */
     List<RolePermissionPo> findByRoleIdIsAndValidIndIsTrue(Long roleId);
 
-    /**
-     * 通过permissionId 删除相应关联
-     *
-     * @param permissionId
-     */
-    void deleteByPermissionId(Long permissionId);
+//    /**
+//     * 通过permissionId 删除相应关联
+//     *
+//     * @param permissionId
+//     */
+//    void deleteByPermissionId(Long permissionId);
+//
+//    /**
+//     * 通过permissionId 查询相应关联
+//     *
+//     * @param permissionId
+//     */
+//    List<RolePermissionPo> findByPermissionId(Long permissionId);
 
     /**
-     * 通过permissionId 查询相应关联
+     * 删除该角色的权限
      *
-     * @param permissionId
+     * @param roleId
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/7/30 10:16
      */
-    List<RolePermissionPo> findByPermissionId(Long permissionId);
+    void deleteByRoleId(Long roleId);
+
+    /**
+     * 删除原始的关联权限数据
+     *
+     * @param id
+     * @return java.util.List<com.billow.system.pojo.po.RolePermissionPo>
+     * @author LiuYongTao
+     * @date 2019/7/30 10:59
+     */
+    List<RolePermissionPo> findByRoleId(Long id);
 }

@@ -29,4 +29,24 @@ public interface RoleMenuDao extends JpaRepository<RoleMenuPo, Long> {
      * @param menuId
      */
     List<RoleMenuPo> findByMenuId(Long menuId);
+
+    /**
+     * 删除该角色的菜单
+     *
+     * @param roleId
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/7/30 10:18
+     */
+    void deleteByRoleId(Long roleId);
+
+    /**
+     * roleId查询出有效的关联信息
+     *
+     * @param id
+     * @return java.util.List<com.billow.system.pojo.po.RoleMenuPo>
+     * @author LiuYongTao
+     * @date 2019/7/30 10:59
+     */
+    List<RoleMenuPo> findByRoleId(Long id);
 }

@@ -9,10 +9,10 @@
           <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline">
             <el-row>
               <el-form-item label="角色名称" prop="roleName">
-                <el-input v-model="queryFilter.roleName" placeholder="权限名称"></el-input>
+                <el-input v-model="queryFilter.roleName" placeholder="角色名称"></el-input>
               </el-form-item>
               <el-form-item label="角色CODE" prop="roleCode">
-                <el-input v-model="queryFilter.roleCode" placeholder="权限CODE"></el-input>
+                <el-input v-model="queryFilter.roleCode" placeholder="角色CODE"></el-input>
               </el-form-item>
             </el-row>
           </el-form>
@@ -91,7 +91,7 @@
 </template>
 
 <script>
-  import {LoadDataRoleList, DeleteRoleById} from "../../api/sys/roleMag";
+  import {LoadDataRoleList, DeleteRoleById, ProhibitRoleById} from "../../api/sys/roleMag";
 
   export default {
     data() {
@@ -117,10 +117,14 @@
     //每次激活时
     activated() {
       var _this = this;
-      this.$bus.on('roleInfo', function (data) {
+      this.$bus.once('roleInfo', function (data) {
         var index = _this.tableData.findIndex(f => f.id === data.id);
-        _this.tableData.splice(index, 1, data);
-      });
+        if (index != -1) {// 更新
+          this.tableData.splice(index, 1, data);
+        } else {// 添加
+          this.tableData.push(data);
+        }
+      }.bind(this));
     },
     methods: {
       // 查询按钮
@@ -140,17 +144,6 @@
       LoadDataRoleList() {
         LoadDataRoleList(this.queryFilter).then(res => {
           var data = res.resData;
-          // // 填充数据
-          // if (data.content) {
-          //   for (var ind in data.content) {
-          //     var childrenData = [];
-          //     if (data.content[ind]) {
-          //       childrenData.push(data.content[ind]);
-          //     }
-          //     this.$set(data.content[ind], 'children', childrenData);
-          //   }
-          // }
-          // console.info(data.content);
           this.tableData = data.content;
           this.queryFilter.recordCount = data.totalElements;
           this.queryFilter.totalPages = data.totalPages;
@@ -167,7 +160,7 @@
         this.queryFilter.pageSize = val;
         this.LoadDataRoleList();
       },
-      // 添加商品
+      // 添加角色
       handleAdd() {
         this.$router.push({
           name: 'sysRoleEdit',
@@ -195,28 +188,28 @@
       },
       handleProhibit(index, row) {
         var _this = this;
-        _this.$confirm('此操作将删除该商品 ' + row.commodityName + ' 信息, 是否继续?', '提示', {
+        _this.$confirm('此操作将禁用该角色 ' + row.roleName + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          DeleteRoleById(row.id).then(res => {
-            _this.tableData.splice(index, 1);
+          ProhibitRoleById(row.id).then(res => {
+            row.validInd = res.resData.validInd;
             _this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: '禁用成功!'
             });
           });
         }).catch((err) => {
           _this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消禁用'
           });
         });
       },
       handleDelete(index, row) {
         var _this = this;
-        _this.$confirm('此操作将删除该商品 ' + row.commodityName + ' 信息, 是否继续?', '提示', {
+        _this.$confirm('此操作将删除该角色 ' + row.roleName + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -246,14 +239,6 @@
 </script>
 
 <style scoped>
-  .el-row {
-    margin-bottom: 5px;
-  }
-
-  .el-form-item {
-    margin-bottom: 3px;
-  }
-
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
   ::-webkit-scrollbar {
     width: 3px; /*滚动条宽度*/
@@ -281,11 +266,5 @@
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
-  }
-
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
   }
 </style>

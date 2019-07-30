@@ -4,7 +4,7 @@ import requestUtils from '../../utils/requestUtils'
 const baseUrl = 'admin-system/roleApi';
 
 /**
- * 根据条件查询商品信息
+ * 根据条件查询角色信息
  * @param roleFilter
  * @constructor
  */
@@ -25,15 +25,22 @@ export const LoadDataPermissionIdList = roleId => requestUtils.get(baseUrl + '/f
 export const LoadDataMenuIdList = roleId => requestUtils.get(baseUrl + '/findMenuByRoleId/' + roleId);
 
 /**
- * 保存商品信息
+ * 保存角色信息
  * @param data
  * @constructor
  */
 export const SaveRole = data => requestUtils.post(baseUrl + '/saveRole', Object.assign(data));
 
 /**
- * 根据id删除商品信息
+ * 根据id禁用角色信息
  * @param id
  * @constructor
  */
-export const DeleteRoleById = id => requestUtils.del('core-product/productApi/deleteProductById/' + id);
+export const ProhibitRoleById = id => requestUtils.put(baseUrl + '/prohibitRoleById/' + id);
+
+/**
+ * 根据id删除角色信息
+ * @param id
+ * @constructor
+ */
+export const DeleteRoleById = id => requestUtils.del(baseUrl + '/deleteRoleById/' + id);

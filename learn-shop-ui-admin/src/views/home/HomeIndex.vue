@@ -79,7 +79,7 @@
         this.sevenDay.push(date)
       }
       this.getSevenData();
-      console.info("sevenDate", this.sevenDate);
+      // console.info("sevenDate", this.sevenDate);
     },
     methods: {
       async getSevenData() {
@@ -90,7 +90,7 @@
           apiArr[1].push(_this.orderCount)
           apiArr[2].push(_this.adminCount)
         })
-        console.info("apiArr", apiArr);
+        // console.info("apiArr", apiArr);
         const promiseArr = [...apiArr[0], ...apiArr[1], ...apiArr[2]]
         Promise.all(promiseArr).then(res => {
           const resArr = [[], [], []];

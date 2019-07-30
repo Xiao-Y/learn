@@ -128,11 +128,11 @@ export default {
   watch: {
     sevenDate: function() {
       this.initData();
-      console.info("watch-sevenDate");
+      // console.info("watch-sevenDate");
     },
     sevenDay: function() {
       this.initData();
-      console.info("watch-sevenDay");
+      // console.info("watch-sevenDay");
     }
   }
 };

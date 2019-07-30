@@ -9,9 +9,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,12 +43,12 @@ public class RoleApi extends BaseApi {
         return page;
     }
 
-    @ApiOperation("根据角色ID查询角色信息")
-    @GetMapping("/findRolesInfoByUserId/{userId}")
-    public List<RoleVo> findRolesInfoByUserId(@PathVariable("userId") Long userId) {
-        List<RoleVo> roleVoList = roleService.findRoleListInfoByUserId(userId);
-        return roleVoList;
-    }
+//    @ApiOperation("根据角色ID查询角色信息")
+//    @GetMapping("/findRolesInfoByUserId/{userId}")
+//    public List<RoleVo> findRolesInfoByUserId(@PathVariable("userId") Long userId) {
+//        List<RoleVo> roleVoList = roleService.findRoleListInfoByUserId(userId);
+//        return roleVoList;
+//    }
 
     @ApiOperation("根据角色ID查询权限ID")
     @GetMapping("/findPermissionByRoleId/{roleId}")
@@ -65,5 +67,17 @@ public class RoleApi extends BaseApi {
     public RoleVo saveRole(@RequestBody RoleVo roleVo) throws Exception {
         roleService.saveRole(roleVo);
         return roleVo;
+    }
+
+    @ApiOperation("根据id禁用角色信息")
+    @PutMapping("/prohibitRoleById/{roleId}")
+    public RoleVo prohibitRoleById(@PathVariable("roleId") Long roleId){
+        return roleService.prohibitRoleById(roleId);
+    }
+
+    @ApiOperation("根据id删除角色信息")
+    @DeleteMapping("/deleteRoleById/{roleId}")
+    public RoleVo deleteRoleById(@PathVariable("roleId") Long roleId){
+        return roleService.deleteRoleById(roleId);
     }
 }

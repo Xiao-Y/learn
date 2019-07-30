@@ -154,7 +154,11 @@
       // 根据key名获取传递回来的参数，data 就是 map
       this.$bus.once('permissionInfo', function (data) {
         var index = this.tableData.findIndex(f => f.id === data.id);
-        this.tableData.splice(index, 1, data);
+        if (index != -1) {// 更新
+          this.tableData.splice(index, 1, data);
+        } else {// 添加
+          this.tableData.push(data);
+        }
       }.bind(this));
     },
     methods: {
