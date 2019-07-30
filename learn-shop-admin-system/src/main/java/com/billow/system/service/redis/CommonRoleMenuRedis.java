@@ -4,6 +4,7 @@ import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.vo.RoleVo;
+import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 public class CommonRoleMenuRedis {
 
-    public final static String ROLE_MENU_KEY = "ROLE:MENU:";
+    public final static String ROLE_MENU_KEY = RedisCst.ROLE_MENU_KEY;
 
     @Autowired
     private RedisUtils redisUtils;

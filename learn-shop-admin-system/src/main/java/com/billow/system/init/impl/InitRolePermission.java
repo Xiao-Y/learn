@@ -6,7 +6,7 @@ import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.PermissionService;
-import com.billow.system.service.redis.CommonRolePermissionRedis;
+import com.billow.tools.constant.RedisCst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +34,7 @@ public class InitRolePermission implements IStartLoading {
         List<RolePo> rolePos = roleDao.findAll();
         for (RolePo rolePo : rolePos) {
             Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
-            redisUtils.setObj(CommonRolePermissionRedis.ROLE_PERMISSION_KEY + rolePo.getRoleCode(), permissionPos);
+            redisUtils.setObj(RedisCst.ROLE_PERMISSION_KEY + rolePo.getRoleCode(), permissionPos);
         }
         return true;
     }

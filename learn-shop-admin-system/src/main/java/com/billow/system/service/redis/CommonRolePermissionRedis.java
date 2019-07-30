@@ -3,6 +3,7 @@ package com.billow.system.service.redis;
 import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.vo.PermissionVo;
+import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class CommonRolePermissionRedis {
 
-    public final static String ROLE_PERMISSION_KEY = "ROLE:PERMISSION:";
+    public final static String ROLE_PERMISSION_KEY = RedisCst.ROLE_PERMISSION_KEY;
 
     @Autowired
     private RedisUtils redisUtils;

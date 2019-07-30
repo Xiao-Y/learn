@@ -5,6 +5,7 @@ import com.billow.system.dao.DataDictionaryDao;
 import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.service.DataDictionaryService;
+import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ import java.util.List;
 @Component
 public class InitDictionary implements IStartLoading {
 
-    private final static String key = "COMM:DICTIONARY";
+    private final static String key = RedisCst.COMM_DICTIONARY;
 
     @Autowired
     private DataDictionaryDao dataDictionaryDao;

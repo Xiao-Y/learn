@@ -7,7 +7,7 @@ import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.properties.CustomProperties;
 import com.billow.system.service.MenuService;
-import com.billow.system.service.redis.CommonRoleMenuRedis;
+import com.billow.tools.constant.RedisCst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +40,7 @@ public class InitRoleMenu implements IStartLoading {
         List<RolePo> rolePos = roleDao.findAll();
         for (RolePo rolePo : rolePos) {
             Set<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
-            redisUtils.setObj(CommonRoleMenuRedis.ROLE_MENU_KEY + rolePo.getRoleCode(), menuExs);
+            redisUtils.setObj(RedisCst.ROLE_MENU_KEY + rolePo.getRoleCode(), menuExs);
         }
         return true;
     }
