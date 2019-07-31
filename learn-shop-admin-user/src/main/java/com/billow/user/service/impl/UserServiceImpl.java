@@ -70,6 +70,8 @@ public class UserServiceImpl implements UserService {
         }
         UserVo vo = ConvertUtils.convert(userPo, UserVo.class);
         vo.setRoleIds(roleIds);
+        // 修改用户，需要重新登陆（redis 中插入 用户名-角色CODE）
+        //TODO: 2019/7/31
         return vo;
     }
 

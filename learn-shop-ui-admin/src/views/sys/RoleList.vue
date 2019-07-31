@@ -53,8 +53,7 @@
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" content="设置为无效" placement="top-start">
-                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini"
-                           :disabled="!scope.row.validInd">
+                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini" :disabled="!scope.row.validInd">
                   <i class="el-icon-warning"></i>
                 </el-button>
               </el-tooltip>
@@ -75,15 +74,9 @@
     <el-row>
       <template>
         <div class="block">
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="queryFilter.pageNo"
-            :page-sizes="[10, 20, 30, 40]"
-            layout="total,sizes, prev, pager, next"
-            :page-size="queryFilter.pageSize"
-            :total="queryFilter.recordCount">
+          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page.sync="queryFilter.pageNo" :page-sizes="[10, 20, 30, 40]" layout="total,sizes, prev, pager, next"
+            :page-size="queryFilter.pageSize" :total="queryFilter.recordCount">
           </el-pagination>
         </div>
       </template>
@@ -92,17 +85,21 @@
 </template>
 
 <script>
-  import {LoadDataRoleList, DeleteRoleById, ProhibitRoleById} from "../../api/sys/roleMag";
+  import {
+    LoadDataRoleList,
+    DeleteRoleById,
+    ProhibitRoleById
+  } from "../../api/sys/roleMag";
 
   export default {
     data() {
       return {
         queryFilter: {
           // 分页数据
-          pageNo: null,// 当前页码
+          pageNo: null, // 当前页码
           recordCount: null, // 总记录数
-          pageSize: null,//每页要显示的记录数
-          totalPages: null,// 总页数
+          pageSize: null, //每页要显示的记录数
+          totalPages: null, // 总页数
           // 查询条件
           roleName: null,
           roleCode: null
@@ -118,11 +115,11 @@
     //每次激活时
     activated() {
       var _this = this;
-      this.$bus.once('roleInfo', function (data) {
+      this.$bus.once('roleInfo', function(data) {
         var index = _this.tableData.findIndex(f => f.id === data.id);
-        if (index != -1) {// 更新
+        if (index != -1) { // 更新
           this.tableData.splice(index, 1, data);
-        } else {// 添加
+        } else { // 添加
           this.tableData.push(data);
         }
       }.bind(this));
@@ -135,7 +132,7 @@
         // 请求数据
         this.LoadDataRoleList();
         // 关闭查询折叠栏
-//        this.activeNames = [];
+        //        this.activeNames = [];
       },
       // 清除查询条件
       resetForm(queryFilter) {
@@ -246,22 +243,28 @@
 <style scoped>
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
   ::-webkit-scrollbar {
-    width: 3px; /*滚动条宽度*/
-    height: 3px; /*滚动条高度*/
+    width: 3px;
+    /*滚动条宽度*/
+    height: 3px;
+    /*滚动条高度*/
   }
 
   /*定义滚动条轨道 内阴影+圆角*/
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px; /*滚动条的背景区域的圆角*/
-    background-color: white; /*滚动条的背景颜色*/
+    border-radius: 10px;
+    /*滚动条的背景区域的圆角*/
+    background-color: white;
+    /*滚动条的背景颜色*/
   }
 
   /*定义滑块 内阴影+圆角*/
   ::-webkit-scrollbar-thumb {
-    border-radius: 10px; /*滚动条的圆角*/
+    border-radius: 10px;
+    /*滚动条的圆角*/
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f; /*滚动条的背景颜色*/
+    background-color: #2e363f;
+    /*滚动条的背景颜色*/
   }
 
   .demo-table-expand {
@@ -271,5 +274,11 @@
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
+  }
+
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
   }
 </style>

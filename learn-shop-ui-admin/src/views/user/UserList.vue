@@ -45,11 +45,11 @@
                   <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否有效">
-                  <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" @change="roleChange(scope.row)"></el-switch>
+                  <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" @change="userInfoChange(scope.row)"></el-switch>
                 </el-form-item>
                 <el-form-item label="角色信息">
                   <custom-select v-model="scope.row.roleIds" :datasource="selectRole" :value-key="scope.row.usercode"
-                    @onchange="roleChange(scope.row)"
+                    @onchange="userInfoChange(scope.row)"
                     placeholder="请选择角色" multiple >
                   </custom-select>
                 </el-form-item>
@@ -268,7 +268,8 @@
           });
         }
       },
-      roleChange(row){
+      //
+      userInfoChange(row){
         UpdateUser(row).then(res => {
           this.$message({
             type: 'success',
