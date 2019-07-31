@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -72,19 +73,25 @@ public class RoleApi extends BaseApi {
 
     @ApiOperation("根据id禁用角色信息")
     @PutMapping("/prohibitRoleById/{roleId}")
-    public RoleVo prohibitRoleById(@PathVariable("roleId") Long roleId){
+    public RoleVo prohibitRoleById(@PathVariable("roleId") Long roleId) {
         return roleService.prohibitRoleById(roleId);
     }
 
     @ApiOperation("根据id删除角色信息")
     @DeleteMapping("/deleteRoleById/{roleId}")
-    public RoleVo deleteRoleById(@PathVariable("roleId") Long roleId){
+    public RoleVo deleteRoleById(@PathVariable("roleId") Long roleId) {
         return roleService.deleteRoleById(roleId);
     }
 
     @ApiOperation("加载下拉列表角色信息")
     @GetMapping("/findSelectRole")
-    public List<DataDictionaryEx> findSelectRole(){
+    public List<DataDictionaryEx> findSelectRole() {
         return roleService.findSelectRole();
+    }
+
+    @ApiOperation("根据id查询角色信息")
+    @GetMapping("/findRoleById")
+    public List<RoleVo> findRoleById(@RequestParam("ids") List<Long> ids) {
+        return roleService.findRoleById(ids);
     }
 }

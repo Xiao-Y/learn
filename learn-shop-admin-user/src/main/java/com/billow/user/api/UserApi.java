@@ -1,8 +1,10 @@
 package com.billow.user.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.user.pojo.po.UserPo;
 import com.billow.user.pojo.vo.UserVo;
+import com.billow.user.remote.AdminSystemRemote;
 import com.billow.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户信息操作

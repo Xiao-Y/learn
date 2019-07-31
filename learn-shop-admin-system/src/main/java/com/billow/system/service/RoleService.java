@@ -87,4 +87,13 @@ public interface RoleService {
      */
     List<DataDictionaryEx> findSelectRole();
 
+    /**
+     * 根据id查询角色信息
+     *
+     * @param ids
+     * @return com.billow.system.pojo.vo.RoleVo
+     * @author LiuYongTao
+     * @date 2019/7/31 11:41
+     */
+    List<RoleVo> findRoleById(List<Long> ids);
 }

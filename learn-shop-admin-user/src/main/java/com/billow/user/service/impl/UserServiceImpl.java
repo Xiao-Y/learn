@@ -1,13 +1,17 @@
 package com.billow.user.service.impl;
 
 import com.billow.common.jpa.DefaultSpec;
+import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import com.billow.user.dao.UserDao;
 import com.billow.user.dao.UserRoleDao;
+import com.billow.user.pojo.ex.RoleEx;
 import com.billow.user.pojo.po.UserPo;
 import com.billow.user.pojo.po.UserRolePo;
 import com.billow.user.pojo.vo.UserVo;
+import com.billow.user.remote.AdminSystemRemote;
 import com.billow.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private UserRoleDao userRoleDao;
+    @Autowired
+    private AdminSystemRemote adminSystemRemote;
 
     @Override
     public Page<UserPo> findUserList(UserVo userVo) {
@@ -71,7 +80,16 @@ public class UserServiceImpl implements UserService {
         UserVo vo = ConvertUtils.convert(userPo, UserVo.class);
         vo.setRoleIds(roleIds);
         // 修改用户，需要重新登陆（redis 中插入 用户名-角色CODE）
-        //TODO: 2019/7/31
+        BaseResponse<List<RoleEx>> base = adminSystemRemote.findRoleById(roleIds);
+        if (base.getResCode().equals(ResCodeEnum.OK)) {
+            List<RoleEx> roleExes = base.getResData();
+            if (ToolsUtils.isNotEmpty(roleExes)) {
+                List<String> roleCodes = roleExes.stream().map(m -> m.getRoleCode()).collect(Collectors.toList());
+                logger.info("----------->>>>>>>>>{}", roleCodes);
+            }
+        } else {
+            throw new RuntimeException(base.getResMsg());
+        }
         return vo;
     }
 

@@ -14,8 +14,8 @@ server:
 spring:
   application:
     name: learn-shop-admin-system #客户端名称
-  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
+#  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
+#    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
@@ -25,25 +25,25 @@ spring:
     bus:
       trace:
         enabled: true #开启消息跟踪
-security:
-  sessions: NEVER
-  oauth2:
-    client:
-      client-id: learn-shop-admin-system
-      client-secret: learn-shop-admin-system
-      user-authorization-uri: ${custom.security.auth-server}/oauth/authorize #请求认证的地址
-      access-token-uri: ${custom.security.auth-server}/oauth/token #请求令牌的地址
-    resource:
-      #      jwt:
-      #        key-uri: ${custom.security.auth-server}/oauth/token_key #解析jwt令牌所需要密钥的地址
-      user-info-uri: ${custom.security.auth-server}/user #获取用户信息的地址
-      prefer-token-info: false
-  basic:
-    enabled: false
+#security:
+#  sessions: NEVER
+#  oauth2:
+#    client:
+#      client-id: learn-shop-admin-system
+#      client-secret: learn-shop-admin-system
+#      user-authorization-uri: ${custom.security.auth-server}/oauth/authorize #请求认证的地址
+#      access-token-uri: ${custom.security.auth-server}/oauth/token #请求令牌的地址
+#    resource:
+#      #      jwt:
+#      #        key-uri: ${custom.security.auth-server}/oauth/token_key #解析jwt令牌所需要密钥的地址
+#      user-info-uri: ${custom.security.auth-server}/user #获取用户信息的地址
+#      prefer-token-info: false
+#  basic:
+#    enabled: false
 
 custom:
-  security:
-    auth-server: http://127.0.0.1:9999
+#  security:
+#    auth-server: http://127.0.0.1:9999
   menu:
     read-cache: true #菜单优先从缓存中读出
     write-cache: true #菜单写入缓存中

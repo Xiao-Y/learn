@@ -26,6 +26,10 @@ spring:
     bus:
       trace:
         enabled: true #开启消息跟踪
+# 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
+ribbon:
+  ReadTimeout: 15000
+  ConnectTimeout: 10000
 #安全配置
 #security:
 #  oauth2:
