@@ -88,7 +88,7 @@
         // console.info("created 加载数据源字典：", this.datasource);
         this.currentSource = this.datasource;
       }
-      console.info("created parentValues：", this.parentValues);
+      // console.info("created parentValues：", this.parentValues);
       if(this.parentValues){
         this.currentValue = this.parentValues;
       }
@@ -114,7 +114,7 @@
         this.currentSource = newVal;
       },
       parentValues:function (newVal, oldVal) {
-        console.info("watch parentValues：", newVal);
+        // console.info("watch parentValues：", newVal);
         this.currentValue = newVal;
       }
     }

@@ -25,7 +25,7 @@
     <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
     <el-row>
       <template>
-        <el-table border stripe style="width: 100%" @expand-change="loadUserRole" row-key="id" :data="tableData">
+        <el-table border stripe style="width: 100%" @expand-change="loadUserRole" :expand-row-keys="expandRows" row-key="id" :data="tableData">
           <el-table-column label="用户名称" prop="username"></el-table-column>
           <el-table-column label="用户CODE" prop="usercode"></el-table-column>
           <el-table-column label="用户描述" prop="descritpion"></el-table-column>
@@ -45,11 +45,12 @@
                   <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否有效">
-                  <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+                  <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" @change="roleChange(scope.row)"></el-switch>
                 </el-form-item>
-                <el-form-item label="是否有效">
-                  <custom-select :datasource="selectRole" v-model="scope.row.roleIds" :value-key="scope.row.usercode"
-                    placeholder="请选择系统模块" multiple>
+                <el-form-item label="角色信息">
+                  <custom-select v-model="scope.row.roleIds" :datasource="selectRole" :value-key="scope.row.usercode"
+                    @onchange="roleChange(scope.row)"
+                    placeholder="请选择角色" multiple >
                   </custom-select>
                 </el-form-item>
               </el-form>
@@ -94,7 +95,8 @@
     LoadDataUserList,
     DeleteUserById,
     ProhibitUserById,
-    LoadRoleIdsByUserId
+    LoadRoleIdsByUserId,
+    UpdateUser
   } from "../../api/user/userMag";
   import {
     LoadSelectRoleList
@@ -118,7 +120,8 @@
           usercode: null
         },
         tableData: [], // 列表数据
-        selectRole: [] // 角色下拉列表
+        selectRole: [], // 角色下拉列表
+        expandRows:[] // 打开的折叠拦
       }
     },
     created() {
@@ -132,8 +135,12 @@
       var _this = this;
       this.$bus.on('userInfo', function(data) {
         var index = _this.tableData.findIndex(f => f.id === data.id);
-        _this.tableData.splice(index, 1, data);
-      });
+        if (index != -1) {// 更新
+          this.tableData.splice(index, 1, data);
+        } else {// 添加
+          this.tableData.push(data);
+        }
+      }.bind(this));
     },
     methods: {
       // 查询按钮
@@ -181,17 +188,21 @@
       handleAdd() {
         this.$router.push({
           name: 'userUserEdit',
-          params: {
-            optionType: 'add'
+          query: {
+            optionType: 'add',
+            selectRole: JSON.stringify(this.selectRole)
           }
         });
       },
       // 修改用户
       handleEdit(index, row) {
+        // 打开折叠栏，再点击编辑保存后，折叠栏有bug
+        this.expandRows = [];
         this.$router.push({
           name: 'userUserEdit',
           query: {
             optionType: 'edit',
+            selectRole: JSON.stringify(this.selectRole),
             userEdit: JSON.stringify(row)
           }
         });
@@ -244,7 +255,6 @@
       loadSelectRoleList() {
         LoadSelectRoleList().then(res => {
           this.selectRole = res.resData;
-          // console.info(res.resData);
         });
       },
       // 加载指定用户的角色信息
@@ -257,6 +267,14 @@
             });
           });
         }
+      },
+      roleChange(row){
+        UpdateUser(row).then(res => {
+          this.$message({
+            type: 'success',
+            message: '更新成功!'
+          });
+        });
       }
     }
   }

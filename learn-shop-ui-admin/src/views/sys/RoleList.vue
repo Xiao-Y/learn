@@ -169,7 +169,7 @@
       handleAdd() {
         this.$router.push({
           name: 'sysRoleEdit',
-          params: {
+          query: {
             optionType: 'add'
           }
         });

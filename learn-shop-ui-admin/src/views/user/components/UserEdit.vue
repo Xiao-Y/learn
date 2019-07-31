@@ -10,18 +10,11 @@
           <el-form-item label="用户CODE" prop="usercode">
             <el-input v-model="userInfo.usercode" placeholder="请输入内容"></el-input>
           </el-form-item>
-         <!-- <el-form-item label="用户角色" prop="url">
-            <el-input v-model="userInfo.url" placeholder="请输入内容"></el-input>
+          <el-form-item label="角色信息">
+            <custom-select v-model="userInfo.roleIds" :datasource="selectRole" :value-key="userInfo.usercode"
+              placeholder="请选择角色" multiple>
+            </custom-select>
           </el-form-item>
-           <el-form-item label="系统模块" prop="systemModules">
-            <template slot-scope="scope">
-              <custom-select v-model="userInfo.systemModules"
-                             :datasource="systemModuleSelect"
-                             placeholder="请选择系统模块"
-                             multiple>
-              </custom-select>
-            </template>
-          </el-form-item> -->
           <el-form-item label="用户描述" prop="descritpion">
             <el-input type="textarea" v-model="userInfo.descritpion"></el-input>
           </el-form-item>
@@ -41,9 +34,12 @@
 </template>
 
 <script>
-  import {SaveUser, UpdateUser} from "../../../api/user/userMag";
+  import {
+    SaveUser,
+    UpdateUser,
+    LoadRoleIdsByUserId
+  } from "../../../api/user/userMag";
   import CustomSelect from '../../../components/common/CustomSelect.vue';
-
   export default {
     components: {
       CustomSelect
@@ -57,14 +53,15 @@
           descritpion: '',
           validInd: true
         },
-        systemModuleSelect: []
+        selectRole: []
       };
     },
     created() {
+      this.selectRole = JSON.parse(this.$route.query.selectRole);
       this.optionType = this.$route.query.optionType;
-      // this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
       if (this.optionType === 'edit') {
         this.userInfo = JSON.parse(this.$route.query.userEdit);
+        this.loadUserRole(this.userInfo);
       }
     },
     methods: {
@@ -98,6 +95,17 @@
       },
       onReset(userInfo) {
         this.$refs[userInfo].resetFields();
+      },
+      // 加载指定用户的角色信息
+      loadUserRole(userInfo) {
+        if (userInfo.roleIds.length < 1) {
+          LoadRoleIdsByUserId(userInfo.id).then(res => {
+            var roleIds = res.resData.roleIds;
+            Object.assign(userInfo, {
+              roleIds: roleIds
+            });
+          });
+        }
       }
     }
   };

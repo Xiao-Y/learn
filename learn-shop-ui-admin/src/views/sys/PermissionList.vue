@@ -195,10 +195,6 @@
           }
         });
       },
-      refresh() {
-        // 刷新数据
-        this.LoadDataPermissionList();
-      },
       handleEdit(index, row) {
         this.$router.push({
           name: 'sysPermissionEdit',
@@ -208,6 +204,10 @@
             systemModuleSelect: JSON.stringify(this.systemModuleSelect)
           }
         });
+      },
+      // 刷新数据
+      refresh() {
+        this.LoadDataPermissionList();
       },
       handleDelete(index, row) {
         var _this = this;
