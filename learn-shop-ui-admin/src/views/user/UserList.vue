@@ -25,15 +25,12 @@
     <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
     <el-row>
       <template>
-        <el-table border stripe style="width: 100%"
-          @expand-change="loadUserRole"
-          row-key="id"
-          :data="tableData">
+        <el-table border stripe style="width: 100%" @expand-change="loadUserRole" row-key="id" :data="tableData">
           <el-table-column label="用户名称" prop="username"></el-table-column>
           <el-table-column label="用户CODE" prop="usercode"></el-table-column>
           <el-table-column label="用户描述" prop="descritpion"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
-            <template slot-scope="scope" >
+            <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="创建人">
                   <span>{{ scope.row.creatorCode }}</span>
@@ -51,10 +48,7 @@
                   <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
                 </el-form-item>
                 <el-form-item label="是否有效">
-                  <custom-select
-                    :datasource="selectRole"
-                    v-model="scope.row.roleIds"
-                    :value-key="scope.row.usercode"
+                  <custom-select :datasource="selectRole" v-model="scope.row.roleIds" :value-key="scope.row.usercode"
                     placeholder="请选择系统模块" multiple>
                   </custom-select>
                 </el-form-item>
@@ -123,14 +117,14 @@
           username: null,
           usercode: null
         },
-        tableData: [],
-        activeNames: ['1'],
+        tableData: [], // 列表数据
         selectRole: [] // 角色下拉列表
       }
     },
     created() {
+      // 加载角色下拉列表
       this.loadSelectRoleList();
-      // 请数据
+      // 请求列表数据
       this.loadDataUserList();
     },
     //每次激活时
@@ -148,21 +142,25 @@
         this.queryFilter.pageNo = 1;
         // 请求数据
         this.loadDataUserList();
-        // 关闭查询折叠栏
-        //        this.activeNames = [];
       },
       // 清除查询条件
       resetForm(queryFilter) {
         this.$refs[queryFilter].resetFields();
       },
+      // 刷新数据
       refresh() {
-        // 刷新数据
         this.loadDataUserList();
       },
-      // 请服务器数据（获取自动任务列表数据）
+      // 请服务器数据（获取列表数据）
       loadDataUserList() {
         LoadDataUserList(this.queryFilter).then(res => {
           var data = res.resData;
+          // 初始化 绑定一个 roleIds，不然后面监听不到
+          for (let index in data.content) {
+            Object.assign(data.content[index], {
+              roleIds: []
+            });
+          }
           this.tableData = data.content;
           this.queryFilter.recordCount = data.totalElements;
           this.queryFilter.totalPages = data.totalPages;
@@ -188,6 +186,7 @@
           }
         });
       },
+      // 修改用户
       handleEdit(index, row) {
         this.$router.push({
           name: 'userUserEdit',
@@ -197,6 +196,7 @@
           }
         });
       },
+      // 禁用
       handleProhibit(index, row) {
         var _this = this;
         _this.$confirm('此操作将禁用该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
@@ -218,6 +218,7 @@
           });
         });
       },
+      // 删除
       handleDelete(index, row) {
         var _this = this;
         _this.$confirm('此操作将删除该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
@@ -243,19 +244,18 @@
       loadSelectRoleList() {
         LoadSelectRoleList().then(res => {
           this.selectRole = res.resData;
-          console.info(res.resData);
+          // console.info(res.resData);
         });
       },
       // 加载指定用户的角色信息
-      loadUserRole(row, expandedRows){
-        if(!row.roleIds){
-          Object.assign(row,{roleIds:[]});
-          LoadRoleIdsByUserId(row.id).then(res=>{
+      loadUserRole(row, expandedRows) {
+        if (row.roleIds.length < 1) {
+          LoadRoleIdsByUserId(row.id).then(res => {
             var roleIds = res.resData.roleIds;
-            console.info("roleIds:",roleIds);
-            Object.assign(row,{roleIds:['1']});
+            Object.assign(row, {
+              roleIds: roleIds
+            });
           });
-          console.info("222--->>>",row.roleIds);
         }
       }
     }

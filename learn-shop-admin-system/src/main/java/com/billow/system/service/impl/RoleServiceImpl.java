@@ -236,7 +236,7 @@ public class RoleServiceImpl implements RoleService {
     public List<DataDictionaryEx> findSelectRole() {
         List<SelectRoleQuery> selectRole = roleDao.findSelectRole();
         List<DataDictionaryEx> collect = selectRole.stream().map(m -> {
-            return new DataDictionaryEx(m.getId(), m.getRoleName() + "-" + m.getRoleCode(), m.getId().toString());
+            return new DataDictionaryEx(m.getId(), m.getRoleName() + "-" + m.getRoleCode(), m.getId());
         }).collect(Collectors.toList());
         return collect;
     }

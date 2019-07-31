@@ -12,9 +12,9 @@ public class DataDictionaryEx {
     // 显示的名称
     private String fieldDisplay;
     // 显示名称的值
-    private String fieldValue;
+    private Long fieldValue;
 
-    public DataDictionaryEx(Long id, String fieldDisplay, String fieldValue) {
+    public DataDictionaryEx(Long id, String fieldDisplay, Long fieldValue) {
         this.id = id;
         this.fieldDisplay = fieldDisplay;
         this.fieldValue = fieldValue;

@@ -24,7 +24,7 @@
   export default {
     // 双向绑定
     model: {
-      prop: 'systemModules',
+      prop: 'parentValues',
       event: 'change'
     },
     props: {
@@ -66,7 +66,7 @@
         type: String,
         default: null
       },
-      systemModules: {
+      parentValues: {
         type: Array,
         default: null
       }
@@ -88,7 +88,10 @@
         // console.info("created 加载数据源字典：", this.datasource);
         this.currentSource = this.datasource;
       }
-      this.currentValue = this.systemModules;
+      console.info("created parentValues：", this.parentValues);
+      if(this.parentValues){
+        this.currentValue = this.parentValues;
+      }
     },
     methods: {
       changeEvent(val) {
@@ -110,8 +113,8 @@
         // console.info("watch 加载数据源字典：", newVal);
         this.currentSource = newVal;
       },
-      systemModules:function (newVal, oldVal) {
-        // console.info("watch systemModules：", newVal);
+      parentValues:function (newVal, oldVal) {
+        console.info("watch parentValues：", newVal);
         this.currentValue = newVal;
       }
     }
