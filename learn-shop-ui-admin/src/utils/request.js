@@ -87,6 +87,10 @@ service.interceptors.response.use(response => {
     var message = error;
     if(error.response){
       message = error.response.status + " " + error.response.statusText;
+      if(error.response.status === 412){
+        message = '用户信息修改，需要重新登陆';
+      }
+
     }
     Message({
       message: message,

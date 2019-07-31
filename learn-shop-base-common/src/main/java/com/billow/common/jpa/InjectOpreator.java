@@ -1,6 +1,6 @@
 package com.billow.common.jpa;
 
-import com.billow.common.business.UserTools;
+import com.billow.tools.utlis.UserTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

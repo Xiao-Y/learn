@@ -86,7 +86,7 @@ public class RequestInfoFilter extends ZuulFilter {
      */
     @Override
     public int filterOrder() {
-        return FilterConstants.DEBUG_FILTER_ORDER;
+        return FilterConstants.DEBUG_FILTER_ORDER - 10;
     }
 
     /**

@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -393,6 +394,13 @@ public class ToolsUtils {
         return false;
     }
 
+    public static <K, V> boolean isEmpty(Map<K, V> map) {
+        if (map == null || map.size() < 1) {
+            return true;
+        }
+        return false;
+    }
+
     public static <T> boolean isNotEmpty(List<T> list) {
         return !isEmpty(list);
     }
@@ -407,6 +415,10 @@ public class ToolsUtils {
 
     public static boolean isNotEmpty(String[] items) {
         return !isEmpty(items);
+    }
+
+    public static <K, V> boolean isNotEmpty(Map<K, V> map) {
+        return !isEmpty(map);
     }
 
     /**

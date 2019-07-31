@@ -8,4 +8,4 @@ export const login = (username, password) => requestUtils.post(baseUrl + '/login
   password: password
 });
 
-export const logout = () => requestUtils.post('/user/logout');
+export const logout = () => requestUtils.post(baseUrl + '/logout');

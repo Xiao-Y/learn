@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      name: 'linxin'
+      name: 'billow'
     }
   },
   computed: {

@@ -58,14 +58,18 @@ const loginHandle = {
       state
     }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit(types.SET_TOKEN, '');
-          commit(types.SET_ROLES, []);
-          removeToken();
-          resolve();
-        }).catch(error => {
-          reject(error);
-        })
+        commit(types.SET_TOKEN, '');
+        commit(types.SET_ROLES, []);
+        removeToken();
+        resolve();
+        // logout(state.token).then(() => {
+        //   commit(types.SET_TOKEN, '');
+        //   commit(types.SET_ROLES, []);
+        //   removeToken();
+        //   resolve();
+        // }).catch(error => {
+        //   reject(error);
+        // })
       })
     },
 

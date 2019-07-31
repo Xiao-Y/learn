@@ -13,6 +13,7 @@ import com.billow.user.pojo.po.UserRolePo;
 import com.billow.user.pojo.vo.UserVo;
 import com.billow.user.remote.AdminSystemRemote;
 import com.billow.user.service.UserService;
+import com.billow.user.service.redis.CommonUserRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class UserServiceImpl implements UserService {
     private UserRoleDao userRoleDao;
     @Autowired
     private AdminSystemRemote adminSystemRemote;
+    @Autowired
+    private CommonUserRedis commonUserRedis;
 
     @Override
     public Page<UserPo> findUserList(UserVo userVo) {
@@ -58,13 +61,18 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserVo saveUser(UserVo userVo) {
+        UserPo oldUser = null;
         UserPo convert = ConvertUtils.convert(userVo, UserPo.class);
-        UserPo userPo = userDao.save(convert);
         Long userId = userVo.getId();
         if (userId != null) {
+            // 查询出旧的数据
+            UserPo po = userDao.findOne(userId);
+            oldUser = ConvertUtils.convert(po, UserPo.class);
             // 删除用户角色关联，重新保存
             userRoleDao.deleteByUserId(userId);
         }
+        // 更新/保存
+        UserPo userPo = userDao.save(convert);
         // 保存用户的角色
         List<Long> roleIds = userVo.getRoleIds();
         List<UserRolePo> userRolePos = roleIds.stream().map(m -> {
@@ -86,6 +94,11 @@ public class UserServiceImpl implements UserService {
             if (ToolsUtils.isNotEmpty(roleExes)) {
                 List<String> roleCodes = roleExes.stream().map(m -> m.getRoleCode()).collect(Collectors.toList());
                 logger.info("----------->>>>>>>>>{}", roleCodes);
+                // 新添加的用户不管
+                if (userId != null) {
+                    // 修改 usercode 放入redis中
+                    commonUserRedis.setBlacklistOnEditUser(oldUser.getUsercode(), userPo.getUsercode(), roleCodes);
+                }
             }
         } else {
             throw new RuntimeException(base.getResMsg());

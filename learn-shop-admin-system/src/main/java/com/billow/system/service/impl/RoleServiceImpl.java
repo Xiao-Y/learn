@@ -243,7 +243,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleVo> findRoleById(List<Long> ids) {
-//        RolePo one = roleDao.findByIdIn(ids);
         List<RolePo> pos = roleDao.findByIdIn(ids);
         return ConvertUtils.convertIgnoreBase(pos, RoleVo.class);
     }
