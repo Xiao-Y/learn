@@ -6,6 +6,7 @@ import com.billow.auth.dao.UserRoleDao;
 import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
+import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,23 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usercode) throws UsernameNotFoundException {
-        logger.debug("查询用户：{} 的信息...", usercode);
+        logger.info("查询用户：{} 的信息...", usercode);
         Set<GrantedAuthority> authorities = new HashSet<>();
+        if(ToolsUtils.isEmpty(usercode)){
+            logger.error("用户名不能为空！");
+            throw new UsernameNotFoundException("用户名不能为空！");
+        }
 
         // 查询用户信息
-        UserPo userPo = userDao.findUserInfoByUsercodeAndValidIndIsTrue(usercode);
+//        UserPo userPo = userDao.findUserInfoByUsercodeAndValidIndIsTrue(usercode);
+        UserPo userPo = userDao.findUserInfoByUsercode(usercode);
         if (userPo == null) {
             logger.error("用户：{}，不存在！", usercode);
             throw new UsernameNotFoundException("用户：" + usercode + "，不存在");
+        }
+        if (!userPo.getValidInd()) {
+            logger.error("用户：{}，被锁定！", usercode);
+            throw new UsernameNotFoundException("用户：" + usercode + "，被锁定");
         }
         // 查询角色信息
         List<UserRolePo> userRolePos = userRoleDao.findRoleIdByUserIdAndValidIndIsTrue(userPo.getId());

@@ -10,6 +10,9 @@
           <el-form-item label="用户CODE" prop="usercode">
             <el-input v-model="userInfo.usercode" placeholder="请输入内容"></el-input>
           </el-form-item>
+		  <el-form-item label="用户密码" prop="password">
+		    <el-input v-model="userInfo.password" placeholder="请输入内容"></el-input>
+		  </el-form-item>
           <el-form-item label="角色信息">
             <custom-select v-model="userInfo.roleIds" :datasource="selectRole" :value-key="userInfo.usercode"
               placeholder="请选择角色" multiple>

@@ -14,4 +14,6 @@ public interface UserDao extends JpaRepository<UserPo, Long> {
      * @date 2018/11/5 16:09
      */
     UserPo findUserInfoByUsercodeAndValidIndIsTrue(String userCode);
+
+    UserPo findUserInfoByUsercode(String userCode);
 }

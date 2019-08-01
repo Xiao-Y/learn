@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,14 +63,35 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserVo saveUser(UserVo userVo) {
         UserPo oldUser = null;
+        boolean isEncryption = true;
         UserPo convert = ConvertUtils.convert(userVo, UserPo.class);
         Long userId = userVo.getId();
-        if (userId != null) {
+
+        if (userId != null) {// 更新
             // 查询出旧的数据
             UserPo po = userDao.findOne(userId);
             oldUser = ConvertUtils.convert(po, UserPo.class);
             // 删除用户角色关联，重新保存
             userRoleDao.deleteByUserId(userId);
+            // 修改时，如果没有修改密码，则不加密密码
+            String passwordPage = userVo.getPassword();
+            if (ToolsUtils.isEmpty(passwordPage)) {
+                isEncryption = false;
+            }
+        }
+
+        // 未加密前(默认密码为用户名)
+        String passwordSource = userVo.getUsercode();
+        // 如果不为空则修改密码
+        if (ToolsUtils.isNotEmpty(userVo.getPassword())) {
+            passwordSource = userVo.getPassword();
+        }
+
+        if (isEncryption) {// 需要加密
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            convert.setPassword(bCryptPasswordEncoder.encode(passwordSource));
+        } else {// 不需要加密，直接取旧的密码
+            convert.setPassword(oldUser.getPassword());
         }
         // 更新/保存
         UserPo userPo = userDao.save(convert);
@@ -86,6 +108,7 @@ public class UserServiceImpl implements UserService {
             userRoleDao.save(userRolePos);
         }
         UserVo vo = ConvertUtils.convert(userPo, UserVo.class);
+        vo.setPassword(null);
         vo.setRoleIds(roleIds);
         // 修改用户，需要重新登陆（redis 中插入 用户名-角色CODE）
         BaseResponse<List<RoleEx>> base = adminSystemRemote.findRoleById(roleIds);

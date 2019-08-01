@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.token.Token;
 import org.springframework.security.core.token.TokenService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
@@ -53,21 +54,21 @@ public class SecurityBeanConfig {
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // 密码加密
-        // return new BCryptPasswordEncoder();
-        // 不加密密码
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return rawPassword.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-//                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
-                return true;
-            }
-        };
+         // 密码加密
+         return new BCryptPasswordEncoder();
+//        // 不加密密码
+//        return new PasswordEncoder() {
+//            @Override
+//            public String encode(CharSequence rawPassword) {
+//                return rawPassword.toString();
+//            }
+//
+//            @Override
+//            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+////                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
+//                return true;
+//            }
+//        };
     }
 
     @Bean

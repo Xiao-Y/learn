@@ -198,6 +198,7 @@
       handleEdit(index, row) {
         // 打开折叠栏，再点击编辑保存后，折叠栏有bug
         this.expandRows = [];
+        row.password = null;
         this.$router.push({
           name: 'userUserEdit',
           query: {
