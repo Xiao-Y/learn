@@ -275,6 +275,7 @@
         LoadDataMenuIdList(this.roleInfo.id).then(res => {
           // 需要移除的父级ids,因为菜单树会自己关联
           let deleteMenuIds = new Set();
+          // 该角色所拥有的菜单
           var checkedMenu = res.resData;
           // 构建出所有需要移除的父级ids
           for (let i = 0; i < checkedMenu.length; i++) {

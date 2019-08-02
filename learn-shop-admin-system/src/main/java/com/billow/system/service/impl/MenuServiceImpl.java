@@ -168,6 +168,33 @@ public class MenuServiceImpl implements MenuService {
         return menuDao.countByMenuCodeIsAndValidIndIsTrue(menuCode);
     }
 
+    @Override
+    public Set<String> getParentByCurrentId(Long id) {
+        Set<String> set = new HashSet<>();
+        MenuPo one = menuDao.getOne(id);
+        if (one.getPid() != null) {
+            this.getMenuPidById(set, one.getPid());
+        }
+        return set;
+    }
+
+    /**
+     * 递归查询父级菜单id
+     *
+     * @param set
+     * @param id
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/8/2 10:57
+     */
+    private void getMenuPidById(Set<String> set, Long id) {
+        MenuPo one = menuDao.getOne(id);
+        if (one.getPid() != null) {
+            this.getMenuPidById(set, one.getPid());
+        }
+        set.add(one.getId().toString());
+    }
+
     /**
      * 递归查询子级菜单
      *

@@ -70,4 +70,14 @@ public interface MenuService {
      * @date 2019/7/24 14:10
      */
     Integer countMenuCodeByMenuCode(String menuCode);
+
+    /**
+     * 查询出指定节点的所有直接父级菜单id
+     *
+     * @param id
+     * @return java.util.Set<java.lang.String>
+     * @author LiuYongTao
+     * @date 2019/8/2 10:52
+     */
+    Set<String> getParentByCurrentId(Long id);
 }

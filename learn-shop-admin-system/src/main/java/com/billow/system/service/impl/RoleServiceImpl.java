@@ -8,7 +8,6 @@ import com.billow.system.dao.RoleMenuDao;
 import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.dao.UserRoleDao;
 import com.billow.system.pojo.ex.DataDictionaryEx;
-import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RoleMenuPo;
@@ -16,10 +15,13 @@ import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.po.UserRolePo;
 import com.billow.system.pojo.vo.RoleVo;
+import com.billow.system.service.MenuService;
 import com.billow.system.service.RoleService;
+import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.service.redis.CommonRoleMenuRedis;
 import com.billow.system.service.redis.CommonRolePermissionRedis;
 import com.billow.tools.utlis.ConvertUtils;
+import com.billow.tools.utlis.MathUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +63,8 @@ public class RoleServiceImpl implements RoleService {
     private PermissionDao permissionDao;
     @Autowired
     private MenuDao menuDao;
+    @Autowired
+    private MenuService menuService;
 
     @Override
     public List<RoleVo> findRoleListInfoByUserId(Long userId) {
@@ -91,8 +98,39 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<String> findMenuByRoleId(Long roleId) throws Exception {
+        Set<String> delMenus = new HashSet<>();
         List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(roleId);
-        return roleMenuPos.stream().map(m -> m.getMenuId().toString()).collect(Collectors.toList());
+        // 所有选种的菜单
+        List<String> collect = roleMenuPos.stream()
+                .map(m -> m.getMenuId().toString())
+                .collect(Collectors.toList());
+        // 异常：防止勾选父级菜单后，又再其下添加新菜单，这样导致新添加的菜单自动勾选上。
+        // 处理：如果勾选了父级菜单但是该角色又没有其下的子菜单，就移除该所有直接父级菜单
+        Iterator<String> iterator = collect.iterator();
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+            // 查询子级菜单
+            List<MenuPo> chiledMenus = menuDao.findByPidEquals(new Long(next));
+            if (ToolsUtils.isNotEmpty(chiledMenus)) {
+                List<String> childeIds = chiledMenus.stream().map(m -> m.getId().toString()).collect(Collectors.toList());
+                // 比较所有选种的菜单中是否包含子级菜单
+                List<String> intersection = MathUtils.getIntersection(collect, childeIds);
+                // 如果该菜单下有子菜单，但是没有勾选，所有移除该父菜单
+                if (ToolsUtils.isEmpty(intersection)) {
+                    delMenus.add(next);
+                    // 查询出当前菜单的所有父级菜单，准备移除
+                    Set<String> set = menuService.getParentByCurrentId(new Long(next));
+                    if (ToolsUtils.isNotEmpty(set)) {
+                        delMenus.addAll(set);
+                    }
+                }
+            }
+        }
+        // 移除菜单
+        if (ToolsUtils.isNotEmpty(delMenus)) {
+            collect.removeAll(delMenus);
+        }
+        return collect;
     }
 
     @Override

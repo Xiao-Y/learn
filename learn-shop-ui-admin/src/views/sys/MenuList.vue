@@ -116,7 +116,7 @@
     </el-row>
 
     <!-- 菜单修改/添加dialog start -->
-    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancledialog('editMenu')">
       <el-form :model="editMenu" :rules="rules22" label-width="130px" ref="editMenu" :inline-message="true">
         <el-form-item label="父菜单标题">
           <el-col :span="18">
