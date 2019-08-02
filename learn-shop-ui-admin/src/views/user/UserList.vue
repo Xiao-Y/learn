@@ -8,10 +8,10 @@
           </template>
           <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
-              <el-form-item label="用户名称" prop="username">
+              <el-form-item label="姓名" prop="username">
                 <el-input v-model="queryFilter.username" placeholder="用户名称"></el-input>
               </el-form-item>
-              <el-form-item label="用户CODE" prop="usercode">
+              <el-form-item label="账号" prop="usercode">
                 <el-input v-model="queryFilter.usercode" placeholder="用户CODE"></el-input>
               </el-form-item>
             </el-row>
@@ -25,13 +25,26 @@
     <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
     <el-row>
       <template>
-        <el-table border stripe style="width: 100%" @expand-change="loadUserRole" :expand-row-keys="expandRows" row-key="id" :data="tableData">
-          <el-table-column label="用户名称" prop="username"></el-table-column>
-          <el-table-column label="用户CODE" prop="usercode"></el-table-column>
-          <el-table-column label="用户描述" prop="descritpion"></el-table-column>
+        <el-table border stripe style="width: 100%" @expand-change="loadUserRole" :expand-row-keys="expandRows" row-key="id"
+          :data="tableData">
+          <el-table-column label="姓名" prop="username"></el-table-column>
+          <el-table-column label="账号" prop="usercode"></el-table-column>
+          <el-table-column label="性别" prop="sex" width="100">
+            <template slot-scope="scope">
+              <custom-select v-model="scope.row.sex" :datasource="selectSex" :value-key="scope.row.usercode"
+                placeholder="请选择性别" disabled>
+              </custom-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="出生日期" prop="birthDate">
+            <template slot-scope="scope">
+              <el-date-picker type="datetime" v-model="scope.row.birthDate" format="yyyy-MM-dd" readonly></el-date-picker>
+            </template>
+          </el-table-column>
+          <el-table-column label="手机号" prop="phone"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
-              <el-form label-position="left" inline class="demo-table-expand">
+              <el-form label-position="left" inline class="demo-table-expand" label-width="80px">
                 <el-form-item label="创建人">
                   <span>{{ scope.row.creatorCode }}</span>
                 </el-form-item>
@@ -47,18 +60,23 @@
                 <el-form-item label="是否有效">
                   <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" @change="userInfoChange(scope.row)"></el-switch>
                 </el-form-item>
-                <el-form-item label="角色信息">
+                <el-form-item label="角色">
                   <custom-select v-model="scope.row.roleIds" :datasource="selectRole" :value-key="scope.row.usercode"
-                    @onchange="userInfoChange(scope.row)"
-                    placeholder="请选择角色" multiple >
+                    @onchange="userInfoChange(scope.row)" placeholder="请选择角色" multiple>
                   </custom-select>
+                </el-form-item>
+                <el-form-item label="地址" prop="address">
+                  <span>{{ scope.row.address }}</span>
+                </el-form-item>
+                <el-form-item label="描述" prop="descritpion">
+                  <span>{{ scope.row.descritpion }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="设置为无效" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start">
                 <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini" :disabled="!scope.row.validInd">
                   <i class="el-icon-warning"></i>
                 </el-button>
@@ -98,10 +116,11 @@
     LoadRoleIdsByUserId,
     UpdateUser
   } from "../../api/user/userMag";
+  import CustomSelect from '../../components/common/CustomSelect.vue';
   import {
     LoadSelectRoleList
   } from "../../api/sys/roleMag";
-  import CustomSelect from '../../components/common/CustomSelect.vue';
+  import {LoadUserDataDictionary} from "../../api/sys/DataDictionaryMag";
 
   export default {
     components: {
@@ -121,12 +140,17 @@
         },
         tableData: [], // 列表数据
         selectRole: [], // 角色下拉列表
-        expandRows:[] // 打开的折叠拦
+        selectSex: [], // 性别下拉列表
+        expandRows: [] // 打开的折叠拦
       }
     },
     created() {
       // 加载角色下拉列表
       this.loadSelectRoleList();
+      // 加载性别下拉列表
+      LoadUserDataDictionary('sexType').then(res=>{
+        this.selectSex = res.resData;
+      });
       // 请求列表数据
       this.loadDataUserList();
     },
@@ -135,9 +159,9 @@
       var _this = this;
       this.$bus.on('userInfo', function(data) {
         var index = _this.tableData.findIndex(f => f.id === data.id);
-        if (index != -1) {// 更新
+        if (index != -1) { // 更新
           this.tableData.splice(index, 1, data);
-        } else {// 添加
+        } else { // 添加
           this.tableData.push(data);
         }
       }.bind(this));
@@ -190,7 +214,8 @@
           name: 'userUserEdit',
           query: {
             optionType: 'add',
-            selectRole: JSON.stringify(this.selectRole)
+            selectRole: JSON.stringify(this.selectRole),
+            selectSex: JSON.stringify(this.selectSex)
           }
         });
       },
@@ -204,6 +229,7 @@
           query: {
             optionType: 'edit',
             selectRole: JSON.stringify(this.selectRole),
+            selectSex: JSON.stringify(this.selectSex),
             userEdit: JSON.stringify(row)
           }
         });
@@ -269,8 +295,8 @@
           });
         }
       },
-      //
-      userInfoChange(row){
+      // 角色修改时，更新用户信息
+      userInfoChange(row) {
         UpdateUser(row).then(res => {
           this.$message({
             type: 'success',
@@ -278,6 +304,9 @@
           });
         });
       }
+    },
+    loadSelectSexList(){
+
     }
   }
 </script>

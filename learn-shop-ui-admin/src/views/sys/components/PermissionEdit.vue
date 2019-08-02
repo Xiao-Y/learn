@@ -29,7 +29,7 @@
             <el-switch v-model="permissionInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
           <el-form-item size="mini">
-            <el-button type="primary" @click="onSubmit">立即创建</el-button>
+            <el-button type="primary" @click="onSubmit">保存</el-button>
             <el-button @click="onReset('permissionInfo')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>

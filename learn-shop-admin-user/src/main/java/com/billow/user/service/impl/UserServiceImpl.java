@@ -5,6 +5,7 @@ import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.billow.tools.utlis.UserTools;
 import com.billow.user.dao.UserDao;
 import com.billow.user.dao.UserRoleDao;
 import com.billow.user.pojo.ex.RoleEx;
@@ -50,6 +51,8 @@ public class UserServiceImpl implements UserService {
     private AdminSystemRemote adminSystemRemote;
     @Autowired
     private CommonUserRedis commonUserRedis;
+    @Autowired
+    private UserTools userTools;
 
     @Override
     public Page<UserPo> findUserList(UserVo userVo) {
@@ -116,7 +119,6 @@ public class UserServiceImpl implements UserService {
             List<RoleEx> roleExes = base.getResData();
             if (ToolsUtils.isNotEmpty(roleExes)) {
                 List<String> roleCodes = roleExes.stream().map(m -> m.getRoleCode()).collect(Collectors.toList());
-                logger.info("----------->>>>>>>>>{}", roleCodes);
                 // 新添加的用户不管
                 if (userId != null) {
                     // 修改 usercode 放入redis中
@@ -160,5 +162,17 @@ public class UserServiceImpl implements UserService {
             userVo.setRoleIds(collect);
         }
         return userVo;
+    }
+
+    @Override
+    public UserVo getUserInfo() {
+        String currentUserCode = userTools.getCurrentUserCode();
+        if(ToolsUtils.isEmpty(currentUserCode)){
+            return null;
+        }
+
+        UserPo userPo = userDao.findByUsercode(currentUserCode);
+        userPo.setPassword(null);
+        return ConvertUtils.convert(userPo, UserVo.class);
     }
 }

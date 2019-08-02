@@ -32,6 +32,8 @@ public class DataDictionaryApi extends BaseApi {
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("systemModule")String systemModule,@PathVariable("fieldType")String fieldType) throws Exception {
         DataDictionaryVo dataDictionaryVo = new DataDictionaryVo();
+        dataDictionaryVo.setSystemModule(systemModule);
+        dataDictionaryVo.setFieldType(fieldType);
         List<DataDictionaryVo> dataDictionaryVos = dataDictionaryService.findDataDictionaryByCondition(dataDictionaryVo);
         return dataDictionaryVos;
     }

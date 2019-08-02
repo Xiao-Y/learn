@@ -67,4 +67,13 @@ public interface UserService {
      * @date 2019/7/30 18:08
      */
     UserVo findRoleIdsByUserId(Long id);
+
+    /**
+     * 根据 token 查询用户信息
+     *
+     * @return com.billow.user.pojo.vo.UserVo
+     * @author LiuYongTao
+     * @date 2019/8/2 14:16
+     */
+    UserVo getUserInfo();
 }

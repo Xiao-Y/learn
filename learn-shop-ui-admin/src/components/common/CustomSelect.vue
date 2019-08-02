@@ -67,13 +67,13 @@
         default: null
       },
       parentValues: {
-        type: Array,
+        // type: Array,
         default: null
       }
     },
     data() {
       return {
-        currentValue: [], // currentValue 当前选种的，接收父组件 v-model 传来的值；
+        currentValue: null, // currentValue 当前选种的，接收父组件 v-model 传来的值；
         currentSource: [] // currentSource 当前数据源|；
       }
     },

@@ -8,9 +8,19 @@ var RequestUtils = {
    * @constructor
    */
   get: function (url) {
-    return request({
-      url: url,
-      method: 'get'
+    // return request({
+    //   url: url,
+    //   method: 'get'
+    // })
+    return new Promise((resolve, reject) => {
+      request({
+        url: url,
+        method: 'get'
+      }).then(res => {
+        resolve(res);
+      }).catch(res => {
+        reject(res)
+      })
     })
   },
   /**

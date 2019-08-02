@@ -33,7 +33,7 @@
             <el-input v-model="productInfo.quantity" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item size="mini">
-            <el-button type="primary" @click="onSubmit">立即创建</el-button>
+            <el-button type="primary" @click="onSubmit">保存</el-button>
             <el-button @click="onReset('productInfo')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>

@@ -71,4 +71,10 @@ public class UserApi extends BaseApi {
     public UserVo findRoleIdsByUserId(@PathVariable("id") Long id) {
         return userService.findRoleIdsByUserId(id);
     }
+
+    @ApiOperation("根据登陆token查询用户信息")
+    @GetMapping("/getUserInfo")
+    public UserVo getUserInfo() {
+        return userService.getUserInfo();
+    }
 }

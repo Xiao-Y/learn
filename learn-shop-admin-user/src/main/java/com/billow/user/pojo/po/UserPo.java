@@ -4,11 +4,14 @@ package com.billow.user.pojo.po;
 
 
 import com.billow.common.base.pojo.BasePo;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "u_user")
 public class UserPo extends BasePo implements Serializable {
@@ -18,144 +21,14 @@ public class UserPo extends BasePo implements Serializable {
     private String usercode;
     // 密码
     private String password;
-    // 加密
-    private String salt;
     // 性别
     private String sex;
-    // 年龄
-    private Integer age;
-    /**
-     * 用户名
-     *
-     * @return
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * 用户名
-     *
-     * @param username
-     * @return
-     */
-    public UserPo setUsername(String username) {
-        this.username = username;
-        return this;
-    }
-
-    /**
-     * 用户code
-     *
-     * @return java.lang.String
-     * @author LiuYongTao
-     * @date 2018/11/5 15:14
-     */
-    public String getUsercode() {
-        return usercode;
-    }
-
-    /**
-     * 用户code
-     *
-     * @param [usercode]
-     * @return UserPo
-     * @author LiuYongTao
-     * @date 2018/11/5 15:14
-     */
-    public UserPo setUsercode(String usercode) {
-        this.usercode = usercode;
-        return this;
-    }
-
-    /**
-     * 密码
-     *
-     * @return
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * 密码
-     *
-     * @param password
-     * @return
-     */
-    public UserPo setPassword(String password) {
-        this.password = password;
-        return this;
-    }
-
-    /**
-     * 加密
-     *
-     * @return
-     */
-    public String getSalt() {
-        return salt;
-    }
-
-    /**
-     * 加密
-     *
-     * @param salt
-     * @return
-     */
-    public UserPo setSalt(String salt) {
-        this.salt = salt;
-        return this;
-    }
-
-    /**
-     * 性别
-     *
-     * @return
-     */
-    public String getSex() {
-        return sex;
-    }
-
-    /**
-     * 性别
-     *
-     * @param sex
-     * @return
-     */
-    public UserPo setSex(String sex) {
-        this.sex = sex;
-        return this;
-    }
-
-    /**
-     * 年龄
-     *
-     * @return
-     */
-    public Integer getAge() {
-        return age;
-    }
-
-    /**
-     * 年龄
-     *
-     * @param age
-     * @return
-     */
-    public UserPo setAge(Integer age) {
-        this.age = age;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "UserPo{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", sex='" + sex + '\'' +
-                ", age=" + age +
-                '}';
-    }
+    // 出生日期
+    private Date birthDate;
+    // 手机号
+    private String phone;
+    // 地址
+    private String address;
+    // 用户描述
+    private String descritpion;
 }

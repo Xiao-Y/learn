@@ -52,3 +52,13 @@ export const DeleteUserById = id => requestUtils.del(baseUrl + '/deleteUserById/
  * @constructor
  */
 export const LoadRoleIdsByUserId = id => requestUtils.get(baseUrl + '/findRoleIdsByUserId/' + id);
+
+/**
+ * 根据 token 获取用户信息
+ * @param token
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const GetUserInfo = () => requestUtils.get(baseUrl + '/getUserInfo');
+
+

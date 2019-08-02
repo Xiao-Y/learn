@@ -1,26 +1,22 @@
-import {getInfo} from '@/api/user'
+import {GetUserInfo} from '../../api/user/userMag'
 // import {getToken, setToken, removeToken} from '@/utils/auth'
 import types from '@/store/mutationsType'
 
 const user = {
-  state: {
+  state: {},
 
-  },
-
-  mutations: {
-
-  },
+  mutations: {},
 
   actions: {
     // 获取用户信息
     GetInfoActions({commit, state}) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(res => {
+        GetUserInfo(state.token).then(res => {
           resolve(res);
         }).catch(error => {
           reject(error);
-        })
-      })
+        });
+      });
     }
   }
 }
