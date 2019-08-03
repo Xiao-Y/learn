@@ -1,10 +1,11 @@
 package com.billow.user.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
+import com.billow.tools.utlis.UserTools;
 import com.billow.user.pojo.po.UserPo;
 import com.billow.user.pojo.vo.UserVo;
-import com.billow.user.remote.AdminSystemRemote;
 import com.billow.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 用户信息操作
  *
@@ -35,6 +33,8 @@ public class UserApi extends BaseApi {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserTools userTools;
 
     @ApiOperation("根据条件查询用户信息")
     @PostMapping("/findUserList")
@@ -82,5 +82,21 @@ public class UserApi extends BaseApi {
     @GetMapping("/checkUserCode/{userCode}")
     public Integer checkUserCode(@PathVariable("userCode") String userCode) {
         return userService.checkUserCode(userCode);
+    }
+
+    @ApiOperation("修改密码")
+    @PutMapping("/editPassWord")
+    public BaseResponse<Boolean> editPassWord(@RequestBody UserVo userVo) {
+        BaseResponse<Boolean> baseResponse = new BaseResponse<>();
+
+        String currentUserCode = userTools.getCurrentUserCode();
+        UserVo oldUser = userService.checkPassWord(currentUserCode, userVo.getOldPassWord());
+        if (oldUser == null) {
+            baseResponse.setResCode(ResCodeEnum.RESCODE_ERROR_PASSWORD);
+            return baseResponse;
+        }
+        oldUser.setPassword(userVo.getNewPassWord());
+        userService.editPassWord(oldUser);
+        return baseResponse;
     }
 }

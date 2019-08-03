@@ -86,4 +86,25 @@ public interface UserService {
      * @date 2019/8/3 15:47
      */
     Integer checkUserCode(String userCode);
+
+    /**
+     * 校验用户的密码是否正确,如果正确则返回用户信息，否则返回空
+     *
+     * @param currentUserCode
+     * @param oldPassWord
+     * @return com.billow.user.pojo.vo.UserVo
+     * @author billow
+     * @date 2019/8/3 18:21
+     */
+    UserVo checkPassWord(String currentUserCode, String oldPassWord);
+
+    /**
+     * 更新密码
+     *
+     * @param oldUser
+     * @return void
+     * @author billow
+     * @date 2019/8/3 18:24
+     */
+    void editPassWord(UserVo oldUser);
 }

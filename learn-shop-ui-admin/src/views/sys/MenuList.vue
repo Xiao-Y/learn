@@ -155,8 +155,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="cancledialog('editMenu')">取 消</el-button>
         <el-button size="mini" type="primary" @click="validSubmie('editMenu')">确 定</el-button>
+        <el-button size="mini" @click="cancledialog('editMenu')">取 消</el-button>
       </div>
     </el-dialog>
     <!-- 菜单修改/添加dialog end -->

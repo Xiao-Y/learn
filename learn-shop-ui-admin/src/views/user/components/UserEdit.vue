@@ -3,30 +3,33 @@
     <div class="ms-doc">
       <h3>用户信息</h3>
       <article>
-        <el-form ref="userInfo" :model="userInfo" :rules="rulesForm" :inline-message="true" label-width="100px" size="mini">
+        <el-form ref="userInfo" :model="userInfo" :rules="rulesForm" :inline-message="true" label-width="100px"
+                 size="mini">
           <el-form-item label="姓名" prop="username">
             <el-col :span="18">
-            <el-input v-model="userInfo.username" placeholder="请输入内容"></el-input>
+              <el-input v-model="userInfo.username" placeholder="请输入内容"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="账号" prop="usercode">
             <el-col :span="18">
-            <el-input v-model="userInfo.usercode" placeholder="请输入内容"></el-input>
+              <el-input v-model="userInfo.usercode" placeholder="请输入内容"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="密码" prop="password" v-if="!fromUserInfo">
             <el-col :span="18">
-            <el-input type="password" v-model="userInfo.password" show-password placeholder="默认密码与用户名相同"></el-input>
+              <el-input type="password" v-model="userInfo.password" placeholder="默认密码与用户名相同"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="性别" prop="sex">
-            <custom-select v-model="userInfo.sex" :datasource="selectSex" :value-key="userInfo.usercode" :disabled="fromUserInfo"
-              placeholder="请选择性别">
+            <custom-select v-model="userInfo.sex" :datasource="selectSex" :value-key="userInfo.usercode"
+                           :disabled="fromUserInfo"
+                           placeholder="请选择性别">
             </custom-select>
           </el-form-item>
           <el-form-item label="角色">
-            <custom-select v-model="userInfo.roleIds" :datasource="selectRole" :value-key="userInfo.usercode" :disabled="fromUserInfo"
-              placeholder="请选择角色" multiple>
+            <custom-select v-model="userInfo.roleIds" :datasource="selectRole" :value-key="userInfo.usercode"
+                           :disabled="fromUserInfo"
+                           placeholder="请选择角色" multiple>
             </custom-select>
           </el-form-item>
           <el-form-item label="出生日期" prop="birthDate">
@@ -34,17 +37,17 @@
           </el-form-item>
           <el-form-item label="手机号" prop="phone">
             <el-col :span="18">
-            <el-input v-model="userInfo.phone" placeholder="请输入内容"></el-input>
+              <el-input v-model="userInfo.phone" placeholder="请输入内容"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="地址" prop="address">
             <el-col :span="18">
-            <el-input v-model="userInfo.address" placeholder="请输入内容"></el-input>
+              <el-input v-model="userInfo.address" placeholder="请输入内容"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="描述" prop="descritpion">
             <el-col :span="18">
-            <el-input type="textarea" v-model="userInfo.descritpion"></el-input>
+              <el-input type="textarea" v-model="userInfo.descritpion"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="有效标志" prop="validInd" v-if="!fromUserInfo">
@@ -93,13 +96,15 @@
         selectRole: [], // 角色下拉列表
         selectSex: [], // 性别下拉列表
         fromUserInfo: false, // 是否来自个人信息
-        oldUserCode:'',// 旧userCode，用于校验
-        rulesForm:{
+        oldUserCode: '',// 旧userCode，用于校验
+        rulesForm: {
           username: [{required: true, message: '请输入姓名', trigger: 'blur'}],
           usercode: [{required: true, message: '请输入账号', trigger: 'blur'},
             {validator: this.checkUserCode, trigger: 'change'}],
-          phone: [{required: true, message: '请输入正确的手机号', trigger: 'blur',
-            pattern:/^1([38][0-9]|4[579]|5[^4]|6[6]|7[0135678]|9[89])\d{8}$/}]
+          phone: [{
+            required: true, message: '请输入正确的手机号', trigger: 'blur',
+            pattern: /^1([38][0-9]|4[579]|5[^4]|6[6]|7[0135678]|9[89])\d{8}$/
+          }]
         }
       };
     },
@@ -109,15 +114,15 @@
       if (selectRole) {
         this.selectRole = JSON.parse(selectRole);
       } else {
-        LoadSelectRoleList().then(res=>{
+        LoadSelectRoleList().then(res => {
           this.selectRole = res.resData;
         });
       }
       var selectSex = this.$route.query.selectSex;
       if (selectSex) {
         this.selectSex = JSON.parse(selectSex);
-      }else{
-        LoadUserDataDictionary('sexType').then(res=>{
+      } else {
+        LoadUserDataDictionary('sexType').then(res => {
           this.selectSex = res.resData;
         });
       }
@@ -135,9 +140,9 @@
       }
     },
     methods: {
-      validSubmit(){
+      validSubmit() {
         var _this = this;
-        this.$refs['userInfo'].validate(valid=>{
+        this.$refs['userInfo'].validate(valid => {
           if (valid) {
             _this.onSubmit();
           } else {
@@ -190,12 +195,12 @@
         }
       },
       // 校验账号是否重复
-      checkUserCode(rule, value, callback){
-        if(this.oldUserCode != '' && this.oldUserCode === value){
+      checkUserCode(rule, value, callback) {
+        if (this.oldUserCode != '' && this.oldUserCode === value) {
           callback();
           return true;
         }
-        CheckUserCode(value).then(res=>{
+        CheckUserCode(value).then(res => {
           if (res.resData >= 1) {
             callback(new Error("账号已经存在"));
           } else {
@@ -261,7 +266,8 @@
   .el-form-item {
     margin-bottom: 3px;
   }
-  .el-input__inner{
-    width:80%
+
+  .el-input__inner {
+    width: 80%
   }
 </style>

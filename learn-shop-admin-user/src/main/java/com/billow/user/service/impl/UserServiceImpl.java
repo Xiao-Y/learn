@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVo getUserInfo() {
         String currentUserCode = userTools.getCurrentUserCode();
-        if(ToolsUtils.isEmpty(currentUserCode)){
+        if (ToolsUtils.isEmpty(currentUserCode)) {
             return null;
         }
 
@@ -179,5 +179,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer checkUserCode(String userCode) {
         return userDao.countByUsercodeIsAndValidIndIsTrue(userCode);
+    }
+
+    @Override
+    public UserVo checkPassWord(String currentUserCode, String oldPassWord) {
+        UserPo userPo = userDao.findByUsercode(currentUserCode);
+        if (userPo == null) {
+            return null;
+        }
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (bCryptPasswordEncoder.matches(oldPassWord, userPo.getPassword())) {
+            return ConvertUtils.convert(userPo, UserVo.class);
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void editPassWord(UserVo oldUser) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        oldUser.setPassword(bCryptPasswordEncoder.encode(oldUser.getPassword()));
+        userDao.save(ConvertUtils.convert(oldUser, UserPo.class));
     }
 }

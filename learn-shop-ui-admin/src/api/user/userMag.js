@@ -68,4 +68,9 @@ export const GetUserInfo = () => requestUtils.get(baseUrl + '/getUserInfo');
  */
 export const CheckUserCode = userCode => requestUtils.get(baseUrl + '/checkUserCode/' + userCode);
 
-
+/**
+ * 更新用户信息
+ * @param data
+ * @constructor
+ */
+export const EditPassWord = data => requestUtils.put(baseUrl + '/editPassWord', Object.assign(data));

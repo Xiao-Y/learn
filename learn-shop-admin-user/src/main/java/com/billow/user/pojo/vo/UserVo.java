@@ -16,5 +16,10 @@ import java.util.List;
 @Data
 public class UserVo extends UserPo {
 
+    // 角色id集合
     List<Long> roleIds = new ArrayList<>();
+    // 旧密码
+    private String oldPassWord;
+    // 新密码
+    private String newPassWord;
 }

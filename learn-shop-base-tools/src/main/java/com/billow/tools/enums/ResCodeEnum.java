@@ -92,6 +92,10 @@ public enum ResCodeEnum {
      */
     RESCODE_NOT_FOUND_USER("0019", "用户名或密码错误"),
     /**
+     * "0020", "密码错误"
+     */
+    RESCODE_ERROR_PASSWORD("0020", "密码错误"),
+    /**
      * "8888", "系统服务异常，熔断请求"
      */
     RESCODE_SYSTEM_HYSTRIC("8888", "系统服务异常，熔断请求"),
