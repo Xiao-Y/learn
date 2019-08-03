@@ -61,4 +61,11 @@ export const LoadRoleIdsByUserId = id => requestUtils.get(baseUrl + '/findRoleId
  */
 export const GetUserInfo = () => requestUtils.get(baseUrl + '/getUserInfo');
 
+/**
+ * 查询 userCode 的个数
+ * @param userCode
+ * @constructor
+ */
+export const CheckUserCode = userCode => requestUtils.get(baseUrl + '/checkUserCode/' + userCode);
+
 

@@ -76,4 +76,14 @@ public interface UserService {
      * @date 2019/8/2 14:16
      */
     UserVo getUserInfo();
+
+    /**
+     * 查询 userCode 的个数
+     *
+     * @param userCode
+     * @return java.lang.Integer
+     * @author billow
+     * @date 2019/8/3 15:47
+     */
+    Integer checkUserCode(String userCode);
 }

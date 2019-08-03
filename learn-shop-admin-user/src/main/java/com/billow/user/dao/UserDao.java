@@ -15,4 +15,14 @@ public interface UserDao extends JpaRepository<UserPo, Long>, JpaSpecificationEx
      * @date 2019/8/2 14:21
      */
     UserPo findByUsercode(String userCode);
+
+    /**
+     * 查询 userCode 的个数
+     *
+     * @param userCode
+     * @return java.lang.Integer
+     * @author billow
+     * @date 2019/8/3 15:49
+     */
+    Integer countByUsercodeIsAndValidIndIsTrue(String userCode);
 }

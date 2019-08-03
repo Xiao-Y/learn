@@ -193,7 +193,7 @@
         optionType: '',// 操作类型
         rules22: {// 校验
           title: [{required: true, message: '请输入菜单名称', trigger: 'blur'}],
-          titleCode: [{validator: this.checkMenuCode, trigger: 'blur'}]
+          titleCode: [{validator: this.checkMenuCode, trigger: 'change'}]
         }
       };
     },
@@ -371,7 +371,7 @@
       // 取消
       cancledialog(formRule) {
         this.$refs[formRule].resetFields();
-        this.dialogFormVisible = false
+        this.dialogFormVisible = false;
         this.initEditMenu();
       },
       // 验证后提交
@@ -415,7 +415,7 @@
             }
           }
           this.$refs[formRule].resetFields();
-          this.dialogFormVisible = false
+          this.dialogFormVisible = false;
           this.initEditMenu();
           this.$message({
             type: 'success',

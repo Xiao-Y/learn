@@ -77,4 +77,10 @@ public class UserApi extends BaseApi {
     public UserVo getUserInfo() {
         return userService.getUserInfo();
     }
+
+    @ApiOperation(value = "查询 userCode 的个数")
+    @GetMapping("/checkUserCode/{userCode}")
+    public Integer checkUserCode(@PathVariable("userCode") String userCode) {
+        return userService.checkUserCode(userCode);
+    }
 }

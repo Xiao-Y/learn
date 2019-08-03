@@ -175,4 +175,9 @@ public class UserServiceImpl implements UserService {
         userPo.setPassword(null);
         return ConvertUtils.convert(userPo, UserVo.class);
     }
+
+    @Override
+    public Integer checkUserCode(String userCode) {
+        return userDao.countByUsercodeIsAndValidIndIsTrue(userCode);
+    }
 }
