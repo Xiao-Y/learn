@@ -14,41 +14,9 @@ public abstract class BasePage implements Serializable {
     private static final Integer PAGE_NO = 1; // 当前页号
     private static final Integer RECORD_COUNT = 0; // 总记录数
 
-    private String requestUrl; // 请求url
     private Integer pageSize = PAGE_SIZE; // 每页要显示的记录数
     private Integer pageNo = PAGE_NO; // 当前页号
     private Integer recordCount = RECORD_COUNT; // 总记录数
-    private String objectOrderBy;
-
-    public String getObjectOrderBy() {
-        return objectOrderBy;
-    }
-
-    public void setObjectOrderBy(String objectOrderBy) {
-        this.objectOrderBy = objectOrderBy;
-    }
-
-    /**
-     * 请求url
-     *
-     * @return
-     * @author XiaoY
-     * @date: 2016年12月3日 下午3:57:19
-     */
-    public String getRequestUrl() {
-        return requestUrl;
-    }
-
-    /**
-     * 请求url
-     *
-     * @param requestUrl
-     * @author XiaoY
-     * @date: 2016年12月3日 下午3:57:23
-     */
-    public void setRequestUrl(String requestUrl) {
-        this.requestUrl = requestUrl;
-    }
 
     /**
      * 每页要显示的记录数
@@ -124,11 +92,9 @@ public abstract class BasePage implements Serializable {
     @Override
     public String toString() {
         return "BasePage{" +
-                "requestUrl='" + requestUrl + '\'' +
-                ", pageSize=" + pageSize +
+                "pageSize=" + pageSize +
                 ", pageNo=" + pageNo +
                 ", recordCount=" + recordCount +
-                ", objectOrderBy='" + objectOrderBy + '\'' +
                 '}';
     }
 }

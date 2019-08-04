@@ -4,7 +4,7 @@ import {
 } from '@/api/login'
 import {
   removeToken
-} from '@/utils/auth'
+} from '../../utils/cookieUtils'
 import types from '@/store/mutationsType'
 import VueUtils from '@/utils/vueUtils'
 

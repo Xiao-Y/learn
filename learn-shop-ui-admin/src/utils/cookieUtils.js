@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie'
-const AccessTokenKey = 'AccessToken'
-const RefreshTokenKey = 'RefreshToken'
+
+const AccessTokenKey = 'AccessToken';
+const RefreshTokenKey = 'RefreshToken';
+const CityData = 'CityData';
 
 /**
  * 获取token
@@ -40,4 +42,27 @@ export function setToken(token) {
 export function removeToken() {
   Cookies.remove(AccessTokenKey);
   Cookies.remove(RefreshTokenKey);
+}
+
+
+/**
+ * 获取 CityData
+ * @returns {*}
+ * @constructor
+ */
+export function getCityData() {
+  var cityData = localStorage.getItem(CityData);
+  if (cityData) {
+    return JSON.parse(cityData);
+  }
+  return cityData;
+}
+
+/**
+ * 设置 CityData
+ * @returns {*}
+ * @constructor
+ */
+export function setCityData(cityData) {
+  localStorage.setItem(CityData, JSON.stringify(cityData))
 }

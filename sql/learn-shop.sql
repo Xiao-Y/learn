@@ -55,7 +55,7 @@ CREATE TABLE `r_role_menu`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `role_id` bigint(20) NULL DEFAULT NULL,
   `menu_id` bigint(20) NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
+  `CREATE_TIME` datetime(0) NULL DEFAULT NULL,
   `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,

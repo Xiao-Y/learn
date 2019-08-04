@@ -52,7 +52,7 @@
   import skinComp from '../../components/skin'
   import {
     getAccessToken
-  } from '../../utils/auth' // 验权
+  } from '../../utils/cookieUtils' // 验权
   import {
     GetUserInfo,
     EditPassWord

@@ -42,7 +42,13 @@
           </el-form-item>
           <el-form-item label="地址" prop="address">
             <el-col :span="18">
-              <el-input v-model="userInfo.address" placeholder="请输入内容"></el-input>
+              <!--              <el-input v-model="userInfo.address" placeholder="请输入内容"></el-input>-->
+              <el-cascader :options="citySources"
+
+                           :props="optionProps"
+                           @active-item-change="handleItemChange"
+                           @change="handleChange">
+              </el-cascader>
             </el-col>
           </el-form-item>
           <el-form-item label="描述" prop="descritpion">
@@ -79,6 +85,14 @@
   import {
     LoadUserDataDictionary
   } from "../../../api/sys/DataDictionaryMag";
+  import {
+    LoadCityData,
+  } from "../../../api/sys/CityMag";
+
+  import {
+    getCityData,
+    setCityData
+  } from '../../../utils/cookieUtils' // 验权
 
   export default {
     components: {
@@ -95,6 +109,12 @@
         },
         selectRole: [], // 角色下拉列表
         selectSex: [], // 性别下拉列表
+        citySources: [],// 省份下拉列表
+        optionProps: {
+          value: 'cityId',
+          label: 'name',
+          children: 'children'
+        },
         fromUserInfo: false, // 是否来自个人信息
         oldUserCode: '',// 旧userCode，用于校验
         rulesForm: {
@@ -138,6 +158,8 @@
       if (this.optionType === 'myUserInfo') {
         this.fromUserInfo = true;
       }
+      // 加载城市下拉列表
+      this.loadCitySources();
     },
     methods: {
       validSubmit() {
@@ -207,6 +229,23 @@
             callback();
           }
         });
+      },
+      loadCitySources() {
+        if (getCityData()) {
+          this.citySources = getCityData();
+          return;
+        }
+        LoadCityData('100000').then(res => {
+          this.citySources = res.resData;
+          setCityData(this.citySources);
+        });
+      },
+      // 加载城市下拉列表
+      handleChange(value) {
+        console.info("value", value);
+      },
+      handleItemChange(value) {
+        console.info("value1", value);
       }
     }
   };

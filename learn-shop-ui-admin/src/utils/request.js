@@ -9,7 +9,7 @@ import store from '../store'
 import {
   getAccessToken,
   setToken
-} from './auth'
+} from './cookieUtils'
 import {
   showFullScreenLoading,
   tryHideFullScreenLoading

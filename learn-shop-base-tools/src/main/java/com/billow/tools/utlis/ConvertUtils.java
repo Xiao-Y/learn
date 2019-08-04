@@ -41,11 +41,11 @@ public class ConvertUtils {
                     FieldUtils.UPDATER_CODE, FieldUtils.UPDATE_TIME, FieldUtils.VALID_IND
             };
             org.springframework.beans.BeanUtils.copyProperties(po, vo, ignoreProperties);
-            FieldUtils.setValue(vo, FieldUtils.REQUEST_URL, null);
+//            FieldUtils.setValue(vo, FieldUtils.REQUEST_URL, null);
             FieldUtils.setValue(vo, FieldUtils.PAGE_SIZE, null);
             FieldUtils.setValue(vo, FieldUtils.PAGE_NO, null);
             FieldUtils.setValue(vo, FieldUtils.RECORD_COUNT, null);
-            FieldUtils.setValue(vo, FieldUtils.OBJECT_ORDER_BY, null);
+//            FieldUtils.setValue(vo, FieldUtils.OBJECT_ORDER_BY, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
