@@ -14,5 +14,5 @@ import java.util.List;
 @Data
 public class CityVo extends CityPo {
 
-    private List<CityVo> children;
+
 }

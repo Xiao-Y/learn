@@ -1,6 +1,7 @@
 package com.billow.system.service.impl;
 
 import com.billow.system.dao.CityDao;
+import com.billow.system.pojo.ex.CityEx;
 import com.billow.system.pojo.po.CityPo;
 import com.billow.system.pojo.vo.CityVo;
 import com.billow.system.service.CityService;
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.sun.tools.internal.xjc.reader.Ring.add;
 
 /**
  * 省市区
@@ -29,32 +28,32 @@ public class CityServiceImpl implements CityService {
     private CityDao cityDao;
 
     @Override
-    public List<CityVo> findCityByParentCityId(String parentCityId) {
+    public List<CityEx> findCityByParentCityId(String parentCityId) {
 
         // 新建一个list来存放一级菜单
-        List<CityVo> tree = new ArrayList<>();
+        List<CityEx> tree = new ArrayList<>();
 
         List<CityPo> cityPos = cityDao.findAll();
-        List<CityVo> cityVos = ConvertUtils.convertIgnoreBase(cityPos, CityVo.class);
+        List<CityEx> cityVos = ConvertUtils.convertIgnoreBase(cityPos, CityEx.class);
 
         // 将所有的数据，以键值对的形式装入map中
-        Map<String, CityVo> map = new HashMap<>();
-        for (CityVo cityVo : cityVos) {
+        Map<String, CityEx> map = new HashMap<>();
+        for (CityEx cityVo : cityVos) {
             map.put(cityVo.getCityId(), cityVo);
         }
 
-        for (CityVo cityVo : cityVos) {
+        for (CityEx cityVo : cityVos) {
             // 如果id是父级的话就放入 tree 中
             if (cityVo.getParentCityId().equals(parentCityId)) {
                 tree.add(cityVo);
             } else {
                 // 子级通过父id获取到父级的类型
-                CityVo parent = map.get(cityVo.getParentCityId());
+                CityEx parent = map.get(cityVo.getParentCityId());
                 if (parent == null) {
                     continue;
                 }
                 // 父级获得子级，再将子级放到对应的父级中
-                List<CityVo> children = parent.getChildren();
+                List<CityEx> children = parent.getChildren();
                 if (ToolsUtils.isEmpty(children)) {
                     parent.setChildren(new ArrayList<>());
                 }

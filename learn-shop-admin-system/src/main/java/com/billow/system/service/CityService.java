@@ -1,5 +1,6 @@
 package com.billow.system.service;
 
+import com.billow.system.pojo.ex.CityEx;
 import com.billow.system.pojo.vo.CityVo;
 
 import java.util.List;
@@ -14,9 +15,9 @@ public interface CityService {
      * 查询省市区
      *
      * @param parentCityId
-     * @return java.util.List<com.billow.system.pojo.vo.CityVo>
+     * @return java.util.List<com.billow.system.pojo.ex.CityEx>
      * @author billow
-     * @date 2019/8/4 13:51
+     * @date 2019/8/4 16:50
      */
-    List<CityVo> findCityByParentCityId(String parentCityId);
+    List<CityEx> findCityByParentCityId(String parentCityId);
 }

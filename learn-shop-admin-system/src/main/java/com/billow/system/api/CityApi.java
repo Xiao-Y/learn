@@ -1,6 +1,7 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.system.pojo.ex.CityEx;
 import com.billow.system.pojo.vo.CityVo;
 import com.billow.system.service.CityService;
 import io.swagger.annotations.Api;
@@ -31,7 +32,7 @@ public class CityApi extends BaseApi {
 
     @ApiOperation(value = "查询省市区")
     @GetMapping("/findCity/{parentCityId}")
-    public List<CityVo> findCity(@PathVariable("parentCityId") String parentCityId) {
+    public List<CityEx> findCity(@PathVariable("parentCityId") String parentCityId) {
         return cityService.findCityByParentCityId(parentCityId);
     }
 }
