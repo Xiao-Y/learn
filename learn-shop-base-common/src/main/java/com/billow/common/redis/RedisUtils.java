@@ -68,7 +68,7 @@ public class RedisUtils {
      */
     public <T> void setObj(String key, T value) {
         Assert.notNull(key,"key is not empty");
-        Assert.notNull(value,"value is not empty");
+//        Assert.notNull(value,"value is not empty");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, JSONObject.toJSONString(value));

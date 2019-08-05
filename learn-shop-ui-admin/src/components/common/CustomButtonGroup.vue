@@ -6,13 +6,14 @@
       </el-button>
     </el-tooltip>
     <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay" v-if="showDel">
-      <el-button @click="onDel" type="danger" size="mini">
+      <el-button @click="onDel" type="danger" size="mini" :disabled="disDel">
         <i class="el-icon-delete"></i>
       </el-button>
     </el-tooltip>
     <el-tooltip class="item" effect="dark" content="修改" placement="top-start" :open-delay="openDelay" v-if="showEdit">
-      <el-button @click="onEdit" type="primary" size="mini">
-        <i class="el-icon-edit"></i></el-button>
+      <el-button @click="onEdit" type="primary" size="mini" :disabled="disEdit">
+        <i class="el-icon-edit"></i>
+      </el-button>
     </el-tooltip>
   </div>
 </template>
@@ -31,7 +32,7 @@
         default: true
       },
       // 是否禁用禁用按钮
-      disInd:{
+      disInd: {
         type: Boolean,
         default: false
       },
@@ -40,10 +41,20 @@
         type: Boolean,
         default: true
       },
+      // 是否禁用删除按钮
+      disDel: {
+        type: Boolean,
+        default: false
+      },
       // 是否显示修改按钮
       showEdit: {
         type: Boolean,
         default: true
+      },
+      // 是否禁用修改按钮
+      disEdit: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -61,7 +72,7 @@
       // 修改事件
       onEdit() {
         this.$emit('onEdit');
-      },
+      }
     }
   }
 </script>

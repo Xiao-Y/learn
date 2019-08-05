@@ -52,7 +52,9 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay">
+              <custom-button-group @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
+                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></custom-button-group>
+              <!-- <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini" :disabled="!scope.row.validInd">
                   <i class="el-icon-warning"></i>
                 </el-button>
@@ -65,7 +67,7 @@
               <el-tooltip class="item" effect="dark" content="修改" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="mini">
                   <i class="el-icon-edit"></i></el-button>
-              </el-tooltip>
+              </el-tooltip> -->
             </template>
           </el-table-column>
         </el-table>
@@ -91,7 +93,12 @@
     ProhibitRoleById
   } from "../../api/sys/roleMag";
 
+  import CustomButtonGroup from '../../components/common/CustomButtonGroup.vue';
+
   export default {
+    components: {
+      CustomButtonGroup
+    },
     data() {
       return {
         queryFilter: {
@@ -172,7 +179,7 @@
           }
         });
       },
-      handleEdit(index, row) {
+      handleEdit(row, index) {
         this.$router.push({
           name: 'sysRoleEdit',
           query: {
@@ -181,15 +188,7 @@
           }
         });
       },
-      handleImageEdit(index, row) {
-        this.$router.push({
-          name: 'productImageEdit',
-          params: {
-            productInfo: row
-          }
-        });
-      },
-      handleProhibit(index, row) {
+      handleProhibit(row, index) {
         var _this = this;
         _this.$confirm('此操作将禁用该角色 ' + row.roleName + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -210,7 +209,7 @@
           });
         });
       },
-      handleDelete(index, row) {
+      handleDelete(row, index) {
         var _this = this;
         _this.$confirm('此操作将删除该角色 ' + row.roleName + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
