@@ -7,18 +7,9 @@
           <el-collapse-item title="菜单树" name="1">
             <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
             <div class="sidebar">
-              <el-tree show-checkbox
-                       default-expand-all
-                       node-key="id"
-                       :data="menus"
-                       ref="tree2"
-                       :expand-on-click-node="false"
-                       :highlight-current="true"
-                       :props="defaultProps"
-                       :check-strictly="true"
-                       @node-click="changeCheck"
-                       @check="changeCheck"
-                       :filter-node-method="filterNode">
+              <el-tree show-checkbox default-expand-all node-key="id" :data="menus" ref="tree2" :expand-on-click-node="false"
+                :highlight-current="true" :props="defaultProps" :check-strictly="true" @node-click="changeCheck" @check="changeCheck"
+                :filter-node-method="filterNode">
               </el-tree>
             </div>
           </el-collapse-item>
@@ -89,18 +80,16 @@
                   <el-input v-model="parentMenu.creatorCode" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间">
-                  <el-date-picker
-                    v-model="parentMenu.createTime" type="date" format="yyyy-MM-dd HH:mm:ss"
-                    value-format="timestamp" readonly style="width: 180px">
+                  <el-date-picker v-model="parentMenu.createTime" type="date" format="yyyy-MM-dd HH:mm:ss" value-format="timestamp"
+                    readonly style="width: 180px">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="更新人">
                   <el-input v-model="parentMenu.updaterCode" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="更新时间">
-                  <el-date-picker
-                    v-model="parentMenu.updateTime" type="date" format="yyyy-MM-dd HH:mm:ss"
-                    value-format="timestamp" readonly style="width: 180px">
+                  <el-date-picker v-model="parentMenu.updateTime" type="date" format="yyyy-MM-dd HH:mm:ss" value-format="timestamp"
+                    readonly style="width: 180px">
                   </el-date-picker>
                 </el-form-item>
               </el-form>
@@ -171,7 +160,9 @@
     delMenuByIds,
     CheckMenuCode
   } from "../../api/sys/menuMag";
-  import {Message} from "element-ui";
+  import {
+    Message
+  } from "element-ui";
 
   export default {
     data() {
@@ -180,28 +171,35 @@
         activeNames: ["2", "3"], //折叠面板
         parentMenusShow: false, //是否显示父级菜单
         dialogFormVisible: false, //菜单修改/添加dialog
-        menu: null,//本级菜单信息
-        parentMenu: null,//父级菜单信息
+        menu: null, //本级菜单信息
+        parentMenu: null, //父级菜单信息
         editMenu: null, //添加修改菜单信息
         defaultProps: {
           //设置数据绑定
           children: "children",
           label: "title"
         },
-        menus: [],// 菜单树数据源
+        menus: [], // 菜单树数据源
         node: [], //正在操作的节点
-        optionType: '',// 操作类型
-        rules22: {// 校验
-          title: [{required: true, message: '请输入菜单名称', trigger: 'blur'}],
-          titleCode: [{validator: this.checkMenuCode, trigger: 'change'}]
+        optionType: '', // 操作类型
+        rules22: { // 校验
+          title: [{
+            required: true,
+            message: '请输入菜单名称',
+            trigger: 'blur'
+          }],
+          titleCode: [{
+            validator: this.checkMenuCode,
+            trigger: 'change'
+          }]
         }
       };
     },
     created() {
-      this.findMenus();// 初始化菜单树
-      this.initMenu();//本级菜单信息
-      this.initEditMenu();//父级菜单信息
-      this.initParentMenu();//添加修改菜单信息
+      this.findMenus(); // 初始化菜单树
+      this.initMenu(); //本级菜单信息
+      this.initEditMenu(); //父级菜单信息
+      this.initParentMenu(); //添加修改菜单信息
     },
     methods: {
       //本级菜单信息
@@ -257,9 +255,9 @@
       },
       // 当前菜单信息
       changeCheck(data) {
-//        console.info("data.pid",data.pid);
+        //        console.info("data.pid",data.pid);
         this.menu = this.VueUtils.deepClone(data);
-//        console.info("menu.pid",this.menu.pid);
+        //        console.info("menu.pid",this.menu.pid);
         this.parentMenusShow = false;
       },
       // 过滤搜索
@@ -288,7 +286,7 @@
         }
       },
       //递归查询出所有的节点id
-      getIds: function (nodes, ids) {
+      getIds: function(nodes, ids) {
         nodes.forEach(node => {
           if (node.children && node.children != null) {
             this.getIds(node.children, ids);
@@ -319,16 +317,16 @@
       editMenuEvent() {
         this.optionType = "edit";
         var nodes = this.$refs.tree2.getCheckedNodes();
-//        console.info(nodes)
+        //        console.info(nodes)
         if (nodes.length != 1) {
           Message.error("请选择一个菜单");
           return;
         }
         this.editMenu = this.VueUtils.deepClone(nodes[0]);
-//        console.info("nodes[0].pid",nodes[0].pid);
+        //        console.info("nodes[0].pid",nodes[0].pid);
         if (nodes[0].pid != null) {
           var parentNode = this.$refs.tree2.getNode(nodes[0].pid);
-//          console.info("parentNode",parentNode);
+          //          console.info("parentNode",parentNode);
           this.editMenu.parentTtile = parentNode.data.title;
         } else {
           this.editMenu.parentTtile = '根节点';
@@ -349,7 +347,7 @@
           if (nodes) {
             //递归查询出所有的节点id
             this.getIds(nodes, ids);
-//            console.info("ids[]", ids);
+            //            console.info("ids[]", ids);
             delMenuByIds(ids).then(res => {
               nodes.forEach(node => {
                 this.$refs.tree2.remove(node);
@@ -388,7 +386,7 @@
       // 提交
       submitMenu(formRule) {
         var editMenus = this.editMenu;
-//        console.info("editMenus", editMenus)
+        //        console.info("editMenus", editMenus)
         saveOrUpdateMenu(editMenus).then(res => {
           var resData = res.resData;
 
@@ -425,7 +423,7 @@
       },
       // 对 MenuCode 校验
       checkMenuCode(rule, value, callback) {
-        if(value === ''){
+        if (value === '') {
           callback(new Error("菜单CODE不能为空"));
           return false;
         }
@@ -482,27 +480,33 @@
     /*background: #2E363F;*/
   }
 
-  .sidebar > ul {
+  .sidebar>ul {
     height: 100%;
   }
 
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
   ::-webkit-scrollbar {
-    width: 3px; /*滚动条宽度*/
-    height: 3px; /*滚动条高度*/
+    width: 3px;
+    /*滚动条宽度*/
+    height: 3px;
+    /*滚动条高度*/
   }
 
   /*定义滚动条轨道 内阴影+圆角*/
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px; /*滚动条的背景区域的圆角*/
-    background-color: white; /*滚动条的背景颜色*/
+    border-radius: 10px;
+    /*滚动条的背景区域的圆角*/
+    background-color: white;
+    /*滚动条的背景颜色*/
   }
 
   /*定义滑块 内阴影+圆角*/
   ::-webkit-scrollbar-thumb {
-    border-radius: 10px; /*滚动条的圆角*/
+    border-radius: 10px;
+    /*滚动条的圆角*/
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f; /*滚动条的背景颜色*/
+    background-color: #2e363f;
+    /*滚动条的背景颜色*/
   }
 </style>

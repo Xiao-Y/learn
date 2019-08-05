@@ -26,8 +26,7 @@
     <el-row>
       <template>
         <el-table border stripe style="width: 100%" @expand-change="expandChang" :expand-row-keys="expandRows" row-key="id"
-        ref="tableData"
-          :data="tableData">
+          ref="tableData" :data="tableData">
           <el-table-column label="姓名" prop="username"></el-table-column>
           <el-table-column label="账号" prop="usercode"></el-table-column>
           <el-table-column label="性别" prop="sex" width="100">
@@ -68,12 +67,9 @@
                 </el-form-item>
                 <el-form-item label="地址" prop="casAddress">
                   <el-popover trigger="hover" width="250" placement="top" @show="addressShow(scope.row,scope.$index)">
-                    <div >{{scope.row.showAddress}}</div>
-                    <el-cascader v-model="scope.row.casAddress"
-                                slot="reference"
-                                :ref="'cascaderAddr' + scope.$index"
-                                :options="citySources"
-                                :props="optionProps">
+                    <div>{{scope.row.showAddress}}</div>
+                    <el-cascader v-model="scope.row.casAddress" slot="reference" :ref="'cascaderAddr' + scope.$index"
+                      :options="citySources" :props="optionProps">
                     </el-cascader>
                   </el-popover>
                 </el-form-item>
@@ -85,20 +81,8 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay">
-                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini" :disabled="!scope.row.validInd">
-                  <i class="el-icon-warning"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay">
-                <el-button @click="handleDelete(scope.$index, scope.row)" type="danger" size="mini">
-                  <i class="el-icon-delete"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="修改" placement="top-start" :open-delay="openDelay">
-                <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="mini">
-                  <i class="el-icon-edit"></i></el-button>
-              </el-tooltip>
+              <custom-button-group @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
+                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></custom-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -129,13 +113,18 @@
   import {
     LoadSelectRoleList
   } from "../../api/sys/roleMag";
-  import {LoadUserDataDictionary} from "../../api/sys/DataDictionaryMag";
+  import {
+    LoadUserDataDictionary
+  } from "../../api/sys/DataDictionaryMag";
   import {
     LoadCityData,
   } from "../../api/sys/CityMag";
+  import CustomButtonGroup from '../../components/common/CustomButtonGroup.vue';
+
   export default {
     components: {
-      CustomSelect
+      CustomSelect,
+      CustomButtonGroup
     },
     data() {
       return {
@@ -153,7 +142,7 @@
         selectRole: [], // 角色下拉列表
         selectSex: [], // 性别下拉列表
         expandRows: [], // 打开的折叠拦
-        citySources: [],// 省份下拉列表
+        citySources: [], // 省份下拉列表
         optionProps: {
           value: 'cityId',
           label: 'name',
@@ -166,7 +155,7 @@
       // 加载角色下拉列表
       this.loadSelectRoleList();
       // 加载性别下拉列表
-      LoadUserDataDictionary('sexType').then(res=>{
+      LoadUserDataDictionary('sexType').then(res => {
         this.selectSex = res.resData;
       });
       // 请求列表数据
@@ -307,7 +296,7 @@
           });
         }
         // 加载城市下拉列表
-        if(this.citySources.length < 1){
+        if (this.citySources.length < 1) {
           LoadCityData().then(res => {
             this.citySources = res;
           });
@@ -328,9 +317,11 @@
           this.citySources = res;
         });
       },
-      addressShow(row,index){
+      addressShow(row, index) {
         var addLabels = this.$refs['cascaderAddr' + index].currentLabels;
-        Object.assign(row,{showAddress:addLabels.join("/")});
+        Object.assign(row, {
+          showAddress: addLabels.join("/")
+        });
       }
     }
   }

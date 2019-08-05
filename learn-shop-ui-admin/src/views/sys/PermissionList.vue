@@ -18,10 +18,8 @@
                 <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
               </el-form-item>
               <el-form-item label="系统模块" prop="systemModules">
-                <custom-select v-model="queryFilter.systemModules"
-                               :datasource="systemModuleSelect"
-                               placeholder="请选择系统模块"
-                               multiple>
+                <custom-select v-model="queryFilter.systemModules" :datasource="systemModuleSelect" placeholder="请选择系统模块"
+                  multiple>
                 </custom-select>
               </el-form-item>
             </el-row>
@@ -41,12 +39,8 @@
           <el-table-column label="权限描述" prop="descritpion"></el-table-column>
           <el-table-column label="系统模块" prop="systemModule">
             <template slot-scope="scope">
-              <custom-select v-model="scope.row.systemModules"
-                             :datasource="systemModuleSelect"
-                             :value-key="scope.row.url"
-                             disabled
-                             placeholder="请选择系统模块"
-                             multiple>
+              <custom-select v-model="scope.row.systemModules" :datasource="systemModuleSelect" :value-key="scope.row.url"
+                disabled placeholder="请选择系统模块" multiple>
               </custom-select>
             </template>
           </el-table-column>
@@ -76,21 +70,8 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay">
-                <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini"
-                           :disabled="!scope.row.validInd">
-                  <i class="el-icon-warning"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay">
-                <el-button @click="handleDelete(scope.$index, scope.row)" type="danger" size="mini">
-                  <i class="el-icon-delete"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="修改" placement="top-start" :open-delay="openDelay">
-                <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="mini">
-                  <i class="el-icon-edit"></i></el-button>
-              </el-tooltip>
+              <custom-button-group @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
+                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></custom-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -99,15 +80,9 @@
     <el-row>
       <template>
         <div class="block">
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="queryFilter.pageNo"
-            :page-sizes="[10, 20, 30, 40]"
-            layout="total,sizes, prev, pager, next"
-            :page-size="queryFilter.pageSize"
-            :total="queryFilter.recordCount">
+          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page.sync="queryFilter.pageNo" :page-sizes="[10, 20, 30, 40]" layout="total,sizes, prev, pager, next"
+            :page-size="queryFilter.pageSize" :total="queryFilter.recordCount">
           </el-pagination>
         </div>
       </template>
@@ -116,22 +91,30 @@
 </template>
 
 <script>
-  import {LoadDataPermissionList, DeletePermissionById, ProhibitPermissionById} from "../../api/sys/permissionMag";
-  import {LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
+  import {
+    LoadDataPermissionList,
+    DeletePermissionById,
+    ProhibitPermissionById
+  } from "../../api/sys/permissionMag";
+  import {
+    LoadSysDataDictionary
+  } from "../../api/sys/DataDictionaryMag";
   import CustomSelect from '../../components/common/CustomSelect.vue';
+  import CustomButtonGroup from '../../components/common/CustomButtonGroup.vue';
 
   export default {
     components: {
-      CustomSelect
+      CustomSelect,
+      CustomButtonGroup
     },
     data() {
       return {
         queryFilter: {
           // 分页数据
-          pageNo: null,// 当前页码
+          pageNo: null, // 当前页码
           recordCount: null, // 总记录数
-          pageSize: null,//每页要显示的记录数
-          totalPages: null,// 总页数
+          pageSize: null, //每页要显示的记录数
+          totalPages: null, // 总页数
           // 查询条件
           permissionName: null,
           permissionCode: null,
@@ -154,11 +137,11 @@
     //每次激活时
     activated() {
       // 根据key名获取传递回来的参数，data 就是 map
-      this.$bus.once('permissionInfo', function (data) {
+      this.$bus.once('permissionInfo', function(data) {
         var index = this.tableData.findIndex(f => f.id === data.id);
-        if (index != -1) {// 更新
+        if (index != -1) { // 更新
           this.tableData.splice(index, 1, data);
-        } else {// 添加
+        } else { // 添加
           this.tableData.push(data);
         }
       }.bind(this));
@@ -171,7 +154,7 @@
         // 请求数据
         this.LoadDataPermissionList();
         // 关闭查询折叠栏
-//        this.activeNames = [];
+        //        this.activeNames = [];
       },
       // 清除查询条件
       resetForm(queryFilter) {
@@ -283,22 +266,28 @@
 
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
   ::-webkit-scrollbar {
-    width: 3px; /*滚动条宽度*/
-    height: 3px; /*滚动条高度*/
+    width: 3px;
+    /*滚动条宽度*/
+    height: 3px;
+    /*滚动条高度*/
   }
 
   /*定义滚动条轨道 内阴影+圆角*/
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px; /*滚动条的背景区域的圆角*/
-    background-color: white; /*滚动条的背景颜色*/
+    border-radius: 10px;
+    /*滚动条的背景区域的圆角*/
+    background-color: white;
+    /*滚动条的背景颜色*/
   }
 
   /*定义滑块 内阴影+圆角*/
   ::-webkit-scrollbar-thumb {
-    border-radius: 10px; /*滚动条的圆角*/
+    border-radius: 10px;
+    /*滚动条的圆角*/
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f; /*滚动条的背景颜色*/
+    background-color: #2e363f;
+    /*滚动条的背景颜色*/
   }
 
   .demo-table-expand {
