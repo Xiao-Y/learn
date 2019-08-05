@@ -40,15 +40,19 @@
               <el-input v-model="userInfo.phone" placeholder="请输入内容"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="地址" prop="address">
+          <el-form-item label="地址" prop="casAddress">
             <el-col :span="18">
-              <!--              <el-input v-model="userInfo.address" placeholder="请输入内容"></el-input>-->
-              <el-cascader :options="citySources"
-
-                           :props="optionProps"
-                           @active-item-change="handleItemChange"
-                           @change="handleChange">
-              </el-cascader>
+              <el-popover trigger="hover" width="250" placement="right" @show="addressShow">
+                <div >{{userInfo.showAddress}}</div>
+                <el-cascader v-model="userInfo.casAddress"
+                              ref="cascaderAddr"
+                              slot="reference"
+                              :options="citySources"
+                              :props="optionProps"
+                              @active-item-change="handleItemChange"
+                              @change="handleChange">
+                </el-cascader>
+              </el-popover>
             </el-col>
           </el-form-item>
           <el-form-item label="描述" prop="descritpion">
@@ -231,21 +235,21 @@
         });
       },
       loadCitySources() {
-        if (getCityData()) {
-          this.citySources = getCityData();
-          return;
-        }
-        LoadCityData('100000').then(res => {
-          this.citySources = res.resData;
-          setCityData(this.citySources);
+        LoadCityData().then(res => {
+          this.citySources = res;
         });
       },
       // 加载城市下拉列表
       handleChange(value) {
         console.info("value", value);
+        console.log(this.$refs['cascaderAddr'].currentLabels);
       },
       handleItemChange(value) {
         console.info("value1", value);
+      },
+      addressShow(){
+        var addLabels = this.$refs['cascaderAddr'].currentLabels;
+        Object.assign(this.userInfo,{showAddress:addLabels.join("/")});
       }
     }
   };
@@ -276,28 +280,6 @@
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
   }
-
-  /*.ms-doc article h1 {*/
-  /*font-size: 32px;*/
-  /*padding-bottom: 10px;*/
-  /*margin-bottom: 15px;*/
-  /*border-bottom: 1px solid #ddd;*/
-  /*}*/
-
-  /*.ms-doc article h2 {*/
-  /*margin: 24px 0 16px;*/
-  /*font-weight: 600;*/
-  /*line-height: 1.25;*/
-  /*padding-bottom: 7px;*/
-  /*font-size: 24px;*/
-  /*border-bottom: 1px solid #eee;*/
-  /*}*/
-
-  /*.ms-doc article p {*/
-  /*margin-bottom: 15px;*/
-  /*line-height: 1.5;*/
-  /*}*/
-
   .ms-doc article .el-checkbox {
     margin-bottom: 5px;
   }

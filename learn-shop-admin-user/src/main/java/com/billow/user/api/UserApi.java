@@ -38,7 +38,7 @@ public class UserApi extends BaseApi {
 
     @ApiOperation("根据条件查询用户信息")
     @PostMapping("/findUserList")
-    public Page<UserPo> findUserList(@RequestBody UserVo userVo) {
+    public Page<UserVo> findUserList(@RequestBody UserVo userVo) {
         return userService.findUserList(userVo);
     }
 

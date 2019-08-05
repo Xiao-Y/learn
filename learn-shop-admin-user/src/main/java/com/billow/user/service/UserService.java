@@ -1,32 +1,19 @@
 package com.billow.user.service;
 
-import com.billow.user.pojo.po.UserPo;
 import com.billow.user.pojo.vo.UserVo;
 import org.springframework.data.domain.Page;
 
 public interface UserService {
 
-//    /**
-//     * 根据userCode 查询出用户信息
-//     *
-//     * @param [userCode]
-//     * @return UserVo
-//     * @author LiuYongTao
-//     * @date 2018/11/5 16:04
-//     */
-//    UserVo findUserInfoByUsercode(String userCode);
-//
-//    UserDetails loadUserByUsername(String userCode);
-
     /**
      * 根据条件查询用户信息
      *
      * @param userVo
-     * @return org.springframework.data.domain.Page<com.billow.user.pojo.po.UserPo>
+     * @return org.springframework.data.domain.Page<com.billow.user.pojo.vo.UserVo>
      * @author LiuYongTao
-     * @date 2019/7/30 13:48
+     * @date 2019/8/5 13:51
      */
-    Page<UserPo> findUserList(UserVo userVo);
+    Page<UserVo> findUserList(UserVo userVo);
 
     /**
      * 保存用户信息

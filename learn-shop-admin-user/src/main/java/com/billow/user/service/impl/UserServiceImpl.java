@@ -15,6 +15,7 @@ import com.billow.user.pojo.vo.UserVo;
 import com.billow.user.remote.AdminSystemRemote;
 import com.billow.user.service.UserService;
 import com.billow.user.service.redis.CommonUserRedis;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -55,11 +53,27 @@ public class UserServiceImpl implements UserService {
     private UserTools userTools;
 
     @Override
-    public Page<UserPo> findUserList(UserVo userVo) {
+    public Page<UserVo> findUserList(UserVo userVo) {
         UserPo convert = ConvertUtils.convert(userVo, UserPo.class);
         DefaultSpec<UserPo> defaultSpec = new DefaultSpec<>(convert);
         Pageable pageable = new PageRequest(userVo.getPageNo(), userVo.getPageSize());
-        return userDao.findAll(defaultSpec, pageable);
+        return userDao.findAll(defaultSpec, pageable).map(this::convertToUserVo);
+    }
+
+    /**
+     * userPo 转化为 userVo
+     *
+     * @param userPo
+     * @return com.billow.user.pojo.vo.UserVo
+     * @author LiuYongTao
+     * @date 2019/8/5 13:49
+     */
+    private UserVo convertToUserVo(UserPo userPo) {
+        UserVo userVo = ConvertUtils.convert(userPo, UserVo.class);
+        if (ToolsUtils.isNotEmpty(userVo.getAddress())) {
+            userVo.setCasAddress(userVo.getAddress().split(","));
+        }
+        return userVo;
     }
 
     @Override
@@ -96,6 +110,11 @@ public class UserServiceImpl implements UserService {
         } else {// 不需要加密，直接取旧的密码
             convert.setPassword(oldUser.getPassword());
         }
+        String address = null;
+        if (ToolsUtils.isNotEmpty(userVo.getCasAddress())) {
+            address = StringUtils.join(userVo.getCasAddress(), ",");
+        }
+        convert.setAddress(address);
         // 更新/保存
         UserPo userPo = userDao.save(convert);
         // 保存用户的角色
@@ -113,6 +132,7 @@ public class UserServiceImpl implements UserService {
         UserVo vo = ConvertUtils.convert(userPo, UserVo.class);
         vo.setPassword(null);
         vo.setRoleIds(roleIds);
+        vo.setCasAddress(userVo.getCasAddress());
         // 修改用户，需要重新登陆（redis 中插入 用户名-角色CODE）
         BaseResponse<List<RoleEx>> base = adminSystemRemote.findRoleById(roleIds);
         if (base.getResCode().equals(ResCodeEnum.OK)) {

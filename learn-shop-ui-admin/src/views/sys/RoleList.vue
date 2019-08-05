@@ -52,17 +52,17 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini" :disabled="!scope.row.validInd">
                   <i class="el-icon-warning"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleDelete(scope.$index, scope.row)" type="danger" size="mini">
                   <i class="el-icon-delete"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="修改" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="修改" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="mini">
                   <i class="el-icon-edit"></i></el-button>
               </el-tooltip>
@@ -105,7 +105,8 @@
           roleCode: null
         },
         tableData: [],
-        activeNames: ['1']
+        activeNames: ['1'],
+        openDelay: 1500 // 提示信息的延时
       }
     },
     created() {

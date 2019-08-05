@@ -25,7 +25,8 @@
     <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
     <el-row>
       <template>
-        <el-table border stripe style="width: 100%" @expand-change="loadUserRole" :expand-row-keys="expandRows" row-key="id"
+        <el-table border stripe style="width: 100%" @expand-change="expandChang" :expand-row-keys="expandRows" row-key="id"
+        ref="tableData"
           :data="tableData">
           <el-table-column label="姓名" prop="username"></el-table-column>
           <el-table-column label="账号" prop="usercode"></el-table-column>
@@ -65,8 +66,16 @@
                     @onchange="userInfoChange(scope.row)" placeholder="请选择角色" multiple>
                   </custom-select>
                 </el-form-item>
-                <el-form-item label="地址" prop="address">
-                  <span>{{ scope.row.address }}</span>
+                <el-form-item label="地址" prop="casAddress">
+                  <el-popover trigger="hover" width="250" placement="top" @show="addressShow(scope.row,scope.$index)">
+                    <div >{{scope.row.showAddress}}</div>
+                    <el-cascader v-model="scope.row.casAddress"
+                                slot="reference"
+                                :ref="'cascaderAddr' + scope.$index"
+                                :options="citySources"
+                                :props="optionProps">
+                    </el-cascader>
+                  </el-popover>
                 </el-form-item>
                 <el-form-item label="描述" prop="descritpion">
                   <span>{{ scope.row.descritpion }}</span>
@@ -76,17 +85,17 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleProhibit(scope.$index, scope.row)" type="warning" size="mini" :disabled="!scope.row.validInd">
                   <i class="el-icon-warning"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleDelete(scope.$index, scope.row)" type="danger" size="mini">
                   <i class="el-icon-delete"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="修改" placement="top-start">
+              <el-tooltip class="item" effect="dark" content="修改" placement="top-start" :open-delay="openDelay">
                 <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="mini">
                   <i class="el-icon-edit"></i></el-button>
               </el-tooltip>
@@ -121,7 +130,9 @@
     LoadSelectRoleList
   } from "../../api/sys/roleMag";
   import {LoadUserDataDictionary} from "../../api/sys/DataDictionaryMag";
-
+  import {
+    LoadCityData,
+  } from "../../api/sys/CityMag";
   export default {
     components: {
       CustomSelect
@@ -141,7 +152,14 @@
         tableData: [], // 列表数据
         selectRole: [], // 角色下拉列表
         selectSex: [], // 性别下拉列表
-        expandRows: [] // 打开的折叠拦
+        expandRows: [], // 打开的折叠拦
+        citySources: [],// 省份下拉列表
+        optionProps: {
+          value: 'cityId',
+          label: 'name',
+          children: 'children'
+        },
+        openDelay: 1500 // 提示信息的延时
       }
     },
     created() {
@@ -186,17 +204,10 @@
       loadDataUserList() {
         LoadDataUserList(this.queryFilter).then(res => {
           var data = res.resData;
-          // 初始化 绑定一个 roleIds，不然后面监听不到
-          for (let index in data.content) {
-            Object.assign(data.content[index], {
-              roleIds: []
-            });
-          }
           this.tableData = data.content;
           this.queryFilter.recordCount = data.totalElements;
           this.queryFilter.totalPages = data.totalPages;
         });
-
       },
       // 翻页
       handleCurrentChange(val) {
@@ -284,14 +295,21 @@
           this.selectRole = res.resData;
         });
       },
-      // 加载指定用户的角色信息
-      loadUserRole(row, expandedRows) {
+      // 打开折叠栏
+      expandChang(row, expandedRows) {
+        // 加载指定用户的角色信息
         if (row.roleIds.length < 1) {
           LoadRoleIdsByUserId(row.id).then(res => {
             var roleIds = res.resData.roleIds;
             Object.assign(row, {
               roleIds: roleIds
             });
+          });
+        }
+        // 加载城市下拉列表
+        if(this.citySources.length < 1){
+          LoadCityData().then(res => {
+            this.citySources = res;
           });
         }
       },
@@ -303,10 +321,17 @@
             message: '更新成功!'
           });
         });
+      },
+      // 加载城市下拉列表
+      loadCitySources() {
+        LoadCityData().then(res => {
+          this.citySources = res;
+        });
+      },
+      addressShow(row,index){
+        var addLabels = this.$refs['cascaderAddr' + index].currentLabels;
+        Object.assign(row,{showAddress:addLabels.join("/")});
       }
-    },
-    loadSelectSexList(){
-
     }
   }
 </script>

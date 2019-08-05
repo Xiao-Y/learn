@@ -22,4 +22,8 @@ public class UserVo extends UserPo {
     private String oldPassWord;
     // 新密码
     private String newPassWord;
+    // 级联地址
+    private String[] casAddress = new String[0];
+    // 显示用
+    private String showAddress;
 }
