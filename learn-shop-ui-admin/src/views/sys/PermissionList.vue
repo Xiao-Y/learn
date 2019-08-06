@@ -18,8 +18,9 @@
                 <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
               </el-form-item>
               <el-form-item label="系统模块" prop="systemModules">
-                <custom-select v-model="queryFilter.systemModules" :datasource="systemModuleSelect" placeholder="请选择系统模块"
-                  multiple>
+                <custom-select v-model="queryFilter.systemModules" :datasource="systemModuleSelect"
+                               placeholder="请选择系统模块"
+                               multiple>
                 </custom-select>
               </el-form-item>
             </el-row>
@@ -37,8 +38,9 @@
           <el-table-column label="权限描述" prop="descritpion"></el-table-column>
           <el-table-column label="系统模块" prop="systemModule">
             <template slot-scope="scope">
-              <custom-select v-model="scope.row.systemModules" :datasource="systemModuleSelect" :value-key="scope.row.url"
-                disabled placeholder="请选择系统模块" multiple>
+              <custom-select v-model="scope.row.systemModules" :datasource="systemModuleSelect"
+                             :value-key="scope.row.url"
+                             disabled placeholder="请选择系统模块" multiple>
               </custom-select>
             </template>
           </el-table-column>
@@ -69,8 +71,10 @@
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
-              <button-group-option @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
-                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></button-group-option>
+              <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
+                                   @onEdit="handleEdit(scope.row,scope.$index)"
+                                   @onInd="handleProhibit(scope.row,scope.$index)"
+                                   :disInd="!scope.row.validInd"></button-group-option>
             </template>
           </el-table-column>
         </el-table>
@@ -94,6 +98,7 @@
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue'
+  import VueUtils from "../../utils/vueUtils";
 
   export default {
     components: {
@@ -132,7 +137,7 @@
     //每次激活时
     activated() {
       // 根据key名获取传递回来的参数，data 就是 map
-      this.$bus.once('permissionInfo', function(data) {
+      this.$bus.once('permissionInfo', function (data) {
         var index = this.tableData.findIndex(f => f.id === data.id);
         if (index != -1) { // 更新
           this.tableData.splice(index, 1, data);
@@ -161,7 +166,7 @@
           }
         });
       },
-      handleEdit(row,index) {
+      handleEdit(row, index) {
         this.$router.push({
           name: 'sysPermissionEdit',
           query: {
@@ -171,7 +176,7 @@
           }
         });
       },
-      handleDelete(row,index) {
+      handleDelete(row, index) {
         var _this = this;
         _this.$confirm('此操作将删除该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -198,13 +203,11 @@
           this.systemModuleSelect = res.resData;
         });
       },
-      handleProhibit(row,index) {
+      handleProhibit(row, index) {
         var _this = this;
-        _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+
+        var tips = '此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?';
+        VueUtils.confirmDel(tips, () => {
           ProhibitPermissionById(row.id).then(res => {
             row.validInd = res.resData.validInd;
             _this.$message({
@@ -212,12 +215,26 @@
               message: '禁用成功!'
             });
           });
-        }).catch((err) => {
-          _this.$message({
-            type: 'info',
-            message: '已取消禁用'
-          });
         });
+
+        // _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
+        //   confirmButtonText: '确定',
+        //   cancelButtonText: '取消',
+        //   type: 'warning'
+        // }).then(() => {
+        //   ProhibitPermissionById(row.id).then(res => {
+        //     row.validInd = res.resData.validInd;
+        //     _this.$message({
+        //       type: 'success',
+        //       message: '禁用成功!'
+        //     });
+        //   });
+        // }).catch((err) => {
+        //   _this.$message({
+        //     type: 'info',
+        //     message: '已取消禁用'
+        //   });
+        // });
       }
     }
   }

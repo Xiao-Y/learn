@@ -1,4 +1,8 @@
 import md5 from 'js-md5'
+import {
+  Message,
+  MessageBox
+} from 'element-ui'
 
 var VueUtils = {
   // /* ================ 深拷贝,不含有 function 可用 ================ */
@@ -137,6 +141,41 @@ var VueUtils = {
     var nodeData = this.getParent(menuData, currentNodeId);
     nodeData.pop();
     return nodeData;
+  },
+  confirmDel(tips, callback) {
+    this.confirm(callback, {tips: tips, title: '警告', cancelMessage: '已取消禁用'});
+  },
+  confirm(callback, option) {
+    if (!option) {
+      option = {};
+    }
+    // 提示信息
+    var tips = option.tips ? option.tips : '确定此操作';
+    // 弹出框标题
+    var title = option.title ? option.title : '提示';
+    // 确认按钮显示
+    var confirmButtonText = option.confirmButtonText ? option.confirmButtonText : '确定';
+    // 取消按钮显示
+    var cancelButtonText = option.cancelButtonText ? option.cancelButtonText : '取消';
+    // 弹出框图标
+    var confirmType = option.confirmType ? option.confirmType : 'warning';
+    // 取消后提示图标
+    var cancelType = option.cancelType ? option.cancelType : 'info';
+    // 取消后提示信息
+    var cancelMessage = option.cancelMessage ? option.cancelMessage : '已取消此操作';
+
+    MessageBox.confirm(tips, title, {
+      confirmButtonText: confirmButtonText,
+      cancelButtonText: cancelButtonText,
+      type: confirmType
+    }).then(() => {
+      callback();
+    }).catch((err) => {
+      Message({
+        type: cancelType,
+        message: cancelMessage
+      });
+    });
   }
 }
 
