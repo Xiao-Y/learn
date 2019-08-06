@@ -27,6 +27,7 @@
         </el-collapse-item>
       </el-collapse>
     </el-row>
+    <!-- 查询按钮组 -->
     <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
     <el-row>
       <template>
@@ -67,6 +68,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
+              <!--  操作按钮组 -->
               <button-group-option @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
                 @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></button-group-option>
             </template>
@@ -74,16 +76,8 @@
         </el-table>
       </template>
     </el-row>
-    <el-row>
-      <template>
-        <div class="block">
-          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-            :current-page.sync="queryFilter.pageNo" :page-sizes="[10, 20, 30, 40]" layout="total,sizes, prev, pager, next"
-            :page-size="queryFilter.pageSize" :total="queryFilter.recordCount">
-          </el-pagination>
-        </div>
-      </template>
-    </el-row>
+    <!-- 分页组件  -->
+    <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
   </div>
 </template>
 
@@ -99,13 +93,14 @@
   import CustomSelect from '../../components/common/CustomSelect.vue';
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
-
+  import CustomPage from '../../components/common/CustomPage.vue'
 
   export default {
     components: {
       CustomSelect,
       ButtonGroupOption,
-      ButtonGroupQuery
+      ButtonGroupQuery,
+      CustomPage
     },
     data() {
       return {
@@ -202,16 +197,6 @@
         LoadSysDataDictionary(fieldType).then(res => {
           this.systemModuleSelect = res.resData;
         });
-      },
-      // 翻页
-      handleCurrentChange(val) {
-        this.queryFilter.pageNo = val;
-        this.loadDataList();
-      },
-      // 改变页面大小
-      handleSizeChange(val) {
-        this.queryFilter.pageSize = val;
-        this.loadDataList();
       },
       handleProhibit(row,index) {
         var _this = this;

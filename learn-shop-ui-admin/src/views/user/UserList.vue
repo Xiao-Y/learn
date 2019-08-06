@@ -19,23 +19,26 @@
         </el-collapse-item>
       </el-collapse>
     </el-row>
+    <!-- 查询按钮组 -->
     <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
     <el-row>
       <template>
-        <el-table border stripe style="width: 100%" @expand-change="expandChang" :expand-row-keys="expandRows" row-key="id"
-          ref="tableData" :data="tableData">
+        <el-table border stripe style="width: 100%" @expand-change="expandChang" :expand-row-keys="expandRows"
+                  row-key="id"
+                  ref="tableData" :data="tableData">
           <el-table-column label="姓名" prop="username"></el-table-column>
           <el-table-column label="账号" prop="usercode"></el-table-column>
           <el-table-column label="性别" prop="sex" width="100">
             <template slot-scope="scope">
               <custom-select v-model="scope.row.sex" :datasource="selectSex" :value-key="scope.row.usercode"
-                placeholder="请选择性别" disabled>
+                             placeholder="请选择性别" disabled>
               </custom-select>
             </template>
           </el-table-column>
           <el-table-column label="出生日期" prop="birthDate">
             <template slot-scope="scope">
-              <el-date-picker type="datetime" v-model="scope.row.birthDate" format="yyyy-MM-dd" readonly></el-date-picker>
+              <el-date-picker type="datetime" v-model="scope.row.birthDate" format="yyyy-MM-dd"
+                              readonly></el-date-picker>
             </template>
           </el-table-column>
           <el-table-column label="手机号" prop="phone"></el-table-column>
@@ -55,18 +58,19 @@
                   <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否有效">
-                  <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" @change="userInfoChange(scope.row)"></el-switch>
+                  <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效"
+                             @change="userInfoChange(scope.row)"></el-switch>
                 </el-form-item>
                 <el-form-item label="角色">
                   <custom-select v-model="scope.row.roleIds" :datasource="selectRole" :value-key="scope.row.usercode"
-                    @onchange="userInfoChange(scope.row)" placeholder="请选择角色" multiple>
+                                 @onchange="userInfoChange(scope.row)" placeholder="请选择角色" multiple>
                   </custom-select>
                 </el-form-item>
                 <el-form-item label="地址" prop="casAddress">
                   <el-popover trigger="hover" placement="right" @show="addressShow(scope.row,scope.$index)">
                     <div>{{scope.row.showAddress}}</div>
                     <el-cascader v-model="scope.row.casAddress" slot="reference" :ref="'cascaderAddr' + scope.$index"
-                      :options="citySources" :props="optionProps" disabled>
+                                 :options="citySources" :props="optionProps" disabled>
                     </el-cascader>
                   </el-popover>
                 </el-form-item>
@@ -78,23 +82,18 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <button-group-option @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
-                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></button-group-option>
+              <!--  操作按钮组 -->
+              <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
+                                   @onEdit="handleEdit(scope.row,scope.$index)"
+                                   @onInd="handleProhibit(scope.row,scope.$index)"
+                                   :disInd="!scope.row.validInd"></button-group-option>
             </template>
           </el-table-column>
         </el-table>
       </template>
     </el-row>
-    <el-row>
-      <template>
-        <div class="block">
-          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-            :current-page.sync="queryFilter.pageNo" :page-sizes="[10, 20, 30, 40]" layout="total,sizes, prev, pager, next"
-            :page-size="queryFilter.pageSize" :total="queryFilter.recordCount">
-          </el-pagination>
-        </div>
-      </template>
-    </el-row>
+    <!-- 分页组件  -->
+    <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
   </div>
 </template>
 
@@ -118,12 +117,14 @@
   } from "../../api/sys/CityMag";
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
+  import CustomPage from '../../components/common/CustomPage.vue';
 
   export default {
     components: {
       CustomSelect,
       ButtonGroupOption,
-      ButtonGroupQuery
+      ButtonGroupQuery,
+      CustomPage
     },
     data() {
       return {
@@ -163,7 +164,7 @@
     //每次激活时
     activated() {
       var _this = this;
-      this.$bus.on('userInfo', function(data) {
+      this.$bus.on('userInfo', function (data) {
         var index = _this.tableData.findIndex(f => f.id === data.id);
         if (index != -1) { // 更新
           this.tableData.splice(index, 1, data);
@@ -182,16 +183,6 @@
           this.queryFilter.totalPages = data.totalPages;
         });
       },
-      // 翻页
-      handleCurrentChange(val) {
-        this.queryFilter.pageNo = val;
-        this.loadDataList();
-      },
-      // 改变页面大小
-      handleSizeChange(val) {
-        this.queryFilter.pageSize = val;
-        this.loadDataList();
-      },
       // 添加用户
       handleAdd() {
         this.$router.push({
@@ -204,7 +195,7 @@
         });
       },
       // 修改用户
-      handleEdit(row,index) {
+      handleEdit(row, index) {
         // 打开折叠栏，再点击编辑保存后，折叠栏有bug
         this.expandRows = [];
         row.password = null;
@@ -219,7 +210,7 @@
         });
       },
       // 禁用
-      handleProhibit(row,index) {
+      handleProhibit(row, index) {
         var _this = this;
         _this.$confirm('此操作将禁用该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -241,7 +232,7 @@
         });
       },
       // 删除
-      handleDelete(row,index) {
+      handleDelete(row, index) {
         var _this = this;
         _this.$confirm('此操作将删除该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
