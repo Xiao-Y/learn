@@ -55,9 +55,9 @@
             <template slot-scope="scope">
               <!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
               <el-button type="text" size="small">编辑</el-button> -->
-              <custom-button-group @onDel="onDel(scope.row,scope.$index)" @onEdit="onEdit(scope.row,scope.$index)"
+              <button-group-option @onDel="onDel(scope.row,scope.$index)" @onEdit="onEdit(scope.row,scope.$index)"
                 :disInd="!scope.row.valid"
-                @onInd="onInd(scope.row,scope.$index)"></custom-button-group>
+                @onInd="onInd(scope.row,scope.$index)"></button-group-option>
             </template>
           </el-table-column>
         </el-table>
@@ -76,11 +76,11 @@
 </template>
 
 <script>
-  import CustomButtonGroup from '../../components/common/CustomButtonGroup.vue';
+  import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
 
   export default {
     components: {
-      CustomButtonGroup
+      ButtonGroupOption
     },
 
     data() {

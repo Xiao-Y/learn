@@ -19,10 +19,8 @@
         </el-collapse-item>
       </el-collapse>
     </el-row>
-    <el-button type="success" size="mini" @click="handleAdd" icon="el-icon-plus">添加</el-button>
-    <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search">查询</el-button>
-    <el-button type="info" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
-    <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
+    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
+
     <el-row>
       <template>
         <el-table :data="tableData" border style="width: 100%">
@@ -52,8 +50,8 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <custom-button-group @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
-                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></custom-button-group>
+              <button-group-option @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
+                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></button-group-option>
             </template>
           </el-table-column>
         </el-table>
@@ -79,11 +77,14 @@
     ProhibitRoleById
   } from "../../api/sys/roleMag";
 
-  import CustomButtonGroup from '../../components/common/CustomButtonGroup.vue';
+  import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
+  import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
+
 
   export default {
     components: {
-      CustomButtonGroup
+      ButtonGroupOption,
+      ButtonGroupQuery
     },
     data() {
       return {
@@ -104,7 +105,7 @@
     },
     created() {
       // 请数据殂
-      this.LoadDataRoleList();
+      this.loadDataList();
     },
     //每次激活时
     activated() {
@@ -119,25 +120,8 @@
       }.bind(this));
     },
     methods: {
-      // 查询按钮
-      onQuery() {
-        // 从第1页开始
-        this.queryFilter.pageNo = 1;
-        // 请求数据
-        this.LoadDataRoleList();
-        // 关闭查询折叠栏
-        //        this.activeNames = [];
-      },
-      // 清除查询条件
-      resetForm(queryFilter) {
-        this.$refs[queryFilter].resetFields();
-      },
-      refresh() {
-        // 刷新数据
-        this.LoadDataRoleList();
-      },
-      // 请服务器数据（获取自动任务列表数据）
-      LoadDataRoleList() {
+      // 获取角色列表数据
+      loadDataList() {
         LoadDataRoleList(this.queryFilter).then(res => {
           var data = res.resData;
           this.tableData = data.content;
@@ -149,12 +133,12 @@
       // 翻页
       handleCurrentChange(val) {
         this.queryFilter.pageNo = val;
-        this.LoadDataRoleList();
+        this.loadDataList();
       },
       // 改变页面大小
       handleSizeChange(val) {
         this.queryFilter.pageSize = val;
-        this.LoadDataRoleList();
+        this.loadDataList();
       },
       // 添加角色
       handleAdd() {

@@ -109,6 +109,7 @@
           username: '',
           usercode: '',
           descritpion: '',
+          roleIds: [],
           validInd: true
         },
         selectRole: [], // 角色下拉列表
@@ -239,14 +240,14 @@
           this.citySources = res;
         });
       },
-      // // 加载城市下拉列表
-      // handleChange(value) {
-      //   console.info("value", value);
-      //   console.log(this.$refs['cascaderAddr'].currentLabels);
-      // },
-      // handleItemChange(value) {
-      //   console.info("value1", value);
-      // },
+      // 加载城市下拉列表
+      handleChange(value) {
+        console.info("value", value);
+        console.log(this.$refs['cascaderAddr'].currentLabels);
+      },
+      handleItemChange(value) {
+        console.info("value1", value);
+      },
       addressShow(){
         var addLabels = this.$refs['cascaderAddr'].currentLabels;
         Object.assign(this.userInfo,{showAddress:addLabels.join("/")});

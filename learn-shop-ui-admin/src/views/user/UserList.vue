@@ -19,10 +19,7 @@
         </el-collapse-item>
       </el-collapse>
     </el-row>
-    <el-button type="success" size="mini" @click="handleAdd" icon="el-icon-plus">添加</el-button>
-    <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search">查询</el-button>
-    <el-button type="info" size="mini" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
-    <el-button type="warning" size="mini" @click="refresh" icon="el-icon-refresh">刷新</el-button>
+    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
     <el-row>
       <template>
         <el-table border stripe style="width: 100%" @expand-change="expandChang" :expand-row-keys="expandRows" row-key="id"
@@ -81,8 +78,8 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <custom-button-group @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
-                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></custom-button-group>
+              <button-group-option @onDel="handleDelete(scope.row,scope.$index)" @onEdit="handleEdit(scope.row,scope.$index)"
+                @onInd="handleProhibit(scope.row,scope.$index)" :disInd="!scope.row.validInd"></button-group-option>
             </template>
           </el-table-column>
         </el-table>
@@ -119,12 +116,14 @@
   import {
     LoadCityData,
   } from "../../api/sys/CityMag";
-  import CustomButtonGroup from '../../components/common/CustomButtonGroup.vue';
+  import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
+  import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
 
   export default {
     components: {
       CustomSelect,
-      CustomButtonGroup
+      ButtonGroupOption,
+      ButtonGroupQuery
     },
     data() {
       return {
@@ -159,7 +158,7 @@
         this.selectSex = res.resData;
       });
       // 请求列表数据
-      this.loadDataUserList();
+      this.loadDataList();
     },
     //每次激活时
     activated() {
@@ -174,23 +173,8 @@
       }.bind(this));
     },
     methods: {
-      // 查询按钮
-      onQuery() {
-        // 从第1页开始
-        this.queryFilter.pageNo = 1;
-        // 请求数据
-        this.loadDataUserList();
-      },
-      // 清除查询条件
-      resetForm(queryFilter) {
-        this.$refs[queryFilter].resetFields();
-      },
-      // 刷新数据
-      refresh() {
-        this.loadDataUserList();
-      },
-      // 请服务器数据（获取列表数据）
-      loadDataUserList() {
+      // 获取列表数据
+      loadDataList() {
         LoadDataUserList(this.queryFilter).then(res => {
           var data = res.resData;
           this.tableData = data.content;
@@ -201,12 +185,12 @@
       // 翻页
       handleCurrentChange(val) {
         this.queryFilter.pageNo = val;
-        this.loadDataUserList();
+        this.loadDataList();
       },
       // 改变页面大小
       handleSizeChange(val) {
         this.queryFilter.pageSize = val;
-        this.loadDataUserList();
+        this.loadDataList();
       },
       // 添加用户
       handleAdd() {
