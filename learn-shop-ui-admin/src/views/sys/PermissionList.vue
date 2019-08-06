@@ -179,7 +179,7 @@
           }
         });
       },
-      handleEdit(index, row) {
+      handleEdit(row,index) {
         this.$router.push({
           name: 'sysPermissionEdit',
           query: {
@@ -193,7 +193,7 @@
       refresh() {
         this.LoadDataPermissionList();
       },
-      handleDelete(index, row) {
+      handleDelete(row,index) {
         var _this = this;
         _this.$confirm('此操作将删除该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -230,7 +230,7 @@
         this.queryFilter.pageSize = val;
         this.LoadDataPermissionList();
       },
-      handleProhibit(index, row) {
+      handleProhibit(row,index) {
         var _this = this;
         _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',

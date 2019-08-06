@@ -66,10 +66,10 @@
                   </custom-select>
                 </el-form-item>
                 <el-form-item label="地址" prop="casAddress">
-                  <el-popover trigger="hover" width="250" placement="top" @show="addressShow(scope.row,scope.$index)">
+                  <el-popover trigger="hover" placement="right" @show="addressShow(scope.row,scope.$index)">
                     <div>{{scope.row.showAddress}}</div>
                     <el-cascader v-model="scope.row.casAddress" slot="reference" :ref="'cascaderAddr' + scope.$index"
-                      :options="citySources" :props="optionProps">
+                      :options="citySources" :props="optionProps" disabled>
                     </el-cascader>
                   </el-popover>
                 </el-form-item>
@@ -220,7 +220,7 @@
         });
       },
       // 修改用户
-      handleEdit(index, row) {
+      handleEdit(row,index) {
         // 打开折叠栏，再点击编辑保存后，折叠栏有bug
         this.expandRows = [];
         row.password = null;
@@ -235,7 +235,7 @@
         });
       },
       // 禁用
-      handleProhibit(index, row) {
+      handleProhibit(row,index) {
         var _this = this;
         _this.$confirm('此操作将禁用该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -257,7 +257,7 @@
         });
       },
       // 删除
-      handleDelete(index, row) {
+      handleDelete(row,index) {
         var _this = this;
         _this.$confirm('此操作将删除该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
           confirmButtonText: '确定',

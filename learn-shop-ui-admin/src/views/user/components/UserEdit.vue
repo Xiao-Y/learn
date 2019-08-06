@@ -42,7 +42,7 @@
           </el-form-item>
           <el-form-item label="地址" prop="casAddress">
             <el-col :span="18">
-              <el-popover trigger="hover" width="250" placement="right" @show="addressShow">
+              <el-popover trigger="hover" placement="right" @show="addressShow">
                 <div >{{userInfo.showAddress}}</div>
                 <el-cascader v-model="userInfo.casAddress"
                               ref="cascaderAddr"
@@ -239,14 +239,14 @@
           this.citySources = res;
         });
       },
-      // 加载城市下拉列表
-      handleChange(value) {
-        console.info("value", value);
-        console.log(this.$refs['cascaderAddr'].currentLabels);
-      },
-      handleItemChange(value) {
-        console.info("value1", value);
-      },
+      // // 加载城市下拉列表
+      // handleChange(value) {
+      //   console.info("value", value);
+      //   console.log(this.$refs['cascaderAddr'].currentLabels);
+      // },
+      // handleItemChange(value) {
+      //   console.info("value1", value);
+      // },
       addressShow(){
         var addLabels = this.$refs['cascaderAddr'].currentLabels;
         Object.assign(this.userInfo,{showAddress:addLabels.join("/")});
