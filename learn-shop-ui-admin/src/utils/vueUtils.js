@@ -142,9 +142,38 @@ var VueUtils = {
     nodeData.pop();
     return nodeData;
   },
-  confirmDel(tips, callback) {
+  /**
+   * 删除前的确认提示
+   * @param info 删除的名称
+   * @param callback 回调
+   */
+  confirmDel(info, callback) {
+    var tips = '此操作将删除 ' + info + ' ,是否继续?';
+    this.confirm(callback, {tips: tips, title: '警告', cancelMessage: '已取消删除'});
+  },
+  /**
+   * 禁用前的确认提示
+   * @param info 禁用的名称
+   * @param callback 回调
+   */
+  confirmInd(info, callback) {
+    var tips = '此操作将禁用 ' + info + ' ,是否继续?';
     this.confirm(callback, {tips: tips, title: '警告', cancelMessage: '已取消禁用'});
   },
+  /**
+   * 确认提示
+   * @param callback
+   * @param option: <br/>
+   * { <br/>
+   * tips:'确定此操作', //提示信息 <br/>
+   * title:'提示', // 弹出框标题 <br/>
+   * confirmButtonText:'确定',  // 确认按钮显示 <br/>
+   * cancelButtonText:'取消',  // 取消按钮显示 <br/>
+   * confirmType:'warning',  // 弹出框图标 <br/>
+   * cancelType:'info',  // 取消后提示图标 <br/>
+   * cancelMessage:'已取消此操作'  // 取消后提示信息 <br/>
+   * } <br/>
+   */
   confirm(callback, option) {
     if (!option) {
       option = {};
