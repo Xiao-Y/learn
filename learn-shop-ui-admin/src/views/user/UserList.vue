@@ -98,6 +98,7 @@
 </template>
 
 <script>
+  // ===== api start
   import {
     LoadDataUserList,
     DeleteUserById,
@@ -105,7 +106,6 @@
     LoadRoleIdsByUserId,
     UpdateUser
   } from "../../api/user/userMag";
-  import CustomSelect from '../../components/common/CustomSelect.vue';
   import {
     LoadSelectRoleList
   } from "../../api/sys/roleMag";
@@ -115,9 +115,13 @@
   import {
     LoadCityData,
   } from "../../api/sys/CityMag";
+  // ===== component start
+  import CustomSelect from '../../components/common/CustomSelect.vue';
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue';
+  // ===== 工具类 start
+  import VueUtils from "../../utils/vueUtils";
 
   export default {
     components: {
@@ -147,8 +151,7 @@
           value: 'cityId',
           label: 'name',
           children: 'children'
-        },
-        openDelay: 1500 // 提示信息的延时
+        }
       }
     },
     created() {
@@ -212,11 +215,7 @@
       // 禁用
       handleProhibit(row, index) {
         var _this = this;
-        _this.$confirm('此操作将禁用该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+        VueUtils.confirmInd(row.username, () => {
           ProhibitUserById(row.id).then(res => {
             row.validInd = res.resData.validInd;
             _this.$message({
@@ -224,32 +223,18 @@
               message: '禁用成功!'
             });
           });
-        }).catch((err) => {
-          _this.$message({
-            type: 'info',
-            message: '已取消禁用'
-          });
         });
       },
       // 删除
       handleDelete(row, index) {
         var _this = this;
-        _this.$confirm('此操作将删除该用户 ' + row.username + ' 信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+        VueUtils.confirmDel(row.username, () => {
           DeleteUserById(row.id).then(res => {
-            _this.tableData.splice(index, 1);
+            row.validInd = res.resData.validInd;
             _this.$message({
               type: 'success',
               message: '删除成功!'
             });
-          });
-        }).catch((err) => {
-          _this.$message({
-            type: 'info',
-            message: '已取消删除'
           });
         });
       },

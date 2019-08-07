@@ -68,16 +68,18 @@
 </template>
 
 <script>
+  // ===== api start
   import {
     LoadDataRoleList,
     DeleteRoleById,
     ProhibitRoleById
   } from "../../api/sys/roleMag";
-
+  // ===== component start
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue';
-
+  // ===== 工具类 start
+  import VueUtils from "../../utils/vueUtils";
 
   export default {
     components: {
@@ -97,9 +99,7 @@
           roleName: null,
           roleCode: null
         },
-        tableData: [],
-        activeNames: ['1'],
-        openDelay: 1500 // 提示信息的延时
+        tableData: []
       }
     },
     created() {
@@ -149,11 +149,7 @@
       },
       handleProhibit(row, index) {
         var _this = this;
-        _this.$confirm('此操作将禁用该角色 ' + row.roleName + ' 信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+        VueUtils.confirmInd(row.roleName, () => {
           ProhibitRoleById(row.id).then(res => {
             row.validInd = res.resData.validInd;
             _this.$message({
@@ -161,20 +157,11 @@
               message: '禁用成功!'
             });
           });
-        }).catch((err) => {
-          _this.$message({
-            type: 'info',
-            message: '已取消禁用'
-          });
         });
       },
       handleDelete(row, index) {
         var _this = this;
-        _this.$confirm('此操作将删除该角色 ' + row.roleName + ' 信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+        VueUtils.confirmDel(row.roleName,()=>{
           DeleteRoleById(row.id).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
@@ -182,18 +169,7 @@
               message: '删除成功!'
             });
           });
-        }).catch((err) => {
-          _this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
         });
-      }
-
-    },
-    filters: {
-      productStatusName(productStatus) {
-        return productStatus === '1' ? '有货' : '无货';
       }
     }
   }
