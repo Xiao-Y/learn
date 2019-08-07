@@ -2,7 +2,9 @@ package com.billow.system.pojo.vo;
 
 import com.billow.system.pojo.po.CityPo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +14,8 @@ import java.util.List;
  * @create 2019-08-04 11:25
  */
 @Data
-public class CityVo extends CityPo {
+@EqualsAndHashCode(callSuper = true)
+public class CityVo extends CityPo implements Serializable {
 
 
 }

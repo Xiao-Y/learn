@@ -1,7 +1,9 @@
 package com.billow.system.pojo.ex;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,50 +13,39 @@ import java.util.List;
  * @create 2018-05-26 9:30
  */
 @Data
-public class MenuEx {
-    /**
-     * 菜单ID
-     */
+public class MenuEx implements Serializable {
+
+    @ApiModelProperty("菜单ID")
     private String id;
-    /**
-     * 菜单父ID
-     */
+
+    @ApiModelProperty("菜单父ID")
     private Long pid;
-    /**
-     * 菜单标题
-     */
+
+    @ApiModelProperty("菜单标题")
     private String title;
-    /**
-     * 菜单标题CODE
-     */
+
+    @ApiModelProperty("菜单标题CODE")
     private String titleCode;
-    /**
-     * 菜单路径
-     */
+
+    @ApiModelProperty("菜单路径")
     private String path;
-    /**
-     * 菜单图标
-     */
+
+    @ApiModelProperty("菜单图标")
     private String icon;
-    /**
-     * 有效标志
-     */
+
+    @ApiModelProperty("有效标志")
     private Boolean validInd;
-    /**
-     * 是否显示
-     */
+
+    @ApiModelProperty("是否显示")
     private Boolean display;
-    /**
-     * 子级菜单
-     */
+
+    @ApiModelProperty("子级菜单")
     private List<MenuEx> children;
-    /**
-     * 是否有子菜单显示
-     */
+
+    @ApiModelProperty("是否有子菜单显示")
     private Boolean isChildrenDisplay;
-    /**
-     * 显示的位置
-     */
+
+    @ApiModelProperty("显示的位置")
     private Double sortField;
 
 }

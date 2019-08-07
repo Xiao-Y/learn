@@ -86,7 +86,7 @@
 </template>
 
 <script>
-  //===== api start
+  // ===== api start
   import {
     LoadDataPermissionList,
     DeletePermissionById,

@@ -1,7 +1,9 @@
 package com.billow.system.pojo.po;
 
 import com.billow.common.base.pojo.BasePo;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,17 +16,23 @@ import java.io.Serializable;
  * @create 2019-07-11 10:47
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "sys_data_dictionary")
 public class DataDictionaryPo extends BasePo implements Serializable {
-    // 系统模块
+
+    @ApiModelProperty("系统模块")
     private String systemModule;
-    // 下拉字段分类
+
+    @ApiModelProperty("下拉字段分类")
     private String fieldType;
-    // 显示的名称
+
+    @ApiModelProperty("显示的名称")
     private String fieldDisplay;
-    // 显示名称的值
+
+    @ApiModelProperty("显示名称的值")
     private String fieldValue;
-    // 字段排序
+
+    @ApiModelProperty("字段排序")
     private Integer fieldOrder;
 }

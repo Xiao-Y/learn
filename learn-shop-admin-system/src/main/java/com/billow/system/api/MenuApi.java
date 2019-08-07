@@ -52,8 +52,9 @@ public class MenuApi extends BaseApi {
             roleVo.setRoleCode(m);
             return roleVo;
         }).collect(Collectors.toList());
-        ex.setUserCode(userTools.getCurrentUserCode()).
-                setRoleVos(roleVos).setValidInd(true);
+        ex.setUserCode(userTools.getCurrentUserCode());
+        ex.setRoleVos(roleVos);
+        ex.setValidInd(true);
 
         List<MenuEx> menuExes = menuService.homeMenus(ex);
 

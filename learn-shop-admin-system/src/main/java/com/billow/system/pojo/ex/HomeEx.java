@@ -1,6 +1,10 @@
 package com.billow.system.pojo.ex;
 
 
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,26 +14,12 @@ import java.util.List;
  * @author liuyongtao
  * @create 2018-05-29 17:47
  */
-public class HomeEx {
+@Data
+public class HomeEx implements Serializable {
 
+    @ApiModelProperty("角色CODE集合")
     List<String> roleCodes = new ArrayList<>();
+
+    @ApiModelProperty("菜单集合")
     List<MenuEx> menus = new ArrayList<>();
-
-    public List<String> getRoleCodes() {
-        return roleCodes;
-    }
-
-    public HomeEx setRoleCodes(List<String> roleCodes) {
-        this.roleCodes = roleCodes;
-        return this;
-    }
-
-    public List<MenuEx> getMenus() {
-        return menus;
-    }
-
-    public HomeEx setMenus(List<MenuEx> menus) {
-        this.menus = menus;
-        return this;
-    }
 }

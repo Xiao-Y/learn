@@ -1,5 +1,8 @@
 package com.billow.common.base.pojo;
 
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -19,88 +22,35 @@ import java.util.Date;
  * @author liuyongtao
  * @create 2018-04-27 12:28
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BasePo extends BasePage implements Serializable {
 
+    @ApiModelProperty("主键id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ApiModelProperty("创建人")
     @CreatedBy
     private String creatorCode;
+
+    @ApiModelProperty("更新人")
     @LastModifiedBy
     private String updaterCode;
+
+    @ApiModelProperty("创建时间")
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
     private Date createTime;
+
+    @ApiModelProperty("更新时间")
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
     private Date updateTime;
+
+    @ApiModelProperty("有效标志")
     private Boolean validInd;
-
-    public Long getId() {
-        return id;
-    }
-
-    public BasePo setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getCreatorCode() {
-        return creatorCode;
-    }
-
-    public BasePo setCreatorCode(String creatorCode) {
-        this.creatorCode = creatorCode;
-        return this;
-    }
-
-    public String getUpdaterCode() {
-        return updaterCode;
-    }
-
-    public BasePo setUpdaterCode(String updaterCode) {
-        this.updaterCode = updaterCode;
-        return this;
-    }
-
-    public Boolean getValidInd() {
-        return validInd;
-    }
-
-    public BasePo setValidInd(Boolean validInd) {
-        this.validInd = validInd;
-        return this;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public BasePo setCreateTime(Date createTime) {
-        this.createTime = createTime;
-        return this;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public BasePo setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "BasePo{" +
-                "id=" + id +
-                ", creatorCode='" + creatorCode + '\'' +
-                ", updaterCode='" + updaterCode + '\'' +
-                ", validInd=" + validInd +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "} " + super.toString();
-    }
 }

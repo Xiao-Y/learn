@@ -207,7 +207,8 @@ public class RoleServiceImpl implements RoleService {
         // 如果不存在，直接构建一个新的返回
         if (one == null) {
             RoleVo roleVo = new RoleVo();
-            roleVo.setId(roleId).setValidInd(false);
+            roleVo.setId(roleId);
+            roleVo.setValidInd(false);
             // 删除 redis 信息
             commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
             // 删除 redis 信息
@@ -247,7 +248,8 @@ public class RoleServiceImpl implements RoleService {
         // 如果不存在，直接构建一个新的返回
         if (one == null) {
             RoleVo roleVo = new RoleVo();
-            roleVo.setId(roleId).setValidInd(false);
+            roleVo.setId(roleId);
+            roleVo.setValidInd(false);
             // 删除 redis 信息
             commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
             // 删除 redis 信息

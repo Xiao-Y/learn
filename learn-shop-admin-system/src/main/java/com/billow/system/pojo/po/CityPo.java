@@ -1,10 +1,13 @@
 package com.billow.system.pojo.po;
 
 import com.billow.common.base.pojo.BasePo;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 中国省市区
@@ -13,30 +16,40 @@ import javax.persistence.Table;
  * @create 2019-08-04 10:52
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "sys_city")
-public class CityPo extends BasePo {
+public class CityPo extends BasePo implements Serializable {
 
-    // 城市 id
+    @ApiModelProperty("城市 id")
     private String cityId;
-    // 上级城市id
+
+    @ApiModelProperty("上级城市id")
     private String parentCityId;
-    // 城市等级
+
+    @ApiModelProperty("城市等级")
     private String levelType;
-    // 城市代码
+    @ApiModelProperty("城市代码")
     private String cityCode;
-    // 城市名称
+
+    @ApiModelProperty("城市名称")
     private String name;
-    // 城市缩写
+
+    @ApiModelProperty("城市缩写")
     private String shortName;
-    // 城市拼音
+
+    @ApiModelProperty("城市拼音")
     private String pinYin;
-    // 城市完整名称
+
+    @ApiModelProperty("城市完整名称")
     private String mergerName;
-    // 邮编
+
+    @ApiModelProperty("邮编")
     private String zipCode;
-    // 纬度
+
+    @ApiModelProperty("纬度")
     private String lat;
-    // 经度
+
+    @ApiModelProperty("经度")
     private String lng;
 }

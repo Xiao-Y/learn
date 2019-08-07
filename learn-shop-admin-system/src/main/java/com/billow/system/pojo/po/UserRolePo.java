@@ -2,6 +2,9 @@ package com.billow.system.pojo.po;
 
 
 import com.billow.common.base.pojo.BasePo;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -10,37 +13,16 @@ import java.io.Serializable;
 /**
  * user与role关联关系，多对多
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "r_user_role")
 public class UserRolePo extends BasePo implements Serializable {
-    // 用户id
+
+    @ApiModelProperty("用户id")
     private Long userId;
-    // 角色id
+
+    @ApiModelProperty("角色id")
     private Long roleId;
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public UserRolePo setUserId(Long userId) {
-        this.userId = userId;
-        return this;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public UserRolePo setRoleId(Long roleId) {
-        this.roleId = roleId;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "UserRolePo{" +
-                "userId=" + userId +
-                ", roleId=" + roleId +
-                '}';
-    }
 }

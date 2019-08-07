@@ -1,5 +1,7 @@
 package com.billow.common.base.pojo;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -14,9 +16,14 @@ public abstract class BasePage implements Serializable {
     private static final Integer PAGE_NO = 1; // 当前页号
     private static final Integer RECORD_COUNT = 0; // 总记录数
 
-    private Integer pageSize = PAGE_SIZE; // 每页要显示的记录数
-    private Integer pageNo = PAGE_NO; // 当前页号
-    private Integer recordCount = RECORD_COUNT; // 总记录数
+    @ApiModelProperty("每页要显示的记录数")
+    private Integer pageSize = PAGE_SIZE;
+
+    @ApiModelProperty("当前页号")
+    private Integer pageNo = PAGE_NO;
+
+    @ApiModelProperty("总记录数")
+    private Integer recordCount = RECORD_COUNT;
 
     /**
      * 每页要显示的记录数

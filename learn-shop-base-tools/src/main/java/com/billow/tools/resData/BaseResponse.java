@@ -6,7 +6,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.io.Serializable;
 import java.util.Map;
 
-
 public class BaseResponse<T> implements Serializable {
 
     private String resTimestamp = DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMddHHmmssSSS");
