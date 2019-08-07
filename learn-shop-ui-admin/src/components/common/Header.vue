@@ -10,7 +10,7 @@
             <img class="user-logo" src="../../static/img/img.jpg"> {{username}}
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="changeAvatar">更换头像</el-dropdown-item>
+            <el-dropdown-item command="changeIcon">更换头像</el-dropdown-item>
             <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
             <el-dropdown-item command="editPassword">修改密码</el-dropdown-item>
             <el-dropdown-item command="loginout">退出</el-dropdown-item>
@@ -45,6 +45,15 @@
       </div>
     </el-dialog>
     <!-- 修改密码 dialog end -->
+    <!-- 修改头像 dialog end -->
+    <el-dialog title="修改头像"
+               width="240px"
+               center
+               :visible.sync="dialogIconVisible"
+               :close-on-click-modal="false"
+               @close="cancledialog">
+      <user-icon-change></user-icon-change>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -57,15 +66,14 @@
     GetUserInfo,
     EditPassWord
   } from '../../api/user/userMag' // 用户相关
-  import {
-    LoadSelectRoleList
-  } from "../../api/sys/roleMag";
 
+  import UserIconChange from '../../views/user/components/UserIconChange.vue';
 
   export default {
     components: {
       LangSelect,
-      skinComp
+      skinComp,
+      UserIconChange
     },
     created() {
       // 加载用户 Header主题
@@ -97,6 +105,7 @@
         name: 'billow',
         selectRole: [], // 角色下拉列表
         dialogFormVisible: false, //修改密码 dialog
+        dialogIconVisible: false, //修改头像 dialog
         userInfo: {
           oldPassWord: null,
           newPassWord: null
@@ -119,7 +128,7 @@
         var _this = this;
         this.$refs['userInfo'].validate(valid => {
           if (valid) {
-            EditPassWord(this.userInfo).then(res=>{
+            EditPassWord(this.userInfo).then(res => {
               this.dialogFormVisible = false;
             });
           } else {
@@ -128,8 +137,11 @@
         });
       },
       cancledialog(formRule) {
-        this.$refs[formRule].resetFields();
+        if (formRule) {
+          this.$refs[formRule].resetFields();
+        }
         this.dialogFormVisible = false;
+        this.dialogIconVisible = false;
       },
       handleCommand(command) {
         switch (command) {
@@ -144,6 +156,9 @@
             break;
           case 'editPassword': // 修改密码
             this.dialogFormVisible = true;
+            break;
+          case 'changeIcon': // 修改密码
+            this.dialogIconVisible = true;
             break;
           default:
             break;
