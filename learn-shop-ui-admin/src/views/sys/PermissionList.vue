@@ -190,24 +190,6 @@
             });
           });
         });
-        // _this.$confirm('此操作将删除该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
-        //   confirmButtonText: '确定',
-        //   cancelButtonText: '取消',
-        //   type: 'warning'
-        // }).then(() => {
-        //   DeletePermissionById(row.id).then(res => {
-        //     _this.tableData.splice(index, 1);
-        //     _this.$message({
-        //       type: 'success',
-        //       message: '删除成功!'
-        //     });
-        //   });
-        // }).catch((err) => {
-        //   _this.$message({
-        //     type: 'info',
-        //     message: '已取消删除'
-        //   });
-        // });
       },
       handleProhibit(row, index) {
         var _this = this;
@@ -221,25 +203,6 @@
             });
           });
         });
-
-        // _this.$confirm('此操作将禁用该权限 ' + row.url + ' 信息, 是否继续?', '提示', {
-        //   confirmButtonText: '确定',
-        //   cancelButtonText: '取消',
-        //   type: 'warning'
-        // }).then(() => {
-        //   ProhibitPermissionById(row.id).then(res => {
-        //     row.validInd = res.resData.validInd;
-        //     _this.$message({
-        //       type: 'success',
-        //       message: '禁用成功!'
-        //     });
-        //   });
-        // }).catch((err) => {
-        //   _this.$message({
-        //     type: 'info',
-        //     message: '已取消禁用'
-        //   });
-        // });
       }
     }
   }

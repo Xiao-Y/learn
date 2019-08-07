@@ -27,7 +27,7 @@
       <el-col :span="14">
         <el-collapse v-model="activeNames">
           <el-collapse-item title="角色信息" name="1">
-            <el-form :inline="true" ref="roleInfo" label-width="80px" :model="roleInfo" size="mini" :rules="rulesForm">
+            <el-form inline ref="roleInfo" label-width="95px" :model="roleInfo" size="mini" :rules="rulesForm">
               <el-form-item label="角色名称" prop="roleName">
                 <el-input v-model="roleInfo.roleName"></el-input>
               </el-form-item>
@@ -51,8 +51,7 @@
               border
               height="500"
               @selection-change="handleSelectionChange"
-              row-key="id"
-            >
+              row-key="id">
               <el-table-column type="selection" width="35" prop="checked" reserve-selection></el-table-column>
               <el-table-column label="权限名称" prop="permissionName" width="300"></el-table-column>
               <el-table-column label="授权链接" prop="url"></el-table-column>
