@@ -27,7 +27,7 @@
       <el-col :span="14">
         <el-collapse v-model="activeNames">
           <el-collapse-item title="角色信息" name="1">
-            <el-form :inline="true" ref="roleInfo" label-width="80px" :model="roleInfo" size="mini">
+            <el-form :inline="true" ref="roleInfo" label-width="80px" :model="roleInfo" size="mini" :rules="rulesForm">
               <el-form-item label="角色名称" prop="roleName">
                 <el-input v-model="roleInfo.roleName"></el-input>
               </el-form-item>
@@ -102,7 +102,7 @@
         </el-collapse>
       </el-col>
     </el-row>
-    <el-button type="primary" @click="onSubmit" size="mini">保存</el-button>
+    <el-button type="primary" @click="validSubmit" size="mini">保存</el-button>
     <el-button @click="onReset('roleInfo')" size="mini">重置</el-button>
     <el-button @click="onReturn" size="mini">返回</el-button>
   </div>
@@ -117,7 +117,8 @@
   import {
     LoadDataPermissionIdList,
     LoadDataMenuIdList,
-    SaveRole
+    SaveRole,
+    CheckRoleCode
   } from "../../../api/sys/roleMag";
   import CustomSelect from '../../../components/common/CustomSelect.vue';
 
@@ -149,12 +150,20 @@
         menus: [], // 菜单树数据源
         filterMenu: "", // 菜单树过滤
         menuChecked: [], // 被选种的菜单ID
-        loadMenuCheckedFlag: false// 是否初始化加载被选种的菜单
+        loadMenuCheckedFlag: false, // 是否初始化加载被选种的菜单
+        rulesForm:{
+          roleName: [{required: true, message: '请输入角色名', trigger: 'blur'}],
+          roleCode: [{required: true, message: '请输入角色CODE', trigger: 'blur'},
+            {validator: this.checkRoleCode, trigger: 'blur'}]
+        },
+        oldRoleCode: '',// 旧roleCode，用于校验
       };
     },
     created() {
       if (this.$route.query.optionType === 'edit') {
-        this.roleInfo = JSON.parse(this.$route.query.roleEdit);
+        var roleInfo = JSON.parse(this.$route.query.roleEdit);
+        this.roleInfo = roleInfo;
+        this.oldRoleCode = roleInfo.roleCode;
       }
       // 初始化菜单树
       this.findMenus();
@@ -209,6 +218,16 @@
         if (!value) return true;
         return data.title.indexOf(value) !== -1;
       },
+      validSubmit() {
+        var _this = this;
+        this.$refs['roleInfo'].validate(valid => {
+          if (valid) {
+            _this.onSubmit();
+          } else {
+            return false;
+          }
+        });
+      },
       onSubmit() {
         var _this = this;
         var roleInfo = _this.roleInfo;
@@ -231,6 +250,20 @@
       },
       handleSelectionChange(row) {
         this.permissionChecked = row.map(item => item.id);
+      },
+      // 校验角色CODE 是否重复
+      checkRoleCode(rule, value, callback){
+        if (this.oldRoleCode != '' && this.oldRoleCode === value) {
+          callback();
+          return true;
+        }
+        CheckRoleCode(value).then(res => {
+          if (res.resData >= 1) {
+            callback(new Error("角色CODE已经存在"));
+          } else {
+            callback();
+          }
+        });
       }
     },
     watch: {

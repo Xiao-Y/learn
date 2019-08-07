@@ -94,4 +94,10 @@ public class RoleApi extends BaseApi {
     public List<RoleVo> findRoleById(@RequestParam("ids") List<Long> ids) {
         return roleService.findRoleById(ids);
     }
+
+    @ApiOperation(value = "查询 roleCode 的个数")
+    @GetMapping("/checkRoleCode/{roleCode}")
+    public Integer checkRoleCode(@PathVariable("roleCode") String roleCode) {
+        return roleService.countRoleCodeByRoleCode(roleCode);
+    }
 }

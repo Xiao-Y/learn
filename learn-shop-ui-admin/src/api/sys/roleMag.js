@@ -47,7 +47,12 @@ export const DeleteRoleById = id => requestUtils.del(baseUrl + '/deleteRoleById/
 
 /**
  * 加载下拉列表角色信息
- * @param roleFilter
  * @constructor
  */
-export const LoadSelectRoleList = roleFilter => requestUtils.get(baseUrl + '/findSelectRole');
+export const LoadSelectRoleList = () => requestUtils.get(baseUrl + '/findSelectRole');
+/**
+ * 查询 userCode 的个数
+ * @param userCode
+ * @constructor
+ */
+export const CheckRoleCode = roleCode => requestUtils.get(baseUrl + '/checkRoleCode/' + roleCode);

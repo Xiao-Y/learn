@@ -285,4 +285,9 @@ public class RoleServiceImpl implements RoleService {
         return ConvertUtils.convertIgnoreBase(pos, RoleVo.class);
     }
 
+    @Override
+    public Integer countRoleCodeByRoleCode(String roleCode) {
+        return roleDao.countRoleCodeByRoleCode(roleCode);
+    }
+
 }

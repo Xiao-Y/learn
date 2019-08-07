@@ -23,4 +23,14 @@ public interface RoleDao extends JpaRepository<RolePo, Long>, JpaSpecificationEx
      * @date 2019/7/31 13:52
      */
     List<RolePo> findByIdIn(List<Long> ids);
+
+    /**
+     * 查询 roleCode 的个数
+     *
+     * @param roleCode
+     * @return java.lang.Integer
+     * @author LiuYongTao
+     * @date 2019/8/7 10:27
+     */
+    Integer countRoleCodeByRoleCode(String roleCode);
 }

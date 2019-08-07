@@ -190,7 +190,7 @@
           }],
           titleCode: [{
             validator: this.checkMenuCode,
-            trigger: 'change'
+            trigger: 'blur'
           }]
         }
       };

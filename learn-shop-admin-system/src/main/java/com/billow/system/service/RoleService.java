@@ -96,4 +96,14 @@ public interface RoleService {
      * @date 2019/7/31 11:41
      */
     List<RoleVo> findRoleById(List<Long> ids);
+
+    /**
+     * 查询 roleCode 的个数
+     *
+     * @param roleCode
+     * @return java.lang.Integer
+     * @author LiuYongTao
+     * @date 2019/8/7 10:27
+     */
+    Integer countRoleCodeByRoleCode(String roleCode);
 }
