@@ -8,9 +8,13 @@ import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 初始化数据字典
@@ -31,7 +35,17 @@ public class InitDictionary implements IStartLoading {
     @Override
     public boolean init() {
         List<DataDictionaryPo> dataDictionaryPos = dataDictionaryDao.findAll();
-        redisUtils.setObj(key, ConvertUtils.convertIgnoreBase(dataDictionaryPos,DataDictionaryPo.class));
+        // 以 systemModule 分组
+        Map<String, List<DataDictionaryPo>> collect = dataDictionaryPos.stream()
+                .collect(Collectors.groupingBy(DataDictionaryPo::getSystemModule));
+        // 分别保存到 redis 中
+        for (Map.Entry<String, List<DataDictionaryPo>> entry : collect.entrySet()) {
+            String systemModule = entry.getKey();
+            List<DataDictionaryPo> pos = entry.getValue();
+            pos.sort(Comparator.nullsLast(Comparator.comparing(DataDictionaryPo::getFieldOrder)));
+
+            redisUtils.setObj(key + systemModule, ConvertUtils.convertIgnoreBase(pos, DataDictionaryPo.class));
+        }
         return true;
     }
 }

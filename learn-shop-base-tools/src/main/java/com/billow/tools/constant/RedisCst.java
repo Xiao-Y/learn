@@ -21,10 +21,10 @@ public class RedisCst {
     public final static String ROLE_MENU_KEY = "ROLE:MENU:";
 
     /**
-     * 数据字典信息：COMM:DICTIONARY
+     * 数据字典信息：COMM:DICTIONARY:adminUser
      *
      */
-    public final static String COMM_DICTIONARY = "COMM:DICTIONARY";
+    public final static String COMM_DICTIONARY = "COMM:DICTIONARY:";
 
     /**
      * 黑名单-修改过用户信息：BLACKLIST:EDITUSER:xxx

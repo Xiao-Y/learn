@@ -1,6 +1,7 @@
 package com.billow.system.service.impl;
 
 import com.billow.common.jpa.DefaultSpec;
+import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.DataDictionaryDao;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.vo.DataDictionaryVo;
@@ -23,6 +24,8 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
 
     @Autowired
     private DataDictionaryDao dataDictionaryDao;
+    @Autowired
+    private RedisUtils redisUtils;
 
     @Override
     public List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionaryVo dataDictionaryVo) {

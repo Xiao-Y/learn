@@ -2,6 +2,7 @@ package com.billow.zuul.config.security;
 
 
 import com.billow.tools.constant.DictionaryType;
+import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ToolsUtils;
 import com.billow.zuul.config.security.vo.DataDictionaryVo;
 import com.billow.zuul.config.security.vo.PermissionVo;
@@ -33,8 +34,8 @@ public class AuthService {
 
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    private final static String PERMISSION = "ROLE:PERMISSION:";
-    private final static String DICTIONARY = "COMM:DICTIONARY";
+    private final static String PERMISSION = RedisCst.ROLE_PERMISSION_KEY;
+    private final static String DICTIONARY = RedisCst.COMM_DICTIONARY;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -49,7 +50,6 @@ public class AuthService {
      * @date 2019/7/16 14:30
      */
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-        boolean isPermission = false;
 
         Object principal = authentication.getPrincipal();
         logger.info("===>>> principal:{}", principal);
@@ -62,10 +62,9 @@ public class AuthService {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         if (authorities != null && authorities.size() > 0) {
             // 获取 redis 中数据字典的数据
-            Map<Long, String> dictionaryMap = redisUtils.getArray(DICTIONARY, DataDictionaryVo.class)
+            Map<Long, String> dictionaryMap = redisUtils.getArray(DICTIONARY + DictionaryType.SYS_MODEL_OCDE_SYSTEM_MODULE, DataDictionaryVo.class)
                     .stream()
-                    .filter(f -> DictionaryType.SYS_MODEL_OCDE_SYSTEM_MODULE.equals(f.getSystemModule())
-                            && DictionaryType.SYS_FIELD_OCDE_SYSTEM_MODULE.equals(f.getFieldType()))
+                    .filter(f -> DictionaryType.SYS_FIELD_OCDE_SYSTEM_MODULE.equals(f.getFieldType()))
                     .collect(Collectors.toMap(DataDictionaryVo::getId, DataDictionaryVo::getFieldDisplay));
             for (GrantedAuthority authority : authorities) {
                 // 查询 redis 中的角色权限
