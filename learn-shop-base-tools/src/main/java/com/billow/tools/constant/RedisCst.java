@@ -27,6 +27,12 @@ public class RedisCst {
     public final static String COMM_DICTIONARY = "COMM:DICTIONARY:";
 
     /**
+     * 数据字典信息：COMM:CITY
+     *
+     */
+    public final static String COMM_CITY = "COMM:CITY";
+
+    /**
      * 黑名单-修改过用户信息：BLACKLIST:EDITUSER:xxx
      *
      */

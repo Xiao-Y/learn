@@ -1,6 +1,5 @@
 package com.billow.system.pojo.ex;
 
-import com.billow.system.pojo.vo.CityVo;
 import lombok.Data;
 
 import java.util.List;

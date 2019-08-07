@@ -1,9 +1,11 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.ex.CityEx;
-import com.billow.system.pojo.vo.CityVo;
 import com.billow.system.service.CityService;
+import com.billow.tools.constant.RedisCst;
+import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +31,20 @@ public class CityApi extends BaseApi {
 
     @Autowired
     private CityService cityService;
+    @Autowired
+    private RedisUtils redisUtils;
 
     @ApiOperation(value = "查询省市区")
     @GetMapping("/findCity/{parentCityId}")
     public List<CityEx> findCity(@PathVariable("parentCityId") String parentCityId) {
-        return cityService.findCityByParentCityId(parentCityId);
+        // 从 redis 中获取
+        List<CityEx> redisData = redisUtils.getArray(RedisCst.COMM_CITY, CityEx.class);
+        if (ToolsUtils.isNotEmpty(redisData)) {
+            return redisData;
+        }
+        List<CityEx> cityExes = cityService.findCityByParentCityId(parentCityId);
+        // 保存到 redis 中
+        redisUtils.setObj(RedisCst.COMM_CITY, cityExes);
+        return cityExes;
     }
 }
