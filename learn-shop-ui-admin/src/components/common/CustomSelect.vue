@@ -1,3 +1,4 @@
+<!-- 下拉列表组件： 可以通过绑定数据源 datasource 和指定 fieldType 的方式加载下拉，如果是列表查询建议使用 datasource 方式-->
 <template>
   <el-select
     @change="changeEvent"
@@ -19,7 +20,7 @@
 
 <script>
 
-  import {LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
+  import {LoadDataDictionary} from "../../api/sys/DataDictionaryMag";
 
   export default {
     // 双向绑定
@@ -28,7 +29,7 @@
       event: 'change'
     },
     props: {
-      valueKey:{
+      valueKey: {
         type: String,
         default: null
       },
@@ -62,10 +63,17 @@
         type: Array,
         default: null
       },
+      // 指定查询下拉的模块,如果不指定就查询整个
+      systemModule: {
+        type: String,
+        default: null
+      },
+      // 查询下拉的字段类型
       fieldType: {
         type: String,
         default: null
       },
+      // 选种的下拉
       parentValues: {
         // type: Array,
         default: null
@@ -81,7 +89,7 @@
       // 当没有外部数据源并且fieldType不为空时，查询数据字典
       if (this.datasource == null && this.fieldType != null) {
         // console.info("查询数据字典 fieldType：", this.fieldType);
-        this.LoadSysDataDictionary(this.fieldType);
+        this.LoadSelectData(this.systemModule, this.fieldType);
       }
       // 当数据源中有数据时，加载数据源
       if (this.datasource && this.datasource.length > 0) {
@@ -89,7 +97,7 @@
         this.currentSource = this.datasource;
       }
       // console.info("created parentValues：", this.parentValues);
-      if(this.parentValues){
+      if (this.parentValues) {
         this.currentValue = this.parentValues;
       }
     },
@@ -101,8 +109,8 @@
         this.$emit('onchange', val);
       },
       //加载下拉列表
-      LoadSysDataDictionary(fieldType) {
-        LoadSysDataDictionary(fieldType).then(res => {
+      LoadSelectData(systemModule, fieldType) {
+        LoadDataDictionary(systemModule, fieldType).then(res => {
           this.currentSource = res.resData;
         });
       }
@@ -113,7 +121,7 @@
         // console.info("watch 加载数据源字典：", newVal);
         this.currentSource = newVal;
       },
-      parentValues:function (newVal, oldVal) {
+      parentValues: function (newVal, oldVal) {
         // console.info("watch parentValues：", newVal);
         this.currentValue = newVal;
       }

@@ -2,6 +2,14 @@ import requestUtils from '../../utils/requestUtils'
 
 const baseUrl = 'admin-system/dataDictionaryApi';
 
+
+/**
+ * 查询 systemModule 指定的 FieldType 的字典
+ * @param roleFilter
+ * @constructor
+ */
+export const LoadDataDictionary = (systemModule, fieldType) => requestUtils.get(baseUrl + '/findDataDictionary' + (systemModule ? ('/' + systemModule + '/') : '/') + fieldType);
+
 /**
  * 查询 system 系统指定的 FieldType 的字典
  * @param roleFilter
