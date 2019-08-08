@@ -48,11 +48,13 @@ custom:
     read-cache: true #菜单优先从缓存中读出
     write-cache: true #菜单写入缓存中
   common:
-    word-resource-dandler: /displayImag # 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/
     linux:
-      word-img-path: /temp-markdown/ # 图片保存的路径
+      base-file-path: /uploadfile # base 路径
     win:
-      word-img-path: D:/temp-markdown/ # 图片保存的路径
+      base-file-path: D:/uploadfile # base 路径
+    image-mapping: /displayImag # 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/
+    markdown-img-path: /markdown # 图片保存的路径
+    user-icon-img-path: /usericon # 图片保存的路径
 
 
 # 显示 sql 的查询参数

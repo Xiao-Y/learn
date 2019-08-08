@@ -17,4 +17,7 @@ public class FileHandleEx implements Serializable {
 
     @ApiModelProperty("文件路径")
     private String fileUrl;
+
+    @ApiModelProperty("新文件名")
+    private String newFileName;
 }

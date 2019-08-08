@@ -54,14 +54,14 @@
         for (var _img in this.img_file) {
           formdata.append("file", this.img_file[_img]);
         }
-        RequestUtils.upload('admin-system/fileHandleApi/upload', formdata).then(res => {
+        RequestUtils.upload('admin-system/fileApi/batchUpload/markdown', formdata).then(res => {
           var resData = res.resData;
           console.log(resData);
           // 第二步.将返回的url替换到文本原位置
           for (var img in resData) {
             console.log("img[0]", resData[img].pos);
             console.log("img[1]", resData[img].fileUrl);
-            this.$refs.md.$img2Url(resData[img].pos, 'admin-system' + resData[img].fileUrl);
+            this.$refs.md.$img2Url(resData[img].pos, resData[img].fileUrl);
           }
         }).catch(err => {
           console.log(err);

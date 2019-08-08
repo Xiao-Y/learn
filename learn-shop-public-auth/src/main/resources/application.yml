@@ -29,7 +29,7 @@ spring:
     generate-ddl: false
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   datasource:
     max-pool-prepared-statement-per-connection-size: 20
     min-idle: 5

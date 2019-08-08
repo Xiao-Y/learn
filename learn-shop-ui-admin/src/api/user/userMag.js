@@ -74,3 +74,11 @@ export const CheckUserCode = userCode => requestUtils.get(baseUrl + '/checkUserC
  * @constructor
  */
 export const EditPassWord = data => requestUtils.put(baseUrl + '/editPassWord', Object.assign(data));
+
+/**
+ * 修改用户头像
+ * @param data
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const UpdateUserIcon = data => requestUtils.put(baseUrl + '/updateUserIcon', Object.assign(data));

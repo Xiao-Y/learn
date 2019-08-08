@@ -11,10 +11,10 @@ import lombok.Data;
 @Data
 public class LinuxProperties {
     /**
-     * 文档中图片保存的路径
+     * 文档中图片保存的 Base 路径
      *
      * @author LiuYongTao
      * @date 2019/7/26 17:16
      */
-    private String wordImgPath;
+    private String baseFilePath;
 }

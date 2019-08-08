@@ -1,45 +1,70 @@
 <template>
   <div id="app">
-  <el-upload
-    class="avatar-uploader"
-    action="https://jsonplaceholder.typicode.com/posts/"
-    :show-file-list="false"
-    :on-success="handleAvatarSuccess"
-    :before-upload="beforeAvatarUpload">
-    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-  </el-upload>
+    <el-upload
+      class="avatar-uploader"
+      action="admin-system/fileApi/singleUpload/userIcon"
+      :multiple="false"
+      :show-file-list="false"
+      :on-success="handleSuccess"
+      :on-error="handleError"
+      :before-upload="beforeAvatarUpload">
+
+      <img v-if="newImageUrl" :src="newImageUrl" class="avatar">
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
   </div>
 </template>
 
 <script>
   export default {
+    props: {
+      imageUrl: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
-        imageUrl: ''
-      };
+        newImageUrl: ''
+      }
+    },
+    created() {
+      this.newImageUrl = this.imageUrl;
     },
     methods: {
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-      },
+      // 图片上传成功后
+      handleSuccess(res, file) {
+        console.info("res", res);
+        console.info("file", file);
+        this.newImageUrl = URL.createObjectURL(file.raw);
+        this.$emit("uploadSuccess", res.resData);
+      }
+      ,
+      // 图片上传失败后
+      handleError(err, file) {
+        console.error(err);
+        this.$emit("uploadError", err);
+      }
+      ,
+      // 图片上传前校验
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!');
         }
+
+        const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
+
         return isJPG && isLt2M;
       }
     }
   }
 </script>
 
-<style scoped>
+<style>
   .avatar-uploader .el-upload {
     border: 1px dashed #4ad939;
     border-radius: 6px;
@@ -47,9 +72,11 @@
     position: relative;
     overflow: hidden;
   }
+
   .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
+
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
@@ -58,6 +85,7 @@
     line-height: 178px;
     text-align: center;
   }
+
   .avatar {
     width: 178px;
     height: 178px;

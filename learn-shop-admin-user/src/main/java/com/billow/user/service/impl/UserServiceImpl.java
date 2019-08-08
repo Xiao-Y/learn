@@ -221,4 +221,15 @@ public class UserServiceImpl implements UserService {
         oldUser.setPassword(bCryptPasswordEncoder.encode(oldUser.getPassword()));
         userDao.save(ConvertUtils.convert(oldUser, UserPo.class));
     }
+
+    @Override
+    public Boolean updateUserIcon(UserVo userVo) {
+        UserPo userPo = userDao.findByUsercode(userVo.getUsercode());
+        if (userPo == null) {
+            return false;
+        }
+        userPo.setIconUrl(userVo.getIconUrl());
+        userDao.save(userPo);
+        return true;
+    }
 }

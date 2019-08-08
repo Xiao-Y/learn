@@ -7,7 +7,10 @@
         <skinComp class="right-menu-item"></skinComp>
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            <img class="user-logo" src="../../static/img/img.jpg"> {{username}}
+            <img v-if="!currenUserInfo.iconUrl || currenUserInfo.iconUrl == ''" class="user-logo"
+                 src="../../static/img/img.jpg">
+            <img v-if="currenUserInfo.iconUrl != ''" class="user-logo" :src="currenUserInfo.iconUrl">
+            {{username}}
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="changeIcon">更换头像</el-dropdown-item>
@@ -45,15 +48,17 @@
       </div>
     </el-dialog>
     <!-- 修改密码 dialog end -->
-    <!-- 修改头像 dialog end -->
+
+    <!-- 修改头像 dialog start -->
     <el-dialog title="修改头像"
                width="240px"
                center
                :visible.sync="dialogIconVisible"
                :close-on-click-modal="false"
                @close="cancledialog">
-      <user-icon-change></user-icon-change>
+      <user-icon-change :imageUrl="currenUserInfo.iconUrl" @uploadSuccess="uploadSuccess"></user-icon-change>
     </el-dialog>
+    <!-- 修改头像 dialog start -->
   </div>
 </template>
 <script>
@@ -64,7 +69,8 @@
   } from '../../utils/cookieUtils' // 验权
   import {
     GetUserInfo,
-    EditPassWord
+    EditPassWord,
+    UpdateUserIcon
   } from '../../api/user/userMag' // 用户相关
 
   import UserIconChange from '../../views/user/components/UserIconChange.vue';
@@ -75,7 +81,26 @@
       skinComp,
       UserIconChange
     },
-    created() {
+    data() {
+      return {
+        name: 'billow',
+        selectRole: [], // 角色下拉列表
+        dialogFormVisible: false, //修改密码 dialog
+        dialogIconVisible: false, //修改头像 dialog
+        userInfo: {
+          oldPassWord: null,
+          newPassWord: null
+        },
+        currenUserInfo: {
+          iconUrl:''
+        },
+        rulesFormEditPass: {
+          oldPassWord: [{required: true, message: '请输入旧密码', trigger: 'blur'}],
+          newPassWord: [{validator: this.validatePass, trigger: 'blur'}],
+          checkPassWord: [{validator: this.validateCheckPass, trigger: 'blur'}]
+        }
+      }
+    }, created() {
       // 加载用户 Header主题
       if (localStorage.getItem('themeValue')) {
         switch (localStorage.getItem('themeValue')) {
@@ -99,23 +124,9 @@
       } else {
         this.primaryColor = '#21baa9';
       }
-    },
-    data() {
-      return {
-        name: 'billow',
-        selectRole: [], // 角色下拉列表
-        dialogFormVisible: false, //修改密码 dialog
-        dialogIconVisible: false, //修改头像 dialog
-        userInfo: {
-          oldPassWord: null,
-          newPassWord: null
-        },
-        rulesFormEditPass: {
-          oldPassWord: [{required: true, message: '请输入旧密码', trigger: 'blur'}],
-          newPassWord: [{validator: this.validatePass, trigger: 'blur'}],
-          checkPassWord: [{validator: this.validateCheckPass, trigger: 'blur'}]
-        }
-      }
+
+      //获取用户信息
+      this.getUserInfo();
     },
     computed: {
       username() {
@@ -146,13 +157,13 @@
       handleCommand(command) {
         switch (command) {
           case 'loginout': // 退出
-            localStorage.removeItem('ms_username')
+            localStorage.removeItem('ms_username');
             this.$store.dispatch('LogOutActions').then(() => {
               location.reload() // 为了重新实例化vue-router对象 避免bug
-            })
+            });
             break;
           case 'userInfo': // 用户信息
-            this.getUserInfo();
+            this.editUserInfo();
             break;
           case 'editPassword': // 修改密码
             this.dialogFormVisible = true;
@@ -164,20 +175,27 @@
             break;
         }
       },
-      // 获取用户信息
-      getUserInfo() {
-        if (!getAccessToken()) {
+      // 编辑用户信息
+      editUserInfo() {
+        if (!this.currenUserInfo.id) {
           this.$message.error("用户没有登陆，请先登陆");
           return;
         }
+        this.$router.push({
+          name: 'userUserEdit',
+          query: {
+            optionType: 'myUserInfo',
+            userEdit: JSON.stringify(this.currenUserInfo)
+          }
+        });
+      },
+      // 获取用户信息
+      getUserInfo() {
+        if (!getAccessToken()) {
+          return;
+        }
         GetUserInfo().then(res => {
-          this.$router.push({
-            name: 'userUserEdit',
-            query: {
-              optionType: 'myUserInfo',
-              userEdit: JSON.stringify(res.resData)
-            }
-          });
+          this.currenUserInfo = res.resData;
         });
       },
       validatePass(rule, value, callback) {
@@ -198,6 +216,17 @@
         } else {
           callback();
         }
+      },
+      uploadSuccess(file) {
+        console.info(file);
+        this.currenUserInfo.iconUrl = file.fileUrl;
+        UpdateUserIcon(this.currenUserInfo).then(res => {
+          if (!res.resData) {
+            this.$message.error('用户不存在，请重新登陆!');
+            return;
+          }
+          this.dialogIconVisible = false;
+        });
       }
     }
   }

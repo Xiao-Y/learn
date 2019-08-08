@@ -2,7 +2,9 @@ package com.billow.user.pojo.vo;
 
 
 import com.billow.user.pojo.po.UserPo;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +16,21 @@ import java.util.List;
  * @create 2018-05-16 10:29
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class UserVo extends UserPo {
 
-    // 角色id集合
+    @ApiModelProperty("角色id集合")
     List<Long> roleIds = new ArrayList<>();
-    // 旧密码
+
+    @ApiModelProperty("旧密码")
     private String oldPassWord;
-    // 新密码
+
+    @ApiModelProperty("新密码")
     private String newPassWord;
-    // 级联地址
+
+    @ApiModelProperty("级联地址")
     private String[] casAddress = new String[0];
-    // 显示用
+
+    @ApiModelProperty("显示用")
     private String showAddress;
 }

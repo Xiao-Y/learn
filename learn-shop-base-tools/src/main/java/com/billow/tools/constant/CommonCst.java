@@ -9,16 +9,17 @@ package com.billow.tools.constant;
 public class CommonCst {
 
     /**
-     * 所有用户session集合Key(全局)
+     * 上传文件的类型-markdown
+     *
+     * @author LiuYongTao
+     * @date 2019/8/8 10:15
      */
-    public static final String SESSION_MAP = "sessionMap";
-
+    public static final String UPLOAD_TYPE_MARKDOWN = "markdown";
     /**
-     * 当前登陆用户的sessionKey
+     * 上传文件的类型-userIcon
+     *
+     * @author LiuYongTao
+     * @date 2019/8/8 10:15
      */
-    public static final String CURRENT_USER = "currentUser";
-    /**
-     * 购物车商品数量sessionKey
-     */
-    public static final String SHOPPING_COUNT = "shoppingCount";
+    public static final String UPLOAD_TYPE_USER_ICON = "userIcon";
 }

@@ -94,4 +94,14 @@ public interface UserService {
      * @date 2019/8/3 18:24
      */
     void editPassWord(UserVo oldUser);
+
+    /**
+     * 修改用户头像
+     *
+     * @param userVo
+     * @return java.lang.Boolean
+     * @author LiuYongTao
+     * @date 2019/8/8 14:27
+     */
+    Boolean updateUserIcon(UserVo userVo);
 }

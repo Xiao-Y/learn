@@ -19,5 +19,22 @@ public class CommonProperties {
      * @author LiuYongTao
      * @date 2019/7/26 17:24
      */
-    private String wordResourceDandler;
+    private String imageMapping;
+
+
+    /**
+     * markdown 图片保存的路径
+     *
+     * @author LiuYongTao
+     * @date 2019/8/8 10:21
+     */
+    private String markdownImgPath;
+
+    /**
+     * userIcon 图片保存的路径
+     *
+     * @author LiuYongTao
+     * @date 2019/8/8 10:21
+     */
+    private String userIconImgPath;
 }

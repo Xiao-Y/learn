@@ -99,4 +99,12 @@ public class UserApi extends BaseApi {
         userService.editPassWord(oldUser);
         return baseResponse;
     }
+
+    @ApiOperation("修改用户头像")
+    @PutMapping("/updateUserIcon")
+    public Boolean updateUserIcon(@RequestBody UserVo userVo) {
+        String currentUserCode = userTools.getCurrentUserCode();
+        userVo.setUsercode(currentUserCode);
+        return userService.updateUserIcon(userVo);
+    }
 }
