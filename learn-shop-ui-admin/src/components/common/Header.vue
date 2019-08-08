@@ -219,6 +219,7 @@
         }
       },
       uploadSuccess(file) {
+        // 头像url
         this.currenUserInfo.iconUrl = file.fileUrl;
         // 头像保存的位置
         this.currenUserInfo.filePath = file.filePath;

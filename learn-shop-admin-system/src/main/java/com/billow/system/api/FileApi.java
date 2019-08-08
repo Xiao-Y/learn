@@ -63,7 +63,7 @@ public class FileApi extends BaseApi {
     }
 
     @ApiOperation("批量上传文件")
-    @PostMapping("/batchUpload/{uploadType}/{fileName}")
+    @PostMapping(value = {"/batchUpload/{uploadType}", "/batchUpload/{uploadType}/{fileName}"})
     public List<FileHandleEx> batchUpload(@PathVariable("uploadType") String uploadType,
                                           @PathVariable(value = "fileName", required = false) String newFileName,
                                           @RequestParam("file") List<MultipartFile> files) throws IOException {

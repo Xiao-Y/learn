@@ -46,8 +46,6 @@
     methods: {
       // 图片上传成功后
       handleSuccess(res, file) {
-        console.info("res", res);
-        console.info("file", file);
         this.newImageUrl = URL.createObjectURL(file.raw);
         this.$emit("uploadSuccess", res.resData);
       }
