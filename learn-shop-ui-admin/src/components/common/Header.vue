@@ -218,6 +218,7 @@
           callback();
         }
       },
+      // 头像上传成功后回调
       uploadSuccess(file) {
         // 头像url
         this.currenUserInfo.iconUrl = file.fileUrl;
