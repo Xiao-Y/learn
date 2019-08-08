@@ -8,6 +8,7 @@ import com.billow.system.properties.CustomProperties;
 import com.billow.tools.constant.CommonCst;
 import com.billow.tools.generator.SequenceUtil;
 import com.billow.tools.utlis.StringUtils;
+import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +46,10 @@ public class FileApi extends BaseApi {
     private CustomProperties customProperties;
 
     @ApiOperation("单个上传文件")
-    @PostMapping("/singleUpload/{uploadType}")
-    public FileHandleEx singleUpload(@PathVariable("uploadType") String uploadType, @RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping(value = {"/singleUpload/{uploadType}", "/singleUpload/{uploadType}/{fileName}"})
+    public FileHandleEx singleUpload(@PathVariable("uploadType") String uploadType,
+                                     @PathVariable(value = "fileName", required = false) String newFileName,
+                                     @RequestParam("file") MultipartFile file) throws IOException {
         // 获取上下文
         String contextPath = this.getContextPath();
         // 静态文件映射
@@ -55,13 +58,15 @@ public class FileApi extends BaseApi {
         Map<String, String> map = this.getFileBasePath(uploadType);
         String path = map.get(PATH);
         // 保存图片
-        FileHandleEx ex = this.saveFile(imageMapping, contextPath, map, file, 0);
+        FileHandleEx ex = this.saveFile(imageMapping, contextPath, map, file, newFileName, 0);
         return ex;
     }
 
     @ApiOperation("批量上传文件")
-    @PostMapping("/batchUpload/{uploadType}")
-    public List<FileHandleEx> batchUpload(@PathVariable("uploadType") String uploadType, @RequestParam("file") List<MultipartFile> files) throws IOException {
+    @PostMapping("/batchUpload/{uploadType}/{fileName}")
+    public List<FileHandleEx> batchUpload(@PathVariable("uploadType") String uploadType,
+                                          @PathVariable(value = "fileName", required = false) String newFileName,
+                                          @RequestParam("file") List<MultipartFile> files) throws IOException {
         List<FileHandleEx> list = new ArrayList<>();
         // 获取上下文
         String contextPath = this.getContextPath();
@@ -72,7 +77,7 @@ public class FileApi extends BaseApi {
         String path = map.get(PATH);
         // 保存图片
         for (int i = 0; i < files.size(); i++) {
-            FileHandleEx ex = this.saveFile(imageMapping, contextPath, map, files.get(i), i);
+            FileHandleEx ex = this.saveFile(imageMapping, contextPath, map, files.get(i), newFileName, i);
         }
         return list;
     }
@@ -93,27 +98,33 @@ public class FileApi extends BaseApi {
     /**
      * 保存文件
      *
-     * @param path 文件保存的位置
-     * @param file 需要保存的文件
-     * @return void
-     * @author LiuYongTao
-     * @date 2019/8/8 10:33
+     * @param imageMapping 文件映射位置
+     * @param contextPath  上下文
+     * @param map
+     * @param file         需要保存的文件
+     * @param newFileName  新文件名
+     * @param index
+     * @return
+     * @throws IOException
      */
-    private FileHandleEx saveFile(String imageMapping, String contextPath, Map<String, String> map, MultipartFile file, int index) throws IOException {
+    private FileHandleEx saveFile(String imageMapping, String contextPath, Map<String, String> map, MultipartFile file, String newFileName, int index) throws IOException {
         String sub = ".";
         // 获取文件后缀
         String last = StringUtils.substringAfterLast(file.getOriginalFilename(), sub);
         // 新文件名
-        String newFileName = SequenceUtil.createSequenceBySuffix(sub + last);
-
-        String filePath = map.get(PATH) + "/" + newFileName;
+        if (ToolsUtils.isEmpty(newFileName) || "undefined".equals(newFileName) || "null".equals(newFileName)) {
+            newFileName = SequenceUtil.createSequence();
+        }
+        String newFile = newFileName + sub + last;
+        String filePath = map.get(PATH) + "/" + newFile;
         FileUtil.writeFromStream(file.getInputStream(), filePath);
 
         FileHandleEx ex = new FileHandleEx();
         ex.setPos(index);
         // admin-system/displayImag/markdown/****.jpg
-        ex.setFileUrl(contextPath + imageMapping + map.get(FILE_PATH) + "/" + newFileName);
+        ex.setFileUrl(contextPath + imageMapping + map.get(FILE_PATH) + "/" + newFile);
         ex.setNewFileName(newFileName);
+        ex.setFilePath(filePath);
         return ex;
     }
 

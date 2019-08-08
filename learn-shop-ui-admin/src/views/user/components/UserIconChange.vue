@@ -2,7 +2,7 @@
   <div id="app">
     <el-upload
       class="avatar-uploader"
-      action="admin-system/fileApi/singleUpload/userIcon"
+      :action="action"
       :multiple="false"
       :show-file-list="false"
       :on-success="handleSuccess"
@@ -18,18 +18,30 @@
 <script>
   export default {
     props: {
+      // 原图片url
       imageUrl: {
+        type: String,
+        default: ''
+      },
+      // 新文件名
+      newFileName: {
         type: String,
         default: ''
       }
     },
     data() {
       return {
-        newImageUrl: ''
+        newImageUrl: '',
+        action: ''
       }
     },
     created() {
       this.newImageUrl = this.imageUrl;
+      this.action = "admin-system/fileApi/singleUpload/userIcon";
+      if (this.newFileName != '') {
+        this.action = this.action + "/" + this.newFileName;
+      }
+
     },
     methods: {
       // 图片上传成功后

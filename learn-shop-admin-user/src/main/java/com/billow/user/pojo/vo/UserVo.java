@@ -33,4 +33,10 @@ public class UserVo extends UserPo {
 
     @ApiModelProperty("显示用")
     private String showAddress;
+
+    @ApiModelProperty("文件保存的完整路径（用户的头像）")
+    private String filePath;
+
+    @ApiModelProperty("文件名（不带后缀）")
+    private String newFileName;
 }

@@ -56,7 +56,8 @@
                :visible.sync="dialogIconVisible"
                :close-on-click-modal="false"
                @close="cancledialog">
-      <user-icon-change :imageUrl="currenUserInfo.iconUrl" @uploadSuccess="uploadSuccess"></user-icon-change>
+      <user-icon-change :imageUrl="currenUserInfo.iconUrl"
+                        @uploadSuccess="uploadSuccess"></user-icon-change>
     </el-dialog>
     <!-- 修改头像 dialog start -->
   </div>
@@ -92,7 +93,7 @@
           newPassWord: null
         },
         currenUserInfo: {
-          iconUrl:''
+          iconUrl: ''
         },
         rulesFormEditPass: {
           oldPassWord: [{required: true, message: '请输入旧密码', trigger: 'blur'}],
@@ -218,13 +219,14 @@
         }
       },
       uploadSuccess(file) {
-        console.info(file);
         this.currenUserInfo.iconUrl = file.fileUrl;
+        // 头像保存的位置
+        this.currenUserInfo.filePath = file.filePath;
+        // 头像文件名（不带后缀）
+        this.currenUserInfo.newFileName = file.newFileName;
         UpdateUserIcon(this.currenUserInfo).then(res => {
-          if (!res.resData) {
-            this.$message.error('用户不存在，请重新登陆!');
-            return;
-          }
+          // 头像url
+          this.currenUserInfo.iconUrl = res.resData.iconUrl;
           this.dialogIconVisible = false;
         });
       }

@@ -1,5 +1,6 @@
 package com.billow.user.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import com.billow.common.jpa.DefaultSpec;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -223,13 +225,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Boolean updateUserIcon(UserVo userVo) {
-        UserPo userPo = userDao.findByUsercode(userVo.getUsercode());
+        String usercode = userVo.getUsercode();
+        UserPo userPo = userDao.findByUsercode(usercode);
         if (userPo == null) {
             return false;
         }
-        userPo.setIconUrl(userVo.getIconUrl());
+        // 修改文件名为用户code
+        String filePath = userVo.getFilePath();
+        if (ToolsUtils.isNotEmpty(filePath)) {
+            // 修改头像名为用户名
+            FileUtil.rename(new File(filePath), usercode, true, true);
+        }
+
+        String iconUrl = userVo.getIconUrl().replaceFirst(userVo.getNewFileName(), usercode);
+        userPo.setIconUrl(iconUrl);
         userDao.save(userPo);
+        userVo.setIconUrl(iconUrl);
         return true;
     }
 }

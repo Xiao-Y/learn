@@ -102,9 +102,10 @@ public class UserApi extends BaseApi {
 
     @ApiOperation("修改用户头像")
     @PutMapping("/updateUserIcon")
-    public Boolean updateUserIcon(@RequestBody UserVo userVo) {
+    public UserVo updateUserIcon(@RequestBody UserVo userVo) {
         String currentUserCode = userTools.getCurrentUserCode();
         userVo.setUsercode(currentUserCode);
-        return userService.updateUserIcon(userVo);
+        userService.updateUserIcon(userVo);
+        return userVo;
     }
 }
