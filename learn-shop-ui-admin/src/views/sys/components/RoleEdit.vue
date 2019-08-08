@@ -44,59 +44,9 @@
           </el-collapse-item>
 
           <el-collapse-item title="权限信息" name="2">
-            <el-input v-model="filterPermission" size="mini" placeholder="输入关键字进行过滤"/>
-            <el-table
-              ref="tableDataTemp"
-              :data="tableDataTemp"
-              border
-              height="500"
-              @selection-change="handleSelectionChange"
-              row-key="id">
-              <el-table-column type="selection" width="35" prop="checked" reserve-selection></el-table-column>
-              <el-table-column label="权限名称" prop="permissionName" width="300"></el-table-column>
-              <el-table-column label="授权链接" prop="url"></el-table-column>
-              <el-table-column type="expand" label="详细" width="50">
-                <template slot-scope="scope">
-                  <el-form label-position="left" inline class="demo-table-expand">
-                    <el-form-item label="创建人：">
-                      <span>{{ scope.row.creatorCode }}</span>
-                    </el-form-item>
-                    <el-form-item label="更新人：">
-                      <span>{{ scope.row.updaterCode }}</span>
-                    </el-form-item>
-                    <el-form-item label="创建时间：">
-                      <el-date-picker type="datetime" v-model="scope.row.createTime" readonly></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="更新时间：">
-                      <el-date-picker type="datetime" v-model="scope.row.updateTime" readonly></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="是否有效：">
-                      <el-switch
-                        v-model="scope.row.validInd"
-                        active-text="有效"
-                        inactive-text="无效"
-                        disabled
-                      ></el-switch>
-                    </el-form-item>
-                    <el-form-item label="权限CODE：">
-                      <span>{{ scope.row.permissionCode }}</span>
-                    </el-form-item>
-                    <el-form-item label="系统模块：">
-                      <custom-select v-model="scope.row.systemModules"
-                                     :datasource="systemModuleSelect"
-                                     :value-key="scope.row.permissionCode"
-                                     placeholder="请选择系统模块"
-                                     disabled
-                                     multiple>
-                      </custom-select>
-                    </el-form-item>
-                    <el-form-item label="权限描述：">
-                      <span>{{ scope.row.descritpion }}</span>
-                    </el-form-item>
-                  </el-form>
-                </template>
-              </el-table-column>
-            </el-table>
+            <!-- 权限列表 -->
+            <permission-list :role-edit-hide="true" :role-id="roleInfo.id"
+                             @checkedArray="handleSelectionChange"></permission-list>
           </el-collapse-item>
         </el-collapse>
       </el-col>
@@ -108,22 +58,20 @@
 </template>
 
 <script>
-  import {
-    LoadDataPermissionListAll
-  } from "../../../api/sys/permissionMag";
   import {findMenus} from "../../../api/sys/menuMag";
-  import {LoadSysDataDictionary} from "../../../api/sys/DataDictionaryMag";
   import {
-    LoadDataPermissionIdList,
     LoadDataMenuIdList,
     SaveRole,
     CheckRoleCode
   } from "../../../api/sys/roleMag";
   import CustomSelect from '../../../components/common/CustomSelect.vue';
 
+  import PermissionList from '../../../views/sys/PermissionList.vue';
+
   export default {
     components: {
-      CustomSelect
+      CustomSelect,
+      PermissionList
     },
     data() {
       return {
@@ -134,23 +82,18 @@
           label: "title"
         },
         roleInfo: {
-          id: "",
+          id: null,
           roleName: "",
           roleCode: "",
           descritpion: "",
           validInd: true
         },
-        tableData: [], // 原始权限列表
-        tableDataTemp: [], // 过滤后的权限列表
-        filterPermission: "", // 权限过滤
-        systemModuleSelect: [], // 系统模块下拉列表
         permissionChecked: [], // 被选种的权限ID
-        loadPermissionCheckedFlag: false,// 是否初始化加载被选种的权限
         menus: [], // 菜单树数据源
         filterMenu: "", // 菜单树过滤
         menuChecked: [], // 被选种的菜单ID
         loadMenuCheckedFlag: false, // 是否初始化加载被选种的菜单
-        rulesForm:{
+        rulesForm: {
           roleName: [{required: true, message: '请输入角色名', trigger: 'blur'}],
           roleCode: [{required: true, message: '请输入角色CODE', trigger: 'blur'},
             {validator: this.checkRoleCode, trigger: 'blur'}]
@@ -166,10 +109,6 @@
       }
       // 初始化菜单树
       this.findMenus();
-      // 获取权限列表数据
-      this.LoadDataPermissionListAll();
-      // 加载系统模块的下拉
-      this.LoadSysDataDictionary("SystemModule");
     },
     methods: {
       // 收集选种和半选种的所有菜单id
@@ -180,24 +119,6 @@
         this.menuChecked = this.menuChecked.concat(
           this.$refs.menuTree.getHalfCheckedNodes().map(m => m.id)
         );
-      },
-      //加载下拉列表
-      LoadSysDataDictionary(fieldType) {
-        LoadSysDataDictionary(fieldType).then(res => {
-          this.systemModuleSelect = res.resData;
-        });
-      },
-      // 获取权限列表数据
-      LoadDataPermissionListAll() {
-        LoadDataPermissionListAll(this.queryFilter).then(res => {
-          this.tableData = res.resData;
-          this.tableDataTemp = this.tableData;
-          // 如果是修改的时候
-          if (this.roleInfo.id) {
-            // 加载权限选种状态
-            this.loadPermissionCheckedFlag = true;
-          }
-        });
       },
       //获取所有菜单
       findMenus() {
@@ -247,11 +168,12 @@
       onReset(roleInfo) {
         this.$refs[roleInfo].resetFields();
       },
-      handleSelectionChange(row) {
-        this.permissionChecked = row.map(item => item.id);
+      handleSelectionChange(checkData) {
+        this.permissionChecked = checkData;
+        // console.info("parent this.permissionChecked", this.permissionChecked);
       },
       // 校验角色CODE 是否重复
-      checkRoleCode(rule, value, callback){
+      checkRoleCode(rule, value, callback) {
         if (this.oldRoleCode != '' && this.oldRoleCode === value) {
           callback();
           return true;
@@ -269,35 +191,6 @@
       //通过 :filter-node-method,找到过滤方法
       filterMenu(val) {
         this.$refs.menuTree.filter(val);
-      },
-      filterPermission(val) {
-        this.tableDataTemp = this.tableData.filter(data => {
-          if (!val) {
-            return true;
-          }
-          if (data.permissionName) {
-            return data.permissionName.includes(val);
-          } else if (data.permissionCode) {
-            return data.permissionCode.includes(val);
-          } else if (data.url.toLowerCase()) {
-            return data.url.includes(val.toLowerCase());
-          }
-        });
-      },
-      loadPermissionCheckedFlag(val) {
-        if (!val) {
-          return;
-        }
-        // 加载权限选种状态
-        LoadDataPermissionIdList(this.roleInfo.id).then(res => {
-          // 设置选种状态
-          this.tableData.forEach(item => {
-            this.$refs.tableDataTemp.toggleRowSelection(
-              item,
-              res.resData.includes(item.id)
-            );
-          });
-        });
       },
       loadMenuCheckedFlag(val) {
         if (!val) {

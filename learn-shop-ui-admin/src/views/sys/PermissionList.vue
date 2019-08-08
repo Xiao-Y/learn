@@ -29,10 +29,16 @@
       </el-collapse>
     </el-row>
     <!-- 查询按钮组 -->
-    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
+    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"
+                        :show-add="!roleEditHide"></button-group-query>
     <el-row>
       <template>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table border style="width: 100%" ref="permissionListRef"
+                  :data="tableData"
+                  @selection-change="handleSelectionChange"
+                  row-key="id">
+          <el-table-column type="selection" width="35" prop="checked" reserve-selection
+                           v-if="roleEditHide"></el-table-column>
           <el-table-column label="权限名称" prop="permissionName" width="210"></el-table-column>
           <el-table-column label="授权链接" prop="url"></el-table-column>
           <el-table-column label="权限描述" prop="descritpion"></el-table-column>
@@ -68,7 +74,7 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="200">
+          <el-table-column fixed="right" label="操作" width="200" v-if="!roleEditHide">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
               <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
@@ -93,6 +99,9 @@
     ProhibitPermissionById
   } from "../../api/sys/permissionMag";
   import {
+    LoadDataPermissionIdList
+  } from "../../api/sys/roleMag";
+  import {
     LoadSysDataDictionary
   } from "../../api/sys/DataDictionaryMag";
   // ===== component start
@@ -110,6 +119,18 @@
       ButtonGroupQuery,
       CustomPage
     },
+    props: {
+      // 是否是从角色修改页面过来
+      roleEditHide: {
+        type: Boolean,
+        default: false
+      },
+      // 角色的 id
+      roleId: {
+        type: Number,
+        default: null
+      },
+    },
     data() {
       return {
         queryFilter: {
@@ -126,6 +147,7 @@
         },
         tableData: [], // 列表数据源
         systemModuleSelect: [],// 系统模块的下拉数据源
+        loadPermissionCheckedFlag: 0, // 监控列表数据加载完成后，加载选种
       }
     },
     created() {
@@ -156,6 +178,10 @@
           this.tableData = data.content;
           this.queryFilter.recordCount = data.totalElements;
           this.queryFilter.totalPages = data.totalPages;
+          if (this.roleId) {
+            // 加载权限选种状态
+            this.loadPermissionCheckedFlag++;
+          }
         });
       },
       // 添加权限
@@ -181,7 +207,7 @@
       handleDelete(row, index) {
         var _this = this;
 
-        VueUtils.confirmDel(row.url,()=>{
+        VueUtils.confirmDel(row.url, () => {
           DeletePermissionById(row.id).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
@@ -201,6 +227,27 @@
               type: 'success',
               message: '禁用成功!'
             });
+          });
+        });
+      },
+      // 选种后，发送通知
+      handleSelectionChange(row) {
+        this.$emit("checkedArray", row.map(item => item.id));
+      },
+    },
+    watch: {
+      loadPermissionCheckedFlag(val) {
+        if (val === 0 || this.roleId == null) {
+          return;
+        }
+        // 加载权限选种状态
+        LoadDataPermissionIdList(this.roleId).then(res => {
+          // 设置选种状态
+          this.tableData.forEach(item => {
+            this.$refs.permissionListRef.toggleRowSelection(
+              item,
+              res.resData.includes(item.id)
+            );
           });
         });
       }
