@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -232,17 +233,8 @@ public class UserServiceImpl implements UserService {
         if (userPo == null) {
             return false;
         }
-        // 修改文件名为用户code
-        String filePath = userVo.getFilePath();
-        if (ToolsUtils.isNotEmpty(filePath)) {
-            // 修改头像名为用户名
-            FileUtil.rename(new File(filePath), usercode, true, true);
-        }
-
-        String iconUrl = userVo.getIconUrl().replaceFirst(userVo.getNewFileName(), usercode);
-        userPo.setIconUrl(iconUrl);
+        userPo.setIconUrl(userVo.getIconUrl());
         userDao.save(userPo);
-        userVo.setIconUrl(iconUrl);
         return true;
     }
 }

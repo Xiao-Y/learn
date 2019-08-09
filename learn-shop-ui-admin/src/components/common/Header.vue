@@ -7,9 +7,7 @@
         <skinComp class="right-menu-item"></skinComp>
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            <img v-if="!currenUserInfo.iconUrl || currenUserInfo.iconUrl == ''" class="user-logo"
-                 src="../../static/img/img.jpg">
-            <img v-if="currenUserInfo.iconUrl != ''" class="user-logo" :src="currenUserInfo.iconUrl">
+            <img class="user-logo" :src="currenUserInfo.iconUrl ? currenUserInfo.iconUrl : require('../../static/img/img.jpg')">
             {{username}}
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -57,6 +55,7 @@
                :close-on-click-modal="false"
                @close="cancledialog">
       <user-icon-change :imageUrl="currenUserInfo.iconUrl"
+                        :newFileName="currenUserInfo.usercode"
                         @uploadSuccess="uploadSuccess"></user-icon-change>
     </el-dialog>
     <!-- 修改头像 dialog start -->
@@ -93,13 +92,13 @@
           newPassWord: null
         },
         currenUserInfo: {
-          iconUrl: ''
+          iconUrl: null
         },
         rulesFormEditPass: {
           oldPassWord: [{required: true, message: '请输入旧密码', trigger: 'blur'}],
           newPassWord: [{validator: this.validatePass, trigger: 'blur'}],
           checkPassWord: [{validator: this.validateCheckPass, trigger: 'blur'}]
-        }
+        },
       }
     }, created() {
       // 加载用户 Header主题
@@ -227,9 +226,12 @@
         // 头像文件名（不带后缀）
         this.currenUserInfo.newFileName = file.newFileName;
         UpdateUserIcon(this.currenUserInfo).then(res => {
-          // 头像url
-          this.currenUserInfo.iconUrl = res.resData.iconUrl;
           this.dialogIconVisible = false;
+          // 头像url,强制头像更新
+          this.currenUserInfo.iconUrl = '';
+          this.$nextTick(() => {
+            this.currenUserInfo.iconUrl =file.fileUrl;
+          });
         });
       }
     }
