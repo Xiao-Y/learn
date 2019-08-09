@@ -9,9 +9,6 @@ swagger: #接口注解文档
       url: https://github.com/Xiao-Y/learn
       email: lyongtao123@126.com #api开发者
 
-server:
-  port: 9999
-
 eureka:
   client:
     serviceUrl:
@@ -69,7 +66,7 @@ auth:
       client-id: app
       client-secret: app
       grant-type: password
-      access-token-uri: http://127.0.0.1:9999/oauth/token
+      access-token-uri: http://127.0.0.1:${server.port}/oauth/token
 
 logging.level.org.springframework.security: DEBUG
 #logging.level.org.springframework: DEBUG
