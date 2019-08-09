@@ -9,16 +9,6 @@ swagger: #接口注解文档
       url: https://github.com/Xiao-Y/learn
       email: lyongtao123@126.com #api开发者
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://119.23.27.78:8761/eureka/ #注册中心地址
-  instance:
-    hostname: ${spring.cloud.client.ipAddress}
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html # api文档页面
-
 spring:
   application:
       name: learn-shop-public-auth
@@ -27,36 +17,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-  datasource:
-    max-pool-prepared-statement-per-connection-size: 20
-    min-idle: 5
-    time-between-eviction-runs-millis: 20000
-    max-active: 20
-    test-while-idle: true
-    validation-query: SELECT 1 FROM DUAL
-    filters: stat,wall,slf4j #开启Druid的监控统计功能，mergeStat代替stat表示sql合并,wall表示防御SQL注入攻击
-    type: com.alibaba.druid.pool.DruidDataSource
-    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-    max-wait: 60000
-    url: jdbc:mysql://119.23.27.78:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false
-    test-on-borrow: false
-    password: ali-root
-    pool-prepared-statements: true
-    min-evictable-idle-time-millis: 300000
-    initial-size: 5
-    driver-class-name: com.mysql.jdbc.Driver
-    test-on-return: false
-    username: root
-  redis:
-    host: 119.23.27.78
-    port: 6379
-    password: requirepass12344321
-    timeout: 5000
-#    pool:
-#      maxActive: 10
-#      max-wait: -1
-#      max-idle: 5
-#      min-idle: 0
 
 auth:
   security:
@@ -70,15 +30,3 @@ auth:
 
 logging.level.org.springframework.security: DEBUG
 #logging.level.org.springframework: DEBUG
-
-#security:
-#  oauth2:
-#    client:
-#      client-id: webapp
-#      client-secret: webapp
-#      user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
-#      access-token-uri: http://127.0.0.1:9999/oauth/token
-#    resource:
-#      jwt:
-#        key-uri: http://127.0.0.1:9999/oauth/token_key
-#      user-info-uri: http://127.0.0.1:9999/user #获取用户信息的地址
