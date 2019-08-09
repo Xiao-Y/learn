@@ -8,10 +8,6 @@ var RequestUtils = {
    * @constructor
    */
   get: function (url) {
-    // return request({
-    //   url: url,
-    //   method: 'get'
-    // })
     return new Promise((resolve, reject) => {
       request({
         url: url,
@@ -57,11 +53,17 @@ var RequestUtils = {
    * @constructor
    */
   post: function (url, data) {
-    return request({
-      url: url,
-      method: 'post',
-      data: data
-    });
+    return new Promise((resolve, reject) => {
+      request({
+        url: url,
+        method: 'post',
+        data: data
+      }).then(res => {
+        resolve(res);
+      }).catch(res => {
+        reject(res)
+      })
+    })
   },
   upload: function (url, formdata) {
     return request({

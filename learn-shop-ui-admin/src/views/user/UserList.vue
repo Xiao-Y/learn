@@ -122,6 +122,7 @@
   import CustomPage from '../../components/common/CustomPage.vue';
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
+  import pageMixins from "../../utils/pageMixins";
 
   export default {
     components: {
@@ -130,14 +131,10 @@
       ButtonGroupQuery,
       CustomPage
     },
+    mixins:[pageMixins],
     data() {
       return {
         queryFilter: {
-          // 分页数据
-          pageNo: null, // 当前页码
-          recordCount: null, // 总记录数
-          pageSize: null, //每页要显示的记录数
-          totalPages: null, // 总页数
           // 查询条件
           username: null,
           usercode: null
@@ -156,7 +153,9 @@
     },
     created() {
       // 加载角色下拉列表
-      this.loadSelectRoleList();
+      LoadSelectRoleList().then(res => {
+        this.selectRole = res.resData;
+      });
       // 加载性别下拉列表
       LoadUserDataDictionary('sexType').then(res => {
         this.selectSex = res.resData;
@@ -236,12 +235,6 @@
               message: '删除成功!'
             });
           });
-        });
-      },
-      // 加载角色信息的下拉列表
-      loadSelectRoleList() {
-        LoadSelectRoleList().then(res => {
-          this.selectRole = res.resData;
         });
       },
       // 打开折叠栏

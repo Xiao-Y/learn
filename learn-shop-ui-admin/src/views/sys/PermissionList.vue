@@ -111,6 +111,7 @@
   import CustomPage from '../../components/common/CustomPage.vue'
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
+  import pageMixins from "../../utils/pageMixins";
 
   export default {
     components: {
@@ -131,14 +132,10 @@
         default: null
       },
     },
+    mixins:[pageMixins],
     data() {
       return {
         queryFilter: {
-          // 分页数据
-          pageNo: null, // 当前页码
-          recordCount: null, // 总记录数
-          pageSize: null, //每页要显示的记录数
-          totalPages: null, // 总页数
           // 查询条件
           permissionName: null,
           permissionCode: null,

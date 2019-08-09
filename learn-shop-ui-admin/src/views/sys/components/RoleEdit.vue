@@ -122,10 +122,9 @@
       },
       //获取所有菜单
       findMenus() {
-        var _this = this;
         // 加载菜单
         findMenus().then(res => {
-          _this.menus = res.resData;
+          this.menus = res.resData;
           // 如果是修改的时候
           if (this.roleInfo.id) {
             // 加载菜单选种状态
