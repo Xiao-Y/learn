@@ -49,7 +49,7 @@ custom:
     write-cache: true #菜单写入缓存中
   common:
     linux:
-      base-file-path: /uploadfile # base 路径
+      base-file-path: /usr/app/uploadfile # base 路径
     win:
       base-file-path: D:/uploadfile # base 路径
     image-mapping: /displayImag # 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/
