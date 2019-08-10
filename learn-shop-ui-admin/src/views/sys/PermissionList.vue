@@ -35,7 +35,8 @@
       <template>
         <el-table border style="width: 100%" ref="permissionListRef"
                   :data="tableData"
-                  @selection-change="handleSelectionChange"
+                  @select="handleSelect"
+                  @select-all="handleSelectAll"
                   row-key="id">
           <el-table-column type="selection" width="35" prop="checked" reserve-selection
                            v-if="roleEditHide"></el-table-column>
@@ -132,7 +133,7 @@
         default: null
       },
     },
-    mixins:[pageMixins],
+    mixins: [pageMixins],
     data() {
       return {
         queryFilter: {
@@ -145,6 +146,7 @@
         tableData: [], // 列表数据源
         systemModuleSelect: [],// 系统模块的下拉数据源
         loadPermissionCheckedFlag: 0, // 监控列表数据加载完成后，加载选种
+        permissionChecked: null, // 被选种的权限ID
       }
     },
     created() {
@@ -227,26 +229,66 @@
           });
         });
       },
-      // 选种后，发送通知
-      handleSelectionChange(row) {
-        this.$emit("checkedArray", row.map(item => item.id));
+      // 勾选单个后，发送通知
+      handleSelect(selection, row) {
+        var checkedIds = selection.map(item => item.id);
+        if(checkedIds.includes(row.id)){
+          this.permissionChecked.push(row.id);
+        }else{
+          var index = this.permissionChecked.indexOf(row.id);
+          if (index > -1) {
+            this.permissionChecked.splice(index, 1);
+          }
+        }
+        this.$emit("checkedArray", this.permissionChecked, "handleSelect");
       },
+      // 勾选全部后
+      handleSelectAll(selection) {
+        if(selection.length > 0){
+          selection.forEach(item=>{
+            if(!this.permissionChecked.includes(item.id)){
+              this.permissionChecked.push(item.id);
+            }
+          });
+        }else{
+          this.tableData.forEach(item => {
+            var index = this.permissionChecked.indexOf(item.id);
+            if (index > -1) {
+              this.permissionChecked.splice(index, 1);
+            }
+          });
+        }
+        this.$emit("checkedArray", this.permissionChecked, "handleSelectAll");
+      }
     },
     watch: {
       loadPermissionCheckedFlag(val) {
         if (val === 0 || this.roleId == null) {
           return;
         }
-        // 加载权限选种状态
-        LoadDataPermissionIdList(this.roleId).then(res => {
+        // 第一次加载时
+        if (this.permissionChecked == null) {
+          // 加载权限选种状态
+          LoadDataPermissionIdList(this.roleId).then(res => {
+            // 设置选种状态
+            this.tableData.forEach(item => {
+              this.$refs.permissionListRef.toggleRowSelection(
+                item,
+                res.resData.includes(item.id)
+              );
+            });
+            this.permissionChecked = res.resData;
+            this.$emit("checkedArray", res.resData, "wacth1");
+          });
+        } else {
           // 设置选种状态
           this.tableData.forEach(item => {
             this.$refs.permissionListRef.toggleRowSelection(
               item,
-              res.resData.includes(item.id)
+              this.permissionChecked.includes(item.id)
             );
           });
-        });
+        }
       }
     }
   }

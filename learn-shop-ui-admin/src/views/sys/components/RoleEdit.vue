@@ -167,9 +167,9 @@
       onReset(roleInfo) {
         this.$refs[roleInfo].resetFields();
       },
-      handleSelectionChange(checkData) {
+      handleSelectionChange(checkData,type) {
         this.permissionChecked = checkData;
-        // console.info("parent this.permissionChecked", this.permissionChecked);
+        // console.info(type + " parent this.permissionChecked", this.permissionChecked);
       },
       // 校验角色CODE 是否重复
       checkRoleCode(rule, value, callback) {
