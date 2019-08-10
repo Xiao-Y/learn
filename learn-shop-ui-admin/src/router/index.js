@@ -72,6 +72,10 @@ export const asyncRouterMap = [{
     name: 'sysPermissionEdit',
     path: 'permissionList/permissionEdit',
     component: resolve => require(['../views/sys/components/PermissionEdit.vue'], resolve)
+  }, {
+    name: 'sysCacheMagIndex',
+    path: 'sysCacheMagIndex/index',
+    component: resolve => require(['../views/sys/CacheMag.vue'], resolve)
   }]
 }, {
   path: '/job',

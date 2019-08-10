@@ -7,6 +7,7 @@ import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * @author liuyongtao
  * @create 2019-07-29 13:59
  */
+@Slf4j
 @Component
 public class InitDictionary implements IStartLoading {
 
@@ -34,6 +36,7 @@ public class InitDictionary implements IStartLoading {
 
     @Override
     public boolean init() {
+        log.info("======== start init Dictionary....");
         List<DataDictionaryPo> dataDictionaryPos = dataDictionaryDao.findAll();
         // 以 systemModule 分组
         Map<String, List<DataDictionaryPo>> collect = dataDictionaryPos.stream()
@@ -46,6 +49,7 @@ public class InitDictionary implements IStartLoading {
 
             redisUtils.setObj(key + systemModule, ConvertUtils.convertIgnoreBase(pos, DataDictionaryPo.class));
         }
+        log.info("======== end init Dictionary....");
         return true;
     }
 }

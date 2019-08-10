@@ -55,7 +55,9 @@ public class MenuServiceImpl implements MenuService {
         // 先从 redis 中查询
         if (customProperties.getMenu().isReadCache()) {
             List<MenuEx> pMenuExs = commonRoleMenuRedis.findMenusByRoles(roleVos);
-            return pMenuExs;
+            if(ToolsUtils.isNotEmpty(pMenuExs)){
+                return pMenuExs;
+            }
         }
 
         Set<Long> menuIds = new HashSet<>();

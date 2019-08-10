@@ -90,7 +90,9 @@ service.interceptors.response.use(response => {
       if(error.response.status === 412){
         message = '用户信息修改，需要重新登陆';
       }
-
+      if(error.response.status === 403){
+        message = '没有权限执行该操作！';
+      }
     }
     Message({
       message: message,

@@ -7,6 +7,7 @@ import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.PermissionService;
 import com.billow.tools.constant.RedisCst;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.Set;
  * @author liuyongtao
  * @create 2019-05-23 19:34
  */
+@Slf4j
 @Component
 public class InitRolePermission implements IStartLoading {
 
@@ -31,11 +33,13 @@ public class InitRolePermission implements IStartLoading {
 
     @Override
     public boolean init() {
+        log.info("======== start init Role Permission....");
         List<RolePo> rolePos = roleDao.findAll();
         for (RolePo rolePo : rolePos) {
             Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
             redisUtils.setObj(RedisCst.ROLE_PERMISSION_KEY + rolePo.getRoleCode(), permissionPos);
         }
+        log.info("======== end init Role Permission....");
         return true;
     }
 }

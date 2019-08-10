@@ -8,6 +8,7 @@ import com.billow.system.pojo.po.RolePo;
 import com.billow.system.properties.CustomProperties;
 import com.billow.system.service.MenuService;
 import com.billow.tools.constant.RedisCst;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import java.util.Set;
  * @author liuyongtao
  * @create 2019-05-23 19:34
  */
+@Slf4j
 @Component
 public class InitRoleMenu implements IStartLoading {
 
@@ -34,7 +36,9 @@ public class InitRoleMenu implements IStartLoading {
 
     @Override
     public boolean init() {
+        log.info("======== start init Role Menu....");
         if (!customProperties.getMenu().isWriteCache()) {
+            log.info("======== end not init Role Menu....");
             return true;
         }
         List<RolePo> rolePos = roleDao.findAll();
@@ -42,6 +46,7 @@ public class InitRoleMenu implements IStartLoading {
             Set<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
             redisUtils.setObj(RedisCst.ROLE_MENU_KEY + rolePo.getRoleCode(), menuExs);
         }
+        log.info("======== end init Role Menu....");
         return true;
     }
 }
