@@ -1,9 +1,9 @@
 <template>
 
   <div class="login-wrap">
-<!--    <div class="head-log">
-      <img class="company-log" src="../../static/images/common/company-log.png" alt="公司log"/>
-    </div> -->
+    <!--    <div class="head-log">
+          <img class="company-log" src="../../static/images/common/company-log.png" alt="公司log"/>
+        </div> -->
     <div class="ms-title">权限管理系统</div>
     <div class="ms-login">
       <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0px" class="demo-ruleForm">
@@ -18,6 +18,7 @@
         <!-- <el-checkbox v-model="checked">记住密码</el-checkbox> -->
         <div class="login-btn">
           <el-button @click.native.prevent="handleLogin">登录</el-button>
+          <el-button style="background-color:red" @click.native.prevent="dataRecovery">恢复数据</el-button>
         </div>
       </el-form>
     </div>
@@ -26,6 +27,10 @@
 </template>
 
 <script>
+
+  import {
+    DataRecovery
+  } from "../../api/login";
 
   export default {
     data() {
@@ -72,7 +77,7 @@
               this.loading = false
 //               alert('登录成功')
               localStorage.setItem('ms_username', this.loginForm.username)
-              this.$router.push({name:'homeIndex'})
+              this.$router.push({name: 'homeIndex'})
             }).catch(() => {
               this.loading = false
             })
@@ -81,6 +86,12 @@
             return false
           }
         })
+      },
+      // 数据恢复
+      dataRecovery() {
+        DataRecovery().then(res => {
+          this.$message.success(res.resMsg);
+        });
       }
     }
   }
@@ -129,7 +140,7 @@
   }
 
   .login-btn button {
-    width: 100%;
+    width: 40%;
     height: 36px;
     color: #FFFFFF;
     background-color: #00d1b2;

@@ -47,7 +47,8 @@ zuul:
       path: /admin-system/**
       strip-prefix: false
 #      serviceId: learn-shop-admin-system
-      url: http://119.23.27.78:8811
+#      url: http://119.23.27.78:8811
+      url: http://127.0.0.1:8811
     #用户相关
     admin-user:
       path: /admin-user/**

@@ -58,9 +58,9 @@
       ,
       // 图片上传前校验
       beforeAvatarUpload(file) {
-        const isJPG = true;//file.type === 'image/jpeg';
+        // const isJPG = true;//file.type === 'image/jpeg';
         const isPNG = file.type === 'image/png';
-        if (!isJPG && !isPNG) {
+        if (!isPNG) {
           this.$message.error('上传头像图片只能是 PNG 格式!');
         }
 
@@ -69,7 +69,7 @@
           this.$message.error('上传头像图片大小不能超过 1MB!');
         }
 
-        return (isJPG || isPNG) && isLt2M;
+        return (isPNG) && isLt2M;
       }
     }
   }

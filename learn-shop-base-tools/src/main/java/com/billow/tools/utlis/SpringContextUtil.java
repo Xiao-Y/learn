@@ -3,6 +3,7 @@ package com.billow.tools.utlis;
 import com.billow.tools.exception.NullBeanException;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -23,6 +24,13 @@ public class SpringContextUtil {
      */
     public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SpringContextUtil.applicationContext = applicationContext;
+    }
+
+    /**
+     * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量
+     */
+    public static ApplicationContext getApplicationContext() throws BeansException {
+        return applicationContext;
     }
 
     /**
@@ -90,5 +98,18 @@ public class SpringContextUtil {
             throw new NullBeanException(clazz);
         }
         return (T) bean;
+    }
+
+    /**
+     * 获取指定资源
+     *
+     * @param name
+     * @return org.springframework.core.io.Resource
+     * @author billow
+     * @date 2019/8/11 12:05
+     */
+    public static Resource getResource(String name) {
+        checkApplicationContext();
+        return applicationContext.getResource(name);
     }
 }

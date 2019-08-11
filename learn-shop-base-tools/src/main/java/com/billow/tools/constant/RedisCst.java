@@ -31,6 +31,13 @@ public class RedisCst {
      *
      */
     public final static String COMM_CITY = "COMM:CITY";
+    /**
+     * 数据恢复
+     *
+     * @author billow
+     * @date 2019/8/11 13:53
+     */
+    public final static String COMM_DATA_RECOVERY = "COMM:DataRecovery";
 
     /**
      * 黑名单-修改过用户信息：BLACKLIST:EDITUSER:xxx

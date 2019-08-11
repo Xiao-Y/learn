@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-row>
+      <el-button type="danger" @click="dataRecovery">数据恢复</el-button>
       <el-button type="danger" @click="loadDataCacheAll">初始化所有缓存</el-button>
     </el-row>
     <el-row>
@@ -17,6 +18,10 @@
     LoadDataCacheByType
   } from "../../api/sys/CacheMag";
 
+  import {
+    DataRecovery
+  } from "../../api/login";
+
   export default {
     data() {
       return {}
@@ -30,6 +35,12 @@
       loadDataCacheByType(cacheType) {
         LoadDataCacheByType(cacheType).then(res => {
           this.$message.success("初始化正在执行...");
+        });
+      },
+      // 数据恢复
+      dataRecovery() {
+        DataRecovery().then(res => {
+          this.$message.success(res.resMsg);
         });
       }
     }
