@@ -37,11 +37,11 @@ public class DemoController {
     }
 
     @GetMapping("/test/getTest2/{id}")
-    public String getTest2(@PathVariable(required = false) String id) throws Exception {
+    public Authentication getTest2(@PathVariable(required = false) String id, Authentication authentication) throws Exception {
         if ("1".equals(id)) {
             throw new RuntimeException("发生了异常：99999DDDDDD");
         }
-        return "test2";
+        return authentication;
     }
 
     @GetMapping("/test/getTest3")
@@ -53,5 +53,10 @@ public class DemoController {
     @GetMapping("/test/getTest4")
     public void getTest4() {
         System.out.println("void");
+    }
+
+    @GetMapping("/user")
+    public Authentication getUser(Authentication authentication) {
+        return authentication;
     }
 }

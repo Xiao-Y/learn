@@ -25,7 +25,7 @@ import java.io.IOException;
  * @apiNote: 统一返回异常数据格式
  */
 @Slf4j
-@ControllerAdvice
+//@ControllerAdvice
 @ResponseBody
 public class GlobalExceptionHandler {
 

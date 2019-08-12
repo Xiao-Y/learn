@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @apiNote: 统一返回数据格式
  */
 @Slf4j
-@ControllerAdvice
+//@ControllerAdvice
 public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

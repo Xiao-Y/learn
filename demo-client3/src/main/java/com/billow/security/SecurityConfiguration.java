@@ -12,22 +12,23 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableOAuth2Sso
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private ResourceServerTokenServices resourceServerTokenServices;
+//    @Autowired
+//    private ResourceServerTokenServices resourceServerTokenServices;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/api/**")
-                .access("@permissionService.hasPermission(request,authentication)");
+//                .antMatchers("/api/**")
+//                .access("@permissionService.hasPermission(request,authentication)");
+                .antMatchers("/**")
+                .authenticated();
 
-        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(resourceServerTokenServices);
-        http.addFilterBefore(jwtAuthenticationFilter, SecurityContextPersistenceFilter.class);
+//        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(resourceServerTokenServices);
+//        http.addFilterBefore(jwtAuthenticationFilter, SecurityContextPersistenceFilter.class);
     }
 }
