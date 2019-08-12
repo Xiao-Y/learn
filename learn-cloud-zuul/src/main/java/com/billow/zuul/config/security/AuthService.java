@@ -54,18 +54,16 @@ public class AuthService {
         Object principal = authentication.getPrincipal();
         logger.info("===>>> principal:{}", principal);
 
-//        String contextPath = request.getContextPath();
-//        logger.info("request.getContextPath:{}", contextPath);
         String targetURI = request.getRequestURI();
         logger.info("<<<=== targetURI:{}", targetURI);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         if (authorities != null && authorities.size() > 0) {
             // 获取 redis 中数据字典的数据
-            Map<Long, String> dictionaryMap = redisUtils.getArray(DICTIONARY + DictionaryType.SYS_MODEL_OCDE_SYSTEM_MODULE, DataDictionaryVo.class)
+            Map<String, String> dictionaryMap = redisUtils.getArray(DICTIONARY + DictionaryType.SYS_MODEL_OCDE_SYSTEM_MODULE, DataDictionaryVo.class)
                     .stream()
                     .filter(f -> DictionaryType.SYS_FIELD_OCDE_SYSTEM_MODULE.equals(f.getFieldType()))
-                    .collect(Collectors.toMap(DataDictionaryVo::getId, DataDictionaryVo::getFieldDisplay));
+                    .collect(Collectors.toMap(DataDictionaryVo::getFieldValue, DataDictionaryVo::getFieldDisplay));
             for (GrantedAuthority authority : authorities) {
                 // 查询 redis 中的角色权限
                 List<PermissionVo> permissionVos = redisUtils.getArray(PERMISSION + authority.getAuthority(), PermissionVo.class);
@@ -80,7 +78,7 @@ public class AuthService {
                     } else {
                         String[] split = permissionVo.getSystemModule().split(",");
                         for (String s : split) {
-                            String sourceURI = "/" + dictionaryMap.get(new Long(s)) + permissionVo.getUrl();
+                            String sourceURI = "/" + dictionaryMap.get(s) + permissionVo.getUrl();
                             logger.info("===>>> sourceURI:{}", sourceURI);
                             if (antPathMatcher.match(sourceURI, targetURI)) {
                                 logger.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);

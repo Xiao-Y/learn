@@ -64,7 +64,9 @@ zuul:
       serviceId: learn-shop-core-product
     public-job:
       path: /public-job/**
+      strip-prefix: false
       serviceId: learn-shop-public-job
+
 # Logging configuration
 logging:
   level: DEBUG
