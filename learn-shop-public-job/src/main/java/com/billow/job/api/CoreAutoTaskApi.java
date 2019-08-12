@@ -81,7 +81,7 @@ public class CoreAutoTaskApi extends BaseApi {
 
     @ApiOperation("保存自动任务")
     @PostMapping("/saveAutoTask")
-    public ScheduleJobVo saveAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
+    public ScheduleJobVo saveAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
         taskManagerService.saveAutoTask(scheduleJobVo);
         return scheduleJobVo;
     }

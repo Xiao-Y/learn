@@ -54,7 +54,7 @@
 </template>
 
 <script>
-  import {SavePermission, UpdatePermission} from "../../../api/sys/permissionMag";
+  import {SaveAutoTask} from "../../../api/job/jobMag";
 
   import CustomSelect from '../../../components/common/CustomSelect.vue';
 
@@ -83,27 +83,14 @@
     methods: {
       onSubmit() {
         var _this = this;
-        if (_this.optionType === 'edit') {
-          UpdatePermission(_this.autoTaskInfo).then(res => {
-            _this.$message({
-              type: 'success',
-              message: '更新成功!'
-            });
-            //传递一个map，updatePermission 是 key，resData 是 value
-            this.$bus.emit('autoTaskInfo', res.resData);
-            _this.$router.back(-1);
+        SaveAutoTask(_this.autoTaskInfo).then(res => {
+          _this.$message({
+            type: 'success',
+            message: '保存成功!'
           });
-        } else { // add
-          SavePermission(_this.autoTaskInfo).then(res => {
-            _this.$message({
-              type: 'success',
-              message: '保存成功!'
-            });
-            //传递一个map，addPermission 是 key，resData 是 value
-            this.$bus.emit('autoTaskInfo', res.resData);
-            _this.$router.back(-1);
-          });
-        }
+          this.$bus.emit('autoTaskInfo', res.resData);
+          _this.$router.back(-1);
+        });
       },
       onReturn() {
         //调用router回退页面

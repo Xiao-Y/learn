@@ -45,7 +45,7 @@ public interface ScheduleJobService {
 
     void deleteByPrimaryKey(ScheduleJobVo dto);
 
-    void insert(ScheduleJobVo scheduleJobVo);
+    void save(ScheduleJobVo scheduleJobVo);
 
     /**
      * 根据条件查询自动任务

@@ -7,6 +7,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
  * @ EnableEurekaClient 开启客户端发现
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @ EnableHystrixDashboard 开启熔断监控仪表盘
  * @ EnableCircuitBreaker 开启断路器
  */
+@EnableJpaAuditing
 @SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients

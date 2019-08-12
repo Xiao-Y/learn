@@ -55,7 +55,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(ScheduleJobVo dto) {
-        scheduleJobDao.save(dto);
+        this.save(dto);
     }
 
     @Override
@@ -66,8 +66,10 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void insert(ScheduleJobVo dto) {
-        scheduleJobDao.save(dto);
+    public void save(ScheduleJobVo dto) {
+        ScheduleJobPo scheduleJobPo = ConvertUtils.convert(dto, ScheduleJobPo.class);
+        ScheduleJobPo save = scheduleJobDao.save(scheduleJobPo);
+        ConvertUtils.convert(save, dto);
     }
 
     @Override

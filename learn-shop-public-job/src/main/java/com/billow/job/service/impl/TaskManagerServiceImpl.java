@@ -61,16 +61,13 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     public void saveAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
         Long jobId = scheduleJobVo.getId();
         String jobStatus = scheduleJobVo.getJobStatus();
+        scheduleJobService.save(scheduleJobVo);
         if (null == jobId) {// 表示添加
-            scheduleJobVo.setUpdateTime(new Date());
-            scheduleJobVo.setCreateTime(new Date());
-            scheduleJobService.insert(scheduleJobVo);
             if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
                 quartzManager.addJob(scheduleJobVo);
             }
         } else {// 表示更新
-            scheduleJobVo.setUpdateTime(new Date());
-            scheduleJobService.updateByPrimaryKeySelective(scheduleJobVo);
+            // 查询是否有计划任务
             JobDetail jobDetail = quartzManager.getJobDetail(scheduleJobVo.getJobName(), scheduleJobVo.getJobGroup());
             if (jobDetail != null) {
                 if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {

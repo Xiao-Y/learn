@@ -84,6 +84,9 @@ export const asyncRouterMap = [{
   children: [{
     name: 'jobAutoTaskListIndex',
     path: 'autoTaskList/index',
+    meta: {
+      keepAlive: true
+    },
     component: resolve => require(['../views/job/AutoTaskList.vue'], resolve)
   }, {
     name: 'jobAutoTaskEdit',

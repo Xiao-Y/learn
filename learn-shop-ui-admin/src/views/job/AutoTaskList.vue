@@ -37,14 +37,16 @@
         <!--        <el-table-column label="ID" prop="id" width="40"></el-table-column>-->
         <el-table-column label="任务分组" prop="jobGroup">
           <template slot-scope="scope">
-            <custom-select v-model="autoTaskInfo.jobGroup"
+            <custom-select v-model="scope.row.jobGroup"
                            systemModule="adminSystem"
                            fieldType="systemModule"
-                           placeholder="请选择任务分组">
+                           placeholder="请选择任务分组"
+                           disabled>
             </custom-select>
           </template>
         </el-table-column>
         <el-table-column label="任务名称" prop="jobName"></el-table-column>
+        <el-table-column label="Cron表达式" prop="cronExpression"></el-table-column>
         <el-table-column label="状态" prop="jobStatus" width="80">
           <template slot-scope="scope">
             <el-tag
@@ -56,9 +58,18 @@
         <el-table-column label="任务描述" prop="description"></el-table-column>
         <el-table-column type="expand" label="详细" width="50">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="Cron表达式">
-                <span>{{ props.row.cronExpression }}</span>
+            <el-form label-position="left" inline class="demo-table-expand" label-width="80px">
+              <el-form-item label="创建人">
+                <span>{{ props.row.creatorCode }}</span>
+              </el-form-item>
+              <el-form-item label="更新人">
+                <span>{{ props.row.updaterCode }}</span>
+              </el-form-item>
+              <el-form-item label="创建时间">
+                <el-date-picker type="datetime" v-model="props.row.createTime" readonly></el-date-picker>
+              </el-form-item>
+              <el-form-item label="更新时间">
+                <el-date-picker type="datetime" v-model="props.row.updateTime" readonly></el-date-picker>
               </el-form-item>
               <el-form-item label="BeanClass">
                 <span>{{ props.row.beanClass }}</span>
@@ -80,22 +91,10 @@
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
                            inactive-value="0"></el-switch>
               </el-form-item>
-              <el-form-item label="创建时间">
-                <span>{{ props.row.createTime }}</span>
-              </el-form-item>
-              <el-form-item label="更新时间">
-                <span>{{ props.row.updateTime }}</span>
-              </el-form-item>
-              <el-form-item label="创建人">
-                <span>{{ props.row.creatorCode }}</span>
-              </el-form-item>
-              <el-form-item label="更新人">
-                <span>{{ props.row.updaterCode }}</span>
-              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="130">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <!--  操作按钮组 -->
             <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
@@ -122,6 +121,8 @@
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue';
+  import CustomSelect from '../../components/common/CustomSelect.vue';
+
   // ===== 工具类 start
   // import VueUtils from "../../utils/vueUtils";
   import pageMixins from "../../utils/pageMixins";
@@ -130,7 +131,8 @@
     components: {
       ButtonGroupOption,
       ButtonGroupQuery,
-      CustomPage
+      CustomPage,
+      CustomSelect
     },
     mixins: [pageMixins],
     data() {
@@ -200,12 +202,18 @@
         });
       },
       handleEdit(row, index) {
-        console.log(index, row);
-        console.log("handleEdit");
+        this.$router.push({
+          name: 'jobAutoTaskEdit',
+          query: {
+            optionType: 'edit',
+            autoTaskEdit: JSON.stringify(row),
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+          }
+        });
       },
       handleDelete(row, index) {
         console.log(index, row);
-        console.log(handleDelete);
+        console.log("handleDelete");
       }
     },
     filters: {
