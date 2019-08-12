@@ -27,7 +27,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,7 +35,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,13 +60,13 @@ public class SecurityEndpoint {
     private SecurityProperties securityProperties;
 
     /**
-     * 认证页面
+     * 认页面
      *
      * @return ModelAndView
      */
     @GetMapping("/authentication/require")
     public ModelAndView require() {
-        return new ModelAndView("/login/index.html");
+        return new ModelAndView("/index.html");
     }
 
     /**
@@ -79,7 +77,7 @@ public class SecurityEndpoint {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/user")
+    @GetMapping("/user")
     public Authentication user(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
@@ -134,7 +132,7 @@ public class SecurityEndpoint {
 
             // String url = "http://127.0.0.1:9999/oauth/token?grant_type=password&username=admin&password=123456&client_id=app&client_secret=app";
             String url = "%s?grant_type=%s&username=%s&password=%s&client_id=%s&client_secret=%s";
-            String trgUrl = String.format(url, accessTokenUri, grantType, username, password, clientId,clientSecret);
+            String trgUrl = String.format(url, accessTokenUri, grantType, username, password, clientId, clientSecret);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("User-Agent", "curl/7.58.0");
@@ -144,8 +142,8 @@ public class SecurityEndpoint {
             ResponseEntity<OAuth2AccessToken> accessTokenEntity = restTemplate.postForEntity(trgUrl, entity, OAuth2AccessToken.class);
             OAuth2AccessToken oAuth2AccessToken = accessTokenEntity.getBody();
 
-            logger.info("token:{}", oAuth2AccessToken.getValue());
-            logger.info("accessToken:{}", oAuth2AccessToken.getRefreshToken().getValue());
+            logger.info("accessToken:{}", oAuth2AccessToken.getValue());
+            logger.info("refreshToken:{}", oAuth2AccessToken.getRefreshToken().getValue());
 
             Map<String, String> result = new HashMap<>();
             result.put("accessToken", oAuth2AccessToken.getValue());

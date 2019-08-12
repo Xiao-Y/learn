@@ -25,21 +25,6 @@ spring:
     bus:
       trace:
         enabled: true #开启消息跟踪
-#security:
-#  sessions: NEVER
-#  oauth2:
-#    client:
-#      client-id: learn-shop-admin-system
-#      client-secret: learn-shop-admin-system
-#      user-authorization-uri: ${custom.security.auth-server}/oauth/authorize #请求认证的地址
-#      access-token-uri: ${custom.security.auth-server}/oauth/token #请求令牌的地址
-#    resource:
-#      #      jwt:
-#      #        key-uri: ${custom.security.auth-server}/oauth/token_key #解析jwt令牌所需要密钥的地址
-#      user-info-uri: ${custom.security.auth-server}/user #获取用户信息的地址
-#      prefer-token-info: false
-#  basic:
-#    enabled: false
 
 custom:
 #  security:
