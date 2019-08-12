@@ -1,12 +1,9 @@
-import request from '@/utils/request'
+import requestUtils from '../../utils/requestUtils'
+
+const baseUrl = 'public-job';
 
 /**
  * 请自动任务列表
  */
-export function LoadDataJobList(scheduleJobFilter) {
-  return request({
-    url: 'public-job/coreAutoTask/findAutoTask',
-    method: 'post',
-    data: Object.assign(scheduleJobFilter)
-  })
-}
+export const LoadDataJobList = scheduleJobFilter => requestUtils.post(baseUrl + '/coreAutoTaskApi/findAutoTask', Object.assign(scheduleJobFilter));
+

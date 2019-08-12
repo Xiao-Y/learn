@@ -7,8 +7,9 @@ import com.billow.job.service.ScheduleJobLogService;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 /**
  * 自动任务日志
@@ -23,7 +24,7 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
     private ScheduleJobLogDao scheduleJobLogDao;
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void insert(ScheduleJobLogVo logDto) {
         ScheduleJobLogPo scheduleJobLogPo = ConvertUtils.convert(logDto, ScheduleJobLogPo.class);
         scheduleJobLogDao.save(scheduleJobLogPo);

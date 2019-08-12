@@ -1,7 +1,6 @@
 package com.billow.job.service;
 
 
-import com.billow.job.pojo.ex.JsonResult;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import org.quartz.JobExecutionContext;
 
@@ -54,7 +53,7 @@ public interface TaskManagerService {
      * @param scheduleJobVo
      * @return
      */
-    JsonResult checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception;
+    ScheduleJobVo checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception;
 
     /**
      * 立即执行自动任务

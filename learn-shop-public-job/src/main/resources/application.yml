@@ -3,13 +3,20 @@ swagger: #接口注解文档
   service:
     name: ${spring.application.name} #api名称
     version: 1.0
-    developer: lyongtao123@126.com #api开发者
-    description: learn-shop 提供的Restful APIs #api描述
+    description: 警告：此API仅用于测试，禁止任何商业用途，否则一切后果自行承担！！！ #api描述
+    contact:
+      developer: billow #api开发者
+      url: https://github.com/Xiao-Y/learn
+      email: lyongtao123@126.com #api开发者
+
+server:
+  context-path: /public-job
+
 spring:
   application:
     name: learn-shop-public-job #客户端名称
-  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
+#  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
+#    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
@@ -22,4 +29,5 @@ spring:
 #    org.hibernate: INFO
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 #    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
+
 #    com.itmuch.youran.persistence: ERROR

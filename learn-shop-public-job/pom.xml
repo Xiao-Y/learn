@@ -22,6 +22,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-aop</artifactId>
+        </dependency>
         <!-- 自动任务 -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -30,6 +34,10 @@
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
     <build>

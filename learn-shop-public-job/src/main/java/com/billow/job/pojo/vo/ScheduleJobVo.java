@@ -2,52 +2,24 @@ package com.billow.job.pojo.vo;
 
 
 import com.billow.job.pojo.po.ScheduleJobPo;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
-
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class ScheduleJobVo extends ScheduleJobPo implements Serializable {
 
     private static final long serialVersionUID = -549836299658030636L;
 
-    //运行状态
+    @ApiModelProperty("运行状态")
     private String statusName;
-    //任务是否有状态,0-无（单线程），1-有（多线程）
+
+    @ApiModelProperty("任务是否有状态,0-无（单线程），1-有（多线程）")
     private String isConcurrentName;
 
-    /**
-     * 运行状态
-     *
-     * @return
-     */
-    public String getStatusName() {
-        return statusName;
-    }
-
-    /**
-     * 运行状态
-     *
-     * @param statusName
-     */
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
-    }
-
-    /**
-     * 任务是否有状态,0-无（单线程），1-有（多线程）
-     *
-     * @return
-     */
-    public String getIsConcurrentName() {
-        return isConcurrentName;
-    }
-
-    /**
-     * 任务是否有状态,0-无（单线程），1-有（多线程）
-     *
-     * @param isConcurrentName
-     */
-    public void setIsConcurrentName(String isConcurrentName) {
-        this.isConcurrentName = isConcurrentName;
-    }
+    @ApiModelProperty("验自动任务添加、修改时参数的设置")
+    private String message;
 }

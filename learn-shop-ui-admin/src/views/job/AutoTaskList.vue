@@ -1,12 +1,7 @@
 <template>
   <div>
-    <div class="crumbs">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item><i class="el-icon-setting"></i>自动任务</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
-    <template>
-      <el-collapse v-model="activeNames">
+    <el-row>
+      <el-collapse value="1">
         <el-collapse-item name="1">
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
@@ -30,20 +25,38 @@
             <el-form-item label="执行方法" prop="methodName">
               <el-input v-model="queryFilter.methodName" placeholder="请输入内容"></el-input>
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onQuery" icon="el-icon-search">查询</el-button>
-              <el-button type="danger" @click="resetForm('queryFilter')" icon="el-icon-close">重置</el-button>
-            </el-form-item>
           </el-form>
         </el-collapse-item>
       </el-collapse>
+    </el-row>
+    <!-- 查询按钮组 -->
+    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
+
+    <el-row>
       <el-table :data="tableData" border style="width:100%">
-        <el-table-column type="expand">
+        <!--        <el-table-column label="ID" prop="id" width="40"></el-table-column>-->
+        <el-table-column label="任务分组" prop="jobGroup">
+          <template slot-scope="scope">
+            <custom-select v-model="autoTaskInfo.jobGroup"
+                           systemModule="adminSystem"
+                           fieldType="systemModule"
+                           placeholder="请选择任务分组">
+            </custom-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="任务名称" prop="jobName"></el-table-column>
+        <el-table-column label="状态" prop="jobStatus" width="80">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.jobStatus === '1' ? 'success' : 'danger'"
+              disable-transitions>{{scope.row.jobStatus | jobStatusName}}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="任务描述" prop="description"></el-table-column>
+        <el-table-column type="expand" label="详细" width="50">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="任务分组">
-                <span>{{ props.row.jobGroup }}</span>
-              </el-form-item>
               <el-form-item label="Cron表达式">
                 <span>{{ props.row.cronExpression }}</span>
               </el-form-item>
@@ -56,9 +69,9 @@
               <el-form-item label="执行方法">
                 <span>{{ props.row.methodName }}</span>
               </el-form-item>
-              <el-form-item label="任务是否有状态">
-                <el-switch v-model="props.row.isConcurrent" active-text="串行" active-value="1" inactive-text="并行"
-                           inactive-value="0" disabled></el-switch>
+              <el-form-item label="串行/并行">
+                <el-switch v-model="props.row.isConcurrent" active-text="串行" active-value="0" inactive-text="并行"
+                           inactive-value="1" disabled></el-switch>
               </el-form-item>
               <el-form-item label="有效状态">
                 <el-switch v-model="props.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
@@ -82,56 +95,44 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="ID" prop="id" width="40"></el-table-column>
-        <el-table-column label="任务分组" prop="jobGroup"></el-table-column>
-        <el-table-column label="任务名称" prop="jobName"></el-table-column>
-        <el-table-column label="状态" prop="jobStatus" width="80">
-          <template slot-scope="scope">
-            <el-tag
-              :type="scope.row.jobStatus === '1' ? 'success' : 'danger'"
-              disable-transitions>{{scope.row.jobStatus | jobStatusName}}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="描述" prop="description"></el-table-column>
         <el-table-column label="操作" width="130">
           <template slot-scope="scope">
-            <el-button
-              icon="el-icon-edit"
-              size="mini"
-              type="warning"
-              @click="handleEdit(scope.$index, scope.row)">
-            </el-button>
-            <el-button
-              icon="el-icon-delete"
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)">
-            </el-button>
+            <!--  操作按钮组 -->
+            <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
+                                 @onEdit="handleEdit(scope.row,scope.$index)"
+                                 @onInd="handleProhibit(scope.row,scope.$index)"
+                                 :disInd="!scope.row.validInd"></button-group-option>
           </template>
         </el-table-column>
       </el-table>
-    </template>
-    <template style="margin-bottom: 20px">
-      <el-pagination
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="queryFilter.pageNo"
-        :page-sizes="[10, 20, 30, 40]"
-        layout="total,sizes, prev, pager, next"
-        :page-size="queryFilter.pageSize"
-        :total="queryFilter.recordCount">
-      </el-pagination>
-    </template>
+    </el-row>
+    <!-- 分页组件  -->
+    <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
   </div>
 </template>
 
 
 <script>
+  // ===== api start
+  import {
+    LoadSysDataDictionary
+  } from "../../api/sys/DataDictionaryMag";
   import {LoadDataJobList} from "../../api/job/jobMag";
+  // ===== component start
+  import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
+  import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
+  import CustomPage from '../../components/common/CustomPage.vue';
+  // ===== 工具类 start
+  // import VueUtils from "../../utils/vueUtils";
+  import pageMixins from "../../utils/pageMixins";
 
   export default {
+    components: {
+      ButtonGroupOption,
+      ButtonGroupQuery,
+      CustomPage
+    },
+    mixins: [pageMixins],
     data() {
       return {
         queryFilter: {
@@ -149,29 +150,33 @@
           methodName: null
         },
         tableData: [],
-        activeNames: ['1']
+        activeNames: ['1'],
+        systemModuleSelect: [],// 系统模块的下拉数据源
       }
     },
+    //每次激活时
+    activated() {
+      // 根据key名获取传递回来的参数，data 就是 map
+      this.$bus.once('autoTaskInfo', function (data) {
+        var index = this.tableData.findIndex(f => f.id === data.id);
+        if (index != -1) { // 更新
+          this.tableData.splice(index, 1, data);
+        } else { // 添加
+          this.tableData.push(data);
+        }
+      }.bind(this));
+    },
     created() {
+      // 加载系统模块的下拉
+      LoadSysDataDictionary('SystemModule').then(res => {
+        this.systemModuleSelect = res.resData;
+      });
       // 请数据殂
-//      this.loadDataJobList();
+      this.loadDataList();
     },
     methods: {
-      // 查询按钮
-      onQuery() {
-        // 从第1页开始
-        this.queryFilter.pageNo = 1;
-        // 请求数据
-        this.loadDataJobList();
-        // 关闭查询折叠栏
-//        this.activeNames = [];
-      },
-      // 清除查询条件
-      resetForm(queryFilter) {
-        this.$refs[queryFilter].resetFields();
-      },
       // 请服务器数据（获取自动任务列表数据）
-      loadDataJobList() {
+      loadDataList() {
         LoadDataJobList(this.queryFilter).then(res => {
           var data = res.resData;
           // 填充数据
@@ -179,25 +184,29 @@
           this.queryFilter.recordCount = data.totalElements;
           this.queryFilter.totalPages = data.totalPages;
         });
+      },
+      handleProhibit(row, index) {
+        console.log(index, row);
+        console.log("handleProhibit");
 
       },
-      // 翻页
-      handleCurrentChange(val) {
-        this.queryFilter.pageNo = val;
-        this.loadDataJobList();
+      handleAdd() {
+        this.$router.push({
+          name: 'jobAutoTaskEdit',
+          query: {
+            optionType: 'add',
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+          }
+        });
       },
-      // 改变页面大小
-      handleSizeChange(val) {
-        this.queryFilter.pageSize = val;
-        this.loadDataJobList();
-      },
-      handleEdit(index, row) {
+      handleEdit(row, index) {
         console.log(index, row);
+        console.log("handleEdit");
       },
-      handleDelete(index, row) {
+      handleDelete(row, index) {
         console.log(index, row);
+        console.log(handleDelete);
       }
-
     },
     filters: {
       jobStatusName(jobStatus) {
@@ -210,12 +219,30 @@
 </script>
 
 <style scoped>
-  .el-row {
-    margin-bottom: 10px;
+  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+  ::-webkit-scrollbar {
+    width: 3px;
+    /*滚动条宽度*/
+    height: 3px;
+    /*滚动条高度*/
   }
 
-  .el-form-item {
-    margin-bottom: 3px;
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    /*滚动条的背景区域的圆角*/
+    background-color: white;
+    /*滚动条的背景颜色*/
+  }
+
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    /*滚动条的圆角*/
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #2e363f;
+    /*滚动条的背景颜色*/
   }
 
   .demo-table-expand {
@@ -223,7 +250,7 @@
   }
 
   .demo-table-expand label {
-    width: 20px;
+    width: 90px;
     color: #99a9bf;
   }
 

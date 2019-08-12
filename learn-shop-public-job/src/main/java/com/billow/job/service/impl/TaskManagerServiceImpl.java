@@ -1,10 +1,8 @@
 package com.billow.job.service.impl;
 
 
-import com.billow.tools.constant.MessageTipsCst;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.core.manager.QuartzManager;
-import com.billow.job.pojo.ex.JsonResult;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.ScheduleJobLogService;
@@ -17,8 +15,9 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
@@ -36,7 +35,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     private ScheduleJobLogService scheduleJobLogService;
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updateJobStatus(ScheduleJobVo dto) throws Exception {
         ScheduleJobVo scheduleJobVo = scheduleJobService.selectByPrimaryKey(dto);
         if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(dto.getJobStatus())) {
@@ -48,7 +47,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deleteAutoTask(Long jobId) throws Exception {
         ScheduleJobVo dto = new ScheduleJobVo();
         dto.setId(jobId);
@@ -58,7 +57,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void saveAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
         Long jobId = scheduleJobVo.getId();
         String jobStatus = scheduleJobVo.getJobStatus();
@@ -88,10 +87,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
-    public JsonResult checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
-        JsonResult json = new JsonResult();
-        json.setType(MessageTipsCst.TYPE_SUCCES);
-        json.setMessage("");
+    public ScheduleJobVo checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
 
         String jobStatus = scheduleJobVo.getJobStatus();
         String cronExpression = scheduleJobVo.getCronExpression();
@@ -103,8 +99,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             try {
                 CronScheduleBuilder.cronSchedule(cronExpression);
             } catch (Exception e) {
-                json.setType(MessageTipsCst.TYPE_ERROR);
-                json.setMessage("cron表达式错误，请查证！");
+                scheduleJobVo.setMessage("cron表达式错误，请查证！");
             }
         } else if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
             // bean能否获取标识
@@ -116,8 +111,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     Object bean = SpringContextUtil.getBean(springId);
                     clazz = bean.getClass();
                 } catch (Exception e) {
-                    json.setType(MessageTipsCst.TYPE_ERROR);
-                    json.setMessage("springId错误，未获取相关Bean！");
+                    scheduleJobVo.setMessage("springId错误，未获取相关Bean！");
                     beanFlag = false;
                 }
             } else {
@@ -125,25 +119,23 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     clazz = Class.forName(beanClass);
                     clazz.newInstance();
                 } catch (Exception e) {
-                    json.setType(MessageTipsCst.TYPE_ERROR);
-                    json.setMessage("beanClass错误，未获取相关类！");
+                    scheduleJobVo.setMessage("beanClass错误，未获取相关类！");
                     beanFlag = false;
                 }
             }
             if (!beanFlag) {
-                return json;
+                return scheduleJobVo;
             }
             // 对执行方法检查（bean可以获取）
             if (ToolsUtils.isNotEmpty(methodName)) {
                 try {
                     clazz.getDeclaredMethod(methodName);
                 } catch (NoSuchMethodException | SecurityException e) {
-                    json.setType(MessageTipsCst.TYPE_ERROR);
-                    json.setMessage("方法：" + methodName + "，未获取！");
+                    scheduleJobVo.setMessage("方法：" + methodName + "，未获取！");
                 }
             }
         }
-        return json;
+        return scheduleJobVo;
     }
 
     @Override

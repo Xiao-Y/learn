@@ -2,6 +2,8 @@ package com.billow.job.pojo.vo;
 
 
 import com.billow.job.pojo.po.ScheduleJobLogPo;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -13,7 +15,8 @@ import java.io.Serializable;
  * @Mail lyongtao123@126.com<br>
  * @date 2017-12-08 15:46:02
  */
-
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class ScheduleJobLogVo extends ScheduleJobLogPo implements Serializable {
 
 }  

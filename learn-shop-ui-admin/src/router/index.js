@@ -38,9 +38,9 @@ export const asyncRouterMap = [{
     name: 'homeIndex',
     component: resolve => require(['../views/home/HomeIndex.vue'], resolve)
   }]
-},{
+}, {
   path: '/sys',
-  name:'sys',
+  name: 'sys',
   component: Home,
   children: [{
     name: 'sysWhiteListIndex',
@@ -53,7 +53,7 @@ export const asyncRouterMap = [{
   }, {
     name: 'sysRoleListIndex',
     path: 'roleList/index',
-    meta:{
+    meta: {
       keepAlive: true
     },
     component: resolve => require(['../views/sys/RoleList.vue'], resolve)
@@ -64,7 +64,7 @@ export const asyncRouterMap = [{
   }, {
     name: 'sysPermissionListIndex',
     path: 'permissionList/index',
-    meta:{
+    meta: {
       keepAlive: true
     },
     component: resolve => require(['../views/sys/PermissionList.vue'], resolve)
@@ -85,6 +85,10 @@ export const asyncRouterMap = [{
     name: 'jobAutoTaskListIndex',
     path: 'autoTaskList/index',
     component: resolve => require(['../views/job/AutoTaskList.vue'], resolve)
+  }, {
+    name: 'jobAutoTaskEdit',
+    path: 'autoTaskList/autoTaskEdit',
+    component: resolve => require(['../views/job/components/AutoTaskEdit.vue'], resolve)
   }]
 }, {
   path: '/pro',
@@ -110,7 +114,7 @@ export const asyncRouterMap = [{
   children: [{
     name: 'userUserListIndex',
     path: 'userList/index',
-    meta:{
+    meta: {
       keepAlive: true
     },
     component: resolve => require(['../views/user/UserList.vue'], resolve)
@@ -119,10 +123,10 @@ export const asyncRouterMap = [{
     path: 'userList/userEdit',
     component: resolve => require(['../views/user/components/UserEdit.vue'], resolve)
   }]
-},{
+}, {
   path: '/edit',
   name: 'edit',
-  component: Home,children: [{
+  component: Home, children: [{
     name: 'editMarkdown',
     path: 'markdown',
     component: resolve => require(['../views/edit/Markdown.vue'], resolve)

@@ -3,16 +3,17 @@ package com.billow.job.service.impl;
 import com.billow.job.dao.ScheduleJobDao;
 import com.billow.job.dao.specification.ScheduleJobSpec;
 import com.billow.job.pojo.po.ScheduleJobPo;
-import com.billow.job.service.ScheduleJobService;
 import com.billow.job.pojo.vo.ScheduleJobVo;
+import com.billow.job.service.ScheduleJobService;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updateJobStatus(ScheduleJobVo vo) {
         ScheduleJobPo jobDto = scheduleJobDao.findOne(vo.getId());
         if (jobDto != null) {
@@ -52,19 +53,19 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(ScheduleJobVo dto) {
         scheduleJobDao.save(dto);
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deleteByPrimaryKey(ScheduleJobVo dto) {
         scheduleJobDao.delete(dto.getId());
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void insert(ScheduleJobVo dto) {
         scheduleJobDao.save(dto);
     }
