@@ -1,5 +1,5 @@
 <template>
-  <section ref="nestRunTime">
+  <section>
     <div>
       <el-row>
         <el-col :span="3">
@@ -20,7 +20,6 @@
 </template>
 <script>
 
-  import {TestRunCron} from "../../../api/job/jobMag";
   import dtime from 'time-formater'
   var parser = require('cron-parser');
 
@@ -49,13 +48,8 @@
             this.rs.push(date);
           }
         } catch (err) {
-          console.log('Error: ' + err.message);
+          console.error('Error: ' + err.message);
         }
-
-        // var cron = this.cron.replace("?", "%3F");
-        // TestRunCron(cron, this.times).then(res => {
-        //   this.rs = res.resData;
-        // });
       }
     }
   }
