@@ -29,13 +29,13 @@
               </el-col>
             </el-row>
           </el-form-item>
-          <el-form-item label="BeanClass" prop="cronExpression">
+          <el-form-item label="BeanClass" prop="beanClass">
             <el-input v-model="autoTaskInfo.beanClass" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="SpringId" prop="cronExpression">
+          <el-form-item label="SpringId" prop="springId">
             <el-input v-model="autoTaskInfo.springId" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="执行方法" prop="cronExpression">
+          <el-form-item label="执行方法" prop="methodName">
             <el-input v-model="autoTaskInfo.methodName" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="串行/并行" prop="isConcurrent">

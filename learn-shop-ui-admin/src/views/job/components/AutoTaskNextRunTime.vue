@@ -36,7 +36,7 @@
     },
     created() {
       // this.initPage();
-
+      // this.testRun();
     },
     methods: {
       testRun() {
