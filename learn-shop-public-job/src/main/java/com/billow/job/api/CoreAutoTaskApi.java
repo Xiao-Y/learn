@@ -5,6 +5,7 @@ import com.billow.job.pojo.po.ScheduleJobPo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.service.TaskManagerService;
+import com.billow.job.util.TaskUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 核心自动任务控制类
@@ -98,5 +101,12 @@ public class CoreAutoTaskApi extends BaseApi {
     public ScheduleJobVo checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
         taskManagerService.checkAutoTask(scheduleJobVo);
         return scheduleJobVo;
+    }
+
+    @ApiOperation("测试Cron表达式下次运行的时间")
+    @GetMapping("/testRunCron/{times}/{cron}")
+    public List<String> testRunCron(@PathVariable("cron") String cron, @PathVariable("times") int times) {
+        logger.info("cron:{}", cron);
+        return TaskUtils.runTime(cron, times);
     }
 }

@@ -7,13 +7,18 @@ import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
+import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 自动任务工具类
@@ -21,12 +26,8 @@ import java.util.Date;
  * @author liuyongtao
  * @date 2017年5月8日 上午10:24:57
  */
+@Slf4j
 public class TaskUtils {
-
-    public final static Logger log = Logger.getLogger(TaskUtils.class);
-
-    @Autowired
-    private ScheduleJobService scheduleJobService;
 
     /**
      * 通过反射调用scheduleJob中定义的方法
@@ -85,9 +86,42 @@ public class TaskUtils {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    log.error(e);
+                    log.error(e.getMessage());
                 }
             }
         }
+    }
+
+    /**
+     * cron 表达式计划运行时间
+     *
+     * @param cron  表达式
+     * @param times 运行次数
+     * @return java.util.List<java.lang.String>
+     * @author LiuYongTao
+     * @date 2019/8/13 9:31
+     */
+    public static List<String> runTime(String cron, int times) {
+        List<String> rs = new ArrayList<>();
+        if (cron == null || "".equals(cron.trim())) {
+            return rs;
+        }
+        try {
+            CronExpression ce = new CronExpression(cron);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d = new Date();
+            for (int i = 0; i < times; i++) {
+                d = ce.getNextValidTimeAfter(d);
+                if (d != null) {
+                    rs.add(format.format(d));
+                } else {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        return rs;
     }
 }

@@ -20,7 +20,14 @@
                        inactive-value="0"></el-switch>
           </el-form-item>
           <el-form-item label="Cron表达式" prop="cronExpression">
-            <el-input v-model="autoTaskInfo.cronExpression" placeholder="请输入内容"></el-input>
+            <el-row>
+              <el-col :span="22">
+                <el-input v-model="autoTaskInfo.cronExpression" placeholder="请输入内容"></el-input>
+              </el-col>
+              <el-col :span="2">
+                <el-button style="width: 100%" type="success" @click="cronExp" size="mini">配置</el-button>
+              </el-col>
+            </el-row>
           </el-form-item>
           <el-form-item label="BeanClass" prop="cronExpression">
             <el-input v-model="autoTaskInfo.beanClass" placeholder="请输入内容"></el-input>
@@ -49,7 +56,12 @@
         </el-form>
       </article>
     </div>
-
+    <el-dialog title="Cron表达式"
+               center
+               :visible.sync="dialogCronExpVisible"
+               :close-on-click-modal="false">
+      <cron-expression :cron="autoTaskInfo.cronExpression" @cancelCron="cancelCron" @saveCron="saveCron"></cron-expression>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,10 +69,12 @@
   import {SaveAutoTask} from "../../../api/job/jobMag";
 
   import CustomSelect from '../../../components/common/CustomSelect.vue';
+  import CronExpression from '../../../views/job/components/CronExpression.vue';
 
   export default {
     components: {
-      CustomSelect
+      CustomSelect,
+      CronExpression
     },
     data() {
       return {
@@ -68,9 +82,11 @@
         autoTaskInfo: {
           jobStatus: "1",
           isConcurrent: "1",
+          cronExpression:"",
           validInd: true
         },
-        systemModuleSelect: []
+        systemModuleSelect: [],
+        dialogCronExpVisible: false
       };
     },
     created() {
@@ -98,6 +114,16 @@
       },
       onReset(autoTaskInfo) {
         this.$refs[autoTaskInfo].resetFields();
+      },
+      cronExp(){
+        this.dialogCronExpVisible = true;
+      },
+      cancelCron(){
+        this.dialogCronExpVisible = false;
+      },
+      saveCron(cron){
+        this.autoTaskInfo.cronExpression = cron;
+        this.cancelCron();
       }
     }
   };
