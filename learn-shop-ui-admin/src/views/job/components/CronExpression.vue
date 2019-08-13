@@ -86,8 +86,8 @@
     methods: {
       initData: function () {
         // 给调度时间一个默认值
-        this.triggerCronShow = new Date();
-        this.triggerCron = this.formatTime(this.triggerCronShow);
+        // this.triggerCronShow = new Date();
+        // this.triggerCron = this.formatTime(this.triggerCronShow);
         // 初始化页面数据
         this.second = this.TimeBase(0, '秒');
         this.minute = this.TimeBase(1, '分钟');
