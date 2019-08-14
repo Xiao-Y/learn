@@ -15,4 +15,6 @@ public interface ScheduleJobDao extends JpaRepository<ScheduleJobPo, Long>, JpaS
      * @return
      */
     List<ScheduleJobPo> findByJobStatusEquals(String jobStatus);
+
+    ScheduleJobPo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id);
 }

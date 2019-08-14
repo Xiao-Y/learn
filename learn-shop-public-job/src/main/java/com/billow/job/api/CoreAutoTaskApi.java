@@ -1,11 +1,13 @@
 package com.billow.job.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.job.pojo.ex.TestRunCronEx;
 import com.billow.job.pojo.po.ScheduleJobPo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.service.TaskManagerService;
 import com.billow.job.util.TaskUtils;
+import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 核心自动任务控制类
@@ -51,27 +54,33 @@ public class CoreAutoTaskApi extends BaseApi {
         return jods;
     }
 
-    @ApiOperation("自动任务修改页面,jobId jobId为null表示是添加，不为null表示修改")
-    @PostMapping("/editAutoTask")
-    public ScheduleJobVo editAutoTask(ScheduleJobVo scheduleJobVo) {
-        Long jobId = scheduleJobVo.getId();
-        if (jobId != null) {// 表示编辑
-            ScheduleJobVo dto = new ScheduleJobVo();
-            dto.setId(jobId);
-            return scheduleJobService.selectByPrimaryKey(dto);
-        }
-        return scheduleJobVo;
-    }
+//    @ApiOperation("自动任务修改页面,jobId jobId为null表示是添加，不为null表示修改")
+//    @PostMapping("/editAutoTask")
+//    public ScheduleJobVo editAutoTask(ScheduleJobVo scheduleJobVo) {
+//        Long jobId = scheduleJobVo.getId();
+//        if (jobId != null) {// 表示编辑
+//            ScheduleJobVo dto = new ScheduleJobVo();
+//            dto.setId(jobId);
+//            return scheduleJobService.selectByPrimaryKey(dto);
+//        }
+//        return scheduleJobVo;
+//    }
 
-    @ApiOperation("启用、禁用自动任务")
+    @ApiOperation("启用、停止、禁用自动任务")
     @ApiImplicitParams({@ApiImplicitParam(dataType = "Integer", name = "jobId", value = "自动任务id", required = true),
-            @ApiImplicitParam(dataType = "String", name = "jobStatus", value = "任务状态，0-禁用，1-启用", required = true)})
-    @PutMapping("/updateJobStatus/{jobId}")
-    public void updateJobStatus(@PathVariable("jobId") Long jobId, String jobStatus) throws Exception {
+            @ApiImplicitParam(dataType = "String", name = "jobStatus", value = "任务状态，0-停止，1-启用", required = true)})
+    @PutMapping(value = {"/updateJobStatus/{jobId}/{jobStatus}", "/updateJobValidInd/{jobId}/{validInd}"})
+    public void updateJobStatus(@PathVariable("jobId") Long jobId,
+                                @PathVariable(value = "jobStatus", required = false) String jobStatus,
+                                @PathVariable(value = "validInd", required = false) Boolean validInd) throws Exception {
+        // 不能同时为空
+        if (ToolsUtils.isEmpty(jobStatus) && validInd == null) {
+            return;
+        }
         ScheduleJobVo dto = new ScheduleJobVo();
         dto.setId(jobId);
         dto.setJobStatus(jobStatus);
-        dto.setUpdateTime(new Date());
+        dto.setValidInd(validInd);
         taskManagerService.updateJobStatus(dto);
     }
 
@@ -91,7 +100,7 @@ public class CoreAutoTaskApi extends BaseApi {
 
     @ApiOperation("立即执行自动任务")
     @PostMapping("/immediateExecutionTask")
-    public ScheduleJobVo immediateExecutionTask(ScheduleJobVo scheduleJobVo) throws Exception {
+    public ScheduleJobVo immediateExecutionTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
         taskManagerService.immediateExecutionTask(scheduleJobVo);
         return scheduleJobVo;
     }
@@ -104,9 +113,9 @@ public class CoreAutoTaskApi extends BaseApi {
     }
 
     @ApiOperation("测试Cron表达式下次运行的时间")
-    @GetMapping("/testRunCron/{times}/{cron}")
-    public List<String> testRunCron(@PathVariable("cron") String cron, @PathVariable("times") int times) {
-        logger.info("cron:{}", cron);
-        return TaskUtils.runTime(cron, times);
+    @PostMapping("/testRunCron")
+    public List<String> testRunCron(@RequestBody TestRunCronEx testRunCronEx) {
+        logger.info("cron:{}", testRunCronEx.getCron());
+        return TaskUtils.runTime(testRunCronEx.getCron(), testRunCronEx.getTimes());
     }
 }

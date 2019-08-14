@@ -38,8 +38,7 @@
         <el-table-column label="任务分组" prop="jobGroup">
           <template slot-scope="scope">
             <custom-select v-model="scope.row.jobGroup"
-                           systemModule="adminSystem"
-                           fieldType="systemModule"
+                           :datasource="systemModuleSelect"
                            placeholder="请选择任务分组"
                            disabled>
             </custom-select>
@@ -89,18 +88,27 @@
               </el-form-item>
               <el-form-item label="任务状态">
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
-                           inactive-value="0"></el-switch>
+                           inactive-value="0"
+                           @change="changeJobStatus(props.row)"></el-switch>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作" width="300">
           <template slot-scope="scope">
             <!--  操作按钮组 -->
             <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
                                  @onEdit="handleEdit(scope.row,scope.$index)"
                                  @onInd="handleProhibit(scope.row,scope.$index)"
                                  :disInd="!scope.row.validInd"></button-group-option>
+            <div style="float:left;margin-left:10px;">
+              <el-tooltip class="item" effect="dark" content="立即执行" placement="top-start" :open-delay="1500">
+                <el-button type="success" size="mini" @click="handleImmediate(scope.row,scope.$index)"
+                           :disabled="!scope.row.validInd || scope.row.jobStatus == '0'">
+                  <i class="el-icon-success"></i>
+                </el-button>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -116,7 +124,13 @@
   import {
     LoadSysDataDictionary
   } from "../../api/sys/DataDictionaryMag";
-  import {LoadDataJobList} from "../../api/job/jobMag";
+  import {
+    LoadDataJobList,
+    UpdateJobStatus,
+    DeleteAutoTask,
+    UpdateJobInd,
+    ImmediateExecutionTask
+  } from "../../api/job/jobMag";
   // ===== component start
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
@@ -124,7 +138,7 @@
   import CustomSelect from '../../components/common/CustomSelect.vue';
 
   // ===== 工具类 start
-  // import VueUtils from "../../utils/vueUtils";
+  import VueUtils from "../../utils/vueUtils";
   import pageMixins from "../../utils/pageMixins";
 
   export default {
@@ -188,9 +202,16 @@
         });
       },
       handleProhibit(row, index) {
-        console.log(index, row);
-        console.log("handleProhibit");
-
+        var _this = this;
+        VueUtils.confirmInd(row.jobName, () => {
+          UpdateJobInd(row.id, false).then(res => {
+            row.validInd = false;
+            _this.$message({
+              type: 'success',
+              message: '禁用成功!'
+            });
+          });
+        });
       },
       handleAdd() {
         this.$router.push({
@@ -212,8 +233,32 @@
         });
       },
       handleDelete(row, index) {
-        console.log(index, row);
-        console.log("handleDelete");
+        var _this = this;
+        VueUtils.confirmDel(row.jobName, () => {
+          DeleteAutoTask(row.id).then(res => {
+            _this.tableData.splice(index, 1);
+            _this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          });
+        });
+      },
+      changeJobStatus(row) {
+        UpdateJobStatus(row.id, row.jobStatus).then(res => {
+          var message = "自动任务启动成功";
+          if (row.jobStatus === "0") {
+            message = "自动任务停止成功";
+          }
+          this.$message.success(message);
+        }).catch(err => {
+          row.jobStatus = row.jobStatus === "0" ? "1" : "0";
+        });
+      },
+      handleImmediate(row, index) {
+        ImmediateExecutionTask(row.jobName, row.jobGroup).then(res => {
+          this.$message.success("成功加入执行队列");
+        });
       }
     },
     filters: {

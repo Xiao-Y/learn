@@ -26,24 +26,24 @@ public interface ScheduleJobService {
      */
     List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo);
 
-    /**
-     * 启用、禁用自动任务
-     * <p>
-     * <br>
-     * added by liuyongtao<br>
-     *
-     * @param jobId     自动任务id
-     * @param jobStatus 任务状态，1-启用，0-禁用
-     * @return
-     * @date 2017年5月11日 下午2:58:16
-     */
-    void updateJobStatus(ScheduleJobVo dto);
+//    /**
+//     * 启用、禁用自动任务
+//     * <p>
+//     * <br>
+//     * added by liuyongtao<br>
+//     *
+//     * @param jobId     自动任务id
+//     * @param jobStatus 任务状态，1-启用，0-禁用
+//     * @return
+//     * @date 2017年5月11日 下午2:58:16
+//     */
+//    void updateJobStatus(ScheduleJobVo dto);
 
-    ScheduleJobVo selectByPrimaryKey(ScheduleJobVo dto);
+    ScheduleJobVo selectByPK(Long id);
 
     void updateByPrimaryKeySelective(ScheduleJobVo dto);
 
-    void deleteByPrimaryKey(ScheduleJobVo dto);
+    void deleteByPK(Long id);
 
     void save(ScheduleJobVo scheduleJobVo);
 
@@ -54,4 +54,7 @@ public interface ScheduleJobService {
      * @return
      */
     Page<ScheduleJobPo> selectAll(ScheduleJobVo scheduleJobVo);
+
+    ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id);
+
 }

@@ -21,5 +21,44 @@ export const SaveAutoTask = data => requestUtils.post(baseUrl + '/saveAutoTask',
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
-export const TestRunCron = (cron, times) => requestUtils.get(baseUrl + '/testRunCron/' + times + "/" + cron);
+export const TestRunCron = data => requestUtils.post(baseUrl + '/testRunCron', Object.assign(data));
+
+/**
+ * 启用、停止自动任务
+ * @param jobId id
+ * @param jobStatus 任务状态，0-停止，1-启用
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const UpdateJobStatus = (jobId, jobStatus) => requestUtils.put(baseUrl + '/updateJobStatus/' + jobId + '/' + jobStatus);
+
+/**
+ * 删除自动任务
+ * @param jobId
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const DeleteAutoTask = jobId => requestUtils.del(baseUrl + '/deleteAutoTask/' + jobId);
+
+/**
+ * 禁用自动任务
+ * @param jobId id
+ * @param validInd
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const UpdateJobInd = (jobId, validInd) => requestUtils.put(baseUrl + '/updateJobValidInd/' + jobId + '/' + validInd);
+
+/**
+ * 立即执行自动任务
+ * @param jobName
+ * @param jobGroup
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const ImmediateExecutionTask = (jobName, jobGroup) => requestUtils.post(baseUrl + '/immediateExecutionTask', {
+  jobName: jobName,
+  jobGroup: jobGroup
+});
+
 

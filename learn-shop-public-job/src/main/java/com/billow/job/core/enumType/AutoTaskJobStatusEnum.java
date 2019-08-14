@@ -6,9 +6,9 @@ package com.billow.job.core.enumType;
 public enum AutoTaskJobStatusEnum {
 
     /**
-     * 任务状态,0-禁用
+     * 任务状态,0-停止
      */
-    JOB_STATUS_PAUSE("0", "禁用"),
+    JOB_STATUS_PAUSE("0", "停止"),
     /**
      * 任务状态,1-启用
      */

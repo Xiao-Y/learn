@@ -1,5 +1,6 @@
 package com.billow.job.service.impl;
 
+import com.billow.common.jpa.DefaultSpec;
 import com.billow.job.dao.ScheduleJobDao;
 import com.billow.job.dao.specification.ScheduleJobSpec;
 import com.billow.job.pojo.po.ScheduleJobPo;
@@ -31,24 +32,26 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo) {
-        List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findByJobStatusEquals(scheduleJobVo.getJobStatus());
+        ScheduleJobPo scheduleJobPo = ConvertUtils.convert(scheduleJobVo, ScheduleJobPo.class);
+        DefaultSpec<ScheduleJobPo> defaultSpec = new DefaultSpec<>(scheduleJobVo);
+        List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findAll(defaultSpec);
         return ConvertUtils.convert(scheduleJobPos, ScheduleJobVo.class);
     }
 
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateJobStatus(ScheduleJobVo vo) {
-        ScheduleJobPo jobDto = scheduleJobDao.findOne(vo.getId());
-        if (jobDto != null) {
-            jobDto.setJobStatus(vo.getJobStatus());
-            jobDto.setUpdateTime(new Date());
-            scheduleJobDao.save(jobDto);
-        }
-    }
+//    @Override
+//    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+//    public void updateJobStatus(ScheduleJobVo vo) {
+//        ScheduleJobPo jobDto = scheduleJobDao.findOne(vo.getId());
+//        if (jobDto != null) {
+//            jobDto.setJobStatus(vo.getJobStatus());
+//            jobDto.setUpdateTime(new Date());
+//            scheduleJobDao.save(jobDto);
+//        }
+//    }
 
     @Override
-    public ScheduleJobVo selectByPrimaryKey(ScheduleJobVo dto) {
-        ScheduleJobPo scheduleJobPo = scheduleJobDao.findOne(dto.getId());
+    public ScheduleJobVo selectByPK(Long id) {
+        ScheduleJobPo scheduleJobPo = scheduleJobDao.findOne(id);
         return ConvertUtils.convert(scheduleJobPo, ScheduleJobVo.class);
     }
 
@@ -60,8 +63,8 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void deleteByPrimaryKey(ScheduleJobVo dto) {
-        scheduleJobDao.delete(dto.getId());
+    public void deleteByPK(Long id) {
+        scheduleJobDao.delete(id);
     }
 
     @Override
@@ -78,5 +81,11 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         ScheduleJobSpec scheduleJobSpec = new ScheduleJobSpec(scheduleJobVo);
         Page<ScheduleJobPo> page = scheduleJobDao.findAll(scheduleJobSpec, pageable);
         return page;
+    }
+
+    @Override
+    public ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id) {
+        ScheduleJobPo po = scheduleJobDao.findByIdAndValidIndIsTrueAndIsStopIsTrue(id);
+        return ConvertUtils.convert(po, ScheduleJobVo.class);
     }
 }

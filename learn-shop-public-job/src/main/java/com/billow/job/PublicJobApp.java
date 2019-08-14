@@ -1,5 +1,6 @@
 package com.billow.job;
 
+import com.billow.tools.utlis.SpringContextUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -15,7 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  * @ EnableHystrixDashboard 开启熔断监控仪表盘
  * @ EnableCircuitBreaker 开启断路器
  */
-@EnableJpaAuditing
+//@EnableJpaAuditing
 @SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
@@ -24,6 +25,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @ComponentScan("com.billow")
 public class PublicJobApp {
     public static void main(String[] args) {
-        SpringApplication.run(PublicJobApp.class, args);
+        SpringContextUtil.setApplicationContext(SpringApplication.run(PublicJobApp.class, args));
     }
 }

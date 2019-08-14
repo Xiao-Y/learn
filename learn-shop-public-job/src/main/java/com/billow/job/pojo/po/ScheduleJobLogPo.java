@@ -4,8 +4,13 @@ import com.billow.common.base.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -22,7 +27,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "job_schedule_job_log")
+@Table(name = "sys_schedule_job_log")
 public class ScheduleJobLogPo extends BasePo implements Serializable {
 
     @ApiModelProperty("任务名称")
@@ -32,9 +37,15 @@ public class ScheduleJobLogPo extends BasePo implements Serializable {
     private String jobGroup;
 
     @ApiModelProperty("自动任务id")
-    private Integer jobId;
+    private Long jobId;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Type(type="text")
     @ApiModelProperty("错误信息")
     private String info;
+
+    @ApiModelProperty("是否执行成功")
+    private Boolean isSeccuss;
 
 }  

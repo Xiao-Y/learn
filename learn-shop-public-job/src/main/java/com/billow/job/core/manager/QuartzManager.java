@@ -1,5 +1,7 @@
 package com.billow.job.core.manager;
 
+import com.billow.job.core.JobDataCst;
+import com.billow.job.core.config.MonitorJobListener;
 import com.billow.job.core.config.QuartzJobFactory;
 import com.billow.job.core.config.QuartzJobFactoryDisallowConcurrentExecution;
 import com.billow.job.core.enumType.AutoTaskJobConcurrentEnum;
@@ -12,12 +14,14 @@ import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
+import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.quartz.impl.matchers.KeyMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
@@ -136,13 +140,12 @@ public class QuartzManager {
      * @date 2017年5月7日 下午5:18:05
      */
     public void resumeJob(ScheduleJobVo scheduleJob) throws SchedulerException {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
-        JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+        JobDetail jobDetail = this.getJobDetail(scheduleJob.getJobName(), scheduleJob.getJobGroup());
         if (jobDetail == null) {
             throw new RuntimeException(scheduleJob.getJobName() + "-" + scheduleJob.getJobGroup() + ",自动任务不存在...");
         }
-        scheduler.resumeJob(jobKey);
+        JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
+        schedulerFactoryBean.getScheduler().resumeJob(jobKey);
     }
 
     /**
@@ -172,13 +175,12 @@ public class QuartzManager {
      * @date 2017年5月7日 下午5:18:21
      */
     public void runAJobNow(ScheduleJobVo scheduleJob) throws SchedulerException {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
-        JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+        JobDetail jobDetail = this.getJobDetail(scheduleJob.getJobName(), scheduleJob.getJobGroup());
         if (jobDetail == null) {
             throw new RuntimeException(scheduleJob.getJobName() + "-" + scheduleJob.getJobGroup() + ",自动任务不存在...");
         }
-        scheduler.triggerJob(jobKey);
+        JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
+        schedulerFactoryBean.getScheduler().triggerJob(jobKey);
     }
 
     /**
@@ -224,11 +226,17 @@ public class QuartzManager {
             }
             // 指定Job在Scheduler中所属组及名称
             JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();
-            jobDetail.getJobDataMap().put("scheduleJob", job);
+            jobDetail.getJobDataMap().put(JobDataCst.SCHEDULE_JOB_VO, job);
             // 设置调度的时间规则
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             // 创建一个SimpleTrigger实例，指定该Trigger在Scheduler中所属组及名称
             trigger = TriggerBuilder.newTrigger().withIdentity(job.getJobName(), job.getJobGroup()).withSchedule(scheduleBuilder).build();
+            // 添加监听
+            JobListener monitorJobListener = new MonitorJobListener();
+            KeyMatcher<JobKey> keyMatcher = KeyMatcher.keyEquals(jobDetail.getKey());
+            //添加job的监听
+            scheduler.getListenerManager().addJobListener(monitorJobListener, keyMatcher);
+
             // 注册并进行调度
             scheduler.scheduleJob(jobDetail, trigger);
         } else {
@@ -236,6 +244,17 @@ public class QuartzManager {
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             // 按新的cronExpression表达式重新构建trigger
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
+            // 查询是否添加了监听
+            JobListener jobListener = scheduler.getListenerManager().getJobListener(MonitorJobListener.LISTENER_NAME);
+            // 获取 jobDetail
+            if (jobListener == null) {
+                JobDetail jobDetail = this.getJobDetail(job.getJobName(), job.getJobGroup());
+                // 添加监听
+                JobListener monitorJobListener = new MonitorJobListener();
+                KeyMatcher<JobKey> keyMatcher = KeyMatcher.keyEquals(jobDetail.getKey());
+                //添加job的监听
+                scheduler.getListenerManager().addJobListener(monitorJobListener, keyMatcher);
+            }
             // 按新的trigger重新设置job执行
             scheduler.rescheduleJob(triggerKey, trigger);
         }

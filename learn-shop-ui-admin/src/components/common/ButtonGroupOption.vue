@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="float:left;">
     <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay" v-if="showInd">
       <el-button @click="onInd" type="warning" size="mini" :disabled="disInd">
         <i class="el-icon-warning"></i>

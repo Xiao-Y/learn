@@ -1,13 +1,13 @@
 <template>
-  <table class="tp-table" cellpadding="0" cellspacing="0" style="width: 100%">
-    <tr>
+  <table class="tp-table" cellpadding="0" cellspacing="0" style="width: 100%;height: 450px">
+    <tr style="height: 280px">
       <el-tabs v-model="cron_tabs" type="border-card" @tab-click="handleTabClick" style="margin:15px;">
         <el-tab-pane v-for="obj in timeArray"
                      :key="obj.resultNum"
                      :label="obj.name"
                      :name="obj.name">
 
-          <el-select v-model="obj.selected" @change="handleSelectChange" style="width: 30%;vertical-align: top;">
+          <el-select v-model="obj.selected" @change="handleSelectChange" style="width: 30%;vertical-align: top; height: 180px">
             <el-option v-for="item in obj.select"
                        :key="item.value"
                        :label="item.label"

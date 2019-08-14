@@ -1,9 +1,9 @@
 package com.billow.job.core.config;
 
+import com.billow.job.core.JobDataCst;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.util.TaskUtils;
 import org.apache.log4j.Logger;
-
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -22,13 +22,13 @@ public class QuartzJobFactory implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
+        ScheduleJobVo scheduleJob = (ScheduleJobVo) context.getMergedJobDataMap().get(JobDataCst.SCHEDULE_JOB_VO);
         try {
-            ScheduleJobVo scheduleJob = (ScheduleJobVo) context.getMergedJobDataMap().get("scheduleJob");
             TaskUtils.invokMethod(scheduleJob);
         } catch (Exception e) {
             JobExecutionException ex = new JobExecutionException(e);
             // 设置 将自动 去除 这个任务的触发器,所以这个任务不会再执行
-            ex.setUnscheduleAllTriggers(true);
+            ex.setUnscheduleAllTriggers(scheduleJob.getIsStop());
             // 抛出异常
             throw ex;
         }
