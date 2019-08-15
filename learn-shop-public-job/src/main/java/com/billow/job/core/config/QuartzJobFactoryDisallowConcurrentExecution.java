@@ -30,7 +30,7 @@ public class QuartzJobFactoryDisallowConcurrentExecution implements Job {
         } catch (Exception e) {
             JobExecutionException ex = new JobExecutionException(e);
             // 设置 将自动 去除 这个任务的触发器,所以这个任务不会再执行
-            ex.setUnscheduleAllTriggers(scheduleJob.getIsStop());
+            ex.setUnscheduleAllTriggers(scheduleJob.getIsExceptionStop());
             // 抛出异常
             throw ex;
         }

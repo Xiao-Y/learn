@@ -46,6 +46,9 @@ public class ScheduleJobLogPo extends BasePo implements Serializable {
     private String info;
 
     @ApiModelProperty("是否执行成功")
-    private Boolean isSeccuss;
+    private Boolean isSuccess;
+
+    @ApiModelProperty("执行时间")
+    private String runTime;
 
 }  

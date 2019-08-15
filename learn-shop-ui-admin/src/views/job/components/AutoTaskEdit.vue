@@ -54,7 +54,10 @@
             <el-switch v-model="autoTaskInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
           <el-form-item label="异常停止">
-            <el-switch v-model="autoTaskInfo.isStop" active-text="是" inactive-text="否"></el-switch>
+            <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
+          </el-form-item>
+          <el-form-item label="是否记录日志">
+            <el-switch v-model="autoTaskInfo.isSaveLog" active-text="是" inactive-text="否"></el-switch>
           </el-form-item>
           <el-form-item label="任务描述" prop="description">
             <el-col :span="18">
@@ -101,6 +104,7 @@
           jobStatus: "1",
           isConcurrent: "1",
           cronExpression: "",
+          isSaveLog: true,
           validInd: true
         },
         systemModuleSelect: [],

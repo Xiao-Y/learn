@@ -52,6 +52,9 @@ public class ScheduleJobPo extends BasePo implements Serializable {
     private String methodName;
 
     @ApiModelProperty("异常时，是否停止自动任务")
-    private Boolean isStop;
+    private Boolean isExceptionStop;
+
+    @ApiModelProperty("是否记录日志")
+    private Boolean isSaveLog;
 
 }

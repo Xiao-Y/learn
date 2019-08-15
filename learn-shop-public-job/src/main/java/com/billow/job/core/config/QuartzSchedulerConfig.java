@@ -1,6 +1,8 @@
 package com.billow.job.core.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import org.quartz.JobListener;
+import org.quartz.impl.matchers.EverythingMatcher;
 import org.quartz.spi.JobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +49,9 @@ public class QuartzSchedulerConfig {
             factoryBean.setOverwriteExistingJobs(true);
             // 延时启动,应用启动完10秒后 QuartzScheduler 再启动
             factoryBean.setStartupDelay(10);
+            // 添加全局监听（用于记录执行日志）
+            JobListener monitorJobListener = new MonitorJobListener();
+            factoryBean.setGlobalJobListeners(monitorJobListener);
         } catch (Exception e) {
             logger.error("加载 {} 配置文件失败.", QUARTZ_PROPERTIES_NAME, e);
             throw new RuntimeException("加载配置文件失败", e);

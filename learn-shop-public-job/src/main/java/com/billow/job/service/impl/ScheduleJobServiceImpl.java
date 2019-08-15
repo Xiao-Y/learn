@@ -85,7 +85,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id) {
-        ScheduleJobPo po = scheduleJobDao.findByIdAndValidIndIsTrueAndIsStopIsTrue(id);
+        ScheduleJobPo po = scheduleJobDao.findByIdAndValidIndIsTrueAndIsExceptionStopIsTrue(id);
         return ConvertUtils.convert(po, ScheduleJobVo.class);
     }
 

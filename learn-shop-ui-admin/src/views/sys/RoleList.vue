@@ -30,7 +30,7 @@
           <el-table-column label="角色描述" prop="descritpion"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
-              <el-form label-position="left" inline class="demo-table-expand" label-width="80px">
+              <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
                 <el-form-item label="创建人">
                   <span>{{ scope.row.creatorCode }}</span>
                 </el-form-item>

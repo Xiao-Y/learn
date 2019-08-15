@@ -16,7 +16,7 @@ public interface ScheduleJobDao extends JpaRepository<ScheduleJobPo, Long>, JpaS
 //     */
 //    List<ScheduleJobPo> findByJobStatusEquals(String jobStatus);
 
-    ScheduleJobPo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id);
+    ScheduleJobPo findByIdAndValidIndIsTrueAndIsExceptionStopIsTrue(Long id);
 
     /**
      * 按照jobName，jobGroup统计已经添加的自动任务的数据量

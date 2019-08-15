@@ -57,7 +57,7 @@
         <el-table-column label="任务描述" prop="description"></el-table-column>
         <el-table-column type="expand" label="详细" width="50">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand" label-width="80px">
+            <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
               <el-form-item label="创建人">
                 <span>{{ props.row.creatorCode }}</span>
               </el-form-item>
@@ -87,7 +87,10 @@
                 <el-switch v-model="props.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
               </el-form-item>
               <el-form-item label="异常停止">
-                <el-switch v-model="props.row.isStop" active-text="是" inactive-text="否" disabled></el-switch>
+                <el-switch v-model="props.row.isExceptionStop" active-text="是" inactive-text="否" disabled></el-switch>
+              </el-form-item>
+              <el-form-item label="是否记录日志">
+                <el-switch v-model="props.row.isSaveLog" active-text="是" inactive-text="否" disabled></el-switch>
               </el-form-item>
               <el-form-item label="任务状态">
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"

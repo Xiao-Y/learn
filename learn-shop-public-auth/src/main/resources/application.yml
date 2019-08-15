@@ -28,5 +28,5 @@ auth:
       grant-type: password
       access-token-uri: http://127.0.0.1:${server.port}/oauth/token
 
-logging.level.org.springframework.security: DEBUG
+logging.level.org.springframework.security: info
 #logging.level.org.springframework: DEBUG

@@ -15,7 +15,8 @@ public class TestAutoTask {
     public void test() {
         try {
             System.out.println("=====================" + TestAutoTask.class.getName() + "=====" + DateTime.getSimpleDateFormat() + "======================");
-            //System.out.println(1/0);
+            Thread.sleep(2000);
+//            System.out.println(1/0);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e);

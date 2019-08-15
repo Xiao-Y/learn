@@ -28,4 +28,7 @@ public class ScheduleJobVo extends ScheduleJobPo implements Serializable {
 
     @ApiModelProperty("旧的任务名称")
     private String oldJobName;
+
+    @ApiModelProperty("执行时间，分钟")
+    private String runTime;
 }

@@ -1,14 +1,12 @@
 package com.billow.job.core.manager;
 
 import com.billow.job.core.JobDataCst;
-import com.billow.job.core.config.MonitorJobListener;
 import com.billow.job.core.config.QuartzJobFactory;
 import com.billow.job.core.config.QuartzJobFactoryDisallowConcurrentExecution;
 import com.billow.job.core.enumType.AutoTaskJobConcurrentEnum;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
@@ -16,14 +14,12 @@ import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
-import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
-import org.quartz.impl.matchers.KeyMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
@@ -238,12 +234,6 @@ public class QuartzManager {
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             // 创建一个SimpleTrigger实例，指定该Trigger在Scheduler中所属组及名称
             trigger = TriggerBuilder.newTrigger().withIdentity(job.getJobName(), job.getJobGroup()).withSchedule(scheduleBuilder).build();
-            // 添加监听
-            JobListener monitorJobListener = new MonitorJobListener();
-            KeyMatcher<JobKey> keyMatcher = KeyMatcher.keyEquals(jobDetail.getKey());
-            //添加job的监听
-            scheduler.getListenerManager().addJobListener(monitorJobListener, keyMatcher);
-
             // 注册并进行调度
             scheduler.scheduleJob(jobDetail, trigger);
         } else {
@@ -251,17 +241,6 @@ public class QuartzManager {
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             // 按新的cronExpression表达式重新构建trigger
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-            // 查询是否添加了监听
-            JobListener jobListener = scheduler.getListenerManager().getJobListener(MonitorJobListener.LISTENER_NAME);
-            // 获取 jobDetail
-            if (jobListener == null) {
-                JobDetail jobDetail = this.getJobDetail(job.getJobName(), job.getJobGroup());
-                // 添加监听
-                JobListener monitorJobListener = new MonitorJobListener();
-                KeyMatcher<JobKey> keyMatcher = KeyMatcher.keyEquals(jobDetail.getKey());
-                //添加job的监听
-                scheduler.getListenerManager().addJobListener(monitorJobListener, keyMatcher);
-            }
             // 按新的trigger重新设置job执行
             scheduler.rescheduleJob(triggerKey, trigger);
         }

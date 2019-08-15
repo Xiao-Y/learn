@@ -12,6 +12,7 @@ import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.quartz.CronExpression;
+import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.PrintWriter;
@@ -128,30 +129,38 @@ public class TaskUtils {
     }
 
     public static void saveLog(ScheduleJobVo scheduleJob, Exception exception) {
-        ScheduleJobLogVo logDto = new ScheduleJobLogVo();
-        logDto.setJobId(scheduleJob.getId());
-        logDto.setJobGroup(scheduleJob.getJobGroup());
-        logDto.setJobName(scheduleJob.getJobName());
-        logDto.setCreateTime(new DateTime());
-        logDto.setUpdateTime(new DateTime());
+
+        boolean isSuccess = true;
         if (exception != null) {
-            StringWriter sw = new StringWriter();
-            exception.printStackTrace(new PrintWriter(sw, true));
-            logDto.setIsSeccuss(false);
-            logDto.setInfo(sw.toString());
-            log.error(logDto.getInfo());
-        } else {
-            logDto.setIsSeccuss(true);
+            isSuccess = false;
         }
 
-        try {
-            ScheduleJobLogService scheduleJobLogService = SpringContextUtil.getBean("scheduleJobLogServiceImpl");
-            scheduleJobLogService.insert(logDto);
-        } catch (Exception e) {
-            log.error("自动任务日志插入失败：{}", e.getMessage());
+        if (scheduleJob.getIsSaveLog()) {
+            // 插入日志
+            ScheduleJobLogVo logDto = new ScheduleJobLogVo();
+            logDto.setJobId(scheduleJob.getId());
+            logDto.setJobGroup(scheduleJob.getJobGroup());
+            logDto.setJobName(scheduleJob.getJobName());
+            logDto.setIsSuccess(isSuccess);
+            logDto.setRunTime(scheduleJob.getRunTime());
+            logDto.setCreateTime(new DateTime());
+            logDto.setUpdateTime(new DateTime());
+            if (exception != null) {
+                StringWriter sw = new StringWriter();
+                exception.printStackTrace(new PrintWriter(sw, true));
+                logDto.setInfo(sw.toString());
+                log.error(logDto.getInfo());
+            }
+
+            try {
+                ScheduleJobLogService scheduleJobLogService = SpringContextUtil.getBean("scheduleJobLogServiceImpl");
+                scheduleJobLogService.insert(logDto);
+            } catch (Exception e) {
+                log.error("自动任务日志插入失败：{}", e.getMessage());
+            }
         }
 
-        if (scheduleJob.getIsStop()) {
+        if (!isSuccess && scheduleJob.getIsExceptionStop()) {
             try {
                 ScheduleJobService scheduleJobService = SpringContextUtil.getBean("scheduleJobServiceImpl");
                 ScheduleJobVo scheduleJobVo = scheduleJobService.findByIdAndValidIndIsTrueAndIsStopIsTrue(scheduleJob.getId());
