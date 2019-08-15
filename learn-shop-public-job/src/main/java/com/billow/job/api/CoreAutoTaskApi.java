@@ -107,7 +107,7 @@ public class CoreAutoTaskApi extends BaseApi {
 
     @ApiOperation("校验自动任务添加、修改时参数的设置")
     @PostMapping("/checkAutoTask")
-    public ScheduleJobVo checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
+    public ScheduleJobVo checkAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
         taskManagerService.checkAutoTask(scheduleJobVo);
         return scheduleJobVo;
     }

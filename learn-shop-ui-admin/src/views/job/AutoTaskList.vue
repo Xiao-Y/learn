@@ -46,7 +46,7 @@
         </el-table-column>
         <el-table-column label="任务名称" prop="jobName"></el-table-column>
         <el-table-column label="Cron表达式" prop="cronExpression"></el-table-column>
-        <el-table-column label="状态" prop="jobStatus" width="80">
+        <el-table-column label="任务状态" prop="jobStatus" width="80">
           <template slot-scope="scope">
             <el-tag
               :type="scope.row.jobStatus === '1' ? 'success' : 'danger'"
@@ -85,6 +85,9 @@
               </el-form-item>
               <el-form-item label="有效状态">
                 <el-switch v-model="props.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+              </el-form-item>
+              <el-form-item label="异常停止">
+                <el-switch v-model="props.row.isStop" active-text="是" inactive-text="否" disabled></el-switch>
               </el-form-item>
               <el-form-item label="任务状态">
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
@@ -152,11 +155,6 @@
     data() {
       return {
         queryFilter: {
-          // 分页数据
-          pageNo: null,// 当前页码
-          recordCount: null, // 总记录数
-          pageSize: null,//每页要显示的记录数
-          totalPages: null,// 总页数
           // 查询条件
           jobGroup: null,
           jobName: null,
@@ -223,6 +221,10 @@
         });
       },
       handleEdit(row, index) {
+        Object.assign(row, {
+          oldJobGroup: row.jobGroup,
+          oldJobName: row.jobName
+        });
         this.$router.push({
           name: 'jobAutoTaskEdit',
           query: {
@@ -245,6 +247,11 @@
         });
       },
       changeJobStatus(row) {
+        if (!row.cronExpression || row.cronExpression === '') {
+          this.$message.error("Cron 表达式不能为空");
+          row.jobStatus = row.jobStatus === "0" ? "1" : "0";
+          return;
+        }
         UpdateJobStatus(row.id, row.jobStatus).then(res => {
           var message = "自动任务启动成功";
           if (row.jobStatus === "0") {

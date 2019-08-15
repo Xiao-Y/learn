@@ -57,4 +57,14 @@ public interface ScheduleJobService {
 
     ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id);
 
+    /**
+     * 按照jobName，jobGroup统计已经添加的自动任务的数据量
+     *
+     * @param jobName
+     * @param jobGroup
+     * @return int
+     * @author LiuYongTao
+     * @date 2019/8/15 11:29
+     */
+    int countByJobNameAndJobGroup(String jobName, String jobGroup);
 }

@@ -88,4 +88,9 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         ScheduleJobPo po = scheduleJobDao.findByIdAndValidIndIsTrueAndIsStopIsTrue(id);
         return ConvertUtils.convert(po, ScheduleJobVo.class);
     }
+
+    @Override
+    public int countByJobNameAndJobGroup(String jobName, String jobGroup) {
+        return scheduleJobDao.countByJobNameAndJobGroup(jobName,jobGroup);
+    }
 }

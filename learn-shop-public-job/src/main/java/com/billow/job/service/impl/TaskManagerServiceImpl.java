@@ -4,7 +4,6 @@ package com.billow.job.service.impl;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.core.manager.QuartzManager;
 import com.billow.job.pojo.vo.ScheduleJobVo;
-import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.service.TaskManagerService;
 import com.billow.tools.utlis.SpringContextUtil;
@@ -66,6 +65,13 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 quartzManager.addJob(scheduleJobVo);
             }
         } else {// 表示更新
+            // 如果是更新就直接删除旧的任务，重新添加（主要是更新JobDataMap）
+            if (ToolsUtils.isNotEmpty(scheduleJobVo.getOldJobName()) && ToolsUtils.isNotEmpty(scheduleJobVo.getOldJobGroup())) {
+                ScheduleJobVo jobVo = new ScheduleJobVo();
+                jobVo.setJobName(scheduleJobVo.getOldJobName());
+                jobVo.setJobGroup(scheduleJobVo.getOldJobGroup());
+                quartzManager.deleteJob(jobVo);
+            }
             // 查询是否有计划任务
             JobDetail jobDetail = quartzManager.getJobDetail(scheduleJobVo.getJobName(), scheduleJobVo.getJobGroup());
             if (jobDetail != null) {
@@ -85,19 +91,36 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Override
     public ScheduleJobVo checkAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
 
+        String message = "";
+
         String jobStatus = scheduleJobVo.getJobStatus();
         String cronExpression = scheduleJobVo.getCronExpression();
         String springId = scheduleJobVo.getSpringId();
         String beanClass = scheduleJobVo.getBeanClass();
         String methodName = scheduleJobVo.getMethodName();
+        String jobName = scheduleJobVo.getJobName();
+        String jobGroup = scheduleJobVo.getJobGroup();
+        String oldJobName = scheduleJobVo.getOldJobName();
+        String oldJobGroup = scheduleJobVo.getOldJobGroup();
+
+        if ((ToolsUtils.isEmpty(oldJobName) && ToolsUtils.isEmpty(oldJobGroup))
+                || !oldJobName.equals(jobName) || !oldJobGroup.equals(jobGroup)) {
+            int count = scheduleJobService.countByJobNameAndJobGroup(jobName, jobGroup);
+            if (count > 0) {
+                message += "自动任务已经存在！<br>";
+                scheduleJobVo.setMessage(message);
+                return scheduleJobVo;
+            }
+        }
 
         if (ToolsUtils.isNotEmpty(cronExpression)) {
             try {
                 CronScheduleBuilder.cronSchedule(cronExpression);
             } catch (Exception e) {
-                scheduleJobVo.setMessage("cron表达式错误，请查证！");
+                message += "cron表达式错误，请查证！<br>";
             }
-        } else if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
+        }
+        if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
             // bean能否获取标识
             boolean beanFlag = true;
             Class<?> clazz = null;
@@ -107,7 +130,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     Object bean = SpringContextUtil.getBean(springId);
                     clazz = bean.getClass();
                 } catch (Exception e) {
-                    scheduleJobVo.setMessage("springId错误，未获取相关Bean！");
+                    message += "springId错误，未获取相关Bean！<br>";
                     beanFlag = false;
                 }
             } else {
@@ -115,11 +138,12 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     clazz = Class.forName(beanClass);
                     clazz.newInstance();
                 } catch (Exception e) {
-                    scheduleJobVo.setMessage("beanClass错误，未获取相关类！");
+                    message += "beanClass错误，未获取相关类！<br>";
                     beanFlag = false;
                 }
             }
             if (!beanFlag) {
+                scheduleJobVo.setMessage(message);
                 return scheduleJobVo;
             }
             // 对执行方法检查（bean可以获取）
@@ -127,10 +151,11 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 try {
                     clazz.getDeclaredMethod(methodName);
                 } catch (NoSuchMethodException | SecurityException e) {
-                    scheduleJobVo.setMessage("方法：" + methodName + "，未获取！");
+                    message += "方法：" + methodName + "，未获取！<br>";
                 }
             }
         }
+        scheduleJobVo.setMessage(message);
         return scheduleJobVo;
     }
 

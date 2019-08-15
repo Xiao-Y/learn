@@ -62,3 +62,9 @@ export const ImmediateExecutionTask = (jobName, jobGroup) => requestUtils.post(b
 });
 
 
+/**
+ * 检查自动任务参数是否正确
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const CheckAutoTask = data => requestUtils.post(baseUrl + '/checkAutoTask', Object.assign(data));

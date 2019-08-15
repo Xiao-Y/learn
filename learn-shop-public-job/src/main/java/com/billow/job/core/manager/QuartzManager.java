@@ -6,6 +6,8 @@ import com.billow.job.core.config.QuartzJobFactory;
 import com.billow.job.core.config.QuartzJobFactoryDisallowConcurrentExecution;
 import com.billow.job.core.enumType.AutoTaskJobConcurrentEnum;
 import com.billow.job.pojo.vo.ScheduleJobVo;
+import com.billow.tools.utlis.ToolsUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -36,10 +38,9 @@ import java.util.Set;
  * @author XiaoY
  * @date: 2017年5月6日 下午10:49:14
  */
+@Slf4j
 @Service
 public class QuartzManager {
-
-    public final static Logger log = Logger.getLogger(QuartzManager.class);
 
     @Autowired
     private SchedulerFactoryBean schedulerFactoryBean;
@@ -159,8 +160,14 @@ public class QuartzManager {
      * @date 2017年5月7日 下午5:18:12
      */
     public void deleteJob(ScheduleJobVo scheduleJob) throws SchedulerException {
+        String jobGroup = scheduleJob.getJobGroup();
+        String jobName = scheduleJob.getJobName();
+        if (ToolsUtils.isEmpty(jobName) || ToolsUtils.isEmpty(jobGroup)) {
+            log.warn("JobGroup:{},JobName:{} 不能为空", jobGroup, jobName);
+            return;
+        }
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         scheduler.deleteJob(jobKey);
     }
 
@@ -288,5 +295,28 @@ public class QuartzManager {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         return scheduler.getJobDetail(jobKey);
+    }
+
+    /**
+     * 校验 job 是否存在，如果 jobName/jobGroup 中存在为空的时候返回 true。异常时，返回true
+     *
+     * @param jobName
+     * @param jobGroup
+     * @return boolean 存在-true
+     * @author LiuYongTao
+     * @date 2019/8/15 11:10
+     */
+    public boolean isJobExist(String jobName, String jobGroup) {
+        if (ToolsUtils.isEmpty(jobName) || ToolsUtils.isEmpty(jobGroup)) {
+            return true;
+        }
+        JobDetail jobDetail;
+        try {
+            jobDetail = this.getJobDetail(jobName, jobGroup);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return true;
+        }
+        return !(jobDetail == null);
     }
 }

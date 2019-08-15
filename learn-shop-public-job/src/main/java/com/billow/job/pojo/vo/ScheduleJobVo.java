@@ -22,4 +22,10 @@ public class ScheduleJobVo extends ScheduleJobPo implements Serializable {
 
     @ApiModelProperty("验自动任务添加、修改时参数的设置")
     private String message;
+
+    @ApiModelProperty("旧的任务分组")
+    private String oldJobGroup;
+
+    @ApiModelProperty("旧的任务名称")
+    private String oldJobName;
 }

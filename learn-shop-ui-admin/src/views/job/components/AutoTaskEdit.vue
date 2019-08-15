@@ -3,7 +3,8 @@
     <div class="ms-doc">
       <h3>权限信息</h3>
       <article>
-        <el-form ref="autoTaskInfo" :model="autoTaskInfo" label-width="100px" size="mini">
+        <el-form ref="autoTaskInfo" :rules="rulesForm" :model="autoTaskInfo" :inline-message="true" label-width="100px"
+                 size="mini">
           <el-form-item label="任务分组" prop="jobGroup">
             <template slot-scope="scope">
               <custom-select v-model="autoTaskInfo.jobGroup"
@@ -13,30 +14,37 @@
             </template>
           </el-form-item>
           <el-form-item label="任务名称" prop="jobName">
-            <el-input v-model="autoTaskInfo.jobName" placeholder="请输入内容"></el-input>
+            <el-col :span="18">
+              <el-input v-model="autoTaskInfo.jobName" placeholder="请输入内容"></el-input>
+            </el-col>
           </el-form-item>
-          <el-form-item label="状态" prop="jobStatus">
-            <el-switch v-model="autoTaskInfo.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
-                       inactive-value="0"></el-switch>
-          </el-form-item>
-          <el-form-item label="Cron表达式" prop="cronExpression">
-            <el-row>
-              <el-col :span="22">
-                <el-input v-model="autoTaskInfo.cronExpression" placeholder="请输入内容"></el-input>
-              </el-col>
-              <el-col :span="2">
-                <el-button style="width: 100%" type="success" @click="cronExp" size="mini">配置</el-button>
-              </el-col>
-            </el-row>
+          <el-form-item label="Cron表达式" prop="cronExpression" :required="autoTaskInfo.jobStatus == '1'">
+            <el-col :span="2">
+              <el-button style="width: 100%" type="success" @click="cronExp" size="mini">配置</el-button>
+            </el-col>
+            <el-col :span="16">
+              <el-input v-model="autoTaskInfo.cronExpression" placeholder="请输入内容"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item label="BeanClass" prop="beanClass">
-            <el-input v-model="autoTaskInfo.beanClass" placeholder="请输入内容"></el-input>
+            <el-col :span="18">
+              <el-input v-model="autoTaskInfo.beanClass" placeholder="请输入内容"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item label="SpringId" prop="springId">
-            <el-input v-model="autoTaskInfo.springId" placeholder="请输入内容"></el-input>
+            <el-col :span="18">
+              <el-input v-model="autoTaskInfo.springId" placeholder="请输入内容"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item label="执行方法" prop="methodName">
-            <el-input v-model="autoTaskInfo.methodName" placeholder="请输入内容"></el-input>
+            <el-col :span="18">
+              <el-input v-model="autoTaskInfo.methodName" placeholder="请输入内容"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="任务状态" prop="jobStatus">
+            <el-switch v-model="autoTaskInfo.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
+                       :validate-event="true"
+                       inactive-value="0"></el-switch>
           </el-form-item>
           <el-form-item label="串行/并行" prop="isConcurrent">
             <el-switch v-model="autoTaskInfo.isConcurrent" active-text="串行" active-value="0" inactive-text="并行"
@@ -45,11 +53,16 @@
           <el-form-item label="有效标志" prop="validInd">
             <el-switch v-model="autoTaskInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
+          <el-form-item label="异常停止">
+            <el-switch v-model="autoTaskInfo.isStop" active-text="是" inactive-text="否"></el-switch>
+          </el-form-item>
           <el-form-item label="任务描述" prop="description">
-            <el-input type="textarea" v-model="autoTaskInfo.description"></el-input>
+            <el-col :span="18">
+              <el-input type="textarea" v-model="autoTaskInfo.description"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item size="mini">
-            <el-button type="primary" @click="onSubmit">保存</el-button>
+            <el-button type="primary" @click="validSubmit">保存</el-button>
             <el-button @click="onReset('autoTaskInfo')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
@@ -60,13 +73,14 @@
                center
                :visible.sync="dialogCronExpVisible"
                :close-on-click-modal="false">
-      <cron-expression :cron="autoTaskInfo.cronExpression" @cancelCron="cancelCron" @saveCron="saveCron"></cron-expression>
+      <cron-expression :cron="autoTaskInfo.cronExpression" @cancelCron="cancelCron"
+                       @saveCron="saveCron"></cron-expression>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import {SaveAutoTask} from "../../../api/job/jobMag";
+  import {SaveAutoTask, CheckAutoTask} from "../../../api/job/jobMag";
 
   import CustomSelect from '../../../components/common/CustomSelect.vue';
   import CronExpression from '../../../views/job/components/CronExpression.vue';
@@ -80,13 +94,24 @@
       return {
         optionType: '', // 操作类型，edit,add
         autoTaskInfo: {
+          jobName: "",
+          beanClass: "",
+          springId: "",
+          jobGroup: "5",
           jobStatus: "1",
           isConcurrent: "1",
-          cronExpression:"",
+          cronExpression: "",
           validInd: true
         },
         systemModuleSelect: [],
-        dialogCronExpVisible: false
+        dialogCronExpVisible: false,
+        rulesForm: {
+          methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
+          beanClass: [{validator: this.validateBeanClass, trigger: 'blur'}],
+          springId: [{validator: this.validateSpringId, trigger: 'blur'}],
+          cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
+          jobName: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
+        }
       };
     },
     created() {
@@ -97,6 +122,29 @@
       }
     },
     methods: {
+      validSubmit() {
+        var _this = this;
+        this.$refs['autoTaskInfo'].validate(valid => {
+          if (valid) {
+            _this.checkAutoTask();
+          } else {
+            return false;
+          }
+        });
+      },
+      checkAutoTask() {
+        CheckAutoTask(this.autoTaskInfo).then(res => {
+          if (res.resData.message && res.resData.message != '') {
+            this.$message({
+              type: 'error',
+              dangerouslyUseHTMLString: true,
+              message: res.resData.message
+            });
+          } else {
+            this.onSubmit();
+          }
+        });
+      },
       onSubmit() {
         var _this = this;
         SaveAutoTask(_this.autoTaskInfo).then(res => {
@@ -115,15 +163,36 @@
       onReset(autoTaskInfo) {
         this.$refs[autoTaskInfo].resetFields();
       },
-      cronExp(){
+      cronExp() {
         this.dialogCronExpVisible = true;
       },
-      cancelCron(){
+      cancelCron() {
         this.dialogCronExpVisible = false;
       },
-      saveCron(cron){
+      saveCron(cron) {
         this.autoTaskInfo.cronExpression = cron;
         this.cancelCron();
+      },
+      validateBeanClass(rule, value, callback) {
+        this.$refs.autoTaskInfo.validateField('springId');
+        callback();
+      },
+      validateSpringId(rule, value, callback) {
+        if (value != '' && this.autoTaskInfo.beanClass != '') {
+          callback(new Error('BeanClass 与 SpringId 不能同时存在!'));
+        } else if (value === '' && this.autoTaskInfo.beanClass === '') {
+          callback(new Error('BeanClass 与 SpringId 不能同时为空!'));
+        } else {
+          callback();
+        }
+
+      },
+      validateCronExp(rule, value, callback) {
+        if (value === '' && this.autoTaskInfo.jobStatus === '1') {
+          callback(new Error('启动状态，Cron表达式不能为空'));
+        } else {
+          callback();
+        }
       }
     }
   };
