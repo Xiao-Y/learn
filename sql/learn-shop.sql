@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 15/08/2019 11:36:07
+ Date: 15/08/2019 17:24:22
 */
 
 SET NAMES utf8mb4;
@@ -385,30 +385,70 @@ INSERT INTO `sys_role` VALUES (8, '2019-08-08 18:07:43', 'admin', '2019-08-08 18
 DROP TABLE IF EXISTS `sys_schedule_job`;
 CREATE TABLE `sys_schedule_job`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `job_status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `cron_expression` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `bean_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `spring_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `method_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `is_concurrent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `is_exception_stop` bit(1) NULL DEFAULT NULL,
+  `is_save_log` bit(1) NULL DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `valid_ind` bit(1) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
   `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `bean_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `cron_expression` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `is_concurrent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `job_status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `method_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `spring_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `is_stop` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_schedule_job
 -- ----------------------------
-INSERT INTO `sys_schedule_job` VALUES (2, NULL, NULL, NULL, NULL, b'0', '1231', '', '123123', '1', '5', '123', '0', '123', '', b'0');
-INSERT INTO `sys_schedule_job` VALUES (4, NULL, NULL, NULL, NULL, b'1', '123131', '123', '123123', '1', '2', '123', '0', '123', '23123', b'0');
-INSERT INTO `sys_schedule_job` VALUES (5, NULL, NULL, NULL, NULL, b'1', 'com.billow.job.autoTask.TestAutoTask', '*/10 * * * * ?', '234234', '1', '5', '234', '0', 'test', '', b'1');
+INSERT INTO `sys_schedule_job` VALUES (2, '5', '123', '0', '', '1231', '', '123', '1', b'0', b'1', '123123', b'0', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_schedule_job` VALUES (4, '2', '测试自动任务', '1', '*/5 * * * * ?', 'com.billow.job.autoTask.TestAutoTask', '', 'test', '1', b'1', b'1', '123123', b'1', NULL, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_schedule_job_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_schedule_job_log`;
+CREATE TABLE `sys_schedule_job_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `job_id` int(11) NULL DEFAULT NULL,
+  `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `is_success` bit(1) NULL DEFAULT NULL,
+  `run_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `info` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `valid_ind` bit(1) NULL DEFAULT NULL,
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_time` datetime(0) NULL DEFAULT NULL,
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 638 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_schedule_job_log
+-- ----------------------------
+INSERT INTO `sys_schedule_job_log` VALUES (906, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:18:57', NULL, '2019-08-15 17:18:57', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (907, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:02', NULL, '2019-08-15 17:19:02', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (908, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:07', NULL, '2019-08-15 17:19:07', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (909, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:13', NULL, '2019-08-15 17:19:13', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (910, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:17', NULL, '2019-08-15 17:19:17', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (911, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:23', NULL, '2019-08-15 17:19:23', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (912, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:28', NULL, '2019-08-15 17:19:28', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (913, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:32', NULL, '2019-08-15 17:19:32', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (914, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:37', NULL, '2019-08-15 17:19:37', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (915, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:42', NULL, '2019-08-15 17:19:42', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (916, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:48', NULL, '2019-08-15 17:19:48', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (917, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:52', NULL, '2019-08-15 17:19:52', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (918, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:19:57', NULL, '2019-08-15 17:19:57', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (919, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:20:02', NULL, '2019-08-15 17:20:02', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (920, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:20:07', NULL, '2019-08-15 17:20:07', NULL);
+INSERT INTO `sys_schedule_job_log` VALUES (921, 4, '2', '测试自动任务', b'1', '0天0小时0分2秒', NULL, NULL, '2019-08-15 17:20:12', NULL, '2019-08-15 17:20:12', NULL);
 
 -- ----------------------------
 -- Table structure for u_user
