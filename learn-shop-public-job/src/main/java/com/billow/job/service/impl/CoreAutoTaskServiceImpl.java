@@ -4,19 +4,18 @@ package com.billow.job.service.impl;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.core.manager.QuartzManager;
 import com.billow.job.pojo.vo.ScheduleJobVo;
+import com.billow.job.service.CoreAutoTaskService;
 import com.billow.job.service.ScheduleJobService;
-import com.billow.job.service.TaskManagerService;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import org.quartz.CronScheduleBuilder;
-import org.quartz.JobDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class TaskManagerServiceImpl implements TaskManagerService {
+public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
 
     @Autowired
     private QuartzManager quartzManager;
@@ -31,19 +30,23 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 
         if (dto.getValidInd() != null) {
             scheduleJobVo.setValidInd(dto.getValidInd());
-            if (!scheduleJobVo.getValidInd()) {
+            if (scheduleJobVo.getValidInd()) {
+                // 有效状态时，job 的状态保持不变
+                dto.setJobStatus(scheduleJobVo.getJobStatus());
+            } else {
+                // 无效时，暂停job
                 dto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus());
             }
         }
 
         String jobStatus = dto.getJobStatus();
         if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
-            quartzManager.addJob(scheduleJobVo);
+            quartzManager.resumeJob(scheduleJobVo);
         } else if (AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus().equals(jobStatus)) {
             quartzManager.pauseJob(scheduleJobVo);
         }
         scheduleJobVo.setJobStatus(jobStatus);
-        scheduleJobService.updateByPrimaryKeySelective(scheduleJobVo);
+        scheduleJobService.updateByPk(scheduleJobVo);
     }
 
     @Override
@@ -57,35 +60,23 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void saveAutoTask(ScheduleJobVo scheduleJobVo) throws Exception {
-        Long jobId = scheduleJobVo.getId();
-        String jobStatus = scheduleJobVo.getJobStatus();
-        scheduleJobService.save(scheduleJobVo);
-        if (null == jobId) {// 表示添加
-            if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
-                quartzManager.addJob(scheduleJobVo);
-            }
-        } else {// 表示更新
+        if (null != scheduleJobVo.getId()) {
             // 如果是更新就直接删除旧的任务，重新添加（主要是更新JobDataMap）
-            if (ToolsUtils.isNotEmpty(scheduleJobVo.getOldJobName()) && ToolsUtils.isNotEmpty(scheduleJobVo.getOldJobGroup())) {
-                ScheduleJobVo jobVo = new ScheduleJobVo();
-                jobVo.setJobName(scheduleJobVo.getOldJobName());
-                jobVo.setJobGroup(scheduleJobVo.getOldJobGroup());
-                quartzManager.deleteJob(jobVo);
-            }
-            // 查询是否有计划任务
-            JobDetail jobDetail = quartzManager.getJobDetail(scheduleJobVo.getJobName(), scheduleJobVo.getJobGroup());
-            if (jobDetail != null) {
-                if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
-                    quartzManager.addJob(scheduleJobVo);
-                } else if (AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus().equals(jobStatus)) {
-                    quartzManager.pauseJob(scheduleJobVo);
-                }
-            } else {
-                if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
-                    quartzManager.addJob(scheduleJobVo);
-                }
+            ScheduleJobVo jobVo = new ScheduleJobVo();
+            jobVo.setJobName(scheduleJobVo.getOldJobName());
+            jobVo.setJobGroup(scheduleJobVo.getOldJobGroup());
+            quartzManager.deleteJob(jobVo);
+        }
+
+        if (!scheduleJobVo.getValidInd()) {
+            scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus());
+        } else {
+            quartzManager.addJob(scheduleJobVo);
+            if (AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus().equals(scheduleJobVo.getJobStatus())) {
+                quartzManager.pauseJob(scheduleJobVo);
             }
         }
+        scheduleJobService.save(scheduleJobVo);
     }
 
     @Override

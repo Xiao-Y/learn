@@ -10,7 +10,7 @@ import org.quartz.JobExecutionContext;
  * @author liuyongtao
  * @date 2017年5月12日 下午5:29:33
  */
-public interface TaskManagerService {
+public interface CoreAutoTaskService {
 
     /**
      * 启用、禁用自动任务

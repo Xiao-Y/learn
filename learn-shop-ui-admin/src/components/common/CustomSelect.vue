@@ -8,6 +8,7 @@
     :default-first-option="defaultFirstOption"
     :multiple="multiple"
     :disabled="disabled"
+    :size="size"
     :placeholder="placeholder">
     <el-option
       v-for="item in currentSource"
@@ -77,6 +78,11 @@
       parentValues: {
         // type: Array,
         default: null
+      },
+      // 下拉的大小
+      size: {
+        type: String,
+        default: 'mini'
       }
     },
     data() {

@@ -11,7 +11,8 @@ import org.quartz.JobExecutionException;
 import org.quartz.PersistJobDataAfterExecution;
 
 /**
- * 若一个方法一次执行不完下次轮转时则等待改方法执行完后才执行下一次操作(相当于单线程的)
+ * DisallowConcurrentExecution 若一个方法一次执行不完下次轮转时则等待改方法执行完后才执行下一次操作(相当于单线程的)
+ * PersistJobDataAfterExecution 更新JobDetail中JobDataMap的数据
  *
  * @author liuyongtao
  * @date 2017年5月7日 下午5:22:03

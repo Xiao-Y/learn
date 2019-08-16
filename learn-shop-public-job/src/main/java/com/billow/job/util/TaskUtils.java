@@ -1,7 +1,6 @@
 package com.billow.job.util;
 
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
-import com.billow.job.pojo.po.ScheduleJobPo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.service.ScheduleJobLogService;
@@ -10,10 +9,7 @@ import com.billow.tools.date.DateTime;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.quartz.CronExpression;
-import org.quartz.JobExecutionContext;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -166,7 +162,7 @@ public class TaskUtils {
                 ScheduleJobVo scheduleJobVo = scheduleJobService.findByIdAndValidIndIsTrueAndIsStopIsTrue(scheduleJob.getId());
                 if (scheduleJobVo != null) {
                     scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
-                    scheduleJobService.updateByPrimaryKeySelective(scheduleJobVo);
+                    scheduleJobService.updateByPk(scheduleJobVo);
                 }
             } catch (Exception e) {
                 log.error("自动任务修改失败：{}", e.getMessage());

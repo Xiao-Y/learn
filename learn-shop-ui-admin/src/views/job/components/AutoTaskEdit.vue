@@ -42,7 +42,7 @@
             </el-col>
           </el-form-item>
           <el-form-item label="任务状态" prop="jobStatus">
-            <el-switch v-model="autoTaskInfo.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
+            <el-switch v-model="autoTaskInfo.jobStatus" @change="validIndChange" active-text="启用" active-value="1" inactive-text="停止"
                        :validate-event="true"
                        inactive-value="0"></el-switch>
           </el-form-item>
@@ -51,7 +51,7 @@
                        inactive-value="1"></el-switch>
           </el-form-item>
           <el-form-item label="有效标志" prop="validInd">
-            <el-switch v-model="autoTaskInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
+            <el-switch v-model="autoTaskInfo.validInd" @change="validIndChange" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
           <el-form-item label="异常停止">
             <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
@@ -196,6 +196,12 @@
           callback(new Error('启动状态，Cron表达式不能为空'));
         } else {
           callback();
+        }
+      },
+      validIndChange(){
+        if(!this.autoTaskInfo.validInd){
+          this.autoTaskInfo.jobStatus = "0";
+          this.$message.info('有效标志为无效时，自动任务状态只能是停止');
         }
       }
     }

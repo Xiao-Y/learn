@@ -95,6 +95,7 @@
               <el-form-item label="任务状态">
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
                            inactive-value="0"
+                           :disabled="!props.row.validInd"
                            @change="changeJobStatus(props.row)"></el-switch>
               </el-form-item>
             </el-form>
@@ -207,6 +208,7 @@
         VueUtils.confirmInd(row.jobName, () => {
           UpdateJobInd(row.id, false).then(res => {
             row.validInd = false;
+            row.jobStatus = "0";
             _this.$message({
               type: 'success',
               message: '禁用成功!'

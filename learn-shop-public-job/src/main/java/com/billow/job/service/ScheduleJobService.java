@@ -41,7 +41,7 @@ public interface ScheduleJobService {
 
     ScheduleJobVo selectByPK(Long id);
 
-    void updateByPrimaryKeySelective(ScheduleJobVo dto);
+    void updateByPk(ScheduleJobVo dto);
 
     void deleteByPK(Long id);
 

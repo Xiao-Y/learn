@@ -4,8 +4,8 @@ import com.billow.common.base.BaseApi;
 import com.billow.job.pojo.ex.TestRunCronEx;
 import com.billow.job.pojo.po.ScheduleJobPo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
+import com.billow.job.service.CoreAutoTaskService;
 import com.billow.job.service.ScheduleJobService;
-import com.billow.job.service.TaskManagerService;
 import com.billow.job.util.TaskUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,9 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 核心自动任务控制类
@@ -45,7 +42,7 @@ public class CoreAutoTaskApi extends BaseApi {
     @Autowired
     private ScheduleJobService scheduleJobService;
     @Autowired
-    private TaskManagerService taskManagerService;
+    private CoreAutoTaskService coreAutoTaskService;
 
     @ApiOperation("查询自动任务列表")
     @PostMapping("/findAutoTask")
@@ -53,18 +50,6 @@ public class CoreAutoTaskApi extends BaseApi {
         Page<ScheduleJobPo> jods = scheduleJobService.selectAll(scheduleJobVo);
         return jods;
     }
-
-//    @ApiOperation("自动任务修改页面,jobId jobId为null表示是添加，不为null表示修改")
-//    @PostMapping("/editAutoTask")
-//    public ScheduleJobVo editAutoTask(ScheduleJobVo scheduleJobVo) {
-//        Long jobId = scheduleJobVo.getId();
-//        if (jobId != null) {// 表示编辑
-//            ScheduleJobVo dto = new ScheduleJobVo();
-//            dto.setId(jobId);
-//            return scheduleJobService.selectByPrimaryKey(dto);
-//        }
-//        return scheduleJobVo;
-//    }
 
     @ApiOperation("启用、停止、禁用自动任务")
     @ApiImplicitParams({@ApiImplicitParam(dataType = "Integer", name = "jobId", value = "自动任务id", required = true),
@@ -81,34 +66,34 @@ public class CoreAutoTaskApi extends BaseApi {
         dto.setId(jobId);
         dto.setJobStatus(jobStatus);
         dto.setValidInd(validInd);
-        taskManagerService.updateJobStatus(dto);
+        coreAutoTaskService.updateJobStatus(dto);
     }
 
     @ApiOperation("根据任务id,删除自动任务")
     @ApiParam(name = "jobId", value = "自动任务id")
     @DeleteMapping("/deleteAutoTask/{jobId}")
     public void deleteAutoTask(@PathVariable("jobId") Long jobId) throws Exception {
-        taskManagerService.deleteAutoTask(jobId);
+        coreAutoTaskService.deleteAutoTask(jobId);
     }
 
     @ApiOperation("保存自动任务")
     @PostMapping("/saveAutoTask")
     public ScheduleJobVo saveAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
-        taskManagerService.saveAutoTask(scheduleJobVo);
+        coreAutoTaskService.saveAutoTask(scheduleJobVo);
         return scheduleJobVo;
     }
 
     @ApiOperation("立即执行自动任务")
     @PostMapping("/immediateExecutionTask")
     public ScheduleJobVo immediateExecutionTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
-        taskManagerService.immediateExecutionTask(scheduleJobVo);
+        coreAutoTaskService.immediateExecutionTask(scheduleJobVo);
         return scheduleJobVo;
     }
 
     @ApiOperation("校验自动任务添加、修改时参数的设置")
     @PostMapping("/checkAutoTask")
     public ScheduleJobVo checkAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
-        taskManagerService.checkAutoTask(scheduleJobVo);
+        coreAutoTaskService.checkAutoTask(scheduleJobVo);
         return scheduleJobVo;
     }
 

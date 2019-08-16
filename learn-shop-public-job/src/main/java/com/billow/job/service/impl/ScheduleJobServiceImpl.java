@@ -33,7 +33,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     public List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo) {
         ScheduleJobPo scheduleJobPo = ConvertUtils.convert(scheduleJobVo, ScheduleJobPo.class);
-        DefaultSpec<ScheduleJobPo> defaultSpec = new DefaultSpec<>(scheduleJobVo);
+        DefaultSpec<ScheduleJobPo> defaultSpec = new DefaultSpec<>(scheduleJobPo);
         List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findAll(defaultSpec);
         return ConvertUtils.convert(scheduleJobPos, ScheduleJobVo.class);
     }
@@ -57,7 +57,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateByPrimaryKeySelective(ScheduleJobVo dto) {
+    public void updateByPk(ScheduleJobVo dto) {
         this.save(dto);
     }
 
