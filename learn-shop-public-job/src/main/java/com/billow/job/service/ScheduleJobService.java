@@ -1,6 +1,8 @@
 package com.billow.job.service;
 
+import com.billow.job.pojo.po.ScheduleJobLogPo;
 import com.billow.job.pojo.po.ScheduleJobPo;
+import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import org.springframework.data.domain.Page;
 
@@ -67,4 +69,14 @@ public interface ScheduleJobService {
      * @date 2019/8/15 11:29
      */
     int countByJobNameAndJobGroup(String jobName, String jobGroup);
+
+    /**
+     * 查询执行日志
+     *
+     * @param scheduleJobLogVo
+     * @return org.springframework.data.domain.Page<com.billow.job.pojo.po.ScheduleJobLogPo>
+     * @author LiuYongTao
+     * @date 2019/8/16 16:17
+     */
+    Page<ScheduleJobLogPo> findAutoTaskLog(ScheduleJobLogVo scheduleJobLogVo);
 }

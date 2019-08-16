@@ -42,7 +42,8 @@
             </el-col>
           </el-form-item>
           <el-form-item label="任务状态" prop="jobStatus">
-            <el-switch v-model="autoTaskInfo.jobStatus" @change="validIndChange" active-text="启用" active-value="1" inactive-text="停止"
+            <el-switch v-model="autoTaskInfo.jobStatus" @change="validIndChange" active-text="启用" active-value="1"
+                       inactive-text="停止"
                        :validate-event="true"
                        inactive-value="0"></el-switch>
           </el-form-item>
@@ -51,7 +52,8 @@
                        inactive-value="1"></el-switch>
           </el-form-item>
           <el-form-item label="有效标志" prop="validInd">
-            <el-switch v-model="autoTaskInfo.validInd" @change="validIndChange" active-text="有效" inactive-text="无效"></el-switch>
+            <el-switch v-model="autoTaskInfo.validInd" @change="validIndChange" active-text="有效"
+                       inactive-text="无效"></el-switch>
           </el-form-item>
           <el-form-item label="异常停止">
             <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
@@ -126,6 +128,7 @@
       }
     },
     methods: {
+      // 校验提交
       validSubmit() {
         var _this = this;
         this.$refs['autoTaskInfo'].validate(valid => {
@@ -136,6 +139,7 @@
           }
         });
       },
+      // 校验提交数据正确否
       checkAutoTask() {
         CheckAutoTask(this.autoTaskInfo).then(res => {
           if (res.resData.message && res.resData.message != '') {
@@ -149,6 +153,7 @@
           }
         });
       },
+      // 提交
       onSubmit() {
         var _this = this;
         SaveAutoTask(_this.autoTaskInfo).then(res => {
@@ -167,20 +172,24 @@
       onReset(autoTaskInfo) {
         this.$refs[autoTaskInfo].resetFields();
       },
+      // 打开 cron 表达式选择窗口
       cronExp() {
         this.dialogCronExpVisible = true;
       },
       cancelCron() {
         this.dialogCronExpVisible = false;
       },
+      // 保存cron
       saveCron(cron) {
         this.autoTaskInfo.cronExpression = cron;
         this.cancelCron();
       },
+      // 规则校验：beanClass
       validateBeanClass(rule, value, callback) {
         this.$refs.autoTaskInfo.validateField('springId');
         callback();
       },
+      // 规则校验：springId
       validateSpringId(rule, value, callback) {
         if (value != '' && this.autoTaskInfo.beanClass != '') {
           callback(new Error('BeanClass 与 SpringId 不能同时存在!'));
@@ -191,6 +200,7 @@
         }
 
       },
+      // 规则校验：cronExp
       validateCronExp(rule, value, callback) {
         if (value === '' && this.autoTaskInfo.jobStatus === '1') {
           callback(new Error('启动状态，Cron表达式不能为空'));
@@ -198,8 +208,9 @@
           callback();
         }
       },
-      validIndChange(){
-        if(!this.autoTaskInfo.validInd){
+      // // 规则校验：validInd/jobStatus
+      validIndChange() {
+        if (!this.autoTaskInfo.validInd) {
           this.autoTaskInfo.jobStatus = "0";
           this.$message.info('有效标志为无效时，自动任务状态只能是停止');
         }

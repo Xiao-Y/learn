@@ -19,7 +19,6 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
 
     @Autowired
     private QuartzManager quartzManager;
-
     @Autowired
     private ScheduleJobService scheduleJobService;
 

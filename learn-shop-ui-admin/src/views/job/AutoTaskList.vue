@@ -115,6 +115,11 @@
                   <i class="el-icon-success"></i>
                 </el-button>
               </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="执行日志" placement="top-start" :open-delay="1500">
+                <el-button type="success" size="mini" @click="handleRunLog(scope.row,scope.$index)">
+                  <i class="el-icon-document"></i>
+                </el-button>
+              </el-tooltip>
             </div>
           </template>
         </el-table-column>
@@ -122,6 +127,9 @@
     </el-row>
     <!-- 分页组件  -->
     <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
+    <el-dialog :title="tableTitle" :visible.sync="dialogTableVisible" v-if="dialogTableVisible">
+      <auto-task-log-list :autoTaskInfo="autoTaskInfo"></auto-task-log-list>
+    </el-dialog>
   </div>
 </template>
 
@@ -143,6 +151,7 @@
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue';
   import CustomSelect from '../../components/common/CustomSelect.vue';
+  import AutoTaskLogList from "./AutoTaskLogList";
 
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
@@ -150,6 +159,7 @@
 
   export default {
     components: {
+      AutoTaskLogList,
       ButtonGroupOption,
       ButtonGroupQuery,
       CustomPage,
@@ -170,6 +180,9 @@
         tableData: [],
         activeNames: ['1'],
         systemModuleSelect: [],// 系统模块的下拉数据源
+        dialogTableVisible: false,// 打开日志窗口
+        tableTitle: '',// 执行日志
+        autoTaskInfo: {},// 用于打开日志
       }
     },
     //每次激活时
@@ -203,6 +216,7 @@
           this.queryFilter.totalPages = data.totalPages;
         });
       },
+      // 禁用自动任务
       handleProhibit(row, index) {
         var _this = this;
         VueUtils.confirmInd(row.jobName, () => {
@@ -216,6 +230,7 @@
           });
         });
       },
+      // 添加自动任务
       handleAdd() {
         this.$router.push({
           name: 'jobAutoTaskEdit',
@@ -225,6 +240,7 @@
           }
         });
       },
+      // 修改自动任务
       handleEdit(row, index) {
         Object.assign(row, {
           oldJobGroup: row.jobGroup,
@@ -239,6 +255,7 @@
           }
         });
       },
+      // 删除自动任务
       handleDelete(row, index) {
         var _this = this;
         VueUtils.confirmDel(row.jobName, () => {
@@ -251,6 +268,7 @@
           });
         });
       },
+      // 修改任务状态
       changeJobStatus(row) {
         if (!row.cronExpression || row.cronExpression === '') {
           this.$message.error("Cron 表达式不能为空");
@@ -267,16 +285,23 @@
           row.jobStatus = row.jobStatus === "0" ? "1" : "0";
         });
       },
+      // 立即执行
       handleImmediate(row, index) {
         ImmediateExecutionTask(row.jobName, row.jobGroup).then(res => {
           this.$message.success("成功加入执行队列");
         });
+      },
+      // 执行日志
+      handleRunLog(row, index) {
+        this.tableTitle = "[ " + row.jobGroup + "-" + row.jobName + " ] 的执行日志";
+        Object.assign(this.autoTaskInfo, row);
+        Object.assign(this.autoTaskInfo, {systemModuleSelect: this.systemModuleSelect});
+        this.dialogTableVisible = true;
+        this.$bus.emit("busLog");
       }
     },
     filters: {
       jobStatusName(jobStatus) {
-//        row.tag = row.jobStatus;
-//        console.info("row.tag", row.tag);
         return jobStatus === '1' ? '启用' : '停止';
       }
     }

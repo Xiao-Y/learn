@@ -2,7 +2,9 @@ package com.billow.job.api;
 
 import com.billow.common.base.BaseApi;
 import com.billow.job.pojo.ex.TestRunCronEx;
+import com.billow.job.pojo.po.ScheduleJobLogPo;
 import com.billow.job.pojo.po.ScheduleJobPo;
+import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.CoreAutoTaskService;
 import com.billow.job.service.ScheduleJobService;
@@ -103,4 +105,12 @@ public class CoreAutoTaskApi extends BaseApi {
         logger.info("cron:{}", testRunCronEx.getCron());
         return TaskUtils.runTime(testRunCronEx.getCron(), testRunCronEx.getTimes());
     }
+
+    @ApiOperation("查询自动任务执行日志")
+    @PostMapping("/findAutoTaskLog")
+    public Page<ScheduleJobLogPo> findAutoTaskLog(@RequestBody ScheduleJobLogVo scheduleJobLogVo) {
+        return scheduleJobService.findAutoTaskLog(scheduleJobLogVo);
+    }
+
+
 }

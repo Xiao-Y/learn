@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -40,8 +37,7 @@ public class ScheduleJobLogPo extends BasePo implements Serializable {
     private Long jobId;
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Type(type="text")
+    @Type(type = "text")
     @ApiModelProperty("错误信息")
     private String info;
 

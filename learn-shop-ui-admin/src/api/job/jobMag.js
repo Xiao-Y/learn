@@ -68,3 +68,11 @@ export const ImmediateExecutionTask = (jobName, jobGroup) => requestUtils.post(b
  * @constructor
  */
 export const CheckAutoTask = data => requestUtils.post(baseUrl + '/checkAutoTask', Object.assign(data));
+
+/**
+ * 查询执行日志
+ * @param data
+ * @returns {*|Promise|Promise<any>}
+ * @constructor
+ */
+export const LoadDataJobLogList = data => requestUtils.post(baseUrl + '/findAutoTaskLog', Object.assign(data));

@@ -2,8 +2,11 @@ package com.billow.job.service.impl;
 
 import com.billow.common.jpa.DefaultSpec;
 import com.billow.job.dao.ScheduleJobDao;
+import com.billow.job.dao.ScheduleJobLogDao;
 import com.billow.job.dao.specification.ScheduleJobSpec;
+import com.billow.job.pojo.po.ScheduleJobLogPo;
 import com.billow.job.pojo.po.ScheduleJobPo;
+import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.tools.utlis.ConvertUtils;
@@ -11,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +32,8 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Autowired
     private ScheduleJobDao scheduleJobDao;
+    @Autowired
+    private ScheduleJobLogDao scheduleJobLogDao;
 
     @Override
     public List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo) {
@@ -37,17 +42,6 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findAll(defaultSpec);
         return ConvertUtils.convert(scheduleJobPos, ScheduleJobVo.class);
     }
-
-//    @Override
-//    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-//    public void updateJobStatus(ScheduleJobVo vo) {
-//        ScheduleJobPo jobDto = scheduleJobDao.findOne(vo.getId());
-//        if (jobDto != null) {
-//            jobDto.setJobStatus(vo.getJobStatus());
-//            jobDto.setUpdateTime(new Date());
-//            scheduleJobDao.save(jobDto);
-//        }
-//    }
 
     @Override
     public ScheduleJobVo selectByPK(Long id) {
@@ -91,6 +85,16 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public int countByJobNameAndJobGroup(String jobName, String jobGroup) {
-        return scheduleJobDao.countByJobNameAndJobGroup(jobName,jobGroup);
+        return scheduleJobDao.countByJobNameAndJobGroup(jobName, jobGroup);
+    }
+
+    @Override
+    public Page<ScheduleJobLogPo> findAutoTaskLog(ScheduleJobLogVo scheduleJobLogVo) {
+        ScheduleJobLogPo scheduleJobLogPo = ConvertUtils.convert(scheduleJobLogVo, ScheduleJobLogPo.class);
+        DefaultSpec<ScheduleJobLogPo> defaultSpec = new DefaultSpec<>(scheduleJobLogPo);
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
+        Pageable pageable = new PageRequest(scheduleJobLogVo.getPageNo(), scheduleJobLogVo.getPageSize(), sort);
+        Page<ScheduleJobLogPo> page = scheduleJobLogDao.findAll(defaultSpec, pageable);
+        return page;
     }
 }
