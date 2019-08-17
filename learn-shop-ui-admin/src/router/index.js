@@ -92,6 +92,10 @@ export const asyncRouterMap = [{
     name: 'jobAutoTaskEdit',
     path: 'autoTaskList/autoTaskEdit',
     component: resolve => require(['../views/job/components/AutoTaskEdit.vue'], resolve)
+  }, {
+    name: 'jobAutoTaskCharts',
+    path: 'autoTaskList/autoTaskCharts',
+    component: resolve => require(['../views/job/AutoTaskCharts.vue'], resolve)
   }]
 }, {
   path: '/pro',
