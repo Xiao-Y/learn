@@ -15,29 +15,8 @@ server:
 spring:
   application:
     name: learn-shop-public-job #客户端名称
-#  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-#    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: update
-#日志配置
-#logging:
-#  level:
-#    root: INFO
-#    org.hibernate: INFO
-#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-#    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
-
-#    com.itmuch.youran.persistence: ERROR
-
-# 显示 sql 的查询参数
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE

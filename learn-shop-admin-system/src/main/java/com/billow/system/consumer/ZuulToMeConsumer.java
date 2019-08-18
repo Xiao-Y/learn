@@ -54,7 +54,7 @@ public class ZuulToMeConsumer {
         pool.execute(() -> {
             log.info("开始初始化 SQL...");
             try {
-                Resource resource = new ClassPathResource("learn-shop.sql");
+                Resource resource = new ClassPathResource("sql/learn-shop.sql");
                 ScriptUtils.executeSqlScript(dataSource.getConnection(), resource);
             } catch (SQLException e) {
                 e.printStackTrace();

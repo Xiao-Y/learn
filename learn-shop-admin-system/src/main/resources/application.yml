@@ -14,8 +14,6 @@ server:
 spring:
   application:
     name: learn-shop-admin-system #客户端名称
-#  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-#    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
@@ -27,8 +25,6 @@ spring:
         enabled: true #开启消息跟踪
 
 custom:
-#  security:
-#    auth-server: http://127.0.0.1:9999
   menu:
     read-cache: true #菜单优先从缓存中读出
     write-cache: true #菜单写入缓存中
@@ -40,14 +36,3 @@ custom:
     image-mapping: /displayImag # 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/
     markdown-img-path: /markdown # 图片保存的路径
     user-icon-img-path: /usericon # 图片保存的路径
-
-
-# 显示 sql 的查询参数
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
