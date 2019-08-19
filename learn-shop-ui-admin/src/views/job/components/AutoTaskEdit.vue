@@ -89,7 +89,7 @@
   import {SaveAutoTask, CheckAutoTask} from "../../../api/job/jobMag";
 
   import CustomSelect from '../../../components/common/CustomSelect.vue';
-  import CronExpression from '../../../views/job/components/CronExpression.vue';
+  import CronExpression from '../../../components/common/cronExpression/CronExpression.vue';
 
   export default {
     components: {
