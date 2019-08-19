@@ -100,7 +100,8 @@
           checkPassWord: [{validator: this.validateCheckPass, trigger: 'blur'}]
         },
       }
-    }, created() {
+    },
+    created() {
       // 加载用户 Header主题
       if (localStorage.getItem('themeValue')) {
         switch (localStorage.getItem('themeValue')) {
@@ -194,9 +195,9 @@
         if (!getAccessToken()) {
           return;
         }
-        GetUserInfo().then(res => {
-          this.currenUserInfo = res.resData;
-        });
+        // GetUserInfo().then(res => {
+        //   this.currenUserInfo = res.resData;
+        // });
       },
       validatePass(rule, value, callback) {
         if (value === '') {

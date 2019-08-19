@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import tendency from '../../components/common/tendency';
+  import tendency from './Tendency';
   // import {userCount, orderCount, getUserCount, getOrderCount, adminDayCount, adminCount} from '../../api/home/home';
   import dtime from 'time-formater'
 
