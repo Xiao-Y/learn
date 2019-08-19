@@ -1,37 +1,99 @@
 <template>
   <table class="tp-table" cellpadding="0" cellspacing="0" style="width: 100%;height: 450px">
-    <tr style="height: 280px">
-      <el-tabs v-model="cron_tabs" type="border-card" @tab-click="handleTabClick" style="margin:15px;">
+    <tr style="height: 350px">
+      <el-tabs v-model="cron_tabs" type="border-card" style="margin:15px;">
         <el-tab-pane v-for="obj in timeArray"
                      :key="obj.resultNum"
                      :label="obj.name"
-                     :name="obj.name">
-
-          <el-select v-model="obj.selected" @change="handleSelectChange" style="width: 30%;vertical-align: top; height: 180px">
-            <el-option v-for="item in obj.select"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value"/>
-            </el-option>
-          </el-select>
-
-          <div style="width: 60%;margin-left: 15px;display: inline-block;">
-            <el-date-picker v-if="obj.selected == 1" type="datetime"
-                            :disabled="isReadonly"
-                            v-model="triggerCronShow"
-                            @change="handleDataChange">
-            </el-date-picker>
-
-            <div class="checkbox-content-div" v-if="obj.selected == 2">
-              <el-checkbox-group v-model="obj.checked" @change="handleCheckedChange">
-                <el-checkbox v-for="item in obj.allElement"
-                             :label="item"
-                             :key="item"
-                             style="float:left;margin-left: 15px;">
-                  {{item}}
-                </el-checkbox>
-              </el-checkbox-group>
+                     :name="obj.resultNum">
+          <div style="margin-top: 5px">
+            <el-radio @change="changeRadio" v-model="obj.radio" label="1">{{obj.label}}</el-radio>
+          </div>
+          <!-- 天,月,周 公共的 -->
+          <div v-if="obj.resultNum == 'day' || obj.resultNum == 'month' || obj.resultNum == 'week'">
+            <div style="margin-top: 5px">
+              <el-radio @change="changeRadio" v-model="obj.radio" label="2">不指定</el-radio>
             </div>
+          </div>
+          <div style="margin-top: 5px">
+            <el-radio @change="changeRadio" v-model="obj.radio" label="3">周期 从
+              <template>
+                <template v-if="obj.resultNum == 'week'">{{obj.name}}</template>
+                <el-input-number size="mini" v-model="obj.num.cycle1" controls-position="right"
+                                 :max="maxNum" :min="minNum" @change="changeNumber"
+                                 @focus="changeNumber('3')"></el-input-number>
+                -
+                <el-input-number size="mini" v-model="obj.num.cycle2" controls-position="right"
+                                 :max="maxNum" :min="minNum" @change="changeNumber"
+                                 @focus="changeNumber('3')"></el-input-number>
+                <template v-if="obj.resultNum != 'week'">{{obj.name}}</template>
+              </template>
+            </el-radio>
+          </div>
+          <div style="margin-top: 5px">
+            <el-radio @change="changeRadio" v-model="obj.radio" label="4">从
+              <template>
+                <el-input-number size="mini" v-model="obj.num.begin" controls-position="right"
+                                 :max="maxNum" :min="minNum" @change="changeNumber"
+                                 @focus="changeNumber('4')"></el-input-number>
+                {{obj.name}}开始,每
+                <el-input-number size="mini" v-model="obj.num.end" controls-position="right" :max="maxNum" :min="minNum"
+                                 @change="changeNumber" @focus="changeNumber('4')"></el-input-number>
+                {{obj.name}}执行一次
+              </template>
+            </el-radio>
+          </div>
+          <!-- 天 -->
+          <div v-if="obj.resultNum == 'day'">
+            <div style="margin-top: 5px">
+              <el-radio @change="changeRadio" v-model="obj.radio" label="5">每月
+                <template>
+                  <el-input-number size="mini" v-model="obj.num.workDay" controls-position="right" :max="maxNum"
+                                   :min="minNum" @change="changeNumber" @focus="changeNumber('5')"></el-input-number>
+                  号最近的那个工作日
+                </template>
+              </el-radio>
+            </div>
+            <div style="margin-top: 5px">
+              <el-radio @change="changeRadio" v-model="obj.radio" label="6">本月最后一天</el-radio>
+            </div>
+          </div>
+          <!-- 周 -->
+          <div v-if="obj.resultNum == 'week'">
+            <div style="margin-top: 5px">
+              <el-radio @change="changeRadio" v-model="obj.radio" label="7">第
+                <template>
+                  <el-input-number size="mini" v-model="obj.num.weekNum1" controls-position="right" :max="maxNum"
+                                   :min="minNum" @change="changeNumber" @focus="changeNumber('7')"></el-input-number>
+                  周的星期
+                  <el-input-number size="mini" v-model="obj.num.weekNum2" controls-position="right" :max="maxNum"
+                                   :min="minNum" @change="changeNumber" @focus="changeNumber('7')"></el-input-number>
+                </template>
+              </el-radio>
+            </div>
+            <div style="margin-top: 5px">
+              <el-radio @change="changeRadio" v-model="obj.radio" label="8">本月最后一个星期
+                <template>
+                  <el-input-number size="mini" v-model="obj.num.weekLast" controls-position="right" :max="maxNum"
+                                   :min="minNum" @change="changeNumber" @focus="changeNumber('8')"></el-input-number>
+                </template>
+              </el-radio>
+            </div>
+          </div>
+
+          <div style="margin-top: 5px" v-if="obj.allElement.length > 0">
+            <el-radio @change="changeRadio" v-model="obj.radio" label="9">指定
+              <template>
+                <el-checkbox-group v-model="obj.checked" @change="changeChecked">
+                  <el-checkbox v-for="item in obj.allElement"
+                               :label="item"
+                               :key="item"
+                               style="float:left;margin-left: 15px;">
+                    {{item}}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </template>
+            </el-radio>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -56,24 +118,22 @@
     props: {
       cron: {
         type: String,
-        default: '* * * * * ?'
+        default: '* * * * * ? *'
       }
     },
     data() {
       return {
-        triggerCron: '* * * * * ?',// 传入后台
-        triggerCronShow: null, // 页面显示的
+        triggerCron: '',// 传入后台
+        cron_tabs: 'second', // 默认选中的tab
         second: {},
         minute: {},
         hour: {},
         day: {},
         month: {},
+        week: {},
+        year: {},
         // 用于el-tab-pane 循环
         timeArray: [],
-        // 默认选中的tab
-        cron_tabs: '秒',
-        cron_result: ['', '', '', '', '', '?'],
-        isReadonly: false,
       }
     },
     created() {
@@ -85,29 +145,27 @@
     },
     methods: {
       initData: function () {
-        // 给调度时间一个默认值
-        // this.triggerCronShow = new Date();
-        // this.triggerCron = this.formatTime(this.triggerCronShow);
         // 初始化页面数据
-        this.second = this.TimeBase(0, '秒');
-        this.minute = this.TimeBase(1, '分钟');
-        this.hour = this.TimeBase(2, '小时');
-        this.day = this.TimeBase(3, '天');
-        this.month = this.TimeBase(4, '月');
+        this.second = this.TimeBase('second', '秒');
+        this.minute = this.TimeBase('minute', '分钟');
+        this.hour = this.TimeBase('hour', '小时');
+        this.day = this.TimeBase('day', '天');
+        this.month = this.TimeBase('month', '月');
+        this.week = this.TimeBase('week', '周');
+        this.year = this.TimeBase('year', '年');
+
         this.timeArray.push(this.second);
         this.timeArray.push(this.minute);
         this.timeArray.push(this.hour);
         this.timeArray.push(this.day);
         this.timeArray.push(this.month);
+        this.timeArray.push(this.week);
+        this.timeArray.push(this.year);
         for (var i = 0; i < 60; i++) {
-          var value;
-          if (i < 10) {
-            value = '0' + i;
-          } else {
-            value = i;
-          }
-          // 秒、分
-          this.second.allElement.push(value);
+          // 秒
+          this.second.allElement.push(i);
+          // 分
+          this.minute.allElement = this.second.allElement;
           // 时
           if (i < 24) {
             this.hour.allElement.push(i + 1);
@@ -116,113 +174,127 @@
           if (i < 31) {
             this.day.allElement.push(i + 1);
           }
+          // 周
+          if (i < 7) {
+            this.week.allElement.push(i + 1);
+          }
           // 月
           if (i < 12) {
             this.month.allElement.push(i + 1);
           }
         }
-        this.minute.allElement = this.second.allElement;
       },
       // 时间基类
       TimeBase: function (resultNum, name) {
+        var radio = "1";
+        var label = '每' + name + ' 允许的通配符[, - * /]';
+        if (resultNum === 'day') {
+          label = '每天 允许的通配符[, - * / L W]';
+        } else if (resultNum === 'week') {
+          label = '每周 允许的通配符[, - * / L #]';
+          radio = "2";
+        }
+
         var rs = {
           name: name,
           resultNum: resultNum,
           allElement: [],
+          radio: radio,
           checked: [],
-          select: [{
-            value: '0',
-            label: '每' + name
-          },
-            {
-              value: '1',
-              label: '指定时间'
-            },
-            {
-              value: '2',
-              label: '循环'
-            }
-          ],
-          selected: '1',
-          temp1: '',
-          temp2: ''
+          label: label,
+          cronTemp: '',
+          num: {
+            cycle1: 1,
+            cycle2: 2,
+            begin: 1,
+            end: 1,
+            workDay: 1,
+            weekNum1: 1,
+            weekNum2: 1,
+            weekLast: 1
+          }
         };
-        return rs;
-      },
-      formatTime: function (time) {
-        var rs = time.getSeconds() + ' ' +
-          time.getMinutes() + ' ' +
-          time.getHours() + ' ' +
-          time.getDate() + ' ' +
-          (time.getMonth() + 1) + ' ? ' +
-          time.getFullYear();
         return rs;
       },
       getObject: function () {
         switch (this.cron_tabs) {
-          case '秒':
+          case 'second':
             return this.second;
-          case '分钟':
+          case 'minute':
             return this.minute;
-          case '小时':
+          case 'hour':
             return this.hour;
-          case '天':
+          case 'day':
             return this.day;
-          case '月':
+          case 'month':
             return this.month;
+          case 'week':
+            return this.week;
+          case 'year':
+            return this.year;
           default:
             return null;
         }
       },
-      removeZero: function (str) {
-        if (str.__proto__.constructor === Array) {
-          for (var i = 0; i < str.length; i++) {
-            str[i] = parseInt(str[i])
-          }
-        }
-        return str;
-      },
-      handleTabClick: function () {
-      },
-      handleSelectChange: function () {
+      changeRadio() {
         var temp = this.getObject();
-        // 指定时间选项
-        this.triggerCronShow = '';
-        // 周期选项
-        temp.checked = [];
-        this.cron_result[temp.resultNum] = '';
-        // 3、4选项
-        temp.temp1 = '';
-        temp.temp2 = '';
-        this.changetriggerCron(temp);
+        if (temp.radio != 9) {
+          temp.checked = [];
+        }
+        this.changetriggerCron();
       },
-      // 周期选项内 的checked组变更时间
-      handleCheckedChange: function () {
-        // 根据tabs标题确定目前操作的时间类型，并返回集合次类型的对象
+      changeNumber(radio) {
+        if (radio) {
+          var temp = this.getObject();
+          temp.radio = radio;
+        }
+        this.changetriggerCron();
+      },
+      changeChecked() {
         var temp = this.getObject();
-        this.changetriggerCron(temp);
+        temp.radio = '9';
+        this.changetriggerCron();
       },
-      changetriggerCron: function (temp) {
-        // 周期选项处理
-        if (temp.selected === '2') {
-          // 深拷贝选中值 后面有去0操作
-          this.cron_result[temp.resultNum] = JSON.parse(JSON.stringify(temp.checked));
-        }
-        this.triggerCron = '';
-        for (var i = 0; i < this.cron_result.length; i++) {
-          if (this.cron_result[i] === '') {
-            this.triggerCron += '* ';
-          } else {
-            this.triggerCron += this.removeZero(this.cron_result[i]) + ' ';
+      changetriggerCron() {
+        var cronTemp = ['*', '*', '*', '*', '*', '?', '*'];
+        for (var index in this.timeArray) {
+          var temp = this.timeArray[index];
+
+          switch (temp.radio) {
+            case '1':
+              temp.cronTemp = '*';
+              break;
+            case '2':
+              temp.cronTemp = '?';
+              break;
+            case '3':
+              temp.cronTemp = temp.num.cycle1 + '-' + temp.num.cycle2;
+              break;
+            case '4':
+              temp.cronTemp = temp.num.begin + '/' + temp.num.end;
+              break;
+            case '5':
+              temp.cronTemp = temp.num.workDay + 'W';
+              break;
+            case '6':
+              temp.cronTemp = 'L';
+              break;
+            case '7':
+              temp.cronTemp = temp.num.weekNum1 + '#' + temp.num.weekNum2;
+              break;
+            case '8':
+              temp.cronTemp = temp.num.weekLast + 'L';
+              break;
+            case '9':
+              temp.cronTemp = temp.checked.join();
+              break;
+            default:
+              temp.cronTemp = '*';
           }
+          cronTemp[index] = temp.cronTemp;
         }
-      },
-      handleDataChange: function () {
-        if (typeof (this.triggerCronShow) === 'undefined' ||
-          this.triggerCronShow === '') {
-          return;
-        }
-        this.triggerCron = this.formatTime(this.triggerCronShow);
+        this.triggerCron = cronTemp.join(" ");
+        console.info(this.triggerCron);
       },
       saveCron() {
         this.$emit("saveCron", this.triggerCron);
@@ -231,9 +303,19 @@
         this.$emit("cancelCron", this.triggerCron);
       }
     },
-    watch: {
-      'cron':function () {
-        this.triggerCron = this.cron;
+    computed: {
+      maxNum() {
+        var obj = this.cron_tabs;
+        return (obj === 'second' || obj === 'minute') ? 59 : obj === 'hour' ? 23 : obj === 'month' ? 12 : obj === 'day' ? 31 : 7;
+      },
+      minNum() {
+        var obj = this.cron_tabs;
+        if (obj === 'second' || obj === 'minute' || obj === 'hour') {
+          var temp = this.getObject();
+          temp.num.begin = 0;
+          return 0;
+        }
+        return 1;
       }
     }
   }

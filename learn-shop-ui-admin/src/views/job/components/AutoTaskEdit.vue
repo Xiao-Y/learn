@@ -76,6 +76,7 @@
     </div>
     <el-dialog title="Cron表达式"
                center
+               v-if="dialogCronExpVisible"
                :visible.sync="dialogCronExpVisible"
                :close-on-click-modal="false">
       <cron-expression :cron="autoTaskInfo.cronExpression" @cancelCron="cancelCron"

@@ -53,8 +53,8 @@ zuul:
     admin-user:
       path: /admin-user/**
       strip-prefix: false
-#      serviceId: learn-shop-admin-user
-      url: http://119.23.27.78:8801
+      serviceId: learn-shop-admin-user
+#      url: http://119.23.27.78:8801
 #      url: http://127.0.0.1:8801
     #订单相关
     core-order:
