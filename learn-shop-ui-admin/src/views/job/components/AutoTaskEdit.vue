@@ -19,11 +19,10 @@
             </el-col>
           </el-form-item>
           <el-form-item label="Cron表达式" prop="cronExpression" :required="autoTaskInfo.jobStatus == '1'">
-            <el-col :span="2">
-              <el-button style="width: 100%" type="success" @click="cronExp" size="mini">配置</el-button>
-            </el-col>
-            <el-col :span="16">
-              <el-input v-model="autoTaskInfo.cronExpression" placeholder="请输入内容"></el-input>
+            <el-col :span="18">
+              <el-input v-model="autoTaskInfo.cronExpression" size="mini" placeholder="请输入内容">
+                <el-button slot="append" icon="el-icon-setting" @click="cronExp">配置</el-button>
+              </el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="BeanClass" prop="beanClass">
