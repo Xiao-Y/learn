@@ -1,10 +1,13 @@
 package com.billow.job.util;
 
+import com.billow.cloud.common.mqvo.MailVo;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
-import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
+import com.billow.job.pojo.vo.ScheduleJobVo;
+import com.billow.job.producer.SendMailPro;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
+import com.billow.tools.constant.DictionaryType;
 import com.billow.tools.date.DateTime;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
@@ -166,6 +169,24 @@ public class TaskUtils {
                 }
             } catch (Exception e) {
                 log.error("自动任务修改失败：{}", e.getMessage());
+            }
+        }
+
+        if (!DictionaryType.SYS_FIELD_CODE_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendMail())) {
+            if (ToolsUtils.isEmpty(scheduleJob.getMailReceive())) {
+                log.error("邮件发送失败，接收邮件人为空");
+                return;
+            }
+
+            try {
+                MailVo mailVo = new MailVo();
+                mailVo.setToEmails(scheduleJob.getMailReceive());
+                mailVo.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
+                mailVo.setContent("自动任务测试");
+                SendMailPro sendMailPro = SpringContextUtil.getBean("sendMailPro");
+                sendMailPro.sendMail(mailVo);
+            } catch (Exception e) {
+                log.error("发送邮件发送消息失败：{}", e.getMessage());
             }
         }
     }

@@ -21,4 +21,6 @@ public class CustomProperties {
 
     private CommonProperties common = new CommonProperties();
 
+    private MailPerproties mail = new MailPerproties();
+
 }

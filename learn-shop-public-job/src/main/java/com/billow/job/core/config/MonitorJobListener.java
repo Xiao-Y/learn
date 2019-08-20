@@ -51,7 +51,7 @@ public class MonitorJobListener implements JobListener {
         ScheduleJobVo scheduleJob = (ScheduleJobVo) jobDataMap.get(JobDataCst.SCHEDULE_JOB_VO);
         String jobRunTime = DateFormatUtils.covertLongToString(context.getJobRunTime());
         scheduleJob.setRunTime(jobRunTime);
-        // 插入执行日志
+        // 插入执行日志（发送邮件mq）
         TaskUtils.saveLog(scheduleJob, exception);
         log.info("<<<<=========== Job : {},RunTime : {} is finished...", scheduleJob.getJobName(), jobRunTime);
     }

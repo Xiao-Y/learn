@@ -60,9 +60,9 @@ public class AuthService {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         if (authorities != null && authorities.size() > 0) {
             // 获取 redis 中数据字典的数据
-            Map<String, String> dictionaryMap = redisUtils.getArray(DICTIONARY + DictionaryType.SYS_MODEL_OCDE_SYSTEM_MODULE, DataDictionaryVo.class)
+            Map<String, String> dictionaryMap = redisUtils.getArray(DICTIONARY + DictionaryType.SYS_MODEL_CODE_SYSTEM_MODULE, DataDictionaryVo.class)
                     .stream()
-                    .filter(f -> DictionaryType.SYS_FIELD_OCDE_SYSTEM_MODULE.equals(f.getFieldType()))
+                    .filter(f -> DictionaryType.SYS_FIELD_CODE_SYSTEM_MODULE.equals(f.getFieldType()))
                     .collect(Collectors.toMap(DataDictionaryVo::getFieldValue, DataDictionaryVo::getFieldDisplay));
             for (GrantedAuthority authority : authorities) {
                 // 查询 redis 中的角色权限

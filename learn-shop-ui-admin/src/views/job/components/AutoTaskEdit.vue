@@ -58,6 +58,18 @@
           <el-form-item label="是否记录日志">
             <el-switch v-model="autoTaskInfo.isSaveLog" active-text="是" inactive-text="否"></el-switch>
           </el-form-item>
+          <el-form-item label="是否发送邮件" prop="isSendMail">
+            <custom-select v-model="autoTaskInfo.isSendMail"
+                           :datasource="sendMailSelect"
+                           @change="test"
+                           placeholder="请选择是否发送邮件">
+            </custom-select>
+          </el-form-item>
+          <el-form-item label="邮件接收人" prop="mailReceive" :required="autoTaskInfo.isSendMail != '0'">
+            <el-col :span="18">
+              <el-input type="textarea" v-model="autoTaskInfo.mailReceive" placeholder="多个接收人用英文封号分割开"></el-input>
+            </el-col>
+          </el-form-item>
           <el-form-item label="任务描述" prop="description">
             <el-col :span="18">
               <el-input type="textarea" v-model="autoTaskInfo.description"></el-input>
@@ -95,28 +107,36 @@
           jobGroup: "5",
           jobStatus: "1",
           isConcurrent: "1",
+          isSendMail: "2",
+          mailReceive: '',
           cronExpression: "",
           isSaveLog: true,
           validInd: true
         },
         systemModuleSelect: [],
+        sendMailSelect: [],
         rulesForm: {
           methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
           beanClass: [{validator: this.validateBeanClass, trigger: 'blur'}],
           springId: [{validator: this.validateSpringId, trigger: 'blur'}],
           cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
           jobName: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
+          mailReceive: [{validator: this.validateMailReceive, trigger: 'blur'}],
         }
       };
     },
     created() {
       this.optionType = this.$route.query.optionType;
       this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
+      this.sendMailSelect = JSON.parse(this.$route.query.sendMailSelect);
       if (this.optionType === 'edit') {
         this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
       }
     },
     methods: {
+      test() {
+        console.info(this.autoTaskInfo.isSendMail);
+      },
       // 校验提交
       validSubmit() {
         var _this = this;
@@ -181,6 +201,13 @@
       validateCronExp(rule, value, callback) {
         if (value === '' && this.autoTaskInfo.jobStatus === '1') {
           callback(new Error('启动状态，Cron表达式不能为空'));
+        } else {
+          callback();
+        }
+      },
+      validateMailReceive(rule, value, callback) {
+        if (value === '' && this.autoTaskInfo.isSendMail !== '0') {
+          callback(new Error('发送邮件状态，邮件地址不能为空'));
         } else {
           callback();
         }

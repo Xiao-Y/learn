@@ -1,6 +1,11 @@
 package com.billow.common.amqp;
 
+import com.billow.cloud.common.properties.ConfigCommonProperties;
+import com.billow.cloud.common.properties.JobToSystemProperties;
+import com.billow.cloud.common.properties.MqProperties;
+import com.billow.cloud.common.properties.ZuulToSystemProperties;
 import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +16,24 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitMqConfig {
+
+    @Autowired
+    private ConfigCommonProperties configCommonProperties;
+
+    public MqProperties getMq() {
+        return configCommonProperties.getMq();
+    }
+
+    public JobToSystemProperties getJobToSystem() {
+        JobToSystemProperties jobToSystem = this.getMq().getJobToSystem();
+        return jobToSystem;
+    }
+
+    @Bean
+    public Queue getSendMailQueue() {
+        return new Queue(this.getJobToSystem().getSendMail());
+    }
+
 
     @Value("${config.mq.orderToUser.orderStatus}")
     private String orderStatusQueue;

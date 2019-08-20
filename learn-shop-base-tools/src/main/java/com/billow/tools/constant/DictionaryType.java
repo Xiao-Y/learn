@@ -15,10 +15,21 @@ public class DictionaryType {
     /**
      * 模块： adminSystem 数据字典模块
      */
-    public static final String SYS_MODEL_OCDE_SYSTEM_MODULE = "adminSystem";
+    public static final String SYS_MODEL_CODE_SYSTEM_MODULE = "adminSystem";
     /**
      * 模块： adminSystem-systemModule数据字典
      */
-    public static final String SYS_FIELD_OCDE_SYSTEM_MODULE = "systemModule";
+    public static final String SYS_FIELD_CODE_SYSTEM_MODULE = "systemModule";
+
+    /************************** publicJob ********************************/
+    public static final String SYS_MODEL_CODE_PUBLIC_JOB = "publicJob";
+    /**
+     * 邮件发送类型： publicJob-sendMailType
+     */
+    public static final String SYS_FIELD_CODE_SEND_MAIL = "sendMailType";
+    /**
+     * 邮件发送类型： publicJob-sendMailType-0 不发送
+     */
+    public static final String SYS_FIELD_CODE_SEND_MAIL_NO_SEND = "0";
 
 }

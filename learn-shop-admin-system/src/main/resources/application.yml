@@ -23,6 +23,13 @@ spring:
     bus:
       trace:
         enabled: true #开启消息跟踪
+  mail:
+    host: pop.exmail.qq.com
+    username: ######
+    password: ######
+    default-encoding: utf-8
+
+
 
 custom:
   menu:
@@ -36,3 +43,5 @@ custom:
     image-mapping: /displayImag # 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/
     markdown-img-path: /markdown # 图片保存的路径
     user-icon-img-path: /usericon # 图片保存的路径
+  mail:
+    from: ###### #系统对外发送邮件的地址

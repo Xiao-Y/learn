@@ -92,6 +92,17 @@
               <el-form-item label="是否记录日志">
                 <el-switch v-model="props.row.isSaveLog" active-text="是" inactive-text="否" disabled></el-switch>
               </el-form-item>
+              <el-form-item label="是否发送邮件">
+                <custom-select v-model="props.row.isSendMail"
+                               :datasource="sendMailSelect"
+                               placeholder="请选择是否发送邮件"
+                               disabled>
+                </custom-select>
+              </el-form-item>
+              <el-form-item label="邮件接收人">
+                <el-input type="textarea" v-model="props.row.mailReceive" placeholder="多个接收人用英文封号分割开"
+                          readonly></el-input>
+              </el-form-item>
               <el-form-item label="任务状态">
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
                            inactive-value="0"
@@ -137,7 +148,8 @@
 <script>
   // ===== api start
   import {
-    LoadSysDataDictionary
+    LoadSysDataDictionary,
+    LoadJobDataDictionary
   } from "../../api/sys/DataDictionaryMag";
   import {
     LoadDataJobList,
@@ -180,6 +192,7 @@
         tableData: [],
         activeNames: ['1'],
         systemModuleSelect: [],// 系统模块的下拉数据源
+        sendMailSelect: [],// 是否发送邮件下拉数据源
         dialogTableVisible: false,// 打开日志窗口
         tableTitle: '',// 执行日志
         autoTaskInfo: {},// 用于打开日志
@@ -201,6 +214,9 @@
       // 加载系统模块的下拉
       LoadSysDataDictionary('SystemModule').then(res => {
         this.systemModuleSelect = res.resData;
+      });
+      LoadJobDataDictionary('sendMailType').then(res => {
+        this.sendMailSelect = res.resData;
       });
       // 请数据殂
       this.loadDataList();
@@ -236,7 +252,8 @@
           name: 'jobAutoTaskEdit',
           query: {
             optionType: 'add',
-            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect),
+            sendMailSelect: JSON.stringify(this.sendMailSelect)
           }
         });
       },
@@ -251,7 +268,8 @@
           query: {
             optionType: 'edit',
             autoTaskEdit: JSON.stringify(row),
-            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect),
+            sendMailSelect: JSON.stringify(this.sendMailSelect)
           }
         });
       },

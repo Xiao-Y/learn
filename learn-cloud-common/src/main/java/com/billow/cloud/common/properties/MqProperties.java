@@ -19,4 +19,5 @@ public class MqProperties {
     private String virtualHost;
 
     private ZuulToSystemProperties zuulToSystem = new ZuulToSystemProperties();
+    private JobToSystemProperties jobToSystem = new JobToSystemProperties();
 }

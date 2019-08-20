@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Zuul 发送过来的消息
@@ -33,25 +30,15 @@ public class ZuulToMeConsumer {
     @Autowired
     private StartLoading startLoading;
 
-    // 线程池长期维持的线程数
-    private static final int corePoolSize = 8;
-    // 线程数的上限
-    private static final int maximumPoolSize = 10;
-    // 超过corePoolSize的线程的idle时长，超过这个时间，多余的线程会被回收。
-    private static final int keepAlivelime = 0;
-    // 任务的排队队列
-    private static final int capacity = 512;
+    @javax.annotation.Resource(name = "fxbDrawExecutor")
+    private ExecutorService executorService;
 
     @RabbitListener(queues = "${config.mq.zuulToSystem.executesqlRoutingKey}")
     @RabbitHandler
     public void executesql(String message) throws Exception {
         log.info(message);
 
-        ExecutorService pool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
-                keepAlivelime, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(capacity), // 使用有界队列，避免OOM
-                new ThreadPoolExecutor.DiscardPolicy());
-        pool.execute(() -> {
+        executorService.execute(() -> {
             log.info("开始初始化 SQL...");
             try {
                 Resource resource = new ClassPathResource("sql/learn-shop.sql");
@@ -64,6 +51,5 @@ public class ZuulToMeConsumer {
             log.info("开始初始化 Redis ...");
             startLoading.init(null);
         });
-        pool.shutdown();
     }
 }
