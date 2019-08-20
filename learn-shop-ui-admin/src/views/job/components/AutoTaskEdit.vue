@@ -20,9 +20,7 @@
           </el-form-item>
           <el-form-item label="Cron表达式" prop="cronExpression" :required="autoTaskInfo.jobStatus == '1'">
             <el-col :span="18">
-              <el-input v-model="autoTaskInfo.cronExpression" size="mini" placeholder="请输入内容">
-                <el-button slot="append" icon="el-icon-setting" @click="cronExp">配置</el-button>
-              </el-input>
+              <custom-cron-input v-model="autoTaskInfo.cronExpression"></custom-cron-input>
             </el-col>
           </el-form-item>
           <el-form-item label="BeanClass" prop="beanClass">
@@ -73,14 +71,6 @@
         </el-form>
       </article>
     </div>
-    <el-dialog title="Cron表达式"
-               center
-               v-if="dialogCronExpVisible"
-               :visible.sync="dialogCronExpVisible"
-               :close-on-click-modal="false">
-      <cron-expression :cron="autoTaskInfo.cronExpression" @cancelCron="cancelCron"
-                       @saveCron="saveCron"></cron-expression>
-    </el-dialog>
   </div>
 </template>
 
@@ -88,12 +78,12 @@
   import {SaveAutoTask, CheckAutoTask} from "../../../api/job/jobMag";
 
   import CustomSelect from '../../../components/common/CustomSelect.vue';
-  import CronExpression from '../../../components/common/cronExpression/CronExpression.vue';
+  import CustomCronInput from '../../../components/common/CustomCronInput.vue';
 
   export default {
     components: {
       CustomSelect,
-      CronExpression
+      CustomCronInput
     },
     data() {
       return {
@@ -110,7 +100,6 @@
           validInd: true
         },
         systemModuleSelect: [],
-        dialogCronExpVisible: false,
         rulesForm: {
           methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
           beanClass: [{validator: this.validateBeanClass, trigger: 'blur'}],
@@ -171,18 +160,6 @@
       },
       onReset(autoTaskInfo) {
         this.$refs[autoTaskInfo].resetFields();
-      },
-      // 打开 cron 表达式选择窗口
-      cronExp() {
-        this.dialogCronExpVisible = true;
-      },
-      cancelCron() {
-        this.dialogCronExpVisible = false;
-      },
-      // 保存cron
-      saveCron(cron) {
-        this.autoTaskInfo.cronExpression = cron;
-        this.cancelCron();
       },
       // 规则校验：beanClass
       validateBeanClass(rule, value, callback) {

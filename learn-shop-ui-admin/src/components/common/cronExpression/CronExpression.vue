@@ -1,7 +1,7 @@
 <template>
-  <table class="tp-table" cellpadding="0" cellspacing="0" style="width: 100%;height: 450px">
+  <table cellpadding="0" cellspacing="0" style="width: 100%;">
     <tr style="height: 350px">
-      <el-tabs v-model="cron_tabs" type="border-card" style="margin:15px;">
+      <el-tabs v-model="cron_tabs" type="border-card"">
         <el-tab-pane v-for="obj in timeArray"
                      :key="obj.resultNum"
                      :label="obj.name"
@@ -33,9 +33,8 @@
           <div style="margin-top: 5px">
             <el-radio @change="changeRadio" v-model="obj.radio" label="4">从
               <template>
-                <el-input-number size="mini" v-model="obj.num.begin" controls-position="right"
-                                 :max="maxNum" :min="minNum" @change="changeNumber"
-                                 @focus="changeNumber('4')"></el-input-number>
+                <el-input-number size="mini" v-model="obj.num.begin" controls-position="right" :max="maxNum" :min="minNum"
+                                 @change="changeNumber" @focus="changeNumber('4')"></el-input-number>
                 {{obj.name}}开始,每
                 <el-input-number size="mini" v-model="obj.num.end" controls-position="right" :max="maxNum" :min="minNum"
                                  @change="changeNumber" @focus="changeNumber('4')"></el-input-number>
@@ -193,6 +192,10 @@
           label = '每周 允许的通配符[, - * / L #]';
           radio = '2';
         }
+        var begin = 1;
+        if (resultNum === 'second' || resultNum === 'minute' || resultNum === 'hour') {
+          begin = 0;
+        }
 
         var rs = {
           name: name,
@@ -204,7 +207,7 @@
           num: {
             cycle1: 1,
             cycle2: 2,
-            begin: 1,
+            begin: begin,
             end: 1,
             workDay: 1,
             weekNum1: 1,
@@ -337,12 +340,7 @@
       },
       minNum() {
         var obj = this.cron_tabs;
-        if (obj === 'second' || obj === 'minute' || obj === 'hour') {
-          var temp = this.getObject();
-          temp.num.begin = 0;
-          return 0;
-        }
-        return 1;
+        return (obj === 'second' || obj === 'minute' || obj === 'hour') ? 0 : 1;
       }
     }
   }
