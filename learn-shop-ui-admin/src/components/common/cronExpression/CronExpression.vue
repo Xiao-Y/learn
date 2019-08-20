@@ -98,7 +98,7 @@
       </el-tabs>
     </tr>
     <tr>
-      <auto-task-next-run-time :cronExp="triggerCron" :isTestRun="false"></auto-task-next-run-time>
+      <next-run-time :cronExp="triggerCron" :isTestRun="false"></next-run-time>
     </tr>
     <tr>
       <el-button type="primary" @click="saveCron" size="mini">确定</el-button>
@@ -108,11 +108,11 @@
 </template>
 
 <script>
-  import AutoTaskNextRunTime from './AutoTaskNextRunTime'
+  import NextRunTime from './NextRunTime'
 
   export default {
     components: {
-      AutoTaskNextRunTime
+      NextRunTime
     },
     props: {
       cron: {
