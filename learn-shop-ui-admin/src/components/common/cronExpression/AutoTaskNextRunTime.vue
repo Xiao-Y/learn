@@ -1,16 +1,16 @@
 <template>
-  <section style="height: 183px">
+  <section>
     <div>
       <el-row>
-        <el-col :span="3">
-          <el-button type="success" @click="testRun" size="mini">执行计划</el-button>
-        </el-col>
-        <el-col :span="9">
-          Cron表达式：{{cron}}
+        <el-col :span="3">Cron表达式：</el-col>
+        <el-col :span="20">
+          <el-input v-model="cronExp" :readonly="true" size="mini">
+            <el-button slot="append" icon="el-icon-search" @click="testRun">执行计划</el-button>
+          </el-input>
         </el-col>
       </el-row>
     </div>
-    <div>最后{{testRunCronEx.times}}次的运行时间：</div>
+    <div>最后{{times}}次的运行时间：</div>
     <div style="padding-top: 10px;padding-left: 25px;">
       <template v-for="(str,index) in rs">
         {{str}}<br/>
@@ -20,43 +20,42 @@
 </template>
 <script>
 
-  import dtime from 'time-formater'
-  // var parser = require('cron-parser');
   import {TestRunCron} from "../../../api/job/jobMag";
 
   export default {
     props: {
-      cron: ''
+      // cron 表达式
+      cronExp: {
+        type: String,
+        default: ''
+      },
+      // 是否立即运行
+      isTestRun: {
+        type: Boolean,
+        default: false
+      },
+      // 运行的次数
+      times: {
+        type: Number,
+        default: 5
+      }
     },
     data() {
       return {
         rs: [],
-        dialogFlag: false,
-        testRunCronEx: {
-          times: 5,
-          cron: ''
-        }
+        testRunCronEx: {}
       }
     },
     created() {
-      // this.initPage();
-      // this.testRun();
+      if (this.isTestRun) {
+        this.testRun();
+      }
     },
     methods: {
       testRun() {
-        this.rs = [];
-        // try {
-        //   var interval = parser.parseExpression(this.cron);
-        //   for(var i = 0; i < this.times;i++){
-        //     const date = dtime(interval.next()).format('YYYY-MM-DD HH:mm:ss');
-        //     this.rs.push(date);
-        //   }
-        // } catch (err) {
-        //   console.error('Error: ' + err.message);
-        // }
-
-        if (this.cron !== '') {
-          this.testRunCronEx.cron = this.cron;
+        if (this.cronExp !== '') {
+          this.testRunCronEx.times = this.times;
+          this.testRunCronEx.cron = this.cronExp;
           TestRunCron(this.testRunCronEx).then(res => {
             this.rs = res.resData;
           });

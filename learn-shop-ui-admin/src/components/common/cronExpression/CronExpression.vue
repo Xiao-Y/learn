@@ -99,7 +99,7 @@
       </el-tabs>
     </tr>
     <tr>
-      <auto-task-next-run-time ref="nextRunTime" :cron="triggerCron"></auto-task-next-run-time>
+      <auto-task-next-run-time :cronExp="triggerCron" :isTestRun="true"></auto-task-next-run-time>
     </tr>
     <tr>
       <el-button type="primary" @click="saveCron" size="mini">确定</el-button>
@@ -139,9 +139,6 @@
     created() {
       this.initData();
       this.triggerCron = this.cron;
-      this.$nextTick(() => {
-        this.$refs.nextRunTime.testRun();
-      });
     },
     methods: {
       initData: function () {
