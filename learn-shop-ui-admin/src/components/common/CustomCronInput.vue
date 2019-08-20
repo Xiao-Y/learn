@@ -9,7 +9,8 @@
                v-if="dialogCronExpVisible"
                :visible.sync="dialogCronExpVisible"
                :close-on-click-modal="false">
-      <cron-expression :cron="cron" @cancelCron="cancelCron" @saveCron="saveCron"></cron-expression>
+      <cron-expression :cron="cron" :isTestRun="isTestRun" @cancelCron="cancelCron"
+                       @saveCron="saveCron"></cron-expression>
     </el-dialog>
   </div>
 </template>
@@ -52,6 +53,11 @@
       cron: {
         type: String,
         default: ''
+      },
+      // 是否立即运行
+      isTestRun: {
+        type: Boolean,
+        default: false
       }
     },
     data() {

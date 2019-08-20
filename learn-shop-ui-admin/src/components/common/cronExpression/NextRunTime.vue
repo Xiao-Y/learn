@@ -1,22 +1,22 @@
 <template>
-  <section>
-    <div>
-      <el-row>
-        <el-col :span="3">Cron表达式：</el-col>
-        <el-col :span="20">
-          <el-input v-model="cronExp" :readonly="true" size="mini">
-            <el-button slot="append" icon="el-icon-search" @click="testRun">执行计划</el-button>
-          </el-input>
-        </el-col>
-      </el-row>
+  <el-card shadow="always">
+    <div slot="header">
+      <span>最后{{times}}次的运行时间</span>
     </div>
-    <div>最后{{times}}次的运行时间：</div>
-    <div style="padding-top: 10px;padding-left: 25px;">
+    <el-row>
+      <el-col :span="3">Cron表达式：</el-col>
+      <el-col :span="20">
+        <el-input v-model="cronExp" :readonly="true" size="mini">
+          <el-button slot="append" icon="el-icon-search" @click="testRun">执行计划</el-button>
+        </el-input>
+      </el-col>
+    </el-row>
+    <el-row>
       <template v-for="(str,index) in rs">
         {{str}}<br/>
       </template>
-    </div>
-  </section>
+    </el-row>
+  </el-card>
 </template>
 <script>
 

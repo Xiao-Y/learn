@@ -20,7 +20,7 @@
           </el-form-item>
           <el-form-item label="Cron表达式" prop="cronExpression" :required="autoTaskInfo.jobStatus == '1'">
             <el-col :span="18">
-              <custom-cron-input v-model="autoTaskInfo.cronExpression"></custom-cron-input>
+              <custom-cron-input v-model="autoTaskInfo.cronExpression" :isTestRun="true"></custom-cron-input>
             </el-col>
           </el-form-item>
           <el-form-item label="BeanClass" prop="beanClass">

@@ -1,7 +1,7 @@
 <template>
-  <table cellpadding="0" cellspacing="0" style="width: 100%;">
-    <tr style="height: 350px">
-      <el-tabs v-model="cron_tabs" type="border-card"">
+  <table style="width: 100%;">
+    <tr style="height: 330px">
+      <el-tabs v-model="cron_tabs" type="border-card" style="height: 320px">
         <el-tab-pane v-for="obj in timeArray"
                      :key="obj.resultNum"
                      :label="obj.name"
@@ -33,7 +33,8 @@
           <div style="margin-top: 5px">
             <el-radio @change="changeRadio" v-model="obj.radio" label="4">从
               <template>
-                <el-input-number size="mini" v-model="obj.num.begin" controls-position="right" :max="maxNum" :min="minNum"
+                <el-input-number size="mini" v-model="obj.num.begin" controls-position="right" :max="maxNum"
+                                 :min="minNum"
                                  @change="changeNumber" @focus="changeNumber('4')"></el-input-number>
                 {{obj.name}}开始,每
                 <el-input-number size="mini" v-model="obj.num.end" controls-position="right" :max="maxNum" :min="minNum"
@@ -98,7 +99,7 @@
       </el-tabs>
     </tr>
     <tr>
-      <next-run-time :cronExp="triggerCron" :isTestRun="false"></next-run-time>
+      <next-run-time :cronExp="triggerCron" :isTestRun="isTestRun"></next-run-time>
     </tr>
     <tr>
       <el-button type="primary" @click="saveCron" size="mini">确定</el-button>
@@ -118,6 +119,11 @@
       cron: {
         type: String,
         default: '* * * * * ? *'
+      },
+      // 是否立即运行
+      isTestRun: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -245,7 +251,7 @@
         this.changetriggerCron();
       },
       changeNumber(radio) {
-        if (radio && typeof(radio) == 'string') {
+        if (radio && typeof (radio) == 'string') {
           var temp = this.getObject();
           temp.radio = radio;
         }
