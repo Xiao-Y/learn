@@ -1,4 +1,3 @@
-import md5 from 'js-md5'
 import {
   Message,
   MessageBox
@@ -90,14 +89,6 @@ var VueUtils = {
       return 'element';
     }
     return map[toString.call(obj)];
-  },
-  /**
-   * md5 前端加密
-   * @param  需要加密的字符串
-   * @return 加密后的字符串
-   */
-  md5: function (string) {
-    return md5(string);
   },
   /**
    * 查询指定节点的所有父级菜单
