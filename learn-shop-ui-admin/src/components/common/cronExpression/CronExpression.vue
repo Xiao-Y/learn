@@ -99,7 +99,7 @@
       </el-tabs>
     </tr>
     <tr>
-      <auto-task-next-run-time :cronExp="triggerCron" :isTestRun="true"></auto-task-next-run-time>
+      <auto-task-next-run-time :cronExp="triggerCron" :isTestRun="false"></auto-task-next-run-time>
     </tr>
     <tr>
       <el-button type="primary" @click="saveCron" size="mini">确定</el-button>
@@ -139,6 +139,7 @@
     created() {
       this.initData();
       this.triggerCron = this.cron;
+      this.cronTempToRadio();
     },
     methods: {
       initData: function () {
@@ -160,36 +161,37 @@
         this.timeArray.push(this.year);
         for (var i = 0; i < 60; i++) {
           // 秒
-          this.second.allElement.push(i);
+          this.second.allElement.push(i + '');
           // 分
           this.minute.allElement = this.second.allElement;
+          var value = (i + 1) + '';
           // 时
           if (i < 24) {
-            this.hour.allElement.push(i + 1);
+            this.hour.allElement.push(value);
           }
           // 天
           if (i < 31) {
-            this.day.allElement.push(i + 1);
+            this.day.allElement.push(value);
           }
           // 周
           if (i < 7) {
-            this.week.allElement.push(i + 1);
+            this.week.allElement.push(value);
           }
           // 月
           if (i < 12) {
-            this.month.allElement.push(i + 1);
+            this.month.allElement.push(value);
           }
         }
       },
       // 时间基类
       TimeBase: function (resultNum, name) {
-        var radio = "1";
+        var radio = '1';
         var label = '每' + name + ' 允许的通配符[, - * /]';
         if (resultNum === 'day') {
           label = '每天 允许的通配符[, - * / L W]';
         } else if (resultNum === 'week') {
           label = '每周 允许的通配符[, - * / L #]';
-          radio = "2";
+          radio = '2';
         }
 
         var rs = {
@@ -199,7 +201,6 @@
           radio: radio,
           checked: [],
           label: label,
-          cronTemp: '',
           num: {
             cycle1: 1,
             cycle2: 2,
@@ -241,7 +242,7 @@
         this.changetriggerCron();
       },
       changeNumber(radio) {
-        if (radio) {
+        if (radio && typeof(radio) == 'string') {
           var temp = this.getObject();
           temp.radio = radio;
         }
@@ -256,42 +257,71 @@
         var cronTemp = ['*', '*', '*', '*', '*', '?', '*'];
         for (var index in this.timeArray) {
           var temp = this.timeArray[index];
-
-          switch (temp.radio) {
-            case '1':
-              temp.cronTemp = '*';
-              break;
-            case '2':
-              temp.cronTemp = '?';
-              break;
-            case '3':
-              temp.cronTemp = temp.num.cycle1 + '-' + temp.num.cycle2;
-              break;
-            case '4':
-              temp.cronTemp = temp.num.begin + '/' + temp.num.end;
-              break;
-            case '5':
-              temp.cronTemp = temp.num.workDay + 'W';
-              break;
-            case '6':
-              temp.cronTemp = 'L';
-              break;
-            case '7':
-              temp.cronTemp = temp.num.weekNum1 + '#' + temp.num.weekNum2;
-              break;
-            case '8':
-              temp.cronTemp = temp.num.weekLast + 'L';
-              break;
-            case '9':
-              temp.cronTemp = temp.checked.join();
-              break;
-            default:
-              temp.cronTemp = '*';
-          }
-          cronTemp[index] = temp.cronTemp;
+          cronTemp[index] = this.radioToCronTemp(temp);
         }
         this.triggerCron = cronTemp.join(" ");
-        console.info(this.triggerCron);
+        // console.info(this.triggerCron);
+      },
+      radioToCronTemp(temp) {
+        switch (temp.radio) {
+          case '1':
+            return '*';
+          case '2':
+            return '?';
+          case '3':
+            return temp.num.cycle1 + '-' + temp.num.cycle2;
+          case '4':
+            return temp.num.begin + '/' + temp.num.end;
+          case '5':
+            return temp.num.workDay + 'W';
+          case '6':
+            return 'L';
+          case '7':
+            return temp.num.weekNum1 + '#' + temp.num.weekNum2;
+          case '8':
+            return temp.num.weekLast + 'L';
+          case '9':
+            return temp.checked.join();
+          default:
+            return '*';
+        }
+      },
+      cronTempToRadio() {
+        if (this.triggerCron && this.triggerCron !== '') {
+          var cronTempArray = this.triggerCron.split(" ");
+          for (var index in cronTempArray) {
+            var cronTemp = cronTempArray[index];
+            var temp = this.timeArray[index];
+            if (cronTemp === '*') {
+              temp.radio = '1';
+            } else if (cronTemp === '?') {
+              temp.radio = '2';
+            } else if (cronTemp.includes("-")) {
+              temp.radio = '3';
+              temp.num.cycle1 = cronTemp.split("-")[0];
+              temp.num.cycle2 = cronTemp.split("-")[1];
+            } else if (cronTemp.includes("/")) {
+              temp.radio = '4';
+              temp.num.begin = cronTemp.split("/")[0];
+              temp.num.end = cronTemp.split("/")[1];
+            } else if (cronTemp.includes("W")) {
+              temp.radio = '5';
+              temp.num.workDay = cronTemp.replace("W", "");
+            } else if (cronTemp === "L") {
+              temp.radio = '6';
+            } else if (cronTemp.includes("#")) {
+              temp.radio = '7';
+              temp.num.weekNum1 = cronTemp.split("#")[0];
+              temp.num.weekNum2 = cronTemp.split("#")[1];
+            } else if (cronTemp.includes("L")) {
+              temp.radio = '8';
+              temp.num.weekLast = cronTemp.replace("W", "");
+            } else {
+              temp.radio = '9';
+              cronTemp.includes(",") ? temp.checked = cronTemp.split(",") : temp.checked.push(cronTemp);
+            }
+          }
+        }
       },
       saveCron() {
         this.$emit("saveCron", this.triggerCron);

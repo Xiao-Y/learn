@@ -18,7 +18,7 @@
         <!-- <el-checkbox v-model="checked">记住密码</el-checkbox> -->
         <div class="login-btn">
           <el-button @click.native.prevent="handleLogin">登录</el-button>
-          <el-button style="background-color:red" @click.native.prevent="dataRecovery">恢复数据</el-button>
+          <el-button style="background-color:red" @click.native.prevent="dataRecovery" :disabled="true">恢复数据</el-button>
         </div>
       </el-form>
     </div>
