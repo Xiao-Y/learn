@@ -1,5 +1,6 @@
 package com.billow.job.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.billow.cloud.common.mqvo.MailVo;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 自动任务工具类
@@ -39,59 +41,23 @@ public class TaskUtils {
     public static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
         Object object = null;
         Class<?> clazz = null;
-        Method method = null;
-        boolean expFlag = false;
-        Exception exception = new Exception();
-        try {
-            // springId不为空先按springId查找bean
-            if (ToolsUtils.isNotEmpty(scheduleJob.getSpringId())) {
-                object = SpringContextUtil.getBean(scheduleJob.getSpringId());
-            } else if (ToolsUtils.isNotEmpty(scheduleJob.getBeanClass())) {
-                clazz = Class.forName(scheduleJob.getBeanClass());
-                object = clazz.newInstance();
-            }
-            if (object == null) {
-                throw new RuntimeException("任务名称 = [" + scheduleJob.getJobName() + "] 未启动成功，请检查是否配置正确！！！");
-            }
-            clazz = object.getClass();
-            // 获取自动任务要执行的方法
-            method = clazz.getDeclaredMethod(scheduleJob.getMethodName());
-            if (method == null) {
-                throw new RuntimeException("任务名称 = [" + scheduleJob.getJobName() + "] 方法名设置错误！！！");
-            }
-            method.invoke(object);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-//            expFlag = true;
-//            exception = e;
-            throw e;
-        } finally {
-//            if (expFlag) {//发生异常停止这个自动任务，写异常日志
-//                try {
-//                    ScheduleJobVo dto = new ScheduleJobVo();
-//                    dto.setId(scheduleJob.getId());
-//                    dto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
-//                    ScheduleJobService scheduleJobService = SpringContextUtil.getBean("scheduleJobServiceImpl");
-//                    scheduleJobService.updateJobStatus(dto);
-//                    if (exception != null) {
-//                        StringWriter sw = new StringWriter();
-//                        exception.printStackTrace(new PrintWriter(sw, true));
-//                        ScheduleJobLogVo logDto = new ScheduleJobLogVo();
-////                        logDto.setId(UUID.generate());
-//                        logDto.setId(scheduleJob.getId());
-//                        logDto.setJobGroup(scheduleJob.getJobGroup());
-//                        logDto.setJobName(scheduleJob.getJobName());
-//                        logDto.setCreateTime(new Date());
-//                        logDto.setInfo(sw.toString());
-//                        ScheduleJobLogService scheduleJobLogService = SpringContextUtil.getBean("scheduleJobLogServiceImpl");
-//                        scheduleJobLogService.insert(logDto);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    log.error(e.getMessage());
-//                }
-//            }
+        // springId不为空先按springId查找bean
+        if (ToolsUtils.isNotEmpty(scheduleJob.getSpringId())) {
+            object = SpringContextUtil.getBean(scheduleJob.getSpringId());
+        } else if (ToolsUtils.isNotEmpty(scheduleJob.getBeanClass())) {
+            clazz = Class.forName(scheduleJob.getBeanClass());
+            object = clazz.newInstance();
         }
+        if (object == null) {
+            throw new RuntimeException("任务名称 = [" + scheduleJob.getJobName() + "] 未启动成功，请检查是否配置正确！！！");
+        }
+        clazz = object.getClass();
+        // 获取自动任务要执行的方法
+        Method method = clazz.getDeclaredMethod(scheduleJob.getMethodName());
+        if (method == null) {
+            throw new RuntimeException("任务名称 = [" + scheduleJob.getJobName() + "] 方法名设置错误！！！");
+        }
+        method.invoke(object);
     }
 
     /**
@@ -134,9 +100,10 @@ public class TaskUtils {
             isSuccess = false;
         }
 
+        ScheduleJobLogVo logDto = null;
         if (scheduleJob.getIsSaveLog()) {
             // 插入日志
-            ScheduleJobLogVo logDto = new ScheduleJobLogVo();
+            logDto = new ScheduleJobLogVo();
             logDto.setJobId(scheduleJob.getId());
             logDto.setJobGroup(scheduleJob.getJobGroup());
             logDto.setJobName(scheduleJob.getJobName());
@@ -154,6 +121,7 @@ public class TaskUtils {
             try {
                 ScheduleJobLogService scheduleJobLogService = SpringContextUtil.getBean("scheduleJobLogServiceImpl");
                 scheduleJobLogService.insert(logDto);
+                log.info(JSONObject.toJSONString(logDto));
             } catch (Exception e) {
                 log.error("自动任务日志插入失败：{}", e.getMessage());
             }
@@ -172,17 +140,26 @@ public class TaskUtils {
             }
         }
 
-        if (!DictionaryType.SYS_FIELD_CODE_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendMail())) {
+        // 发送邮件时，必须要记录日志
+        if (!DictionaryType.JOB_FC_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendMail())) {
             if (ToolsUtils.isEmpty(scheduleJob.getMailReceive())) {
                 log.error("邮件发送失败，接收邮件人为空");
                 return;
             }
 
             try {
+                if (logDto == null) {
+                    log.error("发送邮件时日志不能为空");
+                    return;
+                }
                 MailVo mailVo = new MailVo();
                 mailVo.setToEmails(scheduleJob.getMailReceive());
                 mailVo.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
-                mailVo.setContent("自动任务测试");
+                mailVo.setMailCode("testhtml");
+                Map<String, String> param = mailVo.getParam();
+                param.put("id", logDto.getId().toString());
+                param.put("jobName", "PPPP");
+
                 SendMailPro sendMailPro = SpringContextUtil.getBean("sendMailPro");
                 sendMailPro.sendMail(mailVo);
             } catch (Exception e) {

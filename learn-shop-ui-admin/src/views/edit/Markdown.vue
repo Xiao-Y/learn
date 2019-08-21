@@ -10,6 +10,7 @@
     />
 
     <button @click="uploadimg">提交</button>
+    <button @click="submit">提交</button>
   </div>
 </template>
 
@@ -74,8 +75,8 @@
       },
       // 提交
       submit() {
-        console.log(this.content);
-        console.log(this.html);
+        console.info(this.content);
+        console.info(this.html);
         this.$message.success('提交成功，已打印至控制台！');
       }
     }

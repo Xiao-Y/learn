@@ -55,13 +55,13 @@
           <el-form-item label="异常停止">
             <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
           </el-form-item>
-          <el-form-item label="是否记录日志">
-            <el-switch v-model="autoTaskInfo.isSaveLog" active-text="是" inactive-text="否"></el-switch>
+          <el-form-item label="是否记录日志" prop="isSaveLog">
+            <el-switch v-model="autoTaskInfo.isSaveLog" @change="validateSendMail" active-text="是" inactive-text="否"></el-switch>
           </el-form-item>
           <el-form-item label="是否发送邮件" prop="isSendMail">
             <custom-select v-model="autoTaskInfo.isSendMail"
                            :datasource="sendMailSelect"
-                           @change="test"
+                           @change="validateSendMail"
                            placeholder="请选择是否发送邮件">
             </custom-select>
           </el-form-item>
@@ -134,9 +134,6 @@
       }
     },
     methods: {
-      test() {
-        console.info(this.autoTaskInfo.isSendMail);
-      },
       // 校验提交
       validSubmit() {
         var _this = this;
@@ -218,7 +215,14 @@
           this.autoTaskInfo.jobStatus = "0";
           this.$message.info('有效标志为无效时，自动任务状态只能是停止');
         }
-      }
+      },
+      validateSendMail() {
+        console.info(this.autoTaskInfo.isSendMail);
+        if (this.autoTaskInfo.isSendMail !== '0' && !this.autoTaskInfo.isSaveLog) {
+          this.autoTaskInfo.isSaveLog = true;
+          this.$message.info('需要发送邮件时，必要要记录日志');
+        }
+      },
     }
   };
 </script>

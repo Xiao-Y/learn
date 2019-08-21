@@ -27,6 +27,7 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void insert(ScheduleJobLogVo logDto) {
         ScheduleJobLogPo scheduleJobLogPo = ConvertUtils.convert(logDto, ScheduleJobLogPo.class);
-        scheduleJobLogDao.save(scheduleJobLogPo);
+        ScheduleJobLogPo save = scheduleJobLogDao.save(scheduleJobLogPo);
+        ConvertUtils.convert(save, logDto);
     }
 }
