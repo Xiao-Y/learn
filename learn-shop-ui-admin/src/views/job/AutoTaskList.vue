@@ -212,7 +212,7 @@
     },
     created() {
       // 加载系统模块的下拉
-      LoadSysDataDictionary('SystemModule').then(res => {
+      LoadSysDataDictionary('systemModule').then(res => {
         this.systemModuleSelect = res.resData;
       });
       LoadJobDataDictionary('sendMailType').then(res => {

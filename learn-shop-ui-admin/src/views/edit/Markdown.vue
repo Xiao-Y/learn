@@ -4,13 +4,10 @@
       v-model="content"
       ref="md"
       @change="change"
-      @imgAdd="$imgAdd"
-      @imgDel="$imgDel"
-      style="min-height: 600px"
-    />
-
-    <button @click="uploadimg">提交</button>
-    <button @click="submit">提交</button>
+      @imgAdd="imgAdd"
+      @imgDel="imgDel"
+      style="min-height: 400px"/>
+    <el-button type="primary" @click="submit" size="mini">确定</el-button>
   </div>
 </template>
 
@@ -25,22 +22,30 @@
     components: {
       mavonEditor,
     },
+    props: {
+      markdown: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         content: '', // 输入的markdown
         html: '',    // 及时转的html
         configs: {},
-        img_file: {} // 图片文件
+        imgFile: [] // 图片文件
       }
     },
+    created() {
+      this.content = this.markdown;
+    },
     methods: {
-      // 绑定@imgAdd event
-      $imgAdd(pos, $file) {
+      imgAdd(pos, $file) {
         // 缓存图片信息
-        this.img_file[pos] = $file;
+        this.imgFile[pos] = $file;
       },
-      $imgDel(pos) {
-        delete this.img_file[pos];
+      imgDel(pos) {
+        delete this.imgFile[pos];
       },
       /**
        * 将图片上传到服务器，返回地址替换到md中
@@ -48,35 +53,42 @@
        * @param pos 写在md中的文件名
        * @param $file  File Object
        */
-      uploadimg() {
-        console.log("this.img_file:", this.img_file);
+      uploadimg(callback) {
+        // console.log("this.imgFile:", this.imgFile);
         // 第一步.将图片上传到服务器.
         var formdata = new FormData();
-        for (var _img in this.img_file) {
-          formdata.append("file", this.img_file[_img]);
+        for (var _img in this.imgFile) {
+          formdata.append("file", this.imgFile[_img]);
         }
         RequestUtils.upload('admin-system/fileApi/batchUpload/markdown', formdata).then(res => {
           var resData = res.resData;
-          console.log(resData);
+          // console.log(resData);
           // 第二步.将返回的url替换到文本原位置
           for (var img in resData) {
-            console.log("img[0]", resData[img].pos);
-            console.log("img[1]", resData[img].fileUrl);
+            // console.log("img[0]", resData[img].pos);
+            // console.log("img[1]", resData[img].fileUrl);
             this.$refs.md.$img2Url(resData[img].pos, resData[img].fileUrl);
           }
+          callback();
         }).catch(err => {
           console.log(err);
         })
       },
-      // 所有操作都会被解析重新渲染
+      // 所有操作都会被解析重新渲染，render 为 markdown 解析后的结果[html]
       change(value, render) {
-        // render 为 markdown 解析后的结果[html]
         this.html = render;
       },
       // 提交
       submit() {
+        if (this.imgFile && this.imgFile.length > 0) {
+          this.uploadimg(() => {
+            this.$emit('markdownReturn', {content: this.content, html: this.html});
+          });
+        } else {
+          this.$emit('markdownReturn', {content: this.content, html: this.html});
+        }
         console.info(this.content);
-        console.info(this.html);
+        // console.info(this.html);
         this.$message.success('提交成功，已打印至控制台！');
       }
     }

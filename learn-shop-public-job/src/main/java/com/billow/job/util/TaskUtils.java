@@ -155,10 +155,9 @@ public class TaskUtils {
                 MailVo mailVo = new MailVo();
                 mailVo.setToEmails(scheduleJob.getMailReceive());
                 mailVo.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
-                mailVo.setMailCode("testhtml");
+                mailVo.setMailCode("autoTask");
                 Map<String, String> param = mailVo.getParam();
                 param.put("id", logDto.getId().toString());
-                param.put("jobName", "PPPP");
 
                 SendMailPro sendMailPro = SpringContextUtil.getBean("sendMailPro");
                 sendMailPro.sendMail(mailVo);

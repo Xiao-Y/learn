@@ -191,6 +191,7 @@ var VueUtils = {
     }).then(() => {
       callback();
     }).catch((err) => {
+      console.error(err);
       Message({
         type: cancelType,
         message: cancelMessage

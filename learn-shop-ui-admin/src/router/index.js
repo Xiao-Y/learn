@@ -76,6 +76,17 @@ export const asyncRouterMap = [{
     name: 'sysCacheMagIndex',
     path: 'sysCacheMagIndex/index',
     component: resolve => require(['../views/sys/CacheMag.vue'], resolve)
+  }, {
+    name: 'sysMailTemplateListIndex',
+    path: 'mailTemplateList/index',
+    meta: {
+      keepAlive: true
+    },
+    component: resolve => require(['../views/sys/MailTemplateList.vue'], resolve)
+  }, {
+    name: 'sysMailTemplateEdit',
+    path: 'mailTemplateList/mailTemplateEdit',
+    component: resolve => require(['../views/sys/components/MailTemplateEdit.vue'], resolve)
   }]
 }, {
   path: '/job',

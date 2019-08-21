@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 数据字典
@@ -46,7 +47,7 @@ public class DataDictionaryApi extends BaseApi {
         // 从 redis 中获取
         List<DataDictionaryVo> redisData = redisUtils.getArray(redisKey, DataDictionaryVo.class);
         if (ToolsUtils.isNotEmpty(redisData)) {
-            return redisData;
+            return redisData.stream().filter(f -> f.getFieldType().equals(fieldType)).collect(Collectors.toList());
         }
         DataDictionaryVo dataDictionaryVo = new DataDictionaryVo();
         dataDictionaryVo.setSystemModule(systemModule);

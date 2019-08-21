@@ -18,7 +18,8 @@
                 <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
               </el-form-item>
               <el-form-item label="系统模块" prop="systemModules">
-                <custom-select v-model="queryFilter.systemModules" :datasource="systemModuleSelect"
+                <custom-select v-model="queryFilter.systemModules"
+                               :datasource="systemModuleSelect"
                                placeholder="请选择系统模块"
                                multiple>
                 </custom-select>
@@ -151,7 +152,7 @@
     },
     created() {
       // 加载系统模块的下拉
-      LoadSysDataDictionary('SystemModule').then(res => {
+      LoadSysDataDictionary('systemModule').then(res => {
         this.systemModuleSelect = res.resData;
       });
       // 请数据殂

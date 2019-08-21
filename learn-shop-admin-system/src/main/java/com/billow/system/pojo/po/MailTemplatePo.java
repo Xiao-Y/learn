@@ -23,6 +23,15 @@ import java.io.Serializable;
 @Table(name = "sys_mail_template")
 public class MailTemplatePo extends BasePo implements Serializable {
 
+    public MailTemplatePo(){}
+
+    public MailTemplatePo(String mailCode, String mailType, String dataSources, String descritpion) {
+        this.mailCode = mailCode;
+        this.mailType = mailType;
+        this.dataSources = dataSources;
+        this.descritpion = descritpion;
+    }
+
     @ApiModelProperty("邮件标识，唯一")
     private String mailCode;
 
@@ -41,4 +50,12 @@ public class MailTemplatePo extends BasePo implements Serializable {
     @Type(type = "text")
     @ApiModelProperty("邮件模板")
     private String mailTemp;
+
+    @Lob
+    @Type(type = "text")
+    @ApiModelProperty("邮件Markdown模板")
+    private String mailMarkdown;
+
+    @ApiModelProperty("邮件模板描述")
+    private String descritpion;
 }

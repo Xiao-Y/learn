@@ -1,8 +1,10 @@
 package com.billow.system.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.billow.common.jpa.DefaultSpec;
 import com.billow.system.dao.MailTemplateDao;
 import com.billow.system.pojo.po.MailTemplatePo;
+import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.vo.MailTemplateVo;
 import com.billow.system.service.MailTemplateService;
 import com.billow.tools.constant.DictionaryType;
@@ -12,8 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Convert;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -97,6 +105,73 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                 return mailTemplateVo;
         }
     }
+
+    @Override
+    public Page<MailTemplateVo> findMailTemplateList(MailTemplateVo mailTemplateVo) {
+        MailTemplatePo mailTemplatePo = ConvertUtils.convert(mailTemplateVo, MailTemplatePo.class);
+        DefaultSpec<MailTemplatePo> defaultSpec = new DefaultSpec<>(mailTemplatePo);
+        Pageable pageable = new PageRequest(mailTemplateVo.getPageNo(), mailTemplateVo.getPageSize());
+        return mailTemplateDao.findAll(defaultSpec, pageable).map(this::coverMailTemplateVo);
+    }
+
+    @Override
+    public MailTemplateVo findMailTemplateById(Long id) {
+        MailTemplatePo mailTemplatePo = mailTemplateDao.findOne(id);
+        return ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public MailTemplateVo deleteMailTemplateById(Long id) {
+        mailTemplateDao.delete(id);
+        return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public MailTemplateVo prohibitMailTemplateById(Long id) {
+        MailTemplatePo mailTemplatePo = mailTemplateDao.findOne(id);
+        mailTemplatePo.setValidInd(false);
+        mailTemplateDao.save(mailTemplatePo);
+        return ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void saveMailTemplate(MailTemplateVo permissionVo) {
+        MailTemplatePo mailTemplatePo = ConvertUtils.convert(permissionVo, MailTemplatePo.class);
+        MailTemplatePo save = mailTemplateDao.save(mailTemplatePo);
+        ConvertUtils.convert(save, permissionVo);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void updateMailTemplate(MailTemplateVo permissionVo) {
+        MailTemplatePo mailTemplatePo = ConvertUtils.convert(permissionVo, MailTemplatePo.class);
+        mailTemplateDao.save(mailTemplatePo);
+    }
+
+    @Override
+    public Integer checkMailCode(String mailCode) {
+        return mailTemplateDao.countByMailCodeIs(mailCode);
+    }
+
+    /**
+     * 分页结果集转换
+     *
+     * @param po
+     * @return com.billow.system.pojo.vo.MailTemplateVo
+     * @author LiuYongTao
+     * @date 2019/8/21 15:58
+     */
+    private MailTemplateVo coverMailTemplateVo(MailTemplatePo po) {
+        MailTemplateVo convert = ConvertUtils.convert(po, MailTemplateVo.class);
+        convert.setMailContent(null);
+        convert.setMailTemp(null);
+        convert.setMailMarkdown(null);
+        return convert;
+    }
+
 
     /**
      * 运行sql 得到结果
