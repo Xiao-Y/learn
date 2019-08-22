@@ -168,7 +168,7 @@ public class ToolsUtils {
      * @return
      */
     public static boolean isNotEmpty(Field[] objects) {
-        if (objects != null || objects.length < 1) {
+        if (objects == null || objects.length < 1) {
             return false;
         }
         return true;

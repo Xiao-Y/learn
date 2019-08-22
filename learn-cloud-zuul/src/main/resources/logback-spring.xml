@@ -11,7 +11,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
     <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="localhost.log"/>
 
     <!-- 定义日志的根目录 -->
-    <property name="LOG_HOME" value="/app/log"/>
+    <property name="LOG_HOME" value="/usr/app/logs"/>
     <!-- ch.qos.logback.core.ConsoleAppender 表示控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <!--

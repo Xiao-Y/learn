@@ -123,16 +123,12 @@ public class QueryUtils {
                     flag = getFieldValue(root, criteriaBuilder, po, predicates, clazz, field.getName(), EQUAL);
                 }
             }
-
             // base类的
-            if (!flag) {
-                // base类的
-                Class<?> superClazz = clazz.getSuperclass();
-                Field[] superFields = clazz.getDeclaredFields();
-                if (ToolsUtils.isNotEmpty(superFields)) {
-                    for (Field field : superFields) {
-                        getFieldValue(root, criteriaBuilder, po, predicates, superClazz, field.getName(), EQUAL);
-                    }
+            Class<?> superClazz = clazz.getSuperclass();
+            Field[] superFields = superClazz.getDeclaredFields();
+            if (ToolsUtils.isNotEmpty(superFields)) {
+                for (Field superField : superFields) {
+                    getFieldValue(root, criteriaBuilder, po, predicates, superClazz, superField.getName(), EQUAL);
                 }
             }
         } catch (SecurityException | IllegalArgumentException e) {
