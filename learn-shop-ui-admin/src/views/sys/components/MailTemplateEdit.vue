@@ -45,22 +45,24 @@
           <el-form-item label="运行SQL" prop="runSql"
                         :required="this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4'">
             <el-col :span="18">
-              <el-input type="textarea" v-model="mailTemplateInfo.runSql"></el-input>
+              <el-input type="textarea" v-model="mailTemplateInfo.runSql" rows="6"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="收件人邮箱" prop="toEmails">
             <el-col :span="18">
-              <el-input type="textarea" v-model="mailTemplateInfo.toEmails"></el-input>
+              <el-input type="textarea" v-model="mailTemplateInfo.toEmails"
+                        placeholder="收件人邮箱可以在发送邮件时指定，并且优先使用指定的邮箱"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="邮件主题" prop="subject">
             <el-col :span="18">
-              <el-input type="textarea" v-model="mailTemplateInfo.subject"></el-input>
+              <el-input type="textarea" v-model="mailTemplateInfo.subject"
+                        placeholder="邮件主题可以在发送邮件时指定，并且优先使用指定的主题"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="邮件模板" prop="mailTemp">
             <el-col :span="18">
-              <el-input type="textarea" v-model="mailTemplateInfo.mailTemp"></el-input>
+              <el-input type="textarea" v-model="mailTemplateInfo.mailTemp" rows="10"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item size="mini">
@@ -107,6 +109,7 @@
           mailTemp: '',
           mailMarkdown: '',
           descritpion: '',
+          toEmails: '',
           validInd: true
         },
         oldMailCode: '',
@@ -119,6 +122,7 @@
           mailTemp: [{required: true, message: '请输入邮件模板内容', trigger: 'blur'}],
           runSql: [{validator: this.validateRunSql, trigger: 'blur'}],
           descritpion: [{required: true, message: '请输入邮件模板描述', trigger: 'blur'}],
+          toEmails: [{validator: this.validateToEmails, trigger: 'blur'}],
         }
       };
     },
@@ -200,6 +204,30 @@
         } else {
           callback();
         }
+      },
+      validateToEmails(rule, value, callback) {
+        if (value === '' || value === null) {
+          callback();
+        }
+        value = value.replace(/\s*|\t|\r|\n/g, '');
+        this.mailTemplateInfo.toEmails = value;
+
+        var message = '';
+        var emails = value.split(";");
+        for (var index in emails) {
+          var email = emails[index];
+          if (email === '') {
+            continue;
+          }
+          var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+          if (!reg.test(email)) {
+            message += email + ";";
+          }
+        }
+        if (message !== '') {
+          callback(new Error(message + '邮箱格式不正确'));
+        }
+        callback();
       }
     }
   };

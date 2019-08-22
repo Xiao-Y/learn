@@ -140,6 +140,10 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void saveMailTemplate(MailTemplateVo permissionVo) {
+        String toEmails = permissionVo.getToEmails();
+        if (ToolsUtils.isNotEmpty(toEmails)) {
+            permissionVo.setToEmails(toEmails.replaceAll("\\s*|\t|\r|\n", ""));
+        }
         MailTemplatePo mailTemplatePo = ConvertUtils.convert(permissionVo, MailTemplatePo.class);
         MailTemplatePo save = mailTemplateDao.save(mailTemplatePo);
         ConvertUtils.convert(save, permissionVo);
@@ -148,8 +152,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updateMailTemplate(MailTemplateVo permissionVo) {
-        MailTemplatePo mailTemplatePo = ConvertUtils.convert(permissionVo, MailTemplatePo.class);
-        mailTemplateDao.save(mailTemplatePo);
+        this.saveMailTemplate(permissionVo);
     }
 
     @Override

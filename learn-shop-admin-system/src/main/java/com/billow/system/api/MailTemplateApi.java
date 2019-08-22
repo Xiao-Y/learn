@@ -35,7 +35,7 @@ public class MailTemplateApi {
 
     @ApiOperation("根据条件查询邮件模板信息")
     @PostMapping("/findMailTemplateList")
-    public Page<MailTemplateVo> findMailTemplateList(MailTemplateVo mailTemplateVo) {
+    public Page<MailTemplateVo> findMailTemplateList(@RequestBody MailTemplateVo mailTemplateVo) {
         return mailTemplateService.findMailTemplateList(mailTemplateVo);
     }
 
@@ -69,7 +69,7 @@ public class MailTemplateApi {
     @ApiOperation("更新邮件模板信息")
     @PutMapping("/updateMailTemplate")
     public MailTemplateVo updateMailTemplate(@RequestBody MailTemplateVo permissionVo) {
-        mailTemplateService.updateMailTemplate(permissionVo);
+        mailTemplateService.saveMailTemplate(permissionVo);
         return permissionVo;
     }
 
