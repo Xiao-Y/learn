@@ -37,4 +37,12 @@ public class CommonProperties {
      * @date 2019/8/8 10:21
      */
     private String userIconImgPath;
+
+    /**
+     * 启动时，是否初始数据（首次启动时需要设置为true,默认为true）
+     *
+     * @author LiuYongTao
+     * @date 2019/8/8 10:21
+     */
+    private Boolean startInitData = true;
 }

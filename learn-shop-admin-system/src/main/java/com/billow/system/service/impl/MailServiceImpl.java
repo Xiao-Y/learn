@@ -139,7 +139,6 @@ public class MailServiceImpl implements MailService {
                 FileSystemResource file = new FileSystemResource(new File(filePath));
                 String fileName = filePath.substring(filePath.lastIndexOf(File.separator));
                 helper.addAttachment(fileName, file);
-                //helper.addAttachment("test"+fileName, file);
                 mailSender.send(message);
                 log.info("带附件的邮件已经发送。");
             } catch (MessagingException e) {

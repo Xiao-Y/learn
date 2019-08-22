@@ -1,5 +1,6 @@
 package com.billow.system.init;
 
+import com.billow.system.properties.CustomProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,9 +24,14 @@ public class StartLoading implements InitializingBean {
     @Resource(name = "fxbDrawExecutor")
     private ExecutorService executorService;
 
+    @Autowired
+    private CustomProperties customProperties;
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.init(null);
+        if (customProperties.getCommon().getStartInitData()) {
+            this.init(null);
+        }
     }
 
     public boolean init(String cacheType) {
