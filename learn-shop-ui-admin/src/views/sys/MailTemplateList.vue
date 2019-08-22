@@ -61,6 +61,12 @@
                 <el-form-item label="是否有效">
                   <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
                 </el-form-item>
+                <el-form-item label="收件人邮箱">
+                  <el-input type="textarea" v-model="scope.row.toEmails" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="邮件主题">
+                  <el-input type="textarea" v-model="scope.row.subject" disabled></el-input>
+                </el-form-item>
               </el-form>
             </template>
           </el-table-column>

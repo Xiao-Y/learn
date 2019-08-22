@@ -48,6 +48,16 @@
               <el-input type="textarea" v-model="mailTemplateInfo.runSql"></el-input>
             </el-col>
           </el-form-item>
+          <el-form-item label="收件人邮箱" prop="toEmails">
+            <el-col :span="18">
+              <el-input type="textarea" v-model="mailTemplateInfo.toEmails"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="邮件主题" prop="subject">
+            <el-col :span="18">
+              <el-input type="textarea" v-model="mailTemplateInfo.subject"></el-input>
+            </el-col>
+          </el-form-item>
           <el-form-item label="邮件模板" prop="mailTemp">
             <el-col :span="18">
               <el-input type="textarea" v-model="mailTemplateInfo.mailTemp"></el-input>
@@ -131,7 +141,7 @@
         var _this = this;
         this.$refs['mailTemplateInfo'].validate(valid => {
           if (valid) {
-            // _this.onSubmit();
+            _this.onSubmit();
           } else {
             return false;
           }

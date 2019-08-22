@@ -67,19 +67,20 @@ public class MailTemplateServiceImpl implements MailTemplateService {
      */
     @Override
     public MailTemplateVo genMailContent(String mailCode, Map<String, String> parameter) {
+        if (ToolsUtils.isEmpty(mailCode)) {
+            throw new RuntimeException("使用模板邮件时，mailCode不能为空。请去 sys_mail_template 表中配置邮件模板");
+        }
         MailTemplatePo mailTemplatePo = mailTemplateDao.findByMailCodeAndValidIndIsTrue(mailCode);
         MailTemplateVo mailTemplateVo = ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
         if (mailTemplateVo == null) {
-            log.error("MailCode：{}，没有查询到对应的邮件模板", mailCode);
-            return null;
+            throw new RuntimeException("没有查询到对应的邮件模板。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板");
         }
 
 
         // 邮件模板
         String mailTemp = mailTemplateVo.getMailTemp();
         if (ToolsUtils.isEmpty(mailTemp)) {
-            log.error("MailCode：{}，查询到对应的邮件模板为空", mailCode);
-            return null;
+            throw new RuntimeException("邮件内容为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 mailTemp");
         }
 
         // 数据来源，1-固定邮件，2-SQL查询，3-参数设置,4-混合（2、3都有）
@@ -206,8 +207,10 @@ public class MailTemplateServiceImpl implements MailTemplateService {
         // 替换参数
         Set keys = parameter.keySet();
         for (Object key : keys) {
+            if (key == null) continue;
             Object value = parameter.get(key);
             String param = rep + "{" + key + "}";
+            value = value == null ? "" : value;
             content = content.replace(param, value.toString());
         }
         return content;

@@ -44,27 +44,44 @@ public class MailServiceImpl implements MailService {
         executorService.execute(() -> {
             try {
                 log.info("开始发送模板邮件！");
+                String toEmailsTemp = toEmails;
+                String subjectTemp = subject;
                 MailTemplateVo mailTemplateVo = mailTemplateService.genMailContent(mailCode, parameter);
+                // 优先使用指定的，如果为空，使用数据库中配置的
+                if (ToolsUtils.isEmpty(toEmailsTemp)) {
+                    toEmailsTemp = mailTemplateVo.getToEmails();
+                    if (ToolsUtils.isEmpty(toEmailsTemp)) {
+                        throw new RuntimeException("邮件接收人为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 toEmails");
+                    }
+                }
+                if (ToolsUtils.isEmpty(subjectTemp)) {
+                    toEmailsTemp = mailTemplateVo.getSubject();
+                    if (ToolsUtils.isEmpty(toEmailsTemp)) {
+                        throw new RuntimeException("邮件主题为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 subject");
+                    }
+                }
+
+
                 String mailContent = mailTemplateVo.getMailContent();
                 // 邮件类型，1-普通邮件，2-html邮件，3-带附件邮件
                 String mailType = mailTemplateVo.getMailType();
                 switch (mailType) {
                     case DictionaryType.SYS_FC_DATA_MAIL_COMMON: // 1-普通邮件
-                        this.sendSimpleMail(toEmails, subject, mailContent);
+                        this.sendSimpleMail(toEmailsTemp, subjectTemp, mailContent);
                         break;
                     case DictionaryType.SYS_FC_DATA_MAIL_HTML: // 2-html邮件
-                        this.sendHtmlMail(toEmails, subject, mailContent);
+                        this.sendHtmlMail(toEmailsTemp, subjectTemp, mailContent);
                         break;
                     case DictionaryType.SYS_FC_DATA_MAIL_ATT: // 3-带附件邮件
                         if (ToolsUtils.isEmpty(filePath)) {
-                            this.sendSimpleMail(toEmails, subject, mailContent);
+                            this.sendSimpleMail(toEmailsTemp, subjectTemp, mailContent);
                         } else {
-                            this.sendAttachmentsMail(toEmails, subject, mailContent, filePath);
+                            this.sendAttachmentsMail(toEmailsTemp, subjectTemp, mailContent, filePath);
                         }
                         break;
                     default:
                         // 1-普通邮件
-                        this.sendSimpleMail(toEmails, subject, mailContent);
+                        this.sendSimpleMail(toEmailsTemp, subjectTemp, mailContent);
                 }
                 log.info("模板邮件发送成功！");
             } catch (Exception e) {
@@ -77,11 +94,11 @@ public class MailServiceImpl implements MailService {
     public void sendSimpleMail(String to, String subject, String content) {
         executorService.execute(() -> {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(customProperties.getMail().getFrom());
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(content);
             try {
+                message.setFrom(customProperties.getMail().getFrom());
+                message.setTo(to);
+                message.setSubject(subject);
+                message.setText(content);
                 mailSender.send(message);
                 log.info("简单邮件发送成功！");
             } catch (Exception e) {

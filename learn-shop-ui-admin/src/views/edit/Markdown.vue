@@ -1,9 +1,11 @@
 <template>
   <div>
     <mavon-editor
-      v-model="content"
       ref="md"
+      v-model="content"
+      @save="submit"
       @change="change"
+      @helpToggle="helptoggle"
       @imgAdd="imgAdd"
       @imgDel="imgDel"
       style="min-height: 400px"/>
@@ -89,7 +91,11 @@
         }
         console.info(this.content);
         // console.info(this.html);
-        this.$message.success('提交成功，已打印至控制台！');
+        // this.$message.success('提交成功，已打印至控制台！');
+      },
+      helptoggle(status,value){
+        console.info("status:",status)
+        console.info("value:",value)
       }
     }
   }

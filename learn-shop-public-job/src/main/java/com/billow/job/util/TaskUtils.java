@@ -9,6 +9,7 @@ import com.billow.job.producer.SendMailPro;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.tools.constant.DictionaryType;
+import com.billow.tools.constant.MailTemplateCst;
 import com.billow.tools.date.DateTime;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
@@ -93,6 +94,15 @@ public class TaskUtils {
         return rs;
     }
 
+    /**
+     * 保存日志，修改任务状态，发送邮件
+     *
+     * @param scheduleJob
+     * @param exception
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/8/22 8:25
+     */
     public static void saveLog(ScheduleJobVo scheduleJob, Exception exception) {
 
         boolean isSuccess = true;
@@ -100,9 +110,9 @@ public class TaskUtils {
             isSuccess = false;
         }
 
+        // 插入日志
         ScheduleJobLogVo logDto = null;
         if (scheduleJob.getIsSaveLog()) {
-            // 插入日志
             logDto = new ScheduleJobLogVo();
             logDto.setJobId(scheduleJob.getId());
             logDto.setJobGroup(scheduleJob.getJobGroup());
@@ -121,12 +131,12 @@ public class TaskUtils {
             try {
                 ScheduleJobLogService scheduleJobLogService = SpringContextUtil.getBean("scheduleJobLogServiceImpl");
                 scheduleJobLogService.insert(logDto);
-                log.info(JSONObject.toJSONString(logDto));
             } catch (Exception e) {
                 log.error("自动任务日志插入失败：{}", e.getMessage());
             }
         }
 
+        // 异常时，是否停止自动任务
         if (!isSuccess && scheduleJob.getIsExceptionStop()) {
             try {
                 ScheduleJobService scheduleJobService = SpringContextUtil.getBean("scheduleJobServiceImpl");
@@ -155,11 +165,11 @@ public class TaskUtils {
                 MailVo mailVo = new MailVo();
                 mailVo.setToEmails(scheduleJob.getMailReceive());
                 mailVo.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
-                mailVo.setMailCode("autoTask");
-                Map<String, String> param = mailVo.getParam();
-                param.put("id", logDto.getId().toString());
+                mailVo.setMailCode(MailTemplateCst.MC_AUTO_TASK);
+                mailVo.getParam().put("id", logDto.getId().toString());
 
                 SendMailPro sendMailPro = SpringContextUtil.getBean("sendMailPro");
+                // mq 通知 system 系统发送邮件
                 sendMailPro.sendMail(mailVo);
             } catch (Exception e) {
                 log.error("发送邮件发送消息失败：{}", e.getMessage());
