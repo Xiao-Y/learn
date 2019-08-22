@@ -67,7 +67,7 @@
           </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="validSubmit">保存</el-button>
-            <el-button type="primary" @click="dialogCronExpVisible = true">配置邮件模板</el-button>
+            <el-button type="warning" @click="dialogCronExpVisible = true">配置邮件模板</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
         </el-form>

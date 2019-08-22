@@ -24,10 +24,18 @@ spring:
       trace:
         enabled: true #开启消息跟踪
   mail:
-    host: pop.exmail.qq.com
-    username: ######
-    password: ######
+    host: smtp.exmail.qq.com
+    port: 465
+    username: XXXXXX
+    password: XXXXX
     default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          auth: true
+
 
 
 
@@ -44,4 +52,4 @@ custom:
     markdown-img-path: /markdown # 图片保存的路径
     user-icon-img-path: /usericon # 图片保存的路径
   mail:
-    from: ###### #系统对外发送邮件的地址
+    from: XXXXXX #系统对外发送邮件的地址

@@ -206,6 +206,23 @@
         if (value === '' && this.autoTaskInfo.isSendMail !== '0') {
           callback(new Error('发送邮件状态，邮件地址不能为空'));
         } else {
+          value = value.replace(/\s*|\t|\r|\n/g, '');
+          this.autoTaskInfo.mailReceive = value;
+          var message = '';
+          var emails = value.split(";");
+          for (var index in emails) {
+            var email = emails[index];
+            if (email === '') {
+              continue;
+            }
+            var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+            if (!reg.test(email)) {
+              message += email + ";";
+            }
+          }
+          if (message !== '') {
+            callback(new Error(message + '邮箱格式不正确'));
+          }
           callback();
         }
       },

@@ -14,8 +14,8 @@ server:
 spring:
   application:
     name: learn-cloud-zuul
-#  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-#    static-locations: ${config.zuul.static.locations}
+  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
+    static-locations: ${config.zuul.static.locations}
 eureka:
   client:
     serviceUrl:
@@ -47,14 +47,14 @@ zuul:
       path: /admin-system/**
       strip-prefix: false
 #      serviceId: learn-shop-admin-system
-#      url: http://119.23.27.78:8811
-      url: http://127.0.0.1:8811
+      url: http://119.23.27.78:8811
+#      url: http://127.0.0.1:8811
     #用户相关
     admin-user:
       path: /admin-user/**
       strip-prefix: false
       serviceId: learn-shop-admin-user
-#      url: http://119.23.27.78:8801
+      url: http://119.23.27.78:8801
 #      url: http://127.0.0.1:8801
     #订单相关
     core-order:
@@ -68,8 +68,8 @@ zuul:
       path: /public-job/**
       strip-prefix: false
 #      serviceId: learn-shop-public-job
-#      url: http://119.23.27.78:8011
-      url: http://127.0.0.1:8011
+      url: http://119.23.27.78:8011
+#      url: http://127.0.0.1:8011
 # Logging configuration
 logging:
   level: DEBUG
