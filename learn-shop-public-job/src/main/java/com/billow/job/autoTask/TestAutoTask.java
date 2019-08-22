@@ -1,6 +1,6 @@
 package com.billow.job.autoTask;
 
-import com.billow.tools.date.DateTime;
+import com.billow.tools.date.DateUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -14,7 +14,7 @@ public class TestAutoTask {
 
     public void test() {
         try {
-            System.out.println("=====================" + TestAutoTask.class.getName() + "=====" + DateTime.getSimpleDateFormat() + "======================");
+            System.out.println("=====================" + TestAutoTask.class.getName() + "=====" + DateUtils.getSimpleDateFormat() + "======================");
             Thread.sleep(2000);
         } catch (Exception e) {
             e.printStackTrace();

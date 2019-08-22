@@ -1,12 +1,12 @@
 package com.billow.system.service.impl;
 
-import com.billow.common.jpa.DefaultSpec;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RoleDao;
 import com.billow.system.dao.RoleMenuDao;
 import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.dao.UserRoleDao;
+import com.billow.system.dao.spec.RoleSpec;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.PermissionPo;
@@ -82,10 +82,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Page<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception {
-        RolePo rolePo = ConvertUtils.convert(roleVo, RolePo.class);
-        DefaultSpec<RolePo> defaultSpec = new DefaultSpec<>(rolePo);
+        RoleSpec spec = new RoleSpec(roleVo);
         Pageable pageable = new PageRequest(roleVo.getPageNo(), roleVo.getPageSize());
-        Page<RolePo> rolePos = roleDao.findAll(defaultSpec, pageable);
+        Page<RolePo> rolePos = roleDao.findAll(spec, pageable);
         return rolePos;
     }
 

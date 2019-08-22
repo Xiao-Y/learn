@@ -1,6 +1,5 @@
 package com.billow.job.util;
 
-import com.alibaba.fastjson.JSONObject;
 import com.billow.cloud.common.mqvo.MailVo;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
@@ -10,7 +9,6 @@ import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.tools.constant.DictionaryType;
 import com.billow.tools.constant.MailTemplateCst;
-import com.billow.tools.date.DateTime;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 自动任务工具类
@@ -119,8 +116,8 @@ public class TaskUtils {
             logDto.setJobName(scheduleJob.getJobName());
             logDto.setIsSuccess(isSuccess);
             logDto.setRunTime(scheduleJob.getRunTime());
-            logDto.setCreateTime(new DateTime());
-            logDto.setUpdateTime(new DateTime());
+            logDto.setCreateTime(new Date());
+            logDto.setUpdateTime(new Date());
             if (exception != null) {
                 StringWriter sw = new StringWriter();
                 exception.printStackTrace(new PrintWriter(sw, true));

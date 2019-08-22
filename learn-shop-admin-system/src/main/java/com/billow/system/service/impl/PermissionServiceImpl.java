@@ -3,6 +3,7 @@ package com.billow.system.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.billow.common.jpa.DefaultSpec;
 import com.billow.system.dao.PermissionDao;
+import com.billow.system.dao.spec.PermissionSpec;
 import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePermissionPo;
@@ -76,9 +77,12 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public Page<PermissionVo> findPermissionList(PermissionVo permissionVo) {
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
-        DefaultSpec<PermissionPo> defaultSpec = new DefaultSpec<>(convert);
+//        DefaultSpec<PermissionPo> defaultSpec = new DefaultSpec<>(convert);
+
+        PermissionSpec spec = new PermissionSpec(permissionVo);
+
         Pageable pageable = new PageRequest(permissionVo.getPageNo(), permissionVo.getPageSize());
-        Page<PermissionVo> permissionVos = permissionDao.findAll(defaultSpec, pageable).map(this::convertToPermissionVo);
+        Page<PermissionVo> permissionVos = permissionDao.findAll(spec, pageable).map(this::convertToPermissionVo);
         return permissionVos;
     }
 

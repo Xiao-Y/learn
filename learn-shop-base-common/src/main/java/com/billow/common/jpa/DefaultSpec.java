@@ -22,7 +22,7 @@ public class DefaultSpec<T> implements Specification<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-        List<Predicate> predicateList = QueryUtils.getPredicates(root, criteriaBuilder, t);
+        List<Predicate> predicateList = QueryUtils.getPredicateEqual(root, criteriaBuilder, t);
         Predicate[] predicates = new Predicate[predicateList.size()];
         predicateList.toArray(predicates);
         return criteriaBuilder.and(predicates);

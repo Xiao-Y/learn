@@ -27,37 +27,18 @@ public class ScheduleJobSpec implements Specification<ScheduleJobPo> {
 
     @Override
     public Predicate toPredicate(Root<ScheduleJobPo> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+        ScheduleJobPo convert = ConvertUtils.convert(scheduleJobPo, ScheduleJobPo.class);
         List<Predicate> all = new ArrayList<>();
 
-        String jobName = scheduleJobPo.getJobName();
-        if (ToolsUtils.isNotEmpty(jobName)) {
-            scheduleJobPo.setJobName(null);
-            Predicate predicate = criteriaBuilder.like(root.get("jobName").as(String.class), QueryUtils.aLike(jobName));
-            all.add(predicate);
-        }
+        QueryUtils.getPredicateALike(all, root, criteriaBuilder, convert, "jobName");
+        QueryUtils.getPredicateALike(all, root, criteriaBuilder, convert, "jobGroup");
+        QueryUtils.getPredicateALike(all, root, criteriaBuilder, convert, "methodName");
 
-        String jobGroup = scheduleJobPo.getJobGroup();
-        if (ToolsUtils.isNotEmpty(jobGroup)) {
-            scheduleJobPo.setJobGroup(null);
-            Predicate predicate = criteriaBuilder.like(root.get("jobGroup").as(String.class), QueryUtils.aLike(jobGroup));
-            all.add(predicate);
-        }
-
-        String methodName = scheduleJobPo.getMethodName();
-        if (ToolsUtils.isNotEmpty(methodName)) {
-            scheduleJobPo.setMethodName(null);
-            Predicate predicate = criteriaBuilder.like(root.get("methodName").as(String.class), QueryUtils.aLike(methodName));
-            all.add(predicate);
-        }
-
-        List<Predicate> predicateList = QueryUtils.getPredicates(root, criteriaBuilder, scheduleJobPo);
+        List<Predicate> predicateList = QueryUtils.getPredicateEqual(root, criteriaBuilder, convert);
         if (ToolsUtils.isNotEmpty(predicateList)) {
             all.addAll(predicateList);
         }
 
-        Predicate[] predicates = new Predicate[all.size()];
-        all.toArray(predicates);
-        return criteriaBuilder.and(predicates);
-
+        return criteriaBuilder.and(QueryUtils.converListToArray(all));
     }
 }

@@ -1,7 +1,6 @@
 package com.billow.product.dao;
 
 import com.billow.common.jpa.utils.QueryUtils;
-
 import com.billow.product.pojo.po.ProductPo;
 import com.billow.product.pojo.vo.ProductVo;
 import com.billow.tools.utlis.ConvertUtils;
@@ -23,10 +22,10 @@ public class ProductSpec {
             ProductPo po = ConvertUtils.convert(vo, ProductPo.class);
             List<Predicate> all = new ArrayList();
             // 添加 like 查询
-            QueryUtils.getPredicateLike(all, root, cb, po, "commodityName");
-            QueryUtils.getPredicateLike(all, root, cb, po, "localityGrowth");
+            QueryUtils.getPredicateALike(all, root, cb, po, "commodityName");
+            QueryUtils.getPredicateALike(all, root, cb, po, "localityGrowth");
             // 添加 equal 查询
-            QueryUtils.getPredicates(all, root, cb, po);
+            QueryUtils.getPredicateEqual(all, root, cb, po);
 
             Predicate[] predicates = ConvertUtils.toArray(all, Predicate.class);
             return cb.and(predicates);

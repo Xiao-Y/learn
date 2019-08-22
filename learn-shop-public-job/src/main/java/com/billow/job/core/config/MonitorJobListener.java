@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.billow.job.core.JobDataCst;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.util.TaskUtils;
-import com.billow.tools.date.DateFormatUtils;
+import com.billow.tools.date.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -49,7 +49,7 @@ public class MonitorJobListener implements JobListener {
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException exception) {
         JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
         ScheduleJobVo scheduleJob = (ScheduleJobVo) jobDataMap.get(JobDataCst.SCHEDULE_JOB_VO);
-        String jobRunTime = DateFormatUtils.covertLongToString(context.getJobRunTime());
+        String jobRunTime = DateUtils.covertLongToString(context.getJobRunTime());
         scheduleJob.setRunTime(jobRunTime);
         // 插入执行日志（发送邮件mq）
         TaskUtils.saveLog(scheduleJob, exception);
