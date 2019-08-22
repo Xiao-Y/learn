@@ -208,6 +208,7 @@
       validateToEmails(rule, value, callback) {
         if (value === '' || value === null) {
           callback();
+          return true;
         }
         value = value.replace(/\s*|\t|\r|\n/g, '');
         this.mailTemplateInfo.toEmails = value;
@@ -224,10 +225,7 @@
             message += email + ";";
           }
         }
-        if (message !== '') {
-          callback(new Error(message + '邮箱格式不正确'));
-        }
-        callback();
+        message !== '' ? callback(new Error(message + '邮箱格式不正确')) : callback();
       }
     }
   };

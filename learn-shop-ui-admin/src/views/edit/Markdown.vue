@@ -5,7 +5,6 @@
       v-model="content"
       @save="submit"
       @change="change"
-      @helpToggle="helptoggle"
       @imgAdd="imgAdd"
       @imgDel="imgDel"
       style="min-height: 400px"/>
@@ -69,7 +68,7 @@
           for (var img in resData) {
             // console.log("img[0]", resData[img].pos);
             // console.log("img[1]", resData[img].fileUrl);
-            this.$refs.md.$img2Url(resData[img].pos, resData[img].fileUrl);
+            this.$refs.md.$img2Url(resData[img].pos + 1, resData[img].fileUrl);
           }
           callback();
         }).catch(err => {
@@ -92,10 +91,6 @@
         console.info(this.content);
         // console.info(this.html);
         // this.$message.success('提交成功，已打印至控制台！');
-      },
-      helptoggle(status,value){
-        console.info("status:",status)
-        console.info("value:",value)
       }
     }
   }

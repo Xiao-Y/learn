@@ -78,6 +78,7 @@ public class FileApi extends BaseApi {
         // 保存图片
         for (int i = 0; i < files.size(); i++) {
             FileHandleEx ex = this.saveFile(imageMapping, contextPath, map, files.get(i), newFileName, i);
+            list.add(ex);
         }
         return list;
     }

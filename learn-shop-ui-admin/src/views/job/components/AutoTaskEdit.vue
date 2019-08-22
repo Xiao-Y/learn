@@ -56,7 +56,8 @@
             <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
           </el-form-item>
           <el-form-item label="是否记录日志" prop="isSaveLog">
-            <el-switch v-model="autoTaskInfo.isSaveLog" @change="validateSendMail" active-text="是" inactive-text="否"></el-switch>
+            <el-switch v-model="autoTaskInfo.isSaveLog" @change="validateSendMail" active-text="是"
+                       inactive-text="否"></el-switch>
           </el-form-item>
           <el-form-item label="是否发送邮件" prop="isSendMail">
             <custom-select v-model="autoTaskInfo.isSendMail"
@@ -220,10 +221,7 @@
               message += email + ";";
             }
           }
-          if (message !== '') {
-            callback(new Error(message + '邮箱格式不正确'));
-          }
-          callback();
+          message !== '' ? callback(new Error(message + '邮箱格式不正确')) : callback();
         }
       },
       // // 规则校验：validInd/jobStatus
