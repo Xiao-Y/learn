@@ -108,6 +108,11 @@
                 <artifactId>druid</artifactId>
                 <version>${alibaba.druid.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.googlecode.log4jdbc</groupId>
+                <artifactId>log4jdbc4</artifactId>
+                <version>1.2</version>
+            </dependency>
             <!-- swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
