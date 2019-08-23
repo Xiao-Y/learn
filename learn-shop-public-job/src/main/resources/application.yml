@@ -17,6 +17,6 @@ spring:
     name: learn-shop-public-job #客户端名称
   jpa: #JPA配置
     generate-ddl: false
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
