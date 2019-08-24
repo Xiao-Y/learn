@@ -31,7 +31,7 @@ public class ActDeployApi {
     @PostMapping("/deploy/{processName}")
     public Deployment deploy(@PathVariable("processName") String processName) {
         Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("processes/test.bpmn20.xml")
+                .addClasspathResource("processes/test2.bpmn20.xml")
                 .deploy();
         return deploy;
     }
