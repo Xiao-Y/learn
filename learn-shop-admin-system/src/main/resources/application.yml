@@ -35,7 +35,10 @@ spring:
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
           auth: true
-
+  activiti:
+    check-process-definitions: false #校验流程文件，默认校验resources下的processes文件夹里的流程文件
+    mail-server-use-ssl: true
+    database-schema-update: false
 
 
 
