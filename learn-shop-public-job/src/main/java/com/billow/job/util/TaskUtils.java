@@ -1,6 +1,6 @@
 package com.billow.job.util;
 
-import com.billow.cloud.common.mqvo.MailVo;
+import com.billow.common.amqp.vo.MailVo;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.pojo.vo.ScheduleJobVo;

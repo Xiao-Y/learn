@@ -1,4 +1,4 @@
-package com.billow.system.pojo.ex;
+package com.billow.base.workflow.vo;
 
 import lombok.Data;
 
@@ -9,6 +9,6 @@ import lombok.Data;
  * @create 2019-08-24 18:45
  */
 @Data
-public class ProcessInstanceEx {
+public class ProcessInstanceVo {
     private String processInstanceId;
 }

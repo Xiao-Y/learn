@@ -1,5 +1,6 @@
 package com.billow.system.api;
 
+import com.billow.base.workflow.component.WorkFlowExe;
 import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,15 +29,12 @@ import java.util.Map;
 public class ActTaskApi {
 
     @Autowired
-    private TaskService taskService;
+    private WorkFlowExe workFlowExe;
 
     @ApiOperation(value = "提交任务")
     @PostMapping("/commitProcess/{taskId}")
     public void commitProcess(@PathVariable("taskId") String taskId,
                               @RequestBody Map<String, Object> variables) {
-        if (ToolsUtils.isEmpty(variables)) {
-            variables = new HashMap<>();
-        }
-        taskService.complete(taskId, variables);
+        workFlowExe.commitProcess(taskId, variables);
     }
 }

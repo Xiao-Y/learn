@@ -1,10 +1,9 @@
 package com.billow.system.api;
 
+import com.billow.base.workflow.component.WorkFlowExe;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,14 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActDeployApi {
 
     @Autowired
-    private RepositoryService repositoryService;
+    private WorkFlowExe workFlowExe;
 
     @ApiOperation(value = "部署流程")
     @PostMapping("/deploy/{processName}")
     public Deployment deploy(@PathVariable("processName") String processName) {
-        Deployment deploy = repositoryService.createDeployment()
-                .addClasspathResource("processes/test2.bpmn20.xml")
-                .deploy();
-        return deploy;
+        return workFlowExe.deploy(processName);
     }
 }

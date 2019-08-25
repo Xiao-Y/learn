@@ -1,6 +1,6 @@
 package com.billow.job.producer;
 
-import com.billow.cloud.common.mqvo.MailVo;
+import com.billow.common.amqp.vo.MailVo;
 import com.billow.common.amqp.RabbitMqConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;

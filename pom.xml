@@ -42,6 +42,7 @@
         <module>learn-shop-public-auth</module>
         <module>auth-server</module>
         <module>demo-client3</module>
+        <module>learn-shop-base-workflow</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -102,6 +103,11 @@
             <dependency>
                 <groupId>com.billow</groupId>
                 <artifactId>learn-shop-base-aop</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-workflow</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

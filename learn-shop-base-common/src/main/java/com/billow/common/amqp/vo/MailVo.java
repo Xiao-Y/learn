@@ -1,4 +1,4 @@
-package com.billow.cloud.common.mqvo;
+package com.billow.common.amqp.vo;
 
 import lombok.Data;
 
