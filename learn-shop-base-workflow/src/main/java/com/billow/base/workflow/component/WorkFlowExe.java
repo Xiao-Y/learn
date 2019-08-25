@@ -2,6 +2,8 @@ package com.billow.base.workflow.component;
 
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import org.activiti.engine.repository.Deployment;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,6 +26,17 @@ public interface WorkFlowExe {
      * @date 2019/8/25 10:44
      */
     Deployment deploy(String processName);
+
+    /**
+     * 删除流程部署(cascade为false时，如果存在流程实例，则会抛出异常)
+     *
+     * @param deploymentId 部署id
+     * @param cascade      是否删除所有
+     * @return void
+     * @author billow
+     * @date 2019/8/25 13:20
+     */
+    void deleteDeployment(String deploymentId, boolean cascade);
 
     /**
      * 启动流程实例，如果使用key将默认使用最新版本

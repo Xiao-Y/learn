@@ -38,8 +38,15 @@ public class WorkFlowExeImpl implements WorkFlowExe {
         String filePath = "processes/" + fileName;
         Deployment deploy = repositoryService.createDeployment()
                 .addClasspathResource(filePath)
+                .name(processName)
                 .deploy();
         return deploy;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void deleteDeployment(String deploymentId, boolean cascade) {
+        repositoryService.deleteDeployment(deploymentId,cascade);
     }
 
     @Override
