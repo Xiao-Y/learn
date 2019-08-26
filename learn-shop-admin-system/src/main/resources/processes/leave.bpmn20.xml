@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/testm1510735932336">
+  <process id="leave" isExecutable="true">
+    <startEvent id="_2" name="StartEvent"></startEvent>
+    <endEvent id="_3" name="EndEvent"></endEvent>
+    <userTask id="approve" name="经理审批" activiti:assignee="${approve}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="_5" name="ExclusiveGateway"></exclusiveGateway>
+    <sequenceFlow id="_6" sourceRef="approve" targetRef="_5"></sequenceFlow>
+    <userTask id="application" name="提交申请" activiti:assignee="${apply}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="_9" sourceRef="_2" targetRef="application"></sequenceFlow>
+    <sequenceFlow id="_10" sourceRef="application" targetRef="approve"></sequenceFlow>
+    <userTask id="modify" name="修改申请" activiti:assignee="${apply}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="_13" sourceRef="modify" targetRef="approve"></sequenceFlow>
+    <sequenceFlow id="_12" name="不通过" sourceRef="_5" targetRef="modify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_7" name="通过" sourceRef="_5" targetRef="_3">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_leave">
+    <bpmndi:BPMNPlane bpmnElement="leave" id="BPMNPlane_leave">
+      <bpmndi:BPMNShape bpmnElement="_2" id="BPMNShape__2">
+        <omgdc:Bounds height="30.0" width="30.0" x="45.0" y="62.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_3" id="BPMNShape__3">
+        <omgdc:Bounds height="28.0" width="28.0" x="705.0" y="66.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="approve" id="BPMNShape_approve">
+        <omgdc:Bounds height="55.0" width="85.0" x="315.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_5" id="BPMNShape__5">
+        <omgdc:Bounds height="40.0" width="40.0" x="495.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="application" id="BPMNShape_application">
+        <omgdc:Bounds height="55.0" width="85.0" x="135.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modify" id="BPMNShape_modify">
+        <omgdc:Bounds height="55.0" width="85.0" x="315.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_13" id="BPMNEdge__13">
+        <omgdi:waypoint x="357.5" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="357.5" y="105.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12" id="BPMNEdge__12">
+        <omgdi:waypoint x="515.0" y="100.0"></omgdi:waypoint>
+        <omgdi:waypoint x="515.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="177.36507936507937"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6">
+        <omgdi:waypoint x="400.0" y="78.17460317460318"></omgdi:waypoint>
+        <omgdi:waypoint x="495.3125" y="79.6875"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7">
+        <omgdi:waypoint x="535.0" y="80.0"></omgdi:waypoint>
+        <omgdi:waypoint x="705.0" y="80.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9" id="BPMNEdge__9">
+        <omgdi:waypoint x="75.0" y="77.5"></omgdi:waypoint>
+        <omgdi:waypoint x="135.0" y="77.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10" id="BPMNEdge__10">
+        <omgdi:waypoint x="220.0" y="77.5"></omgdi:waypoint>
+        <omgdi:waypoint x="315.0" y="77.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

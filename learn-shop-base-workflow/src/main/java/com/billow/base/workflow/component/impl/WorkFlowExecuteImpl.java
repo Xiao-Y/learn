@@ -1,6 +1,6 @@
 package com.billow.base.workflow.component.impl;
 
-import com.billow.base.workflow.component.WorkFlowExe;
+import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @create 2019-08-25 10:38
  */
 @Component
-public class WorkFlowExeImpl implements WorkFlowExe {
+public class WorkFlowExecuteImpl implements WorkFlowExecute {
 
     @Autowired
     private RepositoryService repositoryService;

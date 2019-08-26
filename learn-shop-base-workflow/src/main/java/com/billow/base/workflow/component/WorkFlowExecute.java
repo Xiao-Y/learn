@@ -2,10 +2,6 @@ package com.billow.base.workflow.component;
 
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import org.activiti.engine.repository.Deployment;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
@@ -15,7 +11,7 @@ import java.util.Map;
  * @author billow
  * @date 2019/8/25 10:37
  */
-public interface WorkFlowExe {
+public interface WorkFlowExecute {
 
     /**
      * 部署流程

@@ -3,9 +3,13 @@ package com.billow.base.workflow.component.impl;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.Page;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.impl.persistence.entity.DeploymentEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +26,8 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
 
     @Autowired
     private RepositoryService repositoryService;
+    @Autowired
+    private RuntimeService runtimeService;
 
     @Override
     public Page<Deployment> queryDeployment(DeploymentEntity deploymentEntity, int pageNo, int pageSize) {
@@ -30,19 +36,19 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         if (deploymentEntity != null) {
             String category = deploymentEntity.getCategory();
             if (category != null) {
-                query = query.deploymentCategory(category);
+                query.deploymentCategory(category);
             }
             String id = deploymentEntity.getId();
             if (id != null) {
-                query = query.deploymentId(category);
+                query.deploymentId(category);
             }
             String key = deploymentEntity.getKey();
             if (key != null) {
-                query = query.deploymentKeyLike(key);
+                query.deploymentKeyLike(key);
             }
             String name = deploymentEntity.getName();
             if (name != null) {
-                query = query.deploymentNameLike(name);
+                query.deploymentNameLike(name);
             }
         }
 
@@ -52,5 +58,20 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         Page<Deployment> page = new Page<>(pageSize, count, list);
 
         return page;
+    }
+
+    @Override
+    public List<ProcessDefinition> queryProcessDefinition(ProcessDefinitionEntity entity) {
+        ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
+        query.orderByProcessDefinitionVersion().desc();
+        String deploymentId = entity.getDeploymentId();
+        if (deploymentId != null) {
+            query.deploymentId(deploymentId);
+        }
+        String key = entity.getKey();
+        if (key != null) {
+            query.processDefinitionKey(key);
+        }
+        return query.list();
     }
 }

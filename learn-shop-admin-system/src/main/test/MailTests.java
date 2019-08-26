@@ -2,6 +2,10 @@ package test;
 
 import com.billow.system.AdminSystemApp;
 import com.billow.system.service.MailService;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntityImpl;
+import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +15,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {AdminSystemApp.class}) // 指定启动类
-public class ApplicationTests {
+public class MailTests {
 
     @Autowired
     private JavaMailSender mailSender; // 自动注入的Bean
@@ -33,11 +39,5 @@ public class ApplicationTests {
         message.setSubject("主题：简单邮件");
         message.setText("测试邮件内容");
         mailSender.send(message);
-    }
-
-    @Test
-    public void sendSimpleMail2() throws Exception {
-        mailService.sendAttachmentsMail(Sender, "主题：附件邮件", "测试附件", "D:\\20180731-0000-1159.csv");
-        Thread.sleep(30000);
     }
 }

@@ -1,10 +1,21 @@
 ### 一、pom.xml 中添加
 
 ````xml
+<!-- spring 相关 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<!-- 工作流 -->
 <dependency>
     <groupId>com.billow</groupId>
     <artifactId>learn-shop-base-workflow</artifactId>
     <version>1.0-SNAPSHOT</version>
+</dependency>
+<!-- mysql -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
 </dependency>
 ````
 ### 二、配置文件

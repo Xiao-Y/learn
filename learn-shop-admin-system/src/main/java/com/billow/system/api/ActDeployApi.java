@@ -1,6 +1,6 @@
 package com.billow.system.api;
 
-import com.billow.base.workflow.component.WorkFlowExe;
+import com.billow.base.workflow.component.WorkFlowExecute;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActDeployApi {
 
     @Autowired
-    private WorkFlowExe workFlowExe;
+    private WorkFlowExecute workFlowExecute;
 
     @ApiOperation(value = "部署流程")
     @PostMapping("/deploy/{processName}")
     public Deployment deploy(@PathVariable("processName") String processName) {
-        return workFlowExe.deploy(processName);
+        return workFlowExecute.deploy(processName);
     }
 }

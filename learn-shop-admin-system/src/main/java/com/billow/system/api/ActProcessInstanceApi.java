@@ -1,6 +1,6 @@
 package com.billow.system.api;
 
-import com.billow.base.workflow.component.WorkFlowExe;
+import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class ActProcessInstanceApi {
 
     @Autowired
-    private WorkFlowExe workFlowExe;
+    private WorkFlowExecute workFlowExecute;
 
 
     /**
@@ -46,6 +46,6 @@ public class ActProcessInstanceApi {
                                                   @PathVariable("pk") String pk,
                                                   @PathVariable("businessKey") String businessKey,
                                                   @RequestBody Map<String, Object> variables) {
-        return workFlowExe.startProcessInstance(processType, pk, businessKey, variables);
+        return workFlowExecute.startProcessInstance(processType, pk, businessKey, variables);
     }
 }
