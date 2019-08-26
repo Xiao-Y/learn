@@ -6,6 +6,7 @@ import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -35,4 +36,6 @@ public interface WorkFlowQuery {
      * @date 2019/8/26 12:23
      */
     List<ProcessDefinition> queryProcessDefinition(ProcessDefinitionEntity processDefinitionEntity);
+
+    void getActivitiProccessImage(String pProcessInstanceId, HttpServletResponse response) throws Exception;
 }
