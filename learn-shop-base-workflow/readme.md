@@ -36,3 +36,6 @@ spring:
     password: 
     url: jdbc:mysql://ip:port/XXX?useUnicode=true&characterEncoding=utf8&useSSL=false
 ````
+
+**注意：**
+启动类上需要添加 @ComponentScan("com.billow") 扫描路径
