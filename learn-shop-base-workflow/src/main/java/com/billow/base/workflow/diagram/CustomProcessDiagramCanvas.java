@@ -23,10 +23,6 @@ public class CustomProcessDiagramCanvas extends DefaultProcessDiagramCanvas {
         HIGHLIGHT_COLOR = Color.green;
     }
 
-    public CustomProcessDiagramCanvas(int width, int height, int minX, int minY, String imageType) {
-        this(width, height, minX, minY, imageType, "宋体", "宋体", "宋体", null);
-    }
-
     public CustomProcessDiagramCanvas(int width, int height, int minX, int minY, String imageType,
                                       String activityFontName, String labelFontName, String annotationFontName,
                                       ClassLoader customClassLoader) {

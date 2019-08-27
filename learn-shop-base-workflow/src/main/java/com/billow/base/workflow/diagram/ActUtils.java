@@ -41,12 +41,40 @@ public class ActUtils {
     private RuntimeService runtimeService;
 
     /**
-     * 获取流程图，并且显示活动节点.
+     * 获取原始的流程图
+     *
+     * @param deploymentId 部署id
+     * @return java.io.InputStream
+     * @author LiuYongTao
+     * @date 2019/8/27 12:22
+     */
+    public InputStream genOriginalProcessImage(String deploymentId) {
+        InputStream imageStream = null;
+        if (deploymentId == null || "".equals(deploymentId)) {
+            logger.error("deploymentId is null");
+            return imageStream;
+        }
+        try {
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).singleResult();
+            if (processDefinition == null) {
+                logger.error("deploymentId:{},没有查询到流程定义", deploymentId);
+                return imageStream;
+            }
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+            imageStream = new CustomProcessDiagramGenerator().generatePngDiagram(bpmnModel);
+        } catch (Exception e) {
+            logger.error("deploymentId：" + deploymentId + "生成流程图失败，原因：" + e.getMessage(), e);
+        }
+        return imageStream;
+    }
+
+    /**
+     * 获取流程图，并且显示活动节点（显示运行轨迹）
      *
      * @param executionId Execution对象ID，任务ID或流程实例ID等正在执行的对象ID
      * @return 流程图输入流
      */
-    public InputStream generateProcessImage(String executionId) {
+    public InputStream genActivitiProccessImage(String executionId) {
         InputStream imageStream = null;
         if (executionId == null || "".equals(executionId)) {
             logger.error("executionId is null");
@@ -83,12 +111,9 @@ public class ActUtils {
             List<String> activityIds = new ArrayList<>();
             getCurrrentActivity(processInstanceId, activityIds);
             logger.debug("Current activity ids : {}", activityIds);
-            // 中文显示的是口口口，设置字体就好了
-            String font = "黑体";
-            imageStream = new CustomProcessDiagramGenerator().generateDiagram(bpmnModel, "png", highLightedActivities,
-                    highLightedFlows, font, font, font, activityIds);
+            imageStream = new CustomProcessDiagramGenerator().generateDiagram(bpmnModel, highLightedActivities, highLightedFlows, activityIds);
         } catch (Exception e) {
-            logger.error("executionId" + executionId + "生成流程图失败，原因：" + e.getMessage(), e);
+            logger.error("executionId：" + executionId + "生成流程图失败，原因：" + e.getMessage(), e);
         }
         return imageStream;
     }

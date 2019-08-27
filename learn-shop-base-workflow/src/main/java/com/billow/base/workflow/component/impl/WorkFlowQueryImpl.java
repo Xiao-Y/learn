@@ -1,6 +1,7 @@
 package com.billow.base.workflow.component.impl;
 
 import com.billow.base.workflow.component.WorkFlowQuery;
+import com.billow.base.workflow.diagram.ActUtils;
 import com.billow.base.workflow.vo.Page;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
@@ -17,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -36,6 +40,8 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     private RuntimeService runtimeService;
     @Autowired
     private HistoryService historyService;
+    @Autowired
+    private ActUtils actUtils;
 
     @Override
     public Page<Deployment> queryDeployment(DeploymentEntity deploymentEntity, int pageNo, int pageSize) {
@@ -84,13 +90,40 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
-    public void getActivitiProccessImage(String pProcessInstanceId, HttpServletResponse response) throws Exception {
+    public void getActivitiProccessImage(String executionId, HttpServletResponse response) throws Exception {
         logger.info("[开始]-获取流程图图像");
-        try {
-            logger.info("[完成]-获取流程图图像");
-        } catch (Exception e) {
-            logger.error("【异常】-获取流程图失败！" + e.getMessage());
-            throw new RuntimeException("获取流程图失败！" + e.getMessage());
+        InputStream in = actUtils.genActivitiProccessImage(executionId);
+        if (in == null) {
+            return;
         }
+        OutputStream out = response.getOutputStream();
+        // 把图片的输入流程写入resp的输出流中
+        byte[] b = new byte[1024];
+        for (int len; (len = in.read(b)) != -1; ) {
+            out.write(b, 0, len);
+        }
+        // 关闭流
+        out.close();
+        in.close();
+        logger.info("[完成]-获取流程图图像");
+    }
+
+    @Override
+    public void genOriginalProcessImage(String deploymentId, HttpServletResponse response) throws Exception {
+        logger.info("[开始]-获取流程图图像");
+        InputStream in = actUtils.genOriginalProcessImage(deploymentId);
+        if (in == null) {
+            return;
+        }
+        OutputStream out = response.getOutputStream();
+        // 把图片的输入流程写入resp的输出流中
+        byte[] b = new byte[1024];
+        for (int len; (len = in.read(b)) != -1; ) {
+            out.write(b, 0, len);
+        }
+        // 关闭流
+        out.close();
+        in.close();
+        logger.info("[完成]-获取流程图图像");
     }
 }
