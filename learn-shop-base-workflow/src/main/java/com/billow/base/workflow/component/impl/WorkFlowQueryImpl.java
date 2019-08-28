@@ -92,11 +92,11 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
-    public Page<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo entity, int pageNo, int pageSize) {
+    public Page<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo entity, Integer offset, Integer pageSize) {
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
         // 构建查询条件
         this.genProcessDefCondition(entity, query);
-        List<ProcessDefinition> list = query.listPage(pageNo, pageSize);
+        List<ProcessDefinition> list = query.listPage(offset, pageSize);
         return PageUtils.converListToPage(pageSize, query.count(), list, ProcessDefinitionVo.class);
     }
 
@@ -119,6 +119,14 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         String key = entity.getKey();
         if (key != null) {
             query.processDefinitionKey(key);
+        }
+        String id = entity.getId();
+        if (id != null) {
+            query.processDefinitionId(id);
+        }
+        String name = entity.getName();
+        if (name != null) {
+            query.processDefinitionNameLike("%" + name + "%");
         }
     }
 

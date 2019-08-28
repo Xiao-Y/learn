@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: inline-block;">
     <el-button type="success" size="mini" @click="onAdd" icon="el-icon-plus" v-if="showAdd" :disabled="disAdd">添加
     </el-button>
     <el-button type="primary" size="mini" @click="onQuery" icon="el-icon-search" v-if="showQuery" :disabled="disQuery">
@@ -17,6 +17,11 @@
 <script>
   export default {
     props: {
+      // 提示信息延时
+      openDelay: {
+        type: Number,
+        default: 1500
+      },
       // 是否显示添加按钮
       showAdd: {
         type: Boolean,

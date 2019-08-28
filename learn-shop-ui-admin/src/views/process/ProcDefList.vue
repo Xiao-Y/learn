@@ -8,8 +8,17 @@
           </template>
           <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
-              <el-form-item label="邮件CODE" prop="mailCode">
-                <el-input v-model="queryFilter.mailCode" placeholder="邮件CODE"></el-input>
+              <el-form-item label="ID" prop="id">
+                <el-input v-model="queryFilter.id" placeholder="ID"></el-input>
+              </el-form-item>
+              <el-form-item label="KEY" prop="key">
+                <el-input v-model="queryFilter.key" placeholder="KEY"></el-input>
+              </el-form-item>
+              <el-form-item label="名称" prop="name">
+                <el-input v-model="queryFilter.name" placeholder="名称"></el-input>
+              </el-form-item>
+              <el-form-item label="部署ID" prop="deploymentId">
+                <el-input v-model="queryFilter.deploymentId" placeholder="名称"></el-input>
               </el-form-item>
             </el-row>
           </el-form>
@@ -17,7 +26,10 @@
       </el-collapse>
     </el-row>
     <!-- 查询按钮组 -->
-    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
+    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter" :show-add="false"></button-group-query>
+    <div style="display: inline-block;margin-left:10px;">
+      <el-button type="success" size="mini" @click="startDeploy" icon="el-icon-mouse">部署</el-button>
+    </div>
     <el-row>
       <template>
         <el-table border style="width: 100%" ref="procDefListRef"
@@ -28,6 +40,7 @@
           <el-table-column label="分组" prop="category"></el-table-column>
           <el-table-column label="名称" prop="name"></el-table-column>
           <el-table-column label="版本" prop="version"></el-table-column>
+          <el-table-column label="部署ID" prop="deploymentId"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
@@ -43,13 +56,13 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="200">
+          <el-table-column fixed="right" label="操作" width="80">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
               <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
                                    @onEdit="handleEdit(scope.row,scope.$index)"
                                    @onInd="handleProhibit(scope.row,scope.$index)"
-                                   :disInd="!scope.row.validInd"></button-group-option>
+                                   :show-ind="false" :show-edit="false"></button-group-option>
             </template>
           </el-table-column>
         </el-table>
@@ -57,6 +70,21 @@
     </el-row>
     <!-- 分页组件  -->
     <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
+    <el-dialog title="选取部署文件" :visible.sync="dialogVisible" width="30%">
+      <el-upload
+        ref="upload"
+        :action="action"
+        :on-success="uploadSuccess"
+        :on-error="uploadError"
+        :before-upload="checkFile"
+        :file-list="fileList"
+        multiple
+        :auto-upload="false">
+        <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
+        <el-button style="margin-left: 10px;" size="mini" type="success" @click="submitUpload">部署流程</el-button>
+        <div slot="tip">只能上传xml/zip文件，且不超过500kb</div>
+      </el-upload>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,7 +99,6 @@
     LoadSysDataDictionary
   } from "../../api/sys/DataDictionaryMag";
   // ===== component start
-  import CustomSelect from '../../components/common/CustomSelect.vue';
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue'
@@ -81,7 +108,6 @@
 
   export default {
     components: {
-      CustomSelect,
       ButtonGroupOption,
       ButtonGroupQuery,
       CustomPage
@@ -91,22 +117,18 @@
       return {
         queryFilter: {
           // 查询条件
-          mailCode: null
+          id: null,
+          key: null,
+          name: null,
+          deploymentId: null,
         },
         tableData: [], // 列表数据源
-        mailTypeSelect: [],// 邮件类型的下拉数据源
-        dataSourcesSelect: [],// 数据来源的下拉数据源
+        dialogVisible: false,
+        fileList: [], // 上传文件列表
+        action:'admin-system/actDeployApi/deploy/file',
       }
     },
     created() {
-      // 加载邮件类型的下拉
-      LoadSysDataDictionary('mailType').then(res => {
-        this.mailTypeSelect = res.resData;
-      });
-      // 加载数据来源的下拉
-      LoadSysDataDictionary('dataSourcesType').then(res => {
-        this.dataSourcesSelect = res.resData;
-      });
       // 请数据殂
       this.loadDataList();
     },
@@ -179,6 +201,50 @@
             });
           });
         });
+      },
+      startDeploy() {
+        this.dialogVisible = true;
+      },
+      // 检查上传的文件类型
+      checkFile(file) {
+        const fileType = file.type;
+        const isXml = fileType === 'text/xml';
+        const isZip = fileType === 'application/x-zip-compressed';
+        console.log("file type:", file.type);
+        console.log("isXml:", isXml);
+        console.log("isZip:", isZip);
+        if (!isXml && !isZip) {
+          this.$message.error('上传的文件类型只能是 XML 或者 ZIP 格式!');
+        }
+        return (isXml || isZip);
+      },
+      submitUpload() {
+        console.log("submitUpload");
+        this.$refs.upload.submit();
+        console.log("submitUpload...");
+      },
+      uploadSuccess(res, file, fileList) {
+        if (res.resData) {
+          this.$notify({
+            title: '成功',
+            message: file.name + ' 部署成功！',
+            position: 'bottom-right',
+            type: 'success'
+          });
+        } else {
+          this.$notify.error({
+            title: '错误',
+            position: 'bottom-right',
+            message: file.name + ' 部署失败！'
+          });
+        }
+        console.log(res);
+        // console.log("uploadSuccess");
+        this.fileList = [];
+        this.dialogVisible = false;
+      },
+      uploadError(err, file, fileList) {
+
       }
     }
   }

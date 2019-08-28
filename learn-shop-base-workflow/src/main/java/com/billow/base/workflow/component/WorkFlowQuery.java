@@ -47,7 +47,7 @@ public interface WorkFlowQuery {
      * @author LiuYongTao
      * @date 2019/8/27 19:42
      */
-    Page<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo, int pageNo, int pageSize);
+    Page<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo, Integer offset, Integer pageSize);
 
     /**
      * 查看活动的流程图（显示运行轨迹）

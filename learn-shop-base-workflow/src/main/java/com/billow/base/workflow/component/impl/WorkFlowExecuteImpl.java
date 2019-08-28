@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,8 +46,18 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public Deployment deploy(String resourceName, InputStream inputStream) {
+        Deployment deploy = repositoryService.createDeployment()
+                .addInputStream(resourceName, inputStream)
+                .name(resourceName)
+                .deploy();
+        return deploy;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deleteDeployment(String deploymentId, boolean cascade) {
-        repositoryService.deleteDeployment(deploymentId,cascade);
+        repositoryService.deleteDeployment(deploymentId, cascade);
     }
 
     @Override

@@ -23,6 +23,8 @@ public class Page<T> {
     private long totalElements = RECORD_COUNT;
     // 总页数据
     private long totalPages = RECORD_COUNT;
+
+    private Integer offset = PAGE_SIZE * PAGE_NO;
     // 分页数据
     private List<T> content = new ArrayList<>();
 
@@ -54,6 +56,7 @@ public class Page<T> {
         this.pageSize = pageSize;
         this.totalElements = totalElements;
         this.content = content;
+        this.offset = this.pageNo * this.pageSize;
         // 计算分页
         this.totalPages = pageSize == null ? 0 : (int) Math.ceil((double) totalElements / (double) pageSize);
     }
@@ -91,6 +94,7 @@ public class Page<T> {
 
     public Page<T> setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+        this.offset = this.pageNo * this.pageSize;
         return this;
     }
 
@@ -100,6 +104,16 @@ public class Page<T> {
 
     public Page<T> setPageNo(Integer pageNo) {
         this.pageNo = pageNo - 1;
+        this.offset = this.pageNo * this.pageSize;
+        return this;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public Page<T> setOffset(Integer offset) {
+        this.offset = offset;
         return this;
     }
 }

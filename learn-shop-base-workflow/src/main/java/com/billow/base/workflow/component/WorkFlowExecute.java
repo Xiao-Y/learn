@@ -2,7 +2,10 @@ package com.billow.base.workflow.component;
 
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import org.activiti.engine.repository.Deployment;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -22,6 +25,17 @@ public interface WorkFlowExecute {
      * @date 2019/8/25 10:44
      */
     Deployment deploy(String processName);
+
+    /**
+     * 部署流程
+     *
+     * @param resourceName 资源名称
+     * @param inputStream  资源流
+     * @return org.activiti.engine.repository.Deployment
+     * @author LiuYongTao
+     * @date 2019/8/28 20:46
+     */
+    Deployment deploy(String resourceName, InputStream inputStream);
 
     /**
      * 删除流程部署(cascade为false时，如果存在流程实例，则会抛出异常)
