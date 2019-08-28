@@ -1,10 +1,12 @@
 package com.billow.base.workflow.component;
 
+import com.billow.base.workflow.vo.DeploymentVo;
 import com.billow.base.workflow.vo.Page;
-import org.activiti.engine.impl.persistence.entity.DeploymentEntity;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import com.billow.base.workflow.vo.ProcessDefinitionVo;
+import com.billow.base.workflow.vo.TaskVo;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.Task;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -20,22 +22,32 @@ public interface WorkFlowQuery {
     /**
      * 条件查询流程部署
      *
-     * @param deploymentEntity
+     * @param deploymentVo
      * @return com.billow.base.workflow.vo.Page<org.activiti.engine.repository.Deployment>
      * @author billow
      * @date 2019/8/25 12:31
      */
-    Page<Deployment> queryDeployment(DeploymentEntity deploymentEntity, int pageNo, int pageSize);
+    Page<Deployment> queryDeployment(DeploymentVo deploymentVo, int pageNo, int pageSize);
 
     /**
      * 查询流程定义
      *
-     * @param processDefinitionEntity
+     * @param processDefinitionVo
      * @return java.util.List<org.activiti.engine.repository.ProcessDefinition>
      * @author LiuYongTao
      * @date 2019/8/26 12:23
      */
-    List<ProcessDefinition> queryProcessDefinition(ProcessDefinitionEntity processDefinitionEntity);
+    List<ProcessDefinition> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo);
+
+    /**
+     * 查询流程定义（分页）
+     *
+     * @param processDefinitionVo
+     * @return com.billow.base.workflow.vo.Page<org.activiti.engine.repository.ProcessDefinition>
+     * @author LiuYongTao
+     * @date 2019/8/27 19:42
+     */
+    Page<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo, int pageNo, int pageSize);
 
     /**
      * 查看活动的流程图（显示运行轨迹）
@@ -58,4 +70,6 @@ public interface WorkFlowQuery {
      * @date 2019/8/27 12:28
      */
     void genOriginalProcessImage(String deploymentId, HttpServletResponse response) throws Exception;
+
+    Page<Task> queryTaskList(TaskVo taskVo, int pageNo, int pageSize);
 }

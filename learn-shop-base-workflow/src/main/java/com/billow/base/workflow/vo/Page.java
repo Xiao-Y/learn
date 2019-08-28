@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class Page<T> {
 
-    private static final Integer PAGE_SIZE = 10; // 每页要显示的记录数
-    private static final Integer PAGE_NO = 1; // 当前页号
-    private static final Integer RECORD_COUNT = 0; // 总记录数
+    public static final Integer PAGE_SIZE = 10; // 每页要显示的记录数
+    public static final Integer PAGE_NO = 0; // 当前页号
+    public static final Integer RECORD_COUNT = 0; // 总记录数
 
     // 每页要显示的记录数
     private Integer pageSize = PAGE_SIZE;
@@ -27,6 +27,18 @@ public class Page<T> {
     private List<T> content = new ArrayList<>();
 
     public Page() {
+    }
+
+    /**
+     * 分页构造
+     *
+     * @param pageSize      页面大小
+     * @param totalElements 总记录数
+     * @author billow
+     * @date 2019/8/25 12:29
+     */
+    public Page(Integer pageSize, long totalElements) {
+        this(pageSize, totalElements, null);
     }
 
     /**
@@ -87,7 +99,7 @@ public class Page<T> {
     }
 
     public Page<T> setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
+        this.pageNo = pageNo - 1;
         return this;
     }
 }

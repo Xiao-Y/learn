@@ -149,6 +149,14 @@ export const asyncRouterMap = [{
     path: 'markdown',
     component: resolve => require(['../views/edit/Markdown.vue'], resolve)
   }]
+}, {
+  path: '/proc',
+  name: 'proc',
+  component: Home, children: [{
+    name: 'procProcDefListIndex',
+    path: 'procDefList/index',
+    component: resolve => require(['../views/process/ProcDefList.vue'], resolve)
+  }]
 }]
 
 export default new Router({

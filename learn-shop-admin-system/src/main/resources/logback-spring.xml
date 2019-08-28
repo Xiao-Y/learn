@@ -25,6 +25,7 @@
     <!-- hibernate logger -->
     <logger name="org.hibernate.SQL" level="DEBUG"/>
     <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+    <logger name="org.activiti.engine.impl.persistence.entity" level="TRACE"/>
     <!-- Spring framework logger -->
     <logger name="org.springframework" level="debug" additivity="false"></logger>
     <!-- 一般用默认的info就可以 -->
