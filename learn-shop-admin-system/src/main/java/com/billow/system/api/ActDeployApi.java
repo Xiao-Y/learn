@@ -2,8 +2,10 @@ package com.billow.system.api;
 
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
+import com.billow.base.workflow.vo.DeploymentVo;
 import com.billow.base.workflow.vo.Page;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
+import com.billow.common.base.BaseApi;
 import com.billow.tools.utlis.StringUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
@@ -12,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -31,7 +38,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/actDeployApi")
 @Api(value = "工作流部署API")
-public class ActDeployApi {
+public class ActDeployApi extends BaseApi {
 
     @Autowired
     private WorkFlowExecute workFlowExecute;
@@ -53,7 +60,7 @@ public class ActDeployApi {
             // 查询流程定义是否存在，确定是否部署成功
             ProcessDefinitionVo vo = new ProcessDefinitionVo();
             vo.setDeploymentId(deploy.getId());
-            List<ProcessDefinition> definitions = workFlowQuery.queryProcessDefinition(vo);
+            List<ProcessDefinitionVo> definitions = workFlowQuery.queryProcessDefinition(vo);
             return ToolsUtils.isNotEmpty(definitions);
         } catch (Exception e) {
             log.error("流程部署失败：", e);
@@ -61,10 +68,22 @@ public class ActDeployApi {
         }
     }
 
-    @ApiOperation(value = "查询流程定义列表")
-    @PostMapping("/findProcDefList")
-    public Page<ProcessDefinitionVo> findProcDefList(@RequestBody ProcessDefinitionVo vo) {
-        Page<ProcessDefinitionVo> definitionPage = workFlowQuery.queryProcessDefinition(vo, vo.getOffset(), vo.getPageSize());
-        return definitionPage;
+    @ApiOperation(value = "查询流程部署列表")
+    @PostMapping("/findProcDeployList")
+    public Page<DeploymentVo> findProcDeployList(@RequestBody DeploymentVo vo) {
+        Page<DeploymentVo> deploymentPage = workFlowQuery.queryDeployment(vo, vo.getOffset(), vo.getPageSize());
+        return deploymentPage;
+    }
+
+    @ApiOperation(value = "根据id删除流程部署,(cascade：是否级联删除)")
+    @DeleteMapping("/delProceDeployById/{deploymentId}/{cascade}")
+    public void delProceDeployById(@PathVariable String deploymentId, @PathVariable boolean cascade) {
+        workFlowExecute.deleteDeployment(deploymentId, cascade);
+    }
+
+    @ApiOperation(value = "根据id获取原始的流程图")
+    @GetMapping("/viewDeployImgById/{deploymentId}")
+    public void viewDeployImgById(@PathVariable String deploymentId, HttpServletResponse response) throws Exception {
+        workFlowQuery.genOriginalProcessImage(deploymentId, response);
     }
 }

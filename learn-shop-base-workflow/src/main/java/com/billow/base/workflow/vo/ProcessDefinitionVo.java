@@ -19,6 +19,7 @@ public class ProcessDefinitionVo extends Page implements Serializable {
     private String deploymentId;
     private String resourceName;
     private String diagramResourceName;
+    private String engineVersion;
 
     public String getId() {
         return id;
@@ -98,6 +99,15 @@ public class ProcessDefinitionVo extends Page implements Serializable {
 
     public ProcessDefinitionVo setDiagramResourceName(String diagramResourceName) {
         this.diagramResourceName = diagramResourceName;
+        return this;
+    }
+
+    public String getEngineVersion() {
+        return engineVersion;
+    }
+
+    public ProcessDefinitionVo setEngineVersion(String engineVersion) {
+        this.engineVersion = engineVersion;
         return this;
     }
 }

@@ -36,8 +36,8 @@ public class ActivitiQueryTests {
         ProcessDefinitionVo entity = new ProcessDefinitionVo();
 //        entity.setDeploymentId("27501");
         entity.setKey("leave");
-        List<ProcessDefinition> processDefinitions = workFlowQuery.queryProcessDefinition(entity);
-        for (ProcessDefinition processDefinition : processDefinitions) {
+        List<ProcessDefinitionVo> processDefinitions = workFlowQuery.queryProcessDefinition(entity);
+        for (ProcessDefinitionVo processDefinition : processDefinitions) {
             System.out.println("Id:" + processDefinition.getId());
             System.out.println("Key:" + processDefinition.getKey());
 

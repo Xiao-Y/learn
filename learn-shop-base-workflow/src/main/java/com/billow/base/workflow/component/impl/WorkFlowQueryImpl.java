@@ -19,16 +19,13 @@ import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * 工作流查询操作
@@ -53,9 +50,31 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     private ActUtils actUtils;
 
     @Override
-    public Page<Deployment> queryDeployment(DeploymentVo deploymentVo, int pageNo, int pageSize) {
+    public List<DeploymentVo> queryDeployment(DeploymentVo deploymentVo) {
         DeploymentQuery query = repositoryService.createDeploymentQuery();
+        this.genDeploymentCondition(deploymentVo, query);
+        return PageUtils.converListToList(query.list(), DeploymentVo.class);
+    }
 
+    @Override
+    public Page<DeploymentVo> queryDeployment(DeploymentVo deploymentVo, Integer offset, Integer pageSize) {
+        DeploymentQuery query = repositoryService.createDeploymentQuery();
+        this.genDeploymentCondition(deploymentVo, query);
+        List<Deployment> list = query.listPage(offset, pageSize);
+        return PageUtils.converListToPage(pageSize, query.count(), list, DeploymentVo.class);
+    }
+
+    /**
+     * 构建部署的查询条件
+     *
+     * @param deploymentVo
+     * @param query
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/8/29 16:40
+     */
+    private void genDeploymentCondition(DeploymentVo deploymentVo, DeploymentQuery query) {
+        query.orderByDeploymenTime().desc();
         if (deploymentVo != null) {
             String category = deploymentVo.getCategory();
             if (category != null) {
@@ -74,21 +93,14 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
                 query.deploymentNameLike(name);
             }
         }
-
-        List<Deployment> list = query.listPage(pageNo, pageSize);
-        long count = query.count();
-
-        Page<Deployment> page = new Page<>(pageSize, count, list);
-
-        return page;
     }
 
     @Override
-    public List<ProcessDefinition> queryProcessDefinition(ProcessDefinitionVo entity) {
+    public List<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo entity) {
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
         // 构建查询条件
         this.genProcessDefCondition(entity, query);
-        return query.list();
+        return PageUtils.converListToList(query.list(), ProcessDefinitionVo.class);
     }
 
     @Override

@@ -23,21 +23,33 @@ public interface WorkFlowQuery {
      * 条件查询流程部署
      *
      * @param deploymentVo
-     * @return com.billow.base.workflow.vo.Page<org.activiti.engine.repository.Deployment>
-     * @author billow
-     * @date 2019/8/25 12:31
+     * @return com.billow.base.workflow.vo.Page<com.billow.base.workflow.vo.DeploymentVo>
+     * @author LiuYongTao
+     * @date 2019/8/29 16:37
      */
-    Page<Deployment> queryDeployment(DeploymentVo deploymentVo, int pageNo, int pageSize);
+    List<DeploymentVo> queryDeployment(DeploymentVo deploymentVo);
+
+    /**
+     * 条件查询流程部署
+     *
+     * @param deploymentVo
+     * @param offset
+     * @param pageSize
+     * @return com.billow.base.workflow.vo.Page<com.billow.base.workflow.vo.DeploymentVo>
+     * @author LiuYongTao
+     * @date 2019/8/29 16:37
+     */
+    Page<DeploymentVo> queryDeployment(DeploymentVo deploymentVo, Integer offset, Integer pageSize);
 
     /**
      * 查询流程定义
      *
      * @param processDefinitionVo
-     * @return java.util.List<org.activiti.engine.repository.ProcessDefinition>
+     * @return java.util.List<com.billow.base.workflow.vo.ProcessDefinitionVo>
      * @author LiuYongTao
-     * @date 2019/8/26 12:23
+     * @date 2019/8/29 16:47
      */
-    List<ProcessDefinition> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo);
+    List<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo);
 
     /**
      * 查询流程定义（分页）

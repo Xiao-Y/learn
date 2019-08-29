@@ -51,4 +51,31 @@ public class PageUtils {
         }
         return page;
     }
+
+    /**
+     * List 结果集封装到 clazz 泛型的 List 中
+     *
+     * @param souList
+     * @param clazz
+     * @return java.util.List<E>
+     * @author LiuYongTao
+     * @date 2019/8/29 16:44
+     */
+    public static <T, E> List<E> converListToList(List<T> souList, Class<E> clazz) {
+        List<E> tarList = new ArrayList<>();
+        if (souList == null) {
+            return tarList;
+        }
+        try {
+            E tar;
+            for (T sou : souList) {
+                tar = clazz.newInstance();
+                BeanUtils.copyProperties(sou, tar);
+                tarList.add(tar);
+            }
+        } catch (Exception e) {
+            log.error("PageUtils.converListToPage 发生了异常：", e);
+        }
+        return tarList;
+    }
 }
