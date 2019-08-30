@@ -1,4 +1,5 @@
 import requestUtils from '../../utils/requestUtils'
+
 const baseUrl = 'admin-system/actDeployApi';
 
 /**
@@ -11,11 +12,12 @@ export const LoadDataProcDeployList = procDeployFilter => requestUtils.post(base
 
 /**
  * 根据id删除流程部署信息
- * @param id
+ * @param id 部署ID
+ * @param cascade 是否级联删除
  * @returns {*|AxiosPromise}
  * @constructor
  */
-export const DeleteProcDeployById = id => requestUtils.del(baseUrl + '/delProceDeployById/' + id);
+export const DeleteProcDeployById = (id, cascade) => requestUtils.del(baseUrl + '/delProceDeployById/' + id + '/' + cascade);
 
 
 /**
@@ -25,9 +27,7 @@ export const DeleteProcDeployById = id => requestUtils.del(baseUrl + '/delProceD
  * @constructor
  */
 export const ViewDeployImgById = id => {
-  return new Promise((resolve) => {
-    resolve(baseUrl + '/viewDeployImgById/' + id);
-  });
+  return baseUrl + '/viewDeployImgById/' + id;
 };
 
 /**
@@ -36,7 +36,5 @@ export const ViewDeployImgById = id => {
  * @constructor
  */
 export const Deploy = () => {
-  return new Promise((resolve) => {
-    resolve(baseUrl + '/deploy/file');
-  });
+  return baseUrl + '/deploy/file';
 };

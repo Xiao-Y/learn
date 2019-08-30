@@ -152,11 +152,20 @@ export const asyncRouterMap = [{
 }, {
   path: '/proc',
   name: 'proc',
-  component: Home, children: [{
+  component: Home,
+  children: [{
+    name: 'procProcDeployListIndex',
+    path: 'procDeployList/index',
+    component: resolve => require(['../views/process/ProcDeployList.vue'], resolve)
+  }, {
     name: 'procProcDefListIndex',
     path: 'procDefList/index',
     component: resolve => require(['../views/process/ProcDefList.vue'], resolve)
   }]
+}, {
+  name: 'procViewProcessImg',
+  path: '/procViewProcessImg',
+  component: resolve => require(['../views/process/ViewProcessImg.vue'], resolve)
 }]
 
 export default new Router({

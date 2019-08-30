@@ -26,7 +26,7 @@
       </el-collapse>
     </el-row>
     <!-- 查询按钮组 -->
-    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"
+    <button-group-query @onQuery="loadDataList" :queryFilter="queryFilter"
                         :show-add="false"></button-group-query>
     <div style="display: inline-block;margin-left:10px;">
       <el-button type="success" size="mini" @click="startDeploy" icon="el-icon-mouse">部署</el-button>
@@ -36,25 +36,38 @@
         <el-table border style="width: 100%" ref="procDeployListRef"
                   :data="tableData"
                   row-key="id">
-          <el-table-column label="ID" prop="id" width="210"></el-table-column>
+          <el-table-column label="ID" prop="id"></el-table-column>
           <el-table-column label="KEY" prop="key"></el-table-column>
-          <el-table-column label="分组" prop="category"></el-table-column>
           <el-table-column label="部署名称" prop="name"></el-table-column>
-          <el-table-column label="引擎版本" prop="engineVersion"></el-table-column>
-          <el-table-column label="部署时间">
+          <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
-              <el-date-picker type="datetime" v-model="scope.row.deploymentTime" readonly></el-date-picker>
+              <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
+                <el-form-item label="分组">
+                  <span>{{ scope.row.category }}</span>
+                </el-form-item>
+                <el-form-item label="引擎版本">
+                  <span>{{ scope.row.engineVersion }}</span>
+                </el-form-item>
+                <el-form-item label="部署时间">
+                  <el-date-picker type="datetime" v-model="scope.row.deploymentTime" readonly></el-date-picker>
+                </el-form-item>
+              </el-form>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="80">
+          <el-table-column fixed="right" label="操作" width="260">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
-              <button-group-option @onDel="handleDelete(scope.row,scope.$index)" :show-ind="false"
+              <button-group-option @onDel="handleDelete(scope.row,scope.$index,false)" :show-ind="false"
                                    :show-edit="false"></button-group-option>
               <div style="float:left;margin-left:10px;">
-                <el-tooltip class="item" effect="dark" content="查询图片" placement="top-start" :open-delay="1500">
+                <el-tooltip class="item" effect="dark" content="查询图片" placement="top-start" :open-delay="openDelay">
                   <el-button type="success" size="mini" @click="viewDeployImg(scope.row,scope.$index)">
                     <i class="el-icon-picture"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="级联删除" placement="top-start" :open-delay="openDelay">
+                  <el-button type="danger" size="mini" @click="handleDelete(scope.row,scope.$index,true)">
+                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
                   </el-button>
                 </el-tooltip>
               </div>
@@ -85,7 +98,6 @@
     <!-- 流程图片显示 -->
     <el-dialog title="选取部署文件" :visible.sync="imageDialogVisible" v-if="imageDialogVisible">
       <div class="block">
-        <span class="demonstration">自定义</span>
         <el-image :src="deployImgSrc">
           <div slot="placeholder" class="image-slot">
             加载中<span class="dot">...</span>
@@ -101,7 +113,8 @@
   import {
     LoadDataProcDeployList,
     ViewDeployImgById,
-    DeleteProcDeployById
+    DeleteProcDeployById,
+    Deploy
   } from "../../api/proc/procDeployMag";
   // ===== component start
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
@@ -127,6 +140,7 @@
           name: null,
           deploymentId: null,
         },
+        openDelay:1500,
         tableData: [], // 列表数据源
         dialogVisible: false,
         imageDialogVisible: false,
@@ -162,15 +176,22 @@
         });
       },
       viewDeployImg(row, index) {
-        ViewDeployImgById(row.id).then(res => {
-          this.deployImgSrc = res;
-          this.imageDialogVisible = true;
+        // ViewDeployImgById(row.id).then(res => {
+        //   this.deployImgSrc = res;
+        //   this.imageDialogVisible = true;
+        // });
+        const {href} = this.$router.resolve({
+          name: "procViewProcessImg",
+          query: {
+            id: row.id
+          }
         });
+        window.open(href, '_blank');
       },
-      handleDelete(row, index) {
+      handleDelete(row, index,cascade) {
         var _this = this;
         VueUtils.confirmDel(row.name, () => {
-          DeleteProcDeployById(row.id).then(res => {
+          DeleteProcDeployById(row.id,cascade).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
               type: 'success',
@@ -180,9 +201,7 @@
         });
       },
       startDeploy() {
-        Deploy().then(res => {
-          this.deployAction = res;
-        });
+        this.deployAction = Deploy();
         this.dialogVisible = true;
       },
       // 检查上传的文件类型
