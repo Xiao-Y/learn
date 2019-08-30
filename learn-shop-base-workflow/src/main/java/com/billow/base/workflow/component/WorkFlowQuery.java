@@ -83,7 +83,17 @@ public interface WorkFlowQuery {
      */
     void genOriginalProcessImage(String deploymentId, HttpServletResponse response) throws Exception;
 
-    Page<Task> queryTaskList(TaskVo taskVo, int pageNo, int pageSize);
+    /**
+     * 查询任务列表
+     *
+     * @param taskVo
+     * @param offset
+     * @param pageSize
+     * @return com.billow.base.workflow.vo.Page<com.billow.base.workflow.vo.TaskVo>
+     * @author LiuYongTao
+     * @date 2019/8/30 17:44
+     */
+    Page<TaskVo> queryTaskList(TaskVo taskVo, Integer offset, Integer pageSize);
 
     /**
      * 通过流程id 查询任务

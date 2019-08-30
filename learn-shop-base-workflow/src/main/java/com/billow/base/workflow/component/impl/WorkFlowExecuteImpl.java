@@ -37,6 +37,7 @@ import java.util.Map;
  * @create 2019-08-25 10:38
  */
 @Component
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class WorkFlowExecuteImpl implements WorkFlowExecute {
 
     private static final Logger logger = LoggerFactory.getLogger(WorkFlowExecuteImpl.class);
@@ -141,6 +142,11 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     @Override
     public void claim(String taskId, String userId) {
         taskService.claim(taskId, userId);
+    }
+
+    @Override
+    public void unclaim(String taskId) {
+        taskService.unclaim(taskId);
     }
 
     @Override

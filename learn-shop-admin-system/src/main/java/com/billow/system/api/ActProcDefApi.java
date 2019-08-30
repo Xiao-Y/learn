@@ -8,7 +8,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +37,25 @@ public class ActProcDefApi {
     public Page<ProcessDefinitionVo> findProcDefList(@RequestBody ProcessDefinitionVo vo) {
         Page<ProcessDefinitionVo> definitionPage = workFlowQuery.queryProcessDefinition(vo, vo.getOffset(), vo.getPageSize());
         return definitionPage;
+    }
+
+    @ApiOperation(value = "挂起流程定义")
+    @PutMapping("/suspendProcess/{processDefinitionId}/{cascade}")
+    public void suspendProcess(@PathVariable String processDefinitionId, @PathVariable(required = false) boolean cascade) throws Exception {
+        if (cascade) {
+            workFlowExecute.suspendProcessCascade(processDefinitionId);
+        } else {
+            workFlowExecute.suspendProcess(processDefinitionId);
+        }
+    }
+
+    @ApiOperation(value = "激活流程定义")
+    @PutMapping("/activateProcess/{processDefinitionId}/{cascade}")
+    public void activateProcess(@PathVariable String processDefinitionId, @PathVariable(required = false) boolean cascade) throws Exception {
+        if (cascade) {
+            workFlowExecute.activateProcessCascade(processDefinitionId);
+        } else {
+            workFlowExecute.activateProcess(processDefinitionId);
+        }
     }
 }

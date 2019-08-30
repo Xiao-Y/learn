@@ -135,6 +135,16 @@ public interface WorkFlowExecute {
     void claim(String taskId, String userId);
 
     /**
+     * 放弃认领任务
+     *
+     * @param taskId
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/8/30 18:04
+     */
+    void unclaim(String taskId);
+
+    /**
      * 设置认证用户，用于定义流程启动人
      *
      * @param userId

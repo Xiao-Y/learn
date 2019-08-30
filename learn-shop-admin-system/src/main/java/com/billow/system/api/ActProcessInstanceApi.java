@@ -1,6 +1,9 @@
 package com.billow.system.api;
 
 import com.billow.base.workflow.component.WorkFlowExecute;
+import com.billow.base.workflow.component.WorkFlowQuery;
+import com.billow.base.workflow.vo.Page;
+import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +32,8 @@ public class ActProcessInstanceApi {
 
     @Autowired
     private WorkFlowExecute workFlowExecute;
-
+    @Autowired
+    private WorkFlowQuery workFlowQuery;
 
     /**
      * 启动流程实例
@@ -49,4 +54,6 @@ public class ActProcessInstanceApi {
                                                   @RequestBody Map<String, Object> variables) {
         return workFlowExecute.startProcessInstance(processType, pk, businessKey, variables);
     }
+
+
 }

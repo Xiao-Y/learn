@@ -182,8 +182,30 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
-    public Page<Task> queryTaskList(TaskVo taskVo, int pageNo, int pageSize) {
+    public Page<TaskVo> queryTaskList(TaskVo taskVo, Integer offset, Integer pageSize) {
         TaskQuery query = taskService.createTaskQuery();
+        this.genTaskCondition(query, taskVo);
+        List<Task> list = query.listPage(offset, pageSize);
+        return PageUtils.converListToPage(pageSize, query.count(), list, TaskVo.class);
+    }
+
+    /**
+     * 构建任务查询条件
+     *
+     * @param query
+     * @param taskVo
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/8/30 17:46
+     */
+    private void genTaskCondition(TaskQuery query, TaskVo taskVo) {
+
+        query.orderByTaskCreateTime();
+
+        String owner = taskVo.getOwner();
+        if (owner != null) {
+            query.taskOwner(owner);
+        }
 
         String id = taskVo.getId();
         if (id != null) {
@@ -195,14 +217,6 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
             query.taskAssignee(assignee);
         }
 
-        String owner = taskVo.getOwner();
-        if (owner != null) {
-            query.taskOwner(owner);
-        }
-
-        List<Task> tasks = query.listPage(pageNo, pageSize);
-        long count = query.count();
-        return new Page<>(pageSize, count, tasks);
     }
 
     @Override
