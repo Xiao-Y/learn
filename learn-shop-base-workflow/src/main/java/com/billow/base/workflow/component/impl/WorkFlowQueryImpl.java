@@ -11,6 +11,7 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -202,5 +203,18 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         List<Task> tasks = query.listPage(pageNo, pageSize);
         long count = query.count();
         return new Page<>(pageSize, count, tasks);
+    }
+
+    @Override
+    public Task queryTaskByProcessId(String processInstanceId) {
+        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+        return task;
+    }
+
+    @Override
+    public Object queryVariables(String taskId, String varName) {
+        HistoricVariableInstance variableInstance =
+                historyService.createHistoricVariableInstanceQuery().taskId(taskId).variableName(varName).singleResult();
+        return variableInstance.getValue();
     }
 }

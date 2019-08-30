@@ -33,6 +33,22 @@ public class ActUtils {
 
     private static Logger logger = LoggerFactory.getLogger(ActUtils.class);
 
+//    private ActUtils() {
+//        ProcessEngine defaultProcessEngine = ProcessEngines.getDefaultProcessEngine();
+//        historyService = defaultProcessEngine.getHistoryService();
+//        repositoryService = defaultProcessEngine.getRepositoryService();
+//        runtimeService = defaultProcessEngine.getRuntimeService();
+//    }
+//
+//    private static class ActHolder {
+//        private final static ActUtils actUtils = new ActUtils();
+//    }
+//
+//    public static ActUtils getInstance() {
+//        return ActHolder.actUtils;
+//    }
+
+
     @Autowired
     private HistoryService historyService;
     @Autowired

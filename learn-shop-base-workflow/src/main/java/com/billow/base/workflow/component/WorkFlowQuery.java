@@ -84,4 +84,21 @@ public interface WorkFlowQuery {
     void genOriginalProcessImage(String deploymentId, HttpServletResponse response) throws Exception;
 
     Page<Task> queryTaskList(TaskVo taskVo, int pageNo, int pageSize);
+
+    /**
+     * 通过流程id 查询任务
+     *
+     * @param processInstanceId
+     * @return
+     */
+    Task queryTaskByProcessId(String processInstanceId);
+
+    /**
+     * 通过任务和变量名称获取变量
+     *
+     * @param taskId
+     * @param varName
+     * @return
+     */
+    Object queryVariables(String taskId, String varName);
 }
