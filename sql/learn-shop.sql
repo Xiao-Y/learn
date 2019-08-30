@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 21/08/2019 18:58:21
+ Date: 30/08/2019 23:10:54
 */
 
 SET NAMES utf8mb4;
@@ -61,7 +61,7 @@ CREATE TABLE `r_role_menu`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1055 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1299 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_menu
@@ -70,30 +70,34 @@ INSERT INTO `r_role_menu` VALUES (239, 2, 11, '2019-07-23 14:21:04', 'admin', '2
 INSERT INTO `r_role_menu` VALUES (240, 2, 14, '2019-07-23 14:21:04', 'admin', '2019-07-23 14:21:04', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (241, 2, 20, '2019-07-23 14:21:04', 'admin', '2019-07-23 14:21:04', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (242, 2, 2, '2019-07-23 14:21:04', 'admin', '2019-07-23 14:21:04', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1173, 1, 1, '2019-08-21 18:36:02', 'admin', '2019-08-21 18:36:02', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1174, 1, 25, '2019-08-21 18:36:02', 'admin', '2019-08-21 18:36:02', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1175, 1, 26, '2019-08-21 18:36:02', 'admin', '2019-08-21 18:36:02', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1176, 1, 27, '2019-08-21 18:36:02', 'admin', '2019-08-21 18:36:02', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1177, 1, 7, '2019-08-21 18:36:02', 'admin', '2019-08-21 18:36:02', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1178, 1, 8, '2019-08-21 18:36:02', 'admin', '2019-08-21 18:36:02', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1179, 1, 9, '2019-08-21 18:36:02', 'admin', '2019-08-21 18:36:02', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1180, 1, 10, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1181, 1, 5, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1182, 1, 33, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1183, 1, 6, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1184, 1, 32, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1185, 1, 2, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1186, 1, 34, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1187, 1, 35, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1188, 1, 4, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1189, 1, 11, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1190, 1, 14, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1191, 1, 12, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1192, 1, 13, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1193, 1, 3, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1194, 1, 31, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1195, 1, 20, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
-INSERT INTO `r_role_menu` VALUES (1196, 1, 24, '2019-08-21 18:36:03', 'admin', '2019-08-21 18:36:03', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1381, 1, 1, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1382, 1, 25, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1383, 1, 26, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1384, 1, 27, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1385, 1, 7, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1386, 1, 8, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1387, 1, 9, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1388, 1, 10, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1389, 1, 36, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1390, 1, 38, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1391, 1, 39, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1392, 1, 37, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1393, 1, 5, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1394, 1, 33, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1395, 1, 6, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1396, 1, 32, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1397, 1, 2, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1398, 1, 34, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1399, 1, 35, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1400, 1, 4, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1401, 1, 11, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1402, 1, 14, '2019-08-30 23:03:36', 'admin', '2019-08-30 23:03:36', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1403, 1, 12, '2019-08-30 23:03:36', 'admin', '2019-08-30 23:03:36', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1404, 1, 13, '2019-08-30 23:03:36', 'admin', '2019-08-30 23:03:36', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1405, 1, 3, '2019-08-30 23:03:36', 'admin', '2019-08-30 23:03:36', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1406, 1, 31, '2019-08-30 23:03:36', 'admin', '2019-08-30 23:03:36', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1407, 1, 20, '2019-08-30 23:03:36', 'admin', '2019-08-30 23:03:36', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1408, 1, 24, '2019-08-30 23:03:36', 'admin', '2019-08-30 23:03:36', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_role_permission
@@ -109,67 +113,75 @@ CREATE TABLE `r_role_permission`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1893 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2410 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_permission
 -- ----------------------------
 INSERT INTO `r_role_permission` VALUES (288, 2, 4, '2019-07-23 14:21:04', 'admin', '2019-07-23 14:21:04', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (289, 2, 5, '2019-07-23 14:21:04', 'admin', '2019-07-23 14:21:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2138, 1, 1, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2139, 1, 2, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2140, 1, 3, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2141, 1, 4, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2142, 1, 5, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2143, 1, 6, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2144, 1, 7, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2145, 1, 8, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2146, 1, 9, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2147, 1, 12, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2148, 1, 13, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2149, 1, 14, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2150, 1, 15, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2151, 1, 16, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2152, 1, 17, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2153, 1, 18, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2154, 1, 19, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2155, 1, 20, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2156, 1, 21, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2157, 1, 22, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2158, 1, 23, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2159, 1, 24, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2160, 1, 25, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2161, 1, 26, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2162, 1, 27, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2163, 1, 28, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2164, 1, 29, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2165, 1, 30, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2166, 1, 31, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2167, 1, 32, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2168, 1, 33, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2169, 1, 34, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2170, 1, 35, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2171, 1, 37, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2172, 1, 38, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2173, 1, 39, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2174, 1, 42, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2175, 1, 41, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2176, 1, 43, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2177, 1, 44, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2178, 1, 45, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2179, 1, 46, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2180, 1, 47, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2181, 1, 48, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2182, 1, 49, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2183, 1, 50, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2184, 1, 51, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2185, 1, 52, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2186, 1, 53, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2187, 1, 54, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2188, 1, 55, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2189, 1, 56, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2190, 1, 57, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2191, 1, 58, '2019-08-21 18:36:04', 'admin', '2019-08-21 18:36:04', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2594, 1, 1, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2595, 1, 2, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2596, 1, 3, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2597, 1, 4, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2598, 1, 5, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2599, 1, 6, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2600, 1, 7, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2601, 1, 8, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2602, 1, 9, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2603, 1, 12, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2604, 1, 13, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2605, 1, 14, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2606, 1, 15, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2607, 1, 16, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2608, 1, 17, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2609, 1, 18, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2610, 1, 19, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2611, 1, 20, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2612, 1, 21, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2613, 1, 22, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2614, 1, 23, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2615, 1, 24, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2616, 1, 25, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2617, 1, 26, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2618, 1, 27, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2619, 1, 28, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2620, 1, 29, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2621, 1, 30, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2622, 1, 31, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2623, 1, 32, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2624, 1, 33, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2625, 1, 34, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2626, 1, 35, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2627, 1, 37, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2628, 1, 38, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2629, 1, 39, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2630, 1, 42, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2631, 1, 41, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2632, 1, 43, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2633, 1, 44, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2634, 1, 45, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2635, 1, 46, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2636, 1, 47, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2637, 1, 48, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2638, 1, 49, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2639, 1, 50, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2640, 1, 51, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2641, 1, 52, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2642, 1, 53, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2643, 1, 54, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2644, 1, 55, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2645, 1, 56, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2646, 1, 57, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2647, 1, 58, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2648, 1, 59, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2649, 1, 60, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2650, 1, 65, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2651, 1, 61, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2652, 1, 62, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2653, 1, 63, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2654, 1, 64, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2655, 1, 66, '2019-08-30 23:03:38', 'admin', '2019-08-30 23:03:38', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_user_role
@@ -185,7 +197,7 @@ CREATE TABLE `r_user_role`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 156 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 155 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_user_role
@@ -276,14 +288,16 @@ CREATE TABLE `sys_mail_template`  (
   `run_sql` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `descritpion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `mail_markdown` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `to_emails` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_mail_template
 -- ----------------------------
-INSERT INTO `sys_mail_template` VALUES (1, NULL, NULL, '2019-08-21 18:09:29', 'admin', b'1', '2', 'autoTask', '<p><strong>以下是自动任务运行情况</strong></p>\n<table>\n<thead>\n<tr>\n<th>任务ID</th>\n<th>任务分组</th>\n<th>任务名称</th>\n<th>是否执行成功</th>\n<th>运行时间</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#{jobId}</td>\n<td>#{jobGroup}</td>\n<td>#{jobName}</td>\n<td>#{isSuccess}</td>\n<td>#{runTime}</td>\n</tr>\n</tbody>\n</table>\n', '2', 'SELECT r.job_id as jobId,r.job_group as jobGroup,r.job_name as jobName,r.is_success as isSuccess,r.run_time as runTime FROM sys_schedule_job_log r where r.id = #{id}', '自动任务', '**以下是自动任务运行情况**\n|任务ID|任务分组|任务名称|是否执行成功|运行时间|\n|-|-|-|-|-|\n|#{jobId}|#{jobGroup}|#{jobName}|#{isSuccess}|#{runTime}|\n');
-INSERT INTO `sys_mail_template` VALUES (2, NULL, NULL, NULL, NULL, b'1', '1', 'testhtml', '<p>1231231</p>\n<pre><div class=\"hljs\"><code class=\"lang-java\">sfdsesfsdf\n</code></div></pre>\n<h1><a id=\"sjalld_5\"></a>sjalld</h1>\n<h3><a id=\"sdfselidkkd_6\"></a>sdfselidkkd</h3>', '2', NULL, NULL, NULL);
+INSERT INTO `sys_mail_template` VALUES (1, NULL, NULL, '2019-08-22 20:29:02', 'admin', b'1', '2', 'autoTask', '<p><strong>以下是自动任务运行情况</strong></p>\n<table>\n<thead>\n<tr>\n<th>日志ID</th>\n<th>任务ID</th>\n<th>任务分组</th>\n<th>任务名称</th>\n<th>是否成功</th>\n<th>运行时间</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#{id}</td>\n<td>#{jobId}</td>\n<td>#{jobGroup}</td>\n<td>#{jobName}</td>\n<td>#{isSuccess}</td>\n<td>#{runTime}</td>\n</tr>\n</tbody>\n</table>\n<pre><div class=\"hljs\"><code class=\"lang-java\">#{info}\n</code></div></pre>\n', '2', 'SELECT r.id,r.job_id as jobId,\n(select d.field_display from sys_data_dictionary d where d.system_module = \'adminSystem\' and d.field_type = \'systemModule\' and d.field_value = r.job_group) as jobGroup,\nr.job_name as jobName,\n(CASE r.is_success\n	WHEN TRUE THEN\n		\'success\'\n	ELSE\n		\'error\'\nEND)\n as isSuccess,\nr.run_time as runTime,\nr.info \nFROM sys_schedule_job_log r \nwhere r.id = #{id}', '自动任务', '**以下是自动任务运行情况**\n|日志ID|任务ID|任务分组|任务名称|是否成功|运行时间|\n|-|-|-|-|-|-|\n|#{id}|#{jobId}|#{jobGroup}|#{jobName}|#{isSuccess}|#{runTime}|\n\n```java\n#{info}\n```', NULL, '');
+INSERT INTO `sys_mail_template` VALUES (2, NULL, NULL, '2019-08-22 21:08:36', 'admin', b'1', '1', 'testhtml', '<p><img src=\"admin-system/displayImag/markdown/201908220906457923880.jpg\" alt=\"8111d168a53456c63ed4864e9b65f50d.jpg\" /></p>\n<p><img src=\"admin-system/displayImag/markdown/201908220908311726470.jpg\" alt=\"dalog.jpg\" /></p>\n', '2', NULL, '测试', '![8111d168a53456c63ed4864e9b65f50d.jpg](admin-system/displayImag/markdown/201908220906457923880.jpg)\n\n![dalog.jpg](admin-system/displayImag/markdown/201908220908311726470.jpg)', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -304,7 +318,7 @@ CREATE TABLE `sys_menu`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -333,6 +347,10 @@ INSERT INTO `sys_menu` VALUES (32, 'jobAutoTaskEdit', '修改自动任务', 6, b
 INSERT INTO `sys_menu` VALUES (33, 'jobAutoTaskCharts', '任务概览', 5, b'1', '', NULL, 0, '2019-08-20 10:03:01', 'admin', '2019-08-20 10:03:01', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (34, 'sysMailTemplateListIndex', '邮件模板管理', 2, b'1', '', NULL, 0, '2019-08-21 10:27:20', 'admin', '2019-08-21 10:27:20', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (35, 'sysMailTemplateEdit', '邮件模板修改', 34, b'0', '', NULL, 0, '2019-08-21 15:35:19', 'admin', '2019-08-21 15:35:19', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (36, 'processMag', '流程管理', NULL, b'1', '', NULL, 80, '2019-08-27 20:08:40', 'admin', '2019-08-27 20:11:16', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (37, 'procProcDefListIndex', '流程定义', 36, b'1', '', NULL, 3, '2019-08-27 20:15:53', 'admin', '2019-08-30 21:26:10', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (38, 'procProcDeployListIndex', '流程部署', 36, b'1', '', NULL, 0, '2019-08-30 21:26:52', 'admin', '2019-08-30 21:26:52', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (39, 'procViewProcessImg', '查看流程图片', 36, b'0', '', NULL, 0, '2019-08-30 21:42:01', 'admin', '2019-08-30 21:42:01', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -354,12 +372,12 @@ CREATE TABLE `sys_permission`  (
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_permission
 -- ----------------------------
-INSERT INTO `sys_permission` VALUES (1, '查询省市区', 'CityApi-findCity', '/cityApi/findCity/**', '1', '查询省市区', b'1', '2019-04-23 15:41:51', 'admin', '2019-08-04 14:04:04', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (1, '查询省市区', 'CityApi-findCity', '/cityApi/findCity/**', '1', '查询省市区', b'1', '2019-04-23 15:41:51', 'admin', '2019-08-22 15:46:02', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (2, '修改密码', 'UserApi-editPassWord', '/userApi/editPassWord', '4', '修改密码', b'1', '2019-04-23 15:41:51', '', '2019-08-03 18:33:28', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (3, '根据登陆token查询用户信息', 'UserApi-getUserInfo', '/userApi/getUserInfo', '4', '根据登陆token查询用户信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-08-02 14:30:20', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (4, '初始化菜单信息', NULL, '/menuApi/homeMenus', '1', '初始化菜单信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:01:05', 'admin', NULL, NULL, NULL);
@@ -413,6 +431,14 @@ INSERT INTO `sys_permission` VALUES (55, '根据ID禁用邮件模板', 'MailTemp
 INSERT INTO `sys_permission` VALUES (56, '添加邮件模板信息', 'MailTemplateApi-saveMailTemplate', '/mailTemplateApi/saveMailTemplate', '1', '添加邮件模板信息', b'1', '2019-08-21 16:01:35', 'admin', '2019-08-21 16:01:35', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (57, '更新邮件模板信息', 'MailTemplateApi-updateMailTemplate', '/mailTemplateApi/updateMailTemplate', '1', '更新邮件模板信息', b'1', '2019-08-21 16:02:12', 'admin', '2019-08-21 16:02:12', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (58, '查询 mailCode 的个数', 'MailTemplateApi-checkMailCode', '/mailTemplateApi/checkMailCode/**', '1', '查询 mailCode 的个数', b'1', '2019-08-21 18:35:53', 'admin', '2019-08-21 18:35:53', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (59, '查询流程定义列表', 'ActDeployApi-findProcDeployList', '/actDeployApi/findProcDeployList', '1', '查询流程定义列表', b'1', '2019-08-27 20:59:00', 'admin', '2019-08-30 21:16:20', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (60, '部署流程（多文件）', 'ActDeployApi-deploy-file', '/actDeployApi/deploy/file', '1', '部署流程（多文件）', b'1', '2019-08-28 20:57:37', 'admin', '2019-08-28 21:08:34', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (61, '查询流程定义列表', 'ActProcDefApi-findProcDefList', '/actProcDefApi/findProcDefList', '1', '查询流程定义列表', b'1', '2019-08-30 21:21:17', 'admin', '2019-08-30 21:21:17', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (62, '挂起流程定义', 'ActProcDefApi-suspendProcess', '/actProcDefApi/suspendProcess/**', '1', '挂起流程定义', b'1', '2019-08-30 21:22:17', 'admin', '2019-08-30 21:22:17', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (63, '激活流程定义', 'ActProcDefApi-activateProcess', '/actProcDefApi/activateProcess/**', '1', '激活流程定义', b'1', '2019-08-30 21:22:56', 'admin', '2019-08-30 21:22:56', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (64, '查询流程部署列表', 'ActDeployApi-findProcDeployList', '/actDeployApi/findProcDeployList', '1', '查询流程部署列表', b'1', '2019-08-30 21:23:52', 'admin', '2019-08-30 21:23:52', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (65, '根据id获取原始的流程图', 'ActDeployApi-viewDeployImgById', '/actDeployApi/viewDeployImgById/**', '1', '根据id获取原始的流程图', b'1', '2019-08-30 21:24:36', 'admin', '2019-08-30 21:24:36', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (66, '根据id删除流程部署,(cascade：是否级联删除)', 'ActDeployApi-delProceDeployById', '/actDeployApi/delProceDeployById/**', '1', '根据id删除流程部署,(cascade：是否级联删除)', b'1', '2019-08-30 23:03:15', 'admin', '2019-08-30 23:03:15', 'admin', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -429,7 +455,7 @@ CREATE TABLE `sys_role`  (
   `role_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `role_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -464,7 +490,7 @@ CREATE TABLE `sys_schedule_job`  (
   `is_send_mail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `mail_receive` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_schedule_job
@@ -494,7 +520,7 @@ CREATE TABLE `u_user`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of u_user
