@@ -36,7 +36,7 @@
         badgeHidden: true,
         sumNum: 0,// 总待办事项
         auditProgressNum: 0,//审核中的
-        myAudit: -1,//我审核的
+        myAudit: 0,//我审核的
         myInitiated: 0,//我发起的
       }
     },
