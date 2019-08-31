@@ -5,7 +5,7 @@
     <div class="head-top">
       <head-top></head-top>
     </div>
-    
+
     <div class="content">
       <transition name="move" mode="out-in">
         <keep-alive>
@@ -23,10 +23,11 @@
   import vHead from '../../components/common/Header.vue'
   import vSidebar from '../../components/common/Sidebar.vue'
   import store from '../../store'
-import HeadTop from '../../components/common/HeadTop.vue';
+  import HeadTop from '../../components/common/HeadTop.vue';
+
   export default {
     components: {
-      vHead, vSidebar,HeadTop
+      vHead, vSidebar, HeadTop
     },
     computed: {
       routes() {
