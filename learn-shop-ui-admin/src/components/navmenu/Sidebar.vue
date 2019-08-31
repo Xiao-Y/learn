@@ -8,7 +8,7 @@
 
 <script>
 import store from "@/store";
-import NavMenu from "@/components/common/NavMenu";
+import NavMenu from "./NavMenu";
 
 export default {
   data() {

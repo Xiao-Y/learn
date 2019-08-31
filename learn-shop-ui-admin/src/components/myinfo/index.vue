@@ -210,29 +210,7 @@
 <style scoped>
 
   .user-info .el-dropdown-link {
-    position: relative;
-    display: inline-block;
     padding-left: 50px;
-    color: #fff;
-    cursor: pointer;
-    vertical-align: middle;
   }
 
-  .user-info .user-logo {
-    position: absolute;
-    left: 0;
-    top: 15px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-
-  .el-dropdown-menu__item {
-    text-align: center;
-  }
-
-  .right-menu-item {
-    display: inline-block;
-    margin: 0 8px;
-  }
 </style>

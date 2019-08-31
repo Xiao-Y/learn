@@ -3,6 +3,7 @@
     <el-menu class="header" :style="{ 'background-color': primaryColor }">
       <div class="logo">{{$t('navbar.title')}}</div>
       <div class="user-info">
+        <todo-list class="right-menu-item"></todo-list>
         <lang-select class="right-menu-item"></lang-select>
         <skin-comp class="right-menu-item"></skin-comp>
         <my-info class="right-menu-item"></my-info>
@@ -11,15 +12,17 @@
   </div>
 </template>
 <script>
-  import LangSelect from '../../components/langselect'
-  import SkinComp from '../../components/skin'
-  import MyInfo from '../../components/myinfo'
+  import LangSelect from '../langselect/index'
+  import SkinComp from '../skin/index'
+  import MyInfo from '../myinfo/index'
+  import TodoList from '../todo/index'
 
   export default {
     components: {
       LangSelect,
       SkinComp,
-      MyInfo
+      MyInfo,
+      TodoList
     },
     data() {
       return {}
@@ -51,7 +54,7 @@
     }
   }
 </script>
-<style scoped>
+<style lang="less">
   .header {
     position: relative;
     box-sizing: border-box;
@@ -78,7 +81,7 @@
   .user-info .el-dropdown-link {
     position: relative;
     display: inline-block;
-    padding-left: 50px;
+    /*padding-left: 50px;*/
     color: #fff;
     cursor: pointer;
     vertical-align: middle;
@@ -94,7 +97,7 @@
   }
 
   .el-dropdown-menu__item {
-    text-align: center;
+    text-align: left;
   }
 
   .right-menu-item {

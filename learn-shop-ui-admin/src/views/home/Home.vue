@@ -20,10 +20,10 @@
 </template>
 
 <script>
-  import vHead from '../../components/common/Header.vue'
-  import vSidebar from '../../components/common/Sidebar.vue'
+  import vHead from '../../components/header/Header.vue'
+  import vSidebar from '../../components/navmenu/Sidebar.vue'
   import store from '../../store'
-  import HeadTop from '../../components/common/HeadTop.vue';
+  import HeadTop from '../../components/header/HeadTop.vue';
 
   export default {
     components: {
