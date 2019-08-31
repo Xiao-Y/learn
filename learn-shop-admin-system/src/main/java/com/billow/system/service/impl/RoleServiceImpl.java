@@ -9,6 +9,7 @@ import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.dao.UserRoleDao;
 import com.billow.system.dao.spec.RoleSpec;
 import com.billow.system.pojo.ex.DataDictionaryEx;
+import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RoleMenuPo;
@@ -285,10 +286,17 @@ public class RoleServiceImpl implements RoleService {
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
             // 原始的
-            List<MenuPo> menuPos = redisUtils.getArray(RedisCst.ROLE_MENU_KEY + roleVo.getRoleCode(), MenuPo.class);
-            if (ToolsUtils.isNotEmpty(menuPos)) {
+            List<MenuEx> menuExs = redisUtils.getArray(RedisCst.ROLE_MENU_KEY + roleVo.getRoleCode(), MenuEx.class);
+            if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
-                sourceMenuPo = menuPos.stream().filter(f -> !delMenuIdsTemp.contains(f)).collect(Collectors.toList());
+                sourceMenuPo = menuExs.stream().filter(f -> !delMenuIdsTemp.contains(f))
+                        .map(m -> {
+                            MenuPo po = ConvertUtils.convert(m, MenuPo.class);
+                            po.setMenuCode(m.getTitleCode());
+                            po.setMenuName(m.getTitle());
+                            po.setId(new Long(m.getId()));
+                            return po;
+                        }).collect(Collectors.toList());
             }
 
             if (ToolsUtils.isNotEmpty(sourceMenuPo)) {
