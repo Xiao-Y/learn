@@ -89,9 +89,11 @@
           validInd: true
         },
         permissionChecked: [], // 被选种的权限ID
+        oldPermissionChecked: [], // 原始被选种的权限ID
         menus: [], // 菜单树数据源
         filterMenu: "", // 菜单树过滤
         menuChecked: [], // 被选种的菜单ID
+        oldMenuChecked: [], // 原始被选种的菜单ID
         loadMenuCheckedFlag: false, // 是否初始化加载被选种的菜单
         rulesForm: {
           roleName: [{required: true, message: '请输入角色名', trigger: 'blur'}],
@@ -119,6 +121,8 @@
         this.menuChecked = this.menuChecked.concat(
           this.$refs.menuTree.getHalfCheckedNodes().map(m => m.id)
         );
+        console.info("oldMenuChecked",this.oldMenuChecked);
+        console.info("menuChecked",this.menuChecked);
       },
       //获取所有菜单
       findMenus() {
@@ -151,7 +155,9 @@
         var _this = this;
         var roleInfo = _this.roleInfo;
         roleInfo['permissionChecked'] = _this.permissionChecked;
+        roleInfo['oldPermissionChecked'] = _this.oldPermissionChecked;
         roleInfo['menuChecked'] = _this.menuChecked;
+        roleInfo['oldMenuChecked'] = _this.oldMenuChecked;
         SaveRole(roleInfo).then(res => {
           _this.$message({
             type: "success",
@@ -167,9 +173,11 @@
       onReset(roleInfo) {
         this.$refs[roleInfo].resetFields();
       },
-      handleSelectionChange(checkData,type) {
+      handleSelectionChange(checkData, oldPermissionChecked, type) {
         this.permissionChecked = checkData;
-        // console.info(type + " parent this.permissionChecked", this.permissionChecked);
+        this.oldPermissionChecked = oldPermissionChecked;
+        console.info(type + " parent this.permissionChecked", this.permissionChecked);
+        console.info(type + " parent this.oldPermissionChecked", this.oldPermissionChecked);
       },
       // 校验角色CODE 是否重复
       checkRoleCode(rule, value, callback) {
@@ -191,8 +199,8 @@
       filterMenu(val) {
         this.$refs.menuTree.filter(val);
       },
-      loadMenuCheckedFlag(val) {
-        if (!val) {
+      loadMenuCheckedFlag(loadMenuCheckedFlag) {
+        if (!loadMenuCheckedFlag) {
           return;
         }
         // 加载菜单选种状态
@@ -201,6 +209,7 @@
           let deleteMenuIds = new Set();
           // 该角色所拥有的菜单
           var checkedMenu = res.resData;
+          this.oldMenuChecked = [...new Set(res.resData)];
           // 构建出所有需要移除的父级ids
           for (let i = 0; i < checkedMenu.length; i++) {
             var menuParentIds = this.VueUtils.getParentByCurrentNodeId(this.menus, checkedMenu[i]).map(m => m.id);

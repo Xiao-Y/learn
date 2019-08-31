@@ -1,5 +1,6 @@
 package com.billow.system.service.impl;
 
+import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RoleDao;
@@ -20,6 +21,7 @@ import com.billow.system.service.RoleService;
 import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.service.redis.CommonRoleMenuRedis;
 import com.billow.system.service.redis.CommonRolePermissionRedis;
+import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.MathUtils;
 import com.billow.tools.utlis.ToolsUtils;
@@ -32,9 +34,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,6 +69,8 @@ public class RoleServiceImpl implements RoleService {
     private MenuDao menuDao;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private RedisUtils redisUtils;
 
     @Override
     public List<RoleVo> findRoleListInfoByUserId(Long userId) {
@@ -139,6 +145,8 @@ public class RoleServiceImpl implements RoleService {
         RolePo rolePo = ConvertUtils.convert(roleVo, RolePo.class);
         Long id = rolePo.getId();
         if (id != null) {
+            // 表示是新添加的角色
+            roleVo.setIsNewRole(false);
             RolePo one = roleDao.findOne(id);
             // 如果是无效状态时，删除redis 中的信息
             if (!rolePo.getValidInd()) {
@@ -150,52 +158,228 @@ public class RoleServiceImpl implements RoleService {
                 commonRoleMenuRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
             }
         }
-
-        roleDao.save(rolePo);
-
+        rolePo = roleDao.save(rolePo);
         ConvertUtils.convert(rolePo, roleVo);
+        // 保存、更新数据库和 redis 中的角色权限信息
+        this.saveOrUpdateRolePerssion(roleVo);
+        // 保存、更新数据库和 redis 中的角色菜单信息
+        this.saveOrUpdateRoleMenu(roleVo);
 
-        if (id != null) {
+//        // 需要删除的
+//        List<Long> delPermissionIds = null;
+//        // 页面传过来选种的权限
+//        List<Long> permissionChecked = roleVo.getPermissionChecked();
+//        // 原始选种的权限
+//        List<Long> oldPermissionChecked = roleVo.getOldPermissionChecked();
+//        if (id != null) {
+//            // 删除原始的关联菜单数据
+//            List<RoleMenuPo> delRoleMenus = roleMenuDao.findByRoleId(roleVo.getId());
+//            roleMenuDao.deleteInBatch(delRoleMenus);
+//
+//            // 分析需要删除
+//            delPermissionIds = oldPermissionChecked.stream()
+//                    .filter(f -> !roleVo.getPermissionChecked().contains(f))
+//                    .collect(Collectors.toList());
+//            // 删除原始的关联权限数据
+//            if (ToolsUtils.isNotEmpty(delPermissionIds)) {
+//                rolePermissionDao.deleteByRoleIdAndPermissionIdIn(roleVo.getId(), delPermissionIds);
+//            }
+//            // 分析需要插入新的
+//            permissionChecked = permissionChecked.stream().filter(f -> !oldPermissionChecked.contains(f))
+//                    .collect(Collectors.toList());
+//        }
+//
+//        // 用于更新 redis 中的角色对应的菜单信息
+//        List<MenuPo> newMenuPos = new ArrayList<>();
+//        // 保存/修改菜单信息
+//        List<RoleMenuPo> roleMenuPos = roleVo.getMenuChecked().stream().map(m -> {
+//            RoleMenuPo roleMenuPo = new RoleMenuPo();
+//            roleMenuPo.setRoleId(rolePo.getId());
+//            roleMenuPo.setMenuId(new Long(m));
+//            roleMenuPo.setValidInd(true);
+//            newMenuPos.add(menuDao.findOne(new Long(m)));
+//            return roleMenuPo;
+//        }).collect(Collectors.toList());
+//        roleMenuDao.save(roleMenuPos);
+//        if (rolePo.getValidInd()) {
+//            // 更新指定角色的菜单信息
+//            commonRoleMenuRedis.updateRoleMenuByRoleCode(newMenuPos, rolePo.getRoleCode());
+//        }
+//
+//        // 用于更新 redis 中的角色对应的权限信息
+//        List<PermissionPo> newPermissionPos = new ArrayList<>();
+//        if (ToolsUtils.isNotEmpty(permissionChecked)) {
+//            // 保存/修改权限信息
+//            List<RolePermissionPo> rolePermissionPos = permissionChecked.stream().map(m -> {
+//                RolePermissionPo rolePermissionPo = new RolePermissionPo();
+//                rolePermissionPo.setRoleId(rolePo.getId());
+//                rolePermissionPo.setPermissionId(new Long(m));
+//                rolePermissionPo.setValidInd(true);
+//                // 查询出该角色要更新的权限
+//                newPermissionPos.add(permissionDao.findOne(new Long(m)));
+//                return rolePermissionPo;
+//            }).collect(Collectors.toList());
+//            rolePermissionDao.save(rolePermissionPos);
+//        }
+//        if (rolePo.getValidInd()) {
+//            List<PermissionPo> sourcePermissionPo = null;
+//            List<PermissionVo> permissionVos = redisUtils.getArray(RedisCst.ROLE_PERMISSION_KEY + rolePo.getRoleCode(), PermissionVo.class);
+//            if (ToolsUtils.isNotEmpty(delPermissionIds) && ToolsUtils.isNotEmpty(permissionVos)) {
+//                List<Long> delPermissionIdsTemp = delPermissionIds;
+//                // 过滤出本来就存在的权限（扫除掉需要删除的）
+//                sourcePermissionPo = permissionVos.stream().filter(f -> !delPermissionIdsTemp.contains(f.getId()))
+//                        .map(m -> ConvertUtils.convert(m, PermissionPo.class))
+//                        .collect(Collectors.toList());
+//            }
+//            if (ToolsUtils.isNotEmpty(sourcePermissionPo)) {
+//                newPermissionPos.addAll(sourcePermissionPo);
+//            }
+//            // 更新指定角色的权限信息
+//            commonRolePermissionRedis.updateRolePermissionByRoleCode(newPermissionPos, rolePo.getRoleCode());
+//        }
+    }
+
+    /**
+     * 保存、更新数据库和 redis 中的角色菜单信息
+     *
+     * @param roleVo
+     * @return void
+     * @author billow
+     * @date 2019/8/31 10:48
+     */
+    private void saveOrUpdateRoleMenu(RoleVo roleVo) {
+        // 需要删除的
+        List<Long> delMenuIds = new ArrayList<>();
+        // 页面传过来选种的菜单
+        List<String> menuChecked = roleVo.getMenuChecked();
+        // 原始选种的菜单
+        List<String> oldMenuChecked = roleVo.getOldMenuChecked();
+        // 不是新添加的用户
+        if (!roleVo.getIsNewRole()) {
+            // 分析需要删除
+            delMenuIds = oldMenuChecked.stream()
+                    .filter(f -> !roleVo.getMenuChecked().contains(f))
+                    .map(m -> new Long(m))
+                    .collect(Collectors.toList());
             // 删除原始的关联菜单数据
-            List<RoleMenuPo> delRoleMenus = roleMenuDao.findByRoleId(roleVo.getId());
-            roleMenuDao.deleteInBatch(delRoleMenus);
-            // 删除原始的关联权限数据
-            List<RolePermissionPo> delrolePermissions = rolePermissionDao.findByRoleId(roleVo.getId());
-            rolePermissionDao.deleteInBatch(delrolePermissions);
+            roleMenuDao.deleteByRoleIdAndMenuIdIn(roleVo.getId(), delMenuIds);
+            // 分析需要插入新的
+            menuChecked = menuChecked.stream().filter(f -> !oldMenuChecked.contains(f)).collect(Collectors.toList());
         }
+
         // 用于更新 redis 中的角色对应的菜单信息
         List<MenuPo> newMenuPos = new ArrayList<>();
         // 保存/修改菜单信息
-        List<RoleMenuPo> roleMenuPos = roleVo.getMenuChecked().stream().map(m -> {
+        List<RoleMenuPo> roleMenuPos = menuChecked.stream().map(m -> {
             RoleMenuPo roleMenuPo = new RoleMenuPo();
-            roleMenuPo.setRoleId(rolePo.getId());
+            roleMenuPo.setRoleId(roleVo.getId());
             roleMenuPo.setMenuId(new Long(m));
             roleMenuPo.setValidInd(true);
-            newMenuPos.add(menuDao.findOne(new Long(m)));
+            if (roleVo.getValidInd()) {
+                newMenuPos.add(menuDao.findOne(new Long(m)));
+            }
             return roleMenuPo;
         }).collect(Collectors.toList());
         roleMenuDao.save(roleMenuPos);
-        if (rolePo.getValidInd()) {
+
+        if (roleVo.getValidInd()) {
+            List<MenuPo> sourceMenuPo = null;
+            // 原始的
+            List<MenuPo> menuPos = redisUtils.getArray(RedisCst.ROLE_MENU_KEY + roleVo.getRoleCode(), MenuPo.class);
+            if (ToolsUtils.isNotEmpty(menuPos)) {
+                List<Long> delMenuIdsTemp = delMenuIds;
+                sourceMenuPo = menuPos.stream().filter(f -> !delMenuIdsTemp.contains(f)).collect(Collectors.toList());
+            }
+
+            if (ToolsUtils.isNotEmpty(sourceMenuPo)) {
+                newMenuPos.addAll(sourceMenuPo);
+                Map<Long, MenuPo> temp = new HashMap<>();
+                for (MenuPo newMenuPo : newMenuPos) {
+                    temp.put(newMenuPo.getId(), newMenuPo);
+                }
+                newMenuPos.clear();
+                newMenuPos.addAll(temp.values());
+            }
             // 更新指定角色的菜单信息
-            commonRoleMenuRedis.updateRoleMenuByRoleCode(newMenuPos, rolePo.getRoleCode());
+            commonRoleMenuRedis.updateRoleMenuByRoleCode(newMenuPos, roleVo.getRoleCode());
+        } else {
+            // 清除该角色的菜单信息
+            commonRoleMenuRedis.deleteRoleByRoleCode(roleVo.getRoleCode());
+        }
+    }
+
+    /**
+     * 保存、更新数据库和 redis 中的角色权限信息
+     *
+     * @param roleVo
+     * @return void
+     * @author billow
+     * @date 2019/8/31 10:49
+     */
+    private void saveOrUpdateRolePerssion(RoleVo roleVo) {
+        // 需要删除的
+        List<Long> delPermissionIds = new ArrayList<>();
+        // 页面传过来选种的权限
+        List<Long> permissionChecked = roleVo.getPermissionChecked();
+        // 原始选种的权限
+        List<Long> oldPermissionChecked = roleVo.getOldPermissionChecked();
+        // 不是新添加的用户
+        if (!roleVo.getIsNewRole()) {
+            // 分析需要删除
+            delPermissionIds = oldPermissionChecked.stream()
+                    .filter(f -> !roleVo.getPermissionChecked().contains(f))
+                    .collect(Collectors.toList());
+            // 删除原始的关联权限数据
+            if (ToolsUtils.isNotEmpty(delPermissionIds)) {
+                rolePermissionDao.deleteByRoleIdAndPermissionIdIn(roleVo.getId(), delPermissionIds);
+            }
+            // 分析需要插入新的
+            permissionChecked = permissionChecked.stream().filter(f -> !oldPermissionChecked.contains(f))
+                    .collect(Collectors.toList());
         }
 
         // 用于更新 redis 中的角色对应的权限信息
         List<PermissionPo> newPermissionPos = new ArrayList<>();
-        // 保存/修改权限信息
-        List<RolePermissionPo> rolePermissionPos = roleVo.getPermissionChecked().stream().map(m -> {
-            RolePermissionPo rolePermissionPo = new RolePermissionPo();
-            rolePermissionPo.setRoleId(rolePo.getId());
-            rolePermissionPo.setPermissionId(new Long(m));
-            rolePermissionPo.setValidInd(true);
-            // 查询出该角色要更新的权限
-            newPermissionPos.add(permissionDao.findOne(new Long(m)));
-            return rolePermissionPo;
-        }).collect(Collectors.toList());
-        rolePermissionDao.save(rolePermissionPos);
-        if (rolePo.getValidInd()) {
+        if (ToolsUtils.isNotEmpty(permissionChecked)) {
+            // 保存/修改权限信息
+            List<RolePermissionPo> rolePermissionPos = permissionChecked.stream().map(m -> {
+                RolePermissionPo rolePermissionPo = new RolePermissionPo();
+                rolePermissionPo.setRoleId(roleVo.getId());
+                rolePermissionPo.setPermissionId(new Long(m));
+                rolePermissionPo.setValidInd(true);
+                if (roleVo.getValidInd()) {
+                    // 查询出该角色要更新的权限
+                    newPermissionPos.add(permissionDao.findOne(new Long(m)));
+                }
+                return rolePermissionPo;
+            }).collect(Collectors.toList());
+            rolePermissionDao.save(rolePermissionPos);
+        }
+
+        // 如果角色是有效状态时，更新reids 中的信息
+        if (roleVo.getValidInd()) {
+            List<PermissionPo> sourcePermissionPo = null;
+            List<PermissionPo> permissionPos = redisUtils.getArray(RedisCst.ROLE_PERMISSION_KEY + roleVo.getRoleCode(), PermissionPo.class);
+            if (ToolsUtils.isNotEmpty(permissionPos)) {
+                List<Long> delPermissionIdsTemp = delPermissionIds;
+                // 过滤出本来就存在的权限（扫除掉需要删除的）
+                sourcePermissionPo = permissionPos.stream().filter(f -> !delPermissionIdsTemp.contains(f.getId()))
+                        .collect(Collectors.toList());
+            }
+            if (ToolsUtils.isNotEmpty(sourcePermissionPo)) {
+                newPermissionPos.addAll(sourcePermissionPo);
+                Map<Long, PermissionPo> temp = new HashMap<>();
+                for (PermissionPo po : newPermissionPos) {
+                    temp.put(po.getId(), po);
+                }
+                newPermissionPos.clear();
+                newPermissionPos.addAll(temp.values());
+            }
             // 更新指定角色的权限信息
-            commonRolePermissionRedis.updateRolePermissionByRoleCode(newPermissionPos, rolePo.getRoleCode());
+            commonRolePermissionRedis.updateRolePermissionByRoleCode(newPermissionPos, roleVo.getRoleCode());
+        } else {
+            // 清除该角色的权限信息
+            commonRolePermissionRedis.deleteRoleByRoleCode(roleVo.getRoleCode());
         }
     }
 

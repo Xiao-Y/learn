@@ -53,7 +53,7 @@ public class CommonRoleMenuRedis {
     }
 
     /**
-     * 删除指定角色的角色信息
+     * 删除指定角色的菜单信息
      *
      * @param roleCode
      * @return void

@@ -148,6 +148,7 @@
         systemModuleSelect: [],// 系统模块的下拉数据源
         loadPermissionCheckedFlag: 0, // 监控列表数据加载完成后，加载选种
         permissionChecked: null, // 被选种的权限ID
+        oldPermissionChecked: null, // 原始被选种的权限ID
       }
     },
     created() {
@@ -233,25 +234,25 @@
       // 勾选单个后，发送通知
       handleSelect(selection, row) {
         var checkedIds = selection.map(item => item.id);
-        if(checkedIds.includes(row.id)){
+        if (checkedIds.includes(row.id)) {
           this.permissionChecked.push(row.id);
-        }else{
+        } else {
           var index = this.permissionChecked.indexOf(row.id);
           if (index > -1) {
             this.permissionChecked.splice(index, 1);
           }
         }
-        this.$emit("checkedArray", this.permissionChecked, "handleSelect");
+        this.$emit("checkedArray", this.permissionChecked, this.oldPermissionChecked, "handleSelect");
       },
       // 勾选全部后
       handleSelectAll(selection) {
-        if(selection.length > 0){
-          selection.forEach(item=>{
-            if(!this.permissionChecked.includes(item.id)){
+        if (selection.length > 0) {
+          selection.forEach(item => {
+            if (!this.permissionChecked.includes(item.id)) {
               this.permissionChecked.push(item.id);
             }
           });
-        }else{
+        } else {
           this.tableData.forEach(item => {
             var index = this.permissionChecked.indexOf(item.id);
             if (index > -1) {
@@ -259,7 +260,7 @@
             }
           });
         }
-        this.$emit("checkedArray", this.permissionChecked, "handleSelectAll");
+        this.$emit("checkedArray", this.permissionChecked, this.oldPermissionChecked, "handleSelectAll");
       }
     },
     watch: {
@@ -278,8 +279,9 @@
                 res.resData.includes(item.id)
               );
             });
-            this.permissionChecked = res.resData;
-            this.$emit("checkedArray", res.resData, "wacth1");
+            this.permissionChecked = [...new Set(res.resData)];
+            this.oldPermissionChecked = [...new Set(res.resData)];
+            this.$emit("checkedArray", this.permissionChecked, this.oldPermissionChecked, "wacth1");
           });
         } else {
           // 设置选种状态

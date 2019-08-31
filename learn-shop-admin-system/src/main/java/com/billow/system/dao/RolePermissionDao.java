@@ -48,4 +48,15 @@ public interface RolePermissionDao extends JpaRepository<RolePermissionPo, Long>
      * @date 2019/7/30 10:59
      */
     List<RolePermissionPo> findByRoleId(Long id);
+
+    /**
+     * 删除 roleid 的指定权限
+     *
+     * @param roleId        角色id
+     * @param permissionIds 需要删除的权限集合
+     * @return void
+     * @author billow
+     * @date 2019/8/31 10:14
+     */
+    void deleteByRoleIdAndPermissionIdIn(Long roleId, List<Long> permissionIds);
 }
