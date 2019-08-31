@@ -66,6 +66,16 @@ public class ActTaskApi {
         return taskVos;
     }
 
+    @ApiOperation(value = "查询个人任务数量")
+    @PostMapping("/queryOwnerTaskCount")
+    public long queryOwnerTaskCount() {
+        TaskVo taskVo = new TaskVo();
+        String currentUserCode = userTools.getCurrentUserCode();
+        taskVo.setOwner(currentUserCode);
+        long count = workFlowQuery.queryOwnerTaskCount(taskVo);
+        return count;
+    }
+
     @ApiOperation(value = "认领任务")
     @PostMapping("/claimTask/{taskId}")
     public void claimTask(@PathVariable String taskId) {

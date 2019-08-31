@@ -200,7 +200,7 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
      */
     private void genTaskCondition(TaskQuery query, TaskVo taskVo) {
 
-        query.orderByTaskCreateTime();
+        query.orderByTaskCreateTime().desc();
 
         String owner = taskVo.getOwner();
         if (owner != null) {
@@ -230,5 +230,12 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         HistoricVariableInstance variableInstance =
                 historyService.createHistoricVariableInstanceQuery().taskId(taskId).variableName(varName).singleResult();
         return variableInstance.getValue();
+    }
+
+    @Override
+    public long queryOwnerTaskCount(TaskVo taskVo) {
+        TaskQuery query = taskService.createTaskQuery();
+        this.genTaskCondition(query, taskVo);
+        return query.count();
     }
 }

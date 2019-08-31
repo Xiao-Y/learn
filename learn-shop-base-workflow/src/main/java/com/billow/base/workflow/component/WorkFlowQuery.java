@@ -111,4 +111,14 @@ public interface WorkFlowQuery {
      * @return
      */
     Object queryVariables(String taskId, String varName);
+
+    /**
+     * 根据查询任务的数量
+     *
+     * @param taskVo
+     * @return long
+     * @author billow
+     * @date 2019/8/31 16:16
+     */
+    long queryOwnerTaskCount(TaskVo taskVo);
 }
