@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -76,6 +77,12 @@ public class UserApi extends BaseApi {
     @GetMapping("/getUserInfo")
     public UserVo getUserInfo() {
         return userService.getUserInfo();
+    }
+
+    @ApiOperation("根据userId查询用户信息")
+    @GetMapping("/findUserInfoById")
+    public UserPo findUserInfoById(@RequestParam Long id) {
+        return userService.findUserInfoById(id);
     }
 
     @ApiOperation(value = "查询 userCode 的个数")

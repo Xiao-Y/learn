@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,25 +55,42 @@ public class ActTaskApi {
                                                   @PathVariable("pk") String pk,
                                                   @PathVariable("businessKey") String businessKey,
                                                   @RequestBody Map<String, Object> variables) {
-        return workFlowExecute.startProcessInstance(processType, pk, businessKey, variables);
+        String currentUserCode = userTools.getCurrentUserCode();
+        return workFlowExecute.startProcessInstance(currentUserCode, processType, pk, businessKey, variables);
     }
 
     @ApiOperation(value = "查询个人任务列表")
-    @PostMapping("/queryOwnerTaskList")
-    public Page<TaskVo> queryOwnerTaskList(@RequestBody TaskVo taskVo) {
+    @PostMapping("/queryMyTaskList")
+    public Page<TaskVo> queryMyTaskList(@RequestBody TaskVo taskVo) {
         String currentUserCode = userTools.getCurrentUserCode();
-        taskVo.setOwner(currentUserCode);
+        taskVo.setAssignee(currentUserCode);
         Page<TaskVo> taskVos = workFlowQuery.queryTaskList(taskVo, taskVo.getOffset(), taskVo.getPageSize());
         return taskVos;
     }
 
     @ApiOperation(value = "查询个人任务数量")
-    @PostMapping("/queryOwnerTaskCount")
-    public long queryOwnerTaskCount() {
-        TaskVo taskVo = new TaskVo();
+    @GetMapping("/queryAssigneeTaskCount")
+    public long queryAssigneeTaskCount() {
         String currentUserCode = userTools.getCurrentUserCode();
-        taskVo.setOwner(currentUserCode);
-        long count = workFlowQuery.queryOwnerTaskCount(taskVo);
+        TaskVo taskVo = new TaskVo();
+        taskVo.setAssignee(currentUserCode);
+        long count = workFlowQuery.queryAssigneeTaskCount(taskVo);
+        return count;
+    }
+
+    @ApiOperation(value = "我发起的流程（所有的）")
+    @GetMapping("/myStartProdeCount")
+    public long myStartProdeCount() {
+        String currentUserCode = userTools.getCurrentUserCode();
+        long count = workFlowQuery.queryMyStartProdeAllCount(currentUserCode);
+        return count;
+    }
+
+    @ApiOperation(value = "审核中的的流程（运行中的）")
+    @GetMapping("/auditProgressProdeCount")
+    public long auditProgressProdeCount() {
+        String currentUserCode = userTools.getCurrentUserCode();
+        long count = workFlowQuery.queryMyStartProdeActiveCount(currentUserCode);
         return count;
     }
 

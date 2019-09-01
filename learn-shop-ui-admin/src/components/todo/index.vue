@@ -1,23 +1,23 @@
 <template>
   <div>
-    <el-badge :value="sumNum" :hidden="badgeHidden">
-      <el-dropdown trigger="click">
+    <el-badge :value="sumCount" :hidden="badgeHidden">
+      <el-dropdown trigger="click" @command="handleCommand">
         <span class="el-dropdown-link">待办项</span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item class="clearfix">
+          <el-dropdown-item class="clearfix" command="apply">
             发申请
           </el-dropdown-item>
-          <el-dropdown-item class="clearfix">
-            审核中的
-            <el-badge class="mark" :value="auditProgressNum" :hidden="auditProgressNum <= 0"/>
+          <el-dropdown-item class="clearfix" command="ongoing">
+            进行中的
+            <el-badge class="mark" :value="ongoingCount" :hidden="ongoingCount <= 0"/>
           </el-dropdown-item>
-          <el-dropdown-item class="clearfix">
-            我审核的
-            <el-badge class="mark" :value="myAudit" :hidden="myAudit <= 0"/>
+          <el-dropdown-item class="clearfix" command="myTasks">
+            我的任务
+            <el-badge class="mark" :value="myTasksCount" :hidden="myTasksCount <= 0"/>
           </el-dropdown-item>
-          <el-dropdown-item class="clearfix">
+          <el-dropdown-item class="clearfix" command="myStart">
             我发起的
-            <el-badge class="mark" :value="myInitiated" :hidden="myInitiated <= 0"/>
+            <el-badge class="mark" :value="myStartCount" :hidden="myStartCount <= 0"/>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -27,36 +27,69 @@
 
 <script>
 
-  import {QueryOwnerTaskCount} from '../../api/proc/proceTaskMag'
+  import {
+    MyStartCount,
+    OngoingCount,
+    QueryAssigneeTaskCount
+  } from '../../api/proc/proceTaskMag'
 
   export default {
     name: "todoList",
     data() {
       return {
         badgeHidden: true,
-        sumNum: 0,// 总待办事项
-        auditProgressNum: 0,//审核中的
-        myAudit: 0,//我审核的
-        myInitiated: 0,//我发起的
+        sumCount: 0,// 总待办事项
+        ongoingCount: 0,//进行中的
+        myTasksCount: 0,//我的任务
+        myStartCount: 0,//我发起的
       }
     },
     created() {
-      QueryOwnerTaskCount().then(res => {
-        this.myAudit = res.resData;
+      // 我发起的
+      MyStartCount().then(res => {
+        this.myStartCount = res.resData;
+      });
+      // 我的任务
+      QueryAssigneeTaskCount().then(res => {
+        this.myTasksCount = res.resData;
+      });
+      // 进行中的
+      OngoingCount().then(res => {
+        this.ongoingCount = res.resData;
       });
     },
     methods: {
-      initSumNum() {
-        this.sumNum = this.auditProgressNum + this.myAudit;
-        this.badgeHidden = this.sumNum <= 0;
+      initSumCount() {
+        this.sumCount = this.ongoingCount + this.myTasksCount;
+        this.badgeHidden = this.sumCount <= 0;
+      },
+      handleCommand(command) {
+        switch (command) {
+          case 'apply': // 发申请
+            console.info("apply");
+            this.$router.push({
+              name: 'todoApplyIndex'
+            });
+            break;
+          case 'ongoing': // 进行中的
+            console.info("ongoing");
+            break;
+          case 'myTasks': // 我的任务
+            console.info("myTasks");
+            break;
+          case 'myStart': // 我发起的
+            console.info("myStart");
+            break;
+        }
       }
     },
     watch: {
-      auditProgressNum() {
-        this.initSumNum();
-      },
-      myAudit() {
-        this.initSumNum()
+      ongoingCount() {
+        this.initSumCount();
+      }
+      ,
+      myTasksCount() {
+        this.initSumCount()
       }
     }
   }

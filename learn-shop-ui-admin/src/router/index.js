@@ -163,8 +163,17 @@ export const asyncRouterMap = [{
     component: resolve => require(['../views/process/ProcDefList.vue'], resolve)
   }]
 }, {
+  path: '/todo',
+  name: 'todo',
+  component: Home,
+  children: [{
+    name: 'todoApplyIndex',
+    path: 'todoApply/index',
+    component: resolve => require(['../views/process/todo/apply.vue'], resolve)
+  }]
+}, {
   name: 'procViewProcessImg',
-  path: '/procViewProcessImg',
+  path: '/procViewProcessImg', // 单独页面打开
   component: resolve => require(['../views/process/ViewProcessImg.vue'], resolve)
 }]
 

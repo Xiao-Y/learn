@@ -121,4 +121,34 @@ public interface WorkFlowQuery {
      * @date 2019/8/31 16:16
      */
     long queryOwnerTaskCount(TaskVo taskVo);
+
+    /**
+     * 根据条件查询指定人的任务数量
+     *
+     * @param taskVo
+     * @return long
+     * @author billow
+     * @date 2019/8/31 16:16
+     */
+    long queryAssigneeTaskCount(TaskVo taskVo);
+
+    /**
+     * 查询个人发起的流程数量（所有的）
+     *
+     * @param startedBy
+     * @return long
+     * @author billow
+     * @date 2019/8/31 21:26
+     */
+    long queryMyStartProdeAllCount(String startedBy);
+
+    /**
+     * 查询个人发起的流程（还在运行中）
+     *
+     * @param startedBy
+     * @return long
+     * @author billow
+     * @date 2019/8/31 21:26
+     */
+    long queryMyStartProdeActiveCount(String startedBy);
 }

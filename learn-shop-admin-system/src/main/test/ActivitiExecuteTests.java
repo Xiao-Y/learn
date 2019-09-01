@@ -2,7 +2,9 @@ import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.diagram.ActUtils;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import com.billow.system.AdminSystemApp;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.repository.Deployment;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,13 @@ public class ActivitiExecuteTests {
 
     @Autowired
     private WorkFlowExecute workFlowExecute;
+    @Autowired
+    private IdentityService identityService;
 
+    @Before
+    public void setAss() {
+//        identityService.setAuthenticatedUserId("admin");
+    }
 
     @Test
     public void deploy() {
@@ -37,7 +45,8 @@ public class ActivitiExecuteTests {
 
     @Test
     public void startProcessInstance() {
-        ProcessInstanceVo processInstanceVo = workFlowExecute.startProcessInstance("key", "test3", "0000", null);
+        ProcessInstanceVo processInstanceVo = workFlowExecute
+                .startProcessInstance("admin", "key", "test", "1111", null);
         System.out.println(processInstanceVo.getProcessInstanceId());
     }
 

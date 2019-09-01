@@ -105,10 +105,18 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public ProcessInstanceVo startProcessInstance(String processType, String pk, String businessKey, Map<String, Object> variables) {
+    public ProcessInstanceVo startProcessInstance(String operator, String key, String businessKey, Map<String, Object> variables) {
+        return this.startProcessInstance(operator, "key", key, businessKey, variables);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public ProcessInstanceVo startProcessInstance(String operator, String processType, String pk, String businessKey, Map<String, Object> variables) {
         if (variables == null) {
             variables = new HashMap<>();
         }
+        // 设置启动人
+        identityService.setAuthenticatedUserId(operator);
         ProcessInstance processInstance = null;
         if ("id".equals(processType)) {
             processInstance = runtimeService.startProcessInstanceById(pk, businessKey, variables);

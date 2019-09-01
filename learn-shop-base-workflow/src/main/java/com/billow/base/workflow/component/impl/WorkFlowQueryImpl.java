@@ -238,4 +238,25 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         this.genTaskCondition(query, taskVo);
         return query.count();
     }
+
+    @Override
+    public long queryAssigneeTaskCount(TaskVo taskVo) {
+        TaskQuery query = taskService.createTaskQuery();
+        this.genTaskCondition(query, taskVo);
+        return query.count();
+    }
+
+    @Override
+    public long queryMyStartProdeAllCount(String startedBy) {
+        return historyService.createHistoricProcessInstanceQuery()
+                .startedBy(startedBy)
+                .count();
+    }
+
+    @Override
+    public long queryMyStartProdeActiveCount(String startedBy) {
+        return runtimeService.createExecutionQuery()
+                .startedBy(startedBy)
+                .count();
+    }
 }

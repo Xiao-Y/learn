@@ -86,6 +86,20 @@ public interface WorkFlowExecute {
     /**
      * 启动流程实例，如果使用key将默认使用最新版本
      *
+     * @param operator    操作人
+     * @param key         id或者key的值
+     * @param businessKey 业务主键
+     * @param variables   输入的参数
+     * @return ProcessInstanceVo
+     * @author billow
+     * @date 2019/8/25 10:46
+     */
+    ProcessInstanceVo startProcessInstance(String operator, String key, String businessKey, Map<String, Object> variables);
+
+    /**
+     * 启动流程实例，如果使用key将默认使用最新版本
+     *
+     * @param operator    操作人
      * @param processType pk 的类型，流程定义表（ACT_RE_PROCDEF）的id或者key
      * @param pk          id或者key的值
      * @param businessKey 业务主键
@@ -94,7 +108,7 @@ public interface WorkFlowExecute {
      * @author billow
      * @date 2019/8/25 10:46
      */
-    ProcessInstanceVo startProcessInstance(String processType, String pk, String businessKey, Map<String, Object> variables);
+    ProcessInstanceVo startProcessInstance(String operator, String processType, String pk, String businessKey, Map<String, Object> variables);
 
     /**
      * 提交任务

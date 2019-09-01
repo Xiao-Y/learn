@@ -1,5 +1,6 @@
 package com.billow.user.service;
 
+import com.billow.user.pojo.po.UserPo;
 import com.billow.user.pojo.vo.UserVo;
 import org.springframework.data.domain.Page;
 
@@ -104,4 +105,15 @@ public interface UserService {
      * @date 2019/8/8 14:27
      */
     Boolean updateUserIcon(UserVo userVo);
+
+    /**
+     * 根据userId查询用户信息
+     *
+     * @param id
+     * @return com.billow.user.pojo.po.UserPo
+     * @author billow
+     * @date 2019/9/1 13:20
+     */
+    UserPo findUserInfoById(Long id);
+
 }

@@ -30,30 +30,30 @@ import java.util.Map;
 @Api(value = "流程运行API")
 public class ActProcessInstanceApi {
 
-    @Autowired
-    private WorkFlowExecute workFlowExecute;
-    @Autowired
-    private WorkFlowQuery workFlowQuery;
-
-    /**
-     * 启动流程实例
-     *
-     * @param processType 流程启动类型，id 或者 key(与 pk 对应)
-     * @param pk          processDefinitionId 或者 processDefinitionKey
-     * @param businessKey 业务id
-     * @param variables   启动参数
-     * @return org.activiti.engine.runtime.ProcessInstance
-     * @author billow
-     * @date 2019/8/24 15:46
-     */
-    @ApiOperation(value = "启动流程实例")
-    @PostMapping("/startProcessInstance/{processType}/{pk}/{businessKey}")
-    public ProcessInstanceVo startProcessInstance(@PathVariable("processType") String processType,
-                                                  @PathVariable("pk") String pk,
-                                                  @PathVariable("businessKey") String businessKey,
-                                                  @RequestBody Map<String, Object> variables) {
-        return workFlowExecute.startProcessInstance(processType, pk, businessKey, variables);
-    }
+//    @Autowired
+//    private WorkFlowExecute workFlowExecute;
+//    @Autowired
+//    private WorkFlowQuery workFlowQuery;
+//
+//    /**
+//     * 启动流程实例
+//     *
+//     * @param processType 流程启动类型，id 或者 key(与 pk 对应)
+//     * @param pk          processDefinitionId 或者 processDefinitionKey
+//     * @param businessKey 业务id
+//     * @param variables   启动参数
+//     * @return org.activiti.engine.runtime.ProcessInstance
+//     * @author billow
+//     * @date 2019/8/24 15:46
+//     */
+//    @ApiOperation(value = "启动流程实例")
+//    @PostMapping("/startProcessInstance/{processType}/{pk}/{businessKey}")
+//    public ProcessInstanceVo startProcessInstance(@PathVariable("processType") String processType,
+//                                                  @PathVariable("pk") String pk,
+//                                                  @PathVariable("businessKey") String businessKey,
+//                                                  @RequestBody Map<String, Object> variables) {
+//        return workFlowExecute.startProcessInstance(processType, pk, businessKey, variables);
+//    }
 
 
 }
