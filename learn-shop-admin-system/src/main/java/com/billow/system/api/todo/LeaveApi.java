@@ -1,7 +1,10 @@
 package com.billow.system.api.todo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.billow.system.pojo.vo.LeaveVo;
+import com.billow.system.service.ApplyInfoService;
 import com.billow.system.service.LeaveService;
+import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,11 +31,15 @@ public class LeaveApi {
     private UserTools userTools;
     @Autowired
     private LeaveService leaveService;
+    @Autowired
+    private ApplyInfoService applyInfoService;
 
     @ApiOperation(value = "提交请假申请")
     @PostMapping("/submitLeave")
     public void submitLeave(@RequestBody LeaveVo leaveVo) {
-        String currentUserCode = userTools.getCurrentUserCode();
-        leaveService.submitLeave(currentUserCode, leaveVo);
+        String operator = userTools.getCurrentUserCode();
+//        leaveService.submitLeave(operator, leaveVo);
+
+        applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveVo);
     }
 }

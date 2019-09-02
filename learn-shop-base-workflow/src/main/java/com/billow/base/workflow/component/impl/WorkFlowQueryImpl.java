@@ -226,6 +226,12 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
+    public List<Task> queryTasksByProcessId(String processInstanceId) {
+        List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).list();
+        return tasks;
+    }
+
+    @Override
     public Object queryVariables(String taskId, String varName) {
         HistoricVariableInstance variableInstance =
                 historyService.createHistoricVariableInstanceQuery().taskId(taskId).variableName(varName).singleResult();

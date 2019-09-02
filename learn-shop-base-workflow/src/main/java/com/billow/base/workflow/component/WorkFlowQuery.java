@@ -101,6 +101,14 @@ public interface WorkFlowQuery {
      * @param processInstanceId
      * @return
      */
+    List<Task> queryTasksByProcessId(String processInstanceId);
+
+    /**
+     * 通过流程id 查询任务
+     *
+     * @param processInstanceId
+     * @return
+     */
     Task queryTaskByProcessId(String processInstanceId);
 
     /**
