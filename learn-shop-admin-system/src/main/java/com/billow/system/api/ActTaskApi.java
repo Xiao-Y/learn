@@ -5,6 +5,9 @@ import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.Page;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import com.billow.base.workflow.vo.TaskVo;
+import com.billow.system.pojo.po.ApplyInfoPo;
+import com.billow.system.pojo.vo.ApplyInfoVo;
+import com.billow.system.service.ApplyInfoService;
 import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +40,8 @@ public class ActTaskApi {
     private WorkFlowQuery workFlowQuery;
     @Autowired
     private UserTools userTools;
+    @Autowired
+    private ApplyInfoService applyInfoService;
 
     /**
      * 启动流程实例
@@ -61,11 +66,11 @@ public class ActTaskApi {
 
     @ApiOperation(value = "查询个人任务列表")
     @PostMapping("/queryMyTaskList")
-    public Page<TaskVo> queryMyTaskList(@RequestBody TaskVo taskVo) {
+    public Page queryMyTaskList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
-        taskVo.setAssignee(currentUserCode);
-        Page<TaskVo> taskVos = workFlowQuery.queryTaskList(taskVo, taskVo.getOffset(), taskVo.getPageSize());
-        return taskVos;
+        applyInfoVo.setAssignee(currentUserCode);
+        Page applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getOffset(), applyInfoVo.getPageSize());
+        return applyInfoVoPage;
     }
 
     @ApiOperation(value = "查询个人任务数量")

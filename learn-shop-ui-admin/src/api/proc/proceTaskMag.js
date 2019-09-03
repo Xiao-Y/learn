@@ -23,3 +23,10 @@ export const QueryAssigneeTaskCount = () => requestUtils.get(baseUrl + '/queryAs
  */
 export const OngoingCount = () => requestUtils.get(baseUrl + '/auditProgressProdeCount');
 
+/**
+ * 加载我的任务任务列表（已签收和未签收的）
+ * @returns {*|Promise|Promise<any>}
+ * @constructor
+ */
+export const LoadDataTaskList = taskInfo => requestUtils.post(baseUrl + '/queryMyTaskList', Object.assign(taskInfo));
+

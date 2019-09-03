@@ -25,6 +25,8 @@ public abstract class BasePage implements Serializable {
     @ApiModelProperty("总记录数")
     private Integer recordCount = RECORD_COUNT;
 
+    private Integer offset = PAGE_SIZE * PAGE_NO;
+
     /**
      * 每页要显示的记录数
      *

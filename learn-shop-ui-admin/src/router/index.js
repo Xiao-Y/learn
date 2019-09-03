@@ -161,6 +161,10 @@ export const asyncRouterMap = [{
     name: 'procProcDefListIndex',
     path: 'procDefList/index',
     component: resolve => require(['../views/process/ProcDefList.vue'], resolve)
+  }, {
+    name: 'procProcMyTaskListIndex',
+    path: 'procMyTaskList/index',
+    component: resolve => require(['../views/process/MyTaskList.vue'], resolve)
   }]
 }, {
   path: '/todo',

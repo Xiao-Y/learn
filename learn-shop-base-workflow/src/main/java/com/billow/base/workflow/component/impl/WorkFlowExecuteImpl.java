@@ -125,6 +125,7 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
         }
         ProcessInstanceVo ex = new ProcessInstanceVo();
         ex.setProcessInstanceId(processInstance.getProcessInstanceId());
+        ex.setProcessDefinitionId(processInstance.getProcessDefinitionId());
         return ex;
     }
 

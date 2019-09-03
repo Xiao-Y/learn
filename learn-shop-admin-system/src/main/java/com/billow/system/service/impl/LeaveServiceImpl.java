@@ -8,6 +8,8 @@ import com.billow.system.service.LeaveService;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class LeaveServiceImpl implements LeaveService {
     private LeaveDao leaveDao;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void submitLeave(String currentUserCode, LeaveVo leaveVo) {
         LeavePo leavePo = ConvertUtils.convert(leaveVo, LeavePo.class);
         leavePo = leaveDao.save(leavePo);
