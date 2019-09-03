@@ -343,7 +343,7 @@ public class CustomProcessDiagramGenerator extends DefaultProcessDiagramGenerato
                 GraphicInfo labelGraphicInfo = bpmnModel.getLabelGraphicInfo(sequenceFlow.getId());
                 if (labelGraphicInfo != null) {
                     processDiagramCanvas.drawLabel(sequenceFlow.getName(), labelGraphicInfo, false);
-                } else {
+                } else {// 解决连线上不显示名称
                     GraphicInfo lineCenter = getLineCenter(graphicInfoList);
                     processDiagramCanvas.drawLabel(sequenceFlow.getName(), lineCenter, false);
                 }

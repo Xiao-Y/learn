@@ -61,17 +61,9 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
                 applyInfo.getId().toString(),
                 variables);
 
-        // 查询任务号
-        List<Task> taskList = workFlowQuery.queryTasksByProcessId(processInstanceVo.getProcessInstanceId());
-        if (taskList == null || taskList.size() == 0) {
-            applyInfo.setIsEnd(true);
-            String tasks = taskList.stream().map(m -> m.getId()).collect(Collectors.joining(","));
-            applyInfo.setTaskId(tasks);
-        }
-
         // 更新申请信息
-        applyInfo.setProcessDefinitionId(processInstanceVo.getProcessDefinitionId());
-        applyInfo.setProcessInstanceId(processInstanceVo.getProcessInstanceId());
+        applyInfo.setProcDefId(processInstanceVo.getProcessDefinitionId());
+        applyInfo.setProcInstId(processInstanceVo.getProcessInstanceId());
         applyInfoDao.save(applyInfo);
 
         // 启动流程后操作

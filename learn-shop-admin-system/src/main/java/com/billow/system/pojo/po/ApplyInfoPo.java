@@ -22,13 +22,10 @@ import java.io.Serializable;
 public class ApplyInfoPo extends BasePo implements Serializable {
 
     @ApiModelProperty("流程定义ID")
-    private String processDefinitionId;
+    private String procDefId;
 
     @ApiModelProperty("流程实例定义")
-    private String processInstanceId;
-
-    @ApiModelProperty("任务ID，如果结束为空。多个英文逗号分割")
-    private String taskId;
+    private String procInstId;
 
     @ApiModelProperty("流程是否结束")
     private Boolean isEnd;
@@ -38,6 +35,9 @@ public class ApplyInfoPo extends BasePo implements Serializable {
 
     @ApiModelProperty("申请类型：")
     private String applyType;
+
+    @ApiModelProperty("申请人CODE")
+    private String applyUserCode;
 
     @ApiModelProperty("JSON 转换格式，暂时不用")
     private String voClazz;
