@@ -19,7 +19,29 @@ public class AdminUserHystric implements AdminUserFeign {
         BaseResponse<UserEx> base = new BaseResponse(ResCodeEnum.RESCODE_SYSTEM_HYSTRIC);
         UserEx ex = new UserEx();
         ex.setUsercode("admin");
+        ex.setGroupId("deptLeader");
         ex.setId(2L);
+        return base;
+    }
+
+    @Override
+    public BaseResponse<UserEx> findUserInfoByUserCode(String userCode) {
+        BaseResponse<UserEx> base = new BaseResponse(ResCodeEnum.RESCODE_SYSTEM_HYSTRIC);
+        UserEx ex = new UserEx();
+        ex.setUsercode(userCode);
+        if (userCode.equals("admin")) {
+            ex.setGroupId("deptLeader");
+            ex.setId(2L);
+            base.setResCode(ResCodeEnum.OK);
+        } else if (userCode.equals("liuyongtao")) {
+            ex.setGroupId("hr");
+            ex.setId(1L);
+            base.setResCode(ResCodeEnum.OK);
+        } else if (userCode.equals("hr")) {
+            ex.setGroupId("hr");
+            ex.setId(3L);
+            base.setResCode(ResCodeEnum.OK);
+        }
         return base;
     }
 }

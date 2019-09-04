@@ -41,4 +41,7 @@ public class UserEx extends BasePo implements Serializable {
 
     @ApiModelProperty("用户头像")
     private String iconUrl;
+
+    @ApiModelProperty("用户分组")
+    private String groupId;
 }
