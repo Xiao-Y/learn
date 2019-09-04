@@ -75,7 +75,9 @@
             console.info("ongoing");
             break;
           case 'myTasks': // 我的任务
-            console.info("myTasks");
+            this.$router.push({
+              name: 'procProcMyTaskListIndex'
+            });
             break;
           case 'myStart': // 我发起的
             console.info("myStart");

@@ -174,6 +174,10 @@ export const asyncRouterMap = [{
     name: 'todoApplyIndex',
     path: 'todoApply/index',
     component: resolve => require(['../views/process/todo/apply.vue'], resolve)
+  },{
+    name: 'todoLeaveIndex',
+    path: 'todoLeave/index',
+    component: resolve => require(['../views/process/todo/leave.vue'], resolve)
   }]
 }, {
   name: 'procViewProcessImg',

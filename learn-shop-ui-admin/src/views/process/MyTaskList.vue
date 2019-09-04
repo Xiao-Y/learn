@@ -8,8 +8,17 @@
           </template>
           <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
-              <el-form-item label="申请CODE" prop="mailCode">
-                <el-input v-model="queryFilter.mailCode" placeholder="申请CODE"></el-input>
+              <el-form-item label="任务ID" prop="taskId">
+                <el-input v-model="queryFilter.taskId" placeholder="任务ID"></el-input>
+              </el-form-item>
+              <el-form-item label="申请人" prop="applyUserCode">
+                <el-input v-model="queryFilter.applyUserCode" placeholder="申请人"></el-input>
+              </el-form-item>
+              <el-form-item label="申请类型" prop="applyType" width="210">
+                <custom-select v-model="queryFilter.applyType"
+                               :datasource="applyTypeSelect"
+                               placeholder="请选择申请类型">
+                </custom-select>
               </el-form-item>
             </el-row>
           </el-form>
@@ -17,23 +26,28 @@
       </el-collapse>
     </el-row>
     <!-- 查询按钮组 -->
-    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
+    <button-group-query :show-add="false" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
     <el-row>
       <template>
-        <el-table border style="width: 100%" ref="taskListRef"
-                  :data="tableData"
-                  row-key="id">
-          <el-table-column label="申请人CODE" prop="applyUserCode"></el-table-column>
+        <el-table border style="width: 100%" ref="taskListRef" :data="tableData" row-key="id">
+          <el-table-column label="任务ID" prop="taskId"></el-table-column>
+          <el-table-column label="申请人" prop="applyUserCode"></el-table-column>
           <el-table-column label="申请类型" prop="applyType" width="210">
-<!--            <template slot-scope="scope">-->
-<!--              <custom-select v-model="scope.row.mailType"-->
-<!--                             :datasource="applyTypeSelect"-->
-<!--                             :value-key="scope.row.mailCode"-->
-<!--                             disabled placeholder="请选择申请类型">-->
-<!--              </custom-select>-->
-<!--            </template>-->
+            <template slot-scope="scope">
+              <custom-select v-model="scope.row.applyType"
+                             :datasource="applyTypeSelect"
+                             :value-key="scope.row.applyType"
+                             disabled placeholder="请选择申请类型">
+              </custom-select>
+            </template>
           </el-table-column>
-          <el-table-column label="是否结束" prop="isEnd"></el-table-column>
+          <el-table-column label="是否结束" prop="isEnd">
+            <template slot-scope="scope">
+              <el-form-item label="是否有效">
+                <el-switch v-model="scope.row.isEnd" active-text="运行" inactive-text="结束" disabled></el-switch>
+              </el-form-item>
+            </template>
+          </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
@@ -64,10 +78,23 @@
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
-              <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
-                                   @onEdit="handleEdit(scope.row,scope.$index)"
-                                   @onInd="handleProhibit(scope.row,scope.$index)"
-                                   :disInd="!scope.row.validInd"></button-group-option>
+              <el-tooltip class="item" effect="dark" content="处理" placement="top-start" :open-delay="openDelay"
+                          v-if="scope.row.status === '0'">
+                <el-button @click="onHandle(scope.row,scope.$index)" type="primary" size="mini">
+                  <i class="el-icon-service"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="认领" placement="top-start" :open-delay="openDelay"
+                          v-if="scope.row.status === '1'">
+                <el-button @click="onClaim(scope.row,scope.$index)" type="warning" size="mini">
+                  <i class="el-icon-thumb"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="查看图片" placement="top-start" :open-delay="openDelay">
+                <el-button type="success" size="mini" @click="viewDeployImg(scope.row,scope.$index)">
+                  <i class="el-icon-picture"></i>
+                </el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -81,14 +108,15 @@
 <script>
   // ===== api start
   import {
-    LoadDataTaskList
+    LoadDataTaskList,
+    ClaimTask,
   } from "../../api/proc/proceTaskMag";
-  // import {
-  //   LoadSysDataDictionary
-  // } from "../../api/sys/DataDictionaryMag";
+  import {
+    LoadSysDataDictionary
+  } from "../../api/sys/DataDictionaryMag";
   // ===== component start
   import CustomSelect from '../../components/common/CustomSelect.vue';
-  import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
+  // import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue'
   // ===== 工具类 start
@@ -98,27 +126,29 @@
   export default {
     components: {
       CustomSelect,
-      ButtonGroupOption,
+      // ButtonGroupOption,
       ButtonGroupQuery,
       CustomPage
     },
     mixins: [pageMixins],
     data() {
       return {
+        openDelay: 1500,
         queryFilter: {
           // 查询条件
-          mailCode: null
+          taskId: null,
+          applyUserCode: null,
+          applyType: null,
         },
         tableData: [], // 列表数据源
         applyTypeSelect: [],// 申请类型的下拉数据源
-        dataSourcesSelect: [],// 数据来源的下拉数据源
       }
     },
     created() {
       // 加载申请类型的下拉
-      // LoadSysDataDictionary('applyTypeSelect').then(res => {
-      //   this.applyTypeSelect = res.resData;
-      // });
+      LoadSysDataDictionary('applyType').then(res => {
+        this.applyTypeSelect = res.resData;
+      });
       // 请数据殂
       this.loadDataList();
     },
@@ -144,53 +174,36 @@
           this.queryFilter.totalPages = data.totalPages;
         });
       },
-      // 添加权限
-      handleAdd() {
-        this.$router.push({
-          name: 'systaskEdit',
+      viewDeployImg(row, index) {
+        const {href} = this.$router.resolve({
+          name: "procViewProcessImg",
           query: {
-            optionType: 'add',
-            applyTypeSelect: JSON.stringify(this.applyTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
+            id: row.id
           }
         });
+        window.open(href, '_blank');
       },
-      handleEdit(row, index) {
-        this.$router.push({
-          name: 'systaskEdit',
-          query: {
-            optionType: 'edit',
-            id: row.id,
-            applyTypeSelect: JSON.stringify(this.applyTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
-          }
-        });
-      },
-      handleDelete(row, index) {
+      // 认领
+      onClaim(row, index) {
         var _this = this;
-
-        VueUtils.confirmDel(row.mailCode, () => {
-          DeletetaskById(row.id).then(res => {
-            _this.tableData.splice(index, 1);
-            _this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
+        ClaimTask(row.taskId).then(res => {
+          _this.$message({
+            type: 'success',
+            message: '认领成功!'
           });
+          row.status = '0';
         });
       },
-      handleProhibit(row, index) {
-        var _this = this;
-
-        VueUtils.confirmInd(row.mailCode, () => {
-          ProhibittaskById(row.id).then(res => {
-            row.validInd = res.resData.validInd;
-            _this.$message({
-              type: 'success',
-              message: '禁用成功!'
-            });
-          });
-        });
+      // 处理
+      onHandle(row, index) {
+        console.info("applyType:", row.applyType);
+        // this.$router.push({
+        //   name: 'todoLeaveIndex',
+        //   query: {
+        //     optionType: 'edit',
+        //     id: row.id
+        //   }
+        // });
       }
     }
   }

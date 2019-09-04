@@ -30,3 +30,11 @@ export const OngoingCount = () => requestUtils.get(baseUrl + '/auditProgressProd
  */
 export const LoadDataTaskList = taskInfo => requestUtils.post(baseUrl + '/queryMyTaskList', Object.assign(taskInfo));
 
+/**
+ * 认领任务
+ * @param id
+ * @returns {*|Promise|Promise<any>}
+ * @constructor
+ */
+export const ClaimTask = taskId => requestUtils.post(baseUrl + '/claimTask/' + taskId);
+
