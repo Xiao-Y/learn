@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -125,4 +126,11 @@ public class ActTaskApi {
                               @RequestBody Map<String, Object> variables) {
         workFlowExecute.commitProcess(taskId, variables);
     }
+
+    @ApiOperation(value = "查看活动的流程图（显示运行轨迹）")
+    @GetMapping("/viewExecutionImgById/{executionId}")
+    public void viewDeployImgById(@PathVariable String executionId, HttpServletResponse response) throws Exception {
+        workFlowQuery.genActiveProccessImage(executionId, response);
+    }
+
 }

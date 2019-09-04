@@ -43,9 +43,7 @@
           </el-table-column>
           <el-table-column label="是否结束" prop="isEnd">
             <template slot-scope="scope">
-              <el-form-item label="是否有效">
-                <el-switch v-model="scope.row.isEnd" active-text="运行" inactive-text="结束" disabled></el-switch>
-              </el-form-item>
+              <el-switch v-model="scope.row.isEnd" active-text="结束" inactive-text="运行" disabled></el-switch>
             </template>
           </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
@@ -77,24 +75,26 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <!--  操作按钮组 -->
-              <el-tooltip class="item" effect="dark" content="处理" placement="top-start" :open-delay="openDelay"
-                          v-if="scope.row.status === '0'">
-                <el-button @click="onHandle(scope.row,scope.$index)" type="primary" size="mini">
-                  <i class="el-icon-service"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="认领" placement="top-start" :open-delay="openDelay"
-                          v-if="scope.row.status === '1'">
-                <el-button @click="onClaim(scope.row,scope.$index)" type="warning" size="mini">
-                  <i class="el-icon-thumb"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="查看图片" placement="top-start" :open-delay="openDelay">
-                <el-button type="success" size="mini" @click="viewDeployImg(scope.row,scope.$index)">
-                  <i class="el-icon-picture"></i>
-                </el-button>
-              </el-tooltip>
+              <div style="float:left;">
+                <!--  操作按钮组 -->
+                <el-tooltip class="item" effect="dark" content="处理" placement="top-start" :open-delay="openDelay"
+                            v-if="scope.row.claimStatus === '0'">
+                  <el-button @click="onHandle(scope.row,scope.$index)" type="primary" size="mini">
+                    <i class="el-icon-service"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="认领" placement="top-start" :open-delay="openDelay"
+                            v-if="scope.row.claimStatus === '1'">
+                  <el-button @click="onClaim(scope.row,scope.$index)" type="warning" size="mini">
+                    <i class="el-icon-thumb"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="查看图片" placement="top-start" :open-delay="openDelay">
+                  <el-button type="success" size="mini" @click="viewExecutionImg(scope.row,scope.$index)">
+                    <i class="el-icon-picture"></i>
+                  </el-button>
+                </el-tooltip>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -174,11 +174,12 @@
           this.queryFilter.totalPages = data.totalPages;
         });
       },
-      viewDeployImg(row, index) {
+      viewExecutionImg(row, index) {
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
           query: {
-            id: row.id
+            id: row.executionId,
+            type: 'execution'
           }
         });
         window.open(href, '_blank');
@@ -191,7 +192,7 @@
             type: 'success',
             message: '认领成功!'
           });
-          row.status = '0';
+          row.taskStatus = '0';
         });
       },
       // 处理

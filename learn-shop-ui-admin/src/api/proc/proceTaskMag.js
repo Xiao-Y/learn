@@ -38,3 +38,14 @@ export const LoadDataTaskList = taskInfo => requestUtils.post(baseUrl + '/queryM
  */
 export const ClaimTask = taskId => requestUtils.post(baseUrl + '/claimTask/' + taskId);
 
+/**
+ * 根据id获取流程部署图片
+ * @param id
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const ViewExecutionImgById = id => {
+  return baseUrl + '/viewExecutionImgById/' + id;
+};
+
+

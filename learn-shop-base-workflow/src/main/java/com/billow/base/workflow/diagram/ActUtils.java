@@ -90,7 +90,7 @@ public class ActUtils {
      * @param executionId Execution对象ID，任务ID或流程实例ID等正在执行的对象ID
      * @return 流程图输入流
      */
-    public InputStream genActivitiProccessImage(String executionId) {
+    public InputStream genActiveProccessImage(String executionId) {
         InputStream imageStream = null;
         if (executionId == null || "".equals(executionId)) {
             logger.error("executionId is null");

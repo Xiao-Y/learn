@@ -70,7 +70,7 @@ public interface WorkFlowQuery {
      * @author LiuYongTao
      * @date 2019/8/27 12:08
      */
-    void getActivitiProccessImage(String executionId, HttpServletResponse response) throws Exception;
+    void genActiveProccessImage(String executionId, HttpServletResponse response) throws Exception;
 
     /**
      * 获取原始的流程图

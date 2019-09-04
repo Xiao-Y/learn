@@ -49,7 +49,7 @@ public class ActivitiQueryTests {
 
     @Test
     public void imag3() throws Exception {
-        InputStream inputStream = actUtils.genActivitiProccessImage("75002");
+        InputStream inputStream = actUtils.genActiveProccessImage("75002");
         FileOutputStream outputStream = new FileOutputStream(new File("D:\\aa.png"));
         // 输出图片内容
         byte[] b = new byte[1024];

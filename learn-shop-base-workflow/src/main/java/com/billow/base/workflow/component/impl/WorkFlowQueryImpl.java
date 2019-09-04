@@ -144,9 +144,9 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
-    public void getActivitiProccessImage(String executionId, HttpServletResponse response) throws Exception {
+    public void genActiveProccessImage(String executionId, HttpServletResponse response) throws Exception {
         logger.info("[开始]-获取流程图图像");
-        InputStream in = actUtils.genActivitiProccessImage(executionId);
+        InputStream in = actUtils.genActiveProccessImage(executionId);
         if (in == null) {
             return;
         }

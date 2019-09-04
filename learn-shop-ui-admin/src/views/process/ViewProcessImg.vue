@@ -13,18 +13,25 @@
   import {
     ViewDeployImgById,
   } from "../../api/proc/procDeployMag";
+  import {
+    ViewExecutionImgById,
+  } from "../../api/proc/proceTaskMag";
 
   export default {
     name: "procViewProcessImg",
     data() {
       return {
         imgSrc: null,
-    }
+      }
     },
     created() {
       var id = this.$route.query.id;
-      if(id && id != '' && id != null){
-        this.imgSrc = ViewDeployImgById(id);
+      if (id && id != '' && id != null) {
+        if (this.$route.query.type === 'execution') {
+          this.imgSrc = ViewExecutionImgById(id);
+        } else {
+          this.imgSrc = ViewDeployImgById(id);
+        }
       }
     }
   }

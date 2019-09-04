@@ -42,6 +42,7 @@ public class AdminUserHystric implements AdminUserFeign {
             ex.setId(3L);
             base.setResCode(ResCodeEnum.OK);
         }
+        base.setResData(ex);
         return base;
     }
 }

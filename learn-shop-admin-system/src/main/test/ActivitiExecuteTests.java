@@ -61,7 +61,7 @@ public class ActivitiExecuteTests {
 
     @Test
     public void flowImg() throws Exception {
-        InputStream inputStream = actUtils.genActivitiProccessImage("32505");
+        InputStream inputStream = actUtils.genActiveProccessImage("32505");
         FileOutputStream outputStream = new FileOutputStream(new File("D:\\aa.png"));
         // 输出图片内容
         byte[] b = new byte[1024];
