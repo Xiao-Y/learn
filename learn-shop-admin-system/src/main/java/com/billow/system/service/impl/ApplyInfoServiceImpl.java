@@ -94,7 +94,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     @Override
     public Page queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
         StringBuilder sql = new StringBuilder("SELECT ");
-        sql.append("r.executionId AS executionId, ");
+        sql.append("r.processInstanceId AS processInstanceId, ");
         sql.append("r.assignee AS assignee, ");
         sql.append("r.groupId AS groupId, ");
         sql.append("r.taskId AS taskId, ");

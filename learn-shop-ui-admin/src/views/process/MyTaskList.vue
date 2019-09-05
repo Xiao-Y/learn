@@ -170,6 +170,7 @@
       loadDataList() {
         // procMyStartProdeList
         var path = this.$route.path;
+        console.info("path:", path);
         LoadDataTaskList(this.queryFilter).then(res => {
           var data = res.resData;
           this.tableData = data.content;
@@ -181,7 +182,7 @@
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
           query: {
-            id: row.executionId,
+            id: row.processInstanceId,
             type: 'execution'
           }
         });

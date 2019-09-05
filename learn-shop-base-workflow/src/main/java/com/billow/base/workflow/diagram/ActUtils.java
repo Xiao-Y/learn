@@ -87,19 +87,19 @@ public class ActUtils {
     /**
      * 获取流程图，并且显示活动节点（显示运行轨迹）
      *
-     * @param executionId Execution对象ID，任务ID或流程实例ID等正在执行的对象ID
+     * @param processInstanceId 流程实例ID
      * @return 流程图输入流
      */
-    public InputStream genActiveProccessImage(String executionId) {
+    public InputStream genActiveProccessImage(String processInstanceId) {
         InputStream imageStream = null;
-        if (executionId == null || "".equals(executionId)) {
-            logger.error("executionId is null");
+        if (processInstanceId == null || "".equals(processInstanceId)) {
+            logger.error("processInstanceId is null");
             return imageStream;
         }
         try {
             // 查询Execution对象
-            Execution execution = runtimeService.createExecutionQuery().executionId(executionId).singleResult();
-            String processInstanceId = execution.getProcessInstanceId();
+//            Execution execution = runtimeService.createExecutionQuery().executionId(executionId).singleResult();
+//            String processInstanceId = execution.getProcessInstanceId();
             // 查询历史流程实例
             HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(processInstanceId)
@@ -114,7 +114,7 @@ public class ActUtils {
                     .list();
             // 高亮线路id集合
             BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
-            List<String> highLightedFlows = getHighLightedFlows(bpmnModel, highLightedActivitList);
+            List<String> highLightedFlows = this.getHighLightedFlows(bpmnModel, highLightedActivitList);
             logger.debug("Executed flow : {}", highLightedFlows);
             // 高亮环节id集合
             List<String> highLightedActivities = new ArrayList<>();
@@ -125,11 +125,11 @@ public class ActUtils {
             logger.debug("Executed activity: {}", highLightedActivities);
             // 得到正在执行的Activity的Id
             List<String> activityIds = new ArrayList<>();
-            getCurrrentActivity(processInstanceId, activityIds);
+            this.getCurrrentActivity(processInstanceId, activityIds);
             logger.debug("Current activity ids : {}", activityIds);
             imageStream = new CustomProcessDiagramGenerator().generateDiagram(bpmnModel, highLightedActivities, highLightedFlows, activityIds);
         } catch (Exception e) {
-            logger.error("executionId：" + executionId + "生成流程图失败，原因：" + e.getMessage(), e);
+            logger.error("processInstanceId：" + processInstanceId + "生成流程图失败，原因：" + e.getMessage(), e);
         }
         return imageStream;
     }
@@ -141,7 +141,7 @@ public class ActUtils {
      * @param historicActivityInstances
      * @return
      */
-    private static List<String> getHighLightedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
+    private List<String> getHighLightedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
         // 高亮流程已发生流转的线id集合
         List<String> highLightedFlowIds = new ArrayList<>();
         // 全部活动节点

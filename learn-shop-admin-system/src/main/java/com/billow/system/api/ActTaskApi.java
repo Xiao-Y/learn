@@ -85,6 +85,15 @@ public class ActTaskApi {
     }
 
     @ApiOperation(value = "我发起的流程（所有的）")
+    @GetMapping("/myStartProdeList")
+    public Page myStartProdeList(@RequestBody ApplyInfoVo applyInfoVo) {
+        String currentUserCode = userTools.getCurrentUserCode();
+        applyInfoVo.setAssignee(currentUserCode);
+        Page applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getOffset(), applyInfoVo.getPageSize());
+        return applyInfoVoPage;
+    }
+
+    @ApiOperation(value = "我发起的流程（所有的）")
     @GetMapping("/myStartProdeCount")
     public long myStartProdeCount() {
         String currentUserCode = userTools.getCurrentUserCode();
@@ -107,18 +116,18 @@ public class ActTaskApi {
         workFlowExecute.claim(taskId, currentUserCode);
     }
 
-    @ApiOperation(value = "放弃认领任务")
-    @PostMapping("/unclaimTask/{taskId}")
-    public void unclaimTask(@PathVariable String taskId) {
-        workFlowExecute.unclaim(taskId);
-    }
+//    @ApiOperation(value = "放弃认领任务")
+//    @PostMapping("/unclaimTask/{taskId}")
+//    public void unclaimTask(@PathVariable String taskId) {
+//        workFlowExecute.unclaim(taskId);
+//    }
 
-    @ApiOperation(value = "查询任务列表")
-    @PostMapping("/queryTaskList")
-    public Page<TaskVo> queryTaskList(@RequestBody TaskVo taskVo) {
-        Page<TaskVo> taskVos = workFlowQuery.queryTaskList(taskVo, taskVo.getOffset(), taskVo.getPageSize());
-        return taskVos;
-    }
+//    @ApiOperation(value = "查询任务列表")
+//    @PostMapping("/queryTaskList")
+//    public Page<TaskVo> queryTaskList(@RequestBody TaskVo taskVo) {
+//        Page<TaskVo> taskVos = workFlowQuery.queryTaskList(taskVo, taskVo.getOffset(), taskVo.getPageSize());
+//        return taskVos;
+//    }
 
     @ApiOperation(value = "提交任务")
     @PostMapping("/commitProcess/{taskId}")

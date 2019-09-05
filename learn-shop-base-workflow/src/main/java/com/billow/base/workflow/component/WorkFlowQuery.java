@@ -64,13 +64,13 @@ public interface WorkFlowQuery {
     /**
      * 查看活动的流程图（显示运行轨迹）
      *
-     * @param executionId Execution对象ID，任务ID或流程实例ID等正在执行的对象ID
+     * @param processInstanceId 流程实例ID
      * @param response
      * @return void
      * @author LiuYongTao
      * @date 2019/8/27 12:08
      */
-    void genActiveProccessImage(String executionId, HttpServletResponse response) throws Exception;
+    void genActiveProccessImage(String processInstanceId, HttpServletResponse response) throws Exception;
 
     /**
      * 获取原始的流程图
