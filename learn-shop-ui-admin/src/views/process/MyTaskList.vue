@@ -114,6 +114,9 @@
   import {
     LoadSysDataDictionary
   } from "../../api/sys/DataDictionaryMag";
+  import {
+    FindApplyPage
+  } from '../../api/proc/common'
   // ===== component start
   import CustomSelect from '../../components/common/CustomSelect.vue';
   // import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
@@ -155,18 +158,18 @@
     //每次激活时
     activated() {
       // 根据key名获取传递回来的参数，data 就是 map
-      this.$bus.once('taskInfo', function (data) {
-        var index = this.tableData.findIndex(f => f.id === data.id);
+      this.$bus.once('taskInfo', function (id) {
+        var index = this.tableData.findIndex(f => f.id === id);
         if (index != -1) { // 更新
-          this.tableData.splice(index, 1, data);
-        } else { // 添加
-          this.tableData.push(data);
+          this.tableData.splice(index, 1);
         }
       }.bind(this));
     },
     methods: {
       // 获取权限列表数据
       loadDataList() {
+        // procMyStartProdeList
+        var path = this.$route.path;
         LoadDataTaskList(this.queryFilter).then(res => {
           var data = res.resData;
           this.tableData = data.content;
@@ -198,13 +201,16 @@
       // 处理
       onHandle(row, index) {
         console.info("applyType:", row.applyType);
-        // this.$router.push({
-        //   name: 'todoLeaveIndex',
-        //   query: {
-        //     optionType: 'edit',
-        //     id: row.id
-        //   }
-        // });
+        var routerName = FindApplyPage(row.applyType);
+        console.info("applyType:", routerName);
+        this.$router.push({
+          name: routerName,
+          query: {
+            optionType: 'edit',
+            id: row.id,
+            taskId: row.taskId,
+          }
+        });
       }
     }
   }

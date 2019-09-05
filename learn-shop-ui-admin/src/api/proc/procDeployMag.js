@@ -19,17 +19,6 @@ export const LoadDataProcDeployList = procDeployFilter => requestUtils.post(base
  */
 export const DeleteProcDeployById = (id, cascade) => requestUtils.del(baseUrl + '/delProceDeployById/' + id + '/' + cascade);
 
-
-/**
- * 根据id获取流程部署图片
- * @param id
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const ViewDeployImgById = id => {
-  return baseUrl + '/viewDeployImgById/' + id;
-};
-
 /**
  * 部署流程
  * @returns {*|AxiosPromise}

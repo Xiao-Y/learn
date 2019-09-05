@@ -112,7 +112,6 @@
   // ===== api start
   import {
     LoadDataProcDeployList,
-    ViewDeployImgById,
     DeleteProcDeployById,
     Deploy
   } from "../../api/proc/procDeployMag";
@@ -176,10 +175,6 @@
         });
       },
       viewDeployImg(row, index) {
-        // ViewDeployImgById(row.id).then(res => {
-        //   this.deployImgSrc = res;
-        //   this.imageDialogVisible = true;
-        // });
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
           query: {

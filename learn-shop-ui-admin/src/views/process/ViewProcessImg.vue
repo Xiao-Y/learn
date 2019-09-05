@@ -11,11 +11,9 @@
 <script>
   // ===== api start
   import {
-    ViewDeployImgById,
-  } from "../../api/proc/procDeployMag";
-  import {
     ViewExecutionImgById,
-  } from "../../api/proc/proceTaskMag";
+    ViewDeployImgById,
+  } from "../../api/proc/common";
 
   export default {
     name: "procViewProcessImg",

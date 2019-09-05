@@ -11,7 +11,7 @@
       <!--      </el-col>-->
       <el-col :span="4" :offset="0">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="../../../static/img/apply/leave.jpg" class="image" @click="leave">
+          <img src="../../../static/img/apply/leave.jpg" class="image" @click="leaveShow = true">
           <div style="padding: 15px;">
             <span>我要请假</span>
           </div>
@@ -19,7 +19,7 @@
       </el-col>
       <el-col :span="4" :offset="2">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="../../../static/img/apply/leave.jpg" class="image" @click="leave">
+          <img src="../../../static/img/apply/leave.jpg" class="image" @click="leaveShow = true">
           <div style="padding: 15px;">
             <span>我要请假</span>
           </div>
@@ -33,7 +33,7 @@
                :show-close="true"
                :close-on-click-modal="false">
       <!-- 请假申请 -->
-      <leave v-if="leaveShow" v-model="dialogVisible"></leave>
+      <leave v-if="leaveShow" v-model="dialogVisible" :page-read-only="false"></leave>
     </el-dialog>
     <!-- 申请类型 -->
   </div>
@@ -54,11 +54,11 @@
       };
     },
     methods: {
-      leave() {
-        this.dialogVisible = true;
-        this.leaveShow = true;
-        console.info("leave");
-      }
+      // leave() {
+      //   this.dialogVisible = true;
+      //   this.leaveShow = true;
+      //   console.info("leave");
+      // }
     }
   }
 </script>
