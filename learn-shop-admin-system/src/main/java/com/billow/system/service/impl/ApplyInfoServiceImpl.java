@@ -101,12 +101,16 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     public CustomPage queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
         StringBuilder sql = new StringBuilder("SELECT ");
         sql.append("r.processInstanceId AS processInstanceId, ");
-        sql.append("r.assignee AS assignee, ");// 任务归属人
-        sql.append("r.groupId AS groupId, ");// 任务归属分组
+        // 任务归属人
+        sql.append("r.assignee AS assignee, ");
+        // 任务归属分组
+        sql.append("r.groupId AS groupId, ");
         sql.append("r.taskId AS taskId, ");
         sql.append("r.taskName AS taskName, ");
-        sql.append("r.claimStatus AS claimStatus, "); // 是否被认领，0-已认领，1-未认领
-        sql.append("r.suspensionStatus AS suspensionStatus, ");// 是否活动，1-活动，2挂起
+        // 是否被认领，0-已认领，1-未认领
+        sql.append("r.claimStatus AS claimStatus, ");
+        // 是否活动，1-活动，2挂起
+        sql.append("r.suspensionStatus AS suspensionStatus, ");
         sql.append("r.id AS id, ");
 //        sql.append("r.apply_data as applyData, ");
         sql.append("r.procDefId AS procDefId, ");
