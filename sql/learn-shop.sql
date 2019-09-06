@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 04/09/2019 22:14:10
+ Date: 06/09/2019 22:02:23
 */
 
 SET NAMES utf8mb4;
@@ -119,7 +119,7 @@ CREATE TABLE `r_role_permission`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2764 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2766 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_permission
@@ -205,6 +205,10 @@ INSERT INTO `r_role_permission` VALUES (2763, 1, 70, '2019-09-01 14:36:38', 'adm
 INSERT INTO `r_role_permission` VALUES (2764, 1, 71, '2019-09-03 21:24:39', 'admin', '2019-09-03 21:24:39', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2765, 1, 72, '2019-09-04 21:07:10', 'admin', '2019-09-04 21:07:10', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2766, 1, 73, '2019-09-04 21:17:06', 'admin', '2019-09-04 21:17:06', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2767, 1, 75, '2019-09-06 20:15:13', 'admin', '2019-09-06 20:15:13', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2768, 1, 77, '2019-09-06 20:15:13', 'admin', '2019-09-06 20:15:13', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2769, 1, 76, '2019-09-06 20:15:13', 'admin', '2019-09-06 20:15:13', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2770, 1, 74, '2019-09-06 20:15:13', 'admin', '2019-09-06 20:15:13', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_user_role
@@ -270,7 +274,7 @@ CREATE TABLE `sys_apply_info`  (
   `valid_ind` bit(1) NULL DEFAULT NULL,
   `vo_clazz` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_apply_info
@@ -295,7 +299,7 @@ CREATE TABLE `sys_data_dictionary`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_data_dictionary
@@ -431,7 +435,7 @@ CREATE TABLE `sys_permission`  (
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 73 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_permission
@@ -498,13 +502,17 @@ INSERT INTO `sys_permission` VALUES (63, '激活流程定义', 'ActProcDefApi-ac
 INSERT INTO `sys_permission` VALUES (64, '查询流程部署列表', 'ActDeployApi-findProcDeployList', '/actDeployApi/findProcDeployList', '1', '查询流程部署列表', b'1', '2019-08-30 21:23:52', 'admin', '2019-08-30 21:23:52', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (65, '根据id获取原始的流程图', 'ActDeployApi-viewDeployImgById', '/actDeployApi/viewDeployImgById/**', '1', '根据id获取原始的流程图', b'1', '2019-08-30 21:24:36', 'admin', '2019-08-30 21:24:36', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (66, '根据id删除流程部署,(cascade：是否级联删除)', 'ActDeployApi-delProceDeployById', '/actDeployApi/delProceDeployById/**', '1', '根据id删除流程部署,(cascade：是否级联删除)', b'1', '2019-08-30 23:03:15', 'admin', '2019-08-30 23:03:15', 'admin', NULL, NULL, NULL);
-INSERT INTO `sys_permission` VALUES (67, '查询个人任务数量', 'ActTaskApi-queryAssigneeTaskCount', '/actTaskApi/queryAssigneeTaskCount', '1', '查询个人任务数量', b'1', '2019-08-31 16:23:57', 'admin', '2019-08-31 21:22:52', 'admin', NULL, NULL, NULL);
-INSERT INTO `sys_permission` VALUES (68, '我发起的流程（所有的）', 'ActTaskApi-myStartProdeCount', '/actTaskApi/myStartProdeCount', '1', '我发起的流程（所有的）', b'1', '2019-08-31 21:23:26', 'admin', '2019-08-31 21:34:43', 'admin', NULL, NULL, NULL);
-INSERT INTO `sys_permission` VALUES (69, '审核中的的流程（运行中的）', 'ActTaskApi-auditProgressProdeCount', '/actTaskApi/auditProgressProdeCount', '1', '审核中的的流程（运行中的）', b'1', '2019-08-31 21:35:19', 'admin', '2019-08-31 21:35:19', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (67, '查询个人任务数量', 'ApplyApi-queryAssigneeTaskCount', '/applyApi/queryAssigneeTaskCount', '1', '查询个人任务数量', b'1', '2019-08-31 16:23:57', 'admin', '2019-09-06 20:08:02', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (68, '我发起的流程数量（所有的）', 'ApplyApi-myStartProdeCount', '/applyApi/myStartProdeCount', '1', '我发起的流程数量（所有的）', b'1', '2019-08-31 21:23:26', 'admin', '2019-09-06 20:09:52', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (69, '运行中的的流程', 'ApplyApi-auditProgressProdeCount', '/applyApi/ongoingCount', '1', '运行中的的流程', b'1', '2019-08-31 21:35:19', 'admin', '2019-09-06 20:11:10', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (70, '提交请假申请', 'LeaveApi-submitLeave', '/leaveApi/submitLeave', '1', '提交请假申请', b'1', '2019-09-01 14:36:07', 'admin', '2019-09-01 14:36:07', 'admin', NULL, NULL, NULL);
-INSERT INTO `sys_permission` VALUES (71, '查询个人任务列表', 'ActTaskApi-queryMyTaskList', '/actTaskApi/queryMyTaskList', '1', '查询个人任务列表', b'1', '2019-09-03 21:24:26', 'admin', '2019-09-03 21:24:26', 'admin', NULL, NULL, NULL);
-INSERT INTO `sys_permission` VALUES (72, '查看活动的流程图（显示运行轨迹）', 'ActTaskApi-viewExecutionImgById', '/actTaskApi/viewExecutionImgById/**', '1', '查看活动的流程图（显示运行轨迹）', b'1', '2019-09-04 21:06:58', 'admin', '2019-09-04 21:13:03', 'admin', NULL, NULL, NULL);
-INSERT INTO `sys_permission` VALUES (73, '认领任务', 'ActTaskApi-claimTask', '/actTaskApi/claimTask/**', '1', '认领任务', b'1', '2019-09-04 21:15:48', 'admin', '2019-09-04 21:15:48', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (71, '查询个人任务列表', 'ApplyApi-queryMyTaskList', '/applyApi/queryMyTaskList', '1', '查询个人任务列表', b'1', '2019-09-03 21:24:26', 'admin', '2019-09-06 20:07:34', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (72, '查看活动的流程图（显示运行轨迹）', 'ApplyApi-viewExecutionImgById', '/applyApi/viewExecutionImgById/**', '1', '查看活动的流程图（显示运行轨迹）', b'1', '2019-09-04 21:06:58', 'admin', '2019-09-06 20:11:59', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (73, '认领任务', 'ApplyApi-claimTask', '/applyApi/claimTask/**', '1', '认领任务', b'1', '2019-09-04 21:15:48', 'admin', '2019-09-06 20:11:33', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (74, '我发起的流程（所有的）', 'ApplyApi-myStartProdeList', '/applyApi/myStartProdeList', '1', '我发起的流程（所有的）', b'1', '2019-09-06 20:08:55', 'admin', '2019-09-06 20:08:55', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (75, '删除已经结束的申请', 'ApplyApi-deleteApplyInfoById', '/applyApi/deleteApplyInfoById/**', '1', '删除已经结束的申请', b'1', '2019-09-06 20:13:04', 'admin', '2019-09-06 20:13:04', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (76, '提交请假任务', 'ApplyApi-commitLeaveProcess', '/applyApi/commitLeaveProcess/**', '1', '提交请假任务', b'1', '2019-09-06 20:13:54', 'admin', '2019-09-06 20:14:49', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (77, '提交请假申请', 'ApplyApi-submitLeave', '/applyApi/submitLeave', '1', '提交请假申请', b'1', '2019-09-06 20:14:33', 'admin', '2019-09-06 20:14:33', 'admin', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -566,32 +574,6 @@ INSERT INTO `sys_schedule_job` VALUES (4, '2', '123', '0', '23123', '123131', '1
 INSERT INTO `sys_schedule_job` VALUES (5, '5', '234', '0', '', 'com.billow.job.autoTask.TestAutoTask', 'test', '1/10 * * * * ? *', '1', b'1', b'1', '234234', b'1', NULL, NULL, NULL, NULL, '1', 'liuytsz@sinosoft.com.cn');
 
 -- ----------------------------
--- Table structure for u_leave
--- ----------------------------
-DROP TABLE IF EXISTS `u_leave`;
-CREATE TABLE `u_leave`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `end_date` datetime(0) NULL DEFAULT NULL,
-  `reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `start_date` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of u_leave
--- ----------------------------
-INSERT INTO `u_leave` VALUES (1, '2019-09-01 14:38:17', 'admin', '2019-09-01 14:38:17', 'admin', NULL, '2019-09-27 00:00:00', '121212', '2019-09-08 00:00:00');
-INSERT INTO `u_leave` VALUES (2, '2019-09-01 14:47:42', 'admin', '2019-09-01 14:47:42', 'admin', NULL, '2019-09-30 00:00:00', '12323', '2019-09-01 00:00:00');
-INSERT INTO `u_leave` VALUES (3, '2019-09-01 14:56:10', 'admin', '2019-09-01 14:56:10', 'admin', NULL, '2019-09-28 00:00:00', '13123', '2019-09-15 00:00:00');
-INSERT INTO `u_leave` VALUES (4, '2019-09-01 15:04:27', 'admin', '2019-09-01 15:04:27', 'admin', NULL, '2019-10-01 00:00:00', '13123', '2019-09-01 15:04:20');
-INSERT INTO `u_leave` VALUES (5, '2019-09-01 20:03:48', 'admin', '2019-09-01 20:03:48', 'admin', NULL, '2019-09-01 20:03:18', '123123', '2019-09-01 20:03:16');
-
--- ----------------------------
 -- Table structure for u_user
 -- ----------------------------
 DROP TABLE IF EXISTS `u_user`;
@@ -613,7 +595,7 @@ CREATE TABLE `u_user`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `group_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of u_user
