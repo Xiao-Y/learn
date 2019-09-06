@@ -16,10 +16,12 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 工作流查询操作
@@ -110,7 +113,21 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         // 构建查询条件
         this.genProcessDefCondition(entity, query);
         List<ProcessDefinition> list = query.listPage(offset, pageSize);
-        return PageUtils.converListToPage(pageSize, query.count(), list, ProcessDefinitionVo.class);
+
+        CustomPage<ProcessDefinitionVo> page = new CustomPage<>(pageSize, query.count());
+
+        ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
+        List<ProcessDefinitionVo> processDefinitionVos = list.stream().map(m -> {
+            ProcessDefinitionVo vo = new ProcessDefinitionVo();
+            BeanUtils.copyProperties(m, vo);
+            // 判断是否级联挂起
+            long count = processInstanceQuery.processDefinitionId(m.getId()).suspended().count();
+            vo.setSuspendedCascade(count > 0);
+            return vo;
+        }).collect(Collectors.toList());
+        page.setContent(processDefinitionVos);
+
+        return page;
     }
 
     /**

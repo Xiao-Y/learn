@@ -101,18 +101,19 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     public CustomPage queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
         StringBuilder sql = new StringBuilder("SELECT ");
         sql.append("r.processInstanceId AS processInstanceId, ");
-        sql.append("r.assignee AS assignee, ");
-        sql.append("r.groupId AS groupId, ");
+        sql.append("r.assignee AS assignee, ");// 任务归属人
+        sql.append("r.groupId AS groupId, ");// 任务归属分组
         sql.append("r.taskId AS taskId, ");
         sql.append("r.taskName AS taskName, ");
-        sql.append("r.claimStatus AS claimStatus, ");
+        sql.append("r.claimStatus AS claimStatus, "); // 是否被认领，0-已认领，1-未认领
+        sql.append("r.suspensionStatus AS suspensionStatus, ");// 是否活动，1-活动，2挂起
         sql.append("r.id AS id, ");
 //        sql.append("r.apply_data as applyData, ");
         sql.append("r.procDefId AS procDefId, ");
         sql.append("r.procInstId AS procInstId, ");
         sql.append("r.isEnd AS isEnd, ");
-        sql.append("r.applyType AS applyType, ");
-        sql.append("r.applyUserCode AS applyUserCode, ");
+        sql.append("r.applyType AS applyType, "); // 申请类型
+        sql.append("r.applyUserCode AS applyUserCode, ");// 申请人
         sql.append("r.validInd AS validInd, ");
         sql.append("r.createTime AS createTime, ");
         sql.append("r.creatorCode AS creatorCode, ");

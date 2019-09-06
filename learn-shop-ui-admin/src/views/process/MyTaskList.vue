@@ -62,6 +62,12 @@
               <el-switch v-model="scope.row.isEnd" active-text="审批结束" inactive-text="进行中" disabled></el-switch>
             </template>
           </el-table-column>
+          <el-table-column label="是否挂起" prop="suspensionStatus">
+            <template slot-scope="scope">
+              <el-switch v-model="scope.row.suspensionStatus" active-value="1" active-text="活动" inactive-value="2"
+                         inactive-text="挂起" disabled></el-switch>
+            </template>
+          </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
@@ -94,20 +100,20 @@
               <div style="float:left;">
                 <!--  操作按钮组 -->
                 <el-tooltip class="item" effect="dark" content="处理" placement="top-start" :open-delay="openDelay"
-                            v-if="scope.row.claimStatus === '0' && toDo === 'myTasks'">
+                            v-if="scope.row.claimStatus === '0' && toDo === 'myTasks' && scope.row.suspensionStatus === '1'">
                   <el-button @click="onHandle(scope.row,scope.$index)" type="primary" size="mini">
                     <i class="el-icon-service"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="认领" placement="top-start" :open-delay="openDelay"
-                            v-if="scope.row.claimStatus === '1' && toDo === 'myTasks'">
+                            v-if="scope.row.claimStatus === '1' && toDo === 'myTasks' && scope.row.suspensionStatus === '1'">
                   <el-button @click="onClaim(scope.row,scope.$index)" type="warning" size="mini">
                     <i class="el-icon-thumb"></i>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="查看" placement="top-start" :open-delay="openDelay"
+                <el-tooltip class="item" effect="dark" content="查看详细" placement="top-start" :open-delay="openDelay"
                             v-if="toDo === 'myStart'">
-                  <el-button @click="onDel(scope.row,scope.$index)" type="danger" size="mini">
+                  <el-button @click="viewDetile(scope.row,scope.$index)" type="danger" size="mini">
                     <i class="el-icon-delete"></i>
                   </el-button>
                 </el-tooltip>
@@ -189,7 +195,7 @@
     },
     created() {
       this.queryFilter.isEnd = this.$route.query.isEnd;
-      if (this.queryFilter.isEnd typeof 'undefined') {
+      if (typeof (this.queryFilter.isEnd) == "undefined") {
         this.queryFilter.isEnd = null;
       }
 
@@ -233,6 +239,7 @@
           });
         }
       },
+      // 查看执行流程
       viewExecutionImg(row, index) {
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
@@ -268,6 +275,7 @@
           }
         });
       },
+      // 删除已经结束的申请信息
       onDel(row, index) {
         var _this = this;
 
@@ -280,6 +288,10 @@
             });
           });
         });
+      },
+      // 查看详细
+      viewDetile(row, index) {
+
       },
       changToDo() {
         this.queryFilter.pageNo = 1;

@@ -20,6 +20,8 @@ public class ProcessDefinitionVo extends CustomPage implements Serializable {
     private String resourceName;
     private String diagramResourceName;
     private String engineVersion;
+    private boolean suspended;
+    private boolean suspendedCascade;
 
     public String getId() {
         return id;
@@ -108,6 +110,24 @@ public class ProcessDefinitionVo extends CustomPage implements Serializable {
 
     public ProcessDefinitionVo setEngineVersion(String engineVersion) {
         this.engineVersion = engineVersion;
+        return this;
+    }
+
+    public boolean isSuspended() {
+        return suspended;
+    }
+
+    public ProcessDefinitionVo setSuspended(boolean suspended) {
+        this.suspended = suspended;
+        return this;
+    }
+
+    public boolean isSuspendedCascade() {
+        return suspendedCascade;
+    }
+
+    public ProcessDefinitionVo setSuspendedCascade(boolean suspendedCascade) {
+        this.suspendedCascade = suspendedCascade;
         return this;
     }
 }

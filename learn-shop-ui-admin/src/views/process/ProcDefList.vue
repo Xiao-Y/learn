@@ -26,7 +26,8 @@
       </el-collapse>
     </el-row>
     <!-- 查询按钮组 -->
-    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter" :show-add="false"></button-group-query>
+    <button-group-query @onQuery="loadDataList" :queryFilter="queryFilter"
+                        :show-add="false"></button-group-query>
     <div style="display: inline-block;margin-left:10px;">
       <el-button type="success" size="mini" @click="startDeploy" icon="el-icon-mouse">部署</el-button>
     </div>
@@ -53,16 +54,49 @@
                 <el-form-item label="描述">
                   <span>{{ scope.row.description }}</span>
                 </el-form-item>
+                <el-form-item label="是否挂起">
+                  <el-switch v-model="scope.row.suspended" active-text="挂起" inactive-text="激活" disabled></el-switch>
+                </el-form-item>
+                <el-form-item label="是否级联挂起">
+                  <el-switch v-model="scope.row.suspendedCascade" active-text="挂起" inactive-text="激活" disabled></el-switch>
+                </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="80">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
-              <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
-                                   @onEdit="handleEdit(scope.row,scope.$index)"
-                                   @onInd="handleProhibit(scope.row,scope.$index)"
-                                   :show-ind="false" :show-edit="false"></button-group-option>
+              <div style="float:left;margin-left:10px;">
+                <el-tooltip class="item" effect="dark" content="查询图片" placement="top-start" :open-delay="openDelay">
+                  <el-button type="success" size="mini" @click="viewDeployImg(scope.row,scope.$index)">
+                    <i class="el-icon-picture"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="挂起" placement="top-start" :open-delay="openDelay"
+                            v-if="!scope.row.suspended">
+                  <el-button type="danger" size="mini" @click="handleDef(scope.row,false,false)">
+                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="级联挂起" placement="top-start" :open-delay="openDelay"
+                            v-if="!scope.row.suspended">
+                  <el-button type="danger" size="mini" @click="handleDef(scope.row,false,true)">
+                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="激活" placement="top-start" :open-delay="openDelay"
+                            v-if="scope.row.suspended && !scope.row.suspendedCascade">
+                  <el-button type="danger" size="mini" @click="handleDef(scope.row,true,false)">
+                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="级联激活" placement="top-start" :open-delay="openDelay"
+                            v-if="scope.row.suspended && scope.row.suspendedCascade">
+                  <el-button type="danger" size="mini" @click="handleDef(scope.row,true,true)">
+                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                  </el-button>
+                </el-tooltip>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -92,23 +126,20 @@
   // ===== api start
   import {
     LoadDataProcDefList,
-    ProhibitProcDefById,
-    DeleteProcDefById
+    SuspendProcess,
+    ActivateProcess
   } from "../../api/proc/procDefMag";
   import {
-    LoadSysDataDictionary
-  } from "../../api/sys/DataDictionaryMag";
+    Deploy
+  } from "../../api/proc/procDeployMag";
   // ===== component start
-  import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue'
   // ===== 工具类 start
-  import VueUtils from "../../utils/vueUtils";
   import pageMixins from "../../utils/pageMixins";
 
   export default {
     components: {
-      ButtonGroupOption,
       ButtonGroupQuery,
       CustomPage
     },
@@ -125,7 +156,7 @@
         tableData: [], // 列表数据源
         dialogVisible: false,
         fileList: [], // 上传文件列表
-        action:'admin-system/actDeployApi/deploy/file',
+        deployAction: '',
       }
     },
     created() {
@@ -154,55 +185,40 @@
           this.queryFilter.totalPages = data.totalPages;
         });
       },
-      // 添加权限
-      handleAdd() {
-        this.$router.push({
-          name: 'sysProcDefEdit',
+      // 激活或者挂起流程定论
+      handleDef(row, isActive, cascade) {
+        if (isActive) {
+          // 激活
+          ActivateProcess(row.id, cascade).then(res => {
+            this.$message({
+              type: 'success',
+              message: '激活成功!'
+            });
+            row.suspended = false;
+          });
+        } else {
+          // 挂起
+          SuspendProcess(row.id, cascade).then(res => {
+            this.$message({
+              type: 'success',
+              message: '挂起成功!'
+            });
+            row.suspended = true;
+            row.suspendedCascade = cascade;
+          });
+        }
+      },
+      viewDeployImg(row, index) {
+        const {href} = this.$router.resolve({
+          name: "procViewProcessImg",
           query: {
-            optionType: 'add',
-            mailTypeSelect: JSON.stringify(this.mailTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
+            id: row.id
           }
         });
-      },
-      handleEdit(row, index) {
-        this.$router.push({
-          name: 'sysProcDefEdit',
-          query: {
-            optionType: 'edit',
-            id: row.id,
-            mailTypeSelect: JSON.stringify(this.mailTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
-          }
-        });
-      },
-      handleDelete(row, index) {
-        var _this = this;
-
-        VueUtils.confirmDel(row.mailCode, () => {
-          DeleteProcDefById(row.id).then(res => {
-            _this.tableData.splice(index, 1);
-            _this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-          });
-        });
-      },
-      handleProhibit(row, index) {
-        var _this = this;
-
-        VueUtils.confirmInd(row.mailCode, () => {
-          ProhibitProcDefById(row.id).then(res => {
-            row.validInd = res.resData.validInd;
-            _this.$message({
-              type: 'success',
-              message: '禁用成功!'
-            });
-          });
-        });
+        window.open(href, '_blank');
       },
       startDeploy() {
+        this.deployAction = Deploy();
         this.dialogVisible = true;
       },
       // 检查上传的文件类型

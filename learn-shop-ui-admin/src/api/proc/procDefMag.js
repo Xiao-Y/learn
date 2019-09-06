@@ -11,48 +11,20 @@ const baseUrl = 'admin-system/actProcDefApi';
 export const LoadDataProcDefList = procDefFilter => requestUtils.post(baseUrl + '/findProcDefList', Object.assign(procDefFilter));
 
 /**
- * 保存流程定义信息
- * @param data
+ * 挂起流程定义
+ * @param processDefinitionId
+ * @param cascade 是否级联
  * @returns {*|AxiosPromise}
  * @constructor
  */
-export const SaveProcDef = data => requestUtils.post(baseUrl + '/saveProcDef', Object.assign(data));
+export const SuspendProcess = (processDefinitionId, cascade) => requestUtils.del(baseUrl + '/suspendProcess/' + processDefinitionId + '/' + cascade);
 
 /**
- * 更新流程定义信息
- * @param data
+ * 激活流程定义
+ * @param processDefinitionId
+ * @param cascade 是否级联
  * @returns {*|AxiosPromise}
  * @constructor
  */
-export const UpdateProcDef = data => requestUtils.put(baseUrl + '/updateProcDef', Object.assign(data));
+export const ActivateProcess = (processDefinitionId, cascade) => requestUtils.del(baseUrl + '/activateProcess/' + processDefinitionId + '/' + cascade);
 
-/**
- * 根据id删除流程定义信息
- * @param id
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const DeleteProcDefById = id => requestUtils.del(baseUrl + '/deleteProcDefById/' + id);
-
-/**
- * 根据id禁用流程定义信息
- * @param id
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const ProhibitProcDefById = id => requestUtils.put(baseUrl + '/prohibitProcDefById/' + id);
-
-/**
- * 根据id获取流程定义信息
- * @param id
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const FindProcDefById = id => requestUtils.get(baseUrl + '/findProcDefById/' + id);
-
-/**
- * 查询 mailCode 的个数
- * @param userCode
- * @constructor
- */
-export const CheckMailCode = mailCode => requestUtils.get(baseUrl + '/checkMailCode/' + mailCode);
