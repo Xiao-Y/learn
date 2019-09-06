@@ -27,3 +27,14 @@ export const DeleteProcDeployById = (id, cascade) => requestUtils.del(baseUrl + 
 export const Deploy = () => {
   return baseUrl + '/deploy/file';
 };
+
+
+/**
+ * 根据id获取流程部署图片
+ * @param id
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const ViewDeployImgById = id => {
+  return baseUrl + '/viewDeployImgById/' + id;
+};

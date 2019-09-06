@@ -18,4 +18,5 @@ public class ApplyInfoVo extends ApplyInfoPo implements Serializable {
     private String taskId;
     private String taskName;
     private String status;
+    private String isEndStatus;
 }

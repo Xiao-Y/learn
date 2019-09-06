@@ -38,7 +38,6 @@
                   row-key="id">
           <el-table-column label="ID" prop="id" width="210"></el-table-column>
           <el-table-column label="KEY" prop="key"></el-table-column>
-          <el-table-column label="分组" prop="category"></el-table-column>
           <el-table-column label="名称" prop="name"></el-table-column>
           <el-table-column label="版本" prop="version"></el-table-column>
           <el-table-column label="部署ID" prop="deploymentId"></el-table-column>
@@ -54,6 +53,9 @@
                 <el-form-item label="描述">
                   <span>{{ scope.row.description }}</span>
                 </el-form-item>
+                <el-form-item label="分组">
+                  <span>{{ scope.row.category }}</span>
+                </el-form-item>
                 <el-form-item label="是否挂起">
                   <el-switch v-model="scope.row.suspended" active-text="挂起" inactive-text="激活" disabled></el-switch>
                 </el-form-item>
@@ -63,7 +65,7 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="80">
+          <el-table-column fixed="right" label="操作" width="250">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
               <div style="float:left;margin-left:10px;">
@@ -72,28 +74,28 @@
                     <i class="el-icon-picture"></i>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="挂起" placement="top-start" :open-delay="openDelay"
+                <el-tooltip class="item" effect="dark" content="挂起流程" placement="top-start" :open-delay="openDelay"
                             v-if="!scope.row.suspended">
                   <el-button type="danger" size="mini" @click="handleDef(scope.row,false,false)">
-                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                    <i class="el-icon-lightning"></i>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="级联挂起" placement="top-start" :open-delay="openDelay"
+                <el-tooltip class="item" effect="dark" content="挂起流程及任务" placement="top-start" :open-delay="openDelay"
                             v-if="!scope.row.suspended">
                   <el-button type="danger" size="mini" @click="handleDef(scope.row,false,true)">
-                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                    <i class="el-icon-lightning"></i><i class="el-icon-lightning"></i>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="激活" placement="top-start" :open-delay="openDelay"
+                <el-tooltip class="item" effect="dark" content="激活流程" placement="top-start" :open-delay="openDelay"
                             v-if="scope.row.suspended && !scope.row.suspendedCascade">
-                  <el-button type="danger" size="mini" @click="handleDef(scope.row,true,false)">
-                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                  <el-button type="primary" size="mini" @click="handleDef(scope.row,true,false)">
+                    <i class="el-icon-sunny"></i>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="级联激活" placement="top-start" :open-delay="openDelay"
+                <el-tooltip class="item" effect="dark" content="激活流程及任务" placement="top-start" :open-delay="openDelay"
                             v-if="scope.row.suspended && scope.row.suspendedCascade">
-                  <el-button type="danger" size="mini" @click="handleDef(scope.row,true,true)">
-                    <i class="el-icon-delete"></i><i class="el-icon-delete"></i>
+                  <el-button type="primary" size="mini" @click="handleDef(scope.row,true,true)">
+                    <i class="el-icon-sunny"></i><i class="el-icon-sunny"></i>
                   </el-button>
                 </el-tooltip>
               </div>
@@ -107,7 +109,7 @@
     <el-dialog title="选取部署文件" :visible.sync="dialogVisible" width="30%">
       <el-upload
         ref="upload"
-        :action="action"
+        :action="deployAction"
         :on-success="uploadSuccess"
         :on-error="uploadError"
         :before-upload="checkFile"
@@ -130,7 +132,7 @@
     ActivateProcess
   } from "../../api/proc/procDefMag";
   import {
-    Deploy
+    Deploy,
   } from "../../api/proc/procDeployMag";
   // ===== component start
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
@@ -146,6 +148,7 @@
     mixins: [pageMixins],
     data() {
       return {
+        openDelay: 1500,
         queryFilter: {
           // 查询条件
           id: null,
@@ -212,7 +215,7 @@
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
           query: {
-            id: row.id
+            id: row.deploymentId
           }
         });
         window.open(href, '_blank');

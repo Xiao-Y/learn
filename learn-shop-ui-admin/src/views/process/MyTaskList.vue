@@ -20,10 +20,10 @@
                                placeholder="请选择申请类型">
                 </custom-select>
               </el-form-item>
-              <el-form-item label="是否结束" prop="isEnd" width="210">
-                <el-select v-model="queryFilter.isEnd" placeholder="请选择申请类型">
-                  <el-option key="true" label="审批结束" value="true"></el-option>
-                  <el-option key="false" label="进行中" value="false"></el-option>
+              <el-form-item label="是否结束" prop="isEndStatus" width="210">
+                <el-select v-model="queryFilter.isEndStatus" placeholder="请选择申请类型">
+                  <el-option key="1" label="审批结束" value="1"></el-option>
+                  <el-option key="0" label="进行中" value="0"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="待办项目">
@@ -59,13 +59,12 @@
           </el-table-column>
           <el-table-column label="是否结束" prop="isEnd">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.isEnd" active-text="审批结束" inactive-text="进行中" disabled></el-switch>
+              {{scope.row.isEnd ? '是' : '否'}}
             </template>
           </el-table-column>
           <el-table-column label="是否挂起" prop="suspensionStatus">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.suspensionStatus" active-value="1" active-text="活动" inactive-value="2"
-                         inactive-text="挂起" disabled></el-switch>
+              {{scope.row.suspensionStatus === 1 ? '活动' : '挂起'}}
             </template>
           </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
@@ -100,21 +99,21 @@
               <div style="float:left;">
                 <!--  操作按钮组 -->
                 <el-tooltip class="item" effect="dark" content="处理" placement="top-start" :open-delay="openDelay"
-                            v-if="scope.row.claimStatus === '0' && toDo === 'myTasks' && scope.row.suspensionStatus === '1'">
+                            v-if="scope.row.claimStatus === '0' && toDo === 'myTasks' && scope.row.suspensionStatus === 1">
                   <el-button @click="onHandle(scope.row,scope.$index)" type="primary" size="mini">
                     <i class="el-icon-service"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="认领" placement="top-start" :open-delay="openDelay"
-                            v-if="scope.row.claimStatus === '1' && toDo === 'myTasks' && scope.row.suspensionStatus === '1'">
+                            v-if="scope.row.claimStatus === '1' && toDo === 'myTasks' && scope.row.suspensionStatus === 1">
                   <el-button @click="onClaim(scope.row,scope.$index)" type="warning" size="mini">
                     <i class="el-icon-thumb"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="查看详细" placement="top-start" :open-delay="openDelay"
                             v-if="toDo === 'myStart'">
-                  <el-button @click="viewDetile(scope.row,scope.$index)" type="danger" size="mini">
-                    <i class="el-icon-delete"></i>
+                  <el-button @click="viewDetile(scope.row,scope.$index)" type="warning" size="mini">
+                    <i class="el-icon-view"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay"
@@ -145,7 +144,8 @@
     LoadDataTaskList,
     ClaimTask,
     FindApplyPage,
-    DeleteApplyInfoById
+    DeleteApplyInfoById,
+    MyStartProdeList,
   } from "../../api/proc/applyMag";
   import {
     LoadSysDataDictionary
@@ -153,7 +153,6 @@
 
   // ===== component start
   import CustomSelect from '../../components/common/CustomSelect.vue';
-  // import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue'
   // ===== 工具类 start
@@ -163,7 +162,6 @@
   export default {
     components: {
       CustomSelect,
-      // ButtonGroupOption,
       ButtonGroupQuery,
       CustomPage
     },
@@ -187,22 +185,14 @@
           taskId: null,
           applyUserCode: null,
           applyType: null,
-          isEnd: null
+          isEnd: null,
+          isEndStatus: null
         },
         tableData: [], // 列表数据源
         applyTypeSelect: [],// 申请类型的下拉数据源
       }
     },
     created() {
-      this.queryFilter.isEnd = this.$route.query.isEnd;
-      if (typeof (this.queryFilter.isEnd) == "undefined") {
-        this.queryFilter.isEnd = null;
-      }
-
-      var command = this.$route.query.command;
-      if (command) {
-        this.toDo = command;
-      }
       // 加载申请类型的下拉
       LoadSysDataDictionary('applyType').then(res => {
         this.applyTypeSelect = res.resData;
@@ -223,6 +213,16 @@
     methods: {
       // 获取权限列表数据
       loadDataList() {
+        // 从todo过来时，设置参数
+        if (this.$route.query.isEndStatus) {
+          this.queryFilter.isEnd = this.$route.query.isEndStatus === '1';
+          this.queryFilter.isEndStatus = this.$route.query.isEndStatus;
+        }
+
+        if (this.$route.query.command) {
+          this.toDo = this.$route.query.command;
+        }
+
         if (this.toDo === 'myStart' || this.toDo === 'ongoing') {
           MyStartProdeList(this.queryFilter).then(res => {
             var data = res.resData;
@@ -244,7 +244,7 @@
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
           query: {
-            id: row.processInstanceId,
+            id: row.procInstId,
             type: 'execution'
           }
         });
@@ -295,6 +295,15 @@
       },
       changToDo() {
         this.queryFilter.pageNo = 1;
+        this.loadDataList();
+      }
+    },
+    watch: {
+      $route() {
+        // 从todo过来时，设置参数
+        this.toDo = 'myTasks';
+        this.queryFilter.isEnd = null;
+        this.queryFilter.isEndStatus = null;
         this.loadDataList();
       }
     }

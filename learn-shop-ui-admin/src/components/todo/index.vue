@@ -76,7 +76,7 @@
               name: 'procProcMyTaskListIndex',
               query: {
                 command: command,
-                isEnd: false
+                isEndStatus: '0'
               }
             });
             break;

@@ -36,17 +36,6 @@ export const ViewExecutionImgById = id => {
 };
 
 /**
- * 根据id获取流程部署图片
- * @param id
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const ViewDeployImgById = id => {
-  return baseUrl + '/viewDeployImgById/' + id;
-};
-
-
-/**
  * 认领任务
  * @param id
  * @returns {*|Promise|Promise<any>}
@@ -83,7 +72,7 @@ export const OngoingCount = () => requestUtils.get(baseUrl + '/ongoingCount');
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
-export const MyStartProdeList = (applyInfo) => requestUtils.get(baseUrl + '/myStartProdeList');
+export const MyStartProdeList = applyInfo => requestUtils.post(baseUrl + '/myStartProdeList', Object.assign(applyInfo));
 
 
 /**

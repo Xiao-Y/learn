@@ -11,9 +11,9 @@ import java.util.List;
 
 /**
  * @author liuyongtao
- * @create 2019-08-27 19:52
+ * @create 2019-08-27 9:52
  */
-public class TaskVo extends Page implements Serializable {
+public class TaskVo extends CustomPage implements Serializable {
 
     private String id;
     private String owner;

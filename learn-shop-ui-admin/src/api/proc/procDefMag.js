@@ -17,7 +17,7 @@ export const LoadDataProcDefList = procDefFilter => requestUtils.post(baseUrl + 
  * @returns {*|AxiosPromise}
  * @constructor
  */
-export const SuspendProcess = (processDefinitionId, cascade) => requestUtils.del(baseUrl + '/suspendProcess/' + processDefinitionId + '/' + cascade);
+export const SuspendProcess = (processDefinitionId, cascade) => requestUtils.put(baseUrl + '/suspendProcess/' + processDefinitionId + '/' + cascade);
 
 /**
  * 激活流程定义
@@ -26,5 +26,5 @@ export const SuspendProcess = (processDefinitionId, cascade) => requestUtils.del
  * @returns {*|AxiosPromise}
  * @constructor
  */
-export const ActivateProcess = (processDefinitionId, cascade) => requestUtils.del(baseUrl + '/activateProcess/' + processDefinitionId + '/' + cascade);
+export const ActivateProcess = (processDefinitionId, cascade) => requestUtils.put(baseUrl + '/activateProcess/' + processDefinitionId + '/' + cascade);
 

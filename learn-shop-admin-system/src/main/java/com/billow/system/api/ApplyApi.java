@@ -66,15 +66,15 @@ public class ApplyApi {
     }
 
     @ApiOperation(value = "我发起的流程（所有的）")
-    @GetMapping("/myStartProdeList")
+    @PostMapping("/myStartProdeList")
     public Page myStartProdeList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
-        applyInfoVo.setAssignee(currentUserCode);
+        applyInfoVo.setApplyUserCode(currentUserCode);
         Page applyInfoVoPage = applyInfoService.myStartProdeList(applyInfoVo);
         return applyInfoVoPage;
     }
 
-    @ApiOperation(value = "我发起的流程（所有的）")
+    @ApiOperation(value = "我发起的流程数量（所有的）")
     @GetMapping("/myStartProdeCount")
     public long myStartProdeCount() {
         String currentUserCode = userTools.getCurrentUserCode();

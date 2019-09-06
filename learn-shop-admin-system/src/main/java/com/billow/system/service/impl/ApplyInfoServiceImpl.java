@@ -100,7 +100,6 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     @Override
     public CustomPage queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
         StringBuilder sql = new StringBuilder("SELECT ");
-        sql.append("r.processInstanceId AS processInstanceId, ");
         // 任务归属人
         sql.append("r.assignee AS assignee, ");
         // 任务归属分组
@@ -116,6 +115,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         sql.append("r.procDefId AS procDefId, ");
         sql.append("r.procInstId AS procInstId, ");
         sql.append("r.isEnd AS isEnd, ");
+        sql.append("if(r.isEnd,'1','0') AS isEndStatus, ");
         sql.append("r.applyType AS applyType, "); // 申请类型
         sql.append("r.applyUserCode AS applyUserCode, ");// 申请人
         sql.append("r.validInd AS validInd, ");

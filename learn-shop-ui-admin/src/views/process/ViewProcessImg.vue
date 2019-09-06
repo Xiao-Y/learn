@@ -12,8 +12,10 @@
   // ===== api start
   import {
     ViewExecutionImgById,
-    ViewDeployImgById,
   } from "../../api/proc/applyMag";
+  import {
+    ViewDeployImgById,
+  } from "../../api/proc/procDeployMag";
 
   export default {
     name: "procViewProcessImg",
