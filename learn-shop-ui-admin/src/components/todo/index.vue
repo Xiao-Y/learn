@@ -31,7 +31,7 @@
     MyStartCount,
     OngoingCount,
     QueryAssigneeTaskCount
-  } from '../../api/proc/proceTaskMag'
+  } from '../../api/proc/applyMag'
 
   export default {
     name: "todoList",
@@ -72,15 +72,29 @@
             });
             break;
           case 'ongoing': // 进行中的
-            console.info("ongoing");
+            this.$router.push({
+              name: 'procProcMyTaskListIndex',
+              query: {
+                command: command,
+                isEnd: false
+              }
+            });
             break;
           case 'myTasks': // 我的任务
             this.$router.push({
-              name: 'procProcMyTaskListIndex'
+              name: 'procProcMyTaskListIndex',
+              query: {
+                command: command
+              }
             });
             break;
           case 'myStart': // 我发起的
-            console.info("myStart");
+            this.$router.push({
+              name: 'procProcMyTaskListIndex',
+              query: {
+                command: command
+              }
+            });
             break;
         }
       }

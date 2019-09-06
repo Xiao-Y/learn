@@ -3,7 +3,8 @@ package com.billow.system.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
-import com.billow.base.workflow.vo.Page;
+import com.billow.base.workflow.utils.PageUtils;
+import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import com.billow.system.dao.ApplyInfoDao;
 import com.billow.system.feign.AdminUserFeign;
@@ -15,11 +16,16 @@ import com.billow.system.service.StartApplyProcess;
 import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
+import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,7 +98,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     }
 
     @Override
-    public Page queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
+    public CustomPage queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
         StringBuilder sql = new StringBuilder("SELECT ");
         sql.append("r.processInstanceId AS processInstanceId, ");
         sql.append("r.assignee AS assignee, ");
@@ -147,8 +153,25 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         sqlCount.append(sqlCondition);
         nativeQuery = entityManager.createNativeQuery(sqlCount.toString());
         BigInteger o = (BigInteger) nativeQuery.getSingleResult();
-        Page<Map<String, Object>> page = new Page<>(pageSize, o.longValue());
+        CustomPage<Map<String, Object>> page = new CustomPage<>(pageSize, o.longValue());
         page.setContent(resultList);
         return page;
+    }
+
+    @Override
+    public Page<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo) {
+        ApplyInfoPo applyInfoPo = ConvertUtils.convert(applyInfoVo, ApplyInfoPo.class);
+        Pageable pageable = new PageRequest(applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
+        Page<ApplyInfoPo> page = applyInfoDao.findAll(Example.of(applyInfoPo), pageable);
+        return page;
+    }
+
+    @Override
+    public void deleteApplyInfoById(Long id) {
+        ApplyInfoPo applyInfoPo = applyInfoDao.findOne(id);
+        if (!applyInfoPo.getIsEnd()) {
+            throw new RuntimeException("流程未结束不能删除");
+        }
+        applyInfoDao.delete(id);
     }
 }

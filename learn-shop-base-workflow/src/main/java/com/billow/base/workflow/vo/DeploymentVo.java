@@ -6,7 +6,7 @@ import java.util.Date;
  * @author liuyongtao
  * @create 2019-08-27 19:38
  */
-public class DeploymentVo extends Page {
+public class DeploymentVo extends CustomPage {
 
     private String id;
     private String name;

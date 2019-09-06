@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author liuyongtao
  * @create 2019-08-27 19:34
  */
-public class ProcessDefinitionVo extends Page implements Serializable {
+public class ProcessDefinitionVo extends CustomPage implements Serializable {
 
     private String id;
     private String name;

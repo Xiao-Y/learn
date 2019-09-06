@@ -39,12 +39,9 @@
 <script>
   import {
     SubmitLeave,
-    FindLeaveById
-  } from "../../../api/proc/todo";
-
-  import {
-    CommitProcess
-  } from '../../../api/proc/proceTaskMag'
+    FindLeaveById,
+    CommitLeaveProcess
+  } from "../../../api/proc/applyMag";
 
   export default {
     props: {
@@ -132,7 +129,7 @@
         var taskInfo = {
           deptLeaderApprove: flag
         };
-        CommitProcess(taskInfo, _this.taskId).then(res => {
+        CommitLeaveProcess(taskInfo, _this.taskId).then(res => {
           _this.$message({
             type: 'success',
             message: '提交成功!'

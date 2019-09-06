@@ -1,11 +1,9 @@
 package com.billow.base.workflow.component;
 
+import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.DeploymentVo;
-import com.billow.base.workflow.vo.Page;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import com.billow.base.workflow.vo.TaskVo;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +37,7 @@ public interface WorkFlowQuery {
      * @author LiuYongTao
      * @date 2019/8/29 16:37
      */
-    Page<DeploymentVo> queryDeployment(DeploymentVo deploymentVo, Integer offset, Integer pageSize);
+    CustomPage<DeploymentVo> queryDeployment(DeploymentVo deploymentVo, Integer offset, Integer pageSize);
 
     /**
      * 查询流程定义
@@ -59,7 +57,7 @@ public interface WorkFlowQuery {
      * @author LiuYongTao
      * @date 2019/8/27 19:42
      */
-    Page<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo, Integer offset, Integer pageSize);
+    CustomPage<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo processDefinitionVo, Integer offset, Integer pageSize);
 
     /**
      * 查看活动的流程图（显示运行轨迹）
@@ -93,7 +91,7 @@ public interface WorkFlowQuery {
      * @author LiuYongTao
      * @date 2019/8/30 17:44
      */
-    Page<TaskVo> queryTaskList(TaskVo taskVo, Integer offset, Integer pageSize);
+    CustomPage<TaskVo> queryTaskList(TaskVo taskVo, Integer offset, Integer pageSize);
 
     /**
      * 通过流程id 查询任务

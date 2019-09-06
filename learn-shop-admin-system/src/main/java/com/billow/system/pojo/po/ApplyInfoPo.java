@@ -1,7 +1,6 @@
 package com.billow.system.pojo.po;
 
-import com.billow.base.workflow.vo.Page;
-import com.billow.common.base.pojo.BasePo;
+import com.billow.base.workflow.vo.CustomPage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,7 +34,7 @@ import java.util.Date;
 @Entity
 @Table(name = "sys_apply_info")
 @EntityListeners(AuditingEntityListener.class)
-public class ApplyInfoPo extends Page<ApplyInfoPo> implements Serializable {
+public class ApplyInfoPo extends CustomPage<ApplyInfoPo> implements Serializable {
 
     @ApiModelProperty("主键id")
     @Id

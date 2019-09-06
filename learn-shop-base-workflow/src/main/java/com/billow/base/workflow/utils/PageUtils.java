@@ -1,8 +1,6 @@
 package com.billow.base.workflow.utils;
 
-import com.billow.base.workflow.vo.Page;
-import com.billow.base.workflow.vo.ProcessDefinitionVo;
-import org.activiti.engine.repository.ProcessDefinition;
+import com.billow.base.workflow.vo.CustomPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,9 +29,9 @@ public class PageUtils {
      * @author LiuYongTao
      * @date 2019/8/28 8:44
      */
-    public static <T, E> Page<E> converListToPage(int pageSize, long count, List<T> souList, Class<E> clazz) {
+    public static <T, E> CustomPage<E> converListToPage(int pageSize, long count, List<T> souList, Class<E> clazz) {
 
-        Page<E> page = new Page<>(pageSize, count);
+        CustomPage<E> page = new CustomPage<>(pageSize, count);
         if (souList == null) {
             return page;
         }

@@ -2,7 +2,7 @@ package com.billow.system.api;
 
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
-import com.billow.base.workflow.vo.Page;
+import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,8 +34,8 @@ public class ActProcDefApi {
 
     @ApiOperation(value = "查询流程定义列表")
     @PostMapping("/findProcDefList")
-    public Page<ProcessDefinitionVo> findProcDefList(@RequestBody ProcessDefinitionVo vo) {
-        Page<ProcessDefinitionVo> definitionPage = workFlowQuery.queryProcessDefinition(vo, vo.getOffset(), vo.getPageSize());
+    public CustomPage<ProcessDefinitionVo> findProcDefList(@RequestBody ProcessDefinitionVo vo) {
+        CustomPage<ProcessDefinitionVo> definitionPage = workFlowQuery.queryProcessDefinition(vo, vo.getOffset(), vo.getPageSize());
         return definitionPage;
     }
 

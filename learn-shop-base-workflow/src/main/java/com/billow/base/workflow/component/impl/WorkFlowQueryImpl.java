@@ -3,8 +3,8 @@ package com.billow.base.workflow.component.impl;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.diagram.ActUtils;
 import com.billow.base.workflow.utils.PageUtils;
+import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.DeploymentVo;
-import com.billow.base.workflow.vo.Page;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import com.billow.base.workflow.vo.TaskVo;
 import org.activiti.engine.HistoryService;
@@ -58,7 +58,7 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
-    public Page<DeploymentVo> queryDeployment(DeploymentVo deploymentVo, Integer offset, Integer pageSize) {
+    public CustomPage<DeploymentVo> queryDeployment(DeploymentVo deploymentVo, Integer offset, Integer pageSize) {
         DeploymentQuery query = repositoryService.createDeploymentQuery();
         this.genDeploymentCondition(deploymentVo, query);
         List<Deployment> list = query.listPage(offset, pageSize);
@@ -105,7 +105,7 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
-    public Page<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo entity, Integer offset, Integer pageSize) {
+    public CustomPage<ProcessDefinitionVo> queryProcessDefinition(ProcessDefinitionVo entity, Integer offset, Integer pageSize) {
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
         // 构建查询条件
         this.genProcessDefCondition(entity, query);
@@ -182,7 +182,7 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     }
 
     @Override
-    public Page<TaskVo> queryTaskList(TaskVo taskVo, Integer offset, Integer pageSize) {
+    public CustomPage<TaskVo> queryTaskList(TaskVo taskVo, Integer offset, Integer pageSize) {
         TaskQuery query = taskService.createTaskQuery();
         this.genTaskCondition(query, taskVo);
         List<Task> list = query.listPage(offset, pageSize);

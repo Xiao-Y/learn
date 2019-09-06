@@ -9,7 +9,7 @@ import java.util.List;
  * @author liuyongtao
  * @create 2019-08-25 12:12
  */
-public class Page<T> {
+public class CustomPage<T> {
 
     public static final Integer PAGE_SIZE = 10; // 每页要显示的记录数
     public static final Integer PAGE_NO = 0; // 当前页号
@@ -28,7 +28,7 @@ public class Page<T> {
     // 分页数据
     private List<T> content = new ArrayList<>();
 
-    public Page() {
+    public CustomPage() {
     }
 
     /**
@@ -39,7 +39,7 @@ public class Page<T> {
      * @author billow
      * @date 2019/8/25 12:29
      */
-    public Page(Integer pageSize, long totalElements) {
+    public CustomPage(Integer pageSize, long totalElements) {
         this(pageSize, totalElements, null);
     }
 
@@ -52,7 +52,7 @@ public class Page<T> {
      * @author billow
      * @date 2019/8/25 12:29
      */
-    public Page(Integer pageSize, long totalElements, List<T> content) {
+    public CustomPage(Integer pageSize, long totalElements, List<T> content) {
         this.pageSize = pageSize;
         this.totalElements = totalElements;
         this.content = content;
@@ -65,7 +65,7 @@ public class Page<T> {
         return totalElements;
     }
 
-    public Page<T> setTotalElements(long totalElements) {
+    public CustomPage<T> setTotalElements(long totalElements) {
         this.totalElements = totalElements;
         return this;
     }
@@ -74,7 +74,7 @@ public class Page<T> {
         return totalPages;
     }
 
-    public Page<T> setTotalPages(long totalPages) {
+    public CustomPage<T> setTotalPages(long totalPages) {
         this.totalPages = totalPages;
         return this;
     }
@@ -83,7 +83,7 @@ public class Page<T> {
         return content;
     }
 
-    public Page<T> setContent(List<T> content) {
+    public CustomPage<T> setContent(List<T> content) {
         this.content = content;
         return this;
     }
@@ -92,7 +92,7 @@ public class Page<T> {
         return pageSize;
     }
 
-    public Page<T> setPageSize(Integer pageSize) {
+    public CustomPage<T> setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
         this.offset = this.pageNo * this.pageSize;
         return this;
@@ -102,7 +102,7 @@ public class Page<T> {
         return pageNo;
     }
 
-    public Page<T> setPageNo(Integer pageNo) {
+    public CustomPage<T> setPageNo(Integer pageNo) {
         this.pageNo = pageNo - 1;
         this.offset = this.pageNo * this.pageSize;
         return this;
@@ -112,7 +112,7 @@ public class Page<T> {
         return offset;
     }
 
-    public Page<T> setOffset(Integer offset) {
+    public CustomPage<T> setOffset(Integer offset) {
         this.offset = offset;
         return this;
     }

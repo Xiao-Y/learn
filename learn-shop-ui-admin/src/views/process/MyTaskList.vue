@@ -20,6 +20,22 @@
                                placeholder="请选择申请类型">
                 </custom-select>
               </el-form-item>
+              <el-form-item label="是否结束" prop="isEnd" width="210">
+                <el-select v-model="queryFilter.isEnd" placeholder="请选择申请类型">
+                  <el-option key="true" label="审批结束" value="true"></el-option>
+                  <el-option key="false" label="进行中" value="false"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="待办项目">
+                <el-select v-model="toDo" @change="changToDo">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-row>
           </el-form>
         </el-collapse-item>
@@ -43,7 +59,7 @@
           </el-table-column>
           <el-table-column label="是否结束" prop="isEnd">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.isEnd" active-text="结束" inactive-text="运行" disabled></el-switch>
+              <el-switch v-model="scope.row.isEnd" active-text="审批结束" inactive-text="进行中" disabled></el-switch>
             </template>
           </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
@@ -78,15 +94,27 @@
               <div style="float:left;">
                 <!--  操作按钮组 -->
                 <el-tooltip class="item" effect="dark" content="处理" placement="top-start" :open-delay="openDelay"
-                            v-if="scope.row.claimStatus === '0'">
+                            v-if="scope.row.claimStatus === '0' && toDo === 'myTasks'">
                   <el-button @click="onHandle(scope.row,scope.$index)" type="primary" size="mini">
                     <i class="el-icon-service"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="认领" placement="top-start" :open-delay="openDelay"
-                            v-if="scope.row.claimStatus === '1'">
+                            v-if="scope.row.claimStatus === '1' && toDo === 'myTasks'">
                   <el-button @click="onClaim(scope.row,scope.$index)" type="warning" size="mini">
                     <i class="el-icon-thumb"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="查看" placement="top-start" :open-delay="openDelay"
+                            v-if="toDo === 'myStart'">
+                  <el-button @click="onDel(scope.row,scope.$index)" type="danger" size="mini">
+                    <i class="el-icon-delete"></i>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay"
+                            v-if="scope.row.isEnd && toDo === 'myStart'">
+                  <el-button @click="onDel(scope.row,scope.$index)" type="danger" size="mini">
+                    <i class="el-icon-delete"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="查看图片" placement="top-start" :open-delay="openDelay">
@@ -110,13 +138,13 @@
   import {
     LoadDataTaskList,
     ClaimTask,
-  } from "../../api/proc/proceTaskMag";
+    FindApplyPage,
+    DeleteApplyInfoById
+  } from "../../api/proc/applyMag";
   import {
     LoadSysDataDictionary
   } from "../../api/sys/DataDictionaryMag";
-  import {
-    FindApplyPage
-  } from '../../api/proc/common'
+
   // ===== component start
   import CustomSelect from '../../components/common/CustomSelect.vue';
   // import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
@@ -137,17 +165,38 @@
     data() {
       return {
         openDelay: 1500,
+        options: [{
+          value: 'myTasks',
+          label: '我的任务'
+        }, {
+          value: 'myStart',
+          label: '我发起的'
+        }, {
+          value: 'ongoing',
+          label: '进行中的'
+        }],
+        toDo: 'myTasks',// 待办项目,默认为：我的任务列表
         queryFilter: {
           // 查询条件
           taskId: null,
           applyUserCode: null,
           applyType: null,
+          isEnd: null
         },
         tableData: [], // 列表数据源
         applyTypeSelect: [],// 申请类型的下拉数据源
       }
     },
     created() {
+      this.queryFilter.isEnd = this.$route.query.isEnd;
+      if (this.queryFilter.isEnd typeof 'undefined') {
+        this.queryFilter.isEnd = null;
+      }
+
+      var command = this.$route.query.command;
+      if (command) {
+        this.toDo = command;
+      }
       // 加载申请类型的下拉
       LoadSysDataDictionary('applyType').then(res => {
         this.applyTypeSelect = res.resData;
@@ -168,15 +217,21 @@
     methods: {
       // 获取权限列表数据
       loadDataList() {
-        // procMyStartProdeList
-        var path = this.$route.path;
-        console.info("path:", path);
-        LoadDataTaskList(this.queryFilter).then(res => {
-          var data = res.resData;
-          this.tableData = data.content;
-          this.queryFilter.recordCount = data.totalElements;
-          this.queryFilter.totalPages = data.totalPages;
-        });
+        if (this.toDo === 'myStart' || this.toDo === 'ongoing') {
+          MyStartProdeList(this.queryFilter).then(res => {
+            var data = res.resData;
+            this.tableData = data.content;
+            this.queryFilter.recordCount = data.totalElements;
+            this.queryFilter.totalPages = data.totalPages;
+          });
+        } else {
+          LoadDataTaskList(this.queryFilter).then(res => {
+            var data = res.resData;
+            this.tableData = data.content;
+            this.queryFilter.recordCount = data.totalElements;
+            this.queryFilter.totalPages = data.totalPages;
+          });
+        }
       },
       viewExecutionImg(row, index) {
         const {href} = this.$router.resolve({
@@ -212,6 +267,23 @@
             taskId: row.taskId,
           }
         });
+      },
+      onDel(row, index) {
+        var _this = this;
+
+        VueUtils.confirmDel(row.mailCode, () => {
+          DeleteApplyInfoById(row.id).then(res => {
+            _this.tableData.splice(index, 1);
+            _this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          });
+        });
+      },
+      changToDo() {
+        this.queryFilter.pageNo = 1;
+        this.loadDataList();
       }
     }
   }

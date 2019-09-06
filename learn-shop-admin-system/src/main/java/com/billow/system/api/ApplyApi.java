@@ -2,17 +2,19 @@ package com.billow.system.api;
 
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
-import com.billow.base.workflow.vo.Page;
-import com.billow.base.workflow.vo.ProcessInstanceVo;
+import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.TaskVo;
-import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
+import com.billow.system.pojo.vo.LeaveVo;
 import com.billow.system.service.ApplyInfoService;
+import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,16 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * 工作流任务API
+ * 申请操作
  *
  * @author liuyongtao
- * @create 2019-08-24 15:52
+ * @create 2019-09-06 11:22
  */
 @Slf4j
 @RestController
-@RequestMapping("/actTaskApi")
-@Api(value = "工作流任务API")
-public class ActTaskApi {
+@RequestMapping("/applyApi")
+@Api(value = "申请操作API")
+public class ApplyApi {
 
     @Autowired
     private WorkFlowExecute workFlowExecute;
@@ -44,33 +46,12 @@ public class ActTaskApi {
     @Autowired
     private ApplyInfoService applyInfoService;
 
-    /**
-     * 启动流程实例
-     *
-     * @param processType 流程启动类型，id 或者 key(与 pk 对应)
-     * @param pk          processDefinitionId 或者 processDefinitionKey
-     * @param businessKey 业务id
-     * @param variables   启动参数
-     * @return org.activiti.engine.runtime.ProcessInstance
-     * @author billow
-     * @date 2019/8/24 15:46
-     */
-    @ApiOperation(value = "启动流程实例")
-    @PostMapping("/startProcessInstance/{processType}/{pk}/{businessKey}")
-    public ProcessInstanceVo startProcessInstance(@PathVariable("processType") String processType,
-                                                  @PathVariable("pk") String pk,
-                                                  @PathVariable("businessKey") String businessKey,
-                                                  @RequestBody Map<String, Object> variables) {
-        String currentUserCode = userTools.getCurrentUserCode();
-        return workFlowExecute.startProcessInstance(currentUserCode, processType, pk, businessKey, variables);
-    }
-
     @ApiOperation(value = "查询个人任务列表")
     @PostMapping("/queryMyTaskList")
-    public Page queryMyTaskList(@RequestBody ApplyInfoVo applyInfoVo) {
+    public CustomPage queryMyTaskList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
         applyInfoVo.setAssignee(currentUserCode);
-        Page applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getOffset(), applyInfoVo.getPageSize());
+        CustomPage applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getOffset(), applyInfoVo.getPageSize());
         return applyInfoVoPage;
     }
 
@@ -89,7 +70,7 @@ public class ActTaskApi {
     public Page myStartProdeList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
         applyInfoVo.setAssignee(currentUserCode);
-        Page applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getOffset(), applyInfoVo.getPageSize());
+        Page applyInfoVoPage = applyInfoService.myStartProdeList(applyInfoVo);
         return applyInfoVoPage;
     }
 
@@ -101,9 +82,9 @@ public class ActTaskApi {
         return count;
     }
 
-    @ApiOperation(value = "审核中的的流程（运行中的）")
-    @GetMapping("/auditProgressProdeCount")
-    public long auditProgressProdeCount() {
+    @ApiOperation(value = "运行中的的流程")
+    @GetMapping("/ongoingCount")
+    public long ongoingCount() {
         String currentUserCode = userTools.getCurrentUserCode();
         long count = workFlowQuery.queryMyStartProdeActiveCount(currentUserCode);
         return count;
@@ -129,17 +110,30 @@ public class ActTaskApi {
 //        return taskVos;
 //    }
 
-    @ApiOperation(value = "提交任务")
-    @PostMapping("/commitProcess/{taskId}")
-    public void commitProcess(@PathVariable("taskId") String taskId,
-                              @RequestBody Map<String, Object> variables) {
-        workFlowExecute.commitProcess(taskId, variables);
-    }
-
     @ApiOperation(value = "查看活动的流程图（显示运行轨迹）")
     @GetMapping("/viewExecutionImgById/{executionId}")
     public void viewDeployImgById(@PathVariable String executionId, HttpServletResponse response) throws Exception {
         workFlowQuery.genActiveProccessImage(executionId, response);
+    }
+
+    @ApiOperation(value = "删除已经结束的申请")
+    @DeleteMapping("/deleteApplyInfoById/{id}")
+    public void submitLeave(@PathVariable Long id) {
+        applyInfoService.deleteApplyInfoById(id);
+    }
+
+    @ApiOperation(value = "提交请假任务")
+    @PostMapping("/commitLeaveProcess/{taskId}")
+    public void commitLeaveProcess(@PathVariable("taskId") String taskId,
+                              @RequestBody Map<String, Object> variables) {
+        workFlowExecute.commitProcess(taskId, variables);
+    }
+
+    @ApiOperation(value = "提交请假申请")
+    @PostMapping("/submitLeave")
+    public void submitLeave(@RequestBody LeaveVo leaveVo) {
+        String operator = userTools.getCurrentUserCode();
+        applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveVo);
     }
 
 }

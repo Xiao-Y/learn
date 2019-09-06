@@ -2,8 +2,8 @@ package com.billow.system.api;
 
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
+import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.DeploymentVo;
-import com.billow.base.workflow.vo.Page;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import com.billow.common.base.BaseApi;
 import com.billow.tools.utlis.StringUtils;
@@ -12,7 +12,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -70,8 +68,8 @@ public class ActDeployApi extends BaseApi {
 
     @ApiOperation(value = "查询流程部署列表")
     @PostMapping("/findProcDeployList")
-    public Page<DeploymentVo> findProcDeployList(@RequestBody DeploymentVo vo) {
-        Page<DeploymentVo> deploymentPage = workFlowQuery.queryDeployment(vo, vo.getOffset(), vo.getPageSize());
+    public CustomPage<DeploymentVo> findProcDeployList(@RequestBody DeploymentVo vo) {
+        CustomPage<DeploymentVo> deploymentPage = workFlowQuery.queryDeployment(vo, vo.getOffset(), vo.getPageSize());
         return deploymentPage;
     }
 

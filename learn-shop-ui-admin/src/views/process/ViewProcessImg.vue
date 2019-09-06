@@ -13,7 +13,7 @@
   import {
     ViewExecutionImgById,
     ViewDeployImgById,
-  } from "../../api/proc/common";
+  } from "../../api/proc/applyMag";
 
   export default {
     name: "procViewProcessImg",

@@ -1,9 +1,10 @@
 package com.billow.system.service;
 
-import com.billow.base.workflow.vo.Page;
-import com.billow.base.workflow.vo.TaskVo;
+import com.billow.base.workflow.vo.CustomPage;
+import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.tools.enums.ApplyTypeEnum;
+import org.springframework.data.domain.Page;
 
 public interface ApplyInfoService<T> {
 
@@ -29,5 +30,25 @@ public interface ApplyInfoService<T> {
      * @author billow
      * @date 2019/9/3 20:03
      */
-    Page queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize);
+    CustomPage queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize);
+
+    /**
+     * 我发起的流程（所有的）
+     *
+     * @param applyInfoVo
+     * @return com.billow.base.workflow.vo.Page
+     * @author LiuYongTao
+     * @date 2019/9/6 9:02
+     */
+    Page<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo);
+
+    /**
+     * 删除已经结束的申请
+     *
+     * @param id
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/9/6 11:39
+     */
+    void deleteApplyInfoById(Long id);
 }

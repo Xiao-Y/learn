@@ -172,7 +172,7 @@ export const asyncRouterMap = [{
   }, {
     name: 'procApplyLeave',
     path: 'procApplyLeave/edit',
-    component: resolve => require(['../views/process/todo/leave.vue'], resolve)
+    component: resolve => require(['../views/process/apply/leave.vue'], resolve)
   }]
 }, {
   path: '/todo',
@@ -181,11 +181,11 @@ export const asyncRouterMap = [{
   children: [{
     name: 'todoApplyIndex',
     path: 'todoApply/index',
-    component: resolve => require(['../views/process/todo/apply.vue'], resolve)
+    component: resolve => require(['../views/process/apply/apply.vue'], resolve)
   },{
     name: 'todoLeaveIndex',
     path: 'todoLeave/index',
-    component: resolve => require(['../views/process/todo/leave.vue'], resolve)
+    component: resolve => require(['../views/process/apply/leave.vue'], resolve)
   }]
 }, {
   name: 'procViewProcessImg',
