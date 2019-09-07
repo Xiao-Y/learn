@@ -161,27 +161,23 @@ export const asyncRouterMap = [{
     name: 'procProcDefListIndex',
     path: 'procDefList/index',
     component: resolve => require(['../views/process/ProcDefList.vue'], resolve)
-  }, {
-    name: 'procProcMyTaskListIndex',
-    path: 'procMyTaskList/index',
-    component: resolve => require(['../views/process/MyTaskList.vue'], resolve)
-  }, {
-    name: 'procApplyLeave',
-    path: 'procApplyLeave/edit',
-    component: resolve => require(['../views/process/apply/leave.vue'], resolve)
   }]
 }, {
-  path: '/todo',
-  name: 'todo',
+  path: '/workbench',
+  name: 'workbench',
   component: Home,
   children: [{
-    name: 'todoApplyIndex',
-    path: 'todoApply/index',
-    component: resolve => require(['../views/process/apply/apply.vue'], resolve)
+    name: 'workbenchApplyList',
+    path: 'workbenchApply/list',
+    component: resolve => require(['../views/process/apply/applyList.vue'], resolve)
+  }, {
+    name: 'workbenchApplyInfo',
+    path: 'workbenchApplyInfo/index',
+    component: resolve => require(['../views/process/apply/applyInfo.vue'], resolve)
   },{
-    name: 'todoLeaveIndex',
-    path: 'todoLeave/index',
-    component: resolve => require(['../views/process/apply/leave.vue'], resolve)
+    name: 'workbenchMyTaskListIndex',
+    path: 'workbenchMyTaskList/index',
+    component: resolve => require(['../views/process/MyTaskList.vue'], resolve)
   }]
 }, {
   name: 'procViewProcessImg',

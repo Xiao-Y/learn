@@ -215,7 +215,7 @@
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
           query: {
-            id: row.deploymentId
+            proceImgId: row.deploymentId
           }
         });
         window.open(href, '_blank');

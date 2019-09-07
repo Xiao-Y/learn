@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -281,5 +282,16 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         return runtimeService.createExecutionQuery()
                 .startedBy(startedBy)
                 .count();
+    }
+
+    @Override
+    public ProcessDefinitionVo queryProcessDefinitionByKey(String key) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey(key).
+                        latestVersion().
+                        singleResult();
+        ProcessDefinitionVo vo = new ProcessDefinitionVo();
+        BeanUtils.copyProperties(processDefinition, vo);
+        return vo;
     }
 }

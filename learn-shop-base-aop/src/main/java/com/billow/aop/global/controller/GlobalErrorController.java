@@ -86,8 +86,12 @@ public class GlobalErrorController extends AbstractErrorController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
-//        HttpStatus status = getStatus(request);
-        body.put("resCode", ResCodeEnum.RESCODE_FORBIDDEN);
+        HttpStatus status = getStatus(request);
+        if(HttpStatus.NOT_FOUND.equals(status)){
+            body.put("resCode", ResCodeEnum.RESCODE_NULL_RESULT);
+        }else{
+            body.put("resCode", ResCodeEnum.RESCODE_FORBIDDEN);
+        }
         log.error(JSONObject.toJSONString(body));
         return new ResponseEntity<>(body, HttpStatus.OK);
     }

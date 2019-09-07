@@ -28,3 +28,10 @@ export const SuspendProcess = (processDefinitionId, cascade) => requestUtils.put
  */
 export const ActivateProcess = (processDefinitionId, cascade) => requestUtils.put(baseUrl + '/activateProcess/' + processDefinitionId + '/' + cascade);
 
+/**
+ * 通过 key 查询到最新的一个流程定义
+ * @param key
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const FindDefByKey = key => requestUtils.get(baseUrl + '/findDefByKey/' + key);

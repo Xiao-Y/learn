@@ -1,70 +1,61 @@
 <template>
   <div>
-    <el-form ref="leaveInfo" :model="leaveInfo" :rules="rulesForm" label-width="100px" size="mini"
-             :inline-message="true">
-      <el-form-item label="开始时间" prop="startDate">
-        <template slot-scope="scope">
-          <el-col :span="18">
-            <el-date-picker type="datetime" v-model="leaveInfo.startDate" :disabled="readOnly"></el-date-picker>
-          </el-col>
-        </template>
-      </el-form-item>
-      <el-form-item label="结束时间" prop="endDate">
-        <template slot-scope="scope">
-          <el-col :span="18">
-            <el-date-picker type="datetime" v-model="leaveInfo.endDate" :disabled="readOnly"></el-date-picker>
-          </el-col>
-        </template>
-      </el-form-item>
-      <el-form-item label="原因" prop="reason">
-        <el-col :span="18">
-          <el-input type="textarea" v-model="leaveInfo.reason" :disabled="readOnly"></el-input>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="意见" prop="comment" v-if="!readOnly">
-        <el-col :span="18">
-          <el-input type="textarea" v-model="leaveInfo.comment" :disabled="readOnly"></el-input>
-        </el-col>
-      </el-form-item>
-      <el-form-item size="mini">
-        <el-button type="primary" @click="validSubmit" v-if="!readOnly">提交</el-button>
-        <el-button type="primary" @click="commitProcess(true)" v-if="readOnly">同意</el-button>
-        <el-button type="primary" @click="commitProcess(false)" v-if="readOnly">驳回</el-button>
-        <el-button @click="onReturn" size="mini">返回</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="ms-doc">
+      <h3>请假申请信息</h3>
+      <article>
+        <el-form ref="leaveInfo" :model="leaveInfo" :rules="rulesForm" label-width="100px" size="mini"
+                 :inline-message="true">
+          <el-form-item label="开始时间" prop="startDate">
+            <template slot-scope="scope">
+              <el-col :span="18">
+                <el-date-picker type="datetime" v-model="leaveInfo.startDate" :disabled="readOnly"></el-date-picker>
+              </el-col>
+            </template>
+          </el-form-item>
+          <el-form-item label="结束时间" prop="endDate">
+            <template slot-scope="scope">
+              <el-col :span="18">
+                <el-date-picker type="datetime" v-model="leaveInfo.endDate" :disabled="readOnly"></el-date-picker>
+              </el-col>
+            </template>
+          </el-form-item>
+          <el-form-item label="原因" prop="reason">
+            <el-col :span="18">
+              <el-input type="textarea" v-model="leaveInfo.reason" :disabled="readOnly"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="意见" prop="comment" v-if="readOnly && optionType !== 'view'">
+            <el-col :span="18">
+              <el-input type="textarea" v-model="leaveInfo.comment" :disabled="!readOnly"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item size="mini">
+            <el-button type="primary" @click="validSubmit" v-if="!readOnly">提交</el-button>
+            <el-button type="primary" @click="commitProcess(true)" v-if="readOnly && optionType !== 'view'">同意
+            </el-button>
+            <el-button type="primary" @click="commitProcess(false)" v-if="readOnly && optionType !== 'view'">驳回
+            </el-button>
+            <el-button @click="onReturn" size="mini">返回</el-button>
+          </el-form-item>
+        </el-form>
+      </article>
+    </div>
   </div>
 </template>
+
 
 <script>
   import {
     SubmitLeave,
-    FindLeaveById,
+    FindApplyById,
     CommitLeaveProcess
   } from "../../../api/proc/applyMag";
 
   export default {
-    props: {
-      pageReadOnly: {
-        type: Boolean,
-        default: true
-      }
-    },
-    // 双向绑定
-    model: {
-      prop: 'dialogVisible',
-      event: 'change'
-    },
-    dialogVisible: {
-      show: {
-        type: Boolean,
-        default: false
-      }
-    },
     data() {
       return {
         readOnly: true,
-        optionType: 'edit', // 操作类型，edit,add,view
+        optionType: 'add', // 操作类型，edit,add,view
         taskId: null,
         leaveInfo: {
           id: null,
@@ -82,13 +73,13 @@
       };
     },
     created() {
-      this.readOnly = this.pageReadOnly;
+      this.readOnly = Boolean(this.$route.query.pageReadOnly);
       this.optionType = this.$route.query.optionType;
-      if (this.optionType === 'edit') {
+      if (this.optionType === 'edit' || this.optionType === 'view') {
         this.taskId = this.$route.query.taskId;
-        this.leaveInfo.id = this.$route.query.id;
+        this.leaveInfo.id = this.$route.query.applyId;
         if (this.leaveInfo.id) {
-          FindLeaveById(this.leaveInfo.id).then(res => {
+          FindApplyById(this.leaveInfo.id).then(res => {
             if (res.resData && res.resData != '') {
               this.leaveInfo = JSON.parse(res.resData);
             }
@@ -118,8 +109,6 @@
             type: 'success',
             message: '提交成功!'
           });
-          // 关闭窗口
-          this.$emit('change', false);
         });
       },
       // 审批
@@ -143,5 +132,28 @@
 </script>
 
 <style scoped>
+  .ms-doc {
+    width: 70%;
+    margin: 0 auto;
+  }
 
+  .ms-doc h3 {
+    padding: 9px 10px 10px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 17px;
+    background-color: #f5f5f5;
+    border: 1px solid #d8d8d8;
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+  }
+
+  .ms-doc article {
+    padding: 10px;
+    word-wrap: break-word;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
 </style>

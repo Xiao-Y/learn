@@ -244,8 +244,8 @@
         const {href} = this.$router.resolve({
           name: "procViewProcessImg",
           query: {
-            id: row.procInstId,
-            type: 'execution'
+            proceImgId: row.procInstId,
+            proceType: 'execution'
           }
         });
         window.open(href, '_blank');
@@ -263,15 +263,16 @@
       },
       // 处理
       onHandle(row, index) {
-        console.info("applyType:", row.applyType);
-        var routerName = FindApplyPage(row.applyType);
-        console.info("applyType:", routerName);
         this.$router.push({
-          name: routerName,
+          name: 'workbenchApplyInfo',
           query: {
             optionType: 'edit',
-            id: row.id,
+            applyType: row.applyType,
+            pageReadOnly: 1,
+            applyId: row.id,
             taskId: row.taskId,
+            proceType: 'execution',
+            proceImgId: row.procInstId,
           }
         });
       },
@@ -291,7 +292,17 @@
       },
       // 查看详细
       viewDetile(row, index) {
-
+        this.$router.push({
+          name: 'workbenchApplyInfo',
+          query: {
+            optionType: 'view',
+            applyType: row.applyType,
+            pageReadOnly: 1,
+            applyId: row.id,
+            proceType: 'execution',
+            proceImgId: row.procInstId,
+          }
+        });
       },
       changToDo() {
         this.queryFilter.pageNo = 1;

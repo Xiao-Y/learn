@@ -1,5 +1,6 @@
 package com.billow.system.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.CustomPage;
@@ -125,7 +126,7 @@ public class ApplyApi {
     @ApiOperation(value = "提交请假任务")
     @PostMapping("/commitLeaveProcess/{taskId}")
     public void commitLeaveProcess(@PathVariable("taskId") String taskId,
-                              @RequestBody Map<String, Object> variables) {
+                                   @RequestBody Map<String, Object> variables) {
         workFlowExecute.commitProcess(taskId, variables);
     }
 
@@ -136,4 +137,11 @@ public class ApplyApi {
         applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveVo);
     }
 
+    @ApiOperation(value = "根据ID查询申请信息")
+    @GetMapping("/findApplyById/{id}")
+    public String findApplyById(@PathVariable Long id) {
+        ApplyInfoVo applyInfoVo = applyInfoService.findLeaveById(id);
+        String applyData = applyInfoVo.getApplyData();
+        return applyData;
+    }
 }

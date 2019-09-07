@@ -11,6 +11,7 @@ import com.billow.system.feign.AdminUserFeign;
 import com.billow.system.pojo.ex.UserEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
+import com.billow.system.pojo.vo.LeaveVo;
 import com.billow.system.service.ApplyInfoService;
 import com.billow.system.service.StartApplyProcess;
 import com.billow.tools.enums.ApplyTypeEnum;
@@ -178,5 +179,11 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
             throw new RuntimeException("流程未结束不能删除");
         }
         applyInfoDao.delete(id);
+    }
+
+    @Override
+    public ApplyInfoVo findLeaveById(Long id) {
+        ApplyInfoPo infoPo = applyInfoDao.findOne(id);
+        return ConvertUtils.convert(infoPo, ApplyInfoVo.class);
     }
 }

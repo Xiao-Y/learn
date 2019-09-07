@@ -25,12 +25,13 @@
       }
     },
     created() {
-      var id = this.$route.query.id;
+      var id = this.$route.query.proceImgId;
       if (id && id != '' && id != null) {
-        if (this.$route.query.type === 'execution') {
+        if (this.$route.query.proceType === 'execution') {
           this.imgSrc = ViewExecutionImgById(id);
         } else {
-          this.imgSrc = ViewDeployImgById(id);
+          console.info(decodeURI(id));
+          this.imgSrc = ViewDeployImgById(decodeURI(id));
         }
       }
     }

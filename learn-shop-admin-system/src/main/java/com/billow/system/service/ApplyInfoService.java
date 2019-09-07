@@ -3,6 +3,7 @@ package com.billow.system.service;
 import com.billow.base.workflow.vo.CustomPage;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
+import com.billow.system.pojo.vo.LeaveVo;
 import com.billow.tools.enums.ApplyTypeEnum;
 import org.springframework.data.domain.Page;
 
@@ -51,4 +52,14 @@ public interface ApplyInfoService<T> {
      * @date 2019/9/6 11:39
      */
     void deleteApplyInfoById(Long id);
+
+    /**
+     * 根据ID查询申请信息
+     *
+     * @param id
+     * @return com.billow.system.pojo.vo.ApplyInfoVo
+     * @author billow
+     * @date 2019/9/7 12:07
+     */
+    ApplyInfoVo findLeaveById(Long id);
 }

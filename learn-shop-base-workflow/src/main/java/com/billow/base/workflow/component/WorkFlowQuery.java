@@ -157,4 +157,14 @@ public interface WorkFlowQuery {
      * @date 2019/8/31 21:26
      */
     long queryMyStartProdeActiveCount(String startedBy);
+
+    /**
+     * 通过 key 查询到最新的一个流程定义
+     *
+     * @param key
+     * @return com.billow.base.workflow.vo.ProcessDefinitionVo
+     * @author billow
+     * @date 2019/9/7 15:07
+     */
+    ProcessDefinitionVo queryProcessDefinitionByKey(String key);
 }

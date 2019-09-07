@@ -66,14 +66,13 @@
       handleCommand(command) {
         switch (command) {
           case 'apply': // 发申请
-            console.info("apply");
             this.$router.push({
-              name: 'todoApplyIndex'
+              name: 'workbenchApplyList'
             });
             break;
           case 'ongoing': // 进行中的
             this.$router.push({
-              name: 'procProcMyTaskListIndex',
+              name: 'workbenchMyTaskListIndex',
               query: {
                 command: command,
                 isEndStatus: '0'
@@ -82,7 +81,7 @@
             break;
           case 'myTasks': // 我的任务
             this.$router.push({
-              name: 'procProcMyTaskListIndex',
+              name: 'workbenchMyTaskListIndex',
               query: {
                 command: command
               }
@@ -90,7 +89,7 @@
             break;
           case 'myStart': // 我发起的
             this.$router.push({
-              name: 'procProcMyTaskListIndex',
+              name: 'workbenchMyTaskListIndex',
               query: {
                 command: command
               }

@@ -5,7 +5,7 @@ const baseUrl = 'admin-system/applyApi';
 /************************ 申请相关 ****************************/
 // 定义申请页面映射
 const apply = new Map();
-apply.set("leave", "procApplyLeave");
+apply.set("leave", "workbenchApplyLeave");
 
 /**
  * 获取申请页面
@@ -103,4 +103,4 @@ export const SubmitLeave = (leaveInfo) => requestUtils.post(baseUrl + '/submitLe
  * @returns {*|AxiosPromise}
  * @constructor
  */
-export const FindLeaveById = (id) => requestUtils.get(baseUrl + '/findLeaveById/' + id);
+export const FindApplyById = (id) => requestUtils.get(baseUrl + '/findApplyById/' + id);
