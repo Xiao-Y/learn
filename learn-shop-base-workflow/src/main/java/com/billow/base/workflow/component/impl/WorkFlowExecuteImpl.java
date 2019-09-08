@@ -202,6 +202,12 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
         setAssigneeUser(task, preTask.getAssignee());
     }
 
+    @Override
+    public void addComment(String userCode, String procInstId, String taskId, String comment) {
+        identityService.setAuthenticatedUserId(userCode);
+        taskService.addComment(taskId, procInstId, comment);
+    }
+
     /**
      * 新任务设置候选人
      *

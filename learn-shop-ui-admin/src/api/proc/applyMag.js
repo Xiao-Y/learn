@@ -86,11 +86,12 @@ export const LoadDataTaskList = taskInfo => requestUtils.post(baseUrl + '/queryM
 /**
  * 提交任务
  * @param taskInfo
+ * @param procInstId
  * @param taskId
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
-export const CommitLeaveProcess = (taskInfo, taskId) => requestUtils.post(baseUrl + '/commitLeaveProcess/' + taskId, Object.assign(taskInfo));
+export const CommitLeaveProcess = (taskInfo, procInstId, taskId) => requestUtils.post(baseUrl + '/commitLeaveProcess/' + procInstId + '/' + taskId, Object.assign(taskInfo));
 /**
  * 提交请假申请
  * @returns {*|AxiosPromise}
@@ -104,3 +105,11 @@ export const SubmitLeave = (leaveInfo) => requestUtils.post(baseUrl + '/submitLe
  * @constructor
  */
 export const FindApplyById = (id) => requestUtils.get(baseUrl + '/findApplyById/' + id);
+
+/**
+ * 通过流程实例id 查询批注信息
+ * @param procInstId
+ * @returns {*|Promise|Promise<any>}
+ * @constructor
+ */
+export const FindCommentListByProcInstId = procInstId => requestUtils.get(baseUrl + '/findCommentListByProcInstId/' + procInstId);

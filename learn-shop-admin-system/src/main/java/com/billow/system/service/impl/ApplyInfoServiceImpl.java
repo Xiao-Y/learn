@@ -3,15 +3,14 @@ package com.billow.system.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
-import com.billow.base.workflow.utils.PageUtils;
 import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import com.billow.system.dao.ApplyInfoDao;
 import com.billow.system.feign.AdminUserFeign;
+import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.ex.UserEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
-import com.billow.system.pojo.vo.LeaveVo;
 import com.billow.system.service.ApplyInfoService;
 import com.billow.system.service.StartApplyProcess;
 import com.billow.tools.enums.ApplyTypeEnum;
@@ -185,5 +184,18 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     public ApplyInfoVo findLeaveById(Long id) {
         ApplyInfoPo infoPo = applyInfoDao.findOne(id);
         return ConvertUtils.convert(infoPo, ApplyInfoVo.class);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void commitLeaveProcess(String currentUserCode, String procInstId, String taskId, LeaveEx leaveEx) {
+        // 保存批注信息
+        if (ToolsUtils.isNotEmpty(leaveEx.getComment())) {
+            workFlowExecute.addComment(currentUserCode, procInstId, taskId, leaveEx.getComment());
+        }
+        // 提交任务
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("deptLeaderApprove", leaveEx.getDeptLeaderApprove());
+        workFlowExecute.commitProcess(taskId,variables);
     }
 }

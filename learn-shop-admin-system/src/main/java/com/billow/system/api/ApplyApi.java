@@ -1,12 +1,12 @@
 package com.billow.system.api;
 
-import com.alibaba.fastjson.JSONObject;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
+import com.billow.base.workflow.vo.CommentVo;
 import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.TaskVo;
+import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.vo.ApplyInfoVo;
-import com.billow.system.pojo.vo.LeaveVo;
 import com.billow.system.service.ApplyInfoService;
 import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.utlis.UserTools;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 申请操作
@@ -124,17 +124,19 @@ public class ApplyApi {
     }
 
     @ApiOperation(value = "提交请假任务")
-    @PostMapping("/commitLeaveProcess/{taskId}")
-    public void commitLeaveProcess(@PathVariable("taskId") String taskId,
-                                   @RequestBody Map<String, Object> variables) {
-        workFlowExecute.commitProcess(taskId, variables);
+    @PostMapping("/commitLeaveProcess/{procInstId}/{taskId}")
+    public void commitLeaveProcess(@PathVariable("procInstId") String procInstId,
+                                   @PathVariable("taskId") String taskId,
+                                   @RequestBody LeaveEx leaveEx) {
+        String currentUserCode = userTools.getCurrentUserCode();
+        applyInfoService.commitLeaveProcess(currentUserCode, procInstId, taskId, leaveEx);
     }
 
     @ApiOperation(value = "提交请假申请")
     @PostMapping("/submitLeave")
-    public void submitLeave(@RequestBody LeaveVo leaveVo) {
+    public void submitLeave(@RequestBody LeaveEx leaveEx) {
         String operator = userTools.getCurrentUserCode();
-        applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveVo);
+        applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveEx);
     }
 
     @ApiOperation(value = "根据ID查询申请信息")
@@ -143,5 +145,12 @@ public class ApplyApi {
         ApplyInfoVo applyInfoVo = applyInfoService.findLeaveById(id);
         String applyData = applyInfoVo.getApplyData();
         return applyData;
+    }
+
+    @ApiOperation(value = "通过流程实例id 查询批注信息")
+    @GetMapping("/findCommentListByProcInstId/{procInstId}")
+    public List<CommentVo> findCommentListByProcInstId(@PathVariable("procInstId") String procInstId) {
+        List<CommentVo> commentVos = workFlowQuery.findCommentListByProcInstId(procInstId);
+        return commentVos;
     }
 }

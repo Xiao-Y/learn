@@ -1,5 +1,6 @@
 package com.billow.base.workflow.component;
 
+import com.billow.base.workflow.vo.CommentVo;
 import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.DeploymentVo;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
@@ -167,4 +168,14 @@ public interface WorkFlowQuery {
      * @date 2019/9/7 15:07
      */
     ProcessDefinitionVo queryProcessDefinitionByKey(String key);
+
+    /**
+     * 通过流程实例id 查询批注信息
+     *
+     * @param procInstId
+     * @return java.util.List<com.billow.base.workflow.vo.CommentVo>
+     * @author billow
+     * @date 2019/9/8 11:01
+     */
+    List<CommentVo> findCommentListByProcInstId(String procInstId);
 }

@@ -3,6 +3,7 @@ package com.billow.base.workflow.component.impl;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.diagram.ActUtils;
 import com.billow.base.workflow.utils.PageUtils;
+import com.billow.base.workflow.vo.CommentVo;
 import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.DeploymentVo;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
@@ -17,6 +18,7 @@ import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
@@ -293,5 +295,16 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
         ProcessDefinitionVo vo = new ProcessDefinitionVo();
         BeanUtils.copyProperties(processDefinition, vo);
         return vo;
+    }
+
+    @Override
+    public List<CommentVo> findCommentListByProcInstId(String procInstId) {
+        List<Comment> comments = taskService.getProcessInstanceComments(procInstId);
+        List<CommentVo> commentVos = comments.stream().map(m -> {
+            CommentVo vo = new CommentVo();
+            BeanUtils.copyProperties(m, vo);
+            return vo;
+        }).collect(Collectors.toList());
+        return commentVos;
     }
 }

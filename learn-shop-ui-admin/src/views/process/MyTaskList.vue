@@ -271,8 +271,11 @@
             pageReadOnly: 1,
             applyId: row.id,
             taskId: row.taskId,
+            // 流程图使用
             proceType: 'execution',
             proceImgId: row.procInstId,
+            // 批注使用
+            procInstId: row.procInstId,
           }
         });
       },

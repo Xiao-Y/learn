@@ -177,4 +177,17 @@ public interface WorkFlowExecute {
      */
     void rollBackTask(String taskId, String userId, String reason, String groupId, int backNum) throws
             Exception;
+
+    /**
+     * 保存批注信息
+     *
+     * @param userCode   批注人
+     * @param procInstId 流程实例id
+     * @param taskId     任务id
+     * @param comment    批注信息
+     * @return void
+     * @author billow
+     * @date 2019/9/8 10:45
+     */
+    void addComment(String userCode, String procInstId, String taskId, String comment);
 }

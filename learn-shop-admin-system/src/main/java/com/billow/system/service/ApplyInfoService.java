@@ -1,9 +1,9 @@
 package com.billow.system.service;
 
 import com.billow.base.workflow.vo.CustomPage;
+import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
-import com.billow.system.pojo.vo.LeaveVo;
 import com.billow.tools.enums.ApplyTypeEnum;
 import org.springframework.data.domain.Page;
 
@@ -62,4 +62,16 @@ public interface ApplyInfoService<T> {
      * @date 2019/9/7 12:07
      */
     ApplyInfoVo findLeaveById(Long id);
+
+    /**
+     * 提交请假任务
+     *
+     * @param currentUserCode
+     * @param taskId
+     * @param leaveEx
+     * @return void
+     * @author billow
+     * @date 2019/9/8 10:30
+     */
+    void commitLeaveProcess(String currentUserCode, String procInstId, String taskId, LeaveEx leaveEx);
 }

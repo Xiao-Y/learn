@@ -31,9 +31,9 @@
           </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="validSubmit" v-if="!readOnly">提交</el-button>
-            <el-button type="primary" @click="commitProcess(true)" v-if="readOnly && optionType !== 'view'">同意
+            <el-button type="primary" @click="commitProcess('true')" v-if="readOnly && optionType !== 'view'">同意
             </el-button>
-            <el-button type="primary" @click="commitProcess(false)" v-if="readOnly && optionType !== 'view'">驳回
+            <el-button type="primary" @click="commitProcess('false')" v-if="readOnly && optionType !== 'view'">驳回
             </el-button>
             <el-button @click="onReturn" size="mini">返回</el-button>
           </el-form-item>
@@ -63,6 +63,8 @@
           endDate: null,
           reason: '',
           comment: '',
+          deptLeaderApprove: false,
+          procInstId: '',
         },
         rulesForm: {
           startDate: [{required: true, message: '请输入请假开始时间', trigger: 'blur'}],
@@ -78,10 +80,11 @@
       if (this.optionType === 'edit' || this.optionType === 'view') {
         this.taskId = this.$route.query.taskId;
         this.leaveInfo.id = this.$route.query.applyId;
+        this.leaveInfo.procInstId = this.$route.query.procInstId;
         if (this.leaveInfo.id) {
           FindApplyById(this.leaveInfo.id).then(res => {
             if (res.resData && res.resData != '') {
-              this.leaveInfo = JSON.parse(res.resData);
+              Object.assign(this.leaveInfo,JSON.parse(res.resData));
             }
           })
         }
@@ -114,11 +117,8 @@
       // 审批
       commitProcess(flag) {
         var _this = this;
-        console.info("flag:", flag);
-        var taskInfo = {
-          deptLeaderApprove: flag
-        };
-        CommitLeaveProcess(taskInfo, _this.taskId).then(res => {
+        this.leaveInfo.deptLeaderApprove = flag;
+        CommitLeaveProcess(_this.leaveInfo, _this.leaveInfo.procInstId, _this.taskId).then(res => {
           _this.$message({
             type: 'success',
             message: '提交成功!'
