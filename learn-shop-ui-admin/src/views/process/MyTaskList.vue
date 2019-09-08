@@ -16,12 +16,13 @@
               </el-form-item>
               <el-form-item label="申请类型" prop="applyType" width="210">
                 <custom-select v-model="queryFilter.applyType"
+                               :clearable="true"
                                :datasource="applyTypeSelect"
                                placeholder="请选择申请类型">
                 </custom-select>
               </el-form-item>
               <el-form-item label="是否结束" prop="isEndStatus" width="210">
-                <el-select v-model="queryFilter.isEndStatus" placeholder="请选择申请类型">
+                <el-select v-model="queryFilter.isEndStatus" clearable placeholder="请选择申请类型">
                   <el-option key="1" label="审批结束" value="1"></el-option>
                   <el-option key="0" label="进行中" value="0"></el-option>
                 </el-select>
@@ -50,7 +51,7 @@
           <el-table-column label="申请人" prop="applyUserCode"></el-table-column>
           <el-table-column label="申请类型" prop="applyType" width="210">
             <template slot-scope="scope">
-              <custom-select v-model="scope.row.applyType"
+              <custom-select v-model="scope.row.applyType" clearable
                              :datasource="applyTypeSelect"
                              :value-key="scope.row.applyType"
                              disabled placeholder="请选择申请类型">
@@ -64,7 +65,7 @@
           </el-table-column>
           <el-table-column label="是否挂起" prop="suspensionStatus">
             <template slot-scope="scope">
-              {{scope.row.suspensionStatus === 1 ? '活动' : '挂起'}}
+              {{scope.row.suspensionStatus | suspensionStatusFilter}}
             </template>
           </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
@@ -111,7 +112,7 @@
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="查看详细" placement="top-start" :open-delay="openDelay"
-                            v-if="toDo === 'myStart'">
+                            v-if="toDo === 'myStart' || toDo === 'ongoing'">
                   <el-button @click="viewDetile(scope.row,scope.$index)" type="warning" size="mini">
                     <i class="el-icon-view"></i>
                   </el-button>
@@ -200,27 +201,21 @@
       // 请数据殂
       this.loadDataList();
     },
-    //每次激活时
-    activated() {
-      // 根据key名获取传递回来的参数，data 就是 map
-      this.$bus.once('taskInfo', function (id) {
-        var index = this.tableData.findIndex(f => f.id === id);
-        if (index != -1) { // 更新
-          this.tableData.splice(index, 1);
-        }
-      }.bind(this));
-    },
     methods: {
       // 获取权限列表数据
       loadDataList() {
-        // 从todo过来时，设置参数
-        if (this.$route.query.isEndStatus) {
-          this.queryFilter.isEnd = this.$route.query.isEndStatus === '1';
-          this.queryFilter.isEndStatus = this.$route.query.isEndStatus;
-        }
-
         if (this.$route.query.command) {
           this.toDo = this.$route.query.command;
+        }
+
+        // 从todo过来时，设置参数
+        if (this.toDo === 'ongoing') {
+          this.queryFilter.isEnd = false;
+          this.queryFilter.isEndStatus = '0';
+        }
+
+        if (this.queryFilter.applyType === '') {
+          this.queryFilter.applyType = null;
         }
 
         if (this.toDo === 'myStart' || this.toDo === 'ongoing') {
@@ -304,18 +299,32 @@
             applyId: row.id,
             proceType: 'execution',
             proceImgId: row.procInstId,
+            procInstId: row.procInstId,
           }
         });
       },
       changToDo() {
+        this.queryFilter.isEnd = null;
+        this.queryFilter.isEndStatus = null;
         this.queryFilter.pageNo = 1;
         this.loadDataList();
+      }
+    },
+    filters: {
+      suspensionStatusFilter(value) {
+        var statusName = ''
+        if (value === 1) {
+          statusName = '活动';
+        } else if (value === 2) {
+          statusName = '挂起'
+        }
+        return statusName;
       }
     },
     watch: {
       $route() {
         // 从todo过来时，设置参数
-        this.toDo = 'myTasks';
+        // this.toDo = 'myTasks';
         this.queryFilter.isEnd = null;
         this.queryFilter.isEndStatus = null;
         this.loadDataList();

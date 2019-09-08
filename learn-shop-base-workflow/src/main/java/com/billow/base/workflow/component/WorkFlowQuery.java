@@ -178,4 +178,14 @@ public interface WorkFlowQuery {
      * @date 2019/9/8 11:01
      */
     List<CommentVo> findCommentListByProcInstId(String procInstId);
+
+    /**
+     * 是否挂起,0-不存在，1-活动，2-挂起
+     *
+     * @param procInstId
+     * @return int
+     * @author billow
+     * @date 2019/9/8 17:21
+     */
+    int querySuspensionStatus(String procInstId);
 }

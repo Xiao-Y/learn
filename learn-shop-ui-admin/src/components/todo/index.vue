@@ -71,22 +71,7 @@
             });
             break;
           case 'ongoing': // 进行中的
-            this.$router.push({
-              name: 'workbenchMyTaskListIndex',
-              query: {
-                command: command,
-                isEndStatus: '0'
-              }
-            });
-            break;
           case 'myTasks': // 我的任务
-            this.$router.push({
-              name: 'workbenchMyTaskListIndex',
-              query: {
-                command: command
-              }
-            });
-            break;
           case 'myStart': // 我发起的
             this.$router.push({
               name: 'workbenchMyTaskListIndex',

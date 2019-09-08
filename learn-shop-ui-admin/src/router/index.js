@@ -177,6 +177,9 @@ export const asyncRouterMap = [{
   },{
     name: 'workbenchMyTaskListIndex',
     path: 'workbenchMyTaskList/index',
+    meta: {
+      keepAlive: true
+    },
     component: resolve => require(['../views/process/MyTaskList.vue'], resolve)
   }]
 }, {

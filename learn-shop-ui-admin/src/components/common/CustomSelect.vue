@@ -9,6 +9,7 @@
     :multiple="multiple"
     :disabled="disabled"
     :size="size"
+    :clearable="clearable"
     :placeholder="placeholder">
     <el-option
       v-for="item in currentSource"
@@ -83,6 +84,10 @@
       size: {
         type: String,
         default: 'mini'
+      },
+      clearable: {
+        type: Boolean,
+        default: false
       }
     },
     data() {

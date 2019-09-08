@@ -21,6 +21,7 @@ import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -108,7 +109,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         sql.append("r.taskName AS taskName, ");
         // 是否被认领，0-已认领，1-未认领
         sql.append("r.claimStatus AS claimStatus, ");
-        // 是否活动，1-活动，2挂起
+        // 是否活动，1-活动，2-挂起
         sql.append("r.suspensionStatus AS suspensionStatus, ");
         sql.append("r.id AS id, ");
 //        sql.append("r.apply_data as applyData, ");
@@ -164,11 +165,23 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     }
 
     @Override
-    public Page<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo) {
+    public Page<ApplyInfoVo> myStartProdeList(ApplyInfoVo applyInfoVo) {
         ApplyInfoPo applyInfoPo = ConvertUtils.convert(applyInfoVo, ApplyInfoPo.class);
         Pageable pageable = new PageRequest(applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
-        Page<ApplyInfoPo> page = applyInfoDao.findAll(Example.of(applyInfoPo), pageable);
+        Page<ApplyInfoVo> page = applyInfoDao.findAll(Example.of(applyInfoPo), pageable).map(this::applyInfoPoToVo);
         return page;
+    }
+
+    private ApplyInfoVo applyInfoPoToVo(ApplyInfoPo applyInfoPo) {
+        ApplyInfoVo vo = new ApplyInfoVo();
+        BeanUtils.copyProperties(applyInfoPo, vo);
+        if (vo.getIsEnd()) {
+            return vo;
+        }
+        String procInstId = vo.getProcInstId();
+        int status = workFlowQuery.querySuspensionStatus(procInstId);
+        vo.setSuspensionStatus(status);
+        return vo;
     }
 
     @Override
@@ -196,6 +209,6 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         // 提交任务
         Map<String, Object> variables = new HashMap<>();
         variables.put("deptLeaderApprove", leaveEx.getDeptLeaderApprove());
-        workFlowExecute.commitProcess(taskId,variables);
+        workFlowExecute.commitProcess(taskId, variables);
     }
 }

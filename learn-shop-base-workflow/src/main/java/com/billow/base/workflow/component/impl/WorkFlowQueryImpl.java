@@ -17,6 +17,7 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -306,5 +307,19 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
             return vo;
         }).collect(Collectors.toList());
         return commentVos;
+    }
+
+    @Override
+    public int querySuspensionStatus(String procInstId) {
+        List<Execution> execution = runtimeService.createExecutionQuery().processInstanceId(procInstId).list();
+        if (execution == null || execution.size() == 0) {
+            return 0;
+        }
+        for (Execution e : execution) {
+            if (e.isSuspended()) {
+                return 2;
+            }
+        }
+        return 1;
     }
 }

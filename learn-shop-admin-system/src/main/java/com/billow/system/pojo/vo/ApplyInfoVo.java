@@ -19,4 +19,6 @@ public class ApplyInfoVo extends ApplyInfoPo implements Serializable {
     private String taskName;
     private String status;
     private String isEndStatus;
+    // 是否挂起,0-不存在，1-活动，2-挂起
+    private int suspensionStatus;
 }

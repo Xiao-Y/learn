@@ -37,11 +37,11 @@ public interface ApplyInfoService<T> {
      * 我发起的流程（所有的）
      *
      * @param applyInfoVo
-     * @return com.billow.base.workflow.vo.Page
-     * @author LiuYongTao
-     * @date 2019/9/6 9:02
+     * @return org.springframework.data.domain.Page<com.billow.system.pojo.vo.ApplyInfoVo>
+     * @author billow
+     * @date 2019/9/8 17:15
      */
-    Page<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo);
+    Page<ApplyInfoVo> myStartProdeList(ApplyInfoVo applyInfoVo);
 
     /**
      * 删除已经结束的申请
