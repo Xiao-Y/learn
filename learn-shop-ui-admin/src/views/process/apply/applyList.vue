@@ -49,7 +49,6 @@
               // 申请信息
               optionType: 'add',
               applyType: applyType,
-              pageReadOnly: pageReadOnly,
               proceImgId: res.resData.deploymentId
             }
           });

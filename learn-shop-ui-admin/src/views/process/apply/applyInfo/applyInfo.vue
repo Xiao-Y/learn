@@ -4,7 +4,8 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="申请信息" name="first">
           <!-- 请假申请 -->
-          <leave v-if="applyType === 'leave'"></leave>
+          <!--          <leave v-if="applyType === 'leave'"></leave>-->
+          <component v-bind:is="applyType"></component>
         </el-tab-pane>
         <el-tab-pane label="申请流程" name="second" :lazy="true">
           <view-process-img></view-process-img>
@@ -18,14 +19,9 @@
 </template>
 
 <script>
-  import Leave from './leave';
+  import leave from '../leave';
   import CommentList from './commentList';
-
-
-  import ViewProcessImg from '../../../views/process/ViewProcessImg';
-  import {
-    FindApplyPage,
-  } from "../../../api/proc/applyMag";
+  import ViewProcessImg from '../../ViewProcessImg';
 
   export default {
     name: "apply",
@@ -33,7 +29,7 @@
       CommentList,
       ViewProcessImg,
       CommentList,
-      Leave
+      leave
     },
     data() {
       return {

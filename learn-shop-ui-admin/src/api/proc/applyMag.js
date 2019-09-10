@@ -3,19 +3,19 @@ import requestUtils from '../../utils/requestUtils'
 const baseUrl = 'admin-system/applyApi';
 
 /************************ 申请相关 ****************************/
-// 定义申请页面映射
-const apply = new Map();
-apply.set("leave", "workbenchApplyLeave");
-
-/**
- * 获取申请页面
- * @param key
- * @returns {V}
- * @constructor
- */
-export const FindApplyPage = (key) => {
-  return apply.get(key);
-};
+// // 定义申请页面映射
+// const apply = new Map();
+// apply.set("leave", "workbenchApplyLeave");
+//
+// /**
+//  * 获取申请页面
+//  * @param key
+//  * @returns {V}
+//  * @constructor
+//  */
+// export const FindApplyPage = (key) => {
+//   return apply.get(key);
+// };
 
 /**
  * 删除已经结束的申请

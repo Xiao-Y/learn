@@ -144,7 +144,6 @@
   import {
     LoadDataTaskList,
     ClaimTask,
-    FindApplyPage,
     DeleteApplyInfoById,
     MyStartProdeList,
   } from "../../api/proc/applyMag";
@@ -261,9 +260,8 @@
         this.$router.push({
           name: 'workbenchApplyInfo',
           query: {
-            optionType: 'edit',
+            optionType: 'commit',
             applyType: row.applyType,
-            pageReadOnly: 1,
             applyId: row.id,
             taskId: row.taskId,
             // 流程图使用
@@ -277,7 +275,6 @@
       // 删除已经结束的申请信息
       onDel(row, index) {
         var _this = this;
-
         VueUtils.confirmDel(row.mailCode, () => {
           DeleteApplyInfoById(row.id).then(res => {
             _this.tableData.splice(index, 1);
@@ -312,7 +309,7 @@
     },
     filters: {
       suspensionStatusFilter(value) {
-        var statusName = ''
+        var statusName = '';
         if (value === 1) {
           statusName = '活动';
         } else if (value === 2) {

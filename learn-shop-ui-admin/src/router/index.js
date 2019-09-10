@@ -173,7 +173,7 @@ export const asyncRouterMap = [{
   }, {
     name: 'workbenchApplyInfo',
     path: 'workbenchApplyInfo/index',
-    component: resolve => require(['../views/process/apply/applyInfo.vue'], resolve)
+    component: resolve => require(['../views/process/apply/applyInfo/applyInfo.vue'], resolve)
   },{
     name: 'workbenchMyTaskListIndex',
     path: 'workbenchMyTaskList/index',
