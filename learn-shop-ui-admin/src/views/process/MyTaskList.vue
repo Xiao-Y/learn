@@ -252,7 +252,7 @@
             type: 'success',
             message: '认领成功!'
           });
-          row.taskStatus = '0';
+          row.claimStatus = '0';
         });
       },
       // 处理
@@ -292,7 +292,6 @@
           query: {
             optionType: 'view',
             applyType: row.applyType,
-            pageReadOnly: 1,
             applyId: row.id,
             proceType: 'execution',
             proceImgId: row.procInstId,

@@ -2,7 +2,7 @@ package com.billow.tools.enums;
 
 public enum ApplyTypeEnum {
 
-    LEAVE("leave", "process_pool");
+    LEAVE("leave", "leave");
 
     private String applyType;
     private String processKey;

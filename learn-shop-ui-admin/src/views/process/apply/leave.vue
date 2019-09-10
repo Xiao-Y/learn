@@ -9,7 +9,7 @@
             <template slot-scope="scope">
               <el-col :span="18">
                 <el-date-picker type="datetime" v-model="leaveInfo.startDate"
-                                :disabled="startDateReadOnly"></el-date-picker>
+                                :disabled="readOnlyPage.startDateReadOnly"></el-date-picker>
               </el-col>
             </template>
           </el-form-item>
@@ -17,25 +17,26 @@
             <template slot-scope="scope">
               <el-col :span="18">
                 <el-date-picker type="datetime" v-model="leaveInfo.endDate"
-                                :disabled="endDateReadOnly"></el-date-picker>
+                                :disabled="readOnlyPage.endDateReadOnly"></el-date-picker>
               </el-col>
             </template>
           </el-form-item>
           <el-form-item label="原因" prop="reason">
             <el-col :span="18">
-              <el-input type="textarea" v-model="leaveInfo.reason" :disabled="reasonReadOnly"></el-input>
+              <el-input type="textarea" v-model="leaveInfo.reason" :disabled="readOnlyPage.reasonReadOnly"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="意见" prop="comment" v-if="commentShow">
+          <el-form-item label="意见" prop="comment" v-if="readOnlyPage.commentShow">
             <el-col :span="18">
-              <el-input type="textarea" v-model="leaveInfo.comment" :disabled="commentReadOnly"></el-input>
+              <el-input type="textarea" v-model="leaveInfo.comment" :disabled="readOnlyPage.commentReadOnly"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item size="mini">
-            <el-button type="primary" @click="validSubmit" v-if="submitShow">提交</el-button>
-            <el-button type="primary" @click="commitProcess('true')" v-if="agreeShow">同意</el-button>
-            <el-button type="primary" @click="commitProcess('true')" v-if="cancelShow">取消</el-button>
-            <el-button type="primary" @click="commitProcess('false')" v-if="rejectShow">驳回</el-button>
+            <el-button type="primary" @click="validSubmit" v-if="readOnlyPage.submitShow">提交</el-button>
+            <el-button type="primary" @click="validSubmit('reSubmit')" v-if="readOnlyPage.reSubmitShow">重新提交</el-button>
+            <el-button type="primary" @click="commitProcess('0')" v-if="readOnlyPage.cancelShow">取消申请</el-button>
+            <el-button type="primary" @click="commitProcess('1')" v-if="readOnlyPage.agreeShow">同意</el-button>
+            <el-button type="primary" @click="commitProcess('0','reject')" v-if="readOnlyPage.rejectShow">驳回</el-button>
             <el-button @click="$router.back(-1)">返回</el-button>
           </el-form-item>
         </el-form>
@@ -80,9 +81,10 @@
             commentShow: false,
             commentReadOnly: true,
             submitShow: true,
-            agreeShow: false,
             cancelShow: false,
-            rejectShow: true
+            reSubmitShow: false,
+            agreeShow: false,
+            rejectShow: false
           },
           rework: {// 退回的申请
             startDateReadOnly: false,
@@ -91,8 +93,9 @@
             commentShow: false,
             commentReadOnly: true,
             submitShow: true,
-            agreeShow: false,
             cancelShow: true,
+            reSubmitShow: true,
+            agreeShow: false,
             rejectShow: false
           },
           commit: {// 审批的申请
@@ -102,8 +105,9 @@
             commentShow: true,
             commentReadOnly: false,
             submitShow: false,
-            agreeShow: true,
             cancelShow: false,
+            reSubmitShow: false,
+            agreeShow: true,
             rejectShow: true
           },
           view: {// 查看申请
@@ -113,8 +117,9 @@
             commentShow: false,
             commentReadOnly: true,
             submitShow: false,
-            agreeShow: false,
             cancelShow: false,
+            reSubmitShow: false,
+            agreeShow: false,
             rejectShow: false
           }
         }
@@ -123,8 +128,8 @@
     created() {
       var optionType = this.$route.query.optionType;
       // 设置页面读写
-      this.initReadOnlyPage(this.optionType);
-      if (optionType === 'edit' || optionType === 'view') {
+      this.initReadOnlyPage(optionType);
+      if (optionType === 'commit' || optionType === 'view') {
         this.taskId = this.$route.query.taskId;
         this.leaveInfo.id = this.$route.query.applyId;
         this.leaveInfo.procInstId = this.$route.query.procInstId;
@@ -149,10 +154,14 @@
       //   this.$router.back(-1);
       // },
       // 校验提交
-      validSubmit() {
+      validSubmit(submitType) {
         var _this = this;
         this.$refs['leaveInfo'].validate(valid => {
           if (valid) {
+            // 驳回后重新提交
+            if (submitType === 'reSubmit') {
+              this.leaveInfo.approveStatus = '1';
+            }
             _this.onSubmit();
           } else {
             return false;
@@ -166,12 +175,17 @@
             type: 'success',
             message: '提交成功!'
           });
+          _this.$router.back(-1);
         });
       },
       // 审批
-      commitProcess(flag) {
+      commitProcess(flag, commitType) {
         var _this = this;
-        this.leaveInfo.transFlag = flag;
+        this.leaveInfo.moveFlag = flag;
+        // 驳回
+        if (commitType === 'reject') {
+          this.leaveInfo.approveStatus = '2';
+        }
         CommitLeaveProcess(_this.leaveInfo, _this.leaveInfo.procInstId, _this.taskId).then(res => {
           _this.$message({
             type: 'success',

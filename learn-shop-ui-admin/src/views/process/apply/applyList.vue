@@ -11,16 +11,16 @@
       <!--      </el-col>-->
       <el-col :span="4" :offset="0">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="../../../static/img/apply/leave.jpg" class="image" @click="onShow('leave',0)">
+          <img src="../../../static/img/apply/leave.jpg" class="image" @click="onShow('leave')">
           <div style="padding: 15px;">
-            <span @click="onShow('leave',0)">我要请假</span>
+            <span @click="onShow('leave')">我要请假</span>
           </div>
         </el-card>
       </el-col>
       <el-col :span="4" :offset="2">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="../../../static/img/apply/leave.jpg" class="image" @click="onShow('leave',0)">
-          <div style="padding: 15px;" @click="onShow('leave',0)">
+          <img src="../../../static/img/apply/leave.jpg" class="image" @click="onShow('leave')">
+          <div style="padding: 15px;" @click="onShow('leave')">
             <span>我要请假</span>
           </div>
         </el-card>
@@ -41,7 +41,7 @@
       return {};
     },
     methods: {
-      onShow(applyType, pageReadOnly) {
+      onShow(applyType) {
         FindDefByKey(applyType).then(res => {
           this.$router.push({
             name: 'workbenchApplyInfo',

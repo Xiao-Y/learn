@@ -8,6 +8,7 @@ import com.billow.base.workflow.vo.TaskVo;
 import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
+import com.billow.tools.constant.CommonCst;
 import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
@@ -135,8 +136,13 @@ public class ApplyApi {
     @ApiOperation(value = "提交请假申请")
     @PostMapping("/submitLeave")
     public void submitLeave(@RequestBody LeaveEx leaveEx) {
-        String operator = userTools.getCurrentUserCode();
-        applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveEx);
+        String approveStatus = leaveEx.getApproveStatus();
+        if (CommonCst.APPROVE_STATUS_SUBMIT.equals(approveStatus)) {
+            String operator = userTools.getCurrentUserCode();
+            applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveEx);
+        } else if (CommonCst.APPROVE_STATUS_REWORK.equals(approveStatus)) {
+            applyInfoService.submitReWorkApplyInfo(ApplyTypeEnum.LEAVE, leaveEx.getId(), leaveEx.getTaskId(), leaveEx);
+        }
     }
 
     @ApiOperation(value = "根据ID查询申请信息")

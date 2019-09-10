@@ -1,6 +1,5 @@
 package com.billow.system.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.CustomPage;
@@ -67,19 +66,26 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     public void submitApplyInfo(String operator, ApplyTypeEnum applyTypeEnum, Object object) {
         // 保存申请数据
         ApplyInfoPo applyInfo = new ApplyInfoPo();
-        applyInfo.setApplyData(JSONObject.toJSONString(object));
+        String key = applyTypeEnum.getApplyType() + StartApplyProcess.class.getSimpleName();
+        StartApplyProcess startApplyProcess = startApplyProcessMap.get(key);
+
+        if (startApplyProcess != null) {
+            // 构建 applyData 数据
+            String applyData = startApplyProcess.genApplyData(object);
+            applyInfo.setApplyData(applyData);
+        }
         applyInfo.setApplyType(applyTypeEnum.getApplyType());
         applyInfo.setIsEnd(false);
         applyInfo.setApplyUserCode(operator);
         applyInfo.setValidInd(true);
+        // 保存申请信息
         applyInfo = applyInfoDao.save(applyInfo);
+
         // 启动相应流程
-        String key = applyTypeEnum.getApplyType() + StartApplyProcess.class.getSimpleName();
-        StartApplyProcess startApplyProcess = startApplyProcessMap.get(key);
-        Map<String, Object> variables = new HashMap<>();
+        Map<String, Object> variables = null;
         // 启动前操作
         if (startApplyProcess != null) {
-            startApplyProcess.startProcessBefore(variables, object);
+            variables = startApplyProcess.startProcessBefore(object);
         }
         // 启动流程
         ProcessInstanceVo processInstanceVo = workFlowExecute.startProcessInstance(operator,
@@ -96,6 +102,25 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         if (startApplyProcess != null) {
             startApplyProcess.startProcessAfter(applyInfo);
         }
+    }
+
+    @Override
+    public void submitReWorkApplyInfo(ApplyTypeEnum applyTypeEnum, Long id, String taskId, Object object) {
+        String key = applyTypeEnum.getApplyType() + StartApplyProcess.class.getSimpleName();
+        StartApplyProcess startApplyProcess = startApplyProcessMap.get(key);
+
+        Map<String, Object> variables = null;
+        if (startApplyProcess != null) {
+            // 构建 applyData 数据
+            String applyData = startApplyProcess.genApplyData(object);
+            ApplyInfoPo applyInfo = applyInfoDao.findOne(id);
+            applyInfo.setApplyData(applyData);
+            applyInfoDao.save(applyInfo);
+            // 重新提交时，设置工作流运行参数
+            variables = startApplyProcess.submitReWorkBefore(object);
+        }
+        // 执行工作流
+        workFlowExecute.commitProcess(taskId, variables);
     }
 
     @Override
@@ -208,7 +233,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         }
         // 提交任务
         Map<String, Object> variables = new HashMap<>();
-        variables.put("deptLeaderApprove", leaveEx.getDeptLeaderApprove());
+        variables.put("moveFlag", leaveEx.getMoveFlag());
         workFlowExecute.commitProcess(taskId, variables);
     }
 }

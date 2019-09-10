@@ -22,6 +22,19 @@ public interface ApplyInfoService<T> {
     void submitApplyInfo(String operator, ApplyTypeEnum applyType, T t);
 
     /**
+     * 退回后重新提交，如果存在 applyType + StartApplyProcess 的实现类，会执行其中的方法
+     *
+     * @param applyType
+     * @param id        申请信息id
+     * @param taskId    任务id
+     * @param t
+     * @return void
+     * @author billow
+     * @date 2019/9/8 20:15
+     */
+    void submitReWorkApplyInfo(ApplyTypeEnum applyType, Long id, String taskId, T t);
+
+    /**
      * 加载我的任务任务列表（已签收和未签收的）
      *
      * @param applyInfoVo
@@ -74,4 +87,5 @@ public interface ApplyInfoService<T> {
      * @date 2019/9/8 10:30
      */
     void commitLeaveProcess(String currentUserCode, String procInstId, String taskId, LeaveEx leaveEx);
+
 }

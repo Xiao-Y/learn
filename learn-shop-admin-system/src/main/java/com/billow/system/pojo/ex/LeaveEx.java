@@ -12,6 +12,9 @@ import java.util.Date;
 @Data
 public class LeaveEx {
 
+    @ApiModelProperty("申请ID")
+    private Long id;
+
     @ApiModelProperty("请假开始时间")
     private Date startDate;
 
@@ -24,6 +27,12 @@ public class LeaveEx {
     @ApiModelProperty("批注")
     private String comment;
 
-    @ApiModelProperty("经理审核，true-通过，false-驳回")
-    private String deptLeaderApprove;
+    @ApiModelProperty("经理审核，1-否定，2-肯定")
+    private String moveFlag;
+
+    @ApiModelProperty("申请状态，0-提交申请，1-退回")
+    private String approveStatus;
+
+    @ApiModelProperty("任务ID")
+    private String taskId;
 }

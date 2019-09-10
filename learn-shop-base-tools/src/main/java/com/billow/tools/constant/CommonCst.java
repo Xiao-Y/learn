@@ -22,4 +22,26 @@ public class CommonCst {
      * @date 2019/8/8 10:15
      */
     public static final String UPLOAD_TYPE_USER_ICON = "userIcon";
+
+    /**
+     * 审核状态，0-提交
+     *
+     * @author billow
+     * @date 2019/9/8 19:49
+     */
+    public static final String APPROVE_STATUS_SUBMIT = "0";
+    /**
+     * 审核状态：1-退回后提交
+     *
+     * @author billow
+     * @date 2019/9/8 19:50
+     */
+    public static final String APPROVE_STATUS_resubmit = "1";
+    /**
+     * 审核状态：2-退回
+     *
+     * @author billow
+     * @date 2019/9/8 19:50
+     */
+    public static final String APPROVE_STATUS_REWORK = "2";
 }

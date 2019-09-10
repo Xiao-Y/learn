@@ -1,11 +1,13 @@
 package com.billow.system.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.service.StartApplyProcess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,10 +21,19 @@ import java.util.Map;
 public class LeaveStartApplyProcess implements StartApplyProcess<LeaveEx> {
 
     @Override
-    public void startProcessBefore(Map<String, Object> variables, LeaveEx leaveEo) {
-        variables.put("startDate", leaveEo.getStartDate());
-        variables.put("endDate", leaveEo.getEndDate());
-        variables.put("reason", leaveEo.getReason());
+    public String genApplyData(LeaveEx leaveEx) {
+        Map<String, Object> variables = this.startProcessBefore(leaveEx);
+        return JSONObject.toJSONString(variables);
+    }
+
+    @Override
+    public Map<String, Object> startProcessBefore(LeaveEx leaveEx) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("startDate", leaveEx.getStartDate());
+        variables.put("endDate", leaveEx.getEndDate());
+        variables.put("reason", leaveEx.getReason());
+        variables.put("approveStatus", leaveEx.getApproveStatus());
+        return variables;
     }
 
     @Override
