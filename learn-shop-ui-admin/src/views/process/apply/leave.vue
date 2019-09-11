@@ -94,7 +94,7 @@
             reasonReadOnly: false,
             commentShow: false,
             commentReadOnly: true,
-            submitShow: true,
+            submitShow: false,
             cancelShow: true,
             reSubmitShow: true,
             agreeShow: false,

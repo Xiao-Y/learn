@@ -7,9 +7,11 @@
           <el-collapse-item title="菜单树" name="1">
             <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
             <div class="sidebar">
-              <el-tree show-checkbox default-expand-all node-key="id" :data="menus" ref="tree2" :expand-on-click-node="false"
-                :highlight-current="true" :props="defaultProps" :check-strictly="true" @node-click="changeCheck" @check="changeCheck"
-                :filter-node-method="filterNode">
+              <el-tree show-checkbox default-expand-all node-key="id" :data="menus" ref="tree2"
+                       :expand-on-click-node="false"
+                       :highlight-current="true" :props="defaultProps" :check-strictly="true" @node-click="changeCheck"
+                       @check="changeCheck"
+                       :filter-node-method="filterNode">
               </el-tree>
             </div>
           </el-collapse-item>
@@ -80,16 +82,18 @@
                   <el-input v-model="parentMenu.creatorCode" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间">
-                  <el-date-picker v-model="parentMenu.createTime" type="date" format="yyyy-MM-dd HH:mm:ss" value-format="timestamp"
-                    readonly style="width: 180px">
+                  <el-date-picker v-model="parentMenu.createTime" type="date" format="yyyy-MM-dd HH:mm:ss"
+                                  value-format="timestamp"
+                                  readonly style="width: 180px">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="更新人">
                   <el-input v-model="parentMenu.updaterCode" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="更新时间">
-                  <el-date-picker v-model="parentMenu.updateTime" type="date" format="yyyy-MM-dd HH:mm:ss" value-format="timestamp"
-                    readonly style="width: 180px">
+                  <el-date-picker v-model="parentMenu.updateTime" type="date" format="yyyy-MM-dd HH:mm:ss"
+                                  value-format="timestamp"
+                                  readonly style="width: 180px">
                   </el-date-picker>
                 </el-form-item>
               </el-form>
@@ -105,7 +109,8 @@
     </el-row>
 
     <!-- 菜单修改/添加dialog start -->
-    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancledialog('editMenu')">
+    <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false"
+               @close="cancledialog('editMenu')">
       <el-form :model="editMenu" :rules="rules22" label-width="130px" ref="editMenu" :inline-message="true">
         <el-form-item label="父菜单标题">
           <el-col :span="18">
@@ -129,7 +134,8 @@
         </el-form-item>
         <el-form-item label="菜单图标" prop="icon">
           <el-col :span="18">
-            <el-input v-model="editMenu.icon"></el-input>
+            <!--            <el-input v-model="editMenu.icon"></el-input>-->
+            <custom-icon v-model="editMenu.icon"></custom-icon>
           </el-col>
         </el-form-item>
         <el-form-item label="有效标志">
@@ -164,7 +170,12 @@
     Message
   } from "element-ui";
 
+  import CustomIcon from '../../components/common/CustomIcon'
+
   export default {
+    components: {
+      CustomIcon
+    },
     data() {
       return {
         filterText: "", //过滤条件
@@ -235,6 +246,17 @@
       },
       //添加修改菜单信息
       initEditMenu() {
+        // Object.assign(this.editMenu,{
+        //   id: "",
+        //   pid: "",
+        //   title: "",
+        //   titleCode: "",
+        //   parentTtile: "",
+        //   sortField: null,
+        //   icon: "",
+        //   validInd: true,
+        //   display: true
+        // });
         this.editMenu = {
           id: "",
           pid: "",
@@ -286,7 +308,7 @@
         }
       },
       //递归查询出所有的节点id
-      getIds: function(nodes, ids) {
+      getIds: function (nodes, ids) {
         nodes.forEach(node => {
           if (node.children && node.children != null) {
             this.getIds(node.children, ids);
@@ -480,7 +502,7 @@
     /*background: #2E363F;*/
   }
 
-  .sidebar>ul {
+  .sidebar > ul {
     height: 100%;
   }
 

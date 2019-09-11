@@ -10,6 +10,7 @@ import { global } from '@/global/global'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueUtils from '@/utils/vueUtils'
+import iconfont from './static/icon/iconfont.css'
 
 import VueBus from 'vue-bus' // 消息总线
 
