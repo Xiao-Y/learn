@@ -51,15 +51,15 @@ public interface StartApplyProcess<T> {
     default void startProcessAfter(ApplyInfoPo applyInfo) {
     }
 
-    /**
-     * 主要用于退回后重新提交时，设置工作流运行参数
-     *
-     * @param t
-     * @return 启动工作流的参数
-     * @author billow
-     * @date 2019/9/8 20:21
-     */
-    default Map<String, Object> submitReWorkBefore(T t) {
-        return new HashMap<>();
-    }
+//    /**
+//     * 主要用于退回后重新提交时，设置工作流运行参数
+//     *
+//     * @param t
+//     * @return 启动工作流的参数
+//     * @author billow
+//     * @date 2019/9/8 20:21
+//     */
+//    default Map<String, Object> submitReWorkBefore(T t) {
+//        return new HashMap<>();
+//    }
 }

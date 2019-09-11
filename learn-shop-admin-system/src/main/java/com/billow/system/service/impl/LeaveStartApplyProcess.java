@@ -32,7 +32,7 @@ public class LeaveStartApplyProcess implements StartApplyProcess<LeaveEx> {
         variables.put("startDate", leaveEx.getStartDate());
         variables.put("endDate", leaveEx.getEndDate());
         variables.put("reason", leaveEx.getReason());
-        variables.put("approveStatus", leaveEx.getApproveStatus());
+        variables.put("submitType", leaveEx.getSubmitType());
         return variables;
     }
 

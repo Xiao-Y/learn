@@ -14,6 +14,7 @@ import com.billow.system.service.ApplyInfoService;
 import com.billow.system.service.StartApplyProcess;
 import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.enums.SubmitTypeEnum;
 import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
@@ -104,24 +105,24 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         }
     }
 
-    @Override
-    public void submitReWorkApplyInfo(ApplyTypeEnum applyTypeEnum, Long id, String taskId, Object object) {
-        String key = applyTypeEnum.getApplyType() + StartApplyProcess.class.getSimpleName();
-        StartApplyProcess startApplyProcess = startApplyProcessMap.get(key);
-
-        Map<String, Object> variables = null;
-        if (startApplyProcess != null) {
-            // 构建 applyData 数据
-            String applyData = startApplyProcess.genApplyData(object);
-            ApplyInfoPo applyInfo = applyInfoDao.findOne(id);
-            applyInfo.setApplyData(applyData);
-            applyInfoDao.save(applyInfo);
-            // 重新提交时，设置工作流运行参数
-            variables = startApplyProcess.submitReWorkBefore(object);
-        }
-        // 执行工作流
-        workFlowExecute.commitProcess(taskId, variables);
-    }
+//    @Override
+//    public void submitReWorkApplyInfo(ApplyTypeEnum applyTypeEnum, Long id, String taskId, Object object) {
+//        String key = applyTypeEnum.getApplyType() + StartApplyProcess.class.getSimpleName();
+//        StartApplyProcess startApplyProcess = startApplyProcessMap.get(key);
+//
+//        Map<String, Object> variables = null;
+//        if (startApplyProcess != null) {
+//            // 构建 applyData 数据
+//            String applyData = startApplyProcess.genApplyData(object);
+//            ApplyInfoPo applyInfo = applyInfoDao.findOne(id);
+//            applyInfo.setApplyData(applyData);
+//            applyInfoDao.save(applyInfo);
+//            // 重新提交时，设置工作流运行参数
+//            variables = startApplyProcess.submitReWorkBefore(object);
+//        }
+//        // 执行工作流
+//        workFlowExecute.commitProcess(taskId, variables);
+//    }
 
     @Override
     public CustomPage queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
@@ -226,14 +227,28 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void commitLeaveProcess(String currentUserCode, String procInstId, String taskId, LeaveEx leaveEx) {
+    public void commitLeaveProcess(ApplyTypeEnum applyTypeEnum, String currentUserCode, String procInstId, String taskId, LeaveEx leaveEx) {
+        String submitType = leaveEx.getSubmitType();
+        SubmitTypeEnum submitTypeEnum = SubmitTypeEnum.getSubmitTypeEnum(submitType);
+        leaveEx.setTransFlag(submitTypeEnum.getTransFlag());
+
+        String key = applyTypeEnum.getApplyType() + StartApplyProcess.class.getSimpleName();
+        StartApplyProcess startApplyProcess = startApplyProcessMap.get(key);
+        if (startApplyProcess != null) {
+            // 构建 applyData 数据
+            String applyData = startApplyProcess.genApplyData(leaveEx);
+            ApplyInfoPo applyInfo = applyInfoDao.findOne(leaveEx.getId());
+            applyInfo.setApplyData(applyData);
+            applyInfoDao.save(applyInfo);
+        }
+
         // 保存批注信息
         if (ToolsUtils.isNotEmpty(leaveEx.getComment())) {
             workFlowExecute.addComment(currentUserCode, procInstId, taskId, leaveEx.getComment());
         }
         // 提交任务
         Map<String, Object> variables = new HashMap<>();
-        variables.put("moveFlag", leaveEx.getMoveFlag());
+        variables.put("transFlag", leaveEx.getTransFlag());
         workFlowExecute.commitProcess(taskId, variables);
     }
 }

@@ -124,25 +124,20 @@ public class ApplyApi {
         applyInfoService.deleteApplyInfoById(id);
     }
 
+    @ApiOperation(value = "提交请假申请")
+    @PostMapping("/submitLeave")
+    public void submitLeave(@RequestBody LeaveEx leaveEx) {
+        String operator = userTools.getCurrentUserCode();
+        applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveEx);
+    }
+
     @ApiOperation(value = "提交请假任务")
     @PostMapping("/commitLeaveProcess/{procInstId}/{taskId}")
     public void commitLeaveProcess(@PathVariable("procInstId") String procInstId,
                                    @PathVariable("taskId") String taskId,
                                    @RequestBody LeaveEx leaveEx) {
         String currentUserCode = userTools.getCurrentUserCode();
-        applyInfoService.commitLeaveProcess(currentUserCode, procInstId, taskId, leaveEx);
-    }
-
-    @ApiOperation(value = "提交请假申请")
-    @PostMapping("/submitLeave")
-    public void submitLeave(@RequestBody LeaveEx leaveEx) {
-        String approveStatus = leaveEx.getApproveStatus();
-        if (CommonCst.APPROVE_STATUS_SUBMIT.equals(approveStatus)) {
-            String operator = userTools.getCurrentUserCode();
-            applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveEx);
-        } else if (CommonCst.APPROVE_STATUS_REWORK.equals(approveStatus)) {
-            applyInfoService.submitReWorkApplyInfo(ApplyTypeEnum.LEAVE, leaveEx.getId(), leaveEx.getTaskId(), leaveEx);
-        }
+        applyInfoService.commitLeaveProcess(ApplyTypeEnum.LEAVE, currentUserCode, procInstId, taskId, leaveEx);
     }
 
     @ApiOperation(value = "根据ID查询申请信息")

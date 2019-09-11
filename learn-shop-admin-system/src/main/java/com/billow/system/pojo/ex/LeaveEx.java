@@ -27,12 +27,15 @@ public class LeaveEx {
     @ApiModelProperty("批注")
     private String comment;
 
-    @ApiModelProperty("经理审核，1-否定，2-肯定")
-    private String moveFlag;
+    @ApiModelProperty("指定流程路线标志")
+    private String transFlag;
 
-    @ApiModelProperty("申请状态，0-提交申请，1-退回")
-    private String approveStatus;
+//    @ApiModelProperty("申请状态，0-提交申请，1-重新提交,2-取消申请，3-同意，4-驳回")
+//    private String approveStatus;
 
-    @ApiModelProperty("任务ID")
-    private String taskId;
+//    @ApiModelProperty("任务ID")
+//    private String taskId;
+
+    @ApiModelProperty("提交类型:submit-提交，reSubmit-重新提交,cancel-取消申请，agree-同意，reject-驳回")
+    private String submitType;
 }

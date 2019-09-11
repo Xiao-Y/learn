@@ -32,11 +32,12 @@
             </el-col>
           </el-form-item>
           <el-form-item size="mini">
-            <el-button type="primary" @click="validSubmit" v-if="readOnlyPage.submitShow">提交</el-button>
-            <el-button type="primary" @click="validSubmit('reSubmit')" v-if="readOnlyPage.reSubmitShow">重新提交</el-button>
-            <el-button type="primary" @click="commitProcess('0')" v-if="readOnlyPage.cancelShow">取消申请</el-button>
-            <el-button type="primary" @click="commitProcess('1')" v-if="readOnlyPage.agreeShow">同意</el-button>
-            <el-button type="primary" @click="commitProcess('0','reject')" v-if="readOnlyPage.rejectShow">驳回</el-button>
+            <el-button type="primary" @click="validSubmit('submit')" v-if="readOnlyPage.submitShow">提交</el-button>
+            <el-button type="primary" @click="commitProcess('reSubmit')" v-if="readOnlyPage.reSubmitShow">重新提交
+            </el-button>
+            <el-button type="primary" @click="commitProcess('cancel')" v-if="readOnlyPage.cancelShow">取消申请</el-button>
+            <el-button type="primary" @click="commitProcess('agree')" v-if="readOnlyPage.agreeShow">同意</el-button>
+            <el-button type="primary" @click="commitProcess('reject')" v-if="readOnlyPage.rejectShow">驳回</el-button>
             <el-button @click="$router.back(-1)">返回</el-button>
           </el-form-item>
         </el-form>
@@ -65,6 +66,7 @@
           comment: '',
           approveStatus: '0',
           procInstId: '',
+          submitType: '' // 提交类型:submit-提交，reSubmit-重新提交,cancel-取消申请，agree-同意，reject-驳回
         },
         rulesForm: {
           startDate: [{required: true, message: '请输入请假开始时间', trigger: 'blur'}],
@@ -137,8 +139,9 @@
           FindApplyById(this.leaveInfo.id).then(res => {
             if (res.resData && res.resData != '') {
               Object.assign(this.leaveInfo, JSON.parse(res.resData));
-              // 退回修改的
-              if (this.leaveInfo.approveStatus === '2') {
+              // 上一次的提交类型
+              if (this.leaveInfo.submitType === 'reject') {
+                // 退回修改的
                 this.initReadOnlyPage('rework');
               }
             }
@@ -150,18 +153,12 @@
       initReadOnlyPage(optionType) {
         Object.assign(this.readOnlyPage, this.readOnlyPageValue[optionType]);
       },
-      // onReturn() {
-      //   this.$router.back(-1);
-      // },
       // 校验提交
       validSubmit(submitType) {
         var _this = this;
         this.$refs['leaveInfo'].validate(valid => {
           if (valid) {
-            // 驳回后重新提交
-            if (submitType === 'reSubmit') {
-              this.leaveInfo.approveStatus = '1';
-            }
+            this.leaveInfo.submitType = submitType;
             _this.onSubmit();
           } else {
             return false;
@@ -179,13 +176,9 @@
         });
       },
       // 审批
-      commitProcess(flag, commitType) {
+      commitProcess(submitType) {
         var _this = this;
-        this.leaveInfo.moveFlag = flag;
-        // 驳回
-        if (commitType === 'reject') {
-          this.leaveInfo.approveStatus = '2';
-        }
+        this.leaveInfo.submitType = submitType;
         CommitLeaveProcess(_this.leaveInfo, _this.leaveInfo.procInstId, _this.taskId).then(res => {
           _this.$message({
             type: 'success',
