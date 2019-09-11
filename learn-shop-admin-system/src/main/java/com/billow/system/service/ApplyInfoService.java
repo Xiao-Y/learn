@@ -79,13 +79,15 @@ public interface ApplyInfoService<T> {
     /**
      * 提交请假任务
      *
-     * @param currentUserCode
-     * @param taskId
+     * @param operator
+     * @param applyTypeEnum
      * @param leaveEx
+     * @param procInstId
+     * @param taskId
      * @return void
      * @author billow
      * @date 2019/9/8 10:30
      */
-    void commitLeaveProcess(ApplyTypeEnum applyTypeEnum, String currentUserCode, String procInstId, String taskId, LeaveEx leaveEx);
+    void commitLeaveProcess(String operator, ApplyTypeEnum applyTypeEnum, LeaveEx leaveEx, String procInstId, String taskId);
 
 }

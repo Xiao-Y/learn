@@ -136,8 +136,8 @@ public class ApplyApi {
     public void commitLeaveProcess(@PathVariable("procInstId") String procInstId,
                                    @PathVariable("taskId") String taskId,
                                    @RequestBody LeaveEx leaveEx) {
-        String currentUserCode = userTools.getCurrentUserCode();
-        applyInfoService.commitLeaveProcess(ApplyTypeEnum.LEAVE, currentUserCode, procInstId, taskId, leaveEx);
+        String operator = userTools.getCurrentUserCode();
+        applyInfoService.commitLeaveProcess(operator, ApplyTypeEnum.LEAVE, leaveEx, procInstId, taskId);
     }
 
     @ApiOperation(value = "根据ID查询申请信息")

@@ -227,7 +227,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void commitLeaveProcess(ApplyTypeEnum applyTypeEnum, String currentUserCode, String procInstId, String taskId, LeaveEx leaveEx) {
+    public void commitLeaveProcess(String operator, ApplyTypeEnum applyTypeEnum, LeaveEx leaveEx, String procInstId, String taskId) {
         String submitType = leaveEx.getSubmitType();
         SubmitTypeEnum submitTypeEnum = SubmitTypeEnum.getSubmitTypeEnum(submitType);
         leaveEx.setTransFlag(submitTypeEnum.getTransFlag());
@@ -244,7 +244,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
 
         // 保存批注信息
         if (ToolsUtils.isNotEmpty(leaveEx.getComment())) {
-            workFlowExecute.addComment(currentUserCode, procInstId, taskId, leaveEx.getComment());
+            workFlowExecute.addComment(operator, procInstId, taskId, leaveEx.getComment());
         }
         // 提交任务
         Map<String, Object> variables = new HashMap<>();
