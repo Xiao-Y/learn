@@ -31,7 +31,7 @@
     MyStartCount,
     OngoingCount,
     QueryAssigneeTaskCount
-  } from '../../api/proc/applyMag'
+  } from '../../../api/proc/applyMag'
 
   export default {
     name: "todoList",

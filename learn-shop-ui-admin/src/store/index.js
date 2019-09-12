@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import app from './modules/app'
+// import app from './modules/app'
 import user from './modules/user'
 import loginHandle from './modules/login'
 import permission from './modules/permission'
@@ -16,7 +16,7 @@ const debug = process.env.NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
   modules: {
-    app,
+    // app,
     user,
     permission,
     loginHandle

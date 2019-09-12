@@ -77,25 +77,25 @@
                 <el-tooltip class="item" effect="dark" content="挂起流程" placement="top-start" :open-delay="openDelay"
                             v-if="!scope.row.suspended">
                   <el-button type="danger" size="mini" @click="handleDef(scope.row,false,false)">
-                    <i class="el-icon-lightning"></i>
+                    <i class="iconfont icon-suspend"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="挂起流程及任务" placement="top-start" :open-delay="openDelay"
                             v-if="!scope.row.suspended">
                   <el-button type="danger" size="mini" @click="handleDef(scope.row,false,true)">
-                    <i class="el-icon-lightning"></i><i class="el-icon-lightning"></i>
+                    <i class="iconfont icon-suspend"></i><i class="iconfont icon-suspend"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="激活流程" placement="top-start" :open-delay="openDelay"
                             v-if="scope.row.suspended && !scope.row.suspendedCascade">
                   <el-button type="primary" size="mini" @click="handleDef(scope.row,true,false)">
-                    <i class="el-icon-sunny"></i>
+                    <i class="iconfont icon-play"></i>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="激活流程及任务" placement="top-start" :open-delay="openDelay"
                             v-if="scope.row.suspended && scope.row.suspendedCascade">
                   <el-button type="primary" size="mini" @click="handleDef(scope.row,true,true)">
-                    <i class="el-icon-sunny"></i><i class="el-icon-sunny"></i>
+                    <i class="iconfont icon-play_fill"></i>
                   </el-button>
                 </el-tooltip>
               </div>

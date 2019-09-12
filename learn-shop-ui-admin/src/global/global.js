@@ -3,6 +3,15 @@ import themeArray from './themeArray'
 // 封装一些全局元素。如全站通用功能函数和http请求等
 
 export const global = {
+
+  /**
+   * 切换语言
+   * @param lang
+   */
+  changeLanguage(lang) {
+    localStorage.setItem('lang', lang);
+  },
+
   /**
    * 切换主题函数
    */

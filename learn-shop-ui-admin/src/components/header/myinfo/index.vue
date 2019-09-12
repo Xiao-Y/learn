@@ -3,7 +3,7 @@
     <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
             <img class="user-logo"
-                 :src="currenUserInfo.iconUrl ? currenUserInfo.iconUrl : require('../../static/img/img.jpg')">
+                 :src="currenUserInfo.iconUrl ? currenUserInfo.iconUrl : require('../../../static/img/img.jpg')">
             {{username}}
           </span>
       <el-dropdown-menu slot="dropdown">
@@ -60,13 +60,13 @@
 <script>
   import {
     getAccessToken
-  } from '../../utils/cookieUtils' // 验权
+  } from '../../../utils/cookieUtils' // 验权
   import {
     GetUserInfo,
     EditPassWord,
     UpdateUserIcon
-  } from '../../api/user/userMag' // 用户相关
-  import UserIconChange from '../../views/user/components/UserIconChange.vue';
+  } from '../../../api/user/userMag' // 用户相关
+  import UserIconChange from '../../../views/user/components/UserIconChange.vue';
 
   export default {
     name: "myinfo",

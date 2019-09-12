@@ -12,10 +12,10 @@
   </div>
 </template>
 <script>
-  import LangSelect from '../langselect/index'
-  import SkinComp from '../skin/index'
-  import MyInfo from '../myinfo/index'
-  import TodoList from '../todo/index'
+  import LangSelect from './langselect/index'
+  import SkinComp from './skin/index'
+  import MyInfo from './myinfo/index'
+  import TodoList from './todo/index'
 
   export default {
     components: {

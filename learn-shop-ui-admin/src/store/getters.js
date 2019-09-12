@@ -1,5 +1,5 @@
 const getters = {
-  language: state => state.app.language,
+  // language: state => state.app.language,
 
   token: state => state.loginHandle.token,
   avatar: state => state.loginHandle.avatar,
