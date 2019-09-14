@@ -27,6 +27,7 @@ public class CustomExecutionListener implements ExecutionListener {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void notify(DelegateExecution execution) {
         String eventName = execution.getEventName();
+        log.info("eventName:{}", eventName);
         // 监听结束事件
         if (ExecutionListener.EVENTNAME_END.equals(eventName)) {
             String businessKey = execution.getProcessInstanceBusinessKey();
