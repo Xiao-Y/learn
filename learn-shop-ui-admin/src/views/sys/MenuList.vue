@@ -52,7 +52,7 @@
                 <el-input v-model="menu.sortField" readonly></el-input>
               </el-form-item>
               <el-form-item label="菜单图标">
-                <el-input v-model="menu.icon" readonly></el-input>
+                <custom-icon v-model="menu.icon"></custom-icon>
               </el-form-item>
               <el-form-item label="有效标志">
                 <el-switch v-model="menu.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
@@ -72,9 +72,6 @@
                 <el-form-item label="菜单CODE">
                   <el-input v-model="parentMenu.menuCode" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="菜单图标">
-                  <el-input v-model="parentMenu.icon" readonly></el-input>
-                </el-form-item>
                 <el-form-item label="有效标志">
                   <el-switch v-model="menu.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
                 </el-form-item>
@@ -83,8 +80,13 @@
                 </el-form-item>
               </el-form>
               <el-form ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
+                <el-form-item label="菜单图标">
+                  <custom-icon v-model="parentMenu.icon" disabled></custom-icon>
+                </el-form-item>
+              </el-form>
+              <el-form ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
                 <el-form-item label="菜单位置">
-                  <el-input v-model="parentMenu.sortField" readonly style="width: 450px"></el-input>
+                  <el-input v-model="parentMenu.sortField" readonly></el-input>
                 </el-form-item>
               </el-form>
               <el-form :inline="true" ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
@@ -109,7 +111,7 @@
               </el-form>
               <el-form ref="parentMenu" label-width="80px" :model="parentMenu" size="mini">
                 <el-form-item label="描述">
-                  <el-input type="textarea" v-model="parentMenu.descritpion" style="width: 450px" readonly></el-input>
+                  <el-input type="textarea" v-model="parentMenu.descritpion" readonly></el-input>
                 </el-form-item>
               </el-form>
             </el-collapse-item>
@@ -120,9 +122,9 @@
 
     <!-- 菜单修改/添加dialog start -->
     <el-dialog title="修改/添加" :visible.sync="dialogFormVisible" :close-on-click-modal="false"
-               @close="cancledialog('editMenu')">
+               @close="cancledialog('editMenu')" v-if="dialogFormVisible">
       <el-form :model="editMenu" :rules="rules22" label-width="130px" ref="editMenu" :inline-message="true">
-        <el-form-item label="父菜单标题">
+        <el-form-item label="父菜单标题" prop="parentTtile">
           <el-col :span="18">
             <el-input v-model="editMenu.parentTtile" readonly></el-input>
           </el-col>
@@ -144,16 +146,15 @@
         </el-form-item>
         <el-form-item label="菜单图标" prop="icon">
           <el-col :span="18">
-            <!--            <el-input v-model="editMenu.icon"></el-input>-->
             <custom-icon v-model="editMenu.icon"></custom-icon>
           </el-col>
         </el-form-item>
-        <el-form-item label="有效标志">
+        <el-form-item label="有效标志" prop="validInd">
           <el-col :span="18">
             <el-switch v-model="editMenu.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-col>
         </el-form-item>
-        <el-form-item label="是否显示">
+        <el-form-item label="是否显示" prop="display">
           <el-col :span="18">
             <el-switch v-model="editMenu.display" active-text="显示" inactive-text="隐藏"></el-switch>
           </el-col>
@@ -257,17 +258,6 @@
       },
       //添加修改菜单信息
       initEditMenu() {
-        // Object.assign(this.editMenu,{
-        //   id: "",
-        //   pid: "",
-        //   title: "",
-        //   titleCode: "",
-        //   parentTtile: "",
-        //   sortField: null,
-        //   icon: "",
-        //   validInd: true,
-        //   display: true
-        // });
         this.editMenu = {
           id: "",
           pid: "",
@@ -288,9 +278,7 @@
       },
       // 当前菜单信息
       changeCheck(data) {
-        //        console.info("data.pid",data.pid);
         this.menu = this.VueUtils.deepClone(data);
-        //        console.info("menu.pid",this.menu.pid);
         this.parentMenusShow = false;
       },
       // 过滤搜索
@@ -303,7 +291,7 @@
         this.initParentMenu();
         var nodes = this.$refs.tree2.getCheckedNodes();
         if (nodes.length != 1) {
-          Message.error("请选择一个菜单");
+          this.$message.error("请选择一个菜单");
           return;
         }
         var pid = nodes[0].pid;
@@ -312,10 +300,10 @@
             this.parentMenu = res.resData;
             this.parentMenusShow = true;
           }).catch(error => {
-            Message.error(error);
+            this.$message.error(error);
           });
         } else {
-          Message.error("菜单为顶级菜单");
+          this.$message.error("菜单为顶级菜单");
         }
       },
       //递归查询出所有的节点id
@@ -332,7 +320,7 @@
         this.optionType = "add";
         var nodes = this.$refs.tree2.getCheckedNodes();
         if (nodes.length > 1) {
-          Message.error("请选择一个菜单");
+          this.$message.error("请选择一个菜单");
           return;
         } else if (nodes.length == 1) {
           this.editMenu.pid = nodes[0].id;
@@ -350,9 +338,8 @@
       editMenuEvent() {
         this.optionType = "edit";
         var nodes = this.$refs.tree2.getCheckedNodes();
-        //        console.info(nodes)
         if (nodes.length != 1) {
-          Message.error("请选择一个菜单");
+          this.$message.error("请选择一个菜单");
           return;
         }
         this.editMenu = this.VueUtils.deepClone(nodes[0]);
@@ -504,7 +491,7 @@
     display: block;
     position: absolute;
     width: 40%;
-    height: 380px;
+    height: 350px;
     left: 0;
     top: 100px;
     bottom: 0;

@@ -4,6 +4,7 @@
     width="540"
     trigger="click"
     @show="reset()"
+    :disabled="disabled"
     popper-class="popper-class">
     <div class="ui-fas">
       <el-input v-model="iconNameTemp" @input.native="filterIcons" suffix-icon="el-icon-search"
@@ -16,7 +17,7 @@
       </ul>
     </div>
     <el-input slot="reference" placeholder="请输入内容" readonly :value="iconNameTemp" style="cursor: pointer;">
-      <template slot="prepend"><i class="iconfont" :class="['icon-' + iconNameTemp]"></i></template>
+      <template slot="append"><i class="iconfont" :class="['icon-' + iconNameTemp]"></i></template>
     </el-input>
   </el-popover>
 </template>
@@ -30,6 +31,10 @@
       event: 'change'
     },
     props: {
+      disabled: {
+        trpe: Boolean,
+        default: false
+      },
       iconName: {
         type: String,
         default: ''
@@ -62,6 +67,11 @@
       reset() {
         this.iconNameTemp = '';
         this.iconList = fontawesome;
+      }
+    },
+    watch: {
+      iconName() {
+        this.iconNameTemp = this.iconName;
       }
     }
   }
