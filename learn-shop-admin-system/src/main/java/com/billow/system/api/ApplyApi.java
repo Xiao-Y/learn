@@ -8,7 +8,6 @@ import com.billow.base.workflow.vo.TaskVo;
 import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
-import com.billow.tools.constant.CommonCst;
 import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
@@ -124,6 +123,21 @@ public class ApplyApi {
         applyInfoService.deleteApplyInfoById(id);
     }
 
+    @ApiOperation(value = "根据ID查询申请信息")
+    @GetMapping("/findApplyById/{id}")
+    public String findApplyById(@PathVariable Long id) {
+        ApplyInfoVo applyInfoVo = applyInfoService.findLeaveById(id);
+        String applyData = applyInfoVo.getApplyData();
+        return applyData;
+    }
+
+    @ApiOperation(value = "通过流程实例id 查询批注信息")
+    @GetMapping("/findCommentListByProcInstId/{procInstId}")
+    public List<CommentVo> findCommentListByProcInstId(@PathVariable("procInstId") String procInstId) {
+        List<CommentVo> commentVos = workFlowQuery.findCommentListByProcInstId(procInstId);
+        return commentVos;
+    }
+
     @ApiOperation(value = "提交请假申请")
     @PostMapping("/submitLeave")
     public void submitLeave(@RequestBody LeaveEx leaveEx) {
@@ -138,20 +152,5 @@ public class ApplyApi {
                                    @RequestBody LeaveEx leaveEx) {
         String operator = userTools.getCurrentUserCode();
         applyInfoService.commitLeaveProcess(operator, ApplyTypeEnum.LEAVE, leaveEx, procInstId, taskId);
-    }
-
-    @ApiOperation(value = "根据ID查询申请信息")
-    @GetMapping("/findApplyById/{id}")
-    public String findApplyById(@PathVariable Long id) {
-        ApplyInfoVo applyInfoVo = applyInfoService.findLeaveById(id);
-        String applyData = applyInfoVo.getApplyData();
-        return applyData;
-    }
-
-    @ApiOperation(value = "通过流程实例id 查询批注信息")
-    @GetMapping("/findCommentListByProcInstId/{procInstId}")
-    public List<CommentVo> findCommentListByProcInstId(@PathVariable("procInstId") String procInstId) {
-        List<CommentVo> commentVos = workFlowQuery.findCommentListByProcInstId(procInstId);
-        return commentVos;
     }
 }
