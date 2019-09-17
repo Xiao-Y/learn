@@ -190,4 +190,15 @@ public interface WorkFlowExecute {
      * @date 2019/9/8 10:45
      */
     void addComment(String userCode, String procInstId, String taskId, String comment);
+
+    /**
+     * 任务跳转
+     *
+     * @param taskId              当前任务id
+     * @param targetFlowElementId 跳转的目标节点id
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/9/17 8:56
+     */
+    void jump(String taskId, String targetFlowElementId);
 }

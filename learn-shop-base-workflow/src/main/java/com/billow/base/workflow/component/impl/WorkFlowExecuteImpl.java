@@ -2,12 +2,17 @@ package com.billow.base.workflow.component.impl;
 
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
+import com.billow.base.workflow.extend.DeleteTaskCmd;
+import com.billow.base.workflow.extend.SetFLowNodeAndGoCmd;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
+import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -54,6 +59,8 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     private HistoryService historyService;
     @Autowired
     private IdentityService identityService;
+    @Autowired
+    private ManagementService managementService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -206,6 +213,23 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     public void addComment(String userCode, String procInstId, String taskId, String comment) {
         identityService.setAuthenticatedUserId(userCode);
         taskService.addComment(taskId, procInstId, comment);
+    }
+
+    @Override
+    public void jump(String taskId, String targetFlowElementId) {
+        // 当前任务
+        Task currentTask = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (currentTask == null) {
+            throw new ActivitiException("当前任务不存在或已被办理完成，回退失败！");
+        }
+        // 获取流程定义
+        Process process = repositoryService.getBpmnModel(currentTask.getProcessDefinitionId()).getMainProcess();
+        // 获取目标节点定义
+        FlowNode targetNode = (FlowNode) process.getFlowElement(targetFlowElementId);
+        // 删除当前运行任务
+        String executionEntityId = managementService.executeCommand(new DeleteTaskCmd(currentTask.getId()));
+        // 流程执行到来源节点
+        managementService.executeCommand(new SetFLowNodeAndGoCmd(targetNode, executionEntityId));
     }
 
     /**
