@@ -1,7 +1,7 @@
 package test;
 
+import com.billow.email.service.MailService;
 import com.billow.system.AdminSystemApp;
-import com.billow.system.service.MailService;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntityImpl;
 import org.activiti.engine.repository.Deployment;

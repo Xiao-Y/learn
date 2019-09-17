@@ -43,6 +43,7 @@
         <module>auth-server</module>
         <module>demo-client3</module>
         <module>learn-shop-base-workflow</module>
+        <module>learn-shop-base-email</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -108,6 +109,11 @@
             <dependency>
                 <groupId>com.billow</groupId>
                 <artifactId>learn-shop-base-workflow</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-email</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

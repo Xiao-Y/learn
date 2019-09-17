@@ -1,9 +1,7 @@
 package com.billow.system.api;
 
-import com.billow.system.pojo.po.MailTemplatePo;
-import com.billow.system.pojo.vo.MailTemplateVo;
-import com.billow.system.pojo.vo.MailTemplateVo;
-import com.billow.system.service.MailTemplateService;
+import com.billow.email.pojo.vo.MailTemplateVo;
+import com.billow.email.service.MailTemplateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
