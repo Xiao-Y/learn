@@ -1,8 +1,10 @@
 package com.billow.email.service;
 
+import freemarker.template.TemplateException;
 import org.springframework.data.domain.Page;
 import com.billow.email.pojo.vo.MailTemplateVo;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -22,7 +24,7 @@ public interface MailTemplateService {
      * @author LiuYongTao
      * @date 2019/8/21 9:29
      */
-    MailTemplateVo genMailContent(String mailCode, Map<String, String> parameter);
+    MailTemplateVo genMailContent(String mailCode, Map<String, String> parameter) throws Exception;
 
     /**
      * 根据条件查询邮件模板信息

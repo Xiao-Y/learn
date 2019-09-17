@@ -2,6 +2,12 @@ package com.billow.email.service.impl;
 
 import com.billow.email.constant.MailCst;
 import com.billow.email.dao.MailTemplateDao;
+import com.billow.email.pojo.po.MailTemplatePo;
+import com.billow.email.pojo.vo.MailTemplateVo;
+import com.billow.email.service.MailTemplateService;
+import com.billow.email.utils.ConvertUtils;
+import com.billow.email.utils.ToolsUtils;
+import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
@@ -13,11 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import com.billow.email.pojo.po.MailTemplatePo;
-import com.billow.email.pojo.vo.MailTemplateVo;
-import com.billow.email.service.MailTemplateService;
-import com.billow.email.utils.ConvertUtils;
-import com.billow.email.utils.ToolsUtils;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,6 +45,10 @@ public class MailTemplateServiceImpl implements MailTemplateService {
 
     @Autowired
     private MailTemplateDao mailTemplateDao;
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
+    @Autowired
+    private TemplateEngine templateEngine;
 
     private static final String SQL_PLACEHOLDER = "#";
     private static final String PRO_PLACEHOLDER = "$";
@@ -62,7 +71,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
      * @date 2019/8/21 8:35
      */
     @Override
-    public MailTemplateVo genMailContent(String mailCode, Map<String, String> parameter) {
+    public MailTemplateVo genMailContent(String mailCode, Map<String, String> parameter) throws Exception {
         if (ToolsUtils.isEmpty(mailCode)) {
             throw new RuntimeException("使用模板邮件时，mailCode不能为空。请去 sys_mail_template 表中配置邮件模板");
         }
@@ -72,35 +81,78 @@ public class MailTemplateServiceImpl implements MailTemplateService {
             throw new RuntimeException("没有查询到对应的邮件模板。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板");
         }
 
-
+        // 邮件类型
+        String mailType = mailTemplatePo.getMailType();
         // 邮件模板
         String mailTemp = mailTemplateVo.getMailTemp();
-        if (ToolsUtils.isEmpty(mailTemp)) {
+        if (ToolsUtils.isEmpty(mailTemp) && !(MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType) || MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType))) {
             throw new RuntimeException("邮件内容为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 mailTemp");
+        }
+
+        // 使用 Thymeleaf 或者 Freemarker 时,需要指定模板路径
+        String templatePath = mailTemplateVo.getTemplatePath();
+        if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType) || MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
+            if (ToolsUtils.isEmpty(templatePath)) {
+                throw new RuntimeException("邮件模板路径为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 templatePath");
+            }
         }
 
         // 数据来源，1-固定邮件，2-SQL查询，3-参数设置,4-混合（2、3都有）
         String dataSources = mailTemplateVo.getDataSources();
-        Map<String, Object> result = null;
+        Map<String, Object> result;
         switch (dataSources) {
             case MailCst.SYS_FC_DATA_SS_FIXED: // 1-固定邮件
-                mailTemplateVo.setMailContent(mailTemp);
-                return mailTemplateVo;
+                break;
             case MailCst.SYS_FC_DATA_SS_SQL: // 2-SQL查询
                 result = runSQLResult(parameter, mailTemplateVo.getRunSql());
-                mailTemplateVo.setMailContent(this.replaceContent(mailTemp, result, SQL_PLACEHOLDER));
-                return mailTemplateVo;
+                if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
+                    Context context = new Context();
+                    context.setVariables(result);
+                    mailTemp = templateEngine.process(templatePath, context);
+                } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
+                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
+                    mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, result);
+                } else {
+                    mailTemp = this.replaceContent(mailTemp, result, SQL_PLACEHOLDER);
+                }
+                break;
             case MailCst.SYS_FC_DATA_SS_PRO: // 3-参数设置
-                mailTemplateVo.setMailContent(this.replaceContent(mailTemp, parameter, PRO_PLACEHOLDER));
-                return mailTemplateVo;
+                if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
+                    Context context = new Context();
+                    context.setVariables(parameter);
+                    mailTemp = templateEngine.process(templatePath, context);
+                } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
+                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
+                    mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, parameter);
+                } else {
+                    mailTemp = this.replaceContent(mailTemp, parameter, PRO_PLACEHOLDER);
+                }
+                break;
             case MailCst.SYS_FC_DATA_SS_MIX: // 4-混合（2、3都有）
-                String content = this.replaceContent(mailTemp, parameter, PRO_PLACEHOLDER);
                 result = this.runSQLResult(parameter, mailTemplateVo.getRunSql());
-                mailTemplateVo.setMailContent(this.replaceContent(content, result, SQL_PLACEHOLDER));
-                return mailTemplateVo;
-            default:
-                return mailTemplateVo;
+                if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
+                    // 合并参数，指定参数优先
+                    result.putAll(parameter);
+                    Context context = new Context();
+                    context.setVariables(result);
+                    mailTemp = templateEngine.process(templatePath, context);
+                } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
+                    // 合并参数，指定参数优先
+                    result.putAll(parameter);
+                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
+                    mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, result);
+                } else {
+                    mailTemp = this.replaceContent(mailTemp, parameter, PRO_PLACEHOLDER);
+                    mailTemp = this.replaceContent(mailTemp, result, SQL_PLACEHOLDER);
+                }
+                break;
         }
+
+        if (ToolsUtils.isEmpty(mailTemp)) {
+            throw new RuntimeException("mailCode:[" + mailCode + "],mailType:[" + mailType + "],dataSources:[" + dataSources + "]。邮件内容为空，请查证!");
+        }
+        mailTemplateVo.setMailContent(mailTemp);
+        return mailTemplateVo;
     }
 
     @Override

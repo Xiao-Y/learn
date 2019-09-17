@@ -59,15 +59,16 @@ public class MailServiceImpl implements MailService {
                     }
                 }
 
-
                 String mailContent = mailTemplateVo.getMailContent();
-                // 邮件类型，1-普通邮件，2-html邮件，3-带附件邮件
+                // 邮件类型，1-普通邮件，2-html邮件，3-带附件邮件,4-FreeMarker模板邮件,5-Thymeleaf模板邮件
                 String mailType = mailTemplateVo.getMailType();
                 switch (mailType) {
                     case MailCst.SYS_FC_DATA_MAIL_COMMON: // 1-普通邮件
                         this.sendSimpleMail(fromEmailTemp, toEmailsTemp, subjectTemp, mailContent);
                         break;
                     case MailCst.SYS_FC_DATA_MAIL_HTML: // 2-html邮件
+                    case MailCst.SYS_FC_DATA_MAIL_FM:   // 4-FreeMarker模板邮件
+                    case MailCst.SYS_FC_DATA_MAIL_THF:  // 5-Thymeleaf模板邮件
                         this.sendHtmlMail(fromEmailTemp, toEmailsTemp, subjectTemp, mailContent);
                         break;
                     case MailCst.SYS_FC_DATA_MAIL_ATT: // 3-带附件邮件

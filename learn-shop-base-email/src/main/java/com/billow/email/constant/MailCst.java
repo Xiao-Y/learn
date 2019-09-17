@@ -41,4 +41,12 @@ public class MailCst {
      * 模块： adminSystem-mailTypeType邮件模板类型，3-带附件邮件
      */
     public static final String SYS_FC_DATA_MAIL_ATT = "3";
+    /**
+     * 模块： adminSystem-mailTypeType邮件模板类型，4-FreeMarker 模板邮件
+     */
+    public static final String SYS_FC_DATA_MAIL_FM = "4";
+    /**
+     * 模块： adminSystem-mailTypeType邮件模板类型，5-Thymeleaf 模板邮件
+     */
+    public static final String SYS_FC_DATA_MAIL_THF = "5";
 }

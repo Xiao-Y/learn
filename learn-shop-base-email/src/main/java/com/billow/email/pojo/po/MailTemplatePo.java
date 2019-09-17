@@ -64,4 +64,7 @@ public class MailTemplatePo extends BasePo implements Serializable {
 
     // 邮件主题
     private String subject;
+
+    // 使用 Thymeleaf 或者 Freemarker 时,需要指定模板路径
+    private String templatePath;
 }
