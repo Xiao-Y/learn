@@ -1,10 +1,8 @@
 package com.billow.email.service;
 
-import freemarker.template.TemplateException;
-import org.springframework.data.domain.Page;
 import com.billow.email.pojo.vo.MailTemplateVo;
+import org.springframework.data.domain.Page;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -18,8 +16,8 @@ public interface MailTemplateService {
     /**
      * 构建邮件类内容
      *
-     * @param mailCode
-     * @param parameter
+     * @param mailCode  模板CODE
+     * @param parameter 模板或者查询参数
      * @return com.billow.system.com.billow.email.pojo.vo.MailTemplateVo
      * @author LiuYongTao
      * @date 2019/8/21 9:29

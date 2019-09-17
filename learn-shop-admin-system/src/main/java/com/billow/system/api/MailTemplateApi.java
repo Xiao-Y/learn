@@ -67,7 +67,7 @@ public class MailTemplateApi {
     @ApiOperation("更新邮件模板信息")
     @PutMapping("/updateMailTemplate")
     public MailTemplateVo updateMailTemplate(@RequestBody MailTemplateVo permissionVo) {
-        mailTemplateService.saveMailTemplate(permissionVo);
+        mailTemplateService.updateMailTemplate(permissionVo);
         return permissionVo;
     }
 
