@@ -67,4 +67,7 @@ public class MailTemplatePo extends BasePo implements Serializable {
 
     // 使用 Thymeleaf 或者 Freemarker 时,需要指定模板路径
     private String templatePath;
+
+    // 使用 Thymeleaf 或者 Freemarker 时，sql 结果集是否单行，true-单行，false-多行
+    private Boolean singleResult;
 }

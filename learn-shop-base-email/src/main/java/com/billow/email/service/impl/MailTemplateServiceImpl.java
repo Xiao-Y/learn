@@ -27,6 +27,9 @@ import org.thymeleaf.context.Context;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -99,15 +102,24 @@ public class MailTemplateServiceImpl implements MailTemplateService {
 
         // 数据来源，1-固定邮件，2-SQL查询，3-参数设置,4-混合（2、3都有）
         String dataSources = mailTemplateVo.getDataSources();
-        Map<String, Object> result;
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> resultList = new ArrayList<>();
         switch (dataSources) {
             case MailCst.SYS_FC_DATA_SS_FIXED: // 1-固定邮件
                 break;
             case MailCst.SYS_FC_DATA_SS_SQL: // 2-SQL查询
-                result = runSQLResult(parameter, mailTemplateVo.getRunSql());
+                if (!mailTemplateVo.getSingleResult()) {
+                    resultList = this.runSQLResultList(parameter, mailTemplateVo.getRunSql());
+                } else {
+                    result = this.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                }
                 if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
                     Context context = new Context();
-                    context.setVariables(result);
+                    if (!mailTemplateVo.getSingleResult()) {
+                        context.setVariable("root", resultList);
+                    } else {
+                        context.setVariables(result);
+                    }
                     mailTemp = templateEngine.process(templatePath, context);
                 } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
                     Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
@@ -129,16 +141,27 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                 }
                 break;
             case MailCst.SYS_FC_DATA_SS_MIX: // 4-混合（2、3都有）
-                result = this.runSQLResult(parameter, mailTemplateVo.getRunSql());
+                if (!mailTemplateVo.getSingleResult()) {
+                    resultList = this.runSQLResultList(parameter, mailTemplateVo.getRunSql());
+                } else {
+                    result = this.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                }
                 if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
-                    // 合并参数，指定参数优先
-                    result.putAll(parameter);
                     Context context = new Context();
-                    context.setVariables(result);
+                    if (!mailTemplateVo.getSingleResult()) {
+                        context.setVariable("root", resultList);
+                    } else {
+                        // 合并参数，指定参数优先
+                        result.putAll(parameter);
+                        context.setVariables(result);
+                    }
                     mailTemp = templateEngine.process(templatePath, context);
                 } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
                     // 合并参数，指定参数优先
                     result.putAll(parameter);
+                    if (!mailTemplateVo.getSingleResult()) {
+                        result.put("root", resultList);
+                    }
                     Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
                     mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, result);
                 } else {
@@ -234,7 +257,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
      * @author LiuYongTao
      * @date 2019/8/21 8:33
      */
-    private Map<String, Object> runSQLResult(Map<String, String> parameter, String runSql) {
+    private Map<String, Object> runSQLSingleResult(Map<String, String> parameter, String runSql) {
         if (ToolsUtils.isEmpty(runSql)) {
             throw new RuntimeException("查询SQL不能为空");
         }
@@ -243,6 +266,26 @@ public class MailTemplateServiceImpl implements MailTemplateService {
         Query nativeQuery = entityManager.createNativeQuery(runSql);
         nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         return (Map<String, Object>) nativeQuery.getSingleResult();
+    }
+
+    /**
+     * 运行sql 得到结果
+     *
+     * @param parameter
+     * @param runSql
+     * @return java.util.Map<java.lang.String, java.lang.Object>
+     * @author LiuYongTao
+     * @date 2019/8/21 8:33
+     */
+    private List<Map<String, Object>> runSQLResultList(Map<String, String> parameter, String runSql) {
+        if (ToolsUtils.isEmpty(runSql)) {
+            throw new RuntimeException("查询SQL不能为空");
+        }
+        // 替换参数
+        runSql = this.replaceContent(runSql, parameter, SQL_PLACEHOLDER);
+        Query nativeQuery = entityManager.createNativeQuery(runSql);
+        nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        return (List<Map<String, Object>>) nativeQuery.getResultList();
     }
 
     /**
