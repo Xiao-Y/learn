@@ -45,7 +45,6 @@ public class MailTemplateServiceImpl implements MailTemplateService {
 
     @PersistenceContext
     private EntityManager entityManager;
-
     @Autowired
     private MailTemplateDao mailTemplateDao;
     @Autowired
@@ -301,7 +300,9 @@ public class MailTemplateServiceImpl implements MailTemplateService {
         // 替换参数
         Set keys = parameter.keySet();
         for (Object key : keys) {
-            if (key == null) continue;
+            if (key == null) {
+                continue;
+            }
             Object value = parameter.get(key);
             String param = rep + "{" + key + "}";
             value = value == null ? "" : value;

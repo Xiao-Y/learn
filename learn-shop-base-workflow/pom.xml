@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>learn-shop-base-aop</name>
+    <name>learn-shop-base-workflow</name>
     <url>http://www.example.com</url>
 
     <properties>

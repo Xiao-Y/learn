@@ -1,10 +1,9 @@
 package com.billow.email.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.billow.email.pojo.po.MailTemplatePo;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MailTemplateDao extends JpaRepository<MailTemplatePo, Long>, JpaSpecificationExecutor<MailTemplatePo> {
+public interface MailTemplateDao extends JpaRepository<MailTemplatePo, Long> {
 
     /**
      * 通过 mailCode 查询出有效的邮件模板
