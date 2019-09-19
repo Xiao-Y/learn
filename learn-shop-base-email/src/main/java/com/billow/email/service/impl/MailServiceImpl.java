@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 @Service
 public class MailServiceImpl implements MailService {
 
-    @Resource(name = "fxbDrawExecutor")
+    @Autowired
     private ExecutorService executorService;
     @Autowired
     private JavaMailSender mailSender;
