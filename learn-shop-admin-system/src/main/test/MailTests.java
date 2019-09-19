@@ -3,10 +3,6 @@ package test;
 import com.billow.email.service.MailService;
 import com.billow.system.AdminSystemApp;
 import com.billow.system.properties.CustomProperties;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntityImpl;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +13,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -47,12 +42,45 @@ public class MailTests {
     }
 
     @Test
-    public void sendTemplateEmail() {
+    public void sendTemplateEmailParamFreeMarker() throws Exception {
         String from = customProperties.getMail().getFrom();
         String to = from;
         String sub = "测试模板";
-        String mailCode = "";
+        String mailCode = "messageParam-FreeMarker";
         Map<String, String> parameter = new HashMap<>();
+        parameter.put("messageCode", "messageParam-FreeMarker");
+        parameter.put("messageStatus", "200");
+        parameter.put("cause", "causecausecause");
         mailService.sendTemplateMail(from, to, sub, mailCode, parameter);
+
+        Thread.sleep(50000);
+    }
+
+    @Test
+    public void sendTemplateEmailSQLFreeMarker() throws Exception {
+        String from = customProperties.getMail().getFrom();
+        String to = from;
+        String sub = "测试模板";
+        String mailCode = "messageSQL-FreeMarker";
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("mailCode", "messageSQL-FreeMarker");
+        mailService.sendTemplateMail(from, to, sub, mailCode, parameter);
+
+        Thread.sleep(50000);
+    }
+
+    @Test
+    public void sendTemplateEmailParamSQLFreeMarker() throws Exception {
+        String from = customProperties.getMail().getFrom();
+        String to = from;
+        String sub = "测试模板";
+        String mailCode = "messageParamSQL-FreeMarker";
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("mailCode", "messageParamSQL-FreeMarker");
+        parameter.put("messageCode", "messageParamSQL");
+        parameter.put("messageStatus", "200");
+        mailService.sendTemplateMail(from, to, sub, mailCode, parameter);
+
+        Thread.sleep(50000);
     }
 }

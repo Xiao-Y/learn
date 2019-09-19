@@ -34,12 +34,10 @@
         <tr>
             <th>MessageCode</th>
             <th>MessageStatus</th>
-            <th>Cause</th>
         </tr>
         <tr>
-            <td>${(params.messageCode)!""}</td>
-            <td>${(params.messageStatus)!""}</td>
-            <td>${(params.cause)!""}</td>
+            <td>${(mailCode)!""}</td>
+            <td>${(templatePath)!""}</td>
         </tr>
     </table>
 </div>

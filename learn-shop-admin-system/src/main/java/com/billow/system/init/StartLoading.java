@@ -21,7 +21,7 @@ public class StartLoading implements InitializingBean {
     @Autowired
     private Map<String, IStartLoading> startLoading;
 
-    @Resource(name = "fxbDrawExecutor")
+    @Autowired
     private ExecutorService executorService;
 
     @Autowired

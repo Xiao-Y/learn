@@ -30,7 +30,7 @@ public class ZuulToMeConsumer {
     @Autowired
     private StartLoading startLoading;
 
-    @javax.annotation.Resource(name = "fxbDrawExecutor")
+    @Autowired
     private ExecutorService executorService;
 
     @RabbitListener(queues = "${config.mq.zuulToSystem.executesqlRoutingKey}")
