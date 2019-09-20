@@ -29,8 +29,8 @@ public class EmailBeanConfig {
      * @author billow
      * @date 2019/9/19 22:11
      */
-    @Bean
-    @ConditionalOnMissingBean(ExecutorService.class)
+    @Bean("emailExecutor")
+    @ConditionalOnMissingBean(name = "emailExecutor")
     public ExecutorService emailExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);

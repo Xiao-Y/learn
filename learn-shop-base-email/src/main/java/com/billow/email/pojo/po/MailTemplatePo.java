@@ -1,9 +1,9 @@
 package com.billow.email.pojo.po;
 
+import com.billow.email.pojo.BasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
-import com.billow.email.pojo.BasePo;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
