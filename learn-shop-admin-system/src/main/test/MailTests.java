@@ -83,4 +83,19 @@ public class MailTests {
 
         Thread.sleep(50000);
     }
+
+    @Test
+    public void sendTemplateEmailParamThymeleaf() throws Exception {
+        String from = customProperties.getMail().getFrom();
+        String to = from;
+        String sub = "测试模板";
+        String mailCode = "messageParam-Thymeleaf";
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("messageCode", "messageParam-Thymeleaf");
+        parameter.put("messageStatus", "200");
+        parameter.put("cause", "causecausecause");
+        mailService.sendTemplateMail(from, to, sub, mailCode, parameter);
+
+        Thread.sleep(50000);
+    }
 }

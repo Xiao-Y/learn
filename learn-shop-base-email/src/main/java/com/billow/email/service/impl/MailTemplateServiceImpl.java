@@ -112,7 +112,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                 } else {
                     result = this.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
                 }
-                if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
+                if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {// Thymeleaf 模板
                     Context context = new Context();
                     if (!mailTemplateVo.getSingleResult()) {
                         context.setVariable("root", resultList);
@@ -120,22 +120,25 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                         context.setVariables(result);
                     }
                     mailTemp = templateEngine.process(templatePath, context);
-                } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
+                } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {// FreeMarker 模板
                     Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
+                    if (!mailTemplateVo.getSingleResult()) {
+                        result.put("root", resultList);
+                    }
                     mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, result);
-                } else {
+                } else {// html 模板
                     mailTemp = this.replaceContent(mailTemp, result, SQL_PLACEHOLDER);
                 }
                 break;
             case MailCst.SYS_FC_DATA_SS_PRO: // 3-参数设置
-                if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
+                if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {// Thymeleaf 模板
                     Context context = new Context();
                     context.setVariables(parameter);
                     mailTemp = templateEngine.process(templatePath, context);
-                } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
+                } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {// FreeMarker 模板
                     Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
                     mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, parameter);
-                } else {
+                } else {// html 模板
                     mailTemp = this.replaceContent(mailTemp, parameter, PRO_PLACEHOLDER);
                 }
                 break;

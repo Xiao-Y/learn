@@ -87,7 +87,7 @@ public class MailServiceImpl implements MailService {
                     this.sendSimpleMail(fromEmailTemp, toEmailsTemp, subjectTemp, mailContent);
             }
         } catch (Exception e) {
-            log.error("模板邮件发送失败：{}", e);
+            log.error("模板邮件发送失败：{}", e.getMessage());
         }
     }
 
