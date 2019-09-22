@@ -42,10 +42,19 @@
               <el-switch v-model="mailTemplateInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
             </el-col>
           </el-form-item>
-          <el-form-item label="运行SQL" prop="runSql"
-                        :required="this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4'">
+          <el-form-item label="运行SQL" prop="runSql" v-if="this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4'" required>
             <el-col :span="18">
               <el-input type="textarea" v-model="mailTemplateInfo.runSql" rows="6"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="单行结果" prop="singleResult" v-if="this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4'" required>
+            <el-col :span="18">
+              <el-switch v-model="mailTemplateInfo.singleResult" active-text="是" inactive-text="否"></el-switch>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="模板名称" prop="templatePath" v-if="this.mailTemplateInfo.mailType == '4' || this.mailTemplateInfo.mailType == '5'" required>
+            <el-col :span="18">
+              <el-input v-model="mailTemplateInfo.templatePath" rows="6"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="收件人邮箱" prop="toEmails">
@@ -60,7 +69,7 @@
                         placeholder="邮件主题可以在发送邮件时指定，并且优先使用指定的主题"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="邮件模板" prop="mailTemp">
+          <el-form-item label="邮件模板" prop="mailTemp" v-if="this.mailTemplateInfo.mailType != '4' && this.mailTemplateInfo.mailType != '5'">
             <el-col :span="18">
               <el-input type="textarea" v-model="mailTemplateInfo.mailTemp" rows="10"></el-input>
             </el-col>
@@ -106,6 +115,8 @@
           mailType: '',
           dataSources: '',
           runSql: '',
+          singleResult: true,
+          templatePath: '',
           mailTemp: '',
           mailMarkdown: '',
           descritpion: '',
@@ -121,6 +132,7 @@
             {validator: this.checkMailCode, trigger: 'blur'}],
           mailTemp: [{required: true, message: '请输入邮件模板内容', trigger: 'blur'}],
           runSql: [{validator: this.validateRunSql, trigger: 'blur'}],
+          templatePath: [{validator: this.validateTemplatePath, trigger: 'blur'}],
           descritpion: [{required: true, message: '请输入邮件模板描述', trigger: 'blur'}],
           toEmails: [{validator: this.validateToEmails, trigger: 'blur'}],
         }
@@ -201,6 +213,13 @@
       validateRunSql(rule, value, callback) {
         if ((value === '' || value === null) && (this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4')) {
           callback(new Error('当数据来源为SQL和混合时，请输入运行SQL'));
+        } else {
+          callback();
+        }
+      },
+      templatePath(rule, value, callback) {
+        if ((value === '' || value === null) && (this.mailTemplateInfo.mailType == '5' || this.mailTemplateInfo.mailType == '4')) {
+          callback(new Error('当使用 Thymeleaf 或者 Freemarker 时，请输入模板名称'));
         } else {
           callback();
         }
