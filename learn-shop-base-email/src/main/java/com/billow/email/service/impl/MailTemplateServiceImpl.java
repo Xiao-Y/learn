@@ -99,6 +99,10 @@ public class MailTemplateServiceImpl implements MailTemplateService {
             }
         }
 
+        if(parameter == null){
+            parameter = new HashMap<>();
+        }
+
         // 数据来源，1-固定邮件，2-SQL查询，3-参数设置,4-混合（2、3都有）
         String dataSources = mailTemplateVo.getDataSources();
         Map<String, Object> result = new HashMap<>();
@@ -263,8 +267,10 @@ public class MailTemplateServiceImpl implements MailTemplateService {
         if (ToolsUtils.isEmpty(runSql)) {
             throw new RuntimeException("查询SQL不能为空");
         }
-        // 替换参数
-        runSql = this.replaceContent(runSql, parameter, SQL_PLACEHOLDER);
+        if (parameter != null && parameter.size() > 0) {
+            // 替换参数
+            runSql = this.replaceContent(runSql, parameter, SQL_PLACEHOLDER);
+        }
         Query nativeQuery = entityManager.createNativeQuery(runSql);
         nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         return (Map<String, Object>) nativeQuery.getSingleResult();
@@ -283,8 +289,10 @@ public class MailTemplateServiceImpl implements MailTemplateService {
         if (ToolsUtils.isEmpty(runSql)) {
             throw new RuntimeException("查询SQL不能为空");
         }
-        // 替换参数
-        runSql = this.replaceContent(runSql, parameter, SQL_PLACEHOLDER);
+        if (parameter != null && parameter.size() > 0) {
+            // 替换参数
+            runSql = this.replaceContent(runSql, parameter, SQL_PLACEHOLDER);
+        }
         Query nativeQuery = entityManager.createNativeQuery(runSql);
         nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         return (List<Map<String, Object>>) nativeQuery.getResultList();

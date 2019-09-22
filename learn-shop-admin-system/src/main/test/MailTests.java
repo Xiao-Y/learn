@@ -41,6 +41,7 @@ public class MailTests {
         mailSender.send(message);
     }
 
+    // 参数模板
     @Test
     public void sendTemplateEmailParamFreeMarker() throws Exception {
         String from = customProperties.getMail().getFrom();
@@ -56,6 +57,7 @@ public class MailTests {
         Thread.sleep(50000);
     }
 
+    // 单选sql 模板
     @Test
     public void sendTemplateEmailSQLFreeMarker() throws Exception {
         String from = customProperties.getMail().getFrom();
@@ -69,6 +71,20 @@ public class MailTests {
         Thread.sleep(50000);
     }
 
+    // 多行sql模板
+    @Test
+    public void sendTemplateEmailSQLFreeMarker2() throws Exception {
+        String from = customProperties.getMail().getFrom();
+        String to = from;
+        String sub = "测试模板2";
+        String mailCode = "messageSQL2-FreeMarker";
+        Map<String, String> parameter = new HashMap<>();
+        mailService.sendTemplateMail(from, to, sub, mailCode, parameter);
+
+        Thread.sleep(50000);
+    }
+
+    // 单行sql 混合模板
     @Test
     public void sendTemplateEmailParamSQLFreeMarker() throws Exception {
         String from = customProperties.getMail().getFrom();
@@ -84,6 +100,23 @@ public class MailTests {
         Thread.sleep(50000);
     }
 
+    // 多行sql 混合模板
+    @Test
+    public void sendTemplateEmailParamSQLFreeMarker2() throws Exception {
+        String from = customProperties.getMail().getFrom();
+        String to = from;
+        String sub = "测试模板";
+        String mailCode = "messageParamSQL2-FreeMarker";
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("mailCode", "messageParamSQL-FreeMarker");
+        parameter.put("messageCode", "messageParamSQL");
+        parameter.put("messageStatus", "200");
+        mailService.sendTemplateMail(from, to, sub, mailCode, parameter);
+
+        Thread.sleep(50000);
+    }
+
+    // 参数模板
     @Test
     public void sendTemplateEmailParamThymeleaf() throws Exception {
         String from = customProperties.getMail().getFrom();
