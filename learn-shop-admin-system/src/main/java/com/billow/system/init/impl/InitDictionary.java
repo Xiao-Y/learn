@@ -10,6 +10,7 @@ import com.billow.tools.utlis.ConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -35,6 +36,7 @@ public class InitDictionary implements IStartLoading {
     private RedisUtils redisUtils;
 
     @Override
+    @Async("fxbDrawExecutor")
     public boolean init() {
         log.info("======== start init Dictionary....");
         List<DataDictionaryPo> dataDictionaryPos = dataDictionaryDao.findAll();

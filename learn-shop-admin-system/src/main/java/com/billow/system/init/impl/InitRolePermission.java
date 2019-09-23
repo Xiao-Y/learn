@@ -9,6 +9,7 @@ import com.billow.system.service.PermissionService;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class InitRolePermission implements IStartLoading {
     private PermissionService permissionService;
 
     @Override
+    @Async("fxbDrawExecutor")
     public boolean init() {
         log.info("======== start init Role Permission....");
         List<RolePo> rolePos = roleDao.findAll();

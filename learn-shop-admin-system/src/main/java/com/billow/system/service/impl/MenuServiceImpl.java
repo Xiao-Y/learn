@@ -52,9 +52,12 @@ public class MenuServiceImpl implements MenuService {
         if (ToolsUtils.isEmpty(roleVos)) {
             return null;
         }
+        // 转换父级菜单
+        List<MenuEx> pMenuExs = new ArrayList<>();
+
         // 先从 redis 中查询
         if (customProperties.getMenu().isReadCache()) {
-            List<MenuEx> pMenuExs = commonRoleMenuRedis.findMenusByRoles(roleVos);
+            pMenuExs = commonRoleMenuRedis.findMenusByRoles(roleVos);
             if(ToolsUtils.isNotEmpty(pMenuExs)){
                 return pMenuExs;
             }
@@ -69,18 +72,18 @@ public class MenuServiceImpl implements MenuService {
                 }
             });
         }
-        // TODO 测试用
-        if ("admin".equals(menuVo.getUserCode())) {
-            List<MenuPo> all = menuDao.findAll();
-            if (ToolsUtils.isNotEmpty(all)) {
-                Set<Long> set = all.stream()
-                        .filter(f -> f.getValidInd())
-                        .map(m -> m.getId())
-                        .collect(Collectors.toSet());
-                menuIds.clear();
-                menuIds.addAll(set);
-            }
-        }
+//        // TODO 测试用
+//        if ("admin".equals(menuVo.getUserCode())) {
+//            List<MenuPo> all = menuDao.findAll();
+//            if (ToolsUtils.isNotEmpty(all)) {
+//                Set<Long> set = all.stream()
+//                        .filter(f -> f.getValidInd())
+//                        .map(m -> m.getId())
+//                        .collect(Collectors.toSet());
+//                menuIds.clear();
+//                menuIds.addAll(set);
+//            }
+//        }
         // 如果没有权限直接返回
         if (ToolsUtils.isEmpty(menuIds)) {
             return null;
@@ -88,8 +91,6 @@ public class MenuServiceImpl implements MenuService {
         // 查询父级菜单
         List<MenuPo> menuPos = menuDao.findByPidIsNullAndValidIndIsTrue();
 
-        // 转换父级菜单
-        List<MenuEx> pMenuExs = new ArrayList<>();
         if (ToolsUtils.isNotEmpty(menuPos)) {
             this.menuPosCoverMenuExs(menuPos, pMenuExs, menuIds);
             // 递归查询子级菜单
