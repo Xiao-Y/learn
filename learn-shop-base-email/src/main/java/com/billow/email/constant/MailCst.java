@@ -38,10 +38,6 @@ public class MailCst {
      */
     public static final String SYS_FC_DATA_MAIL_HTML = "2";
     /**
-     * 模块： adminSystem-mailTypeType邮件模板类型，3-带附件邮件
-     */
-    public static final String SYS_FC_DATA_MAIL_ATT = "3";
-    /**
      * 模块： adminSystem-mailTypeType邮件模板类型，4-FreeMarker 模板邮件
      */
     public static final String SYS_FC_DATA_MAIL_FM = "4";

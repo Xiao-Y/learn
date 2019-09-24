@@ -67,9 +67,10 @@ public interface MailService {
      * @param subject   主题
      * @param content   内容
      * @param filePath  附件路径
+     * @param isHtml    是否html 邮件
      * @return void
      * @author LiuYongTao
      * @date 2019/8/20 19:32
      */
-    void sendAttachmentsMail(String fromEmail, String toEmails, String subject, String content, String filePath);
+    void sendAttachmentsMail(String fromEmail, String toEmails, String subject, String content, String filePath, boolean isHtml);
 }

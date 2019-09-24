@@ -92,14 +92,14 @@ public class MailTemplateServiceImpl implements MailTemplateService {
         }
 
         // 使用 Thymeleaf 或者 Freemarker 时,需要指定模板路径
-        String templatePath = mailTemplateVo.getTemplatePath();
+        String templateName = mailTemplateVo.getTemplateName();
         if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType) || MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
-            if (ToolsUtils.isEmpty(templatePath)) {
-                throw new RuntimeException("邮件模板路径为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 templatePath");
+            if (ToolsUtils.isEmpty(templateName)) {
+                throw new RuntimeException("邮件模板路径为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 templateName");
             }
         }
 
-        if(parameter == null){
+        if (parameter == null) {
             parameter = new HashMap<>();
         }
 
@@ -123,14 +123,14 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                     } else {
                         context.setVariables(result);
                     }
-                    mailTemp = templateEngine.process(templatePath, context);
+                    mailTemp = templateEngine.process(templateName, context);
                 } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {// FreeMarker 模板
-                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
+                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateName);
                     if (!mailTemplateVo.getSingleResult()) {
                         result.put("root", resultList);
                     }
                     mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, result);
-                } else {// html 模板
+                } else {// html 模板，1-普通邮件
                     mailTemp = this.replaceContent(mailTemp, result, SQL_PLACEHOLDER);
                 }
                 break;
@@ -138,11 +138,11 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                 if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {// Thymeleaf 模板
                     Context context = new Context();
                     context.setVariables(parameter);
-                    mailTemp = templateEngine.process(templatePath, context);
+                    mailTemp = templateEngine.process(templateName, context);
                 } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {// FreeMarker 模板
-                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
+                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateName);
                     mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, parameter);
-                } else {// html 模板
+                } else {// html 模板，普通邮件
                     mailTemp = this.replaceContent(mailTemp, parameter, PRO_PLACEHOLDER);
                 }
                 break;
@@ -161,14 +161,14 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                         result.putAll(parameter);
                         context.setVariables(result);
                     }
-                    mailTemp = templateEngine.process(templatePath, context);
+                    mailTemp = templateEngine.process(templateName, context);
                 } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
                     // 合并参数，指定参数优先
                     result.putAll(parameter);
                     if (!mailTemplateVo.getSingleResult()) {
                         result.put("root", resultList);
                     }
-                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templatePath);
+                    Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateName);
                     mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, result);
                 } else {
                     mailTemp = this.replaceContent(mailTemp, parameter, PRO_PLACEHOLDER);

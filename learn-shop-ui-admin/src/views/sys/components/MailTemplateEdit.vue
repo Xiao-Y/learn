@@ -16,6 +16,7 @@
                 <custom-select v-model="mailTemplateInfo.mailType"
                                :datasource="mailTypeSelect"
                                :value-key="mailTemplateInfo.mailCode"
+                               @change="pageShowChange"
                                placeholder="请选择邮件类型">
                 </custom-select>
               </el-col>
@@ -27,6 +28,7 @@
                 <custom-select v-model="mailTemplateInfo.dataSources"
                                :datasource="dataSourcesSelect"
                                :value-key="mailTemplateInfo.mailCode"
+                               @change="pageShowChange"
                                placeholder="请选择数据来源">
                 </custom-select>
               </el-col>
@@ -42,19 +44,19 @@
               <el-switch v-model="mailTemplateInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
             </el-col>
           </el-form-item>
-          <el-form-item label="运行SQL" prop="runSql" v-if="this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4'" required>
+          <el-form-item label="运行SQL" prop="runSql" v-if="pageShow.runSqlShow" required>
             <el-col :span="18">
               <el-input type="textarea" v-model="mailTemplateInfo.runSql" rows="6"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="单行结果" prop="singleResult" v-if="this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4'" required>
+          <el-form-item label="单行结果" prop="singleResult" v-if="pageShow.singleResultShow" required>
             <el-col :span="18">
               <el-switch v-model="mailTemplateInfo.singleResult" active-text="是" inactive-text="否"></el-switch>
             </el-col>
           </el-form-item>
-          <el-form-item label="模板名称" prop="templatePath" v-if="this.mailTemplateInfo.mailType == '4' || this.mailTemplateInfo.mailType == '5'" required>
+          <el-form-item label="模板名称" prop="templateName" v-if="pageShow.templateNameShow" required>
             <el-col :span="18">
-              <el-input v-model="mailTemplateInfo.templatePath" rows="6"></el-input>
+              <el-input v-model="mailTemplateInfo.templateName" rows="6"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="收件人邮箱" prop="toEmails">
@@ -69,22 +71,29 @@
                         placeholder="邮件主题可以在发送邮件时指定，并且优先使用指定的主题"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="邮件模板" prop="mailTemp" v-if="this.mailTemplateInfo.mailType != '4' && this.mailTemplateInfo.mailType != '5'">
+          <el-form-item label="邮件模板" prop="mailTemp" v-if="pageShow.mailTempShow">
             <el-col :span="18">
               <el-input type="textarea" v-model="mailTemplateInfo.mailTemp" rows="10"></el-input>
             </el-col>
           </el-form-item>
+          <el-form-item label="存在附件" prop="attachment">
+            <el-col :span="18">
+              <el-switch v-model="mailTemplateInfo.attachment" active-text="是" inactive-text="否"></el-switch>
+            </el-col>
+          </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="validSubmit">保存</el-button>
-            <el-button type="warning" @click="dialogCronExpVisible = true">配置邮件模板</el-button>
+            <el-button type="warning" @click="dialogMarkdownVisible = true" v-if="pageShow.mailMarkdownButtonShow">
+              配置邮件模板
+            </el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
         </el-form>
       </article>
     </div>
     <el-dialog title="Markdown 编辑器"
-               v-if="dialogCronExpVisible"
-               :visible.sync="dialogCronExpVisible"
+               v-if="dialogMarkdownVisible"
+               :visible.sync="dialogMarkdownVisible"
                :close-on-click-modal="false">
       <markdown :markdown="mailTemplateInfo.mailMarkdown" @markdownReturn="markdownReturn"></markdown>
     </el-dialog>
@@ -112,33 +121,37 @@
         mailTemplateInfo: {
           id: null,
           mailCode: '',
-          mailType: '',
-          dataSources: '',
+          mailType: '1',
+          dataSources: '1',
           runSql: '',
           singleResult: true,
-          templatePath: '',
+          templateName: '',
           mailTemp: '',
           mailMarkdown: '',
           descritpion: '',
           toEmails: '',
+          attachment: false,
           validInd: true
         },
         oldMailCode: '',
         mailTypeSelect: [],
         dataSourcesSelect: [],
-        dialogCronExpVisible: false,
+        dialogMarkdownVisible: false,
+        pageShow: {// 控制页面显示
+        },
         rulesForm: {
           mailCode: [{required: true, message: '请输入账号', trigger: 'blur'},
             {validator: this.checkMailCode, trigger: 'blur'}],
           mailTemp: [{required: true, message: '请输入邮件模板内容', trigger: 'blur'}],
           runSql: [{validator: this.validateRunSql, trigger: 'blur'}],
-          templatePath: [{validator: this.validateTemplatePath, trigger: 'blur'}],
+          templateName: [{validator: this.validatetemplateName, trigger: 'blur'}],
           descritpion: [{required: true, message: '请输入邮件模板描述', trigger: 'blur'}],
           toEmails: [{validator: this.validateToEmails, trigger: 'blur'}],
         }
       };
     },
     created() {
+      this.initPageShow();
       this.optionType = this.$route.query.optionType;
       this.mailTypeSelect = JSON.parse(this.$route.query.mailTypeSelect);
       this.dataSourcesSelect = JSON.parse(this.$route.query.dataSourcesSelect);
@@ -147,11 +160,21 @@
           FindMailTemplateById(this.$route.query.id).then(res => {
             this.mailTemplateInfo = res.resData;
             this.oldMailCode = res.resData.mailCode;
+            this.pageShowChange();
           })
         }
       }
     },
     methods: {
+      initPageShow() {
+        Object.assign(this.pageShow, {
+          runSqlShow: false,
+          singleResultShow: false,
+          templateNameShow: false,
+          mailTempShow: true,
+          mailMarkdownButtonShow: false
+        });
+      },
       // 校验提交
       validSubmit() {
         var _this = this;
@@ -195,7 +218,36 @@
       markdownReturn(data) {
         this.mailTemplateInfo.mailTemp = data.html;
         this.mailTemplateInfo.mailMarkdown = data.content;
-        this.dialogCronExpVisible = false;
+        this.dialogMarkdownVisible = false;
+      },
+      pageShowChange() {
+        this.initPageShow();
+        // runSqlShow: false,
+        // singleResultShow: false,
+        // templateNameShow: false,
+        // mailTempShow: true,
+        // mailMarkdownButtonShow: false
+        var mailType = this.mailTemplateInfo.mailType;
+        var dataSources = this.mailTemplateInfo.dataSources;
+
+        // 4-FreeMarker 模板邮件,5-Thymeleaf
+        if (mailType === '4' || mailType === '5') {
+          this.pageShow.templateNameShow = true;
+          this.pageShow.mailTempShow = false;
+        }
+        // 1-普通邮件，2-html邮件
+        if (mailType === '1' || mailType === '2') {
+          this.mailMarkdownButtonShow = true;
+        }
+        // 2-SQL查询,4-混合
+        if (dataSources === '2' || dataSources === '4') {
+          if (mailType === '2' || mailType === '4' || mailType === '5') {
+            this.pageShow.runSqlShow = true;
+            if (mailType === '4' || mailType === '5') {
+              this.pageShow.singleResultShow = true;
+            }
+          }
+        }
       },
       checkMailCode(rule, value, callback) {
         if (this.oldMailCode != '' && this.oldMailCode === value) {
@@ -217,7 +269,7 @@
           callback();
         }
       },
-      templatePath(rule, value, callback) {
+      templateName(rule, value, callback) {
         if ((value === '' || value === null) && (this.mailTemplateInfo.mailType == '5' || this.mailTemplateInfo.mailType == '4')) {
           callback(new Error('当使用 Thymeleaf 或者 Freemarker 时，请输入模板名称'));
         } else {
