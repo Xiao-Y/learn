@@ -222,6 +222,7 @@
       },
       pageShowChange() {
         this.initPageShow();
+        // 默认
         // runSqlShow: false,
         // singleResultShow: false,
         // templateNameShow: false,

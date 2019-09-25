@@ -17,12 +17,18 @@
       </el-collapse>
     </el-row>
     <!-- 查询按钮组 -->
-    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
+    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"
+                        :show-add="!selectView"></button-group-query>
     <el-row>
       <template>
         <el-table border style="width: 100%" ref="mailTemplateListRef"
                   :data="tableData"
                   row-key="id">
+          <el-table-column label="选择" width="35" v-if="selectView">
+            <template scope="scope">
+              <el-radio :label="scope.row.id" @change="handleSelect(scope.row)"></el-radio>
+            </template>
+          </el-table-column>
           <el-table-column label="模板CODE" prop="mailCode" width="210"></el-table-column>
           <el-table-column label="邮件类型" prop="mailType">
             <template slot-scope="scope">
@@ -70,7 +76,7 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="200">
+          <el-table-column fixed="right" label="操作" width="200" v-if="!selectView">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
               <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
@@ -114,6 +120,17 @@
       CustomPage
     },
     mixins: [pageMixins],
+    props: {
+      // 是否显示选择框 和操作按钮
+      selectView: {
+        type: Boolean,
+        default: false
+      },
+      mailCode: {
+        trype: String,
+        default: null
+      }
+    },
     data() {
       return {
         queryFilter: {
@@ -126,6 +143,10 @@
       }
     },
     created() {
+      // 使用邮件模板时
+      if (this.selectView) {
+        this.queryFilter.mailCode = this.mailCode;
+      }
       // 加载邮件类型的下拉
       LoadSysDataDictionary('mailType').then(res => {
         this.mailTypeSelect = res.resData;
@@ -206,6 +227,10 @@
             });
           });
         });
+      },
+      // 勾选单个后，发送通知
+      handleSelect(row) {
+        this.$emit("change", row);
       }
     }
   }
