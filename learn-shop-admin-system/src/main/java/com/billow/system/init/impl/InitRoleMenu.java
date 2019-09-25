@@ -10,11 +10,12 @@ import com.billow.system.service.MenuService;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 /**
  * 初始化角色菜单,保存到 redis 中
@@ -34,21 +35,24 @@ public class InitRoleMenu implements IStartLoading {
     private MenuService menuService;
     @Autowired
     private CustomProperties customProperties;
+    @Resource(name = "fxbDrawExecutor")
+    private ExecutorService executorService;
 
     @Override
-    @Async("fxbDrawExecutor")
     public boolean init() {
         log.info("======== start init Role Menu....");
-        if (!customProperties.getMenu().isWriteCache()) {
-            log.info("======== end not init Role Menu....");
-            return true;
-        }
-        List<RolePo> rolePos = roleDao.findAll();
-        for (RolePo rolePo : rolePos) {
-            Set<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
-            redisUtils.setObj(RedisCst.ROLE_MENU_KEY + rolePo.getRoleCode(), menuExs);
-        }
-        log.info("======== end init Role Menu....");
+        executorService.execute(() -> {
+            if (!customProperties.getMenu().isWriteCache()) {
+                log.info("======== end not init Role Menu....");
+                return;
+            }
+            List<RolePo> rolePos = roleDao.findAll();
+            for (RolePo rolePo : rolePos) {
+                Set<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
+                redisUtils.setObj(RedisCst.ROLE_MENU_KEY + rolePo.getRoleCode(), menuExs);
+            }
+            log.info("======== end init Role Menu....");
+        });
         return true;
     }
 }
