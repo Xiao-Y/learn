@@ -60,6 +60,9 @@ public class ScheduleJobPo extends BasePo implements Serializable {
     @ApiModelProperty("是否发送邮件,0-不发送,1-发送,2-异常时发送,3-成功时发送")
     private String isSendMail;
 
+    @ApiModelProperty("邮件模板ID")
+    private Long templateId;
+
     @ApiModelProperty("邮件接收人,多个时,用;分开")
     private String mailReceive;
 

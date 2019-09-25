@@ -8,6 +8,7 @@
 
     <el-dialog title="选择邮件模板"
                v-if="dialogVisible"
+               :fullscreen="true"
                :visible.sync="dialogVisible"
                :close-on-click-modal="false">
       <mail-template-list @change="selectMailTemplate" :selectView="true" :mailCode="mailCode"></mail-template-list>
@@ -66,8 +67,8 @@
       }
     },
     created() {
-      if (templateId) {
-        FindMailTemplateById(templateId).then(res => {
+      if (this.templateId) {
+        FindMailTemplateById(this.templateId).then(res => {
           this.mailCode = res.resData.mailCode;
         });
       }
@@ -75,7 +76,7 @@
     methods: {
       selectMailTemplate(row) {
         console.info("mailTemplate:", row);
-        this.templateId = row.id;
+        this.$emit('change', row.id);
         this.mailCode = row.mailCode;
         this.dialogVisible = false;
       },

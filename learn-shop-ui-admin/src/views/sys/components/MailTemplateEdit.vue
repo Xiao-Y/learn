@@ -44,7 +44,7 @@
               <el-switch v-model="mailTemplateInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
             </el-col>
           </el-form-item>
-          <el-form-item label="运行SQL" prop="runSql" v-if="pageShow.runSqlShow" required>
+          <el-form-item label="运行SQL" prop="runSql" v-show="pageShow.runSqlShow" required>
             <el-col :span="18">
               <el-input type="textarea" v-model="mailTemplateInfo.runSql" rows="6"></el-input>
             </el-col>
@@ -138,6 +138,11 @@
         dataSourcesSelect: [],
         dialogMarkdownVisible: false,
         pageShow: {// 控制页面显示
+          runSqlShow: false,
+          singleResultShow: false,
+          templateNameShow: false,
+          mailTempShow: true,
+          mailMarkdownButtonShow: false
         },
         rulesForm: {
           mailCode: [{required: true, message: '请输入账号', trigger: 'blur'},
@@ -228,25 +233,28 @@
         // templateNameShow: false,
         // mailTempShow: true,
         // mailMarkdownButtonShow: false
+        // 邮件类型，1-普通邮件，2-html邮件,4-FreeMarker 模板邮件,5-Thymeleaf 模板邮件
         var mailType = this.mailTemplateInfo.mailType;
+        // 数据来源，1-固定内容，2-SQL查询，3-参数设置,4-混合（2、3都有）
         var dataSources = this.mailTemplateInfo.dataSources;
+
+        console.info("mailType:", mailType)
+        console.info("dataSources:", dataSources)
 
         // 4-FreeMarker 模板邮件,5-Thymeleaf
         if (mailType === '4' || mailType === '5') {
           this.pageShow.templateNameShow = true;
           this.pageShow.mailTempShow = false;
         }
-        // 1-普通邮件，2-html邮件
-        if (mailType === '1' || mailType === '2') {
-          this.mailMarkdownButtonShow = true;
+        // 2-html邮件
+        if (mailType === '2') {
+          this.pageShow.mailMarkdownButtonShow = true;
         }
-        // 2-SQL查询,4-混合
-        if (dataSources === '2' || dataSources === '4') {
-          if (mailType === '2' || mailType === '4' || mailType === '5') {
-            this.pageShow.runSqlShow = true;
-            if (mailType === '4' || mailType === '5') {
-              this.pageShow.singleResultShow = true;
-            }
+        // 1-固定内容
+        if (dataSources !== '1') {
+          this.pageShow.runSqlShow = true;
+          if (mailType === '4' || mailType === '5') {
+            this.pageShow.singleResultShow = true;
           }
         }
       },

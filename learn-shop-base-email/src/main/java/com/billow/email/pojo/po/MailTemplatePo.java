@@ -38,7 +38,7 @@ public class MailTemplatePo extends BasePo implements Serializable {
     // 邮件类型，1-普通邮件，2-html邮件,4-FreeMarker 模板邮件,5-Thymeleaf 模板邮件
     private String mailType;
 
-    // 数据来源，1-固定邮件，2-SQL查询，3-参数设置,4-混合（2、3都有）
+    // 数据来源，1-固定内容，2-SQL查询，3-参数设置,4-混合（2、3都有）
     private String dataSources;
 
     @Lob

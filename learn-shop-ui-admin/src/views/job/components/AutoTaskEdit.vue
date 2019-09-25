@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="ms-doc">
-      <h3>权限信息</h3>
+      <h3>自动任务信息</h3>
       <article>
         <el-form ref="autoTaskInfo" :rules="rulesForm" :model="autoTaskInfo" :inline-message="true" label-width="100px"
                  size="mini">
@@ -66,14 +66,19 @@
                            placeholder="请选择是否发送邮件">
             </custom-select>
           </el-form-item>
-          <el-form-item label="邮件接收人" prop="mailReceive" :required="autoTaskInfo.isSendMail != '0'">
+          <el-form-item label="邮件接收人" prop="mailReceive" v-if="autoTaskInfo.isSendMail != '0'" required>
             <el-col :span="18">
               <el-input type="textarea" v-model="autoTaskInfo.mailReceive" placeholder="多个接收人用英文封号分割开"></el-input>
             </el-col>
           </el-form-item>
+          <el-form-item label="邮件模板" prop="templateId" v-if="autoTaskInfo.isSendMail != '0'" required>
+            <el-col :span="18">
+              <custom-sel-mail-template v-model="autoTaskInfo.templateId"></custom-sel-mail-template>
+            </el-col>
+          </el-form-item>
           <el-form-item label="任务描述" prop="description">
             <el-col :span="18">
-              <el-input type="textarea" v-model="autoTaskInfo.description"></el-input>
+              <el-input type="textarea" v-model="autoTaskInfo.description" required></el-input>
             </el-col>
           </el-form-item>
           <el-form-item size="mini">
@@ -92,11 +97,13 @@
 
   import CustomSelect from '../../../components/common/CustomSelect.vue';
   import CustomCronInput from '../../../components/common/CustomCronInput.vue';
+  import CustomSelMailTemplate from '../../../components/common/CustomSelMailTemplate.vue';
 
   export default {
     components: {
       CustomSelect,
-      CustomCronInput
+      CustomCronInput,
+      CustomSelMailTemplate
     },
     data() {
       return {
@@ -111,6 +118,7 @@
           isSendMail: "2",
           mailReceive: '',
           cronExpression: "",
+          templateId: null,
           isSaveLog: true,
           validInd: true
         },
@@ -123,6 +131,8 @@
           cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
           jobName: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
           mailReceive: [{validator: this.validateMailReceive, trigger: 'blur'}],
+          templateId: [{required: true, message: '请选择邮件模板', trigger: 'blur'}],
+          description: [{required: true, message: '请输入任务描述', trigger: 'blur'}],
         }
       };
     },
@@ -137,14 +147,15 @@
     methods: {
       // 校验提交
       validSubmit() {
-        var _this = this;
-        this.$refs['autoTaskInfo'].validate(valid => {
-          if (valid) {
-            _this.checkAutoTask();
-          } else {
-            return false;
-          }
-        });
+        console.info(this.autoTaskInfo.templateId)
+        // var _this = this;
+        // this.$refs['autoTaskInfo'].validate(valid => {
+        //   if (valid) {
+        //     _this.checkAutoTask();
+        //   } else {
+        //     return false;
+        //   }
+        // });
       },
       // 校验提交数据正确否
       checkAutoTask() {
@@ -204,7 +215,7 @@
         }
       },
       validateMailReceive(rule, value, callback) {
-        if (value === '' && this.autoTaskInfo.isSendMail !== '0') {
+        if (value === '') {
           callback(new Error('发送邮件状态，邮件地址不能为空'));
         } else {
           value = value.replace(/\s*|\t|\r|\n/g, '');

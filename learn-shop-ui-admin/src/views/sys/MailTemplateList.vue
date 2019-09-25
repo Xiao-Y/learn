@@ -25,7 +25,7 @@
                   :data="tableData"
                   row-key="id">
           <el-table-column label="选择" width="35" v-if="selectView">
-            <template scope="scope">
+            <template slot-scope="scope">
               <el-radio :label="scope.row.id" @change="handleSelect(scope.row)"></el-radio>
             </template>
           </el-table-column>
@@ -144,7 +144,7 @@
     },
     created() {
       // 使用邮件模板时
-      if (this.selectView) {
+      if (this.selectView && this.mailCode && this.mailCode != '') {
         this.queryFilter.mailCode = this.mailCode;
       }
       // 加载邮件类型的下拉

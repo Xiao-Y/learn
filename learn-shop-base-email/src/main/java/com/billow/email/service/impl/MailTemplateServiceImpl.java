@@ -187,6 +187,9 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     @Override
     public Page<MailTemplateVo> findMailTemplateList(MailTemplateVo mailTemplateVo) {
         MailTemplatePo mailTemplatePo = ConvertUtils.convert(mailTemplateVo, MailTemplatePo.class);
+        if(mailTemplatePo.getMailCode() == ""){
+            mailTemplatePo.setMailCode(null);
+        }
         Example<MailTemplatePo> example = Example.of(mailTemplatePo);
         Pageable pageable = new PageRequest(mailTemplateVo.getPageNo(), mailTemplateVo.getPageSize());
         return mailTemplateDao.findAll(example, pageable).map(this::coverMailTemplateVo);
