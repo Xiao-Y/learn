@@ -34,6 +34,17 @@ public interface MailTemplateService {
      */
     Page<MailTemplateVo> findMailTemplateList(MailTemplateVo mailTemplateVo);
 
+
+    /**
+     * 通过 id 查询有效的邮件模板信息
+     *
+     * @param id
+     * @return com.billow.email.pojo.vo.MailTemplateVo
+     * @author LiuYongTao
+     * @date 2019/9/26 11:45
+     */
+    MailTemplateVo findByIdAndValidIndIsTrue(Long id);
+
     /**
      * 根据id获取邮件模板信息
      *

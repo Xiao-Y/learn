@@ -39,14 +39,20 @@ public class ScheduleJobPo extends BasePo implements Serializable {
     @ApiModelProperty("描述")
     private String description;
 
+    @ApiModelProperty("任务执行时调用类的类型，1-springId，2-beanClass")
+    private String classType;
+
+    @ApiModelProperty("任务执行时调用类或者springId")
+    private String runClass;
+
     @ApiModelProperty("任务执行时调用哪个类的方法 包名+类名")
     private String beanClass;
 
-    @ApiModelProperty("任务是否有状态,任务是否有状态,0-无，1-有")
-    private String isConcurrent;
-
     @ApiModelProperty("spring bean")
     private String springId;
+
+    @ApiModelProperty("任务是否有状态,任务是否有状态,0-无，1-有")
+    private String isConcurrent;
 
     @ApiModelProperty("任务调用的方法名")
     private String methodName;

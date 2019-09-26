@@ -23,21 +23,21 @@
               <custom-cron-input v-model="autoTaskInfo.cronExpression" :isTestRun="true"></custom-cron-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="BeanClass" prop="beanClass">
-            <el-col :span="18">
-              <el-input v-model="autoTaskInfo.beanClass" placeholder="请输入内容"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="SpringId" prop="springId">
-            <el-col :span="18">
-              <el-input v-model="autoTaskInfo.springId" placeholder="请输入内容"></el-input>
-            </el-col>
-          </el-form-item>
+          <!--          <el-form-item label="BeanClass" prop="beanClass">-->
+          <!--            <el-col :span="18">-->
+          <!--              <el-input v-model="autoTaskInfo.beanClass" placeholder="请输入内容"></el-input>-->
+          <!--            </el-col>-->
+          <!--          </el-form-item>-->
+          <!--          <el-form-item label="SpringId" prop="springId">-->
+          <!--            <el-col :span="18">-->
+          <!--              <el-input v-model="autoTaskInfo.springId" placeholder="请输入内容"></el-input>-->
+          <!--            </el-col>-->
+          <!--          </el-form-item>-->
 
-          <el-form-item label="BeanClass" prop="beanClass">
+          <el-form-item label="运行的类" prop="runClass">
             <el-col :span="18">
-              <el-input placeholder="请输入内容" v-model="autoTaskInfo.beanClass" class="input-with-select">
-                <el-select v-model="autoTaskInfo.classType" slot="prepend" placeholder="请选择">
+              <el-input placeholder="请输入内容" v-model="autoTaskInfo.runClass" class="input-with-select">
+                <el-select v-model="autoTaskInfo.classType" slot="prepend" @change="changeClassType">
                   <el-option label="SpringId" value="1"></el-option>
                   <el-option label="BeanClass" value="2"></el-option>
                 </el-select>
@@ -66,14 +66,24 @@
           <el-form-item label="异常停止">
             <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
           </el-form-item>
+          <!--          <el-form-item label="是否记录日志" prop="isSaveLog">-->
+          <!--            <el-switch v-model="autoTaskInfo.isSaveLog" @change="validateSendMail" active-text="是"-->
+          <!--                       inactive-text="否"></el-switch>-->
+          <!--          </el-form-item>-->
+          <!--          <el-form-item label="是否发送邮件" prop="isSendMail">-->
+          <!--            <custom-select v-model="autoTaskInfo.isSendMail"-->
+          <!--                           :datasource="sendMailSelect"-->
+          <!--                           @change="validateSendMail"-->
+          <!--                           placeholder="请选择是否发送邮件">-->
+          <!--            </custom-select>-->
+          <!--          </el-form-item>-->
           <el-form-item label="是否记录日志" prop="isSaveLog">
-            <el-switch v-model="autoTaskInfo.isSaveLog" @change="validateSendMail" active-text="是"
+            <el-switch v-model="autoTaskInfo.isSaveLog" active-text="是"
                        inactive-text="否"></el-switch>
           </el-form-item>
           <el-form-item label="是否发送邮件" prop="isSendMail">
             <custom-select v-model="autoTaskInfo.isSendMail"
                            :datasource="sendMailSelect"
-                           @change="validateSendMail"
                            placeholder="请选择是否发送邮件">
             </custom-select>
           </el-form-item>
@@ -130,6 +140,7 @@
           mailReceive: '',
           cronExpression: "",
           classType: "1",
+          runClass: "1",
           templateId: null,
           isSaveLog: true,
           validInd: true
@@ -138,13 +149,14 @@
         sendMailSelect: [],
         rulesForm: {
           methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
-          beanClass: [{validator: this.validateBeanClass, trigger: 'blur'}],
-          springId: [{validator: this.validateSpringId, trigger: 'blur'}],
+          // beanClass: [{validator: this.validateBeanClass, trigger: 'blur'}],
+          // springId: [{validator: this.validateSpringId, trigger: 'blur'}],
           cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
           jobName: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
           mailReceive: [{validator: this.validateMailReceive, trigger: 'blur'}],
           templateId: [{required: true, message: '请选择邮件模板', trigger: 'blur'}],
           description: [{required: true, message: '请输入任务描述', trigger: 'blur'}],
+          runClass: [{required: true, message: '请输入运行的类', trigger: 'blur'}],
         }
       };
     },
@@ -201,22 +213,25 @@
       onReset(autoTaskInfo) {
         this.$refs[autoTaskInfo].resetFields();
       },
-      // 规则校验：beanClass
-      validateBeanClass(rule, value, callback) {
-        this.$refs.autoTaskInfo.validateField('springId');
-        callback();
+      changeClassType() {
+        this.autoTaskInfo.beanClass = null;
+        this.autoTaskInfo.springId = null;
       },
-      // 规则校验：springId
-      validateSpringId(rule, value, callback) {
-        if (value != '' && this.autoTaskInfo.beanClass != '') {
-          callback(new Error('BeanClass 与 SpringId 不能同时存在!'));
-        } else if (value === '' && this.autoTaskInfo.beanClass === '') {
-          callback(new Error('BeanClass 与 SpringId 不能同时为空!'));
-        } else {
-          callback();
-        }
-
-      },
+      // // 规则校验：beanClass
+      // validateBeanClass(rule, value, callback) {
+      //   this.$refs.autoTaskInfo.validateField('springId');
+      //   callback();
+      // },
+      // // 规则校验：springId
+      // validateSpringId(rule, value, callback) {
+      //   if (value != '' && this.autoTaskInfo.beanClass != '') {
+      //     callback(new Error('BeanClass 与 SpringId 不能同时存在!'));
+      //   } else if (value === '' && this.autoTaskInfo.beanClass === '') {
+      //     callback(new Error('BeanClass 与 SpringId 不能同时为空!'));
+      //   } else {
+      //     callback();
+      //   }
+      // },
       // 规则校验：cronExp
       validateCronExp(rule, value, callback) {
         if (value === '' && this.autoTaskInfo.jobStatus === '1') {
@@ -253,13 +268,12 @@
           this.$message.info('有效标志为无效时，自动任务状态只能是停止');
         }
       },
-      validateSendMail() {
-        console.info(this.autoTaskInfo.isSendMail);
-        if (this.autoTaskInfo.isSendMail !== '0' && !this.autoTaskInfo.isSaveLog) {
-          this.autoTaskInfo.isSaveLog = true;
-          this.$message.info('需要发送邮件时，必要要记录日志');
-        }
-      },
+      // validateSendMail() {
+      //   if (this.autoTaskInfo.isSendMail !== '0' && !this.autoTaskInfo.isSaveLog) {
+      //     this.autoTaskInfo.isSaveLog = true;
+      //     this.$message.info('需要发送邮件时，必要要记录日志');
+      //   }
+      // },
     }
   };
 </script>

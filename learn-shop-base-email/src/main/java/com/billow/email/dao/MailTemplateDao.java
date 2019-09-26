@@ -24,4 +24,14 @@ public interface MailTemplateDao extends JpaRepository<MailTemplatePo, Long> {
      * @date 2019/8/21 18:23
      */
     Integer countByMailCodeIs(String mailCode);
+
+    /**
+     * 通过 id 查询有效的邮件模板信息
+     *
+     * @param id
+     * @return com.billow.email.pojo.po.MailTemplatePo
+     * @author LiuYongTao
+     * @date 2019/9/26 11:44
+     */
+    MailTemplatePo findByIdAndValidIndIsTrue(Long id);
 }

@@ -16,6 +16,29 @@ public interface MailService {
      * @param fromEmail 发送人
      * @param toEmails  接收人
      * @param subject   主题
+     * @param id  邮件id
+     * @param parameter 邮件参数
+     */
+    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter);
+
+    /**
+     * 发送模板邮件,带附件的
+     *
+     * @param fromEmail 发送人
+     * @param toEmails  接收人
+     * @param subject   主题
+     * @param id  邮件id
+     * @param parameter 邮件参数
+     * @param filePath  附件路径
+     */
+    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter, String filePath);
+
+    /**
+     * 发送模板邮件
+     *
+     * @param fromEmail 发送人
+     * @param toEmails  接收人
+     * @param subject   主题
      * @param mailCode  邮件code
      * @param parameter 邮件参数
      */

@@ -29,6 +29,22 @@ public class MailServiceImpl implements MailService {
 
     @Async("emailExecutor")
     @Override
+    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter) {
+        this.sendTemplateMail(fromEmail, toEmails, subject, id, parameter, null);
+    }
+
+    @Async("emailExecutor")
+    @Override
+    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter, String filePath) {
+        MailTemplateVo mailTemplateVo = mailTemplateService.findByIdAndValidIndIsTrue(id);
+        if (mailTemplateVo == null) {
+            throw new RuntimeException("id:" + id + ",没有查询到模板信息");
+        }
+        this.sendTemplateMail(fromEmail, toEmails, subject, mailTemplateVo.getMailCode(), parameter, filePath);
+    }
+
+    @Async("emailExecutor")
+    @Override
     public void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, String> parameter) {
         this.sendTemplateMail(fromEmail, toEmails, subject, mailCode, parameter, null);
     }
@@ -45,10 +61,6 @@ public class MailServiceImpl implements MailService {
             String subjectTemp = subject;
             // 获取邮件信息
             MailTemplateVo mailTemplateVo = mailTemplateService.genMailContent(mailCode, parameter);
-
-            if (mailTemplateVo == null) {
-                throw new RuntimeException("未查询到 " + mailCode + " 的邮件模板信息。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板");
-            }
 
             log.debug(mailTemplateVo.toString());
 

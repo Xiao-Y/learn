@@ -196,6 +196,13 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     }
 
     @Override
+    public MailTemplateVo findByIdAndValidIndIsTrue(Long id){
+        MailTemplatePo mailTemplatePo = mailTemplateDao.findByIdAndValidIndIsTrue(id);
+        MailTemplateVo mailTemplateVo = ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
+        return mailTemplateVo;
+    }
+
+    @Override
     public MailTemplateVo findMailTemplateById(Long id) {
         MailTemplatePo mailTemplatePo = mailTemplateDao.findOne(id);
         return ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
