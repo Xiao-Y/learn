@@ -44,6 +44,8 @@
         <module>demo-client3</module>
         <module>learn-shop-base-workflow</module>
         <module>learn-shop-base-email</module>
+        <module>learn-shop-base-job</module>
+        <module>learn-shop-public-test</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -114,6 +116,11 @@
             <dependency>
                 <groupId>com.billow</groupId>
                 <artifactId>learn-shop-base-email</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-job</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
