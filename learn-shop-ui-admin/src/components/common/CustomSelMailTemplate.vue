@@ -6,6 +6,7 @@
       </el-button>
     </el-input>
 
+    <!-- dialog 选择邮件模板 -->
     <el-dialog title="选择邮件模板"
                v-if="dialogVisible"
                :fullscreen="true"
@@ -63,7 +64,7 @@
     data() {
       return {
         dialogVisible: false,
-        mailCode: ''
+        mailCode: null
       }
     },
     created() {
@@ -75,7 +76,6 @@
     },
     methods: {
       selectMailTemplate(row) {
-        console.info("mailTemplate:", row);
         this.$emit('change', row.id);
         this.mailCode = row.mailCode;
         this.dialogVisible = false;

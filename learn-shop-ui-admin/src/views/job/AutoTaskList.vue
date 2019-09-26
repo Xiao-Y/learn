@@ -99,7 +99,11 @@
                                disabled>
                 </custom-select>
               </el-form-item>
-              <el-form-item label="邮件接收人">
+              <el-form-item label="邮件模板">
+                <custom-sel-mail-template v-model="props.row.templateId" :input-read-only="true"
+                                          :button-disabled="true"></custom-sel-mail-template>
+              </el-form-item>
+              <el-form-item label="邮件接收人" v-if="props.row.isSendMail != '0'">
                 <el-input type="textarea" v-model="props.row.mailReceive" placeholder="多个接收人用英文封号分割开"
                           readonly></el-input>
               </el-form-item>
@@ -163,7 +167,8 @@
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
   import CustomPage from '../../components/common/CustomPage.vue';
   import CustomSelect from '../../components/common/CustomSelect.vue';
-  import AutoTaskLogList from "./AutoTaskLogList";
+  import AutoTaskLogList from "./AutoTaskLogList.vue";
+  import CustomSelMailTemplate from '../../components/common/CustomSelMailTemplate.vue';
 
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
@@ -175,7 +180,8 @@
       ButtonGroupOption,
       ButtonGroupQuery,
       CustomPage,
-      CustomSelect
+      CustomSelect,
+      CustomSelMailTemplate
     },
     mixins: [pageMixins],
     data() {

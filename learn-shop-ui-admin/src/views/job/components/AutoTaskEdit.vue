@@ -33,6 +33,17 @@
               <el-input v-model="autoTaskInfo.springId" placeholder="请输入内容"></el-input>
             </el-col>
           </el-form-item>
+
+          <el-form-item label="BeanClass" prop="beanClass">
+            <el-col :span="18">
+              <el-input placeholder="请输入内容" v-model="autoTaskInfo.beanClass" class="input-with-select">
+                <el-select v-model="autoTaskInfo.classType" slot="prepend" placeholder="请选择">
+                  <el-option label="SpringId" value="1"></el-option>
+                  <el-option label="BeanClass" value="2"></el-option>
+                </el-select>
+              </el-input>
+            </el-col>
+          </el-form-item>
           <el-form-item label="执行方法" prop="methodName">
             <el-col :span="18">
               <el-input v-model="autoTaskInfo.methodName" placeholder="请输入内容"></el-input>
@@ -118,6 +129,7 @@
           isSendMail: "2",
           mailReceive: '',
           cronExpression: "",
+          classType: "1",
           templateId: null,
           isSaveLog: true,
           validInd: true
@@ -147,15 +159,14 @@
     methods: {
       // 校验提交
       validSubmit() {
-        console.info(this.autoTaskInfo.templateId)
-        // var _this = this;
-        // this.$refs['autoTaskInfo'].validate(valid => {
-        //   if (valid) {
-        //     _this.checkAutoTask();
-        //   } else {
-        //     return false;
-        //   }
-        // });
+        var _this = this;
+        this.$refs['autoTaskInfo'].validate(valid => {
+          if (valid) {
+            _this.checkAutoTask();
+          } else {
+            return false;
+          }
+        });
       },
       // 校验提交数据正确否
       checkAutoTask() {
