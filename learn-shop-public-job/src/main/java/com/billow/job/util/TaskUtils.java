@@ -8,7 +8,6 @@ import com.billow.job.producer.SendMailPro;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.tools.constant.DictionaryType;
-import com.billow.tools.constant.MailTemplateCst;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -147,7 +146,6 @@ public class TaskUtils {
             }
         }
 
-        // 发送邮件时，必须要记录日志
         if (!DictionaryType.JOB_FC_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendMail())) {
             if (ToolsUtils.isEmpty(scheduleJob.getMailReceive())) {
                 log.error("邮件发送失败，接收邮件人为空");
@@ -155,18 +153,15 @@ public class TaskUtils {
             }
 
             try {
-                if (logDto == null) {
-                    log.error("发送邮件时日志不能为空");
-                    return;
-                }
                 MailVo mailVo = new MailVo();
                 mailVo.setToEmails(scheduleJob.getMailReceive());
                 mailVo.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
-                mailVo.setMailCode(MailTemplateCst.MC_AUTO_TASK);
-                mailVo.getParam().put("id", logDto.getId().toString());
-
-                SendMailPro sendMailPro = SpringContextUtil.getBean("sendMailPro");
+                mailVo.setMailTemplateId(scheduleJob.getTemplateId());
+                if (logDto != null) {
+                    mailVo.getParam().put("logId", logDto.getId().toString());
+                }
                 // mq 通知 system 系统发送邮件
+                SendMailPro sendMailPro = SpringContextUtil.getBean("sendMailPro");
                 sendMailPro.sendMail(mailVo);
             } catch (Exception e) {
                 log.error("发送邮件发送消息失败：{}", e.getMessage());

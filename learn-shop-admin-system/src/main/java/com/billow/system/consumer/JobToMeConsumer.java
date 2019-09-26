@@ -30,6 +30,6 @@ public class JobToMeConsumer {
     public void sendMail(MailVo mailVo) throws Exception {
         log.info(JSONObject.toJSONString(mailVo));
         mailService.sendTemplateMail(customProperties.getMail().getFrom(), mailVo.getToEmails(), mailVo.getSubject(),
-                mailVo.getMailCode(), mailVo.getParam());
+                mailVo.getMailTemplateId(), mailVo.getParam());
     }
 }

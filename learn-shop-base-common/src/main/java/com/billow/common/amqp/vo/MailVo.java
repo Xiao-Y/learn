@@ -21,14 +21,14 @@ public class MailVo implements Serializable {
     /**
      * 普通构造器
      *
-     * @param toEmails 收件人邮箱，多个邮箱以“;”分隔
-     * @param subject  邮件主题
-     * @param subject  邮件Code
+     * @param toEmails       收件人邮箱，多个邮箱以“;”分隔
+     * @param subject        邮件主题
+     * @param mailTemplateId 邮件模板ID
      */
-    public MailVo(String toEmails, String subject, String mailCode) {
+    public MailVo(String toEmails, String subject, Long mailTemplateId) {
         this.toEmails = toEmails;
         this.subject = subject;
-        this.mailCode = mailCode;
+        this.mailTemplateId = mailTemplateId;
     }
 
     //收件人邮箱，多个邮箱以“;”分隔
@@ -37,6 +37,8 @@ public class MailVo implements Serializable {
     private String subject;
     // 邮件标识，唯一
     private String mailCode;
+    // 邮件模板ID
+    private Long mailTemplateId;
     // 参数设置
     private Map<String, String> param = new HashMap<>();
 }
