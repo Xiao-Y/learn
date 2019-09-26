@@ -103,6 +103,9 @@ public class MailTemplateServiceImpl implements MailTemplateService {
             parameter = new HashMap<>();
         }
 
+        // sql 执行结果是否是单行，默认是单行
+        Boolean singleResult = mailTemplateVo.getSingleResult();
+        singleResult = singleResult == null ? true : singleResult;
         // 数据来源，1-固定邮件，2-SQL查询，3-参数设置,4-混合（2、3都有）
         String dataSources = mailTemplateVo.getDataSources();
         Map<String, Object> result = new HashMap<>();
@@ -111,14 +114,14 @@ public class MailTemplateServiceImpl implements MailTemplateService {
             case MailCst.SYS_FC_DATA_SS_FIXED: // 1-固定邮件
                 break;
             case MailCst.SYS_FC_DATA_SS_SQL: // 2-SQL查询
-                if (!mailTemplateVo.getSingleResult()) {
+                if (!singleResult) {
                     resultList = this.runSQLResultList(parameter, mailTemplateVo.getRunSql());
                 } else {
                     result = this.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
                 }
                 if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {// Thymeleaf 模板
                     Context context = new Context();
-                    if (!mailTemplateVo.getSingleResult()) {
+                    if (!singleResult) {
                         context.setVariable("root", resultList);
                     } else {
                         context.setVariables(result);
@@ -126,7 +129,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                     mailTemp = templateEngine.process(templateName, context);
                 } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {// FreeMarker 模板
                     Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateName);
-                    if (!mailTemplateVo.getSingleResult()) {
+                    if (!singleResult) {
                         result.put("root", resultList);
                     }
                     mailTemp = FreeMarkerTemplateUtils.processTemplateIntoString(template, result);
@@ -147,14 +150,14 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                 }
                 break;
             case MailCst.SYS_FC_DATA_SS_MIX: // 4-混合（2、3都有）
-                if (!mailTemplateVo.getSingleResult()) {
+                if (!singleResult) {
                     resultList = this.runSQLResultList(parameter, mailTemplateVo.getRunSql());
                 } else {
                     result = this.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
                 }
                 if (MailCst.SYS_FC_DATA_MAIL_THF.equals(mailType)) {
                     Context context = new Context();
-                    if (!mailTemplateVo.getSingleResult()) {
+                    if (!singleResult) {
                         context.setVariable("root", resultList);
                     } else {
                         // 合并参数，指定参数优先
@@ -165,7 +168,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
                 } else if (MailCst.SYS_FC_DATA_MAIL_FM.equals(mailType)) {
                     // 合并参数，指定参数优先
                     result.putAll(parameter);
-                    if (!mailTemplateVo.getSingleResult()) {
+                    if (!singleResult) {
                         result.put("root", resultList);
                     }
                     Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateName);
@@ -187,7 +190,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     @Override
     public Page<MailTemplateVo> findMailTemplateList(MailTemplateVo mailTemplateVo) {
         MailTemplatePo mailTemplatePo = ConvertUtils.convert(mailTemplateVo, MailTemplatePo.class);
-        if(mailTemplatePo.getMailCode() == ""){
+        if (mailTemplatePo.getMailCode() == "") {
             mailTemplatePo.setMailCode(null);
         }
         Example<MailTemplatePo> example = Example.of(mailTemplatePo);
@@ -196,7 +199,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     }
 
     @Override
-    public MailTemplateVo findByIdAndValidIndIsTrue(Long id){
+    public MailTemplateVo findByIdAndValidIndIsTrue(Long id) {
         MailTemplatePo mailTemplatePo = mailTemplateDao.findByIdAndValidIndIsTrue(id);
         MailTemplateVo mailTemplateVo = ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
         return mailTemplateVo;

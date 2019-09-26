@@ -44,4 +44,9 @@ public class CommonCst {
      * @date 2019/9/8 19:50
      */
     public static final String APPROVE_STATUS_REWORK = "2";
+
+    // 执行类型：1-spring id
+    public static final String CLASS_TYPE_SPRING_ID = "1";
+    // 执行类型：2-全类名
+    public static final String CLASS_TYPE_BEAN_CLASS = "2";
 }

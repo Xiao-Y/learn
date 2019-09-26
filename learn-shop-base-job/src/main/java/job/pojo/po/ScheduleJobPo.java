@@ -44,11 +44,11 @@ public class ScheduleJobPo extends BasePo implements Serializable {
     // 任务执行时调用类或者springId
     private String runClass;
 
-    // 任务执行时调用哪个类的方法 包名+类名
-    private String beanClass;
-
-    // spring bean
-    private String springId;
+//    // 任务执行时调用哪个类的方法 包名+类名
+//    private String beanClass;
+//
+//    // spring bean
+//    private String springId;
 
     // 任务是否有状态,任务是否有状态,0-无，1-有
     private String isConcurrent;

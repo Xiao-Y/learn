@@ -76,12 +76,14 @@
               <!--              <el-form-item label="SpringId">-->
               <!--                <span>{{ props.row.springId }}</span>-->
               <!--              </el-form-item>-->
+              <el-form-item label="运行类型">
+                <el-select v-model="props.row.classType" disabled>
+                  <el-option label="SpringId" value="1"></el-option>
+                  <el-option label="BeanClass" value="2"></el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="运行的类">
-                <el-input v-model="props.row.runClass" class="input-with-select" readonly>
-                  <el-select v-model="props.row.classType" slot="prepend" disabled>
-                    <el-option label="SpringId" value="1"></el-option>
-                    <el-option label="BeanClass" value="2"></el-option>
-                  </el-select>
+                <el-input v-model="props.row.runClass" readonly>
                 </el-input>
               </el-form-item>
               <el-form-item label="执行方法">

@@ -17,4 +17,8 @@ public class JobCst {
 
     // ScheduleJobLogService 实现类 bean id
     public static final String SCHEDULE_JOB_LOG_SERVICE_IMPL = "ScheduleJobLogServiceImpl";
+    // 执行类型：1-spring id
+    public static final String CLASS_TYPE_SPRING_ID = "1";
+    // 执行类型：2-全类名
+    public static final String CLASS_TYPE_BEAN_CLASS = "2";
 }

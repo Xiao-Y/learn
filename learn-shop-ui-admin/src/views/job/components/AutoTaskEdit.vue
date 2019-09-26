@@ -23,24 +23,17 @@
               <custom-cron-input v-model="autoTaskInfo.cronExpression" :isTestRun="true"></custom-cron-input>
             </el-col>
           </el-form-item>
-          <!--          <el-form-item label="BeanClass" prop="beanClass">-->
-          <!--            <el-col :span="18">-->
-          <!--              <el-input v-model="autoTaskInfo.beanClass" placeholder="请输入内容"></el-input>-->
-          <!--            </el-col>-->
-          <!--          </el-form-item>-->
-          <!--          <el-form-item label="SpringId" prop="springId">-->
-          <!--            <el-col :span="18">-->
-          <!--              <el-input v-model="autoTaskInfo.springId" placeholder="请输入内容"></el-input>-->
-          <!--            </el-col>-->
-          <!--          </el-form-item>-->
-
+          <el-form-item label="运行类型" prop="classType">
+            <el-col :span="18">
+              <el-select v-model="autoTaskInfo.classType">
+                <el-option label="SpringId" value="1"></el-option>
+                <el-option label="BeanClass" value="2"></el-option>
+              </el-select>
+            </el-col>
+          </el-form-item>
           <el-form-item label="运行的类" prop="runClass">
             <el-col :span="18">
               <el-input placeholder="请输入内容" v-model="autoTaskInfo.runClass" class="input-with-select">
-                <el-select v-model="autoTaskInfo.classType" slot="prepend" @change="changeClassType">
-                  <el-option label="SpringId" value="1"></el-option>
-                  <el-option label="BeanClass" value="2"></el-option>
-                </el-select>
               </el-input>
             </el-col>
           </el-form-item>
@@ -66,17 +59,6 @@
           <el-form-item label="异常停止">
             <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
           </el-form-item>
-          <!--          <el-form-item label="是否记录日志" prop="isSaveLog">-->
-          <!--            <el-switch v-model="autoTaskInfo.isSaveLog" @change="validateSendMail" active-text="是"-->
-          <!--                       inactive-text="否"></el-switch>-->
-          <!--          </el-form-item>-->
-          <!--          <el-form-item label="是否发送邮件" prop="isSendMail">-->
-          <!--            <custom-select v-model="autoTaskInfo.isSendMail"-->
-          <!--                           :datasource="sendMailSelect"-->
-          <!--                           @change="validateSendMail"-->
-          <!--                           placeholder="请选择是否发送邮件">-->
-          <!--            </custom-select>-->
-          <!--          </el-form-item>-->
           <el-form-item label="是否记录日志" prop="isSaveLog">
             <el-switch v-model="autoTaskInfo.isSaveLog" active-text="是"
                        inactive-text="否"></el-switch>
@@ -149,8 +131,6 @@
         sendMailSelect: [],
         rulesForm: {
           methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
-          // beanClass: [{validator: this.validateBeanClass, trigger: 'blur'}],
-          // springId: [{validator: this.validateSpringId, trigger: 'blur'}],
           cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
           jobName: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
           mailReceive: [{validator: this.validateMailReceive, trigger: 'blur'}],
@@ -166,6 +146,7 @@
       this.sendMailSelect = JSON.parse(this.$route.query.sendMailSelect);
       if (this.optionType === 'edit') {
         this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
+        console.info(this.autoTaskInfo.classType)
       }
     },
     methods: {
@@ -213,10 +194,10 @@
       onReset(autoTaskInfo) {
         this.$refs[autoTaskInfo].resetFields();
       },
-      changeClassType() {
-        this.autoTaskInfo.beanClass = null;
-        this.autoTaskInfo.springId = null;
-      },
+      // changeClassType() {
+      //   // this.autoTaskInfo.beanClass = null;
+      //   // this.autoTaskInfo.springId = null;
+      // },
       // // 规则校验：beanClass
       // validateBeanClass(rule, value, callback) {
       //   this.$refs.autoTaskInfo.validateField('springId');
@@ -253,7 +234,7 @@
             if (email === '') {
               continue;
             }
-            var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+            var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
             if (!reg.test(email)) {
               message += email + ";";
             }

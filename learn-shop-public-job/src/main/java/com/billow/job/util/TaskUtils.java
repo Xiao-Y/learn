@@ -7,6 +7,7 @@ import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.producer.SendMailPro;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
+import com.billow.tools.constant.CommonCst;
 import com.billow.tools.constant.DictionaryType;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
@@ -37,12 +38,13 @@ public class TaskUtils {
      */
     public static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
         Object object = null;
-        Class<?> clazz = null;
-        // springId不为空先按springId查找bean
-        if (ToolsUtils.isNotEmpty(scheduleJob.getSpringId())) {
-            object = SpringContextUtil.getBean(scheduleJob.getSpringId());
-        } else if (ToolsUtils.isNotEmpty(scheduleJob.getBeanClass())) {
-            clazz = Class.forName(scheduleJob.getBeanClass());
+        Class<?> clazz;
+        String classType = scheduleJob.getClassType();
+        String runClass = scheduleJob.getRunClass();
+        if (CommonCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
+            object = SpringContextUtil.getBean(runClass);
+        } else if (CommonCst.CLASS_TYPE_BEAN_CLASS.equals(classType)) {
+            clazz = Class.forName(runClass);
             object = clazz.newInstance();
         }
         if (object == null) {

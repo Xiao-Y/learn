@@ -6,6 +6,7 @@ import com.billow.job.core.manager.QuartzManager;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.CoreAutoTaskService;
 import com.billow.job.service.ScheduleJobService;
+import com.billow.tools.constant.CommonCst;
 import com.billow.tools.utlis.SpringContextUtil;
 import com.billow.tools.utlis.ToolsUtils;
 import org.quartz.CronScheduleBuilder;
@@ -85,8 +86,8 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
 
         String jobStatus = scheduleJobVo.getJobStatus();
         String cronExpression = scheduleJobVo.getCronExpression();
-        String springId = scheduleJobVo.getSpringId();
-        String beanClass = scheduleJobVo.getBeanClass();
+        String classType = scheduleJobVo.getClassType();
+        String runClass = scheduleJobVo.getRunClass();
         String methodName = scheduleJobVo.getMethodName();
         String jobName = scheduleJobVo.getJobName();
         String jobGroup = scheduleJobVo.getJobGroup();
@@ -115,9 +116,9 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
             boolean beanFlag = true;
             Class<?> clazz = null;
             // bean相关检查
-            if (ToolsUtils.isNotEmpty(springId)) {
+            if (CommonCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
                 try {
-                    Object bean = SpringContextUtil.getBean(springId);
+                    Object bean = SpringContextUtil.getBean(runClass);
                     clazz = bean.getClass();
                 } catch (Exception e) {
                     message += "springId错误，未获取相关Bean！<br>";
@@ -125,7 +126,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
                 }
             } else {
                 try {
-                    clazz = Class.forName(beanClass);
+                    clazz = Class.forName(runClass);
                     clazz.newInstance();
                 } catch (Exception e) {
                     message += "beanClass错误，未获取相关类！<br>";

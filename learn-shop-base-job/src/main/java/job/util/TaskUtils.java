@@ -36,11 +36,12 @@ public class TaskUtils {
     public static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
         Object object = null;
         Class<?> clazz;
-        // springId不为空先按springId查找bean
-        if (ToolsUtils.isNotEmpty(scheduleJob.getSpringId())) {
-            object = SpringContextUtil.getBean(scheduleJob.getSpringId());
-        } else if (ToolsUtils.isNotEmpty(scheduleJob.getBeanClass())) {
-            clazz = Class.forName(scheduleJob.getBeanClass());
+        String classType = scheduleJob.getClassType();
+        String runClass = scheduleJob.getRunClass();
+        if (JobCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
+            object = SpringContextUtil.getBean(runClass);
+        } else if (JobCst.CLASS_TYPE_BEAN_CLASS.equals(classType)) {
+            clazz = Class.forName(runClass);
             object = clazz.newInstance();
         }
         if (object == null) {
