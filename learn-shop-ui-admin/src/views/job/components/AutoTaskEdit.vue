@@ -118,11 +118,11 @@
           jobGroup: "5",
           jobStatus: "1",
           isConcurrent: "1",
-          isSendMail: "2",
+          isSendMail: "0",
           mailReceive: '',
           cronExpression: "",
           classType: "1",
-          runClass: "1",
+          runClass: null,
           templateId: null,
           isSaveLog: true,
           validInd: true

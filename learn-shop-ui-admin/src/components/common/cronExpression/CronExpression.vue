@@ -1,7 +1,7 @@
 <template>
   <table style="width: 100%;">
-    <tr style="height: 330px">
-      <el-tabs v-model="cron_tabs" type="border-card" style="height: 320px">
+    <tr style="height: 350px">
+      <el-tabs v-model="cron_tabs" type="border-card" style="height: 345px">
         <el-tab-pane v-for="obj in timeArray"
                      :key="obj.resultNum"
                      :label="obj.name"
@@ -86,10 +86,10 @@
               <template>
                 <el-checkbox-group v-model="obj.checked" @change="changeChecked">
                   <el-checkbox v-for="item in obj.allElement"
-                               :label="item"
-                               :key="item"
-                               style="float:left;margin-left: 15px;">
-                    {{item}}
+                               :label="item.value"
+                               :key="item.label"
+                               style="float:left;margin-left: 0px;">
+                    {{item.label}}
                   </el-checkbox>
                 </el-checkbox-group>
               </template>
@@ -165,26 +165,31 @@
         this.timeArray.push(this.week);
         this.timeArray.push(this.year);
         for (var i = 0; i < 60; i++) {
+          var value = i;
+          var label = value < 10 ? '0' + value : value + '';
+          value = i + '';
           // 秒
-          this.second.allElement.push(i + '');
+          this.second.allElement.push({value: value, label: label});
           // 分
           this.minute.allElement = this.second.allElement;
-          var value = (i + 1) + '';
           // 时
           if (i < 24) {
-            this.hour.allElement.push(value);
+            this.hour.allElement.push({value: value, label: label});
           }
+          value = (i + 1) + '';
+          label = value < 10 ? '0' + value : value + '';
+          value = value + '';
           // 天
           if (i < 31) {
-            this.day.allElement.push(value);
+            this.day.allElement.push({value: value, label: label});
           }
           // 周
           if (i < 7) {
-            this.week.allElement.push(value);
+            this.week.allElement.push({value: value, label: label});
           }
           // 月
           if (i < 12) {
-            this.month.allElement.push(value);
+            this.month.allElement.push({value: value, label: label});
           }
         }
       },
