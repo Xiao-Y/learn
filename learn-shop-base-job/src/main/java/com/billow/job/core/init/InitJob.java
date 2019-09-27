@@ -29,7 +29,7 @@ public class InitJob implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        logger.info("==============================初始化自动任务开始===========================");
+        logger.info("==========初始化自动任务开始==========");
         try {
             ScheduleJobVo scheduleJobVo = new ScheduleJobVo();
             scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus());
@@ -42,6 +42,6 @@ public class InitJob implements InitializingBean {
             e.printStackTrace();
             logger.info("初始化自动任务失败：" + e);
         }
-        logger.info("==============================初始化自动任务结束===========================");
+        logger.info("==========初始化自动任务结束==========");
     }
 }
