@@ -39,7 +39,7 @@ public class TaskUtils {
         String classType = scheduleJob.getClassType();
         String runClass = scheduleJob.getRunClass();
         if (JobCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
-            object = SpringContextUtil.getBean(runClass);
+            object = JobContextUtil.getBean(runClass);
         } else if (JobCst.CLASS_TYPE_BEAN_CLASS.equals(classType)) {
             clazz = Class.forName(runClass);
             object = clazz.newInstance();
@@ -114,7 +114,9 @@ public class TaskUtils {
             logDto.setJobName(scheduleJob.getJobName());
             logDto.setIsSuccess(isSuccess);
             logDto.setRunTime(scheduleJob.getRunTime());
+            logDto.setCreatorCode("JOB-AUTO");
             logDto.setCreateTime(new Date());
+            logDto.setUpdaterCode("JOB-AUTO");
             logDto.setUpdateTime(new Date());
             if (exception != null) {
                 StringWriter sw = new StringWriter();
@@ -124,7 +126,7 @@ public class TaskUtils {
             }
 
             try {
-                ScheduleJobLogService scheduleJobLogService = SpringContextUtil.getBean(ScheduleJobLogService.class);
+                ScheduleJobLogService scheduleJobLogService = JobContextUtil.getBean(JobCst.SCHEDULE_JOB_LOG_SERVICE_IMPL);
                 scheduleJobLogService.insert(logDto);
             } catch (Exception e) {
                 log.error("自动任务日志插入失败：{}", e.getMessage());
@@ -134,7 +136,7 @@ public class TaskUtils {
         // 异常时，是否停止自动任务
         if (!isSuccess && scheduleJob.getIsExceptionStop()) {
             try {
-                ScheduleJobService scheduleJobService = SpringContextUtil.getBean(ScheduleJobService.class);
+                ScheduleJobService scheduleJobService = JobContextUtil.getBean(JobCst.SCHEDULE_JOB_SERVICE_IMPL);
                 ScheduleJobVo scheduleJobVo = scheduleJobService.findByIdAndValidIndIsTrueAndIsStopIsTrue(scheduleJob.getId());
                 if (scheduleJobVo != null) {
                     scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
@@ -151,7 +153,6 @@ public class TaskUtils {
                 return;
             }
 
-
             try {
                 MailEx mailEx = new MailEx();
                 mailEx.setToEmails(scheduleJob.getMailReceive());
@@ -160,12 +161,9 @@ public class TaskUtils {
                 if (logDto != null) {
                     mailEx.setLogId(logDto.getId());
                 }
-                JobService jobService = SpringContextUtil.getBean(JobService.class);
                 // 发送邮件接口
+                JobService jobService = JobContextUtil.getBean(JobCst.JOB_SERVICE_IMPL);
                 jobService.sendMail(mailEx);
-//                // mq 通知 system 系统发送邮件
-//                SendMailPro sendMailPro = SpringContextUtil.getBean("sendMailPro");
-//                sendMailPro.sendMail(mailEx);
             } catch (Exception e) {
                 log.error("发送邮件发送消息失败：{}", e.getMessage());
             }

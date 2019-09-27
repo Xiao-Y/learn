@@ -6,14 +6,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ScheduleJobDao extends JpaRepository<ScheduleJobPo, Long>, JpaSpecificationExecutor<ScheduleJobPo> {
 
-//    /**
-//     * 通过自动任务状态查询出可运行的自动任务
-//     *
-//     * @param jobStatus
-//     * @return
-//     */
-//    List<ScheduleJobPo> findByJobStatusEquals(String jobStatus);
-
+    /**
+     * 通过id 查询出有效的并且是否异常停止为true的自动任务
+     *
+     * @param id
+     * @return com.billow.job.pojo.po.ScheduleJobPo
+     * @author LiuYongTao
+     * @date 2019/9/27 17:44
+     */
     ScheduleJobPo findByIdAndValidIndIsTrueAndIsExceptionStopIsTrue(Long id);
 
     /**

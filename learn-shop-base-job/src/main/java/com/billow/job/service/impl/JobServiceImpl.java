@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory;
  * @author liuyongtao
  * @create 2019-09-26 15:55
  */
-public class DefJobServiceImpl implements JobService {
+public class JobServiceImpl implements JobService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void sendMail(MailEx mailEx) {
-        logger.warn("请配置 JobService 接口的实现.");
-        throw new RuntimeException("请配置 JobService 接口的实现");
+        logger.warn("请配置 JobService 接口的实现.bean name 为 jobServiceImpl");
+        throw new RuntimeException("请配置 JobService 接口的实现.bean name 为 jobServiceImpl");
     }
 }

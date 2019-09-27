@@ -13,10 +13,14 @@ public class JobCst {
     public static final String SCHEDULE_JOB_VO = "ScheduleJobVo";
 
     // ScheduleJobLogService 实现类 bean id
-    public static final String SCHEDULE_JOB_SERVICE_IMPL = "ScheduleJobServiceImpl";
+    public static final String SCHEDULE_JOB_SERVICE_IMPL = "scheduleJobServiceImpl";
 
     // ScheduleJobLogService 实现类 bean id
-    public static final String SCHEDULE_JOB_LOG_SERVICE_IMPL = "ScheduleJobLogServiceImpl";
+    public static final String SCHEDULE_JOB_LOG_SERVICE_IMPL = "scheduleJobLogServiceImpl";
+
+    // JobService 实现类 bean id
+    public static final String JOB_SERVICE_IMPL = "jobServiceImpl";
+
     // 执行类型：1-spring id
     public static final String CLASS_TYPE_SPRING_ID = "1";
     // 执行类型：2-全类名

@@ -7,7 +7,7 @@ import com.billow.job.core.manager.QuartzManager;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.CoreAutoTaskService;
 import com.billow.job.service.ScheduleJobService;
-import com.billow.job.util.SpringContextUtil;
+import com.billow.job.util.JobContextUtil;
 import com.billow.job.util.ToolsUtils;
 import org.quartz.CronScheduleBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +118,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
             // bean相关检查
             if (JobCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
                 try {
-                    Object bean = SpringContextUtil.getBean(runClass);
+                    Object bean = JobContextUtil.getBean(runClass);
                     clazz = bean.getClass();
                 } catch (Exception e) {
                     message += "springId错误，未获取相关Bean！<br>";

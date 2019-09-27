@@ -1,6 +1,6 @@
 package com.billow.job.core.config;
 
-import com.billow.job.util.SpringContextUtil;
+import com.billow.job.util.JobContextUtil;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +19,7 @@ public class AutowiringSpringBeanJobFactory extends SpringBeanJobFactory impleme
 
     @Override
     public void setApplicationContext(ApplicationContext context) {
-        SpringContextUtil.setApplicationContext(context);
+        JobContextUtil.setApplicationContext(context);
         beanFactory = context.getAutowireCapableBeanFactory();
     }
 

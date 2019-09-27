@@ -1,7 +1,7 @@
 package com.billow.job.core.config;
 
 import com.billow.job.service.JobService;
-import com.billow.job.service.impl.DefJobServiceImpl;
+import com.billow.job.service.impl.JobServiceImpl;
 import org.quartz.JobListener;
 import org.quartz.spi.JobFactory;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class QuartzSchedulerConfig {
     @Bean
     @ConditionalOnMissingBean
     public JobService jobService() {
-        return new DefJobServiceImpl();
+        return new JobServiceImpl();
     }
 
     @Bean

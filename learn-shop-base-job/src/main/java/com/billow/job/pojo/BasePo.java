@@ -2,14 +2,10 @@ package com.billow.job.pojo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +20,6 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 public class BasePo extends BasePage implements Serializable {
 
     // 主键id
@@ -33,11 +28,9 @@ public class BasePo extends BasePage implements Serializable {
     private Long id;
 
     // 创建人
-    @CreatedBy
     private String creatorCode;
 
     // 更新人
-    @LastModifiedBy
     private String updaterCode;
 
     // 创建时间

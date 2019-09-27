@@ -3,9 +3,6 @@ package com.billow.job.util;
 import com.billow.job.exception.NullBeanException;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-
-import java.util.Map;
 
 /**
  * 以静态变量保存Spring ApplicationContext, 可在任何代码任何地方任何时候中取出ApplicaitonContext.
@@ -13,7 +10,7 @@ import java.util.Map;
  * @author liuyongtao
  * @date 2017年4月18日 下午3:52:31
  */
-public class SpringContextUtil {
+public class JobContextUtil {
 
     private static ApplicationContext applicationContext;
 
@@ -21,14 +18,7 @@ public class SpringContextUtil {
      * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量
      */
     public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringContextUtil.applicationContext = applicationContext;
-    }
-
-    /**
-     * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量
-     */
-    public static ApplicationContext getApplicationContext() throws BeansException {
-        return applicationContext;
+        JobContextUtil.applicationContext = applicationContext;
     }
 
     /**
@@ -44,18 +34,6 @@ public class SpringContextUtil {
         if (applicationContext == null) {
             throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义ContextUtils");
         }
-    }
-
-    /**
-     * 通过name和clazz返回指定的Bean
-     */
-    public static <T> T getBean(String name, Class<T> clazz) {
-        checkApplicationContext();
-        T bean = applicationContext.getBean(name, clazz);
-        if (bean == null) {
-            throw new NullBeanException(name);
-        }
-        return bean;
     }
 
     /**
@@ -76,38 +54,5 @@ public class SpringContextUtil {
             throw new NullBeanException(name);
         }
         return (T) bean;
-    }
-
-    /**
-     * 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
-     * <p>
-     * <br>
-     * added by liuyongtao<br>
-     *
-     * @param clazz
-     * @return
-     * @date 2017年4月18日 下午4:04:09
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T getBean(Class<T> clazz) throws Exception {
-        checkApplicationContext();
-        Map<String, T> bean = applicationContext.getBeansOfType(clazz);
-        if (bean == null) {
-            throw new NullBeanException(clazz);
-        }
-        return (T) bean;
-    }
-
-    /**
-     * 获取指定资源
-     *
-     * @param name
-     * @return org.springframework.core.io.Resource
-     * @author billow
-     * @date 2019/8/11 12:05
-     */
-    public static Resource getResource(String name) {
-        checkApplicationContext();
-        return applicationContext.getResource(name);
     }
 }
