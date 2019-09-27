@@ -1,6 +1,7 @@
 import requestUtils from '../../utils/requestUtils'
 
 const baseUrl = 'public-job/coreAutoTaskApi';
+// const baseUrl = 'admin-system/coreAutoTaskApi';
 
 /**
  * 请自动任务列表

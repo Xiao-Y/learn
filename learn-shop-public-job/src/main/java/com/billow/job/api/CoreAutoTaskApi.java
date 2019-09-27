@@ -7,6 +7,7 @@ import com.billow.job.pojo.po.ScheduleJobPo;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.CoreAutoTaskService;
+import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.TaskUtils;
 import com.billow.tools.utlis.ToolsUtils;
@@ -43,6 +44,8 @@ public class CoreAutoTaskApi extends BaseApi {
 
     @Autowired
     private ScheduleJobService scheduleJobService;
+    @Autowired
+    private ScheduleJobLogService scheduleJobLogService;
     @Autowired
     private CoreAutoTaskService coreAutoTaskService;
 
@@ -109,7 +112,7 @@ public class CoreAutoTaskApi extends BaseApi {
     @ApiOperation("查询自动任务执行日志")
     @PostMapping("/findAutoTaskLog")
     public Page<ScheduleJobLogPo> findAutoTaskLog(@RequestBody ScheduleJobLogVo scheduleJobLogVo) {
-        return scheduleJobService.findAutoTaskLog(scheduleJobLogVo);
+        return scheduleJobLogService.findAutoTaskLog(scheduleJobLogVo);
     }
 
 
