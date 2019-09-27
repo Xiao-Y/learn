@@ -49,7 +49,7 @@ public class UserTools {
      * @author LiuYongTao
      * @date 2019/7/30 9:05
      */
-    public List<String> getCurrentRoleCode(){
+    public List<String> getCurrentRoleCode() {
         String token = this.getAccessToken();
         if (token == null) {
             return new ArrayList<>();
@@ -107,6 +107,9 @@ public class UserTools {
      * @date 2019/7/29 16:23
      */
     private String getTokenByParameter() {
+        if (request == null) {
+            return null;
+        }
         return request.getParameter(ACCESS_TOKEN);
     }
 
@@ -118,6 +121,9 @@ public class UserTools {
      * @date 2019/7/29 16:23
      */
     private String getTokenByHeader() {
+        if (request == null) {
+            return null;
+        }
         Enumeration<String> headers = request.getHeaders("Authorization");
         // 通常只有一个（大多数服务器都会强制这样做）
         while (headers.hasMoreElements()) {

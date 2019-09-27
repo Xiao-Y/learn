@@ -26,9 +26,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan("com.billow")
-// 邮件模块也有实例类所有需要扫描
-@EntityScan(basePackages = {"com.billow.email", "com.billow.system"})
-@EnableJpaRepositories(basePackages = {"com.billow.email", "com.billow.system"})
+// 邮件模块和自动任务也有实例类所有需要扫描
+@EntityScan(basePackages = {"com.billow.email", "com.billow.system", "com.billow.job"})
+@EnableJpaRepositories(basePackages = {"com.billow.email", "com.billow.system", "com.billow.job"})
 public class AdminSystemApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(AdminSystemApp.class, args));
