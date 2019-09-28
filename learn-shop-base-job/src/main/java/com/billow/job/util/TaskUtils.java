@@ -155,6 +155,8 @@ public class TaskUtils {
 
             try {
                 MailEx mailEx = new MailEx();
+                mailEx.setJobId(scheduleJob.getId());
+                mailEx.setJobName(scheduleJob.getJobName());
                 mailEx.setToEmails(scheduleJob.getMailReceive());
                 mailEx.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
                 mailEx.setMailTemplateId(scheduleJob.getTemplateId());

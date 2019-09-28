@@ -16,6 +16,10 @@ public class MailEx implements Serializable {
     public MailEx() {
     }
 
+    //自动任务id
+    private Long jobId;
+    // 任务名称
+    private String jobName;
     //收件人邮箱，多个邮箱以“;”分隔
     private String toEmails;
     //邮件主题
