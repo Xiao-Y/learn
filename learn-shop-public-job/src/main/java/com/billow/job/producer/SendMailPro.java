@@ -1,6 +1,7 @@
 package com.billow.job.producer;
 
 import com.billow.common.amqp.RabbitMqConfig;
+import com.billow.common.amqp.RabbitMqSendMailConfig;
 import com.billow.job.pojo.ex.MailEx;
 import com.billow.job.service.JobService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class SendMailPro implements JobService {
     @Autowired
     private RabbitMqConfig rabbitMqConfig;
 
+    @Autowired
+    private RabbitMqSendMailConfig rabbitMqSendMailConfig;
+
     /**
      * 邮件
      *
@@ -32,8 +36,23 @@ public class SendMailPro implements JobService {
      */
     @Override
     public void sendMail(MailEx mailEx) {
-        String sendMailRoutingKey = rabbitMqConfig.getSendMailQueue().getName();
-        log.info("RoutingKey:{}，发送邮件的 mq", sendMailRoutingKey);
-        amqpTemplate.convertAndSend(sendMailRoutingKey, mailEx);
+        String exchange = rabbitMqSendMailConfig.getExchange();
+        String routeKey = rabbitMqSendMailConfig.getRouteKey();
+        log.info("exchange:{},routeKey:{}，发送邮件的 mq", exchange, routeKey);
+        amqpTemplate.convertAndSend(exchange, routeKey, mailEx);
     }
+
+//    /**
+//     * 邮件
+//     *
+//     * @return void
+//     * @author billow
+//     * @date 2019/8/11 10:33
+//     */
+//    @Override
+//    public void sendMail(MailEx mailEx) {
+//        String sendMailRoutingKey = rabbitMqConfig.getSendMailQueue().getName();
+//        log.info("RoutingKey:{}，发送邮件的 mq", sendMailRoutingKey);
+//        amqpTemplate.convertAndSend(sendMailRoutingKey, mailEx);
+//    }
 }

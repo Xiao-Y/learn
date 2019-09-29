@@ -20,4 +20,8 @@ public class MqProperties {
 
     private ZuulToSystemProperties zuulToSystem = new ZuulToSystemProperties();
     private JobToSystemProperties jobToSystem = new JobToSystemProperties();
+
+    private QueueProperties queue = new QueueProperties();
+    private RouteKeyProperties routeKey = new RouteKeyProperties();
+    private ExchangeProperties exchange = new ExchangeProperties();
 }
