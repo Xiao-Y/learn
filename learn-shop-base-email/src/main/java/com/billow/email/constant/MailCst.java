@@ -45,4 +45,12 @@ public class MailCst {
      * 模块： adminSystem-mailTypeType邮件模板类型，5-Thymeleaf 模板邮件
      */
     public static final String SYS_FC_DATA_MAIL_THF = "5";
+    /**
+     * SQL点位符
+     */
+    public static final String SQL_PLACEHOLDER = "#";
+    /**
+     * 参数点位符
+     */
+    public static final String PRO_PLACEHOLDER = "$";
 }

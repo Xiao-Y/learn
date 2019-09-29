@@ -3,6 +3,7 @@ package com.billow.email.service;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,4 +105,37 @@ public interface MailTemplateService {
      * @date 2019/8/21 18:21
      */
     Integer checkMailCode(String mailCode);
+
+    /**
+     * 运行sql 得到结果
+     *
+     * @param parameter
+     * @param runSql
+     * @return java.util.Map<java.lang.String, java.lang.Object>
+     * @author LiuYongTao
+     * @date 2019/8/21 8:33
+     */
+    Map<String, Object> runSQLSingleResult(Map<String, String> parameter, String runSql);
+
+    /**
+     * 运行sql 得到结果
+     *
+     * @param parameter
+     * @param runSql
+     * @return java.util.Map<java.lang.String, java.lang.Object>
+     * @author LiuYongTao
+     * @date 2019/8/21 8:33
+     */
+    List<Map<String, Object>> runSQLResultList(Map<String, String> parameter, String runSql);
+
+    /**
+     * 替换字符串中的参数
+     *
+     * @param content   字符串
+     * @param parameter 参数和值
+     * @return java.lang.String
+     * @author LiuYongTao
+     * @date 2019/8/21 8:30
+     */
+    String replaceContent(String content, Map parameter, String rep);
 }
