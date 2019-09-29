@@ -45,6 +45,7 @@
         <module>learn-shop-base-workflow</module>
         <module>learn-shop-base-email</module>
         <module>learn-shop-base-job</module>
+        <module>learn-shop-base-mq</module>
     </modules>
     <packaging>pom</packaging>
 
