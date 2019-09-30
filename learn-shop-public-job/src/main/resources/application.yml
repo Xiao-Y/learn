@@ -20,3 +20,22 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: update
+
+#v1:
+#  spring:
+#    rabbitmq:
+#      username: admin
+#      password: admin123
+#      host: 127.0.0.1
+#      port: 5672
+#      virtual-host: /learn-default
+#      publisher-confirms: true
+#      publisher-returns: true
+#      listener:
+#        simple:
+#          acknowledge-mode: manual
+#          prefetch: 5
+#        direct:
+#          acknowledge-mode: manual
+#      template:
+#        mandatory: true

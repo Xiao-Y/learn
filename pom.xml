@@ -124,6 +124,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-mq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>${alibaba.druid.version}</version>

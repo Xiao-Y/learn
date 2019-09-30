@@ -1,13 +1,19 @@
 package com.billow.mq;
 
+import com.billow.mq.properties.CustomProperties;
+import com.billow.mq.properties.MqProperties;
+import com.billow.mq.service.StoredOperations;
+import com.billow.mq.stored.mysql.service.impl.StoredOperationsByMysql;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -18,45 +24,55 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class MultipleRabbitMQConfig {
 
+    @Autowired
+    private MqProperties mqProperties;
+
+    @Autowired
+    private StoredOperations storedOperations;
+
     @Bean
-    @Primary
-    public MyStoredRabbitOperations myStoredRabbitOperationsByCache() {
-        return new MyStoredRabbitOperationsByCache();
+    @ConditionalOnMissingBean(StoredOperations.class)
+    public StoredOperations storedOperationsByMysql() {
+        return new StoredOperationsByMysql();
     }
 
     // mq主连接
     @Bean(name = "publicConnectionFactory")
     @Primary
-    public CachingConnectionFactory publicConnectionFactory(
-            @Value("${v1.spring.rabbitmq.host}") String host,
-            @Value("${v1.spring.rabbitmq.port}") int port,
-            @Value("${v1.spring.rabbitmq.username}") String username,
-            @Value("${v1.spring.rabbitmq.password}") String password,
-            @Value("${v1.spring.rabbitmq.virtual-host}") String virtualHost,
-            @Value("${v1.spring.rabbitmq.publisher-confirms}") Boolean publisherConfirms,
-            @Value("${v1.spring.rabbitmq.publisher-returns}") Boolean publisherReturns) {
+    public CachingConnectionFactory publicConnectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost(host);
-        connectionFactory.setPort(port);
-        connectionFactory.setUsername(username);
-        connectionFactory.setPassword(password);
-        connectionFactory.setVirtualHost(virtualHost);
-        connectionFactory.setPublisherConfirms(publisherConfirms);
-        connectionFactory.setPublisherReturns(publisherReturns);
+        connectionFactory.setHost(mqProperties.getHost());
+        connectionFactory.setPort(mqProperties.getPort());
+        connectionFactory.setUsername(mqProperties.getUsername());
+        connectionFactory.setPassword(mqProperties.getPassword());
+        connectionFactory.setVirtualHost(mqProperties.getVirtualHost());
+        connectionFactory.setPublisherConfirms(mqProperties.getPublisherConfirms());
+        connectionFactory.setPublisherReturns(mqProperties.getPublisherReturns());
         return connectionFactory;
     }
 
     @Bean(name = "publicRabbitTemplate")
     @Primary
-    public MyStoredRabbitTemplate publicRabbitTemplate(
+    public StoredRabbitTemplate publicRabbitTemplate(
             @Qualifier("publicConnectionFactory") ConnectionFactory connectionFactory,
             @Value("${v1.spring.rabbitmq.template.mandatory}") Boolean mandatory) {
-        MyStoredRabbitTemplate publicRabbitTemplate = new MyStoredRabbitTemplate(connectionFactory, myStoredRabbitOperationsByCache(), "publicRabbitTemplate");
+        CustomProperties custom = mqProperties.getCustom();
+        StoredRabbitTemplate publicRabbitTemplate = new StoredRabbitTemplate(connectionFactory, storedOperations,
+                custom.getTemplateName(),custom.getReceiveRetryCount());
         publicRabbitTemplate.setMandatory(mandatory);
         publicRabbitTemplate.setConfirmCallback(publicRabbitTemplate);
         publicRabbitTemplate.setReturnCallback(publicRabbitTemplate);
         return publicRabbitTemplate;
     }
+
+    // 当 is-retry = true时，开启重试机制
+    @ConditionalOnProperty(value = {"v1.spring.rabbitmq.custom.is-retry"}, matchIfMissing = true)
+    @Bean
+    public RetrySendMessage retrySendMessage(StoredRabbitTemplate publicRabbitTemplate) {
+        CustomProperties custom = mqProperties.getCustom();
+        return new RetrySendMessage(publicRabbitTemplate, custom.getSendRetryCount(), custom.getCacheThreshold());
+    }
+
 
     @Bean(name = "publicContainerFactory")
     public SimpleRabbitListenerContainerFactory insMessageListenerContainer(
@@ -70,13 +86,5 @@ public class MultipleRabbitMQConfig {
         factory.setPrefetchCount(prefetch);
         configurer.configure(factory, connectionFactory);
         return factory;
-    }
-
-    @Bean(name = "publicRabbitAdmin")
-    public RabbitAdmin publicRabbitAdmin(
-            @Qualifier("publicConnectionFactory") ConnectionFactory connectionFactory) {
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        rabbitAdmin.setAutoStartup(true);
-        return rabbitAdmin;
     }
 }

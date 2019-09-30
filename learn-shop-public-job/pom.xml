@@ -27,9 +27,13 @@
             <artifactId>learn-shop-base-aop</artifactId>
         </dependency>
         <!-- 自动任务 -->
+        <!--        <dependency>-->
+        <!--            <groupId>com.billow</groupId>-->
+        <!--            <artifactId>learn-shop-base-job</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-job</artifactId>
+            <artifactId>learn-shop-base-mq</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
