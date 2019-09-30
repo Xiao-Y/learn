@@ -57,6 +57,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         }
         PublisherPo mqPublisher = list.get(0);
         mqPublisher.setStatus(PublisherStatusEnum.SUCCESS.getStatus());
+        mqPublisher.setUpdateTime(new Date());
         publisherDao.save(mqPublisher);
     }
 
@@ -73,6 +74,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         }
         PublisherPo publisher = list.get(0);
         publisher.setStatus(PublisherStatusEnum.FAIL.getStatus());
+        publisher.setUpdateTime(new Date());
         publisherDao.save(publisher);
     }
 
@@ -88,6 +90,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         }
         PublisherPo publisher = list.get(0);
         publisher.setTryCount(publisher.getTryCount() + 1);
+        publisher.setUpdateTime(new Date());
         publisherDao.save(publisher);
     }
 
