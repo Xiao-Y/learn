@@ -58,7 +58,7 @@ public class MultipleRabbitMQConfig {
             @Value("${v1.spring.rabbitmq.template.mandatory}") Boolean mandatory) {
         CustomProperties custom = mqProperties.getCustom();
         StoredRabbitTemplate publicRabbitTemplate = new StoredRabbitTemplate(connectionFactory, storedOperations,
-                custom.getTemplateName(),custom.getReceiveRetryCount());
+                custom.getTemplateName(), custom.getReceiveRetryCount(), custom.getDeliveryMode());
         publicRabbitTemplate.setMandatory(mandatory);
         publicRabbitTemplate.setConfirmCallback(publicRabbitTemplate);
         publicRabbitTemplate.setReturnCallback(publicRabbitTemplate);

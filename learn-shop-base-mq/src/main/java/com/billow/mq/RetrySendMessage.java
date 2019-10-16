@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class RetrySendMessage {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(StoredRabbitTemplate.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(RetrySendMessage.class);
 
     /**
      * StoredRabbitTemplate的操作，插入，更新，数据
@@ -72,6 +72,7 @@ public class RetrySendMessage {
                     storedOperations.updateSendMessageFail(rabbitTemplateName, correlationId);
                 }
             }
+            // 打印警告
             if (count > cacheThreshold) {
                 LOGGER.error("{} RabbitMQ 补偿发送，发现积压消息过多,此次共重试了[{}]条mq消息", rabbitTemplateName, count);
             }

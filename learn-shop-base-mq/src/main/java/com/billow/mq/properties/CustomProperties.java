@@ -15,4 +15,6 @@ public class CustomProperties {
     private String retryCron = "0/5 * * * * ?";
     private Integer cacheThreshold = 100;
     private String templateName = "storedRabbitTemplate";
+    // 1-NON_PERSISTENT 不持久化,2-PERSISTENT 持久化
+    private Integer deliveryMode = 1;
 }

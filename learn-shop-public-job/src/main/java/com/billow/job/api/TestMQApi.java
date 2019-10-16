@@ -26,7 +26,7 @@ public class TestMQApi {
 
     @PostMapping("/sendMessage")
     public void sendMessage() {
-        publicRabbitTemplate.MQSend(sendMailConfig.getExchange(), sendMailConfig.getRouteKey(),
+        publicRabbitTemplate.messageSendMQ(sendMailConfig.getExchange(), sendMailConfig.getRouteKey(),
                 "发送测试消息：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss.SSS"));
     }
 

@@ -16,7 +16,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by shuai on 2019/5/12.
+ * 发送消息模板
+ *
+ * @author LiuYongTao
+ * @date 2019/10/16 16:17
  */
 public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnCallback {
 
@@ -28,12 +31,17 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
 
     private final static Integer ONE = 1;
 
-    private Integer receiveRetryCount;
+    private int receiveRetryCount;
 
     /**
      * MyRabbitTemplate的name
      */
     private String rabbitTemplateName;
+
+    /**
+     * 设置消息是否持久化。2-Persistent表示持久化，1-Non-persistent表示不持久化
+     */
+    private int deliveryMode;
 
     /**
      * MyStoredRabbitTemplate的操作，插入，更新，数据
@@ -45,13 +53,15 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      * @param storedOperations   重试策略
      * @param rabbitTemplateName 自定义名字
      * @param receiveRetryCount  消费失败后重新放入队列中重试次数
+     * @param deliveryMode       设置消息是否持久化。2-Persistent表示持久化，1-Non-persistent表示不持久化
      */
     public StoredRabbitTemplate(ConnectionFactory connectionFactory, StoredOperations storedOperations,
-                                String rabbitTemplateName, Integer receiveRetryCount) {
+                                String rabbitTemplateName, int receiveRetryCount, int deliveryMode) {
         super(connectionFactory);
         this.rabbitTemplateName = rabbitTemplateName;
         this.storedOperations = storedOperations;
         this.receiveRetryCount = receiveRetryCount;
+        this.deliveryMode = deliveryMode;
     }
 
     /**
@@ -73,7 +83,8 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
     }
 
     /**
-     * RabbitMQ的return回调
+     * RabbitMQ的return回调<br/>
+     * 发送至Exchange却没有发送到Queue时，也会走一遍 confirm 方法
      *
      * @param message    message
      * @param code       code
@@ -101,35 +112,47 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
     public boolean retryRabbitMQ(Message message, String retryExchangeName, String retryRoutingKey,
                                  String failExchangeName, String failRoutingKey) {
         try {
+//            Map<String, Object> headersMap = message.getMessageProperties().getHeaders();
+//            if (CollectionUtils.isEmpty(headersMap)) {
+//                message.getMessageProperties().setHeader(COUNT_TIME, ONE);
+//                // retry
+//                this.retry(message, retryExchangeName, retryRoutingKey);
+//            } else {
+//                if (!headersMap.containsKey(COUNT_TIME) || headersMap.get(COUNT_TIME) == null) {
+//                    headersMap.put(COUNT_TIME, ONE);
+//                    // retry
+//                    this.retry(message, retryExchangeName, retryRoutingKey);
+//                } else {
+//                    Integer countTime = (Integer) headersMap.get(COUNT_TIME);
+//                    if (countTime < receiveRetryCount) {
+//                        message.getMessageProperties().setHeader(COUNT_TIME, ++countTime);
+//                        // retry
+//                        this.retry(message, retryExchangeName, retryRoutingKey);
+//                    } else {
+//                        // fail
+//                        messageSendMQ(failExchangeName, failRoutingKey, message);
+//                        LOGGER.info("{} rabbitmq 消费失败 receiveRetryCount 次，扔到消费失败队列，exchange:[{}],routingKey:[{}],message:[{}]",
+//                                rabbitTemplateName, failExchangeName, failRoutingKey, JSON.toJSONString(message));
+//                    }
+//                }
+//            }
+
             Map<String, Object> headersMap = message.getMessageProperties().getHeaders();
             if (CollectionUtils.isEmpty(headersMap)) {
                 message.getMessageProperties().setHeader(COUNT_TIME, ONE);
+            }
+            Integer countTime = (Integer) headersMap.getOrDefault(COUNT_TIME, ONE);
+            if (countTime < receiveRetryCount) {
+                message.getMessageProperties().setHeader(COUNT_TIME, ++countTime);
                 // retry
                 messageSendMQ(retryExchangeName, retryRoutingKey, message);
                 LOGGER.info("{} rabbitmq 消费失败，重新扔回队列，exchange:[{}],routingKey:[{}],message:[{}]",
                         rabbitTemplateName, retryExchangeName, retryRoutingKey, JSON.toJSONString(message));
             } else {
-                if (!headersMap.containsKey(COUNT_TIME) || headersMap.get(COUNT_TIME) == null) {
-                    headersMap.put(COUNT_TIME, ONE);
-                    // retry
-                    messageSendMQ(retryExchangeName, retryRoutingKey, message);
-                    LOGGER.info("{} rabbitmq 消费失败，重新扔回队列，exchange:[{}],routingKey:[{}],message:[{}]",
-                            rabbitTemplateName, retryExchangeName, retryRoutingKey, JSON.toJSONString(message));
-                } else {
-                    Integer countTime = (Integer) headersMap.get(COUNT_TIME);
-                    if (countTime < receiveRetryCount) {
-                        message.getMessageProperties().setHeader(COUNT_TIME, ++countTime);
-                        // retry
-                        messageSendMQ(retryExchangeName, retryRoutingKey, message);
-                        LOGGER.info("{} rabbitmq 消费失败，重新扔回队列，exchange:[{}],routingKey:[{}],message:[{}]",
-                                rabbitTemplateName, retryExchangeName, retryRoutingKey, JSON.toJSONString(message));
-                    } else {
-                        // fail
-                        messageSendMQ(failExchangeName, failRoutingKey, message);
-                        LOGGER.info("{} rabbitmq 消费失败 receiveRetryCount 次，扔到消费失败队列，exchange:[{}],routingKey:[{}],message:[{}]",
-                                rabbitTemplateName, failExchangeName, failRoutingKey, JSON.toJSONString(message));
-                    }
-                }
+                // fail
+                messageSendMQ(failExchangeName, failRoutingKey, message);
+                LOGGER.info("{} rabbitmq 消费失败 receiveRetryCount 次，扔到消费失败队列，exchange:[{}],routingKey:[{}],message:[{}]",
+                        rabbitTemplateName, failExchangeName, failRoutingKey, JSON.toJSONString(message));
             }
         } catch (Throwable e) {
             LOGGER.error("{} rabbitmq 消费失败，重新扔回队列出现异常，exchange:[{}],routingKey:[{}],message:[{}],异常为",
@@ -139,6 +162,12 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
         return true;
     }
 
+//    private void retry(Message message, String retryExchangeName, String retryRoutingKey) {
+//        messageSendMQ(retryExchangeName, retryRoutingKey, message);
+//        LOGGER.info("{} rabbitmq 消费失败，重新扔回队列，exchange:[{}],routingKey:[{}],message:[{}]",
+//                rabbitTemplateName, retryExchangeName, retryRoutingKey, JSON.toJSONString(message));
+//    }
+
     /**
      * 发送mq消息
      *
@@ -147,31 +176,16 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      * @param object     object
      * @return boolean
      */
-    public boolean MQSend(String exchange, String routingKey, Object object) {
-        try {
-            if (object == null) {
-                return false;
-            }
-            String data = JSON.toJSONString(object);
-            String generateId = UUID.randomUUID().toString();
-            // 本地缓存
-            MessageProperties messageProperties = new MessageProperties();
-            // 设置消息是否持久化。Persistent表示持久化，Non-persistent表示不持久化
-            messageProperties.setDeliveryMode(MessageDeliveryMode.NON_PERSISTENT);
-            messageProperties.setCorrelationIdString(generateId);
-            Message message = new Message(data.getBytes(), messageProperties);
-            // 存储
-            storedOperations.saveInitMessage(rabbitTemplateName, generateId, exchange, routingKey, message);
-            // 发送消息
-            this.send(exchange, routingKey, message, new CorrelationData(generateId));
-        } catch (Throwable e) {
-            LOGGER.error("{} sendRabbitMQ 发送异常，exchange:[{}],routingKey:[{}],object:[{}],correlationData:[{}],异常为：",
-                    rabbitTemplateName, exchange, routingKey, JSON.toJSONString(object), e);
+    public boolean messageSendMQ(String exchange, String routingKey, String object) {
+        if (object == null) {
             return false;
         }
-        LOGGER.info("{} sendRabbitMQ 发送成功，exchange:[{}],routingKey:[{}],object:[{}]", rabbitTemplateName, exchange,
-                routingKey, JSON.toJSONString(object));
-        return true;
+        // 本地缓存
+        MessageProperties messageProperties = new MessageProperties();
+        // 设置消息是否持久化。Persistent表示持久化，Non-persistent表示不持久化
+        messageProperties.setDeliveryMode(MessageDeliveryMode.fromInt(this.deliveryMode));
+        Message message = new Message(object.getBytes(), messageProperties);
+        return this.messageSendMQ(exchange, routingKey, message);
     }
 
 
@@ -189,7 +203,7 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
             message.getMessageProperties().setCorrelationIdString(id);
             // 存储
             storedOperations.saveInitMessage(rabbitTemplateName, id, exchange, routingKey, message);
-// 发送消息
+            // 发送消息
             this.send(exchange, routingKey, message, new CorrelationData(id));
         } catch (Throwable e) {
             LOGGER.error("{} messageSendRabbitMQ 发送异常，exchange:[{}],routingKey:[{}],object:[{}],correlationData:[{}],异常为：",
