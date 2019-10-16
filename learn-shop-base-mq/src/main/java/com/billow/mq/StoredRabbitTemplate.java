@@ -69,15 +69,15 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      *
      * @param correlationData correlationData
      * @param ack             ack
-     * @param s               s
+     * @param error           error
      */
     @Override
-    public void confirm(CorrelationData correlationData, boolean ack, String s) {
+    public void confirm(CorrelationData correlationData, boolean ack, String error) {
         Object object = storedOperations.getMessageByCorrelationId(rabbitTemplateName, correlationData.getId());
         if (!ack) {
-            LOGGER.info("{} 发送RabbitMQ消息 ack确认 失败: [{}]", rabbitTemplateName, JSON.toJSONString(object));
+            LOGGER.info("{} 发送RabbitMQ消息 ack确认 失败: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(object), JSON.toJSONString(error));
         } else {
-            LOGGER.info("{} 发送RabbitMQ消息 ack确认 成功: [{}]", rabbitTemplateName, JSON.toJSONString(object));
+            LOGGER.info("{} 发送RabbitMQ消息 ack确认 成功: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(object), JSON.toJSONString(error));
             storedOperations.updateSendMessageSuccess(rabbitTemplateName, correlationData.getId());
         }
     }
@@ -88,14 +88,14 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      *
      * @param message    message
      * @param code       code
-     * @param s          s
+     * @param error      error
      * @param exchange   exchange
      * @param routingKey routingKey
      */
     @Override
-    public void returnedMessage(Message message, int code, String s, String exchange, String routingKey) {
-        LOGGER.error("{} 发送RabbitMQ消息returnedMessage，出现异常，Exchange不存在或发送至Exchange却没有发送到Queue中，message：[{}], code[{}], s[{}], exchange[{}], routingKey[{}]",
-                rabbitTemplateName, JSON.toJSONString(message), JSON.toJSONString(code), JSON.toJSONString(s), JSON.toJSONString(exchange), JSON.toJSONString(routingKey));
+    public void returnedMessage(Message message, int code, String error, String exchange, String routingKey) {
+        LOGGER.error("{} 发送RabbitMQ消息returnedMessage，出现异常，Exchange不存在或发送至Exchange却没有发送到Queue中，message：[{}], code[{}], error[{}], exchange[{}], routingKey[{}]",
+                rabbitTemplateName, JSON.toJSONString(message), JSON.toJSONString(code), JSON.toJSONString(error), JSON.toJSONString(exchange), JSON.toJSONString(routingKey));
     }
 
     /**
@@ -112,31 +112,6 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
     public boolean retryRabbitMQ(Message message, String retryExchangeName, String retryRoutingKey,
                                  String failExchangeName, String failRoutingKey) {
         try {
-//            Map<String, Object> headersMap = message.getMessageProperties().getHeaders();
-//            if (CollectionUtils.isEmpty(headersMap)) {
-//                message.getMessageProperties().setHeader(COUNT_TIME, ONE);
-//                // retry
-//                this.retry(message, retryExchangeName, retryRoutingKey);
-//            } else {
-//                if (!headersMap.containsKey(COUNT_TIME) || headersMap.get(COUNT_TIME) == null) {
-//                    headersMap.put(COUNT_TIME, ONE);
-//                    // retry
-//                    this.retry(message, retryExchangeName, retryRoutingKey);
-//                } else {
-//                    Integer countTime = (Integer) headersMap.get(COUNT_TIME);
-//                    if (countTime < receiveRetryCount) {
-//                        message.getMessageProperties().setHeader(COUNT_TIME, ++countTime);
-//                        // retry
-//                        this.retry(message, retryExchangeName, retryRoutingKey);
-//                    } else {
-//                        // fail
-//                        messageSendMQ(failExchangeName, failRoutingKey, message);
-//                        LOGGER.info("{} rabbitmq 消费失败 receiveRetryCount 次，扔到消费失败队列，exchange:[{}],routingKey:[{}],message:[{}]",
-//                                rabbitTemplateName, failExchangeName, failRoutingKey, JSON.toJSONString(message));
-//                    }
-//                }
-//            }
-
             Map<String, Object> headersMap = message.getMessageProperties().getHeaders();
             if (CollectionUtils.isEmpty(headersMap)) {
                 message.getMessageProperties().setHeader(COUNT_TIME, ONE);
@@ -161,12 +136,6 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
         }
         return true;
     }
-
-//    private void retry(Message message, String retryExchangeName, String retryRoutingKey) {
-//        messageSendMQ(retryExchangeName, retryRoutingKey, message);
-//        LOGGER.info("{} rabbitmq 消费失败，重新扔回队列，exchange:[{}],routingKey:[{}],message:[{}]",
-//                rabbitTemplateName, retryExchangeName, retryRoutingKey, JSON.toJSONString(message));
-//    }
 
     /**
      * 发送mq消息
