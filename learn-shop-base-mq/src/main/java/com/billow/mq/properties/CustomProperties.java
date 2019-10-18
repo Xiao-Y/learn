@@ -11,6 +11,8 @@ public class CustomProperties {
 
     private Boolean isRetry = true;
     private Integer sendRetryCount = 3;
+    // 重试时间因子
+    private Integer sendRetryFactor = 1;
     private Integer receiveRetryCount = 3;
     private String retryCron = "0/5 * * * * ?";
     private Integer cacheThreshold = 100;

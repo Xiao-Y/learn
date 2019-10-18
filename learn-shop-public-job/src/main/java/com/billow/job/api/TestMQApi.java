@@ -1,8 +1,11 @@
 package com.billow.job.api;
 
 import com.billow.common.amqp.RabbitMqSendMailConfig;
-import com.billow.mq.StoredRabbitTemplate;
+import com.billow.common.amqp.RabbitMqSendMailTTLConfig;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,16 +21,33 @@ import java.util.Date;
 @RequestMapping("/testMQApi")
 public class TestMQApi {
 
+//    @Autowired
+//    private StoredRabbitTemplate publicRabbitTemplate;
+
     @Autowired
-    private StoredRabbitTemplate publicRabbitTemplate;
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private RabbitMqSendMailConfig sendMailConfig;
 
+    @Autowired
+    private RabbitMqSendMailTTLConfig sendMailTTLConfig;
+
     @GetMapping("/sendMessage")
     public void sendMessage() {
-        publicRabbitTemplate.messageSendMQ(sendMailConfig.getExchange(), sendMailConfig.getRouteKey(),
-                "发送测试消息：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss.SSS"));
+//        publicRabbitTemplate.messageSendMQ(sendMailConfig.getExchange() + "22", sendMailConfig.getRouteKey(),
+//                "发送测试消息：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss.SSS"));
+    }
+
+    @GetMapping("/sendMessage2")
+    public void sendMesageTTL() {
+        MessagePostProcessor processor = (Message message) -> {
+            message.getMessageProperties().setExpiration("10000");
+            return message;
+        };
+
+        rabbitTemplate.convertAndSend(sendMailTTLConfig.getExchange(), sendMailTTLConfig.getRouteKeyDlx(),
+                "发送测试消息：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss.SSS"), processor);
     }
 
 }

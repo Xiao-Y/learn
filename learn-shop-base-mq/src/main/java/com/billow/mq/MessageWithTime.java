@@ -17,11 +17,14 @@ public class MessageWithTime {
     private Message message;
     // 重试次数
     private Integer tryCount;
+    // 消息状态
+    private String status;
 
-    public MessageWithTime(Integer tryCount, String exchange, String routingKey, Message message) {
+    public MessageWithTime(Integer tryCount, String exchange, String routingKey,String status, Message message) {
         this.tryCount = tryCount;
         this.exchange = exchange;
         this.routingKey = routingKey;
+        this.status = status;
         this.message = message;
     }
 
@@ -63,6 +66,15 @@ public class MessageWithTime {
 
     public MessageWithTime setTryCount(Integer tryCount) {
         this.tryCount = tryCount;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public MessageWithTime setStatus(String status) {
+        this.status = status;
         return this;
     }
 }

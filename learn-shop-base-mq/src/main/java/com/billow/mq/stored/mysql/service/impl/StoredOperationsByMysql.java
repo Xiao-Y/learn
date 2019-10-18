@@ -26,18 +26,19 @@ public class StoredOperationsByMysql implements StoredOperations {
     private PublisherDao publisherDao;
 
     @Override
-    public void saveInitMessage(String name, String correlationId, String exchange, String routingKey, Message message) {
+    public void saveInitMessage(String rabbitTemplateName, String correlationId, String exchange, String routingKey,
+                                Message message, Date retryDate, Integer tryCount) {
         // sql .... insert mq
         PublisherPo publisherPo = new PublisherPo();
         publisherPo.setExchangeName(exchange);
         publisherPo.setMessage(JSON.toJSONString(message));
-        publisherPo.setRabbitTemplateName(name);
+        publisherPo.setRabbitTemplateName(rabbitTemplateName);
         publisherPo.setRoutingKey(routingKey);
         publisherPo.setBody(new String(message.getBody()));
         publisherPo.setStatus(PublisherStatusEnum.INIT.getStatus());
         publisherPo.setCorrelationId(correlationId);
-        publisherPo.setTryCount(0);
-        publisherPo.setNextRetry(new Date(new Date().getTime() + 10000));
+        publisherPo.setTryCount(tryCount);
+        publisherPo.setNextRetry(retryDate);
         publisherPo.setCreateTime(new Date());
         publisherPo.setUpdateTime(new Date());
         publisherDao.save(publisherPo);
@@ -45,107 +46,93 @@ public class StoredOperationsByMysql implements StoredOperations {
     }
 
     @Override
-    public void updateSendMessageSuccess(String name, String correlationId) {
-        // sql .... update mq success
-        PublisherPo publisherQuery = new PublisherPo();
-        publisherQuery.setCorrelationId(correlationId);
-        publisherQuery.setRabbitTemplateName(name);
-        Example example = Example.of(publisherQuery);
-        List<PublisherPo> list = publisherDao.findAll(example);
-        if (CollectionUtils.isEmpty(list) || list.size() > 1) {
+    public void updateStautsSuccess(String rabbitTemplateName, String correlationId) {
+        PublisherPo publisher = this.findMessage(rabbitTemplateName, correlationId);
+        if (publisher == null) {
             return;
         }
-        PublisherPo mqPublisher = list.get(0);
-        mqPublisher.setStatus(PublisherStatusEnum.SUCCESS.getStatus());
-        mqPublisher.setUpdateTime(new Date());
-        publisherDao.save(mqPublisher);
+        // sql .... update mq success
+        publisher.setStatus(PublisherStatusEnum.SUCCESS.getStatus());
+        publisher.setUpdateTime(new Date());
+        publisherDao.save(publisher);
     }
 
     @Override
-    public void updateSendMessageFail(String name, String correlationId) {
-        // sql .... update mq fail
-        PublisherPo publisherQuery = new PublisherPo();
-        publisherQuery.setCorrelationId(correlationId);
-        publisherQuery.setRabbitTemplateName(name);
-        Example example = Example.of(publisherQuery);
-        List<PublisherPo> list = publisherDao.findAll(example);
-        if (CollectionUtils.isEmpty(list) || list.size() > 1) {
+    public void updateStautsFail(String rabbitTemplateName, String correlationId) {
+        PublisherPo publisher = this.findMessage(rabbitTemplateName, correlationId);
+        if (publisher == null) {
             return;
         }
-        PublisherPo publisher = list.get(0);
+        // sql .... update mq fail
         publisher.setStatus(PublisherStatusEnum.FAIL.getStatus());
         publisher.setUpdateTime(new Date());
         publisherDao.save(publisher);
     }
 
     @Override
-    public void updateTryCountAddOne(String name, String correlationId) {
-        PublisherPo publisherQuery = new PublisherPo();
-        publisherQuery.setCorrelationId(correlationId);
-        publisherQuery.setRabbitTemplateName(name);
-        Example example = Example.of(publisherQuery);
-        List<PublisherPo> list = publisherDao.findAll(example);
-        if (CollectionUtils.isEmpty(list) || list.size() > 1) {
+    public void updateNextRetry(String rabbitTemplateName, String correlationId, Date nextRetry, Integer tryCount) {
+        PublisherPo publisher = this.findMessage(rabbitTemplateName, correlationId);
+        if (publisher == null) {
             return;
         }
-        PublisherPo publisher = list.get(0);
-        publisher.setTryCount(publisher.getTryCount() + 1);
+        // sql .... update mq TryCount + 1
+        publisher.setTryCount(tryCount);
+        publisher.setNextRetry(nextRetry);
         publisher.setUpdateTime(new Date());
         publisherDao.save(publisher);
     }
 
     @Override
-    public MessageWithTime getMessageByCorrelationId(String name, String correlationId) {
-        // sql .... select mq by PublisherStatusEnum
-        PublisherPo mqPublisherQuery = new PublisherPo();
-        mqPublisherQuery.setCorrelationId(correlationId);
-        mqPublisherQuery.setRabbitTemplateName(name);
-        Example example = Example.of(mqPublisherQuery);
-        List<PublisherPo> list = publisherDao.findAll(example);
-        if (CollectionUtils.isEmpty(list) || list.size() > 1) {
+    public MessageWithTime findMessageByCorrelationId(String rabbitTemplateName, String correlationId) {
+        PublisherPo publisher = this.findMessage(rabbitTemplateName, correlationId);
+        if (publisher == null) {
             return null;
         }
-        PublisherPo mqPublisher = list.get(0);
-        Message message = JSON.parseObject(mqPublisher.getMessage(), Message.class);
-        return new MessageWithTime(mqPublisher.getTryCount(), mqPublisher.getExchangeName(), mqPublisher.getRoutingKey(), message);
+        Message message = JSON.parseObject(publisher.getMessage(), Message.class);
+        return new MessageWithTime(publisher.getTryCount(), publisher.getExchangeName(), publisher.getRoutingKey(),
+                publisher.getStatus(), message);
     }
 
-//    @Override
-//    public List<MessageWithTime> getSendFailMessages(String name) {
-//        // 查询4秒前，未发送成功的mq数据返回
-//        // sql .... select all fail mq between time1 and time2
-//        List<MessageWithTime> list = new ArrayList<>();
-//        PublisherPo mqPublisherQuery = new PublisherPo();
-//        mqPublisherQuery.setStatus(PublisherStatusEnum.INIT.getStatus());
-//        mqPublisherQuery.setRabbitTemplateName(name);
-//        Example example = Example.of(mqPublisherQuery);
-//        List<PublisherPo> mqPublisherList = publisherDao.findAll(example);
-//        for (PublisherPo mqPublisher : mqPublisherList) {
-//            Message message = JSON.parseObject(mqPublisher.getMessage(), Message.class);
-//            MessageWithTime messageWithTime = new MessageWithTime(mqPublisher.getTryCount(), mqPublisher.getExchangeName(), mqPublisher.getRoutingKey(), message);
-//            list.add(messageWithTime);
-//        }
-//        return list;
-//    }
-
     @Override
-    public List<MessageWithTime> findRetrySendMessage(String name) {
+    public List<MessageWithTime> findRetryMessage(String rabbitTemplateName) {
         // sql .... select all fail mq between time1 and time2
-
         List<MessageWithTime> list = new ArrayList<>();
+
         PublisherPo publisherQuery = new PublisherPo();
         publisherQuery.setStatus(PublisherStatusEnum.INIT.getStatus());
-        publisherQuery.setRabbitTemplateName(name);
+        publisherQuery.setRabbitTemplateName(rabbitTemplateName);
         Example example = Example.of(publisherQuery);
         List<PublisherPo> publisherPos = publisherDao.findAll(example);
         for (PublisherPo publisherPo : publisherPos) {
             // 获取超时的失败消息
             if (publisherPo.getNextRetry().getTime() < new Date().getTime()) {
                 Message message = JSON.parseObject(publisherPo.getMessage(), Message.class);
-                MessageWithTime messageWithTime = new MessageWithTime(publisherPo.getTryCount(), publisherPo.getExchangeName(), publisherPo.getRoutingKey(), message);
+                MessageWithTime messageWithTime = new MessageWithTime(publisherPo.getTryCount(), publisherPo.getExchangeName(),
+                        publisherPo.getRoutingKey(), publisherPo.getStatus(), message);
                 list.add(messageWithTime);
             }
         }
         return list;
+    }
+
+    /**
+     * 根据 rabbitTemplateName 和 correlationId 查询出 message
+     *
+     * @param rabbitTemplateName
+     * @param correlationId
+     * @return com.billow.mq.stored.mysql.po.PublisherPo
+     * @author LiuYongTao
+     * @date 2019/10/18 14:58
+     */
+    private PublisherPo findMessage(String rabbitTemplateName, String correlationId) {
+        PublisherPo publisherQuery = new PublisherPo();
+        publisherQuery.setCorrelationId(correlationId);
+        publisherQuery.setRabbitTemplateName(rabbitTemplateName);
+        Example example = Example.of(publisherQuery);
+        List<PublisherPo> list = publisherDao.findAll(example);
+        if (CollectionUtils.isEmpty(list) || list.size() > 1) {
+            return null;
+        }
+        return list.get(0);
     }
 }

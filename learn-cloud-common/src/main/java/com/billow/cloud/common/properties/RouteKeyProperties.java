@@ -10,4 +10,6 @@ import lombok.Data;
 public class RouteKeyProperties {
 
     private String sendMail;
+    private String sendMailDlx;
+    private String sendMailTrt;
 }

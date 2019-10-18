@@ -3,6 +3,7 @@ package com.billow.mq.service;
 import com.billow.mq.MessageWithTime;
 import org.springframework.amqp.core.Message;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,58 +17,53 @@ public interface StoredOperations {
     /**
      * 存储初始化 mq 信息
      *
-     * @param name          RabbitTemplateName
-     * @param correlationId 消息唯一键
-     * @param exchange      交换机名称
-     * @param routingKey    路由名称
-     * @param message       消息
+     * @param rabbitTemplateName RabbitTemplateName
+     * @param correlationId      消息唯一键
+     * @param exchange           交换机名称
+     * @param routingKey         路由名称
+     * @param message            消息
+     * @param retryDate          重试时间
+     * @param tryCount           重试次数
      */
-    void saveInitMessage(String name, String correlationId, String exchange, String routingKey, Message message);
+    void saveInitMessage(String rabbitTemplateName, String correlationId, String exchange, String routingKey,
+                         Message message, Date retryDate, Integer tryCount);
 
     /**
      * 更新 mq 消息为成功
      *
      * @param correlationId
      */
-    void updateSendMessageSuccess(String name, String correlationId);
+    void updateStautsSuccess(String rabbitTemplateName, String correlationId);
 
     /**
      * 更新 mq 消息为失败
      *
      * @param correlationId
      */
-    void updateSendMessageFail(String name, String correlationId);
+    void updateStautsFail(String rabbitTemplateName, String correlationId);
 
     /**
-     * 更新 mq 重试次数,每次加一
+     * 更新 mq 重试次数,每次加一。更新下次发送时间
      *
      * @param correlationId
      */
-    void updateTryCountAddOne(String name, String correlationId);
+    void updateNextRetry(String rabbitTemplateName, String correlationId, Date nextRetry, Integer tryCount);
 
     /**
      * 根据 correlationId 获取 mq 消息
      *
-     * @param name          RabbitTemplateName
-     * @param correlationId 消息唯一键
+     * @param rabbitTemplateName RabbitTemplateName
+     * @param correlationId      消息唯一键
      * @return
      */
-    MessageWithTime getMessageByCorrelationId(String name, String correlationId);
-
-//    /**
-//     * 获取发送失败的mq消息
-//     *
-//     * @param name RabbitTemplateName
-//     * @return
-//     */
-//    List<MessageWithTime> getSendFailMessages(String name);
+    MessageWithTime findMessageByCorrelationId(String rabbitTemplateName, String correlationId);
 
     /**
      * 需要重新投递，投递失败的mq消息
      *
-     * @param name RabbitTemplateName
+     * @param rabbitTemplateName RabbitTemplateName
      * @return
      */
-    List<MessageWithTime> findRetrySendMessage(String name);
+    List<MessageWithTime> findRetryMessage(String rabbitTemplateName);
 
 }

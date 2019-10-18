@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,13 +35,15 @@ public class RetrySendMessage {
     private Integer retryCount;
     // 补偿消息阈值，超过会打印错误日志
     private Integer cacheThreshold;
+    private NextRetryDate nextRetryDate;
 
-    public RetrySendMessage(StoredRabbitTemplate storedRabbitTemplate, Integer retryCount, Integer cacheThreshold) {
+    public RetrySendMessage(StoredRabbitTemplate storedRabbitTemplate, Integer retryCount, Integer cacheThreshold, NextRetryDate nextRetryDate) {
         this.storedRabbitTemplate = storedRabbitTemplate;
         this.storedOperations = storedRabbitTemplate.getStoredOperations();
         this.rabbitTemplateName = storedRabbitTemplate.getRabbitTemplateName();
         this.retryCount = retryCount;
         this.cacheThreshold = cacheThreshold;
+        this.nextRetryDate = nextRetryDate;
     }
 
     /**
@@ -50,7 +53,7 @@ public class RetrySendMessage {
     public void startRetry() {
         try {
             // 需要重新投递，投递失败的mq消息
-            List<MessageWithTime> list = storedOperations.findRetrySendMessage(rabbitTemplateName);
+            List<MessageWithTime> list = storedOperations.findRetryMessage(rabbitTemplateName);
             if (CollectionUtils.isEmpty(list)) {
                 return;
             }
@@ -62,14 +65,18 @@ public class RetrySendMessage {
                     continue;
                 }
                 Integer tryCount = messageWithTime.getTryCount();
-                if (tryCount <= retryCount) {
+                if (tryCount < retryCount) {
                     ++count;
                     // 之前的数据进行重试
-                    storedRabbitTemplate.send(messageWithTime.getExchange(), messageWithTime.getRoutingKey(), messageWithTime.getMessage(), new CorrelationData(correlationId));
-                    storedOperations.updateTryCountAddOne(rabbitTemplateName, correlationId);
+                    storedRabbitTemplate.send(messageWithTime.getExchange(), messageWithTime.getRoutingKey(),
+                            messageWithTime.getMessage(), new CorrelationData(correlationId));
+                    ++tryCount;
+                    // 获取下次重试时间
+                    Date retryDate = nextRetryDate.nextRetryDate(tryCount);
+                    storedOperations.updateNextRetry(rabbitTemplateName, correlationId, retryDate, tryCount);
                     LOGGER.info("{} RabbitMQ 补偿发送, messageWithTime:[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime));
                 } else {// 超过最大重试次数，更新消息为失败，人工介入
-                    storedOperations.updateSendMessageFail(rabbitTemplateName, correlationId);
+                    storedOperations.updateStautsFail(rabbitTemplateName, correlationId);
                 }
             }
             // 打印警告

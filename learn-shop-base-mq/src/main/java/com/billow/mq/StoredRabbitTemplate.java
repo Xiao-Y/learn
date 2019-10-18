@@ -12,6 +12,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -48,6 +49,8 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      */
     private StoredOperations storedOperations;
 
+    private NextRetryDate nextRetryDate;
+
     /**
      * @param connectionFactory  rabbitmq连接工厂
      * @param storedOperations   重试策略
@@ -56,12 +59,13 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      * @param deliveryMode       设置消息是否持久化。2-Persistent表示持久化，1-Non-persistent表示不持久化
      */
     public StoredRabbitTemplate(ConnectionFactory connectionFactory, StoredOperations storedOperations,
-                                String rabbitTemplateName, int receiveRetryCount, int deliveryMode) {
+                                String rabbitTemplateName, int receiveRetryCount, int deliveryMode, NextRetryDate nextRetryDate) {
         super(connectionFactory);
         this.rabbitTemplateName = rabbitTemplateName;
         this.storedOperations = storedOperations;
         this.receiveRetryCount = receiveRetryCount;
         this.deliveryMode = deliveryMode;
+        this.nextRetryDate = nextRetryDate;
     }
 
     /**
@@ -69,33 +73,36 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      *
      * @param correlationData correlationData
      * @param ack             ack
-     * @param error           error
+     * @param cause           error
      */
     @Override
-    public void confirm(CorrelationData correlationData, boolean ack, String error) {
-        Object object = storedOperations.getMessageByCorrelationId(rabbitTemplateName, correlationData.getId());
+    public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+        MessageWithTime messageWithTime = storedOperations.findMessageByCorrelationId(rabbitTemplateName, correlationData.getId());
         if (!ack) {
-            LOGGER.info("{} 发送RabbitMQ消息 ack确认 失败: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(object), JSON.toJSONString(error));
+            LOGGER.info("{} 发送RabbitMQ消息 ack确认 失败: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime), JSON.toJSONString(cause));
         } else {
-            LOGGER.info("{} 发送RabbitMQ消息 ack确认 成功: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(object), JSON.toJSONString(error));
-            storedOperations.updateSendMessageSuccess(rabbitTemplateName, correlationData.getId());
+            LOGGER.info("{} 发送RabbitMQ消息 ack确认 成功: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime), JSON.toJSONString(cause));
+            storedOperations.updateStautsSuccess(rabbitTemplateName, correlationData.getId());
         }
     }
 
     /**
      * RabbitMQ的return回调<br/>
-     * 发送至Exchange却没有发送到Queue时，也会走一遍 confirm 方法
+     * <p>
+     * 发送至Exchange却没有发送到Queue时，也会走一遍 confirm 方法<br/>
+     * <p>
+     * 如果消息真的不可达，那么就要根据你实际的业务去做对应处理，比如是直接落库，记录补偿，还是放到死信队列里面，之后再进行落库
      *
      * @param message    message
-     * @param code       code
-     * @param error      error
+     * @param replyCode  code
+     * @param replyText  error
      * @param exchange   exchange
      * @param routingKey routingKey
      */
     @Override
-    public void returnedMessage(Message message, int code, String error, String exchange, String routingKey) {
-        LOGGER.error("{} 发送RabbitMQ消息returnedMessage，出现异常，Exchange不存在或发送至Exchange却没有发送到Queue中，message：[{}], code[{}], error[{}], exchange[{}], routingKey[{}]",
-                rabbitTemplateName, JSON.toJSONString(message), JSON.toJSONString(code), JSON.toJSONString(error), JSON.toJSONString(exchange), JSON.toJSONString(routingKey));
+    public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+        LOGGER.error("{} 发送RabbitMQ消息returnedMessage，出现异常，Exchange不存在或发送至Exchange却没有发送到Queue中，message：[{}], replyCode[{}], replyText[{}], exchange[{}], routingKey[{}]",
+                rabbitTemplateName, JSON.toJSONString(message), JSON.toJSONString(replyCode), JSON.toJSONString(replyText), JSON.toJSONString(exchange), JSON.toJSONString(routingKey));
     }
 
     /**
@@ -170,8 +177,11 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
         try {
             String id = UUID.randomUUID().toString();
             message.getMessageProperties().setCorrelationIdString(id);
+            int tryCount = 0;
+            // 获取下次重试时间
+            Date retryDate = nextRetryDate.nextRetryDate(tryCount);
             // 存储
-            storedOperations.saveInitMessage(rabbitTemplateName, id, exchange, routingKey, message);
+            storedOperations.saveInitMessage(rabbitTemplateName, id, exchange, routingKey, message, retryDate, tryCount);
             // 发送消息
             this.send(exchange, routingKey, message, new CorrelationData(id));
         } catch (Throwable e) {

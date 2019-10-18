@@ -19,7 +19,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 /**
- * Created by shuai on 2019/4/23.
+ * MQ 配置
+ *
+ * @author LiuYongTao
+ * @date 2019/10/17 16:53
  */
 @Configuration
 public class MultipleRabbitMQConfig {
@@ -34,6 +37,19 @@ public class MultipleRabbitMQConfig {
     @ConditionalOnMissingBean(StoredOperations.class)
     public StoredOperations storedOperationsByMysql() {
         return new StoredOperationsByMysql();
+    }
+
+    /**
+     * 默认实现的重试时间因子
+     *
+     * @return com.billow.mq.NextRetryDate
+     * @author LiuYongTao
+     * @date 2019/10/18 15:23
+     */
+    @Bean
+    @ConditionalOnMissingBean(NextRetryDate.class)
+    public NextRetryDate nextRetryDateDefault() {
+        return new NextRetryDateDefault();
     }
 
     // mq主连接
@@ -58,7 +74,7 @@ public class MultipleRabbitMQConfig {
             @Value("${v1.spring.rabbitmq.template.mandatory}") Boolean mandatory) {
         CustomProperties custom = mqProperties.getCustom();
         StoredRabbitTemplate publicRabbitTemplate = new StoredRabbitTemplate(connectionFactory, storedOperations,
-                custom.getTemplateName(), custom.getReceiveRetryCount(), custom.getDeliveryMode());
+                custom.getTemplateName(), custom.getReceiveRetryCount(), custom.getDeliveryMode(), nextRetryDateDefault());
         publicRabbitTemplate.setMandatory(mandatory);
         publicRabbitTemplate.setConfirmCallback(publicRabbitTemplate);
         publicRabbitTemplate.setReturnCallback(publicRabbitTemplate);
@@ -70,7 +86,7 @@ public class MultipleRabbitMQConfig {
     @Bean
     public RetrySendMessage retrySendMessage(StoredRabbitTemplate publicRabbitTemplate) {
         CustomProperties custom = mqProperties.getCustom();
-        return new RetrySendMessage(publicRabbitTemplate, custom.getSendRetryCount(), custom.getCacheThreshold());
+        return new RetrySendMessage(publicRabbitTemplate, custom.getSendRetryCount(), custom.getCacheThreshold(), nextRetryDateDefault());
     }
 
 
