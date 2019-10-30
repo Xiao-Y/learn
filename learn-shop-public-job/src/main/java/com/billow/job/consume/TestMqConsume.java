@@ -24,7 +24,7 @@ public class TestMqConsume {
     @RabbitListener(queues = "${config.mq.queue.sendMail}")
     public void sendmailQueue(Message message, Channel channel) throws Exception {
 //        Thread.sleep(100);
-//        System.out.println("开始消费：" + JSONObject.toJSONString(message));
+        System.out.println("开始消费：" + JSONObject.toJSONString(message));
 //        System.out.println("开始消费：" + new String(message.getBody()));
 //        channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
         try {

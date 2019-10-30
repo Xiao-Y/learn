@@ -77,6 +77,10 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
      */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+        if (correlationData == null) {
+            LOGGER.info("{} 发送RabbitMQ消息 ack确认: [{}], error[{}]", rabbitTemplateName, ack, cause);
+            return;
+        }
         MessageWithTime messageWithTime = storedOperations.findMessageByCorrelationId(rabbitTemplateName, correlationData.getId());
         if (!ack) {
             LOGGER.info("{} 发送RabbitMQ消息 ack确认 失败: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime), JSON.toJSONString(cause));
