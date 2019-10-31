@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.product.mapper.ProductMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.billow.product.pojo.po.ProductPo">
+        <result column="id" property="id"/>
+        <result column="creator_code" property="creatorCode"/>
+        <result column="updater_code" property="updaterCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="valid_ind" property="validInd"/>
+        <result column="dele_flag" property="deleFlag"/>
+        <result column="commodity_info" property="commodityInfo"/>
+        <result column="grade" property="grade"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="locality_growth" property="localityGrowth"/>
+        <result column="packing" property="packing"/>
+        <result column="spec" property="spec"/>
+        <result column="commodity_name" property="commodityName"/>
+        <result column="status" property="status"/>
+        <result column="quantity" property="quantity"/>
+        <result column="img" property="img"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        creator_code,
+        updater_code,
+        create_time,
+        update_time,
+        valid_ind,
+        dele_flag, commodity_info, grade, unit_price, locality_growth, packing, spec, commodity_name, status, quantity, img
+    </sql>
+
+</mapper>

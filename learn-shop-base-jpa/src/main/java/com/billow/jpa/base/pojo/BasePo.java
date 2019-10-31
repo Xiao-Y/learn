@@ -34,7 +34,7 @@ public class BasePo extends BasePage implements Serializable {
     // 创建人
     @CreatedBy
     private String creatorCode;
-    // 创建人
+    // 更新人
     @LastModifiedBy
     private String updaterCode;
     // 创建时间

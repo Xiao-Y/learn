@@ -43,6 +43,7 @@
         <module>learn-shop-base-job</module>
         <module>learn-shop-base-mq</module>
         <module>learn-shop-base-jpa</module>
+        <module>learn-shop-base-mybatis</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -128,6 +129,11 @@
             <dependency>
                 <groupId>com.billow</groupId>
                 <artifactId>learn-shop-base-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
