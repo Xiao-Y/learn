@@ -1,15 +1,10 @@
 package com.billow.order.producer;
 
-import com.billow.common.amqp.RabbitMqConfig;
-import com.billow.order.pojo.vo.OrderVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * 订单生产者
@@ -24,20 +19,20 @@ public class CoreOrderProducer {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
-    @Autowired
-    private RabbitMqConfig rabbitMqConfig;
-
-    public void sendOrderCar() {
-        String message = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        amqpTemplate.convertAndSend(rabbitMqConfig.getOrderStatusQueue().getName(), message);
-        logger.info("【MQ发送内容】" + message);
-    }
-
-    public void sendOrderCar(OrderVo vo) {
-        vo.setCreatorCode("3333");
-        amqpTemplate.convertAndSend(rabbitMqConfig.getTestQueue().getName(), vo);
-        logger.info("【MQ发送内容】" + vo.toString());
-    }
+//    @Autowired
+//    private RabbitMqConfig rabbitMqConfig;
+//
+//    public void sendOrderCar() {
+//        String message = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+//        amqpTemplate.convertAndSend(rabbitMqConfig.getOrderStatusQueue().getName(), message);
+//        logger.info("【MQ发送内容】" + message);
+//    }
+//
+//    public void sendOrderCar(OrderVo vo) {
+//        vo.setCreatorCode("3333");
+//        amqpTemplate.convertAndSend(rabbitMqConfig.getTestQueue().getName(), vo);
+//        logger.info("【MQ发送内容】" + vo.toString());
+//    }
 
     //轮训
 //    @InboundChannelAdapter(value = Source.OUTPUT)
