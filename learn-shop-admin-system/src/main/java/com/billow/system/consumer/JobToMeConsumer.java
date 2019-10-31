@@ -25,7 +25,7 @@ public class JobToMeConsumer {
     @Autowired
     private CustomProperties customProperties;
 
-    @RabbitListener(queues = "${config.mq.queue.sendMai}")
+    @RabbitListener(queues = "${config.mq.queue.sendMail}")
     @RabbitHandler
     public void sendMail(MailEx mailEx) throws Exception {
         log.info(JSONObject.toJSONString(mailEx));

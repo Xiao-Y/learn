@@ -32,7 +32,7 @@ public class TestMQApi {
 
     @GetMapping("/sendMessage")
     public void sendMessage() {
-        publicRabbitTemplate.messageSendMQ(sendMailConfig.getExchange(), sendMailConfig.getRouteKey(),
+        publicRabbitTemplate.messageSendMQ(sendMailConfig.getExchange() + "22", sendMailConfig.getRouteKey(),
                 "发送测试消息：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss.SSS"));
     }
 

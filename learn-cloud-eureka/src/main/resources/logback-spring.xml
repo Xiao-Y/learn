@@ -3,7 +3,7 @@
     <!-- spring boot默认配置 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <springProperty scope="context" name="APP_PORT" source="server.port"/>
+    <springProperty scope="context" name="APP_PORT" source="config.eureka.server.port" defaultValue="0000"/>
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
 
     <property name="LOG_HOME" value="/usr/app/logs"/>
@@ -34,9 +34,6 @@
     </appender>
 
     <logger name="com.billow" level="info"/>
-    <!-- hibernate logger -->
-    <logger name="org.hibernate.SQL" level="DEBUG"/>
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
 
     <!-- 一般用默认的info就可以 -->
     <root level="info">

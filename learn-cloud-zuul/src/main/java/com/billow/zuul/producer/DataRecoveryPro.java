@@ -1,7 +1,6 @@
 package com.billow.zuul.producer;
 
-import com.billow.cloud.common.properties.ConfigCommonProperties;
-import com.billow.zuul.config.RabbitMqConfig;
+import com.billow.zuul.config.MqExecuteSqlConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class DataRecoveryPro {
     @Autowired
     private AmqpTemplate amqpTemplate;
     @Autowired
-    private RabbitMqConfig rabbitMqConfig;
+    private MqExecuteSqlConfig mqExecuteSqlConfig;
 
     /**
      * 执行sql 和 加载缓存
@@ -30,8 +29,10 @@ public class DataRecoveryPro {
      * @date 2019/8/11 10:33
      */
     public void dataRecovery() {
-        String executesqlRoutingKey = rabbitMqConfig.getExecutesqlQueue().getName();
-        log.info("RoutingKey:{}，发送初始化 sql 的 mq", executesqlRoutingKey);
-        amqpTemplate.convertAndSend(executesqlRoutingKey, "开始执行sql...");
+        String exchange = mqExecuteSqlConfig.getExchange();
+        String routeKey = mqExecuteSqlConfig.getRouteKey();
+        String queue = mqExecuteSqlConfig.getQueue();
+        log.info("exchange:{},routeKey:{},queue{}，发送初始化 sql 的 mq", exchange, routeKey, queue);
+        amqpTemplate.convertAndSend(exchange, routeKey, "开始执行sql...");
     }
 }

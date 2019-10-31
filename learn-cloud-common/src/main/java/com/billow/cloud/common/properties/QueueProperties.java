@@ -12,4 +12,5 @@ public class QueueProperties {
     private String sendMail;
     private String sendMailDlx;
     private String sendMailTrt;
+    private String executeSql;
 }

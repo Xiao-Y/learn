@@ -31,7 +31,7 @@ public class ZuulToMeConsumer {
     private StartLoading startLoading;
 
     @Async("fxbDrawExecutor")
-    @RabbitListener(queues = "${config.mq.zuulToSystem.executesqlRoutingKey}")
+    @RabbitListener(queues = "${config.mq.queue.executeSql}")
     @RabbitHandler
     public void executesql(String message) throws Exception {
         log.info(message);

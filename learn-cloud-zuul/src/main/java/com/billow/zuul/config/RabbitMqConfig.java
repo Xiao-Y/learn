@@ -2,13 +2,10 @@ package com.billow.zuul.config;
 
 import com.billow.cloud.common.properties.ConfigCommonProperties;
 import com.billow.cloud.common.properties.MqProperties;
-import com.billow.cloud.common.properties.ZuulToSystemProperties;
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,16 +23,6 @@ public class RabbitMqConfig {
 
     public MqProperties getMq() {
         return configCommonProperties.getMq();
-    }
-
-    public ZuulToSystemProperties getZuulToSystem() {
-        ZuulToSystemProperties zuulToSystem = this.getMq().getZuulToSystem();
-        return zuulToSystem;
-    }
-
-    @Bean
-    public Queue getExecutesqlQueue() {
-        return new Queue(this.getZuulToSystem().getExecutesqlRoutingKey());
     }
 
     @Bean

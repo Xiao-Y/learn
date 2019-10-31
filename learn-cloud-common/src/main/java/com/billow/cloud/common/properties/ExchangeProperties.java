@@ -12,4 +12,5 @@ import lombok.Data;
 public class ExchangeProperties {
 
     private String sendMail;
+    private String executeSql;
 }
