@@ -1,6 +1,6 @@
 package com.billow.system.dao.spec;
 
-import com.billow.common.jpa.utils.QueryUtils;
+import com.billow.jpa.utils.QueryUtils;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.tools.utlis.ConvertUtils;

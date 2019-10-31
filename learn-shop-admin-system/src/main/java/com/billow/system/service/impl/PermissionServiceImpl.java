@@ -1,10 +1,10 @@
 package com.billow.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.billow.common.jpa.DefaultSpec;
+import com.billow.jpa.DefaultSpec;
 import com.billow.system.dao.PermissionDao;
-import com.billow.system.dao.spec.PermissionSpec;
 import com.billow.system.dao.RolePermissionDao;
+import com.billow.system.dao.spec.PermissionSpec;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;

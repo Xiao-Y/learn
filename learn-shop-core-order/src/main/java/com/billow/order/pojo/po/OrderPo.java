@@ -1,7 +1,6 @@
 package com.billow.order.pojo.po;
 
-
-import com.billow.common.base.pojo.BasePo;
+import com.billow.jpa.base.pojo.BasePo;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

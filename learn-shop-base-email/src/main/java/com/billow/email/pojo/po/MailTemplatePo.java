@@ -1,6 +1,6 @@
 package com.billow.email.pojo.po;
 
-import com.billow.email.pojo.BasePo;
+import com.billow.jpa.base.pojo.BasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;

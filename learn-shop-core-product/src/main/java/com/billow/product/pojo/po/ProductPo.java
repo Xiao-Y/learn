@@ -1,7 +1,7 @@
 package com.billow.product.pojo.po;
 
 
-import com.billow.common.base.pojo.BasePoDefault;
+import com.billow.jpa.base.pojo.BasePoDefault;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

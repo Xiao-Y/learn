@@ -21,6 +21,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-aop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-jpa</artifactId>
+        </dependency>
          <!--分布式事务 start-->
         <dependency>
             <groupId>com.codingapi</groupId>

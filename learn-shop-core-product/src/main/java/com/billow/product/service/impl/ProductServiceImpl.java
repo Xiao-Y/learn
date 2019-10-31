@@ -1,7 +1,7 @@
 package com.billow.product.service.impl;
 
 import cn.hutool.core.io.FileUtil;
-import com.billow.common.jpa.DefaultSpec;
+import com.billow.jpa.DefaultSpec;
 import com.billow.product.dao.ProductDao;
 import com.billow.product.dao.ProductImageDao;
 import com.billow.product.dao.ProductSpec;

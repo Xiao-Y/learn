@@ -46,6 +46,7 @@
         <module>learn-shop-base-email</module>
         <module>learn-shop-base-job</module>
         <module>learn-shop-base-mq</module>
+        <module>learn-shop-base-jpa</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -129,15 +130,15 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>${alibaba.druid.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.googlecode.log4jdbc</groupId>-->
-<!--                <artifactId>log4jdbc4</artifactId>-->
-<!--                <version>1.2</version>-->
-<!--            </dependency>-->
             <!-- swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -269,10 +270,10 @@
         </dependency>
         <!-- spring boot devtools 依赖包. -->
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-devtools</artifactId>-->
-            <!--<optional>true</optional>-->
-            <!--<scope>true</scope>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-devtools</artifactId>-->
+        <!--<optional>true</optional>-->
+        <!--<scope>true</scope>-->
         <!--</dependency>-->
         <dependency>
             <groupId>junit</groupId>

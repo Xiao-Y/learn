@@ -1,7 +1,7 @@
 package com.billow.system.service.impl;
 
-import com.billow.common.jpa.DefaultSpec;
 import com.billow.common.redis.RedisUtils;
+import com.billow.jpa.DefaultSpec;
 import com.billow.system.dao.DataDictionaryDao;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.vo.DataDictionaryVo;

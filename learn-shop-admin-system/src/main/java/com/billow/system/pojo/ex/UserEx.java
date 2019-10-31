@@ -1,13 +1,11 @@
 package com.billow.system.pojo.ex;
 
 
-import com.billow.common.base.pojo.BasePo;
+import com.billow.jpa.base.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 

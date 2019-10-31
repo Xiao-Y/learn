@@ -1,14 +1,12 @@
 package com.billow.system.pojo.po;
 
 
-import com.billow.common.base.pojo.BasePo;
+import com.billow.jpa.base.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import java.io.Serializable;
 

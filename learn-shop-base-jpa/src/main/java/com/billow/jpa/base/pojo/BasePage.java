@@ -1,5 +1,4 @@
-package com.billow.email.pojo;
-
+package com.billow.jpa.base.pojo;
 
 import java.io.Serializable;
 
@@ -17,11 +16,9 @@ public abstract class BasePage implements Serializable {
 
     // 每页要显示的记录数
     private Integer pageSize = PAGE_SIZE;
-
-    // 当前页号
+    // "当前页号"
     private Integer pageNo = PAGE_NO;
-
-    // 总记录数
+    // "总记录数"
     private Integer recordCount = RECORD_COUNT;
 
     private Integer offset = PAGE_SIZE * PAGE_NO;

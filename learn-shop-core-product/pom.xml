@@ -22,6 +22,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-jpa</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
