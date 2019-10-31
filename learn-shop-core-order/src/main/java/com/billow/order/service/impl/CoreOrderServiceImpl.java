@@ -1,14 +1,13 @@
 package com.billow.order.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.billow.order.dao.OrderDao;
 import com.billow.order.pojo.po.OrderPo;
 import com.billow.order.pojo.vo.OrderVo;
 import com.billow.order.remote.TestUserRemote;
 import com.billow.order.service.CoreOrderService;
-import com.codingapi.tx.annotation.TxTransaction;
-import com.billow.tools.resData.BaseResponse;
-import com.billow.order.dao.OrderDao;
 import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +74,6 @@ public class CoreOrderServiceImpl implements CoreOrderService {
     }
 
     @Override
-    @TxTransaction(isStart = true)
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public BaseResponse<OrderVo> saveUserAndOrderTx() {
         //远程事务已经提交后，本地异常，远程事务会回滚

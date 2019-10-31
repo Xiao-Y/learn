@@ -32,16 +32,12 @@
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
 
+        <module>learn-shop-public-job</module>
+        <module>learn-shop-public-auth</module>
+
         <module>learn-shop-base-common</module>
         <module>learn-shop-base-tools</module>
         <module>learn-shop-base-aop</module>
-
-        <module>learn-shop-public-job</module>
-        <!--<module>learn-shop-public-tx</module>-->
-        <module>tx-manager</module>
-        <module>learn-shop-public-auth</module>
-        <module>auth-server</module>
-        <module>demo-client3</module>
         <module>learn-shop-base-workflow</module>
         <module>learn-shop-base-email</module>
         <module>learn-shop-base-job</module>
@@ -189,30 +185,6 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
-            <!-- 分布式事务 -->
-            <dependency>
-                <groupId>com.codingapi</groupId>
-                <artifactId>transaction-springcloud</artifactId>
-                <version>${lcn.last.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>com.codingapi</groupId>
-                <artifactId>tx-plugins-db</artifactId>
-                <version>${lcn.last.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
             <!-- redis -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -266,19 +238,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!-- spring boot devtools 依赖包. -->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-devtools</artifactId>-->
-        <!--<optional>true</optional>-->
-        <!--<scope>true</scope>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

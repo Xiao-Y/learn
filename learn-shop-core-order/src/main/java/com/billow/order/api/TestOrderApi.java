@@ -40,7 +40,7 @@ public class TestOrderApi extends BaseApi {
     public boolean sendMQ() {
         boolean flag = false;
         try {
-            coreOrderProducer.sendOrderCar();
+//            coreOrderProducer.sendOrderCar();
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class TestOrderApi extends BaseApi {
     public String sendMQTest() {
         OrderVo vo = new OrderVo();
         vo.setProductName("Billow").setProductNo("SSDFW1231").setCreateTime(new Date());
-        coreOrderProducer.sendOrderCar(vo);
+//        coreOrderProducer.sendOrderCar(vo);
         return "SSDFW1231";
     }
 
