@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
+import com.billow.cloud.common.properties.DruidDSProperties;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
