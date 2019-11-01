@@ -32,7 +32,7 @@ public class CodeGenerator {
      * @author LiuYongTao
      * @date 2019/10/29 9:46
      */
-    private InjectionConfig getInjectionConfig() {
+    private InjectionConfig getInjectionConfig(PackageConfig pc) {
         String projectPath = System.getProperty("user.dir") + "/learn-shop-base-mybatis";
         // 如果模板引擎是 freemarker
         String templatePath = "/templates/mapper.xml.ftl";
@@ -47,15 +47,37 @@ public class CodeGenerator {
         };
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
-        // 自定义配置会被优先输出
+
+        // 自定义配置:mapper.xml
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/src/main/resources/mapper/"
-                        + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+                // 自定义输出文件名
+                return projectPath + "/src/main/resources/mapper/" + tableInfo.getXmlName() + StringPool.DOT_XML;
             }
         });
+
+        // 自定义配置:controller.java
+        templatePath = "/template/controller.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/api/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
+            }
+        });
+
+        // 自定义配置:xxVo.java
+        templatePath = "/template/vo.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/pojo/vo/" +
+                        tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "Vo" + StringPool.DOT_JAVA;
+            }
+        });
+
         cfg.setFileOutConfigList(focList);
         return cfg;
     }
@@ -93,13 +115,14 @@ public class CodeGenerator {
         gc.setBaseResultMap(true);
         gc.setBaseColumnList(true);
         gc.setFileOverride(true);
-        gc.setServiceName("%sService");
         gc.setIdType(IdType.ID_WORKER);
 
+        gc.setServiceName("%sService");
         gc.setEntityName("%sPo");
         gc.setControllerName("%sApi");
         gc.setMapperName("%sDao");
-//        gc.setSwagger2(true); //实体属性 Swagger2 注解
+        gc.setXmlName("%sMapper");
+        gc.setSwagger2(true); //实体属性 Swagger2 注解
         return gc;
     }
 
@@ -108,11 +131,6 @@ public class CodeGenerator {
         GlobalConfig gc = this.getGlobalConfig();
         // 数据源配置
         DataSourceConfig dsc = this.getDataSourceConfig();
-        // 模板配置
-        TemplateConfig templateConfig = new TemplateConfig();
-        templateConfig.setXml(null);
-        // 自定义配置
-        InjectionConfig cfg = this.getInjectionConfig();
         // 策略配置
         StrategyConfig strategy = this.getStrategyConfig();
 
@@ -120,20 +138,22 @@ public class CodeGenerator {
         AutoGenerator mpg = new AutoGenerator();
         mpg.setGlobalConfig(gc);
         mpg.setDataSource(dsc);
-        mpg.setTemplate(templateConfig);
-        mpg.setCfg(cfg);
         mpg.setStrategy(strategy);
         // 包配置
         PackageConfig pc = this.getPackageConfig(mpg);
         mpg.setPackageInfo(pc);
+        // 自定义配置
+        InjectionConfig cfg = this.getInjectionConfig(pc);
+        mpg.setCfg(cfg);
+        // 模板配置
+        TemplateConfig templateConfig = new TemplateConfig();
+        templateConfig.setXml(null);
+        templateConfig.setController(null);
+        mpg.setTemplate(templateConfig);
+
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
 
         mpg.execute();
-    }
-
-    public static void main(String[] args) {
-        CodeGenerator cg = new CodeGenerator();
-        cg.gen();
     }
 
     /**
@@ -159,7 +179,6 @@ public class CodeGenerator {
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setInclude("cp_product");
         strategy.setTablePrefix("cp_");
-        //        strategy.setTablePrefix(pc.getModuleName() + "_");
         return strategy;
     }
 
@@ -173,18 +192,23 @@ public class CodeGenerator {
      */
     private PackageConfig getPackageConfig(AutoGenerator mpg) {
         PackageConfig pc = new PackageConfig();
-//        pc.setModuleName(scanner("模块名"));
         StrategyConfig strategy = mpg.getStrategy();
 
         String parent = "";
-//        String entity = "";
         if (strategy.getTablePrefix()[0].equals("cp_")) {
             parent = "product";
         }
-        pc.setParent("com.billow." + parent);
+        pc.setParent("com.billow");
+        pc.setModuleName(parent);
         pc.setEntity("pojo.po");
         pc.setController("api");
         pc.setMapper("dao");
         return pc;
+    }
+
+
+    public static void main(String[] args) {
+        CodeGenerator cg = new CodeGenerator();
+        cg.gen();
     }
 }

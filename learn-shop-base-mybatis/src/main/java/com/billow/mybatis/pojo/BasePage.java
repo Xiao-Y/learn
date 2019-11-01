@@ -25,8 +25,6 @@ public abstract class BasePage implements Serializable {
     // "总记录数"
     @TableField(exist = false)
     private Integer recordCount = RECORD_COUNT;
-    @TableField(exist = false)
-    private Integer offset = PAGE_SIZE * PAGE_NO;
 
     /**
      * 每页要显示的记录数
