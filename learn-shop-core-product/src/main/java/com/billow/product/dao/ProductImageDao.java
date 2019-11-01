@@ -1,12 +1,10 @@
 package com.billow.product.dao;
 
 import com.billow.product.pojo.po.ProductImagePo;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface ProductImageDao extends JpaRepository<ProductImagePo, String>, JpaSpecificationExecutor<ProductImagePo> {
+public interface ProductImageDao {
 
     /**
      * 通过商品id和有效标志查询商品
@@ -15,5 +13,5 @@ public interface ProductImageDao extends JpaRepository<ProductImagePo, String>, 
      * @param validInd  有效标志
      * @return
      */
-    List<ProductImagePo> findByProductIdAndValidInd(String productId, boolean validInd);
+//    List<ProductImagePo> findByProductIdAndValidInd(String productId, boolean validInd);
 }

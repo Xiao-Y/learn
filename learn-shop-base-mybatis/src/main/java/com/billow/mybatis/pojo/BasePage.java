@@ -1,5 +1,7 @@
 package com.billow.mybatis.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 
 /**
@@ -15,12 +17,15 @@ public abstract class BasePage implements Serializable {
     private static final Integer RECORD_COUNT = 0; // 总记录数
 
     // 每页要显示的记录数
+    @TableField(exist = false)
     private Integer pageSize = PAGE_SIZE;
     // "当前页号"
+    @TableField(exist = false)
     private Integer pageNo = PAGE_NO;
     // "总记录数"
+    @TableField(exist = false)
     private Integer recordCount = RECORD_COUNT;
-
+    @TableField(exist = false)
     private Integer offset = PAGE_SIZE * PAGE_NO;
 
     /**

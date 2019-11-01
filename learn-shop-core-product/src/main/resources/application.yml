@@ -14,8 +14,12 @@ spring:
     name: learn-shop-core-product #客户端名称
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-core
-  jpa: #JPA配置
-    generate-ddl: false
-    show-sql: true
-    hibernate:
-      ddl-auto: update
+
+# 显示sql 日志
+logging.level.com.billow.product.dao: debug
+# mybatis-plus 配置
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-value: 0 # 逻辑已删除值(默认为 0)
+      logic-not-delete-value: 1 # 逻辑已删除值(默认为 1)

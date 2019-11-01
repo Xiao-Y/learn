@@ -1,13 +1,15 @@
 package com.billow.aop.global.advice;
 
-import cn.hutool.json.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.aop.global.commons.CustomPage;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -76,6 +78,20 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
             }
             baseResponse = new BaseResponse(resCode);
             baseResponse.setRequestUrl(map.get("path") + "");
+        } else if (body instanceof IPage) {// mybatis 分页
+            IPage temp = (IPage) body;
+            CustomPage customPage = new CustomPage();
+            customPage.setTableData(temp.getRecords());
+            customPage.setRecordCount(temp.getTotal());
+            customPage.setTotalPages(temp.getPages());
+            baseResponse = BaseResponse.success(customPage);
+        } else if (body instanceof Page) {// spring data jpa 分页
+            Page temp = (Page) body;
+            CustomPage customPage = new CustomPage();
+            customPage.setTableData(temp.getContent());
+            customPage.setRecordCount(temp.getTotalElements());
+            customPage.setTotalPages(temp.getTotalPages());
+            baseResponse = BaseResponse.success(customPage);
         } else {
             baseResponse = BaseResponse.success(body);
         }

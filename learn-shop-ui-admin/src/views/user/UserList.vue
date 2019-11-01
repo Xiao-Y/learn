@@ -180,8 +180,8 @@
       loadDataList() {
         LoadDataUserList(this.queryFilter).then(res => {
           var data = res.resData;
-          this.tableData = data.content;
-          this.queryFilter.recordCount = data.totalElements;
+          this.tableData = data.tableData;
+          this.queryFilter.recordCount = data.recordCount;
           this.queryFilter.totalPages = data.totalPages;
         });
       },

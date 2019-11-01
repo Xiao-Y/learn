@@ -1,10 +1,16 @@
 package com.billow.product.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.billow.product.pojo.po.ProductPo;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ProductDao extends JpaRepository<ProductPo, String>,JpaSpecificationExecutor<ProductPo> {
+/**
+ * <p>
+ * 商品 Mapper 接口
+ * </p>
+ *
+ * @author billow
+ * @since 2019-11-01
+ */
+public interface ProductDao extends BaseMapper<ProductPo> {
+
 }

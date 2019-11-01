@@ -1,10 +1,10 @@
 package com.billow.product.service;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.product.pojo.po.ProductPo;
 import com.billow.product.pojo.vo.ProductImageVo;
 import com.billow.product.pojo.vo.ProductVo;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface ProductService {
      * @param productVo
      * @return
      */
-    Page<ProductPo> findProductList(ProductVo productVo);
+    IPage<ProductPo> findProductList(ProductVo productVo);
 
     /**
      * 保存商品信息

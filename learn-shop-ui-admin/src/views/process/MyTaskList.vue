@@ -220,16 +220,16 @@
         if (this.toDo === 'myStart' || this.toDo === 'ongoing') {
           MyStartProdeList(this.queryFilter).then(res => {
             var data = res.resData;
-            this.tableData = data.content;
-            this.queryFilter.recordCount = data.totalElements;
-            this.queryFilter.totalPages = data.totalPages;
+            this.tableData = data.tableData;
+            this.queryFilter.recordCount = data.recordCount;
+          this.queryFilter.totalPages = data.totalPages;
           });
         } else {
           LoadDataTaskList(this.queryFilter).then(res => {
             var data = res.resData;
-            this.tableData = data.content;
-            this.queryFilter.recordCount = data.totalElements;
-            this.queryFilter.totalPages = data.totalPages;
+            this.tableData = data.tableData;
+            this.queryFilter.recordCount = data.recordCount;
+          this.queryFilter.totalPages = data.totalPages;
           });
         }
       },

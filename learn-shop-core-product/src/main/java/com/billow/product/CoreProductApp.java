@@ -1,6 +1,7 @@
 package com.billow.product;
 
 import com.billow.tools.utlis.SpringContextUtil;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan("com.billow")
+@MapperScan("com.billow.*.dao")
 public class CoreProductApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(CoreProductApp.class, args));

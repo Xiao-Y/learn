@@ -1,18 +1,12 @@
 package com.billow.product.pojo.po;
 
 
-import com.billow.jpa.base.pojo.BasePoDefault;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * 商品图片实体类
  */
-@Entity
-@Table(name = "cp_product_image")
-public class ProductImagePo extends BasePoDefault implements Serializable {
+public class ProductImagePo implements Serializable {
     // 商品图片
     private String productId;
     // 原始图上名

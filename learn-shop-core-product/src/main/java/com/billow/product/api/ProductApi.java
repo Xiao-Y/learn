@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.base.BaseApi;
 import com.billow.product.pojo.po.ProductPo;
 import com.billow.product.pojo.vo.ProductImageVo;
@@ -38,8 +39,8 @@ public class ProductApi extends BaseApi {
 
     @ApiOperation("根据条件查询商品信息")
     @PostMapping("/findProductList")
-    public Page<ProductPo> findProductList(@RequestBody ProductVo productVo) {
-        Page<ProductPo> productPos = productService.findProductList(productVo);
+    public IPage<ProductPo> findProductList(@RequestBody ProductVo productVo) {
+        IPage<ProductPo> productPos = productService.findProductList(productVo);
         return productPos;
     }
 

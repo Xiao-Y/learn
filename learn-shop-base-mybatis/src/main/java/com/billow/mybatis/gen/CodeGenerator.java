@@ -98,6 +98,7 @@ public class CodeGenerator {
 
         gc.setEntityName("%sPo");
         gc.setControllerName("%sApi");
+        gc.setMapperName("%sDao");
 //        gc.setSwagger2(true); //实体属性 Swagger2 注解
         return gc;
     }
@@ -183,6 +184,7 @@ public class CodeGenerator {
         pc.setParent("com.billow." + parent);
         pc.setEntity("pojo.po");
         pc.setController("api");
+        pc.setMapper("dao");
         return pc;
     }
 }

@@ -28,6 +28,9 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="商品ID：">
+                <span>{{ props.row.id }}</span>
+              </el-form-item>
               <el-form-item label="商品信息：">
                 <span>{{ props.row.commodityInfo }}</span>
               </el-form-item>
@@ -173,8 +176,8 @@
         LoadDataProductList(this.queryFilter).then(res => {
           var data = res.resData;
           // 填充数据
-          this.tableData = data.content;
-          this.queryFilter.recordCount = data.totalElements;
+          this.tableData = data.tableData;
+          this.queryFilter.recordCount = data.recordCount;
           this.queryFilter.totalPages = data.totalPages;
         });
 
