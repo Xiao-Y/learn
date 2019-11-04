@@ -12,7 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
 <#else>
@@ -57,8 +57,8 @@ public class ${table.controllerName} {
     */
     @ApiOperation(value = "查询分页${table.comment!}数据")
     @RequestMapping(value = "/list")
-    public Page<${entity}> findListByPage(@RequestBody ${VO} ${Vo}){
-        return null;
+    public IPage<${entity}> findListByPage(@RequestBody ${VO} ${Vo}){
+        return ${table.serviceName?uncap_first}.findListByPage(${Vo});
     }
 
 

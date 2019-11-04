@@ -78,6 +78,28 @@ public class CodeGenerator {
             }
         });
 
+        // 自定义配置:xxService.java
+        templatePath = "/template/IService.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/service/" +
+                        tableInfo.getServiceName() + StringPool.DOT_JAVA;
+            }
+        });
+
+        // 自定义配置:xxServiceImpl.java
+        templatePath = "/template/ServiceImpl.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/service/impl/" +
+                        tableInfo.getServiceImplName() + StringPool.DOT_JAVA;
+            }
+        });
+
         cfg.setFileOutConfigList(focList);
         return cfg;
     }
@@ -149,6 +171,8 @@ public class CodeGenerator {
         TemplateConfig templateConfig = new TemplateConfig();
         templateConfig.setXml(null);
         templateConfig.setController(null);
+        templateConfig.setService(null);
+        templateConfig.setServiceImpl(null);
         mpg.setTemplate(templateConfig);
 
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
