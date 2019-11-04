@@ -52,19 +52,12 @@ public class ${table.controllerName} {
     @Autowired
     private ${table.serviceName} ${table.serviceName?uncap_first};
 
-    /**
-    * 查询分页数据
-    */
     @ApiOperation(value = "查询分页${table.comment!}数据")
     @RequestMapping(value = "/list")
     public IPage<${entity}> findListByPage(@RequestBody ${VO} ${Vo}){
         return ${table.serviceName?uncap_first}.findListByPage(${Vo});
     }
 
-
-    /**
-    * 根据id查询
-    */
     @ApiOperation(value = "根据id查询${table.comment!}数据")
     @GetMapping(value = "/getById/{id}")
     public ${VO} getById(@PathVariable("id") String id){
@@ -72,9 +65,6 @@ public class ${table.controllerName} {
         return ConvertUtils.convert(po, ${VO}.class);
     }
 
-    /**
-    * 新增
-    */
     @ApiOperation(value = "新增${table.comment!}数据")
     @PostMapping(value = "/add")
     public ${VO} add(@RequestBody ${VO} ${Vo}){
@@ -83,25 +73,24 @@ public class ${table.controllerName} {
         return ConvertUtils.convert(po, ${VO}.class);
     }
 
-    /**
-    * 删除
-    */
     @ApiOperation(value = "删除${table.comment!}数据")
-    @DeleteMapping(value = "/del/{id}")
-    public String delete(@PathVariable("id") String id){
-        ${table.serviceName?uncap_first}.removeById(id);
-        return id;
+    @DeleteMapping(value = "/delById/{id}")
+    public boolean delById(@PathVariable("id") String id){
+        return ${table.serviceName?uncap_first}.removeById(id);
     }
 
-    /**
-    * 修改
-    */
     @ApiOperation(value = "更新${table.comment!}数据")
     @PutMapping(value = "/update")
     public ${VO} update(@RequestBody ${VO} ${Vo}){
         ${entity} po = ConvertUtils.convert(${Vo}, ${entity}.class);
         ${table.serviceName?uncap_first}.updateById(po);
         return ConvertUtils.convert(po, ${VO}.class);
+    }
+
+    @ApiOperation("根据ID禁用${table.comment!}数据")
+    @PutMapping("/prohibitById/{id}")
+    public boolean prohibitById(@PathVariable String id) {
+        return ${table.serviceName?uncap_first}.prohibitById(id);
     }
 }
 </#if>

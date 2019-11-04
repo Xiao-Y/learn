@@ -37,5 +37,14 @@ public class ${table.serviceImplName} extends ServiceImpl<ProductDao, ${entity}>
         IPage<${entity}> selectPage = ${table.mapperName?uncap_first}.selectPage(page, wrapper);
         return selectPage;
     }
+
+    @Override
+    public boolean prohibitById(String id) {
+        ${entity} po = new ${entity}();
+        po.setValidInd(false);
+        LambdaQueryWrapper<${entity}> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(${entity}::getId, id);
+        return ${table.mapperName?uncap_first}.update(po, wrapper) >= 1;
+    }
 }
 

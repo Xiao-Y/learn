@@ -22,10 +22,20 @@ public interface ${table.serviceName} extends IService<${entity}> {
     /**
      * 分页查询
      *
-     * @param productVo
+     * @param productVo 查询条件
      * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.${package.ModuleName}.pojo.po.${entity}>
      * @author ${author}
      * @since ${date}
      */
     IPage<${entity}> findListByPage(${VO} ${Vo});
+
+    /**
+     * 根据ID禁用数据
+     *
+     * @param id 主键id
+     * @return boolean
+     * @author ${author}
+     * @since ${date}
+     */
+    boolean prohibitById(String id);
 }
