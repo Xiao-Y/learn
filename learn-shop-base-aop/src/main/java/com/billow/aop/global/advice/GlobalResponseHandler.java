@@ -6,8 +6,6 @@ import com.billow.aop.global.commons.CustomPage;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -35,8 +33,6 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     private AntPathMatcher matcher = new AntPathMatcher();
 
     @Override
@@ -61,8 +57,12 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         HttpServletRequest servletRequest = httpRequest.getServletRequest();
         String requestURI = servletRequest.getRequestURI();
         log.info("请求的方法URI：{}", requestURI);
+        // swagger2 ui
         if (matcher.match("", requestURI)
-                || matcher.match("/**/v2/api-docs", requestURI)) {
+                || matcher.match("/**/v2/api-docs", requestURI)
+                || matcher.match("/**/swagger-resources", requestURI)
+                || matcher.match("/**/swagger-resources/configuration/security", requestURI)
+                || matcher.match("/**/swagger-resources/configuration/ui", requestURI)) {
             return body;
         }
 

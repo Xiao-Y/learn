@@ -41,7 +41,8 @@ zuul:
     public-auth:
       path: /public-auth/**
 #      serviceId: learn-shop-public-auth
-      url: http://119.23.27.78:8999
+#      url: http://119.23.27.78:8999
+      url: http://127.0.0.1:8999
     #系统相关
     admin-system:
       path: /admin-system/**
@@ -89,4 +90,4 @@ security:
 # 自定义配置
 custom:
   security:
-    auth-server: http://119.23.27.78:8999
+    auth-server: http://${spring.cloud.client.ipAddress}:8999
