@@ -5,6 +5,7 @@ import com.billow.tools.utlis.ToolsUtils;
 import com.billow.zuul.producer.DataRecoveryPro;
 import com.billow.zuul.redis.RedisUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class DataRecoveryApi {
     @Autowired
     private RedisUtils redisUtils;
 
+    @ApiOperation(value = "数据恢复")
     @GetMapping("/initData")
     public Map<String, String> initData() {
         Map<String, String> map = new HashMap<>();

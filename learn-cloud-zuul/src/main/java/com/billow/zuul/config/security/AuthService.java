@@ -67,6 +67,9 @@ public class AuthService {
             for (GrantedAuthority authority : authorities) {
                 // 查询 redis 中的角色权限
                 List<PermissionVo> permissionVos = redisUtils.getArray(PERMISSION + authority.getAuthority(), PermissionVo.class);
+                if(permissionVos == null){
+                    continue;
+                }
                 for (PermissionVo permissionVo : permissionVos) {
                     if (ToolsUtils.isEmpty(permissionVo.getSystemModule())) {
                         String sourceURI = permissionVo.getUrl();
