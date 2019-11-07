@@ -33,9 +33,6 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
     private DataDictionaryDao dataDictionaryDao;
     @Autowired
     private RedisUtils redisUtils;
-    @Autowired
-    @Qualifier("initDictionary")
-    private IStartLoading initDictionary;
 
     @Override
     public Page<DataDictionaryPo> listByPage(DataDictionaryVo dataDictionaryVo) {
@@ -61,7 +58,6 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void delById(Long id) {
         dataDictionaryDao.delete(id);
-        initDictionary.init();
     }
 
 
@@ -71,7 +67,6 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
         DataDictionaryPo convert = ConvertUtils.convert(dataDictionaryVo, DataDictionaryPo.class);
         DataDictionaryPo dictionaryPo = dataDictionaryDao.save(convert);
         ConvertUtils.convert(dictionaryPo, dataDictionaryVo);
-        initDictionary.init();
     }
 
     @Override

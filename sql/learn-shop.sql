@@ -11,7 +11,7 @@
  Target Server Version : 80017
  File Encoding         : 65001
 
- Date: 07/11/2019 14:01:18
+ Date: 07/11/2019 16:24:55
 */
 
 SET NAMES utf8mb4;
@@ -172,6 +172,9 @@ INSERT INTO `r_role_menu` VALUES (1644, 1, 42, '2019-09-07 10:45:03', 'admin', '
 INSERT INTO `r_role_menu` VALUES (1645, 1, 44, '2019-09-07 10:45:03', 'admin', '2019-09-07 10:45:03', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (1647, 1, 46, '2019-09-07 11:06:04', 'admin', '2019-09-07 11:06:04', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (1648, 1, 47, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1649, 1, 2, '2019-11-07 16:07:47', 'admin', '2019-11-07 16:07:47', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1650, 1, 47, '2019-11-07 16:07:47', 'admin', '2019-11-07 16:07:47', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1651, 1, 48, '2019-11-07 16:07:47', 'admin', '2019-11-07 16:07:47', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_role_permission
@@ -299,7 +302,7 @@ INSERT INTO `r_role_permission` VALUES (2789, 1, 96, '2019-11-07 11:12:43', 'adm
 INSERT INTO `r_role_permission` VALUES (2790, 1, 97, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2791, 1, 98, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2792, 1, 99, '2019-11-07 11:15:44', 'admin', '2019-11-07 11:15:44', 'admin', b'1');
-INSERT INTO `r_role_permission` VALUES (2793, 1, 100, '2019-11-07 13:56:20', 'admin', '2019-11-07 13:56:20', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2794, 1, 100, '2019-11-07 16:06:02', 'admin', '2019-11-07 16:06:02', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_user_role
@@ -429,7 +432,7 @@ INSERT INTO `sys_data_dictionary` VALUES (16, 'mailType', '1', '普通邮件', '
 INSERT INTO `sys_data_dictionary` VALUES (17, 'mailType', '2', 'html邮件', 'adminSystem', 2, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
 INSERT INTO `sys_data_dictionary` VALUES (18, 'mailType', '3', '带附件邮件', 'adminSystem', 2, b'0', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
 INSERT INTO `sys_data_dictionary` VALUES (19, 'dataSourcesType', '4', '混合（参数和SQL）', 'adminSystem', 4, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
-INSERT INTO `sys_data_dictionary` VALUES (20, 'userGroupType', 'General', '\r\n普通用户', 'adminUser', 1, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
+INSERT INTO `sys_data_dictionary` VALUES (20, 'userGroupType', 'General', '普通用户', 'adminUser', 1, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
 INSERT INTO `sys_data_dictionary` VALUES (21, 'userGroupType', 'GroupLeader', '分管经理', 'adminUser', 2, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
 INSERT INTO `sys_data_dictionary` VALUES (22, 'userGroupType', 'HR', '人力资源', 'adminUser', 3, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
 INSERT INTO `sys_data_dictionary` VALUES (23, 'userGroupType', 'GeneralMg', '总经理', 'adminUser', 4, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
@@ -533,6 +536,7 @@ INSERT INTO `sys_menu` VALUES (43, 'workbenchMyTaskListIndex', '我的任务', 4
 INSERT INTO `sys_menu` VALUES (44, 'workbenchApplyList', '我要申请', 42, b'1', 'mail_fill', NULL, 0, '2019-09-07 10:32:33', 'admin', '2019-09-13 09:39:11', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (46, 'workbenchApplyInfo', '申请信息', 44, b'0', 'brush_fill', NULL, 1, '2019-09-07 11:05:44', 'admin', '2019-09-13 09:39:23', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (47, 'sysDataDictionaryList', '数据字典', 2, b'1', 'qrcode_fill', NULL, 95, '2019-11-07 08:51:33', 'admin', '2019-11-07 11:14:04', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (48, 'sysDataDictionaryEdit', '修改数据字典', 47, b'0', 'brush_fill', NULL, 0, '2019-11-07 16:07:39', 'admin', '2019-11-07 16:16:37', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -754,6 +758,24 @@ INSERT INTO `sys_schedule_job_log` VALUES (10, '2019-09-27 17:52:53', 'JOB-AUTO'
 INSERT INTO `sys_schedule_job_log` VALUES (11, '2019-09-27 17:53:03', 'JOB-AUTO', '2019-09-27 17:53:03', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
 INSERT INTO `sys_schedule_job_log` VALUES (12, '2019-09-27 17:53:13', 'JOB-AUTO', '2019-09-27 17:53:13', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
 INSERT INTO `sys_schedule_job_log` VALUES (13, '2019-09-27 17:53:23', 'JOB-AUTO', '2019-09-27 17:53:23', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+
+-- ----------------------------
+-- Table structure for sys_white_list
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_white_list`;
+CREATE TABLE `sys_white_list`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_time` datetime(0) NULL DEFAULT NULL,
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `valid_ind` bit(1) NULL DEFAULT NULL,
+  `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `mark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `module` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `port` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for u_leave

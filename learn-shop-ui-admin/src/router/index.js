@@ -94,6 +94,10 @@ export const asyncRouterMap = [{
       keepAlive: true
     },
     component: resolve => require(['../views/sys/DataDictionaryList.vue'], resolve)
+  }, {
+    name: 'sysDataDictionaryEdit',
+    path: 'dataDictionaryList/dataDictionaryEdit',
+    component: resolve => require(['../views/sys/components/DataDictionaryEdit.vue'], resolve)
   }]
 }, {
   path: '/job',

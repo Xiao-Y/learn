@@ -2,6 +2,7 @@ package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
 import com.billow.common.redis.RedisUtils;
+import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.vo.DataDictionaryVo;
 import com.billow.system.service.DataDictionaryService;
@@ -12,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +48,9 @@ public class DataDictionaryApi extends BaseApi {
     private DataDictionaryService dataDictionaryService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    @Qualifier("initDictionary")
+    private IStartLoading initDictionary;
 
     @ApiOperation(value = "查询数据字典，指定 systemModule 和 fieldType")
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
@@ -127,6 +132,7 @@ public class DataDictionaryApi extends BaseApi {
     @PutMapping("/saveOrUpdate")
     public DataDictionaryVo saveOrUpdate(@RequestBody DataDictionaryVo dataDictionaryVo) {
         dataDictionaryService.saveOrUpdate(dataDictionaryVo);
+        initDictionary.init();
         return dataDictionaryVo;
     }
 
@@ -134,6 +140,7 @@ public class DataDictionaryApi extends BaseApi {
     @DeleteMapping("/del/{id}")
     public void delById(@PathVariable Long id) {
         dataDictionaryService.delById(id);
+        initDictionary.init();
     }
 
     @ApiOperation("根据id禁用数据字典")

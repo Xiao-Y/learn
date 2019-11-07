@@ -90,7 +90,6 @@
     LoadDictionaryList,
     FindFieldType,
     FindSysModule,
-    SaveOrUpdate,
     DelById,
     ProhibitById
   } from "../../api/sys/DataDictionaryMag";
@@ -123,7 +122,6 @@
         tableData: [], // 列表数据源
         fieldTypeSelect: [],// 数据字典类型的下拉数据源
         systemModuleSelect: [],// 数据字典系统模块的下拉数据源
-        dataSourcesSelect: [],// 数据来源的下拉数据源
       }
     },
     created() {
@@ -163,22 +161,23 @@
       // 添加权限
       handleAdd() {
         this.$router.push({
-          name: 'sysMailTemplateEdit',
+          name: 'sysDataDictionaryEdit',
           query: {
             optionType: 'add',
             fieldTypeSelect: JSON.stringify(this.fieldTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
           }
         });
       },
       handleEdit(row, index) {
         this.$router.push({
-          name: 'sysMailTemplateEdit',
+          name: 'sysDataDictionaryEdit',
           query: {
             optionType: 'edit',
             id: row.id,
+            dataDictionaryEdit: JSON.stringify(row),
             fieldTypeSelect: JSON.stringify(this.fieldTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
+            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
           }
         });
       },
