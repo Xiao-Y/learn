@@ -1,21 +1,86 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : learn_shop
+ Source Server         : 127.0.0.1
  Source Server Type    : MySQL
- Source Server Version : 80011
- Source Host           : 119.23.27.78:3306
+ Source Server Version : 80017
+ Source Host           : 127.0.0.1:3306
  Source Schema         : learn
 
  Target Server Type    : MySQL
- Target Server Version : 80011
+ Target Server Version : 80017
  File Encoding         : 65001
 
- Date: 26/09/2019 14:13:46
+ Date: 07/11/2019 14:01:18
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for cp_product
+-- ----------------------------
+DROP TABLE IF EXISTS `cp_product`;
+CREATE TABLE `cp_product`  (
+  `id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `creator_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `updater_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '有效标志',
+  `dele_flag` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除标志，0-删除，1-正常',
+  `commodity_info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品信息',
+  `grade` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级',
+  `unit_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '单价',
+  `locality_growth` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '产地',
+  `packing` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '包装',
+  `spec` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '规格',
+  `commodity_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `status` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态：0-无货，1-有货',
+  `quantity` int(255) NULL DEFAULT NULL COMMENT '销售数量',
+  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图片名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of cp_product
+-- ----------------------------
+INSERT INTO `cp_product` VALUES ('1190094653702959106', 'admin', 'admin', '2019-11-01 10:34:11', '2019-11-01 11:01:32', b'1', '0', '123', '一级', 1.00, '232', '23', '23', '123', '1', 1000, NULL);
+INSERT INTO `cp_product` VALUES ('1190095071354974210', 'admin', NULL, '2019-11-01 10:35:51', NULL, b'1', '0', '23', '一级', 22.00, '23', '23', '12', '23', '1', 1000, NULL);
+INSERT INTO `cp_product` VALUES ('1190095968122310658', 'admin', 'admin', '2019-11-01 10:39:24', '2019-11-01 10:39:24', b'1', '0', '55', '一级', 5.00, '57', '55', '5', '55', '1', 1000, NULL);
+INSERT INTO `cp_product` VALUES ('1190103030382432258', 'admin', 'admin', '2019-11-01 11:07:28', '2019-11-01 11:07:28', b'1', '1', '888', '一级', 88.00, '88', '8', '88', '88', '1', 1000, NULL);
+
+-- ----------------------------
+-- Table structure for mq_publisher
+-- ----------------------------
+DROP TABLE IF EXISTS `mq_publisher`;
+CREATE TABLE `mq_publisher`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `body` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `correlation_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  `exchange_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `message` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `rabbit_template_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `routing_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_time` datetime(0) NULL DEFAULT NULL,
+  `next_retry` datetime(0) NULL DEFAULT NULL,
+  `try_count` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 155 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mq_publisher
+-- ----------------------------
+INSERT INTO `mq_publisher` VALUES (148, '发送测试消息：2019-10-18 03:58:47.139', '18fc80ae-98a8-45d8-862b-b642a3fd3e37', '2019-10-18 15:58:54', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0xOCAwMzo1ODo0Ny4xMzk=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"18fc80ae-98a8-45d8-862b-b642a3fd3e37\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-18 15:59:35', '2019-10-18 15:59:35', 3);
+INSERT INTO `mq_publisher` VALUES (149, '发送测试消息：2019-10-18 04:00:21.434', '21ccc9da-4ecd-48ea-ad13-20c6f14a8145', '2019-10-18 16:00:28', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0xOCAwNDowMDoyMS40MzQ=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"21ccc9da-4ecd-48ea-ad13-20c6f14a8145\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-18 16:01:25', '2019-10-18 16:01:23', 3);
+INSERT INTO `mq_publisher` VALUES (150, '发送测试消息：2019-10-18 04:01:12.326', 'cb2cf066-b178-4887-b04f-ac721e7c0e6c', '2019-10-18 16:01:12', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0xOCAwNDowMToxMi4zMjY=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"cb2cf066-b178-4887-b04f-ac721e7c0e6c\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-18 16:02:10', '2019-10-18 16:02:08', 3);
+INSERT INTO `mq_publisher` VALUES (151, '发送测试消息：2019-10-30 04:10:22.036', '8e0465ab-39a3-4c04-b286-3cbb21d820aa', '2019-10-30 16:10:27', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMDoyMi4wMzY=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"8e0465ab-39a3-4c04-b286-3cbb21d820aa\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-30 16:11:25', '2019-10-30 16:11:23', 3);
+INSERT INTO `mq_publisher` VALUES (152, '发送测试消息：2019-10-30 04:10:39.851', '90ddf788-9830-4e7d-84ea-a38f16e4bb76', '2019-10-30 16:10:40', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMDozOS44NTE=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"90ddf788-9830-4e7d-84ea-a38f16e4bb76\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-30 16:11:35', '2019-10-30 16:11:33', 3);
+INSERT INTO `mq_publisher` VALUES (153, '发送测试消息：2019-10-30 04:11:42.596', 'fc960ac3-4dad-4ddb-8123-f2a33996ecfe', '2019-10-30 16:11:43', 'sendMailExchange', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMTo0Mi41OTY=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"fc960ac3-4dad-4ddb-8123-f2a33996ecfe\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '1', '2019-10-30 16:11:43', '2019-10-30 16:11:53', 0);
+INSERT INTO `mq_publisher` VALUES (154, '发送测试消息：2019-10-30 04:12:20.085', '719831d9-d605-48fb-80b8-b11bafe5795c', '2019-10-30 16:12:20', 'sendMailExchange', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMjoyMC4wODU=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"719831d9-d605-48fb-80b8-b11bafe5795c\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '1', '2019-10-30 16:12:20', '2019-10-30 16:12:30', 0);
+INSERT INTO `mq_publisher` VALUES (155, '发送测试消息：2019-10-31 10:13:33.717', '11266413-b96c-424b-aa11-593720e72639', '2019-10-31 10:13:34', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMSAxMDoxMzozMy43MTc=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"11266413-b96c-424b-aa11-593720e72639\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-31 10:14:30', '2019-10-31 10:14:28', 3);
 
 -- ----------------------------
 -- Table structure for oauth_client_details
@@ -106,6 +171,7 @@ INSERT INTO `r_role_menu` VALUES (1643, 1, 44, '2019-09-07 10:33:38', 'admin', '
 INSERT INTO `r_role_menu` VALUES (1644, 1, 42, '2019-09-07 10:45:03', 'admin', '2019-09-07 10:45:03', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (1645, 1, 44, '2019-09-07 10:45:03', 'admin', '2019-09-07 10:45:03', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (1647, 1, 46, '2019-09-07 11:06:04', 'admin', '2019-09-07 11:06:04', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (1648, 1, 47, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_role_permission
@@ -121,7 +187,7 @@ CREATE TABLE `r_role_permission`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2773 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2779 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_permission
@@ -214,6 +280,26 @@ INSERT INTO `r_role_permission` VALUES (2770, 1, 74, '2019-09-06 20:15:13', 'adm
 INSERT INTO `r_role_permission` VALUES (2771, 1, 78, '2019-09-07 12:14:15', 'admin', '2019-09-07 12:14:15', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2772, 1, 79, '2019-09-07 15:10:45', 'admin', '2019-09-07 15:10:45', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2773, 1, 80, '2019-09-08 12:02:54', 'admin', '2019-09-08 12:02:54', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2774, 1, 81, '2019-11-01 10:04:23', 'admin', '2019-11-01 10:04:23', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2775, 1, 82, '2019-11-01 10:04:23', 'admin', '2019-11-01 10:04:23', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2776, 1, 83, '2019-11-01 10:04:23', 'admin', '2019-11-01 10:04:23', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2777, 1, 84, '2019-11-01 10:04:23', 'admin', '2019-11-01 10:04:23', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2778, 1, 85, '2019-11-01 10:51:27', 'admin', '2019-11-01 10:51:27', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2779, 1, 94, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2780, 1, 93, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2781, 1, 92, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2782, 1, 91, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2783, 1, 90, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2784, 1, 89, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2785, 1, 88, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2786, 1, 87, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2787, 1, 86, '2019-11-07 08:48:46', 'admin', '2019-11-07 08:48:46', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2788, 1, 95, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2789, 1, 96, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2790, 1, 97, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2791, 1, 98, '2019-11-07 11:12:43', 'admin', '2019-11-07 11:12:43', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2792, 1, 99, '2019-11-07 11:15:44', 'admin', '2019-11-07 11:15:44', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (2793, 1, 100, '2019-11-07 13:56:20', 'admin', '2019-11-07 13:56:20', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for r_user_role
@@ -376,7 +462,7 @@ CREATE TABLE `sys_mail_template`  (
   `attachment` bit(1) NULL DEFAULT NULL,
   `template_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_mail_template
@@ -409,7 +495,7 @@ CREATE TABLE `sys_menu`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -446,6 +532,7 @@ INSERT INTO `sys_menu` VALUES (42, 'workbench', '我的工作台', NULL, b'1', '
 INSERT INTO `sys_menu` VALUES (43, 'workbenchMyTaskListIndex', '我的任务', 42, b'1', 'task_fill', NULL, 1, '2019-09-03 21:21:33', 'admin', '2019-09-13 09:39:40', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (44, 'workbenchApplyList', '我要申请', 42, b'1', 'mail_fill', NULL, 0, '2019-09-07 10:32:33', 'admin', '2019-09-13 09:39:11', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (46, 'workbenchApplyInfo', '申请信息', 44, b'0', 'brush_fill', NULL, 1, '2019-09-07 11:05:44', 'admin', '2019-09-13 09:39:23', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (47, 'sysDataDictionaryList', '数据字典', 2, b'1', 'qrcode_fill', NULL, 95, '2019-11-07 08:51:33', 'admin', '2019-11-07 11:14:04', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -467,7 +554,7 @@ CREATE TABLE `sys_permission`  (
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 80 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_permission
@@ -548,6 +635,26 @@ INSERT INTO `sys_permission` VALUES (77, '提交请假申请', 'ApplyApi-submitL
 INSERT INTO `sys_permission` VALUES (78, '根据ID查询申请信息', 'ApplyApi-findApplyById', '/applyApi/findApplyById/**', '1', '根据ID查询申请信息', b'1', '2019-09-07 12:14:03', 'admin', '2019-09-07 12:14:03', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (79, '通过 key 查询到最新的一个流程定义', 'ActProcDefApi-findDefByKey', '/actProcDefApi/findDefByKey/**', '1', '通过 key 查询到最新的一个流程定义', b'1', '2019-09-07 15:10:32', 'admin', '2019-09-07 15:10:32', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (80, '通过流程实例id 查询批注信息', 'ApplyApi-findCommentListByProcInstId', '/applyApi/findCommentListByProcInstId/**', '1', '通过流程实例id 查询批注信息', b'1', '2019-09-08 12:02:42', 'admin', '2019-09-08 12:03:25', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (81, '根据条件查询商品信息', 'ProductApi-findProductList', '/productApi/findProductList', '2', '根据条件查询商品信息', b'1', '2019-11-01 10:02:34', 'admin', '2019-11-01 10:02:34', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (82, '保存商品信息', 'ProductApi-saveProduct', '/productApi/saveProduct', '2', '保存商品信息', b'1', '2019-11-01 10:03:11', 'admin', '2019-11-01 10:03:11', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (83, '更新商品信息', 'ProductApi-saveProduct', '/productApi/saveProduct', '2', '更新商品信息', b'1', '2019-11-01 10:03:46', 'admin', '2019-11-01 10:03:46', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (84, '更新商品信息', 'ProductApi-updateProduct', '/productApi/updateProduct', '2', '更新商品信息', b'1', '2019-11-01 10:04:13', 'admin', '2019-11-01 10:04:13', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (85, '根据id删除商品信息', 'ProductApi-deleteProductById', '/productApi/deleteProductById/*', '2', '根据id删除商品信息', b'1', '2019-11-01 10:51:17', 'admin', '2019-11-01 10:51:17', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (86, '查询自动任务列表', 'CoreAutoTaskApi-findAutoTask', '/coreAutoTaskApi/findAutoTask', '1', '查询自动任务列表', b'1', '2019-08-12 16:35:36', 'admin', '2019-08-12 16:35:36', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (87, '保存/修改自动任务', 'CoreAutoTaskApi-saveAutoTask', '/coreAutoTaskApi/saveAutoTask', '1', '保存/修改自动任务', b'1', '2019-08-12 18:52:51', 'admin', '2019-08-12 18:52:51', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (88, '测试Cron表达式下次运行的时间', 'CoreAutoTaskApi-testRunCron', '/coreAutoTaskApi/testRunCron/**', '1', '测试Cron表达式下次运行的时间', b'1', '2019-08-13 09:55:30', 'admin', '2019-08-13 09:55:30', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (89, '启用、停止自动任务', 'CoreAutoTaskApi-updateJobStatus', '/coreAutoTaskApi/updateJobStatus/**', '1', '启用、停止自动任务', b'1', '2019-08-14 09:00:10', 'admin', '2019-08-14 09:00:10', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (90, '禁用自动任务', 'CoreAutoTaskApi-updateJobValidInd', '/coreAutoTaskApi/updateJobValidInd/**', '1', '123123', b'1', '2019-08-14 20:40:53', 'admin', '2019-08-14 20:40:53', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (91, '根据任务id,删除自动任务', 'CoreAutoTaskApi-deleteAutoTask', '/coreAutoTaskApi/deleteAutoTask/**', '1', '根据任务id,删除自动任务', b'1', '2019-08-14 20:49:16', 'admin', '2019-08-14 20:50:10', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (92, '立即执行自动任务', 'CoreAutoTaskApi-immediateExecutionTask', '/coreAutoTaskApi/immediateExecutionTask', '1', '立即执行自动任务', b'1', '2019-08-14 21:18:56', 'admin', '2019-08-14 21:18:56', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (93, '校验自动任务添加、修改时参数的设置', 'CoreAutoTaskApi-checkAutoTask', '/coreAutoTaskApi/checkAutoTask', '1', '校验自动任务添加、修改时参数的设置', b'1', '2019-08-15 10:53:31', 'admin', '2019-08-15 10:53:31', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (94, '查询自动任务执行日志', 'CoreAutoTaskApi-findAutoTaskLog', '/coreAutoTaskApi/findAutoTaskLog', '1', '查询自动任务执行日志', b'1', '2019-08-20 10:01:30', 'admin', '2019-08-20 10:01:30', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (95, '根据条件查询数据字典信息', 'DataDictionaryApi-listByPage', '/dataDictionaryApi/list', '1', '根据条件查询数据字典信息', b'1', '2019-11-07 11:10:29', 'admin', '2019-11-07 11:10:29', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (96, '保存/更新数据字典', 'DataDictionaryApi-saveOrUpdate', '/dataDictionaryApi/saveOrUpdate', '1', '保存/更新数据字典', b'1', '2019-11-07 11:11:12', 'admin', '2019-11-07 11:11:12', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (97, '根据id删除数据字典', 'DataDictionaryApi-del', '/dataDictionaryApi/del/**', '1', '根据id删除数据字典', b'1', '2019-11-07 11:11:40', 'admin', '2019-11-07 11:12:21', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (98, '根据id禁用数据字典', 'DataDictionaryApi-prohibit', '/dataDictionaryApi/prohibit/**', '1', '根据id禁用数据字典', b'1', '2019-11-07 11:12:14', 'admin', '2019-11-07 11:12:26', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (99, '字典下拉字段分类', 'DataDictionaryApi-findFieldType', '/dataDictionaryApi/findFieldType', '1', '字典下拉字段分类', b'1', '2019-11-07 11:15:37', 'admin', '2019-11-07 11:15:37', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (100, '字典下拉系统模块', 'DataDictionaryApi-findSysModule', '/dataDictionaryApi/findSysModule', '1', '字典下拉系统模块', b'1', '2019-11-07 13:56:14', 'admin', '2019-11-07 13:56:14', 'admin', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -598,15 +705,55 @@ CREATE TABLE `sys_schedule_job`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `is_send_mail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `mail_receive` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `class_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `run_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `template_id` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_schedule_job
 -- ----------------------------
-INSERT INTO `sys_schedule_job` VALUES (2, '5', '123', '0', '', '1231', '123', '', '1', b'1', b'0', '123123', b'0', NULL, NULL, NULL, NULL, '0', NULL);
-INSERT INTO `sys_schedule_job` VALUES (4, '2', '123', '0', '23123', '123131', '123', '123', '1', b'1', b'0', '123123', b'1', NULL, NULL, NULL, NULL, '0', NULL);
-INSERT INTO `sys_schedule_job` VALUES (5, '5', '234', '0', '', 'com.billow.job.autoTask.TestAutoTask', 'test', '1/10 * * * * ? *', '1', b'1', b'1', '234234', b'1', NULL, NULL, NULL, NULL, '1', 'liuytsz@sinosoft.com.cn');
+INSERT INTO `sys_schedule_job` VALUES (2, '5', '123', '0', '', '1231', '123', '', '1', b'1', b'0', '123123', b'0', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_schedule_job` VALUES (4, '2', '123', '0', '23123', '123131', '123', '123', '1', b'1', b'0', '123123', b'1', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_schedule_job` VALUES (5, '5', '234', '0', '', 'com.billow.job.autoTask.TestAutoTask', 'test', '1/10 * * * * ? *', '1', b'1', b'1', '234234', b'1', NULL, NULL, NULL, NULL, '1', 'liuytsz@sinosoft.com.cn', NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_schedule_job_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_schedule_job_log`;
+CREATE TABLE `sys_schedule_job_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_time` datetime(0) NULL DEFAULT NULL,
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `valid_ind` bit(1) NULL DEFAULT NULL,
+  `info` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `is_success` bit(1) NULL DEFAULT NULL,
+  `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `job_id` bigint(20) NULL DEFAULT NULL,
+  `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `run_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_schedule_job_log
+-- ----------------------------
+INSERT INTO `sys_schedule_job_log` VALUES (1, '2019-09-27 17:38:55', 'JOB-AUTO', '2019-09-27 17:38:55', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (2, '2019-09-27 17:39:03', 'JOB-AUTO', '2019-09-27 17:39:03', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (3, '2019-09-27 17:39:13', 'JOB-AUTO', '2019-09-27 17:39:13', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (4, '2019-09-27 17:39:23', 'JOB-AUTO', '2019-09-27 17:39:23', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (5, '2019-09-27 17:39:33', 'JOB-AUTO', '2019-09-27 17:39:33', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (6, '2019-09-27 17:39:43', 'JOB-AUTO', '2019-09-27 17:39:43', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (7, '2019-09-27 17:39:53', 'JOB-AUTO', '2019-09-27 17:39:53', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (8, '2019-09-27 17:40:03', 'JOB-AUTO', '2019-09-27 17:40:03', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (9, '2019-09-27 17:52:44', 'JOB-AUTO', '2019-09-27 17:52:44', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (10, '2019-09-27 17:52:53', 'JOB-AUTO', '2019-09-27 17:52:53', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (11, '2019-09-27 17:53:03', 'JOB-AUTO', '2019-09-27 17:53:03', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (12, '2019-09-27 17:53:13', 'JOB-AUTO', '2019-09-27 17:53:13', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
+INSERT INTO `sys_schedule_job_log` VALUES (13, '2019-09-27 17:53:23', 'JOB-AUTO', '2019-09-27 17:53:23', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
 
 -- ----------------------------
 -- Table structure for u_leave
