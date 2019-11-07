@@ -28,8 +28,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .access("@authService.hasPermission(request,authentication)")
                 .anyRequest()
                 .permitAll()
-                .and().cors()
-                .and().csrf().disable();
+                .and()
+                .csrf().disable();
 
         JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(resourceServerTokenServices);
         http.addFilterBefore(jwtAuthenticationFilter, SecurityContextPersistenceFilter.class);

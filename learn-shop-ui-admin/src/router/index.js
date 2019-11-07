@@ -87,6 +87,13 @@ export const asyncRouterMap = [{
     name: 'sysMailTemplateEdit',
     path: 'mailTemplateList/mailTemplateEdit',
     component: resolve => require(['../views/sys/components/MailTemplateEdit.vue'], resolve)
+  }, {
+    name: 'sysDataDictionaryList',
+    path: 'dataDictionaryList/index',
+    meta: {
+      keepAlive: true
+    },
+    component: resolve => require(['../views/sys/DataDictionaryList.vue'], resolve)
   }]
 }, {
   path: '/job',

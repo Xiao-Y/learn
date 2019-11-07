@@ -35,7 +35,7 @@ public class AuthService {
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     private final static String PERMISSION = RedisCst.ROLE_PERMISSION_KEY;
-    private final static String DICTIONARY = RedisCst.COMM_DICTIONARY;
+    private final static String DICTIONARY = RedisCst.COMM_DICTIONARY_SYS_MODULE;
 
     @Autowired
     private RedisUtils redisUtils;
