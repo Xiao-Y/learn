@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -86,8 +87,8 @@ public class UserServiceImpl implements UserService {
 
         if (userId != null) {// 更新
             // 查询出旧的数据
-            UserPo po = userDao.findOne(userId);
-            oldUser = ConvertUtils.convert(po, UserPo.class);
+            Optional<UserPo> po = userDao.findById(userId);
+            oldUser = ConvertUtils.convert(po.get(), UserPo.class);
             // 删除用户角色关联，重新保存
             userRoleDao.deleteByUserId(userId);
             // 修改时，如果没有修改密码，则不加密密码
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
             return po;
         }).collect(Collectors.toList());
         if (ToolsUtils.isNotEmpty(userRolePos)) {
-            userRoleDao.save(userRolePos);
+            userRoleDao.saveAll(userRolePos);
         }
         UserVo vo = ConvertUtils.convert(userPo, UserVo.class);
         vo.setPassword(null);
@@ -154,9 +155,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserVo deleteUserById(Long id) {
-        UserPo userPo = userDao.findOne(id);
-        if (userPo != null) {
-            userDao.delete(userPo);
+        Optional<UserPo> userPo = userDao.findById(id);
+        if (userPo.isPresent()) {
+            userDao.delete(userPo.get());
         }
         return ConvertUtils.convert(userPo, UserVo.class);
     }
@@ -164,7 +165,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserVo prohibitUserById(Long id) {
-        UserPo userPo = userDao.findOne(id);
+        Optional<UserPo> optional = userDao.findById(id);
+        UserPo userPo = optional.orElse(new UserPo());
         if (userPo != null) {
             userPo.setValidInd(false);
             userDao.save(userPo);

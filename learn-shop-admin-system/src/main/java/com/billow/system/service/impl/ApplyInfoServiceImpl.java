@@ -38,6 +38,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 申请信息服务
@@ -212,17 +213,17 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
 
     @Override
     public void deleteApplyInfoById(Long id) {
-        ApplyInfoPo applyInfoPo = applyInfoDao.findOne(id);
-        if (!applyInfoPo.getIsEnd()) {
+        Optional<ApplyInfoPo> applyInfoPo = applyInfoDao.findById(id);
+        if (!applyInfoPo.get().getIsEnd()) {
             throw new RuntimeException("流程未结束不能删除");
         }
-        applyInfoDao.delete(id);
+        applyInfoDao.deleteById(id);
     }
 
     @Override
     public ApplyInfoVo findLeaveById(Long id) {
-        ApplyInfoPo infoPo = applyInfoDao.findOne(id);
-        return ConvertUtils.convert(infoPo, ApplyInfoVo.class);
+        Optional<ApplyInfoPo> infoPo = applyInfoDao.findById(id);
+        return ConvertUtils.convert(infoPo.orElse(new ApplyInfoPo()), ApplyInfoVo.class);
     }
 
     @Override
@@ -237,7 +238,8 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         if (startApplyProcess != null) {
             // 构建 applyData 数据
             String applyData = startApplyProcess.genApplyData(leaveEx);
-            ApplyInfoPo applyInfo = applyInfoDao.findOne(leaveEx.getId());
+            Optional<ApplyInfoPo> optional = applyInfoDao.findById(leaveEx.getId());
+            ApplyInfoPo applyInfo = optional.get();
             applyInfo.setApplyData(applyData);
             applyInfoDao.save(applyInfo);
         }

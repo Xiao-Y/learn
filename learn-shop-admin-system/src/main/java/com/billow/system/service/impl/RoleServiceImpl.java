@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -79,8 +80,8 @@ public class RoleServiceImpl implements RoleService {
         List<UserRolePo> userRolePos = userRoleDao.findRoleIdByUserId(userId);
         if (ToolsUtils.isNotEmpty(userRolePos)) {
             userRolePos.stream().forEach(userRolePo -> {
-                RolePo rolePo = roleDao.findOne(userRolePo.getRoleId());
-                RoleVo roleVo = ConvertUtils.convert(rolePo, RoleVo.class);
+                Optional<RolePo> rolePo = roleDao.findById(userRolePo.getRoleId());
+                RoleVo roleVo = ConvertUtils.convert(rolePo.orElse(new RolePo()), RoleVo.class);
                 roleVos.add(roleVo);
             });
         }
@@ -148,7 +149,7 @@ public class RoleServiceImpl implements RoleService {
         if (id != null) {
             // 表示是新添加的角色
             roleVo.setIsNewRole(false);
-            RolePo one = roleDao.findOne(id);
+            RolePo one = roleDao.findById(id).get();
             // 如果是无效状态时，删除redis 中的信息
             if (!rolePo.getValidInd()) {
                 commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
@@ -277,11 +278,11 @@ public class RoleServiceImpl implements RoleService {
             roleMenuPo.setMenuId(new Long(m));
             roleMenuPo.setValidInd(true);
             if (roleVo.getValidInd()) {
-                newMenuPos.add(menuDao.findOne(new Long(m)));
+                newMenuPos.add(menuDao.findById(new Long(m)).get());
             }
             return roleMenuPo;
         }).collect(Collectors.toList());
-        roleMenuDao.save(roleMenuPos);
+        roleMenuDao.saveAll(roleMenuPos);
 
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
@@ -357,11 +358,11 @@ public class RoleServiceImpl implements RoleService {
                 rolePermissionPo.setValidInd(true);
                 if (roleVo.getValidInd()) {
                     // 查询出该角色要更新的权限
-                    newPermissionPos.add(permissionDao.findOne(new Long(m)));
+                    newPermissionPos.add(permissionDao.findById(new Long(m)).get());
                 }
                 return rolePermissionPo;
             }).collect(Collectors.toList());
-            rolePermissionDao.save(rolePermissionPos);
+            rolePermissionDao.saveAll(rolePermissionPos);
         }
 
         // 如果角色是有效状态时，更新reids 中的信息
@@ -394,19 +395,20 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RoleVo prohibitRoleById(Long roleId) {
-        RolePo one = roleDao.findOne(roleId);
+        Optional<RolePo> optional = roleDao.findById(roleId);
         // 如果不存在，直接构建一个新的返回
-        if (one == null) {
+        if (!optional.isPresent()) {
             RoleVo roleVo = new RoleVo();
             roleVo.setId(roleId);
             roleVo.setValidInd(false);
             // 删除 redis 信息
-            commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+//            commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
             // 删除 redis 信息
-            commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+//            commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
             return roleVo;
         }
         // 更新角色为无效
+        RolePo one = optional.get();
         one.setValidInd(false);
         roleDao.save(one);
 
@@ -415,7 +417,7 @@ public class RoleServiceImpl implements RoleService {
         for (RolePermissionPo rolePermissionPo : rolePermissionPos) {
             rolePermissionPo.setValidInd(false);
         }
-        rolePermissionDao.save(rolePermissionPos);
+        rolePermissionDao.saveAll(rolePermissionPos);
         // 删除 redis 信息
         commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
 
@@ -424,7 +426,7 @@ public class RoleServiceImpl implements RoleService {
         for (RoleMenuPo roleMenuPo : roleMenuPos) {
             roleMenuPo.setValidInd(false);
         }
-        roleMenuDao.save(roleMenuPos);
+        roleMenuDao.saveAll(roleMenuPos);
         // 删除 redis 信息
         commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
 
@@ -435,19 +437,20 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RoleVo deleteRoleById(Long roleId) {
-        RolePo one = roleDao.findOne(roleId);
+        Optional<RolePo> optional = roleDao.findById(roleId);
         // 如果不存在，直接构建一个新的返回
-        if (one == null) {
+        if (!optional.isPresent()) {
             RoleVo roleVo = new RoleVo();
             roleVo.setId(roleId);
             roleVo.setValidInd(false);
             // 删除 redis 信息
-            commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+//            commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
             // 删除 redis 信息
-            commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+//            commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
             return roleVo;
         }
         // 删除角色
+        RolePo one = optional.get();
         roleDao.delete(one);
 
         // 删除该角色的权限

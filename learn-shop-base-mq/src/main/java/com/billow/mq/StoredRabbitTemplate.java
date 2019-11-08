@@ -8,8 +8,8 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
@@ -180,7 +180,7 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
     public boolean messageSendMQ(String exchange, String routingKey, Message message) {
         try {
             String id = UUID.randomUUID().toString();
-            message.getMessageProperties().setCorrelationIdString(id);
+            message.getMessageProperties().setCorrelationId(id);
             int tryCount = 0;
             // 获取下次重试时间
             Date retryDate = nextRetryDate.nextRetryDate(tryCount);

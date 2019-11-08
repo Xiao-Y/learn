@@ -19,7 +19,7 @@ public interface MailService {
      * @param id  邮件id
      * @param parameter 邮件参数
      */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter);
+    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter);
 
     /**
      * 发送模板邮件,带附件的
@@ -31,7 +31,7 @@ public interface MailService {
      * @param parameter 邮件参数
      * @param filePath  附件路径
      */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter, String filePath);
+    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter, String filePath);
 
     /**
      * 发送模板邮件
@@ -42,7 +42,7 @@ public interface MailService {
      * @param mailCode  邮件code
      * @param parameter 邮件参数
      */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, String> parameter);
+    void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter);
 
     /**
      * 发送模板邮件,带附件的
@@ -54,7 +54,7 @@ public interface MailService {
      * @param parameter 邮件参数
      * @param filePath  附件路径
      */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, String> parameter, String filePath);
+    void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter, String filePath);
 
     /**
      * 发送简单邮件

@@ -2,7 +2,7 @@ package com.billow.product.remote;
 
 import com.billow.tools.resData.BaseResponse;
 import com.billow.product.pojo.re.WhiteListRe;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 

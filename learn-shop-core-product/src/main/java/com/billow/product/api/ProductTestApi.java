@@ -2,7 +2,7 @@ package com.billow.product.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.billow.common.base.BaseApi;
-import com.billow.tools.http.HttpUtils;
+//import com.billow.tools.http.HttpUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
@@ -29,12 +29,12 @@ public class ProductTestApi extends BaseApi {
     @ApiOperation("test1")
     @PostMapping("/test1")
     public void findProductList() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", "billow");
-        String json = jsonObject.toJSONString();
-        String url = "http://localhost:8911/productTestApi/test2";
-        String object = HttpUtils.doPost(url, json);
-        System.out.println("返回值：" + object);
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("name", "billow");
+//        String json = jsonObject.toJSONString();
+//        String url = "http://localhost:8911/productTestApi/test2";
+//        String object = HttpUtils.doPost(url, json);
+//        System.out.println("返回值：" + object);
     }
 
     @ApiOperation("test2")

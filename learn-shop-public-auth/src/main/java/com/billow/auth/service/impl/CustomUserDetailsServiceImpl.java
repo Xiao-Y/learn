@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -67,12 +68,12 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         }
         userRolePos.stream().forEach(ur -> {
             Long roleId = ur.getRoleId();
-            RolePo rolePo = roleDao.findOne(roleId);
-            if (rolePo == null) {
+            Optional<RolePo> rolePo = roleDao.findById(roleId);
+            if (!rolePo.isPresent()) {
                 logger.error("用户：{}，roleId:{},未查询到信息！", usercode, roleId);
                 return;
             }
-            authorities.add(new SimpleGrantedAuthority(rolePo.getRoleCode()));
+            authorities.add(new SimpleGrantedAuthority(rolePo.get().getRoleCode()));
         });
         if (CollectionUtils.isEmpty(authorities)) {
             logger.error("用户：{}，未分配权限！", usercode);

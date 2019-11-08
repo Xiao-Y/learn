@@ -3,7 +3,6 @@ package com.billow.job.core.config;
 import com.billow.job.constant.JobCst;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.util.TaskUtils;
-import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -17,8 +16,6 @@ import org.quartz.PersistJobDataAfterExecution;
  */
 @PersistJobDataAfterExecution
 public class QuartzJobFactory implements Job {
-
-    public final Logger log = Logger.getLogger(this.getClass());
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {

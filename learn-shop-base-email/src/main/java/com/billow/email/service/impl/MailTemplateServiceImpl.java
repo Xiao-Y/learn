@@ -10,7 +10,6 @@ import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ConvertUtils;
 import com.billow.email.utils.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.util.Asserts;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,7 @@ import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -75,7 +75,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
      * @date 2019/8/21 8:35
      */
     @Override
-    public MailTemplateVo genMailContent(String mailCode, Map<String, String> parameter) throws Exception {
+    public MailTemplateVo genMailContent(String mailCode, Map<String, Object> parameter) throws Exception {
         if (ToolsUtils.isEmpty(mailCode)) {
             throw new RuntimeException("使用模板邮件时，mailCode不能为空。请去 sys_mail_template 表中配置邮件模板");
         }
@@ -267,21 +267,22 @@ public class MailTemplateServiceImpl implements MailTemplateService {
 
     @Override
     public MailTemplateVo findMailTemplateById(Long id) {
-        MailTemplatePo mailTemplatePo = mailTemplateDao.findOne(id);
-        return ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
+        Optional<MailTemplatePo> mailTemplatePo = mailTemplateDao.findById(id);
+        return ConvertUtils.convert(mailTemplatePo.get(), MailTemplateVo.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public MailTemplateVo deleteMailTemplateById(Long id) {
-        mailTemplateDao.delete(id);
+        mailTemplateDao.deleteById(id);
         return null;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public MailTemplateVo prohibitMailTemplateById(Long id) {
-        MailTemplatePo mailTemplatePo = mailTemplateDao.findOne(id);
+        Optional<MailTemplatePo> optional = mailTemplateDao.findById(id);
+        MailTemplatePo mailTemplatePo = optional.get();
         mailTemplatePo.setValidInd(false);
         mailTemplateDao.save(mailTemplatePo);
         return ConvertUtils.convert(mailTemplatePo, MailTemplateVo.class);
@@ -327,7 +328,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     }
 
     @Override
-    public Map<String, Object> runSQLSingleResult(Map<String, String> parameter, String runSql) {
+    public Map<String, Object> runSQLSingleResult(Map<String, Object> parameter, String runSql) {
         if (ToolsUtils.isEmpty(runSql)) {
             throw new RuntimeException("查询SQL不能为空");
         }
@@ -341,7 +342,7 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     }
 
     @Override
-    public List<Map<String, Object>> runSQLResultList(Map<String, String> parameter, String runSql) {
+    public List<Map<String, Object>> runSQLResultList(Map<String, Object> parameter, String runSql) {
         if (ToolsUtils.isEmpty(runSql)) {
             throw new RuntimeException("查询SQL不能为空");
         }
