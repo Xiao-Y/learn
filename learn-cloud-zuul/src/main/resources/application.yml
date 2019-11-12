@@ -22,7 +22,7 @@ eureka:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
   instance:
     prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
 
 # 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
 ribbon:
@@ -33,7 +33,7 @@ zuul:
     socket-timeout-millis: 50000
     connect-timeout-millis: 10000
 ##  #添加代理头
-#  add-proxy-headers: true
+  add-proxy-headers: true
 #  #敏感头信息
   sensitive-headers:
   routes:
@@ -90,4 +90,4 @@ security:
 # 自定义配置
 custom:
   security:
-    auth-server: http://${spring.cloud.client.ipAddress}:8999
+    auth-server: http://${spring.cloud.client.ip-address}:8999

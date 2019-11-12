@@ -29,7 +29,7 @@ import java.util.Set;
  * @author LiuYongTao
  * @date 2018/11/20 15:19
  */
-public class CustomUserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

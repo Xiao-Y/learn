@@ -13,19 +13,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Order(2)
+//@Order(2)
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService customUserDetailsServiceImpl;
+    private UserDetailsService customUserDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsServiceImpl)
+        auth.userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder);
     }
 
@@ -71,49 +71,45 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 //    }
 
-    //
-//    /**
-//     * 这一步的配置是必不可少的，否则SpringBoot会自动配置一个AuthenticationManager,覆盖掉内存中的用户
-//     */
+
+    /**
+     * 这一步的配置是必不可少的，否则SpringBoot会自动配置一个AuthenticationManager,覆盖掉内存中的用户
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager manager = super.authenticationManagerBean();
-        return manager;
+        return super.authenticationManagerBean();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
+//        http
+//                .requestMatchers()
+//                .antMatchers("/oauth/**", "/authentication/**", "/login/**", "/logout/**")
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/oauth/**").permitAll()
+//                .antMatchers("/login").permitAll()
+//                .and()
+//                .formLogin()
+//                .loginPage("/authentication/require")
+//                .loginProcessingUrl("/authentication/form")
+//                .permitAll()
+//                .and()
+//                .csrf().disable();
         http
-                .requestMatchers()
-                .antMatchers("/oauth/**", "/authentication/**", "/login/**", "/logout/**")
-                .and()
                 .authorizeRequests()
-                .antMatchers("/oauth/**").authenticated()
-                .antMatchers("/login").permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/authentication/require")
-                .loginProcessingUrl("/authentication/form")
+                .antMatchers("/oauth/**")
                 .permitAll()
                 .and()
                 .csrf().disable();
-        // @formatter:on
-//        http.authorizeRequests().anyRequest().fullyAuthenticated();
-//        http.httpBasic();
-////        http.formLogin()
-////                .loginPage("/authentication/require")
-////                .loginProcessingUrl("/authentication/form")
-////                .permitAll();
-//        http.logout().permitAll();
-//        http.authorizeRequests().antMatchers("/oauth/authorize").permitAll();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/resources/**");
-    }
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web
+//                .ignoring()
+//                .antMatchers("/resources/**");
+//    }
 }

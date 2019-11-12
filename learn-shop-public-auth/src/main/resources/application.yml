@@ -23,7 +23,14 @@ auth:
     oauth2:
       jwtSigningKey: billow
     client:
-      client-id: app
-      client-secret: app
+      client-id: authServe1
+      client-secret: admin
       grant-type: password
       access-token-uri: http://127.0.0.1:${server.port}/oauth/token
+
+# 日志
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

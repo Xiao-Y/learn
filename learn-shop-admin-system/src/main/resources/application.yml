@@ -10,7 +10,8 @@ swagger: #接口注解文档
       email: lyongtao123@126.com #api开发者
 
 server:
-  context-path: /admin-system
+  servlet:
+    context-path: /admin-system
 spring:
   application:
     name: learn-shop-admin-system #客户端名称

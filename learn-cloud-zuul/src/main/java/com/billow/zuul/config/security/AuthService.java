@@ -40,15 +40,6 @@ public class AuthService {
     @Autowired
     private RedisUtils redisUtils;
 
-    /**
-     * 判断是否有权限
-     *
-     * @param request
-     * @param authentication
-     * @return boolean
-     * @author LiuYongTao
-     * @date 2019/7/16 14:30
-     */
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
 
         Object principal = authentication.getPrincipal();
@@ -67,7 +58,7 @@ public class AuthService {
             for (GrantedAuthority authority : authorities) {
                 // 查询 redis 中的角色权限
                 List<PermissionVo> permissionVos = redisUtils.getArray(PERMISSION + authority.getAuthority(), PermissionVo.class);
-                if(permissionVos == null){
+                if (permissionVos == null) {
                     continue;
                 }
                 for (PermissionVo permissionVo : permissionVos) {
