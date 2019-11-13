@@ -35,8 +35,8 @@
 
     <logger name="com.billow" level="info"/>
     <!-- hibernate logger -->
-    <logger name="org.hibernate.SQL" level="DEBUG"/>
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+<!--    <logger name="org.hibernate.SQL" level="DEBUG"/>-->
+<!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
 
     <!-- 一般用默认的info就可以 -->
     <root level="info">

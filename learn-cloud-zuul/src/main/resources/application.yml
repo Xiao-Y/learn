@@ -80,8 +80,9 @@ security:
   sessions: NEVER
   oauth2:
     client:
-      client-id: learn-shop-admin-system
-      client-secret: learn-shop-admin-system
+      client-id: webapp
+      client-secret: webapp
+      scope: webapp
       user-authorization-uri: ${custom.security.auth-server}/oauth/authorize #请求认证的地址
       access-token-uri: ${custom.security.auth-server}/oauth/token #请求令牌的地址
     resource:

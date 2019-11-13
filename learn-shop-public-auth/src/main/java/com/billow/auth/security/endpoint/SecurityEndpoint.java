@@ -110,7 +110,7 @@ public class SecurityEndpoint {
      * 获取用户信息
      *
      * @param authorization
-     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @return java.util.Map<java.lang.String, java.lang.Object>
      * @author LiuYongTao
      * @date 2019/11/12 13:57
      */
@@ -171,10 +171,12 @@ public class SecurityEndpoint {
             Assert.notNull(clientId, "clientId 不能为空,请配置 auth.security.client.clientId");
             String clientSecret = client.getClientSecret();
             Assert.notNull(clientSecret, "clientSecret 不能为空,请配置 auth.security.client.clientSecret");
+            String scope = client.getScope();
+            Assert.notNull(scope, "scope 不能为空,请配置 auth.security.client.scope");
 
-            // String url = "http://127.0.0.1:9999/oauth/token?grant_type=password&username=admin&password=123456&client_id=app&client_secret=app";
-            String url = "%s?grant_type=%s&username=%s&password=%s&client_id=%s&client_secret=%s";
-            String trgUrl = String.format(url, accessTokenUri, grantType, username, password, clientId, clientSecret);
+            // String url = "http://127.0.0.1:9999/oauth/token?grant_type=password&username=admin&password=123456&client_id=app&client_secret=app&scope=app";
+            String url = "%s?grant_type=%s&username=%s&password=%s&client_id=%s&client_secret=%s&scope=%s";
+            String trgUrl = String.format(url, accessTokenUri, grantType, username, password, clientId, clientSecret, scope);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("User-Agent", "curl/7.58.0");

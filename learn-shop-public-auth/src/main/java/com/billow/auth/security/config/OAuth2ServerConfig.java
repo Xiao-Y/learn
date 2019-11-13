@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -48,14 +47,6 @@ public class OAuth2ServerConfig {
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
-//            http
-//                    .formLogin()
-//                    .and()
-//                    .httpBasic()
-//                    .and()
-//                    .authorizeRequests()
-//                    .antMatchers("/api/**").authenticated();//配置order访问控制，必须认证过后才可以访问
-
             http.csrf().disable()
                     // 由于我们希望在用户界面中访问受保护的资源，因此我们需要允许创建会话
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -67,7 +58,7 @@ public class OAuth2ServerConfig {
                     .and()
                     .authorizeRequests()
                     //配置protected访问控制，必须认证过后才可以访问
-                    .antMatchers("/**/*Api/**","/*Api/**").authenticated();
+                    .antMatchers("/**/*Api/**", "/*Api/**").authenticated();
 
         }
     }
