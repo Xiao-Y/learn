@@ -10,6 +10,6 @@ public class PasswordEncoder {
     @Test
     public void encoder(){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        System.out.println(encoder.encode("webapp"));
+        System.out.println(encoder.encode("swagger"));
     }
 }

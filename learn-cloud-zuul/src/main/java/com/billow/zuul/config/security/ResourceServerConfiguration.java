@@ -44,16 +44,4 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.expressionHandler(appSecurityExpressionHandler);
     }
-//
-//    @Bean
-//    public TokenStore jwtTokenStore() {
-//        return new JwtTokenStore(jwtAccessTokenConverter());
-//    }
-//
-//    @Bean
-//    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-//        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-//        converter.setSigningKey("billow");
-//        return converter;
-//    }
 }

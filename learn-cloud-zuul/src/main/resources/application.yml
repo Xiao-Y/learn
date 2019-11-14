@@ -91,4 +91,4 @@ security:
 # 自定义配置
 custom:
   security:
-    auth-server: http://${spring.cloud.client.ip-address}:8999
+    auth-server: http://127.0.0.1:8999
