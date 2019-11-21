@@ -1,5 +1,10 @@
 <template>
     <div class="AddressList">
+        <van-nav-bar
+                title="地址列表"
+                left-text="返回"
+                left-arrow
+                @click-left="onClickLeft"/>
         <van-address-list
                 v-model="chosenAddressId"
                 :list="list"
@@ -41,10 +46,12 @@
             onAdd() {
                 this.$router.push({name: 'addressEdit'});
             },
-
             onEdit(item, index) {
                 this.$router.push({name: 'addressEdit'});
                 this.$toast('编辑地址:' + index);
+            },
+            onClickLeft() {
+                this.$router.back();
             }
         }
     }

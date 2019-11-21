@@ -1,6 +1,63 @@
 <template>
     <div class="home">
-        <h1>This is an home page</h1>
+        <!-- 标题 -->
+        <van-nav-bar
+                :left-arrow="false"
+                @click-left="onClickLeft"
+                @click-right="onClickRight">
+            <van-icon name="user-o" slot="left" size="1.5em"/>
+            <van-search
+                    slot="title"
+                    v-model="searchKey"
+                    placeholder="请输入搜索关键词"
+                    show-action
+                    shape="round"
+                    @search="onSearch">
+                <div slot="action" @click="onSearch">搜索</div>
+            </van-search>
+            <van-icon name="qr-invalid" slot="right" size="1.5em"/>
+        </van-nav-bar>
+        <!-- 轮播图 -->
+        <van-swipe :autoplay="3000">
+            <van-swipe-item v-for="(image, index) in swipeImages" :key="index">
+                <img v-lazy="image" style="width:100%;height: 12em"/>
+            </van-swipe-item>
+        </van-swipe>
+        <!-- 热销 -->
+        <div class="hot-re">热销商品</div>
+        <van-grid :column-num="2">
+            <van-grid-item
+                    v-for="(hotData,index) in hotDatas"
+                    :key="index"
+                    @click="viewProduct(hotData.id)">
+                <van-image :src="hotData.image" v-lazy="hotData.image" style="width:6em;height: 6em"/>
+            </van-grid-item>
+        </van-grid>
+        <!-- 推荐商品 -->
+        <div class="hot-re">推荐商品</div>
+        <van-card
+                v-for="(hotData,index) in hotDatas"
+                :key="index"
+                tag="HOT"
+                price="2.00"
+                :lazy-load="true"
+                @click="viewProduct(hotData.id)"
+                :thumb="hotData.image">
+            <div slot="tags">
+                <van-tag plain type="danger">标签</van-tag>
+                <van-tag plain type="danger">标签</van-tag>
+            </div>
+            <div slot="desc">描述信息</div>
+            <div slot="title">商品标题</div>
+        </van-card>
+
+        <van-tabbar route>
+            <van-tabbar-item replace to="/home" icon="home-o">首页</van-tabbar-item>
+            <van-tabbar-item replace to="/search" icon="apps-o">分类</van-tabbar-item>
+            <van-tabbar-item replace to="/friends" icon="fire-o" info="5">推荐</van-tabbar-item>
+            <van-tabbar-item replace to="/cart?val=home" icon="shopping-cart-o" info="20">购物车</van-tabbar-item>
+            <van-tabbar-item replace to="/profile" icon="user-o">我的</van-tabbar-item>
+        </van-tabbar>
     </div>
 </template>
 
@@ -8,8 +65,68 @@
 
     export default {
         data() {
-            return {}
+            return {
+                // 轮播图
+                swipeImages: [
+                    'https://img.yzcdn.cn/vant/apple-1.jpg',
+                    'https://img.yzcdn.cn/vant/apple-2.jpg',
+                    'https://img.yzcdn.cn/vant/apple-3.jpg',
+                    'https://img.yzcdn.cn/vant/apple-4.jpg',
+                    'https://img.yzcdn.cn/vant/apple-5.jpg',
+                    'https://img.yzcdn.cn/vant/apple-6.jpg'
+                ],
+                // 搜索关键字
+                searchKey: '',
+                // 热销商品
+                hotDatas: [{
+                    id: '1',
+                    text: '',
+                    image: 'https://img.yzcdn.cn/vant/apple-1.jpg'
+                }, {
+                    id: '2',
+                    text: '',
+                    image: 'https://img.yzcdn.cn/vant/apple-2.jpg'
+                }, {
+                    id: '3',
+                    text: '',
+                    image: 'https://img.yzcdn.cn/vant/apple-3.jpg'
+                }, {
+                    id: '4',
+                    text: '',
+                    image: 'https://img.yzcdn.cn/vant/apple-4.jpg'
+                }, {
+                    id: '5',
+                    text: '',
+                    image: 'https://img.yzcdn.cn/vant/apple-5.jpg'
+                }, {
+                    id: '6',
+                    text: '',
+                    image: 'https://img.yzcdn.cn/vant/apple-6.jpg'
+                }]
+            }
         },
-        methods: {}
+        methods: {
+            onSearch() {
+                this.$toast("搜索...");
+            },
+            onClickLeft() {
+                this.$toast("登陆...");
+            },
+            onClickRight() {
+                this.$toast("二维码...");
+            },
+            viewProduct() {
+                this.$router.push({name: 'goods'});
+            }
+        }
     }
 </script>
+
+<style>
+    .hot-re {
+        padding-top: 1em;
+        margin-left: 0.2em;
+        color: #8c939d;
+        font-size: 14px;
+    }
+</style>

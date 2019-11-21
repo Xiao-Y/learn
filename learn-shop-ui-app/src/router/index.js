@@ -14,21 +14,21 @@ const routes = [{
     name: 'home',
     component: Home
 }, {
-    path: '/search',
-    name: 'search',
-    component: () => import('../views/Search.vue')
+    path: '/category',
+    name: 'category',
+    component: () => import('../views/Category.vue')
 }, {
-    path: '/setting',
-    name: 'setting',
-    component: () => import('../views/Setting.vue')
+    path: '/cart',
+    name: 'cart',
+    component: () => import('../views/Cart.vue')
 }, {
     path: '/friends',
     name: 'friends',
     component: () => import('../views/Friends.vue')
 }, {
-    path: '/my',
-    name: 'my',
-    component: () => import('../views/My.vue')
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/Profile.vue')
 }, {
     path: '/addressList',
     name: 'addressList',
@@ -37,6 +37,10 @@ const routes = [{
     path: '/addressEdit',
     name: 'addressEdit',
     component: () => import('../views/AddressEdit.vue')
+}, {
+    path: '/goods',
+    name: 'goods',
+    component: () => import('../views/Goods.vue')
 }]
 
 const router = new VueRouter({

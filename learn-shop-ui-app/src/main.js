@@ -11,7 +11,9 @@ Vue.use(Vuex, VueAxios, axios);
 
 import {
     Button, Dialog, Icon, Tabbar, TabbarItem, Panel, Grid, GridItem, Collapse, CollapseItem, Divider, Image,
-    AddressList, AddressEdit, Area
+    AddressList, AddressEdit, Area, NavBar, Swipe, SwipeItem, Lazyload, Search, Card, Tag, Col, Cell, CellGroup,
+    GoodsAction, GoodsActionIcon, GoodsActionButton, Checkbox, SubmitBar, CheckboxGroup, CouponCell, CouponList,
+    Popup, Stepper
 } from 'vant';
 
 Vue.use(Button)
@@ -23,6 +25,21 @@ Vue.use(Button)
     .use(AddressList)
     .use(AddressEdit)
     .use(Area)
+    .use(NavBar)
+    .use(Lazyload)
+    .use(Search)
+    .use(Card)
+    .use(Tag)
+    .use(Col)
+    .use(Checkbox)
+    .use(SubmitBar)
+    .use(Popup)
+    .use(Stepper)
+    .use(CheckboxGroup)
+    .use(CouponCell).use(CouponList)
+    .use(Cell).use(CellGroup)
+    .use(GoodsAction).use(GoodsActionIcon).use(GoodsActionButton)
+    .use(Swipe).use(SwipeItem)
     .use(Tabbar).use(TabbarItem)
     .use(Collapse).use(CollapseItem)
     .use(Grid).use(GridItem);
