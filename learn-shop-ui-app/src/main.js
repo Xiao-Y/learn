@@ -3,17 +3,21 @@ import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+// import axios from 'axios'
+// import vueAxios from 'vue-axios'
 import 'vant/lib/icon/local.css';
 
-Vue.use(Vuex, VueAxios, axios);
+Vue.use(Vuex);
+
+// Vue.use(vueAxios,axios);//Vue.axios/this.axios/this.$http使用axios，一次封装方便协作规范
+
+// Vue.prototype.$axios = axios;   //全局注册，使用方法为:this.$axios
 
 import {
     Button, Dialog, Icon, Tabbar, TabbarItem, Panel, Grid, GridItem, Collapse, CollapseItem, Divider, Image,
     AddressList, AddressEdit, Area, NavBar, Swipe, SwipeItem, Lazyload, Search, Card, Tag, Col, Cell, CellGroup,
     GoodsAction, GoodsActionIcon, GoodsActionButton, Checkbox, SubmitBar, CheckboxGroup, CouponCell, CouponList,
-    Popup, Stepper
+    Popup, Stepper,Sku
 } from 'vant';
 
 Vue.use(Button)
@@ -36,6 +40,7 @@ Vue.use(Button)
     .use(Popup)
     .use(Stepper)
     .use(CheckboxGroup)
+    .use(Sku)
     .use(CouponCell).use(CouponList)
     .use(Cell).use(CellGroup)
     .use(GoodsAction).use(GoodsActionIcon).use(GoodsActionButton)

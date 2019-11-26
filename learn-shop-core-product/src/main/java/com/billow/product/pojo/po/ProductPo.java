@@ -1,9 +1,9 @@
 package com.billow.product.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -12,75 +12,41 @@ import java.math.BigDecimal;
 
 /**
  * <p>
- * 商品
+ * 商品信息
  * </p>
  *
  * @author billow
- * @since 2019-11-01
+ * @since 2019-11-26
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("cp_product")
+@TableName("p_product")
+@ApiModel(value="ProductPo对象", description="商品信息")
 public class ProductPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 删除标志，0-删除，1-正常
-     */
-    @TableLogic
-    private String deleFlag;
+    @ApiModelProperty(value = "分类主键")
+    private Integer categoryId;
 
-    /**
-     * 商品信息
-     */
-    private String commodityInfo;
+    @ApiModelProperty(value = "商品标题")
+    private String title;
 
-    /**
-     * 等级
-     */
-    private String grade;
+    @ApiModelProperty(value = "默认商品 sku 缩略图")
+    private String picture;
 
-    /**
-     * 单价
-     */
-    private BigDecimal unitPrice;
+    @ApiModelProperty(value = "默认价格（单位元）")
+    private BigDecimal price;
 
-    /**
-     * 产地
-     */
-    private String localityGrowth;
+    @ApiModelProperty(value = "商品总库存")
+    private Integer stockNum;
 
-    /**
-     * 包装
-     */
-    private String packing;
+    @ApiModelProperty(value = "是否无规格商品")
+    private Boolean noneSku;
 
-    /**
-     * 规格
-     */
-    private String spec;
-
-    /**
-     * 商品名称
-     */
-    private String commodityName;
-
-    /**
-     * 状态：0-无货，1-有货
-     */
-    private String status;
-
-    /**
-     * 销售数量
-     */
-    private Integer quantity;
-
-    /**
-     * 商品图片名称
-     */
-    private String img;
+    @ApiModelProperty(value = "是否隐藏剩余库存")
+    private String hideStock;
 
 
 }

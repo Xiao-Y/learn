@@ -1,16 +1,16 @@
 package com.billow.product.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.billow.product.pojo.po.ProductPo;
+import com.billow.product.pojo.po.ProductSpcesPo;
 
 /**
  * <p>
- * 商品信息 Mapper 接口
+ * 商品规格 Mapper 接口
  * </p>
  *
  * @author billow
  * @since 2019-11-26
  */
-public interface ProductDao extends BaseMapper<ProductPo> {
+public interface ProductSpcesDao extends BaseMapper<ProductSpcesPo> {
 
 }

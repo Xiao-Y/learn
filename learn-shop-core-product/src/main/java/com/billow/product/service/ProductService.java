@@ -1,66 +1,50 @@
+
 package com.billow.product.service;
 
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.product.pojo.po.ProductPo;
-import com.billow.product.pojo.vo.ProductImageVo;
+import com.billow.product.pojo.vo.ProductSkuVo;
 import com.billow.product.pojo.vo.ProductVo;
 
-import java.util.List;
-
-public interface ProductService {
+/**
+ * <p>
+ * 商品信息 服务类
+ * </p>
+ *
+ * @author billow
+ * @version v1.0
+ * @since 2019-11-26
+ */
+public interface ProductService extends IService<ProductPo> {
 
     /**
-     * 根据条件查询商品信息
+     * 分页查询
      *
-     * @param productVo
-     * @return
+     * @param productVo 查询条件
+     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.product.pojo.po.ProductPo>
+     * @author billow
+     * @since 2019-11-26
      */
-    IPage<ProductPo> findProductList(ProductVo productVo);
+    IPage<ProductPo> findListByPage(ProductVo productVo);
 
     /**
-     * 保存商品信息
+     * 根据ID禁用数据
      *
-     * @param productVo
+     * @param id 主键id
+     * @return boolean
+     * @author billow
+     * @since 2019-11-26
      */
-    void saveProduct(ProductVo productVo) throws Exception;
+    boolean prohibitById(String id);
 
     /**
-     * 更新商品信息
-     *
-     * @param productVo
-     * @throws Exception
-     */
-    void updateProduct(ProductVo productVo) throws Exception;
-
-    /**
-     * 根据id删除商品信息
+     * 通过 productId 获取商品 sku 信息
      *
      * @param id
+     * @return com.billow.product.pojo.vo.ProductSkuVo
+     * @author LiuYongTao
+     * @date 2019/11/26 11:40
      */
-    ProductVo deleteProductById(String id) throws Exception;
-
-    /**
-     * 上传商品图片，保存图片信息
-     *
-     * @param productImageVo
-     */
-    void uploadProductImage(ProductImageVo productImageVo) throws Exception;
-
-    /**
-     * 通过商品id查询出商品图片
-     *
-     * @param productId      商品id
-     * @param productImageVo 查询条件
-     * @return
-     * @throws Exception
-     */
-    List<ProductImageVo> findProductImageByProductId(String productId, ProductImageVo productImageVo) throws Exception;
-
-    /**
-     * 通过图片id删除商品图片
-     *
-     * @param id 图片id
-     */
-    void deleteProductImageById(String id) throws Exception;
+    ProductSkuVo findProductSku(String id);
 }

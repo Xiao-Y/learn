@@ -1,15 +1,16 @@
 package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.billow.common.base.BaseApi;
 import com.billow.product.pojo.po.ProductPo;
-import com.billow.product.pojo.vo.ProductImageVo;
+import com.billow.product.pojo.vo.ProductSkuVo;
 import com.billow.product.pojo.vo.ProductVo;
 import com.billow.product.service.ProductService;
+import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,81 +18,72 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
- * 商品相关操
+ * <p>
+ * 商品信息 前端控制器
+ * </p>
  *
- * @author liuyongtao
- * @create 2018-08-28 21:27
+ * @author billow
+ * @since 2019-11-26
+ * @version v1.0
  */
-@Api("商品相关操作")
+@Api(tags = {"商品信息"},value = "商品信息")
 @RestController
 @RequestMapping("/productApi")
-public class ProductApi extends BaseApi {
+public class ProductApi {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private ProductService productService;
 
-    @ApiOperation("根据条件查询商品信息")
-    @PostMapping("/findProductList")
-    public IPage<ProductPo> findProductList(@RequestBody ProductVo productVo) {
-        IPage<ProductPo> productPos = productService.findProductList(productVo);
-        return productPos;
+    @ApiOperation(value = "查询分页商品信息数据")
+    @RequestMapping(value = "/list")
+    public IPage<ProductPo> findListByPage(@RequestBody ProductVo productVo){
+        return productService.findListByPage(productVo);
     }
 
-    @ApiOperation("保存商品信息")
-    @PostMapping("/saveProduct")
-    public ProductVo saveProduct(@RequestBody ProductVo productVo) throws Exception{
-        productService.saveProduct(productVo);
-        return productVo;
+    @ApiOperation(value = "根据id查询商品信息数据")
+    @GetMapping(value = "/getById/{id}")
+    public ProductVo getById(@PathVariable("id") String id){
+        ProductPo po = productService.getById(id);
+        return ConvertUtils.convert(po, ProductVo.class);
     }
 
-    @ApiOperation("更新商品信息")
-    @PutMapping("/updateProduct")
-    public ProductVo updateProduct(@RequestBody ProductVo productVo) throws Exception {
-        productService.updateProduct(productVo);
-        return productVo;
+    @ApiOperation(value = "新增商品信息数据")
+    @PostMapping(value = "/add")
+    public ProductVo add(@RequestBody ProductVo productVo){
+        ProductPo po = ConvertUtils.convert(productVo, ProductPo.class);
+        productService.save(po);
+        return ConvertUtils.convert(po, ProductVo.class);
     }
 
-    @ApiOperation("根据id删除商品信息")
-    @DeleteMapping("/deleteProductById/{id}")
-    public ProductVo deleteProductById(@PathVariable String id) throws Exception {
-        ProductVo productVo = productService.deleteProductById(id);
-        return productVo;
+    @ApiOperation(value = "删除商品信息数据")
+    @DeleteMapping(value = "/delById/{id}")
+    public boolean delById(@PathVariable("id") String id){
+        return productService.removeById(id);
     }
 
-    @ApiOperation("上传商品图片，保存图片信息")
-    @PostMapping("/uploadProductImage/{productId}")
-    public ProductImageVo uploadProductImage(@PathVariable String productId,
-                                             @RequestParam("file") MultipartFile multipartFile,
-                                             ProductImageVo productImageVo) throws Exception {
-        productImageVo.setProductId(productId);
-        productImageVo.setOldImageName(multipartFile.getOriginalFilename());
-        productImageVo.setContentType(multipartFile.getContentType());
-        productImageVo.setInputStream(multipartFile.getInputStream());
-        productService.uploadProductImage(productImageVo);
-
-        productImageVo.setInputStream(null);
-        return productImageVo;
+    @ApiOperation(value = "更新商品信息数据")
+    @PutMapping(value = "/update")
+    public ProductVo update(@RequestBody ProductVo productVo){
+        ProductPo po = ConvertUtils.convert(productVo, ProductPo.class);
+        productService.updateById(po);
+        return ConvertUtils.convert(po, ProductVo.class);
     }
 
-    @ApiOperation("通过商品id查询出商品图片")
-    @GetMapping("/findProductImageByProductId/{productId}")
-    public List<ProductImageVo> findProductImageByProductId(@PathVariable String productId,
-                                                            ProductImageVo productImageVo) throws Exception {
-        List<ProductImageVo> productImageVos = productService.findProductImageByProductId(productId, productImageVo);
-        return productImageVos;
+    @ApiOperation("根据ID禁用商品信息数据")
+    @PutMapping("/prohibitById/{id}")
+    public boolean prohibitById(@PathVariable String id) {
+        return productService.prohibitById(id);
     }
 
-    @ApiOperation("通过图片id删除商品图片")
-    @DeleteMapping("/deleteProductImageById/{id}")
-    public Boolean deleteProductImageById(@PathVariable String id) throws Exception {
-        productService.deleteProductImageById(id);
-        return true;
+    @ApiOperation(value = "通过 productId 获取商品 sku 信息")
+    @GetMapping(value = "/findProductSku/{id}")
+    public ProductSkuVo findProductSku(@PathVariable("id") String id){
+        ProductSkuVo vo = productService.findProductSku(id);
+        return vo;
     }
 }

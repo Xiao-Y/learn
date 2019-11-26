@@ -201,8 +201,8 @@ public class CodeGenerator {
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
 //        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setInclude("cp_product");
-        strategy.setTablePrefix("cp_");
+        strategy.setInclude("p_product","p_attribute_key","p_attributs_value","p_category","p_product_spces");
+        strategy.setTablePrefix("p_");
         return strategy;
     }
 
@@ -219,7 +219,7 @@ public class CodeGenerator {
         StrategyConfig strategy = mpg.getStrategy();
 
         String parent = "";
-        if (strategy.getTablePrefix()[0].equals("cp_")) {
+        if (strategy.getTablePrefix()[0].equals("p_")) {
             parent = "product";
         }
         pc.setParent("com.billow");

@@ -17,28 +17,38 @@
                 <div class="goods-price">{{ formatPrice(goods.price) }}</div>
             </van-cell>
             <van-cell class="goods-express">
-                <van-col span="10">运费：{{ goods.express }}</van-col>
-                <van-col span="14">剩余：{{ goods.remain }}</van-col>
+                <van-col span="10">
+                    发货：<van-icon name="location-o"/> 
+                    {{ goods.address }}
+                </van-col>
+                <van-col span="6">运费：{{ goods.express }}</van-col>
+                <van-col class="remain" span="8">剩余：{{ goods.remain }}</van-col>
             </van-cell>
         </van-cell-group>
-
         <van-cell-group class="goods-cell-group">
+            <van-cell title="保障" is-link @click="sorry">七天包退</van-cell>
+        </van-cell-group>
+        <!-- <van-cell-group class="goods-cell-group">
             <van-cell value="进入店铺" icon="shop-o" is-link @click="sorry">
                 <template slot="title">
                     <span class="van-cell-text">有赞的店</span>
                     <van-tag class="goods-tag" type="danger">官方</van-tag>
                 </template>
             </van-cell>
-            <van-cell title="线下门店" icon="location-o" is-link @click="sorry"/>
+        </van-cell-group> -->
+
+        <van-cell-group class="goods-cell-group">
+            <van-cell title="选择" icon="location-o" is-link @click="onViewSuk"/>
+            <van-cell title="参数" is-link @click="sorry"/>
         </van-cell-group>
 
         <van-cell-group class="goods-cell-group">
-            <van-cell title="查看商品详情" is-link @click="sorry"/>
+            <van-cell title="宝贝评价" is-link @click="sorry">暂无评价</van-cell>
         </van-cell-group>
 
         <van-goods-action>
             <van-goods-action-icon icon="chat-o" @click="sorry">
-                客服
+                客服 
             </van-goods-action-icon>
             <van-goods-action-icon icon="cart-o" @click="onClickCart">
                 购物车
@@ -50,24 +60,35 @@
                 立即购买
             </van-goods-action-button>
         </van-goods-action>
+
+        <!-- sku -->
+        <coustomSuk :show="showSuk" v-if="showSuk"/>
     </div>
+    
 </template>
 
 <script>
 
+    import CoustomSuk from '../components/Sku';
+
     export default {
+        components:{
+            CoustomSuk
+        },
         data() {
             return {
                 goods: {
                     title: '美国伽力果（约680g/3个）',
                     price: 2680,
                     express: '免运费',
+                    address: '武汉',
                     remain: 19,
                     thumb: [
                         'https://img.yzcdn.cn/public_files/2017/10/24/e5a5a02309a41f9f5def56684808d9ae.jpeg',
                         'https://img.yzcdn.cn/public_files/2017/10/24/1791ba14088f9c2be8c610d0a6cc0f93.jpeg'
                     ]
-                }
+                },
+                showSuk:false
             };
         },
         methods: {
@@ -91,6 +112,9 @@
             },
             onBuyNow() {
 
+            },
+            onViewSuk(){
+                this.showSuk = true;
             }
         }
     };
@@ -132,5 +156,9 @@
         &-tag {
             margin-left: 5px;
         }
+    }
+
+    .remain{
+        text-align: right;
     }
 </style>

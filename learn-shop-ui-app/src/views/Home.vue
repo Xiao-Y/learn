@@ -51,19 +51,16 @@
             <div slot="title">商品标题</div>
         </van-card>
 
-        <van-tabbar route>
-            <van-tabbar-item replace to="/home" icon="home-o">首页</van-tabbar-item>
-            <van-tabbar-item replace to="/search" icon="apps-o">分类</van-tabbar-item>
-            <van-tabbar-item replace to="/friends" icon="fire-o" info="5">推荐</van-tabbar-item>
-            <van-tabbar-item replace to="/cart?val=home" icon="shopping-cart-o" info="20">购物车</van-tabbar-item>
-            <van-tabbar-item replace to="/profile" icon="user-o">我的</van-tabbar-item>
-        </van-tabbar>
+        <tobbar/>
     </div>
 </template>
 
 <script>
-
+import Tobbar from "../components/Tobbar";
     export default {
+        components: {
+            Tobbar
+        },
         data() {
             return {
                 // 轮播图
@@ -128,5 +125,9 @@
         margin-left: 0.2em;
         color: #8c939d;
         font-size: 14px;
+    }
+    .van-tag{
+        margin-top: 2px;
+        margin-right: 5px;
     }
 </style>

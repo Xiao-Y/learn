@@ -1,7 +1,7 @@
 package com.billow.product.pojo.vo;
 
 
-import com.billow.product.pojo.po.ProductPo;
+import com.billow.product.pojo.po.ProductSpcesPo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 商品信息 信息
+ * 商品规格 信息
  * </p>
  *
  * @author billow
@@ -20,6 +20,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ProductVo extends ProductPo implements Serializable {
+public class ProductSpcesVo extends ProductSpcesPo implements Serializable {
 
+    private Integer stock_num;
 }
