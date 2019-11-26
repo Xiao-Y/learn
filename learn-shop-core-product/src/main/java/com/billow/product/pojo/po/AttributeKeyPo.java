@@ -26,7 +26,7 @@ public class AttributeKeyPo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "分类主键")
-    private Integer categoryId;
+    private String categoryId;
 
     @ApiModelProperty(value = "属性名")
     private String attributeName;

@@ -28,7 +28,7 @@ public class ProductPo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "分类主键")
-    private Integer categoryId;
+    private String categoryId;
 
     @ApiModelProperty(value = "商品标题")
     private String title;
@@ -46,7 +46,7 @@ public class ProductPo extends BasePo {
     private Boolean noneSku;
 
     @ApiModelProperty(value = "是否隐藏剩余库存")
-    private String hideStock;
+    private Boolean hideStock;
 
 
 }

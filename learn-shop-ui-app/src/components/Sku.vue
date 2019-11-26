@@ -43,8 +43,13 @@
     import {FindProductSku} from '../api/ProductApi';
 
     export default {
+        model: {
+            // 双向绑定
+            prop: 'showSku',
+            event: 'change'
+        },
         props: {
-            show: {
+            showSku: {
                 type: Boolean,
                 default: false
             },
@@ -55,6 +60,7 @@
         },
         data() {
             return {
+                show:false,
                 quota: 0,//限购数，0 表示不限购
                 quotaUsed: 3, //已经购买过的数量
                 sku: {
@@ -167,6 +173,7 @@
             };
         },
         created() {
+            this.show = this.showSku;
             FindProductSku(1).then(res => {
                 console.info(res);
             })
@@ -180,6 +187,13 @@
             },
             onPointClicked(){
 
+            }
+        },
+        watch:{
+            show(){
+                if(!this.show){
+                    this.$emit('change', this.show);
+                }
             }
         }
     };

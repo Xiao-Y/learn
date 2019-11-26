@@ -1,5 +1,7 @@
 package com.billow.product.pojo.vo;
 
+import lombok.Data;
+
 import java.util.List;
 
 /**
@@ -8,9 +10,10 @@ import java.util.List;
  * @author liuyongtao
  * @create 2019-11-26 11:15
  */
+@Data
 public class ProductSkuVo {
 
-    private ProductSkuTree tree;
+    private List<ProductSkuTree> tree;
 
     private List<ProductSpcesVo> list;
 

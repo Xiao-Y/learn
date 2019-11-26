@@ -26,7 +26,7 @@ public class AttributsValuePo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "p_attribute_key的主键")
-    private Integer attributeKeyId;
+    private String attributeKeyId;
 
     @ApiModelProperty(value = "属性值")
     private String attributeValue;

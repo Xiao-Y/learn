@@ -62,7 +62,7 @@
         </van-goods-action>
 
         <!-- sku -->
-        <coustomSuk :show="showSuk" v-if="showSuk"/>
+        <coustomSuk v-model="showSuk" v-if="showSuk"/>
     </div>
     
 </template>

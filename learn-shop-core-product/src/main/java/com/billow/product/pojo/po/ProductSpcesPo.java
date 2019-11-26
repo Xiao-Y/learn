@@ -29,7 +29,7 @@ public class ProductSpcesPo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "商品id")
-    private Integer productId;
+    private String productId;
 
     @ApiModelProperty(value = "商品规格")
     private String productSpces;

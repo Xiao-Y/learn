@@ -26,7 +26,7 @@ public class CategoryPo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "父级id")
-    private Integer parentId;
+    private String parentId;
 
     @ApiModelProperty(value = "分类名")
     private String categoryName;
