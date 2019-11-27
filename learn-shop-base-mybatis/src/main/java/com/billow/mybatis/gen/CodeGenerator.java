@@ -201,7 +201,8 @@ public class CodeGenerator {
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
 //        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setInclude("p_product","p_attribute_key","p_attributs_value","p_category","p_product_spces");
+        strategy.setInclude("p_goods_brand","p_goods_category","p_goods_sku"
+                ,"p_goods_sku_spec_value","p_goods_spec_key","p_goods_spec_value","p_goods_spu","p_goods_spu_spec","p_shop_info");
         strategy.setTablePrefix("p_");
         return strategy;
     }

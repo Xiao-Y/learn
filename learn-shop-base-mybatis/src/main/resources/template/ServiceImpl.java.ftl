@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
  * @since ${date}
  */
 @Service
-public class ${table.serviceImplName} extends ServiceImpl<ProductDao, ${entity}> implements ${table.serviceName} {
+public class ${table.serviceImplName} extends ServiceImpl<${table.mapperName}, ${entity}> implements ${table.serviceName} {
 
     @Autowired
     private ${table.mapperName} ${table.mapperName?uncap_first};

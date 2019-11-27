@@ -32,7 +32,7 @@ import ${superControllerClassPackage};
  * @version v1.0
  */
 <#if restControllerStyle>
-@Api(tags = {"${table.comment!}"},value = "${table.comment!}")
+@Api(tags = {"${table.controllerName}"},value = "${table.comment!}")
 @RestController
 <#else>
 @Controller
@@ -53,7 +53,7 @@ public class ${table.controllerName} {
     private ${table.serviceName} ${table.serviceName?uncap_first};
 
     @ApiOperation(value = "查询分页${table.comment!}数据")
-    @RequestMapping(value = "/list")
+    @PostMapping(value = "/list")
     public IPage<${entity}> findListByPage(@RequestBody ${VO} ${Vo}){
         return ${table.serviceName?uncap_first}.findListByPage(${Vo});
     }

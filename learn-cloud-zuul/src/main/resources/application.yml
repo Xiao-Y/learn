@@ -64,7 +64,9 @@ zuul:
     #商品相关
     core-product:
       path: /core-product/**
-      serviceId: learn-shop-core-product
+      strip-prefix: false
+#      serviceId: learn-shop-core-product
+      url: http://127.0.0.1:8911
     public-job:
       path: /public-job/**
       strip-prefix: false
