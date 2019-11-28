@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
+import com.billow.tools.generator.OrderNumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = {"GoodsSpuApi"},value = "spu表")
 @RestController
-@RequestMapping("/goodsSpuApi11")
+@RequestMapping("/goodsSpuApi")
 public class GoodsSpuApi {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -55,6 +56,7 @@ public class GoodsSpuApi {
     @PostMapping(value = "/add")
     public GoodsSpuVo add(@RequestBody GoodsSpuVo goodsSpuVo){
         GoodsSpuPo po = ConvertUtils.convert(goodsSpuVo, GoodsSpuPo.class);
+        po.setSpuNo(OrderNumUtil.makeOrderNum("PG"));
         goodsSpuService.save(po);
         return ConvertUtils.convert(po, GoodsSpuVo.class);
     }

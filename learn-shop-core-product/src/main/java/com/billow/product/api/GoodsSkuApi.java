@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @Api(tags = {"GoodsSkuApi"},value = "sku表")
 @RestController
-@RequestMapping("/goodsSkuApi11")
+@RequestMapping("/goodsSkuApi")
 public class GoodsSkuApi {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -81,10 +81,10 @@ public class GoodsSkuApi {
     public boolean prohibitById(@PathVariable String id) {
         return goodsSkuService.prohibitById(id);
     }
-
-    @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
-    @GetMapping(value = "/findGoodsSku/{spuId}")
-    public List<Map<String,Object>> findGoodsSku(@PathVariable String spuId){
-        return goodsSkuService.findGoodsSku(spuId);
-    }
+//
+//    @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
+//    @GetMapping(value = "/findGoodsSku/{spuId}")
+//    public List<Map<String,Object>> findGoodsSku(@PathVariable String spuId){
+//        return goodsSkuService.findGoodsSku(spuId);
+//    }
 }

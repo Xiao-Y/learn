@@ -3,38 +3,31 @@
     <div class="ms-doc">
       <h3>商品信息</h3>
       <article>
-        <el-form ref="productInfo" :model="productInfo" label-width="100px" size="mini">
-          <el-form-item label="商品名称" prop="commodityName">
-            <el-input v-model="productInfo.commodityName" placeholder="请输入内容"></el-input>
+        <el-form ref="goodsSpu" :model="goodsSpu" label-width="100px" size="mini">
+          <el-form-item label="商品名称" prop="goodsName">
+            <el-input v-model="goodsSpu.goodsName" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="商品信息" prop="commodityInfo">
-            <el-input type="textarea" v-model="productInfo.commodityInfo"></el-input>
+          <el-form-item label="最低售价" prop="lowPrice">
+            <el-input v-model="goodsSpu.lowPrice" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="单价" prop="unitPrice">
-            <el-input v-model="productInfo.unitPrice" placeholder="请输入内容"></el-input>
+          <el-form-item label="总库存量" prop="stock">
+            <el-input v-model="goodsSpu.stock" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="规格" prop="spec">
-            <el-input v-model="productInfo.spec" placeholder="请输入内容"></el-input>
+          <el-form-item label="品牌" prop="brandId">
+            <el-input v-model="goodsSpu.brandId" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="是否有货" prop="status">
-            <el-switch v-model="productInfo.status" activeValue="1" inactiveValue="0" active-text="有货"
-                       inactive-text="无货"></el-switch>
+          <el-form-item label="分类" prop="categoryId">
+            <el-input v-model="goodsSpu.categoryId" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="等级" prop="grade">
-            <el-input v-model="productInfo.grade" placeholder="请输入内容"></el-input>
+          <el-form-item label="商品排序" prop="spuSort">
+            <el-input v-model="goodsSpu.spuSort" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="产地" prop="localityGrowth">
-            <el-input v-model="productInfo.localityGrowth" placeholder="请输入内容"></el-input>
-          </el-form-item>
-          <el-form-item label="包装" prop="packing">
-            <el-input v-model="productInfo.packing" placeholder="请输入内容"></el-input>
-          </el-form-item>
-          <el-form-item label="销售数量" prop="quantity">
-            <el-input v-model="productInfo.quantity" placeholder="请输入内容"></el-input>
+          <el-form-item label="有效标志" prop="validInd">
+            <el-switch v-model="goodsSpu.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="onReset('productInfo')">重置</el-button>
+            <el-button @click="onReset('goodsSpu')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
         </el-form>
@@ -45,49 +38,48 @@
 </template>
 
 <script>
-  import {SaveProduct, UpdateProduct} from "../../../api/product/productMag";
+  import {Update, Add} from "../../../api/product/GoodsSpuApi";
 
   export default {
     data() {
       return {
         optionType: '', // 操作类型，edit,add
-        productInfo: {
-          commodityName: '',
-          unitPrice: 0.00,
-          spec: '',
-          status: '1',
-          grade: '一级',
-          localityGrowth: '',
-          packing: '',
-          quantity: 1000
+        goodsSpu: {
+          goodsName: '',
+          lowPrice: 0.00,
+          stock: 0,
+          brandId: null,
+          categoryId: null,
+          validInd: true,
+          spuSort: 999
         }
-      };
-    },
+      }
+  },
     created() {
-      this.optionType = this.$route.params.optionType;
+      this.optionType = this.$route.query.optionType;
       if (this.optionType === 'edit') {
-        this.productInfo = this.$route.params.productEdit;
+        this.goodsSpu = JSON.parse(this.$route.query.goodsSpuEdit);;
       }
     },
     methods: {
       onSubmit() {
         var _this = this;
         if (_this.optionType === 'edit') {
-          UpdateProduct(_this.productInfo).then(res => {
+          Update(_this.goodsSpu).then(res => {
             _this.$message({
               type: 'success',
               message: '更新成功!'
             });
-
+            this.$bus.emit('notifyInfo', res.resData);
             _this.$router.back(-1);
           });
         } else { // add
-          SaveProduct(_this.productInfo).then(res => {
+          Add(_this.goodsSpu).then(res => {
             _this.$message({
               type: 'success',
               message: '保存成功!'
             });
-
+            this.$bus.emit('notifyInfo', res.resData);
             _this.$router.back(-1);
           });
         }
@@ -95,8 +87,8 @@
       onReturn() {
         this.$router.back(-1);
       },
-      onReset(productInfo) {
-        this.$refs[productInfo].resetFields();
+      onReset(goodsSpu) {
+        this.$refs[goodsSpu].resetFields();
       }
     }
   };

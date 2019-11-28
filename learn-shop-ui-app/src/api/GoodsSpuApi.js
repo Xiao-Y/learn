@@ -1,7 +1,7 @@
 
 import http from '../utils/requestUtils'
 
-const baseUrl = 'core-product/goodsSpuApi11';
+const baseUrl = 'core-product/goodsSpuApp';
 
 /**
  * 通过 spuId 获取商品 sku 信息

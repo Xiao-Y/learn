@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @Api(tags = {"GoodsSpuSpecApi"}, value = "spu规格表")
 @RestController
-@RequestMapping("/goodsSpuSpecApi11")
+@RequestMapping("/goodsSpuSpecApi")
 public class GoodsSpuSpecApi {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -82,9 +82,9 @@ public class GoodsSpuSpecApi {
         return goodsSpuSpecService.prohibitById(id);
     }
 
-    @ApiOperation(value = "根据 spuId 查询 spu 规格表数据")
-    @GetMapping(value = "/findSpuSpec/{spuId}")
-    public List<Map<String, Object>> findSpuSpec(@PathVariable String spuId) {
-        return goodsSpuSpecService.findSpuSpec(spuId);
-    }
+//    @ApiOperation(value = "根据 spuId 查询 spu 规格表数据")
+//    @GetMapping(value = "/findSpuSpec/{spuId}")
+//    public List<Map<String, Object>> findSpuSpec(@PathVariable String spuId) {
+//        return goodsSpuSpecService.findSpuSpec(spuId);
+//    }
 }

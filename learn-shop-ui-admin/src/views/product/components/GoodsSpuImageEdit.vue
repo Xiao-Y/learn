@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import {UpdateProduct, GetProuctImageByProductId, DeleteProductImageById} from "../../../api/product/productMag";
+  import {UpdateProduct, GetProuctImageByProductId, DeleteProductImageById} from "../../../api/product/GoodsSpuApi";
 
   export default {
     data() {

@@ -9,6 +9,7 @@ import com.billow.product.dao.GoodsSpuDao;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
+import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,9 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
         IPage<GoodsSpuPo> page = new Page<>(goodsSpuVo.getPageNo(), goodsSpuVo.getPageSize());
         LambdaQueryWrapper<GoodsSpuPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
+        wrapper.eq(ToolsUtils.isNotEmpty(goodsSpuVo.getSpuNo()), GoodsSpuPo::getSpuNo, goodsSpuVo.getSpuNo())
+                .like(ToolsUtils.isNotEmpty(goodsSpuVo.getGoodsName()), GoodsSpuPo::getGoodsName, goodsSpuVo.getGoodsName())
+                .eq(ToolsUtils.isNotEmpty(goodsSpuVo.getBrandId()), GoodsSpuPo::getBrandId, goodsSpuVo.getBrandId());
         IPage<GoodsSpuPo> selectPage = goodsSpuDao.selectPage(page, wrapper);
         return selectPage;
     }
