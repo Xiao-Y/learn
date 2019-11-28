@@ -41,12 +41,22 @@ public interface GoodsSkuService extends IService<GoodsSkuPo> {
     boolean prohibitById(String id);
 
     /**
-     * 通过 spuId 获取商品 sku 信息
+     * 通过 spuId 获取商品 sku 规格信息
      *
      * @param spuId
      * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
      * @author LiuYongTao
      * @date 2019/11/27 14:18
      */
-    List<Map<String, Object>> findGoodsSku(String spuId);
+    List<Map<String, Object>> findGoodsSkuSpec(String spuId);
+
+    /**
+     * 通过 spuId 获取商品 sku 信息
+     *
+     * @param spuId
+     * @return java.util.List<com.billow.product.pojo.vo.GoodsSkuVo>
+     * @author LiuYongTao
+     * @date 2019/11/28 14:04
+     */
+    List<GoodsSkuVo> findGoodsSku(String spuId);
 }

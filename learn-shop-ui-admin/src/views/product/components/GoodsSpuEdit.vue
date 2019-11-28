@@ -25,13 +25,17 @@
           <el-form-item label="有效标志" prop="validInd">
             <el-switch v-model="goodsSpu.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
+          <!-- sku 信息 -->
+          <good-sku-list :spu-id="goodsSpu.id" :show-option="true" v-if="showSku"/>
           <el-form-item size="mini">
+            <el-button type="success" @click="showSku = true" :disabled="showSku">显示SKU</el-button>
             <el-button type="primary" @click="onSubmit">保存</el-button>
             <el-button @click="onReset('goodsSpu')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
         </el-form>
       </article>
+
     </div>
 
   </div>
@@ -40,12 +44,19 @@
 <script>
   import {Update, Add} from "../../../api/product/GoodsSpuApi";
 
+  import GoodSkuList from '../GoodsSkuList';
+
   export default {
+    components: {
+      GoodSkuList
+    },
     data() {
       return {
+        showSku:false,// 是否显示sku信息
         optionType: '', // 操作类型，edit,add
         goodsSpu: {
-          goodsName: '',
+          id: null,
+          goodsName: null,
           lowPrice: 0.00,
           stock: 0,
           brandId: null,
@@ -54,11 +65,12 @@
           spuSort: 999
         }
       }
-  },
+    },
     created() {
       this.optionType = this.$route.query.optionType;
       if (this.optionType === 'edit') {
-        this.goodsSpu = JSON.parse(this.$route.query.goodsSpuEdit);;
+        this.goodsSpu = JSON.parse(this.$route.query.goodsSpuEdit);
+        ;
       }
     },
     methods: {
@@ -119,27 +131,6 @@
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
   }
-
-  /*.ms-doc article h1 {*/
-  /*font-size: 32px;*/
-  /*padding-bottom: 10px;*/
-  /*margin-bottom: 15px;*/
-  /*border-bottom: 1px solid #ddd;*/
-  /*}*/
-
-  /*.ms-doc article h2 {*/
-  /*margin: 24px 0 16px;*/
-  /*font-weight: 600;*/
-  /*line-height: 1.25;*/
-  /*padding-bottom: 7px;*/
-  /*font-size: 24px;*/
-  /*border-bottom: 1px solid #eee;*/
-  /*}*/
-
-  /*.ms-doc article p {*/
-  /*margin-bottom: 15px;*/
-  /*line-height: 1.5;*/
-  /*}*/
 
   .ms-doc article .el-checkbox {
     margin-bottom: 5px;

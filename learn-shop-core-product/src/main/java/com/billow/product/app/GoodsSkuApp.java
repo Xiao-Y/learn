@@ -36,6 +36,6 @@ public class GoodsSkuApp {
     @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
     @GetMapping(value = "/findGoodsSku/{spuId}")
     public List<Map<String, Object>> findGoodsSku(@PathVariable String spuId) {
-        return goodsSkuService.findGoodsSku(spuId);
+        return goodsSkuService.findGoodsSkuSpec(spuId);
     }
 }
