@@ -1,3 +1,5 @@
+# spring boot 1.5版本不在维护
+
 所有配置文件都是从配置中心获取： <br/>
 配置文件：learn-cloud-config--->cloud-config-repo-->cloud-config-dev.properties <br/>
 修改后提交git后才能生效 <br/>
