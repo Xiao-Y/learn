@@ -7,7 +7,6 @@
         <el-table-column label="说明" prop="specKeyValue" width="200"></el-table-column>
         <el-table-column label="售价" prop="price"></el-table-column>
         <el-table-column label="库存量" prop="stock"></el-table-column>
-        <el-table-column label="商铺ID" prop="shopId"></el-table-column>
         <el-table-column label="是否有货" prop="stock" width="80">
           <template slot-scope="scope">
             <el-tag
@@ -43,25 +42,34 @@
               <el-form-item label="是否有效">
                 <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
               </el-form-item>
+              <el-form-item label="商铺ID">
+                <span>{{ scope.row.shopId }}</span>
+              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
       </el-table>
     </el-row>
+
+    <el-dialog :title="tableTitle" :visible.sync="showSkuEdit" v-if="showSkuEdit">
+      <goods-sku-edit :sku-id="skuId" :spu-id="spuId" @closeDialog="closeDialog" v-if="showSkuEdit"/>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
-  import {FindGoodsSku} from "../../api/product/GoodsSkuApi";
+  import {FindGoodsSku, DelById, ProhibitById} from "../../api/product/GoodsSkuApi";
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
 
   // ===== component start
+  import GoodsSkuEdit from './components/GoodsSkuEdit.vue';
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
 
   export default {
     components: {
+      GoodsSkuEdit,
       ButtonGroupOption
     },
     props: {
@@ -76,6 +84,9 @@
     },
     data() {
       return {
+        showSkuEdit: false,// 打开SKU窗口
+        tableTitle: '',// SKU name
+        skuId: null,// 商品ID
         tableData: []
       }
     },
@@ -86,7 +97,6 @@
     methods: {
       // 获取权限列表数据
       loadDataList() {
-        console.info("-----", this.spuId);
         if (this.spuId === null) {
           return;
         }
@@ -96,27 +106,18 @@
       },
       // 添加权限
       handleAdd() {
-        this.$router.push({
-          name: 'proGoodsSpuEdit',
-          query: {
-            optionType: 'add',
-            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
-          }
-        });
+        this.showSkuEdit = true;
+        this.tableTitle = '添加SKU';
       },
       handleEdit(row, index) {
-        this.$router.push({
-          name: 'proGoodsSpuEdit',
-          query: {
-            optionType: 'edit',
-            goodsSpuEdit: JSON.stringify(row)
-          }
-        });
+        this.showSkuEdit = true;
+        this.tableTitle = '修改SKU';
+        this.skuId = row.id;
       },
       handleDelete(row, index) {
         var _this = this;
 
-        VueUtils.confirmDel(row.url, () => {
+        VueUtils.confirmDel(row.skuName, () => {
           DelById(row.id).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
@@ -129,7 +130,7 @@
       handleProhibit(row, index) {
         var _this = this;
 
-        VueUtils.confirmInd(row.url, () => {
+        VueUtils.confirmInd(row.skuName, () => {
           ProhibitById(row.id).then(res => {
             row.validInd = res.resData.validInd;
             _this.$message({
@@ -138,6 +139,12 @@
             });
           });
         });
+      },
+      closeDialog(type) {
+        this.showSkuEdit = false;
+        if (type === 'refresh') {
+          this.loadDataList();
+        }
       }
 
     },

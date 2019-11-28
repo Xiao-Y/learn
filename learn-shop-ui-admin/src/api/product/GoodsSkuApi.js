@@ -4,17 +4,21 @@ import requestUtils from '../../utils/requestUtils'
 
 const baseUrl = 'core-product/goodsSkuApi';
 
-
-export const FindGoodsSku = spuId => requestUtils.get(baseUrl + '/findGoodsSku/' + spuId);
-
 /**
- * 根据条件查询商品信息
- * @param goodsSpuFilter
+ * 根据 spuId 查询 sku 信息
+ * @param spuId
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
-export const FindListByPage = goodsSpuFilter => requestUtils.post(baseUrl + '/list', Object.assign(goodsSpuFilter));
+export const FindGoodsSku = spuId => requestUtils.get(baseUrl + '/findGoodsSku/' + spuId);
 
+/**
+ * 根据id查询sku表数据
+ * @param skuId
+ * @returns {*|Promise|Promise<any>}
+ * @constructor
+ */
+export const GetById = skuId => requestUtils.get(baseUrl + '/getById/' + skuId);
 
 /**
  * 保存商品信息

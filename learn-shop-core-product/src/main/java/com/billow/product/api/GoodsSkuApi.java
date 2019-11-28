@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 import com.billow.product.service.GoodsSkuService;
+import com.billow.tools.generator.OrderNumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +56,8 @@ public class GoodsSkuApi {
     @PostMapping(value = "/add")
     public GoodsSkuVo add(@RequestBody GoodsSkuVo goodsSkuVo) {
         GoodsSkuPo po = ConvertUtils.convert(goodsSkuVo, GoodsSkuPo.class);
+        po.setSkuNo(OrderNumUtil.makeOrderNum("SK"));
+        po.setShopId("0");
         goodsSkuService.save(po);
         return ConvertUtils.convert(po, GoodsSkuVo.class);
     }
@@ -81,7 +84,7 @@ public class GoodsSkuApi {
 
     @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
     @GetMapping(value = "/findGoodsSku/{spuId}")
-    public List<GoodsSkuVo> findGoodsSku(@PathVariable String spuId){
+    public List<GoodsSkuVo> findGoodsSku(@PathVariable String spuId) {
         return goodsSkuService.findGoodsSku(spuId);
     }
 }

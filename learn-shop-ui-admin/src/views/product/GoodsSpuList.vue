@@ -175,7 +175,7 @@
       handleDelete(row, index) {
         var _this = this;
 
-        VueUtils.confirmDel(row.url, () => {
+        VueUtils.confirmDel(row.goodsName, () => {
           DelById(row.id).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
@@ -188,7 +188,7 @@
       handleProhibit(row, index) {
         var _this = this;
 
-        VueUtils.confirmInd(row.url, () => {
+        VueUtils.confirmInd(row.goodsName, () => {
           ProhibitById(row.id).then(res => {
             row.validInd = res.resData.validInd;
             _this.$message({

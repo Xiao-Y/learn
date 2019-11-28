@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="ms-doc">
-      <h3>商品信息</h3>
-      <article>
-        <el-form ref="goodsSpu" :model="goodsSpu" label-width="100px" size="mini">
+    <el-form ref="goodsSpu" :model="goodsSpu" label-width="100px" size="mini">
+      <div class="ms-doc">
+        <h3>商品信息</h3>
+        <article>
           <el-form-item label="商品名称" prop="goodsName">
             <el-input v-model="goodsSpu.goodsName" placeholder="请输入内容"></el-input>
           </el-form-item>
@@ -25,19 +25,23 @@
           <el-form-item label="有效标志" prop="validInd">
             <el-switch v-model="goodsSpu.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
-          <!-- sku 信息 -->
-          <good-sku-list :spu-id="goodsSpu.id" :show-option="true" v-if="showSku"/>
           <el-form-item size="mini">
             <el-button type="success" @click="showSku = true" :disabled="showSku">显示SKU</el-button>
+            <el-button type="warning" @click="addSku" :disabled="!showSku">添加SKU</el-button>
             <el-button type="primary" @click="onSubmit">保存</el-button>
             <el-button @click="onReset('goodsSpu')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
-        </el-form>
-      </article>
-
-    </div>
-
+        </article>
+      </div>
+      <br>
+      <div class="ms-doc" v-if="showSku">
+        <h3>SKU信息</h3>
+        <article>
+          <good-sku-list :spu-id="goodsSpu.id" :show-option="true" ref="GoodsSkuListRef"/>
+        </article>
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -52,7 +56,7 @@
     },
     data() {
       return {
-        showSku:false,// 是否显示sku信息
+        showSku: false,// 是否显示sku信息
         optionType: '', // 操作类型，edit,add
         goodsSpu: {
           id: null,
@@ -70,7 +74,6 @@
       this.optionType = this.$route.query.optionType;
       if (this.optionType === 'edit') {
         this.goodsSpu = JSON.parse(this.$route.query.goodsSpuEdit);
-        ;
       }
     },
     methods: {
@@ -95,6 +98,9 @@
             _this.$router.back(-1);
           });
         }
+      },
+      addSku(){
+        this.$refs.GoodsSkuListRef.handleAdd();
       },
       onReturn() {
         this.$router.back(-1);
