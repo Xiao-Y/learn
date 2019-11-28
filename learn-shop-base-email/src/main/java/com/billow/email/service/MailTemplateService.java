@@ -23,7 +23,7 @@ public interface MailTemplateService {
      * @author LiuYongTao
      * @date 2019/8/21 9:29
      */
-    MailTemplateVo genMailContent(String mailCode, Map<String, String> parameter) throws Exception;
+    MailTemplateVo genMailContent(String mailCode, Map<String, Object> parameter) throws Exception;
 
     /**
      * 根据条件查询邮件模板信息
@@ -115,7 +115,7 @@ public interface MailTemplateService {
      * @author LiuYongTao
      * @date 2019/8/21 8:33
      */
-    Map<String, Object> runSQLSingleResult(Map<String, String> parameter, String runSql);
+    Map<String, Object> runSQLSingleResult(Map<String, Object> parameter, String runSql);
 
     /**
      * 运行sql 得到结果
@@ -126,7 +126,7 @@ public interface MailTemplateService {
      * @author LiuYongTao
      * @date 2019/8/21 8:33
      */
-    List<Map<String, Object>> runSQLResultList(Map<String, String> parameter, String runSql);
+    List<Map<String, Object>> runSQLResultList(Map<String, Object> parameter, String runSql);
 
     /**
      * 替换字符串中的参数

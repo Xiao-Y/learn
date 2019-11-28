@@ -24,7 +24,7 @@ public class HtmlMailContentBuild implements MailContentBuild {
     private MailTemplateService mailTemplateService;
 
     @Override
-    public String build(MailTemplateVo mailTemplateVo, Map<String, String> parameter) throws Exception {
+    public String build(MailTemplateVo mailTemplateVo, Map<String, Object> parameter) throws Exception {
 
         // 邮件CODE
         String mailCode = mailTemplateVo.getMailCode();

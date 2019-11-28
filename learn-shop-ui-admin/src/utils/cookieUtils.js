@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
-const AccessTokenKey = 'AccessToken';
-const RefreshTokenKey = 'RefreshToken';
+const ACCESS_TOKEN = 'AccessToken';
+const REFRESH_TOKEN = 'RefreshToken';
 const CityData = 'CityData';
 
 /**
@@ -10,7 +10,8 @@ const CityData = 'CityData';
  * @constructor
  */
 export function getAccessToken() {
-  var accessToken = Cookies.get(AccessTokenKey);
+  // var accessToken = Cookies.get(ACCESS_TOKEN);
+  var accessToken = localStorage.getItem(ACCESS_TOKEN);
   return accessToken
 }
 
@@ -20,7 +21,8 @@ export function getAccessToken() {
  * @constructor
  */
 export function getRefresToken() {
-  var refreshToken = Cookies.get(RefreshTokenKey);
+  // var refreshToken = Cookies.get(REFRESH_TOKEN);
+  var refreshToken = localStorage.getItem(REFRESH_TOKEN);
   return refreshToken
 }
 
@@ -30,8 +32,10 @@ export function getRefresToken() {
  * @constructor
  */
 export function setToken(token) {
-  Cookies.set(AccessTokenKey, token.accessToken);
-  Cookies.set(RefreshTokenKey, token.refreshToken);
+  // Cookies.set(ACCESS_TOKEN, token.accessToken);
+  // Cookies.set(REFRESH_TOKEN, token.refssToken);
+  localStorage.setItem(ACCESS_TOKEN, token.accessToken);
+  localStorage.setItem(REFRESH_TOKEN, token.refreshToken);
 }
 
 /**
@@ -40,10 +44,18 @@ export function setToken(token) {
  * @constructor
  */
 export function removeToken() {
-  Cookies.remove(AccessTokenKey);
-  Cookies.remove(RefreshTokenKey);
+  localStorage.removeItem(ACCESS_TOKEN);
+  localStorage.removeItem(REFRESH_TOKEN);
+  // Cookies.remove(ACCESS_TOKEN);
+  // Cookies.remove(REFRESH_TOKEN);
 }
 
+/**
+ * 退出时，清理数据
+ */
+export function logOut() {
+  localStorage.clear();
+}
 
 /**
  * 获取 CityData

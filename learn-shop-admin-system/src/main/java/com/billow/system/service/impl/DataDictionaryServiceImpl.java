@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 数据字典
@@ -57,7 +58,7 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void delById(Long id) {
-        dataDictionaryDao.delete(id);
+        dataDictionaryDao.deleteById(id);
     }
 
 
@@ -71,7 +72,8 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
 
     @Override
     public DataDictionaryVo prohibitById(Long id) {
-        DataDictionaryPo dataDictionaryPo = dataDictionaryDao.findOne(id);
+        Optional<DataDictionaryPo> optional = dataDictionaryDao.findById(id);
+        DataDictionaryPo dataDictionaryPo = optional.get();
         dataDictionaryPo.setValidInd(false);
         dataDictionaryDao.save(dataDictionaryPo);
         return ConvertUtils.convert(dataDictionaryPo, DataDictionaryVo.class);

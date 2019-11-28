@@ -22,11 +22,14 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpoint;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,7 +38,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -59,43 +64,80 @@ public class SecurityEndpoint {
     @Autowired
     private SecurityProperties securityProperties;
 
-    /**
-     * 认页面
-     *
-     * @return ModelAndView
-     */
-    @GetMapping("/authentication/require")
-    public ModelAndView require() {
-        return new ModelAndView("/index.html");
-    }
+//    /**
+//     * 认页面
+//     *
+//     * @return ModelAndView
+//     */
+//    @GetMapping("/authentication/require")
+//    public ModelAndView require() {
+//        return new ModelAndView("/index.html");
+//    }
+
+//    /**
+//     * 获取用户信息
+//     *
+//     * @param request
+//     * @param response
+//     * @return
+//     */
+//    @ResponseBody
+//    @GetMapping("/user")
+//    public Authentication user(ServletRequest request, ServletResponse response) {
+//        HttpServletRequest req = (HttpServletRequest) request;
+//        HttpServletResponse res = (HttpServletResponse) response;
+//
+//        OAuth2Authentication oAuth2Authentication = null;
+//        // 获取请求中中的 Authorization 或者 access_token 中的 token
+//        Authentication authentication = tokenExtractor.extract(req);
+//        if (authentication != null && !StringUtils.isEmpty(authentication.getPrincipal())) {
+//            // 从授权服务器，获取用户信息
+//            oAuth2Authentication = defaultTokenServices.loadAuthentication(authentication.getPrincipal().toString());
+//            if (oAuth2Authentication instanceof AbstractAuthenticationToken) {
+//                // 填充其它信息
+//                oAuth2Authentication.setDetails(authenticationDetailsSource.buildDetails(req));
+//                Authentication userAuthentication = oAuth2Authentication.getUserAuthentication();
+//                oAuth2Authentication.setAuthenticated(userAuthentication.isAuthenticated());
+//            }
+//        }
+//        return oAuth2Authentication;
+//    }
+
+    @Autowired
+    private TokenStore tokenStore;
 
     /**
      * 获取用户信息
      *
-     * @param request
-     * @param response
-     * @return
+     * @param authorization
+     * @return java.util.Map<java.lang.String, java.lang.Object>
+     * @author LiuYongTao
+     * @date 2019/11/12 13:57
      */
+    @RequestMapping("/user")
     @ResponseBody
-    @GetMapping("/user")
-    public Authentication user(ServletRequest request, ServletResponse response) {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
-
-        OAuth2Authentication oAuth2Authentication = null;
-        // 获取请求中中的 Authorization 或者 access_token 中的 token
-        Authentication authentication = tokenExtractor.extract(req);
-        if (authentication != null && !StringUtils.isEmpty(authentication.getPrincipal())) {
-            // 从授权服务器，获取用户信息
-            oAuth2Authentication = defaultTokenServices.loadAuthentication(authentication.getPrincipal().toString());
-            if (oAuth2Authentication instanceof AbstractAuthenticationToken) {
-                // 填充其它信息
-                oAuth2Authentication.setDetails(authenticationDetailsSource.buildDetails(req));
-                Authentication userAuthentication = oAuth2Authentication.getUserAuthentication();
-                oAuth2Authentication.setAuthenticated(userAuthentication.isAuthenticated());
+    public Map<String, Object> user(@RequestHeader String authorization) {
+        //必须通过客户端{携带的token在服务端的token存储中获取用户信息。
+        //header中 Authorization传过来的格式为[type token]的格式
+        //因此必须先对Authorization传过来的数据进行分隔authorization.split(" ")[1]才是真正的token
+        Map<String, Object> map = new HashMap<>();
+        OAuth2Authentication authen = null;
+        try {
+            authen = tokenStore.readAuthentication(authorization.split(" ")[1]);
+            if (authen == null) {
+                map.put("error", "invalid token !");
+                return map;
             }
+        } catch (Exception e) {
+            System.out.println(e);
+            map.put("error", e);
+            return map;
         }
-        return oAuth2Authentication;
+        //注意这两个key都不能随便填，都是和客户端进行数据处理时进行对应的。
+        map.put("user", authen.getPrincipal());
+        map.put("authorities", authen.getAuthorities());
+        return map;
+
     }
 
     /**
@@ -129,10 +171,12 @@ public class SecurityEndpoint {
             Assert.notNull(clientId, "clientId 不能为空,请配置 auth.security.client.clientId");
             String clientSecret = client.getClientSecret();
             Assert.notNull(clientSecret, "clientSecret 不能为空,请配置 auth.security.client.clientSecret");
+            String scope = client.getScope();
+            Assert.notNull(scope, "scope 不能为空,请配置 auth.security.client.scope");
 
-            // String url = "http://127.0.0.1:9999/oauth/token?grant_type=password&username=admin&password=123456&client_id=app&client_secret=app";
-            String url = "%s?grant_type=%s&username=%s&password=%s&client_id=%s&client_secret=%s";
-            String trgUrl = String.format(url, accessTokenUri, grantType, username, password, clientId, clientSecret);
+            // String url = "http://127.0.0.1:9999/oauth/token?grant_type=password&username=admin&password=123456&client_id=app&client_secret=app&scope=app";
+            String url = "%s?grant_type=%s&username=%s&password=%s&client_id=%s&client_secret=%s&scope=%s";
+            String trgUrl = String.format(url, accessTokenUri, grantType, username, password, clientId, clientSecret, scope);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("User-Agent", "curl/7.58.0");

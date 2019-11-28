@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.billow.mq.service.StoredOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.CollectionUtils;
 
@@ -59,7 +59,7 @@ public class RetrySendMessage {
             }
             int count = 0;
             for (MessageWithTime messageWithTime : list) {
-                String correlationId = messageWithTime.getMessage().getMessageProperties().getCorrelationIdString();
+                String correlationId = messageWithTime.getMessage().getMessageProperties().getCorrelationId();
                 if (correlationId == null || "".equals(correlationId)) {
                     LOGGER.error("{} RabbitMQ 补偿发送，发现mq消息格式不正确,correlationId为空,数据为[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime));
                     continue;

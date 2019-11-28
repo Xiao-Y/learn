@@ -2,7 +2,7 @@ package com.billow.system.feign;
 
 import com.billow.system.pojo.ex.UserEx;
 import com.billow.tools.resData.BaseResponse;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 

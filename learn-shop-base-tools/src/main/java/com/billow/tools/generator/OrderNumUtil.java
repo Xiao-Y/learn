@@ -44,6 +44,27 @@ public class OrderNumUtil {
         return finOrderNum;
     }
 
+    /**
+     * 生成非重复订单号，理论上限1毫秒1000个，可扩展
+     */
+    public static String makeOrderNum(String pix) {
+        // 最终生成的订单号
+        String finOrderNum = "";
+        synchronized (lockObj) {
+            // 取系统当前时间作为订单号变量前半部分，精确到毫秒
+            long nowLong = Long.parseLong(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
+            // 计数器到最大值归零，可扩展更大，目前1毫秒处理峰值1000个，1秒100万
+            if (orderNumCount >= maxPerMSECSize) {
+                orderNumCount = 0L;
+            }
+            //组装订单号
+            String countStr = maxPerMSECSize + orderNumCount + "";
+            finOrderNum = pix + nowLong + countStr.substring(1);
+            orderNumCount++;
+        }
+        return finOrderNum;
+    }
+
 //    public static void main(String[] args) {
 //        // 测试多线程调用订单号生成工具
 //        try {

@@ -124,17 +124,17 @@ export const asyncRouterMap = [{
   name: 'pro',
   component: Home,
   children: [{
-    name: 'proProductListIndex',
-    path: 'productList/index',
-    component: resolve => require(['../views/product/ProductList.vue'], resolve)
+    name: 'proGoodsSpuListIndex',
+    path: 'goodsSpuList/index',
+    component: resolve => require(['../views/product/GoodsSpuList.vue'], resolve)
   }, {
-    name: 'proProductEdit',
-    path: 'productList/productEdit',
-    component: resolve => require(['../views/product/components/ProductEdit.vue'], resolve)
+    name: 'proGoodsSpuEdit',
+    path: 'goodsSpuList/goodsSpuEdit',
+    component: resolve => require(['../views/product/components/GoodsSpuEdit.vue'], resolve)
   }, {
-    name: 'proProductImageEdit',
-    path: 'productList/productImageEdit',
-    component: resolve => require(['../views/product/components/ProductImageEdit.vue'], resolve)
+    name: 'proGoodsSpuImageEdit',
+    path: 'goodsSpuList/goodsSpuImageEdit',
+    component: resolve => require(['../views/product/components/GoodsSpuImageEdit.vue'], resolve)
   }]
 }, {
   path: '/user',

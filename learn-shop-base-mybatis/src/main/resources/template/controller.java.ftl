@@ -10,8 +10,7 @@ import com.billow.tools.utlis.ConvertUtils;
 import com.billow.${package.ModuleName}.pojo.po.${entity};
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
@@ -31,8 +30,9 @@ import ${superControllerClassPackage};
  * @since ${date}
  * @version v1.0
  */
+@Slf4j
 <#if restControllerStyle>
-@Api(tags = {"${table.comment!}"},value = "${table.comment!}")
+@Api(tags = {"${table.controllerName}"},value = "${table.comment!}")
 @RestController
 <#else>
 @Controller
@@ -47,13 +47,11 @@ public class ${table.controllerName} extends ${superControllerClass} {
 public class ${table.controllerName} {
 </#if>
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private ${table.serviceName} ${table.serviceName?uncap_first};
 
     @ApiOperation(value = "查询分页${table.comment!}数据")
-    @RequestMapping(value = "/list")
+    @PostMapping(value = "/list")
     public IPage<${entity}> findListByPage(@RequestBody ${VO} ${Vo}){
         return ${table.serviceName?uncap_first}.findListByPage(${Vo});
     }

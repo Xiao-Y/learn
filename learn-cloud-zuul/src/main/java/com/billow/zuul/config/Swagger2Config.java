@@ -4,19 +4,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * 用于接口文档
@@ -42,28 +48,34 @@ public class Swagger2Config {
     private String url;
     @Value("${swagger.service.contact.email}")
     private String email;
+    @Value("${security.oauth2.client.access-token-uri}")
+    private String tokenUrl;
+
+    private static final String CLIENT_ID = "swagger";
+    private static final String CLIENT_SECRET = "swagger";
+    private static final String SCOPE = "webapp";
+
 
     @Bean
     public Docket createRestApi() {
-
-        //添加head参数start
-        ParameterBuilder tokenPar = new ParameterBuilder();
-        List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("access_token")
-                .description("请输入您的Access Token")
-                .modelRef(new ModelRef("string"))
-                .parameterType("query")//参数类型支持header, cookie, body, query
-                .required(false)
-                .build();
-        pars.add(tokenPar.build());
 
         return (new Docket(DocumentationType.SWAGGER_2))
                 .apiInfo(this.apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(this.basePackage))
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.regex("^(?!auth).*$"))
                 .build()
-                .globalOperationParameters(pars);
+                .securityContexts(Collections.singletonList(securityContext()))
+                .securitySchemes(Collections.singletonList(securityScheme()));
+    }
+
+    @Bean
+    public SecurityConfiguration security() {
+        return SecurityConfigurationBuilder.builder()
+                .clientId(CLIENT_ID)
+                .clientSecret(CLIENT_SECRET)
+                .scopeSeparator(SCOPE)
+                .build();
     }
 
     private ApiInfo apiInfo() {
@@ -73,5 +85,27 @@ public class Swagger2Config {
                 .contact(new Contact(this.developer, this.url, this.email))
                 .version(version)
                 .build();
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(Collections.singletonList(new SecurityReference("OAuth2.0", scoper())))
+                .forPaths(PathSelectors.regex("^(?!auth).*$"))
+                .build();
+    }
+
+    private SecurityScheme securityScheme() {
+        GrantType grantType = new ResourceOwnerPasswordCredentialsGrant(tokenUrl);
+        return new OAuthBuilder()
+                .name("OAuth2.0")
+                .grantTypes(Collections.singletonList(grantType))
+                .scopes(Arrays.asList(scoper()))
+                .build();
+    }
+
+    private AuthorizationScope[] scoper() {
+        return new AuthorizationScope[]{
+                new AuthorizationScope(SCOPE, "webapp scope is trusted!")
+        };
     }
 }

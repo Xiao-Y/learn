@@ -29,13 +29,13 @@ public class MailServiceImpl implements MailService {
 
     @Async("emailExecutor")
     @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter) {
+    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter) {
         this.sendTemplateMail(fromEmail, toEmails, subject, id, parameter, null);
     }
 
     @Async("emailExecutor")
     @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, String> parameter, String filePath) {
+    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter, String filePath) {
         MailTemplateVo mailTemplateVo = mailTemplateService.findByIdAndValidIndIsTrue(id);
         if (mailTemplateVo == null) {
             throw new RuntimeException("id:" + id + ",没有查询到模板信息");
@@ -45,13 +45,13 @@ public class MailServiceImpl implements MailService {
 
     @Async("emailExecutor")
     @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, String> parameter) {
+    public void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter) {
         this.sendTemplateMail(fromEmail, toEmails, subject, mailCode, parameter, null);
     }
 
     @Async("emailExecutor")
     @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, String> parameter, String filePath) {
+    public void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter, String filePath) {
         try {
             log.info("开始发送模板邮件！");
             log.debug("fromEmail:{},toEmails:{},subject:{},mailCode:{},filePath:{}", fromEmail, toEmails, subject, mailCode, filePath);

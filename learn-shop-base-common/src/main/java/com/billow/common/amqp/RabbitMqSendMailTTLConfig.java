@@ -57,7 +57,7 @@ public class RabbitMqSendMailTTLConfig {
 
     // 交换机
     @Bean
-    public DirectExchange sendMailExchange() {
+    public DirectExchange sendMailExchangeTTL() {
         return new DirectExchange(this.getExchange(), true, false);
     }
 
@@ -71,7 +71,7 @@ public class RabbitMqSendMailTTLConfig {
     @Bean
     public Binding sendBindingTrt() {
         return BindingBuilder.bind(this.sendMailQueueTrt())
-                .to(this.sendMailExchange())
+                .to(this.sendMailExchangeTTL())
                 .with(this.getRouteKeyTrt());
     }
 
@@ -94,7 +94,7 @@ public class RabbitMqSendMailTTLConfig {
     @Bean
     public Binding sendBindingDlx() {
         return BindingBuilder.bind(this.sendMailQueueDlx())
-                .to(this.sendMailExchange())
+                .to(this.sendMailExchangeTTL())
                 .with(this.getRouteKeyDlx());
     }
 }

@@ -96,8 +96,8 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo deletePermissionById(Long id) {
-        PermissionPo permissionPo = permissionDao.findOne(id);
-        permissionDao.delete(id);
+        PermissionPo permissionPo = permissionDao.findById(id).get();
+        permissionDao.deleteById(id);
         // redis：删除所有角色所持有的该权限
         commonRolePermissionRedis.deleteRolePermissionById(id);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
@@ -122,7 +122,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo prohibitPermissionById(Long id) {
-        PermissionPo permissionPo = permissionDao.findOne(id);
+        PermissionPo permissionPo = permissionDao.findById(id).get();
         permissionPo.setValidInd(false);
         permissionDao.save(permissionPo);
         // redis：删除所有角色所持有的该权限

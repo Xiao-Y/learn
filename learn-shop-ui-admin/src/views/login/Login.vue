@@ -32,6 +32,10 @@
     DataRecovery
   } from "../../api/login";
 
+  import {
+    removeToken
+  } from '../../utils/cookieUtils';
+
   export default {
     data() {
       const validateUsername = (rule, value, callback) => {
@@ -73,6 +77,8 @@
       handleLogin() {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
+            // 清理旧 token
+            removeToken();
             this.$store.dispatch('LoginActions', this.loginForm).then(() => {
               this.loading = false
 //               alert('登录成功')

@@ -31,7 +31,7 @@ public class FmMailContentBuild implements MailContentBuild {
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
     @Override
-    public String build(MailTemplateVo mailTemplateVo, Map<String, String> parameter) throws Exception {
+    public String build(MailTemplateVo mailTemplateVo, Map<String, Object> parameter) throws Exception {
         // 模板名称
         String templateName = mailTemplateVo.getTemplateName();
         if (ToolsUtils.isEmpty(templateName)) {

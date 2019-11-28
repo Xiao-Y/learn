@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface MailContentBuild {
 
-    String build(MailTemplateVo mailTemplateVo, Map<String, String> parameter) throws Exception;
+    String build(MailTemplateVo mailTemplateVo, Map<String, Object> parameter) throws Exception;
 }

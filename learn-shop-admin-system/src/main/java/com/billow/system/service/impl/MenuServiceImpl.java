@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -116,8 +117,8 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuVo findMenuById(Long id) {
-        MenuPo menuPo = menuDao.findOne(id);
-        return ConvertUtils.convert(menuPo, MenuVo.class);
+        Optional<MenuPo> menuPo = menuDao.findById(id);
+        return ConvertUtils.convert(menuPo.orElse(new MenuPo()), MenuVo.class);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class MenuServiceImpl implements MenuService {
         Long id = menuVo.getId();
         MenuPo one;
         if (null != id) {
-            one = menuDao.findOne(id);
+            one = menuDao.findById(id).get();
             ConvertUtils.copyNonNullProperties(menuVo, one);
             // 更新 redis 中的菜单信息
             commonRoleMenuRedis.updateMeunById(one);
@@ -148,9 +149,9 @@ public class MenuServiceImpl implements MenuService {
                 roleMenuDao.deleteByMenuId(new Long(id));
             }
 
-            MenuPo menuPo = menuDao.findOne(new Long(id));
-            if (null != menuPo) {
-                menuDao.delete(new Long(id));
+            Optional<MenuPo> menuPo = menuDao.findById(new Long(id));
+            if (menuPo.isPresent()) {
+                menuDao.deleteById(new Long(id));
             }
         });
         commonRoleMenuRedis.deleteRoleMenuById(ids);
@@ -160,7 +161,7 @@ public class MenuServiceImpl implements MenuService {
     public Set<MenuEx> findMenuByRole(RolePo rolePo) {
         List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(rolePo.getId());
         Set<MenuEx> menuPos = roleMenuPos.stream().map(m -> {
-            MenuPo menuPo = menuDao.findOne(m.getMenuId());
+            MenuPo menuPo = menuDao.findById(m.getMenuId()).get();
             return commonRoleMenuRedis.menuPoCoverMenuex(menuPo);
         }).collect(Collectors.toSet());
         return menuPos;

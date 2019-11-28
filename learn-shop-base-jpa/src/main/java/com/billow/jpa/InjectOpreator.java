@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 
+import java.util.Optional;
+
 /**
  * 给Bean中的 @CreatedBy  @LastModifiedBy 注入操作人
  *
@@ -19,7 +21,8 @@ public class InjectOpreator implements AuditorAware<String> {
 
 
     @Override
-    public String getCurrentAuditor() {
-        return userTools.getCurrentUserCode();
+    public Optional<String> getCurrentAuditor() {
+        Optional<String> optional = Optional.of(userTools.getCurrentUserCode());
+        return optional;
     }
 }

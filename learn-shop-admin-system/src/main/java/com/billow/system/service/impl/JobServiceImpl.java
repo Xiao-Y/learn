@@ -31,7 +31,7 @@ public class JobServiceImpl implements JobService {
     public void sendMail(MailEx mailEx) {
         log.info(JSONObject.toJSONString(mailEx));
 
-        Map<String, String> parameter = new HashMap<>();
+        Map<String, Object> parameter = new HashMap<>();
         parameter.put("logId", mailEx.getLogId().toString());
 
         mailService.sendTemplateMail(customProperties.getMail().getFrom(), mailEx.getToEmails(), mailEx.getSubject(),

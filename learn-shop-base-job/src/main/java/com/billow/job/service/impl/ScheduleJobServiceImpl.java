@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 自动任务
@@ -48,8 +49,8 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Override
     public ScheduleJobVo selectByPK(Long id) {
-        ScheduleJobPo scheduleJobPo = scheduleJobDao.findOne(id);
-        return ConvertUtils.convert(scheduleJobPo, ScheduleJobVo.class);
+        Optional<ScheduleJobPo> scheduleJobPo = scheduleJobDao.findById(id);
+        return ConvertUtils.convert(scheduleJobPo.get(), ScheduleJobVo.class);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deleteByPK(Long id) {
-        scheduleJobDao.delete(id);
+        scheduleJobDao.deleteById(id);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     public Page<ScheduleJobPo> selectAll(ScheduleJobVo scheduleJobVo) {
         ScheduleJobPo scheduleJobPo = ConvertUtils.convert(scheduleJobVo, ScheduleJobPo.class);
-        Pageable pageable = new PageRequest(scheduleJobVo.getPageNo(), scheduleJobVo.getPageSize());
+        Pageable pageable = PageRequest.of(scheduleJobVo.getPageNo(), scheduleJobVo.getPageSize());
         ExampleMatcher matcher = getExampleMatcher();
         Example<ScheduleJobPo> example = Example.of(scheduleJobPo, matcher);
         Page<ScheduleJobPo> page = scheduleJobDao.findAll(example, pageable);
