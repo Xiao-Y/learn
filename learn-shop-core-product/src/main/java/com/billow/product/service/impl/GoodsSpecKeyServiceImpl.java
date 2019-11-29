@@ -12,6 +12,8 @@ import com.billow.product.service.GoodsSpecKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 规格表 服务实现类
@@ -43,6 +45,14 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
         LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSpecKeyPo::getId, id);
         return goodsSpecKeyDao.update(po, wrapper) >= 1;
+    }
+
+    @Override
+    public List<GoodsSpecKeyPo> findListByCategoryId(String categoryId) {
+        LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(GoodsSpecKeyPo::getCategoryId, categoryId);
+        wrapper.eq(GoodsSpecKeyPo::getValidInd, true);
+        return goodsSpecKeyDao.selectList(wrapper);
     }
 }
 

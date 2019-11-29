@@ -1,5 +1,6 @@
 package com.billow.product.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -106,7 +107,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
             GoodsSkuVo goodsSkuVo = new GoodsSkuVo();
             ConvertUtils.convert(goodsSkuPo, goodsSkuVo);
             // 规格key 和 规格值
-            Map<String, String> specKeyValue = new LinkedHashMap<>();
+            Map<String, String> specKeyValueName = new LinkedHashMap<>();
 
             // suk 对应的规格值
             LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper1 = Wrappers.lambdaQuery();
@@ -132,9 +133,11 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
                     goodsSpecValuePo = goodsSpecValueDao.selectById(specValueId);
                     specValue.put(specValueId, goodsSpecValuePo);
                 }
-                specKeyValue.put(goodsSpecKeyPo.getSpecName(), goodsSpecValuePo.getSpecValue());
-                goodsSkuVo.setSpecKeyValue(specKeyValue);
+                specKeyValueName.put(goodsSpecKeyPo.getSpecName(), goodsSpecValuePo.getSpecValue());
+                goodsSkuVo.setSpecKeyValueName(JSONObject.toJSONString(specKeyValueName));
             });
+            List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuVo.getGoodsSkuSpecValuePos();
+            skuSpecValuePos.addAll(goodsSkuSpecValuePos);
 
             list.add(goodsSkuVo);
         });

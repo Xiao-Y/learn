@@ -85,7 +85,7 @@
     <!-- 分页组件  -->
     <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
     <el-dialog :title="tableTitle" :visible.sync="dialogTableVisible" v-if="dialogTableVisible">
-      <good-sku-list :spuId="spuId" v-if="dialogTableVisible"/>
+      <good-sku-list :spuId="spuId" :category-id="categoryId" v-if="dialogTableVisible"/>
     </el-dialog>
   </div>
 </template>
@@ -116,6 +116,7 @@
         dialogTableVisible:false,// 打开SKU窗口
         tableTitle: '',// SPU name
         spuId: null,// 商品ID
+        categoryId: null,// 商品分类id
         queryFilter: {
           // 查询条件
           spuNo: null,
@@ -201,6 +202,7 @@
       handleSku(row,index){
         this.dialogTableVisible = true;
         this.spuId = row.id;
+        this.categoryId = row.categoryId;
         this.tableTitle = row.goodsName;
       }
     },

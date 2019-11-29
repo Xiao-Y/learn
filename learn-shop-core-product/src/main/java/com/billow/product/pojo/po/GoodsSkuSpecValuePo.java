@@ -1,7 +1,9 @@
 package com.billow.product.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author billow
- * @since 2019-11-27
+ * @since 2019-11-29
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -33,6 +35,9 @@ public class GoodsSkuSpecValuePo extends BasePo {
 
     @ApiModelProperty(value = "规格值id")
     private String specValueId;
+
+    @ApiModelProperty(value = "规格值排序")
+    private Long skuSpecSort;
 
 
 }

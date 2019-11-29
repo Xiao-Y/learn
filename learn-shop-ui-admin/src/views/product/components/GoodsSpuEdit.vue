@@ -38,7 +38,7 @@
       <div class="ms-doc" v-if="showSku">
         <h3>SKU信息</h3>
         <article>
-          <good-sku-list :spu-id="goodsSpu.id" :show-option="true" ref="GoodsSkuListRef"/>
+          <good-sku-list :spu-id="goodsSpu.id" :category-id="goodsSpu.categoryId" :show-option="true" ref="GoodsSkuListRef"/>
         </article>
       </div>
     </el-form>

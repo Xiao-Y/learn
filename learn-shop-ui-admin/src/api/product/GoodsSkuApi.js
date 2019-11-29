@@ -1,5 +1,3 @@
-import request from '@/utils/request'
-
 import requestUtils from '../../utils/requestUtils'
 
 const baseUrl = 'core-product/goodsSkuApi';

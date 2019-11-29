@@ -4,7 +4,7 @@
       <el-table :data="tableData" border style="width:100%">
         <el-table-column label="SKU编号" prop="skuNo" width="200"></el-table-column>
         <el-table-column label="SKU名称" prop="skuName"></el-table-column>
-        <el-table-column label="说明" prop="specKeyValue" width="200"></el-table-column>
+        <el-table-column label="说明" prop="specKeyValueName" width="200"></el-table-column>
         <el-table-column label="售价" prop="price"></el-table-column>
         <el-table-column label="库存量" prop="stock"></el-table-column>
         <el-table-column label="是否有货" prop="stock" width="80">
@@ -52,7 +52,8 @@
     </el-row>
 
     <el-dialog :title="tableTitle" :visible.sync="showSkuEdit" v-if="showSkuEdit">
-      <goods-sku-edit :sku-id="skuId" :spu-id="spuId" @closeDialog="closeDialog" v-if="showSkuEdit"/>
+      <goods-sku-edit :sku-id="skuId" :spu-id="spuId" :category-id="categoryId" :spec-key-value="specKeyValue"
+                      @closeDialog="closeDialog" v-if="showSkuEdit"/>
     </el-dialog>
   </div>
 </template>
@@ -80,6 +81,10 @@
       showOption: {
         type: Boolean,
         default: false
+      },
+      categoryId: {
+        type: String,
+        default: null
       }
     },
     data() {
@@ -87,6 +92,7 @@
         showSkuEdit: false,// 打开SKU窗口
         tableTitle: '',// SKU name
         skuId: null,// 商品ID
+        specKeyValue: null,// 规格key-value
         tableData: []
       }
     },
@@ -95,7 +101,7 @@
       this.loadDataList();
     },
     methods: {
-      // 获取权限列表数据
+      // 获取SKU列表数据
       loadDataList() {
         if (this.spuId === null) {
           return;
@@ -104,15 +110,18 @@
           this.tableData = res.resData;
         });
       },
-      // 添加权限
+      // 添加SKU
       handleAdd() {
         this.showSkuEdit = true;
         this.tableTitle = '添加SKU';
+        this.skuId = null;
+        this.specKeyValue = null;
       },
       handleEdit(row, index) {
         this.showSkuEdit = true;
         this.tableTitle = '修改SKU';
         this.skuId = row.id;
+        this.specKeyValue = row.goodsSkuSpecValuePos;
       },
       handleDelete(row, index) {
         var _this = this;

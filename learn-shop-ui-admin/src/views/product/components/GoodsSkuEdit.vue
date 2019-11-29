@@ -16,6 +16,20 @@
           <el-form-item label="有效标志" prop="validInd">
             <el-switch v-model="goodsSku.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
+          <el-form-item label="SKU 规格" prop="validInd">
+            <custom-sku-spec-select v-for="(item,index) in specKeyValue" :category-id="categoryId"
+                                    :spec-key="item.specKeyId"
+                                    :spec-value="item.specValueId"
+                                    :key="index"
+                                    :valid-data="goodsSkuSpecValuePos"
+                                    @change="changeSukSpec"/>
+            <!-- 默认显示3个-->
+            <custom-sku-spec-select v-for="count in specKeyValue === null ? 3 : (3 - specKeyValue.length)"
+                                    :category-id="categoryId"
+                                    :key="count + 3"
+                                    :valid-data="goodsSkuSpecValuePos"
+                                    @change="changeSukSpec"/>
+          </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="onSubmit">保存</el-button>
             <el-button @click="onReset('goodsSku')">重置</el-button>
@@ -32,7 +46,12 @@
 <script>
   import {Update, Add, GetById} from "../../../api/product/GoodsSkuApi";
 
+  import CustomSkuSpecSelect from '../../../components/common/CustomSkuSpecSelect'
+
   export default {
+    components: {
+      CustomSkuSpecSelect
+    },
     props: {
       spuId: {
         type: String,
@@ -40,6 +59,13 @@
       },
       skuId: {
         type: String,
+        default: null
+      },
+      categoryId: {
+        type: String,
+        default: null
+      },
+      specKeyValue: {
         default: null
       }
     },
@@ -52,8 +78,11 @@
           price: 0.00,
           stock: 0,
           spuId: null,
-          validInd: true
-        }
+          validInd: true,
+
+        },
+        goodsSkuSpecKeyValueMap: new Map(),// 初始化时，goodsSkuSpecKeyValue 转 map
+        goodsSkuSpecValuePos: [],
       }
     },
     created() {
@@ -63,11 +92,24 @@
           this.optionType = 'edit';
         });
       }
+      console.info("specKeyValue:", this.specKeyValue)
       this.goodsSku.spuId = this.spuId;
+      if (this.specKeyValue) {
+        for (let index in this.specKeyValue) {
+          this.goodsSkuSpecKeyValueMap.set(this.specKeyValue[index].specKeyId, this.specKeyValue[index]);
+        }
+        // Object.assign(this.goodsSku,"goodsSkuSpecValuePos",this.specKeyValue)
+        this.goodsSkuSpecValuePos = this.specKeyValue;
+      }
     },
     methods: {
       onSubmit() {
         var _this = this;
+
+        Object.assign(this.goodsSku, {
+          "goodsSkuSpecValuePos": this.goodsSkuSpecValuePos
+        });
+
         if (_this.optionType === 'edit') {
           Update(_this.goodsSku).then(res => {
             _this.$message({
@@ -87,12 +129,29 @@
             this.$emit('closeDialog', 'refresh');
           });
         }
+        // console.info(this.goodsSku)
       },
       onReturn() {
         this.$emit('closeDialog', 'unchanged');
       },
       onReset(goodsSku) {
         this.$refs[goodsSku].resetFields();
+      },
+      changeSukSpec(oldSpecKey, specKey, oldSpecValue, specValue) {
+        // console.info(oldSpecKey, specKey, oldSpecValue, specValue);
+        // 删除旧数据
+        if (oldSpecKey !== null) {
+          this.goodsSkuSpecKeyValueMap.delete(oldSpecKey);
+        }
+        // 直接覆盖
+        this.goodsSkuSpecKeyValueMap.set(specKey, {"specKeyId": specKey, "specKeyValueId": specValue});
+        // map 转 list ,用于后台保存
+        this.goodsSkuSpecValuePos = [];
+        for (let value of this.goodsSkuSpecKeyValueMap.values()) {
+          // console.log(value);
+          this.goodsSkuSpecValuePos.push(value);
+        }
+        // console.log(this.goodsSkuSpecKeyValue);
       }
     }
   };
