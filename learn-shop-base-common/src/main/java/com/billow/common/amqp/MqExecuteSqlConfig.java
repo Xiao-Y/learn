@@ -1,5 +1,6 @@
 package com.billow.common.amqp;
 
+import com.billow.cloud.common.properties.ConfigCommonProperties;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -9,46 +10,43 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 发送邮件MQ配置
+ * 执行sql 配置
  *
  * @author liuyongtao
- * @create 2019-09-29 15:24
+ * @create 2019-10-31 10:50
  */
 @Configuration
-public class RabbitMqSendMailConfig implements MqCommon {
+public class MqExecuteSqlConfig {
 
     @Autowired
-    private BaseMqConfig baseMqConfig;
+    private ConfigCommonProperties configCommonProperties;
 
-    @Override
     public String getQueue() {
-        return baseMqConfig.getQueue().getSendMail();
+        return this.configCommonProperties.getMq().getQueue().getExecuteSql();
     }
 
-    @Override
     public String getExchange() {
-        return baseMqConfig.getExchange().getSendMail();
+        return this.configCommonProperties.getMq().getExchange().getExecuteSql();
     }
 
-    @Override
     public String getRouteKey() {
-        return baseMqConfig.getRouteKey().getSendMail();
+        return this.configCommonProperties.getMq().getRouteKey().getExecuteSql();
     }
 
     @Bean
-    public Queue sendMailQueue() {
+    public Queue executeSqlQueue() {
         return new Queue(this.getQueue());
     }
 
     @Bean
-    public DirectExchange sendMailExchange() {
+    public DirectExchange executeSqlExchange() {
         return new DirectExchange(this.getExchange());
     }
 
     @Bean
-    public Binding sendMailBinding() {
-        return BindingBuilder.bind(this.sendMailQueue())
-                .to(this.sendMailExchange())
+    public Binding executeSqlBinding() {
+        return BindingBuilder.bind(this.executeSqlQueue())
+                .to(this.executeSqlExchange())
                 .with(this.getRouteKey());
     }
 }
