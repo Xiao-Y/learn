@@ -15,7 +15,7 @@ spring:
   application:
     name: learn-cloud-zuul
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-    static-locations: ${config.zuul.static.locations}
+    static-locations: ${config.zuul.static.locations.app},${config.zuul.static.locations.web}
 eureka:
   client:
     serviceUrl:

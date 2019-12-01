@@ -1,6 +1,6 @@
 module.exports = {
     assetsDir: 'static',
-    publicPath: '/', // 设置打包文件相对路径
+    publicPath: '', // 设置打包文件相对路径
     devServer: {
         host: '127.0.0.1', // can be overwritten by process.env.HOST
         port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
