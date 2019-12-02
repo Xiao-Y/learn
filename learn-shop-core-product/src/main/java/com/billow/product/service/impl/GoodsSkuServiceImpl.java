@@ -17,9 +17,11 @@ import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 import com.billow.product.service.GoodsSkuService;
+import com.billow.tools.generator.OrderNumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,6 +146,54 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
 
 
         return list;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void add(GoodsSkuVo vo) {
+        // 插入 sku
+        GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
+        po.setSkuNo(OrderNumUtil.makeOrderNum("SK"));
+        po.setShopId("0");
+        goodsSkuDao.insert(po);
+        String skuId = po.getId();
+//        // 删除 sku 下的所有规格
+//        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
+//        wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
+//        goodsSkuSpecValueDao.delete(wrapper);
+        // 直接插入新的
+        List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = vo.getGoodsSkuSpecValuePos();
+        for (int i = 0; i < goodsSkuSpecValuePos.size(); i++) {
+            GoodsSkuSpecValuePo goodsSkuSpecValuePo = goodsSkuSpecValuePos.get(i);
+            goodsSkuSpecValuePo.setSkuId(skuId);
+            goodsSkuSpecValuePo.setSkuSpecSort(new Long(i));
+            goodsSkuSpecValueDao.insert(goodsSkuSpecValuePo);
+        }
+        ConvertUtils.convert(po, vo);
+        vo.setGoodsSkuSpecValuePos(goodsSkuSpecValuePos);
+    }
+
+    @Override
+    public void update(GoodsSkuVo vo) {
+        // 插入 sku
+        GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
+        goodsSkuDao.updateById(po);
+
+        String skuId = po.getId();
+        // 删除 sku 下的所有规格
+        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
+        goodsSkuSpecValueDao.delete(wrapper);
+        // 重新添加
+        List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = vo.getGoodsSkuSpecValuePos();
+        for (int i = 0; i < goodsSkuSpecValuePos.size(); i++) {
+            GoodsSkuSpecValuePo goodsSkuSpecValuePo = goodsSkuSpecValuePos.get(i);
+            goodsSkuSpecValuePo.setSkuId(skuId);
+            goodsSkuSpecValuePo.setSkuSpecSort(new Long(i));
+            goodsSkuSpecValueDao.insert(goodsSkuSpecValuePo);
+        }
+        ConvertUtils.convert(po, vo);
+        vo.setGoodsSkuSpecValuePos(goodsSkuSpecValuePos);
     }
 }
 

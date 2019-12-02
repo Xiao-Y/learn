@@ -3,24 +3,28 @@
 <template>
   <div class="spec_select">
     <el-select
-      @change="changeKeyEvent"
+      @change="changeEvent(true)"
+      @clear="clearEvent(null,null)"
       v-model="specKeyTemp"
       :filterable="filterable"
+      :default-first-option="defaultFirstOption"
       :disabled="disabled"
       :size="size"
       :clearable="clearable"
       :placeholder="placeholder">
       <el-option
-        v-for="item in currentKeys"
+        v-for="item in selectKeyData"
         :key="item.id"
         :label="item.specName"
         :value="item.id">
       </el-option>
     </el-select>
     <el-select
-      @change="changeValueEvent"
+      @change="changeEvent(false)"
+      @clear="clearEvent(specKeyTemp,null)"
       v-model="specValueTemp"
       :filterable="filterable"
+      :default-first-option="defaultFirstOption"
       :disabled="disabled"
       :size="size"
       :clearable="clearable"
@@ -37,12 +41,17 @@
 
 <script>
 
-  import {FindListByCategoryId, FindListBySpecKeyId} from "../../api/product/GoodsSpecApi";
+  import {FindListBySpecKeyId} from "../../api/product/GoodsSpecApi";
 
   export default {
     props: {
       // 是否可以过滤
       filterable: {
+        type: Boolean,
+        default: true
+      },
+      // 在输入框按下回车，选择第一个匹配项
+      defaultFirstOption: {
         type: Boolean,
         default: true
       },
@@ -63,11 +72,7 @@
       },
       clearable: {
         type: Boolean,
-        default: false
-      },
-      categoryId: {
-        type: String,
-        default: null
+        default: true
       },
       // 选种的下拉
       specKey: {
@@ -79,83 +84,82 @@
         type: String,
         default: null
       },
-      validData: {
+      index: {
+        type: Number,
         default: null
+      },
+      selectKeyData: {
+        type: Array,
+        default: new Array()
       }
     },
     data() {
       return {
         specKeyTemp: null, // specKey 当前选种的，接收父组件 v-model 传来的值；
         specValueTemp: null, // specValue 当前选种的，接收父组件 v-model 传来的值；
-        validDataTemp: null, // specValue 当前选种的，接收父组件 v-model 传来的值；
-        currentKeys: [], // currentKeys 当前数据源|；
         currentValues: [], // currentValues 当前数据源|；
       }
     },
     created() {
       this.specKeyTemp = this.specKey;
       this.specValueTemp = this.specValue;
-      this.validDataTemp = this.validData;
-
-      if (this.categoryId !== null) {
-        this.LoadSelectKeyData(this.categoryId);
-      }
-      // console.info("this.validData:",this.validData)
     },
     methods: {
-      changeKeyEvent(val) {
-        // console.info(this.validDataTemp);
-        // console.info(this.specKey);
-        if (this.validDataTemp) {
-          var index = this.validDataTemp.findIndex(f => f.specKeyId == val);
-          if (index !== -1) {
-            this.specKeyTemp = this.specKey;
-            if (this.specKeyTemp === null) {
-              this.specValueTemp = null;
-              this.currentValues = [];
-            }
-            this.$message({
-              showClose: true,
-              message: '规格类型不能重复',
-              type: 'error'
-            });
-            return;
-          }
+      /**
+       * 下拉列表切换时触发，用于通知父组件
+       * @param isCheck 是否检查重复，key 需要检查，value 不需要
+       */
+      changeEvent(isCheck) {
+        var specValue = null;
+        if (this.specValueTemp) {
+          var value = this.currentValues.find(f => {
+            return f.id === this.specValueTemp;
+          });
+          specValue = value.specValue;
         }
-        this.specValueTemp = null;
-        this.currentValues = [];
-        if (val) {
-          this.LoadSelectValueData(val);
-        }
-        this.$emit("change", this.specKey, this.specKeyTemp, this.specValue, this.specValueTemp);
+        this.$emit("change", this.index, this.specKeyTemp, this.specValueTemp, specValue, isCheck);
       },
-      changeValueEvent() {
-        this.$emit("change", this.specKey, this.specKeyTemp, this.specValue, this.specValueTemp);
+      /**
+       * 对子组件设置值
+       * @param specKeyId
+       * @param specValueId
+       */
+      setSpecKey(specKeyId, specValueId) {
+        this.specKeyTemp = specKeyId;
+        this.specValueTemp = specValueId;
+        this.LoadSelectValueData(specKeyId);
+      },
+      /**
+       * 点击下拉的clear 时触发
+       * @param specKeyId
+       * @param specValueId
+       */
+      clearEvent(specKeyId, specValueId) {
+        if (specKeyId === null) {
+          this.specValueTemp = null;
+        }
+        var specValue = null;
+        if (this.specValueTemp) {
+          var value = this.currentValues.find(f => {
+            return f.id === this.specValueTemp;
+          });
+          specValue = value.specValue;
+        }
+        this.$emit("change", this.index, specKeyId, specValueId, specValue, false);
       },
       //加载下拉列表
-      LoadSelectKeyData(categoryId) {
-        FindListByCategoryId(categoryId).then(res => {
-          this.currentKeys = res.resData;
-        });
-      },
       LoadSelectValueData(specKeyId) {
-        FindListBySpecKeyId(specKeyId).then(res => {
-          this.currentValues = res.resData;
-        });
+        if (specKeyId) {
+          FindListBySpecKeyId(specKeyId).then(res => {
+            this.currentValues = res.resData;
+          });
+        }
       }
     },
     watch: {
-      currentKeys() {
+      // key 加载完成后加载 value
+      selectKeyData() {
         this.LoadSelectValueData(this.specKeyTemp);
-      },
-      validData: {
-        handler(newName, oldName) {
-          this.validDataTemp = this.validData;
-          // console.info("watch:newName", newName);
-          // console.info("watch:oldName", oldName);
-          // console.info("watch:", this.validData);
-        },
-        deep: true
       }
     }
   }

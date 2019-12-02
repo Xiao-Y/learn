@@ -4,9 +4,6 @@
       <h3>SKU信息</h3>
       <article>
         <el-form ref="goodsSku" :model="goodsSku" label-width="100px" size="mini">
-          <el-form-item label="SKU名称" prop="skuName">
-            <el-input v-model="goodsSku.skuName" placeholder="请输入内容"></el-input>
-          </el-form-item>
           <el-form-item label="售价" prop="price">
             <el-input v-model="goodsSku.price" placeholder="请输入内容"></el-input>
           </el-form-item>
@@ -17,18 +14,17 @@
             <el-switch v-model="goodsSku.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
           <el-form-item label="SKU 规格" prop="validInd">
-            <custom-sku-spec-select v-for="(item,index) in specKeyValue" :category-id="categoryId"
+            <custom-sku-spec-select v-for="(item,index) in goodsSkuSpecValuePos"
+                                    :select-key-data="selectKeyData"
                                     :spec-key="item.specKeyId"
                                     :spec-value="item.specValueId"
                                     :key="index"
-                                    :valid-data="goodsSkuSpecValuePos"
+                                    :index="index"
+                                    ref="skuSpecSelect"
                                     @change="changeSukSpec"/>
-            <!-- 默认显示3个-->
-            <custom-sku-spec-select v-for="count in specKeyValue === null ? 3 : (3 - specKeyValue.length)"
-                                    :category-id="categoryId"
-                                    :key="count + 3"
-                                    :valid-data="goodsSkuSpecValuePos"
-                                    @change="changeSukSpec"/>
+          </el-form-item>
+          <el-form-item label="SKU名称" prop="skuName">
+            <el-input v-model="goodsSku.skuName" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -45,8 +41,9 @@
 
 <script>
   import {Update, Add, GetById} from "../../../api/product/GoodsSkuApi";
+  import {FindListByCategoryId} from "../../../api/product/GoodsSpecApi";
 
-  import CustomSkuSpecSelect from '../../../components/common/CustomSkuSpecSelect'
+  import CustomSkuSpecSelect from '../../../components/common/CustomSkuSpecSelect';
 
   export default {
     components: {
@@ -79,10 +76,10 @@
           stock: 0,
           spuId: null,
           validInd: true,
-
         },
-        goodsSkuSpecKeyValueMap: new Map(),// 初始化时，goodsSkuSpecKeyValue 转 map
-        goodsSkuSpecValuePos: [],
+        goodsSkuSpecValuePos: [],// custom-sku-spec-select 选种的值
+        maxSkuSpec: 3,// custom-sku-spec-select 组件的最大个数
+        selectKeyData: [],// custom-sku-spec-select 子组件中 key 的下拉数据
       }
     },
     created() {
@@ -92,22 +89,44 @@
           this.optionType = 'edit';
         });
       }
-      console.info("specKeyValue:", this.specKeyValue)
       this.goodsSku.spuId = this.spuId;
       if (this.specKeyValue) {
-        for (let index in this.specKeyValue) {
-          this.goodsSkuSpecKeyValueMap.set(this.specKeyValue[index].specKeyId, this.specKeyValue[index]);
-        }
-        // Object.assign(this.goodsSku,"goodsSkuSpecValuePos",this.specKeyValue)
         this.goodsSkuSpecValuePos = this.specKeyValue;
       }
+      // 不满足 maxSkuSpec 的，补充完整
+      var length = this.goodsSkuSpecValuePos.length;
+      for (var i = 0; i < (this.maxSkuSpec - length); i++) {
+        var spec = new Object();
+        spec.specKeyId = null;
+        spec.specValueId = null;
+        spec.specValue = null;
+        this.goodsSkuSpecValuePos[i + length] = spec;
+      }
+      // 加载 custom-sku-spec-select 子组件中 key 的下拉数据
+      this.LoadSelectKeyData(this.categoryId);
     },
     methods: {
+      //加载下拉列表
+      LoadSelectKeyData(categoryId) {
+        if (categoryId) {
+          FindListByCategoryId(categoryId).then(res => {
+            this.selectKeyData = res.resData;
+          });
+        }
+      },
       onSubmit() {
         var _this = this;
 
+        // 整理数据，传送后台
+        var pos = [];
+        this.goodsSkuSpecValuePos.forEach(item => {
+          if (item.specKeyId && item.specValueId) {
+            pos.push(item);
+          }
+        });
+
         Object.assign(this.goodsSku, {
-          "goodsSkuSpecValuePos": this.goodsSkuSpecValuePos
+          "goodsSkuSpecValuePos": pos
         });
 
         if (_this.optionType === 'edit') {
@@ -137,21 +156,46 @@
       onReset(goodsSku) {
         this.$refs[goodsSku].resetFields();
       },
-      changeSukSpec(oldSpecKey, specKey, oldSpecValue, specValue) {
-        // console.info(oldSpecKey, specKey, oldSpecValue, specValue);
-        // 删除旧数据
-        if (oldSpecKey !== null) {
-          this.goodsSkuSpecKeyValueMap.delete(oldSpecKey);
+      changeSukSpec(index, specKeyId, specValueId, specValue, isCheck) {
+        // 不检查时，直接设值
+        if (!isCheck) {
+          var spec = new Object();
+          spec.specKeyId = specKeyId;
+          spec.specValueId = specValueId;
+          spec.specValue = specValue;
+          this.goodsSkuSpecValuePos[index] = spec;
+          console.log(this.goodsSkuSpecValuePos);
+          this.goodsSku.skuName = this.goodsSkuSpecValuePos
+            .filter(f => f.specValue !== null)
+            .map(m => m.specValue).join("/");
+          return;
         }
-        // 直接覆盖
-        this.goodsSkuSpecKeyValueMap.set(specKey, {"specKeyId": specKey, "specKeyValueId": specValue});
-        // map 转 list ,用于后台保存
-        this.goodsSkuSpecValuePos = [];
-        for (let value of this.goodsSkuSpecKeyValueMap.values()) {
-          // console.log(value);
-          this.goodsSkuSpecValuePos.push(value);
+        // 校验重复
+        var f = false;
+        for (var i = 0; i < this.goodsSkuSpecValuePos.length; i++) {
+          if (i !== index && specKeyId === this.goodsSkuSpecValuePos[i].specKeyId) {
+            f = true;
+            break;
+          }
         }
-        // console.log(this.goodsSkuSpecKeyValue);
+        if (!f) {
+          var spec = new Object();
+          spec.specKeyId = specKeyId;
+          spec.specValueId = specValueId;
+          spec.specValue = specValue;
+          this.goodsSkuSpecValuePos[index] = spec;
+        } else {
+          specKeyId = this.goodsSkuSpecValuePos[index].specKeyId;
+          specValueId = this.goodsSkuSpecValuePos[index].specValueId;
+          this.$message({
+            showClose: true,
+            message: '规格类型不能重复',
+            type: 'error'
+          });
+        }
+        // 调用子组件
+        this.$refs.skuSpecSelect[index].setSpecKey(specKeyId, specValueId);
+        // console.log(this.goodsSkuSpecValuePos);
       }
     }
   };
