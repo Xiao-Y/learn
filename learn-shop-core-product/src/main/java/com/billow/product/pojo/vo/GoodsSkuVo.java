@@ -32,6 +32,6 @@ public class GoodsSkuVo extends GoodsSkuPo implements Serializable {
     // 规格key 和 规格值，页面显示
     private String specKeyValueName;
     // 规格key 和 规格值
-    private List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = new ArrayList<>();
+    private List<GoodsSkuSpecValueVo> goodsSkuSpecValueVos = new ArrayList<>();
 
 }

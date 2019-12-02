@@ -121,7 +121,7 @@
         this.showSkuEdit = true;
         this.tableTitle = '修改SKU';
         this.skuId = row.id;
-        this.specKeyValue = row.goodsSkuSpecValuePos;
+        this.specKeyValue = row.goodsSkuSpecValueVos;
       },
       handleDelete(row, index) {
         var _this = this;

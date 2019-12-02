@@ -126,7 +126,7 @@
         });
 
         Object.assign(this.goodsSku, {
-          "goodsSkuSpecValuePos": pos
+          "goodsSkuSpecValueVos": pos
         });
 
         if (_this.optionType === 'edit') {

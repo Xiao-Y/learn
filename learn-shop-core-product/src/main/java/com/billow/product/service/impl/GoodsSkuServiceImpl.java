@@ -15,6 +15,7 @@ import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
+import com.billow.product.pojo.vo.GoodsSkuSpecValueVo;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 import com.billow.product.service.GoodsSkuService;
 import com.billow.tools.generator.OrderNumUtil;
@@ -111,6 +112,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
             // 规格key 和 规格值
             Map<String, String> specKeyValueName = new LinkedHashMap<>();
 
+            List<GoodsSkuSpecValueVo> skuSpecValueVos = goodsSkuVo.getGoodsSkuSpecValueVos();
             // suk 对应的规格值
             LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper1 = Wrappers.lambdaQuery();
             wrapper1.eq(GoodsSkuSpecValuePo::getSkuId, goodsSkuPo.getId());
@@ -137,10 +139,11 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
                 }
                 specKeyValueName.put(goodsSpecKeyPo.getSpecName(), goodsSpecValuePo.getSpecValue());
                 goodsSkuVo.setSpecKeyValueName(JSONObject.toJSONString(specKeyValueName));
-            });
-            List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuVo.getGoodsSkuSpecValuePos();
-            skuSpecValuePos.addAll(goodsSkuSpecValuePos);
 
+                GoodsSkuSpecValueVo convert = ConvertUtils.convert(goodsSkuSpecValuePo, GoodsSkuSpecValueVo.class);
+                convert.setSpecValue(goodsSpecValuePo.getSpecValue());
+                skuSpecValueVos.add(convert);
+            });
             list.add(goodsSkuVo);
         });
 
@@ -162,7 +165,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
 //        wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
 //        goodsSkuSpecValueDao.delete(wrapper);
         // 直接插入新的
-        List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = vo.getGoodsSkuSpecValuePos();
+        List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = ConvertUtils.convert(vo.getGoodsSkuSpecValueVos(), GoodsSkuSpecValuePo.class);
         for (int i = 0; i < goodsSkuSpecValuePos.size(); i++) {
             GoodsSkuSpecValuePo goodsSkuSpecValuePo = goodsSkuSpecValuePos.get(i);
             goodsSkuSpecValuePo.setSkuId(skuId);
@@ -170,7 +173,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
             goodsSkuSpecValueDao.insert(goodsSkuSpecValuePo);
         }
         ConvertUtils.convert(po, vo);
-        vo.setGoodsSkuSpecValuePos(goodsSkuSpecValuePos);
+        vo.setGoodsSkuSpecValueVos(ConvertUtils.convert(goodsSkuSpecValuePos, GoodsSkuSpecValueVo.class));
     }
 
     @Override
@@ -185,7 +188,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
         wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
         goodsSkuSpecValueDao.delete(wrapper);
         // 重新添加
-        List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = vo.getGoodsSkuSpecValuePos();
+        List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = ConvertUtils.convert(vo.getGoodsSkuSpecValueVos(), GoodsSkuSpecValuePo.class);
         for (int i = 0; i < goodsSkuSpecValuePos.size(); i++) {
             GoodsSkuSpecValuePo goodsSkuSpecValuePo = goodsSkuSpecValuePos.get(i);
             goodsSkuSpecValuePo.setSkuId(skuId);
@@ -193,7 +196,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
             goodsSkuSpecValueDao.insert(goodsSkuSpecValuePo);
         }
         ConvertUtils.convert(po, vo);
-        vo.setGoodsSkuSpecValuePos(goodsSkuSpecValuePos);
+        vo.setGoodsSkuSpecValueVos(ConvertUtils.convert(goodsSkuSpecValuePos, GoodsSkuSpecValueVo.class));
     }
 }
 
