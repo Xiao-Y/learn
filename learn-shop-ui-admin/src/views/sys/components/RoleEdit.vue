@@ -121,8 +121,8 @@
         this.menuChecked = this.menuChecked.concat(
           this.$refs.menuTree.getHalfCheckedNodes().map(m => m.id)
         );
-        console.info("oldMenuChecked",this.oldMenuChecked);
-        console.info("menuChecked",this.menuChecked);
+        // console.info("oldMenuChecked",this.oldMenuChecked);
+        // console.info("menuChecked",this.menuChecked);
       },
       //获取所有菜单
       findMenus() {
@@ -176,8 +176,8 @@
       handleSelectionChange(checkData, oldPermissionChecked, type) {
         this.permissionChecked = checkData;
         this.oldPermissionChecked = oldPermissionChecked;
-        console.info(type + " parent this.permissionChecked", this.permissionChecked);
-        console.info(type + " parent this.oldPermissionChecked", this.oldPermissionChecked);
+        // console.info(type + " parent this.permissionChecked", this.permissionChecked);
+        // console.info(type + " parent this.oldPermissionChecked", this.oldPermissionChecked);
       },
       // 校验角色CODE 是否重复
       checkRoleCode(rule, value, callback) {

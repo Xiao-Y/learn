@@ -9,8 +9,12 @@ import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.vo.GoodsSpecKeyVo;
 import com.billow.product.service.GoodsSpecKeyService;
+import com.billow.tools.generator.OrderNumUtil;
+import com.billow.tools.utlis.ConvertUtils;
+import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,6 +57,25 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
         wrapper.eq(GoodsSpecKeyPo::getCategoryId, categoryId);
         wrapper.eq(GoodsSpecKeyPo::getValidInd, true);
         return goodsSpecKeyDao.selectList(wrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<GoodsSpecKeyVo> saveList(List<GoodsSpecKeyVo> goodsSpecKeyVos) {
+        for (GoodsSpecKeyVo goodsSpecKeyVo : goodsSpecKeyVos) {
+            String id = goodsSpecKeyVo.getId();
+            if (ToolsUtils.isEmpty(id)) {
+                goodsSpecKeyVo.setSpecNo(OrderNumUtil.makeOrderNum("SP"));
+                GoodsSpecKeyPo convert = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);
+                goodsSpecKeyDao.insert(convert);
+                ConvertUtils.convert(convert, goodsSpecKeyVo);
+            } else {
+                GoodsSpecKeyPo convert = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);
+                goodsSpecKeyDao.updateById(convert);
+                ConvertUtils.convert(convert, goodsSpecKeyVo);
+            }
+        }
+        return goodsSpecKeyVos;
     }
 }
 

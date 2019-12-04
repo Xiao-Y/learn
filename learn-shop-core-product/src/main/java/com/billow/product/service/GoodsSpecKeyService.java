@@ -48,4 +48,14 @@ public interface GoodsSpecKeyService extends IService<GoodsSpecKeyPo> {
      * @date 2019/11/29 10:25
      */
     List<GoodsSpecKeyPo> findListByCategoryId(String categoryId);
+
+    /**
+     * 保存一组规格信息
+     *
+     * @param goodsSpecKeyVos
+     * @return java.util.List<com.billow.product.pojo.vo.GoodsSpecKeyVo>
+     * @author LiuYongTao
+     * @date 2019/12/4 11:05
+     */
+    List<GoodsSpecKeyVo> saveList(List<GoodsSpecKeyVo> goodsSpecKeyVos);
 }

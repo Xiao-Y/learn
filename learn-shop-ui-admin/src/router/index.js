@@ -135,6 +135,14 @@ export const asyncRouterMap = [{
     name: 'proGoodsSpuImageEdit',
     path: 'goodsSpuList/goodsSpuImageEdit',
     component: resolve => require(['../views/product/components/GoodsSpuImageEdit.vue'], resolve)
+  }, {
+    name: 'proGoodsCategoryListIndex',
+    path: 'goodsCategoryList/index',
+    component: resolve => require(['../views/product/GoodsCategoryList.vue'], resolve)
+  }, {
+    name: 'proGoodsCategoryEdit',
+    path: 'goodsCategoryList/goodsCategoryEdit',
+    component: resolve => require(['../views/product/components/GoodsCategoryEdit.vue'], resolve)
   }]
 }, {
   path: '/user',

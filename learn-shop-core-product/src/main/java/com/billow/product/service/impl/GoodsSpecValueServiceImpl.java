@@ -10,6 +10,7 @@ import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.vo.GoodsSpecValueVo;
 import com.billow.product.service.GoodsSpecValueService;
+import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +50,11 @@ public class GoodsSpecValueServiceImpl extends ServiceImpl<GoodsSpecValueDao, Go
     }
 
     @Override
-    public List<GoodsSpecValuePo> findListByCategoryId(String specKeyId) {
+    public List<GoodsSpecValueVo> findListBySpecKeyId(String specKeyId) {
         LambdaQueryWrapper<GoodsSpecValuePo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSpecValuePo::getSpecKeyId,specKeyId);
-        wrapper.eq(GoodsSpecValuePo::getValidInd, true);
-        return goodsSpecValueDao.selectList(wrapper);
+        wrapper.eq(GoodsSpecValuePo::getSpecKeyId, specKeyId);
+        List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectList(wrapper);
+        return ConvertUtils.convert(goodsSpecValuePos, GoodsSpecValueVo.class);
     }
 }
 

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -22,4 +23,5 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class GoodsSpecKeyVo extends GoodsSpecKeyPo implements Serializable {
 
+    private List<GoodsSpecValueVo> goodsSpecValueVos;
 }

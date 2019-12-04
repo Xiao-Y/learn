@@ -111,6 +111,7 @@
       ButtonGroupQuery,
       CustomPage
     },
+    mixins: [pageMixins],
     data() {
       return {
         dialogTableVisible:false,// 打开SKU窗口

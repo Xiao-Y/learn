@@ -86,4 +86,10 @@ public class GoodsSpecKeyApi {
     public List<GoodsSpecKeyPo> findListByCategoryId(@PathVariable("categoryId") String categoryId) {
         return goodsSpecKeyService.findListByCategoryId(categoryId);
     }
+
+    @ApiOperation(value = "保存一组规格信息")
+    @PostMapping(value = "/saveList")
+    public  List<GoodsSpecKeyVo> saveList(@RequestBody List<GoodsSpecKeyVo> goodsSpecKeyVos) {
+        return goodsSpecKeyService.saveList(goodsSpecKeyVos);
+    }
 }

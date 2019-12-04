@@ -41,7 +41,7 @@
 
 <script>
   import {Update, Add, GetById} from "../../../api/product/GoodsSkuApi";
-  import {FindListByCategoryId} from "../../../api/product/GoodsSpecApi";
+  import {FindKeyListByCategoryId} from "../../../api/product/GoodsSpecKeyApi";
 
   import CustomSkuSpecSelect from '../../../components/common/CustomSkuSpecSelect';
 
@@ -109,7 +109,7 @@
       //加载下拉列表
       LoadSelectKeyData(categoryId) {
         if (categoryId) {
-          FindListByCategoryId(categoryId).then(res => {
+          FindKeyListByCategoryId(categoryId).then(res => {
             this.selectKeyData = res.resData;
           });
         }

@@ -84,7 +84,7 @@ public class GoodsSpecValueApi {
 
     @ApiOperation(value = "通过 SpecKeyId 查询出所有的规格 Value")
     @GetMapping(value = "/findListBySpecKeyId/{specKeyId}")
-    public List<GoodsSpecValuePo> findListBySpecKeyId(@PathVariable("specKeyId") String specKeyId) {
-        return goodsSpecValueService.findListByCategoryId(specKeyId);
+    public List<GoodsSpecValueVo> findListBySpecKeyId(@PathVariable("specKeyId") String specKeyId) {
+        return goodsSpecValueService.findListBySpecKeyId(specKeyId);
     }
 }

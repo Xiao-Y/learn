@@ -41,7 +41,7 @@
 
 <script>
 
-  import {FindListBySpecKeyId} from "../../api/product/GoodsSpecApi";
+  import {FindValueListBySpecKeyId} from "../../api/product/GoodsSpecValueApi";
 
   export default {
     props: {
@@ -150,7 +150,7 @@
       //加载下拉列表
       LoadSelectValueData(specKeyId) {
         if (specKeyId) {
-          FindListBySpecKeyId(specKeyId).then(res => {
+          FindValueListBySpecKeyId(specKeyId).then(res => {
             this.currentValues = res.resData;
           });
         }

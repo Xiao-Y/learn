@@ -48,5 +48,5 @@ public interface GoodsSpecValueService extends IService<GoodsSpecValuePo> {
      * @author LiuYongTao
      * @date 2019/11/29 10:31
      */
-    List<GoodsSpecValuePo> findListByCategoryId(String specKeyId);
+    List<GoodsSpecValueVo> findListBySpecKeyId(String specKeyId);
 }

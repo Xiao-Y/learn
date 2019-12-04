@@ -1,12 +1,10 @@
-import request from '@/utils/request'
-
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'core-product/goodsSpuApi';
+const baseUrl = 'core-product/goodsCategoryApi';
 
 /**
  * 根据条件查询商品信息
- * @param queryFilter
+ * @param goodsSpuFilter
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
@@ -44,27 +42,3 @@ export const DelById = id => requestUtils.del(baseUrl + '/delById/' + id);
  * @constructor
  */
 export const ProhibitById = id => requestUtils.put(baseUrl + '/prohibitById/' + id);
-
-/**
- * 查询商品图片
- * @param productId 商品id
- * @constructor
- */
-export function GetProuctImageByProductId({productId}) {
-  return request({
-    url: 'core-product/productApi/findProductImageByProductId/' + productId,
-    method: 'get'
-  });
-}
-
-/**
- * 通过图片id 删除商品图上
- * @param id 图片id
- * @constructor
- */
-export function DeleteProductImageById(id) {
-  return request({
-    url: 'core-product/productApi/deleteProductImageById/' + id,
-    method: 'delete'
-  });
-}

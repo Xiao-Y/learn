@@ -2,26 +2,34 @@
   <div>
     <el-row>
       <el-table :data="tableData" border style="width:100%">
-        <el-table-column label="SKU编号" prop="skuNo" width="200"></el-table-column>
-        <el-table-column label="SKU名称" prop="skuName"></el-table-column>
-        <el-table-column label="说明" prop="specKeyValueName" width="200"></el-table-column>
-        <el-table-column label="售价" prop="price"></el-table-column>
-        <el-table-column label="库存量" prop="stock"></el-table-column>
-        <el-table-column label="是否有货" prop="stock" width="80">
+        <el-table-column label="规格编号" prop="specNo"></el-table-column>
+        <el-table-column label="规格名称" prop="specName">
           <template slot-scope="scope">
-            <el-tag
-              :type="scope.row.stock > 0 ? 'success' : 'danger'"
-              disable-transitions>{{scope.row.stock | productStatusName}}
-            </el-tag>
+            <el-input v-model="scope.row.specName" :readonly="readonly" placeholder="请输入内容"></el-input>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="200" v-if="showOption">
+        <el-table-column label="规格排序" prop="keySort" width="200">
+          <template slot-scope="scope">
+            <el-input-number v-model="scope.row.keySort" :min="0" :disabled="readonly" size="mini"></el-input-number>
+          </template>
+        </el-table-column>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <!--  操作按钮组 -->
             <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
-                                 @onEdit="handleEdit(scope.row,scope.$index)"
                                  @onInd="handleProhibit(scope.row,scope.$index)"
-                                 :disInd="!scope.row.validInd"></button-group-option>
+                                 :show-edit="false"
+                                 :disInd="!scope.row.validInd"
+                                 v-if="showOption"/>
+            <div style="float:left;margin-left:10px;">
+              <el-tooltip class="item" effect="dark" content="修改规格值" placement="top-start" :open-delay="1500">
+                <el-button type="success" size="mini" v-if="scope.row.id"
+                           @click="editSpecValue(scope.row,scope.$index)">
+                  <i class="el-icon-thumb"></i>
+                </el-button>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column type="expand" label="详细" width="50">
@@ -42,60 +50,57 @@
               <el-form-item label="是否有效">
                 <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
               </el-form-item>
-              <el-form-item label="商铺ID">
-                <span>{{ scope.row.shopId }}</span>
-              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
       </el-table>
     </el-row>
-
-    <el-dialog :title="tableTitle" :visible.sync="showSkuEdit" v-if="showSkuEdit">
-      <goods-sku-edit :sku-id="skuId" :spu-id="spuId" :category-id="categoryId" :spec-key-value="specKeyValue"
-                      @closeDialog="closeDialog" v-if="showSkuEdit"/>
+    <!-- 规格value  -->
+    <el-dialog :closeOnClickModal="false" :title="tableTitle" :visible.sync="dialogTableVisible"
+               v-if="dialogTableVisible">
+      <goods-spec-value-list :spec-key-id="specKeyId" v-if="dialogTableVisible" ref="GoodsSpecValueListRef"/>
     </el-dialog>
   </div>
 </template>
 
 
 <script>
-  import {FindGoodsSku, DelById, ProhibitById} from "../../api/product/GoodsSkuApi";
+  import {FindKeyListByCategoryId, ProhibitById, DelById, SaveSpecKeyList} from "../../api/product/GoodsSpecKeyApi";
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
-  import pageMixins from "../../utils/pageMixins";
 
   // ===== component start
-  import GoodsSkuEdit from './components/GoodsSkuEdit.vue';
+  import GoodsSpecValueList from './GoodsSpecValueList.vue';
+
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
 
   export default {
-    components: {
-      GoodsSkuEdit,
-      ButtonGroupOption
-    },
     props: {
-      spuId: {
-        type: String,
-        default: null
+      readonly: {
+        type: Boolean,
+        default: true
       },
       showOption: {
         type: Boolean,
         default: false
       },
+      // 商品分类id
       categoryId: {
         type: String,
         default: null
       }
     },
-    mixins: [pageMixins],
+    components: {
+      GoodsSpecValueList,
+      ButtonGroupOption,
+    },
     data() {
       return {
-        showSkuEdit: false,// 打开SKU窗口
-        tableTitle: '',// SKU name
-        skuId: null,// 商品ID
-        specKeyValue: null,// 规格key-value
-        tableData: []
+        dialogTableVisible: false,// 打开规格Value窗口
+        tableTitle: '',// KEY name
+        specKeyId: null,// 规格KEY ID
+        tableData: [],
+        activeNames: ['1']
       }
     },
     created() {
@@ -103,32 +108,34 @@
       this.loadDataList();
     },
     methods: {
-      // 获取SKU列表数据
+      // 获取权限列表数据
       loadDataList() {
-        if (this.spuId === null) {
-          return;
-        }
-        FindGoodsSku(this.spuId).then(res => {
+        FindKeyListByCategoryId(this.categoryId).then(res => {
           this.tableData = res.resData;
         });
       },
-      // 添加SKU
+      // 添加权限
       handleAdd() {
-        this.showSkuEdit = true;
-        this.tableTitle = '添加SKU';
-        this.skuId = null;
-        this.specKeyValue = null;
+        this.tableData.push({
+          categoryId: this.categoryId,
+          specName: '',
+          keySort: 0
+        });
       },
-      handleEdit(row, index) {
-        this.showSkuEdit = true;
-        this.tableTitle = '修改SKU';
-        this.skuId = row.id;
-        this.specKeyValue = row.goodsSkuSpecValueVos;
+      saveList() {
+        SaveSpecKeyList(this.tableData).then(res => {
+          this.tableData = res.resData;
+        });
       },
       handleDelete(row, index) {
         var _this = this;
 
-        VueUtils.confirmDel(row.skuName, () => {
+        if (!row.id) {
+          _this.tableData.splice(index, 1);
+          return;
+        }
+
+        VueUtils.confirmDel(row.specName, () => {
           DelById(row.id).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
@@ -141,7 +148,7 @@
       handleProhibit(row, index) {
         var _this = this;
 
-        VueUtils.confirmInd(row.skuName, () => {
+        VueUtils.confirmInd(row.specName, () => {
           ProhibitById(row.id).then(res => {
             row.validInd = res.resData.validInd;
             _this.$message({
@@ -151,17 +158,10 @@
           });
         });
       },
-      closeDialog(type) {
-        this.showSkuEdit = false;
-        if (type === 'refresh') {
-          this.loadDataList();
-        }
-      }
-
-    },
-    filters: {
-      productStatusName(productStatus) {
-        return productStatus > 0 ? '有货' : '无货';
+      editSpecValue(row, index) {
+        this.dialogTableVisible = true;
+        this.specKeyId = row.id;
+        this.tableTitle = row.specName;
       }
     }
   }
