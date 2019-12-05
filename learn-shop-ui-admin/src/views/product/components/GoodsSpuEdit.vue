@@ -17,10 +17,28 @@
             <el-input v-model="goodsSpu.brandId" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="分类" prop="categoryId">
-            <el-input v-model="goodsSpu.categoryId" placeholder="请输入内容"></el-input>
+            <custom-select v-model="goodsSpu.categoryId"
+                           :datasource="categorySelect"
+                           placeholder="请选择商品分类">
+            </custom-select>
           </el-form-item>
           <el-form-item label="商品排序" prop="spuSort">
             <el-input v-model="goodsSpu.spuSort" placeholder="请输入内容"></el-input>
+          </el-form-item>
+          <el-form-item label="商品规格" prop="spuSort">
+            <el-select
+              v-model="specKeys"
+              filterable
+              default-first-option
+              multiple
+              placeholder="请选择商品规格">
+              <el-option
+                v-for="item in specKeySelect"
+                :key="item.id"
+                :label="item.specName"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="有效标志" prop="validInd">
             <el-switch v-model="goodsSpu.validInd" active-text="有效" inactive-text="无效"></el-switch>
@@ -38,7 +56,11 @@
       <div class="ms-doc" v-if="showSku">
         <h3>SKU信息</h3>
         <article>
-          <good-sku-list :spu-id="goodsSpu.id" :category-id="goodsSpu.categoryId" :show-option="true" ref="GoodsSkuListRef"/>
+          <good-sku-list :spu-id="goodsSpu.id"
+                         :category-id="goodsSpu.categoryId"
+                         :show-option="true"
+                         :spec-keys="specKeys"
+                         ref="GoodsSkuListRef"/>
         </article>
       </div>
     </el-form>
@@ -47,11 +69,17 @@
 
 <script>
   import {Update, Add} from "../../../api/product/GoodsSpuApi";
+  import {FindSpuSpecKey} from "../../../api/product/GoodsSpuSpecApi";
+  import {FindKeyListByCategoryId} from "../../../api/product/GoodsSpecKeyApi";
+
 
   import GoodSkuList from '../GoodsSkuList';
+  import CustomSelect from '../../../components/common/CustomSelect.vue';
+
 
   export default {
     components: {
+      CustomSelect,
       GoodSkuList
     },
     data() {
@@ -67,11 +95,15 @@
           categoryId: null,
           validInd: true,
           spuSort: 999
-        }
+        },
+        categorySelect: [],// 分类数据源
+        specKeySelect: [],// 规格数据源
+        specKeys: [],// 选种的规格
       }
     },
     created() {
       this.optionType = this.$route.query.optionType;
+      this.categorySelect = JSON.parse(this.$route.query.categorySelect);
       if (this.optionType === 'edit') {
         this.goodsSpu = JSON.parse(this.$route.query.goodsSpuEdit);
       }
@@ -79,6 +111,10 @@
     methods: {
       onSubmit() {
         var _this = this;
+        Object.assign(this.goodsSpu, {
+          "specKeys": this.specKeys
+        });
+
         if (_this.optionType === 'edit') {
           Update(_this.goodsSpu).then(res => {
             _this.$message({
@@ -99,7 +135,7 @@
           });
         }
       },
-      addSku(){
+      addSku() {
         this.$refs.GoodsSkuListRef.handleAdd();
       },
       onReturn() {
@@ -107,6 +143,23 @@
       },
       onReset(goodsSpu) {
         this.$refs[goodsSpu].resetFields();
+      }
+    },
+    watch: {
+      'goodsSpu.id'() {
+        if (this.goodsSpu.id) {
+          // 获取已经选种的规格信息
+          FindSpuSpecKey(this.goodsSpu.id).then(res => {
+            this.specKeys = res.resData;
+          });
+        }
+      },
+      'goodsSpu.categoryId'() {
+        if (this.goodsSpu.categoryId) {
+          FindKeyListByCategoryId(this.goodsSpu.categoryId).then(res => {
+            this.specKeySelect = res.resData;
+          });
+        }
       }
     }
   };

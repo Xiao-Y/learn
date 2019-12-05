@@ -64,6 +64,9 @@
       },
       specKeyValue: {
         default: null
+      },
+      specKeys: {
+        default: null
       }
     },
     data() {
@@ -78,7 +81,7 @@
           validInd: true,
         },
         goodsSkuSpecValuePos: [],// custom-sku-spec-select 选种的值
-        maxSkuSpec: 3,// custom-sku-spec-select 组件的最大个数
+        // maxSkuSpec: 3,// custom-sku-spec-select 组件的最大个数
         selectKeyData: [],// custom-sku-spec-select 子组件中 key 的下拉数据
       }
     },
@@ -93,15 +96,15 @@
       if (this.specKeyValue) {
         this.goodsSkuSpecValuePos = this.specKeyValue;
       }
-      // 不满足 maxSkuSpec 的，补充完整
-      var length = this.goodsSkuSpecValuePos.length;
-      for (var i = 0; i < (this.maxSkuSpec - length); i++) {
-        var spec = new Object();
-        spec.specKeyId = null;
-        spec.specValueId = null;
-        spec.specValue = null;
-        this.goodsSkuSpecValuePos[i + length] = spec;
-      }
+      // // 不满足 maxSkuSpec 的，补充完整
+      // var length = this.goodsSkuSpecValuePos.length;
+      // for (var i = 0; i < (this.maxSkuSpec - length); i++) {
+      //   var spec = new Object();
+      //   spec.specKeyId = null;
+      //   spec.specValueId = null;
+      //   spec.specValue = null;
+      //   this.goodsSkuSpecValuePos[i + length] = spec;
+      // }
       // 加载 custom-sku-spec-select 子组件中 key 的下拉数据
       this.LoadSelectKeyData(this.categoryId);
     },

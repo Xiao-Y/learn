@@ -49,4 +49,15 @@ public interface GoodsSpuSpecService extends IService<GoodsSpuSpecPo> {
      * @date 2019/11/27 11:33
      */
     List<Map<String, Object>> findSpuSpec(String spuId);
+
+    /**
+     * 根据 spuId 查询 spu 规格Key数据
+     *
+     * @param spuId
+     * @return java.util.List<java.lang.String>
+     * @author LiuYongTao
+     * @date 2019/12/5 16:33
+     */
+    List<String> findSpuSpecKey(String spuId);
+
 }

@@ -4,7 +4,7 @@ const baseUrl = 'core-product/goodsCategoryApi';
 
 /**
  * 根据条件查询商品信息
- * @param goodsSpuFilter
+ * @param queryFilter
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
@@ -42,3 +42,10 @@ export const DelById = id => requestUtils.del(baseUrl + '/delById/' + id);
  * @constructor
  */
 export const ProhibitById = id => requestUtils.put(baseUrl + '/prohibitById/' + id);
+
+/**
+ * 查询分类下拉列表数据
+ * @returns {*|Promise|Promise<any>}
+ * @constructor
+ */
+export const FindCategorySelect = () => requestUtils.post(baseUrl + '/findCategorySelect',{});

@@ -8,7 +8,7 @@
       v-model="specKeyTemp"
       :filterable="filterable"
       :default-first-option="defaultFirstOption"
-      :disabled="disabled"
+      :disabled="true"
       :size="size"
       :clearable="clearable"
       :placeholder="placeholder">

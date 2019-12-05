@@ -86,6 +86,9 @@
       categoryId: {
         type: String,
         default: null
+      },
+      specKeys: {
+        default: null
       }
     },
     mixins: [pageMixins],
@@ -123,7 +126,18 @@
         this.showSkuEdit = true;
         this.tableTitle = '修改SKU';
         this.skuId = row.id;
-        this.specKeyValue = row.goodsSkuSpecValueVos;
+        this.specKeyValue = [];
+        if (this.specKeys) {
+          for (let i in this.specKeys) {
+            var value = row.goodsSkuSpecValueVos.find(f => f.specKeyId === this.specKeys[i]);
+            if (value) {
+              this.specKeyValue.push(value);
+            } else {
+              this.specKeyValue.push({specKeyId: this.specKeys[i], specValueId: null});
+            }
+          }
+        }
+        console.info('this.specKeyValue', this.specKeyValue);
       },
       handleDelete(row, index) {
         var _this = this;

@@ -7,7 +7,7 @@
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
           <el-form :model="queryFilter" ref="queryFilter" :inline="true" size="mini">
-            <el-form-item label="品牌名称" prop="categoryName">
+            <el-form-item label="分类名称" prop="categoryName">
               <el-input v-model="queryFilter.categoryName" placeholder="请输入内容"></el-input>
             </el-form-item>
           </el-form>
@@ -18,8 +18,8 @@
     <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"/>
     <el-row>
       <el-table :data="tableData" border style="width:100%">
-        <el-table-column label="品牌名称" prop="categoryName"></el-table-column>
-        <el-table-column label="品牌排序" prop="categorySort" width="200"></el-table-column>
+        <el-table-column label="分类名称" prop="categoryName"></el-table-column>
+        <el-table-column label="分类排序" prop="categorySort" width="200"></el-table-column>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="240">
           <template slot-scope="scope">
@@ -93,7 +93,7 @@
     data() {
       return {
         dialogTableVisible:false,// 打开规格窗口
-        tableTitle: '',// 品牌名称
+        tableTitle: '',// 分类名称
         categoryId: null,// 商品分类id
         queryFilter: {
           // 查询条件

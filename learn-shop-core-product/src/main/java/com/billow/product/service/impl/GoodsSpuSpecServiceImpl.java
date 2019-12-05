@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -90,6 +91,14 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
         });
 
         return tree;
+    }
+
+    @Override
+    public List<String> findSpuSpecKey(String spuId) {
+        LambdaQueryWrapper<GoodsSpuSpecPo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(GoodsSpuSpecPo::getSpuId, spuId);
+        List<GoodsSpuSpecPo> goodsSpuSpecPos = goodsSpuSpecDao.selectList(wrapper);
+        return goodsSpuSpecPos.stream().map(m -> m.getSpecKeyId()).collect(Collectors.toList());
     }
 }
 

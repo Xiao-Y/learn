@@ -1,6 +1,7 @@
 package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.common.business.ex.SelectEx;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.vo.GoodsCategoryVo;
 import com.billow.product.service.GoodsCategoryService;
@@ -17,6 +18,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -75,5 +81,21 @@ public class GoodsCategoryApi {
     @PutMapping("/prohibitById/{id}")
     public boolean prohibitById(@PathVariable String id) {
         return goodsCategoryService.prohibitById(id);
+    }
+
+    @ApiOperation(value = "查询分类下拉列表数据")
+    @PostMapping(value = "/findCategorySelect")
+    public List<SelectEx> findCategorySelect(@RequestBody GoodsCategoryVo goodsCategoryVo) {
+        List<SelectEx> selectExes = new ArrayList<>();
+        List<GoodsCategoryPo> list = goodsCategoryService.findList(goodsCategoryVo);
+        list.forEach(f -> {
+            SelectEx ex = new SelectEx();
+            ex.setFieldDisplay(f.getCategoryName());
+            ex.setFieldValue(f.getId());
+            ex.setFieldOrder(f.getCategorySort());
+            selectExes.add(ex);
+        });
+        selectExes.sort(Comparator.comparing(SelectEx::getFieldOrder, Comparator.nullsFirst(Long::compareTo)));
+        return selectExes;
     }
 }

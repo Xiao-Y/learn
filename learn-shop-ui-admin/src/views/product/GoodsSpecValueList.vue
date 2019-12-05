@@ -26,8 +26,8 @@
               <el-tooltip class="item" effect="dark" content="保存" placement="top-start" :open-delay="1500">
                 <el-button type="success" size="mini"
                            v-show="!scope.row.readonly"
-                           @click="saveSpecValue(scope.row)">
-                  <i class="el-icon-thumb"></i>
+                           @click="saveSpecValue(scope.row,scope.$index)">
+                  <i class="iconfont icon-createtask"></i>
                 </el-button>
               </el-tooltip>
             </div>
@@ -56,8 +56,12 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <div style="float:right;margin-right:10px;">
-      <el-button type="success" size="mini" @click="addSpecValue">添加</el-button>
+    <div style="float:right;">
+      <el-tooltip class="item" effect="dark" content="增加" placement="top-start" :open-delay="1500">
+        <el-button type="success" size="mini" @click="addSpecValue">
+          <i class="iconfont icon-add"></i>
+        </el-button>
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -145,7 +149,7 @@
           });
         } else {
           Add(row).then(res => {
-            this.tableData.push(res.resData);
+            this.tableData.splice(index, 1, res.resData);
           });
         }
       }

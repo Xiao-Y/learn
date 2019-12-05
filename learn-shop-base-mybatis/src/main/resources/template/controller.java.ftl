@@ -51,14 +51,14 @@ public class ${table.controllerName} {
     private ${table.serviceName} ${table.serviceName?uncap_first};
 
     @ApiOperation(value = "查询分页${table.comment!}数据")
-    @PostMapping(value = "/list")
+    @PostMapping(value = "/findListByPage")
     public IPage<${entity}> findListByPage(@RequestBody ${VO} ${Vo}){
         return ${table.serviceName?uncap_first}.findListByPage(${Vo});
     }
 
     @ApiOperation(value = "根据id查询${table.comment!}数据")
-    @GetMapping(value = "/getById/{id}")
-    public ${VO} getById(@PathVariable("id") String id){
+    @GetMapping(value = "/findById/{id}")
+    public ${VO} findById(@PathVariable("id") String id){
         ${entity} po = ${table.serviceName?uncap_first}.getById(id);
         return ConvertUtils.convert(po, ${VO}.class);
     }

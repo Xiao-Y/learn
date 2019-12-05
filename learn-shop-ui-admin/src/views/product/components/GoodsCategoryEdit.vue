@@ -2,9 +2,9 @@
   <div>
     <el-form ref="infoModel" :model="infoModel" label-width="100px" size="mini">
       <div class="ms-doc">
-        <h3>品牌信息</h3>
+        <h3>分类信息</h3>
         <article>
-          <el-form-item label="品牌名称" prop="categoryName">
+          <el-form-item label="分类名称" prop="categoryName">
             <el-input v-model="infoModel.categoryName" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="商品排序" prop="spuSort">
