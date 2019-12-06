@@ -7,11 +7,11 @@
         <el-table-column label="说明" prop="specKeyValueName" width="200"></el-table-column>
         <el-table-column label="售价" prop="price"></el-table-column>
         <el-table-column label="库存量" prop="stock"></el-table-column>
-        <el-table-column label="是否有货" prop="stock" width="80">
+        <el-table-column label="是否有效" prop="stock" width="80">
           <template slot-scope="scope">
             <el-tag
-              :type="scope.row.stock > 0 ? 'success' : 'danger'"
-              disable-transitions>{{scope.row.stock | productStatusName}}
+              :type="scope.row.validInd ? 'success' : 'danger'"
+              disable-transitions>{{scope.row.validInd | validIndName}}
             </el-tag>
           </template>
         </el-table-column>
@@ -174,8 +174,8 @@
 
     },
     filters: {
-      productStatusName(productStatus) {
-        return productStatus > 0 ? '有货' : '无货';
+      validIndName(validInd) {
+        return validInd ? '有效' : '无效';
       }
     }
   }
