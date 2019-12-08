@@ -27,8 +27,8 @@ spring:
   mail:
     host: smtp.exmail.qq.com
     port: 465
-    username: SSSSSSSS
-    password: SSSSSSSS
+    username: liuytsz@sinosoft.com.cn
+    password: Liuyongtao1223
     default-encoding: utf-8
     properties:
       mail:
@@ -39,7 +39,7 @@ spring:
   activiti:
     check-process-definitions: false #校验流程文件，默认校验resources下的processes文件夹里的流程文件
     mail-server-use-ssl: true
-    database-schema-update: false #首次启动时，需要设置为true，自动建表
+    database-schema-update: true #首次启动时，需要设置为true，自动建表
     async-executor-activate: false
   thymeleaf:
     mode: HTML5
