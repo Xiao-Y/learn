@@ -27,8 +27,8 @@ spring:
   mail:
     host: smtp.exmail.qq.com
     port: 465
-    username: liuytsz@sinosoft.com.cn
-    password: Liuyongtao1223
+    username: XXXXXX
+    password: XXXXXX
     default-encoding: utf-8
     properties:
       mail:

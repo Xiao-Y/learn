@@ -82,6 +82,7 @@ public class AuthService {
                     }
                 }
             }
+            logger.info("<<<=== targetURI未获取授权:{}", targetURI);
         }
         return false;
     }
