@@ -15,7 +15,7 @@ public class JobContextUtil {
     private static ApplicationContext applicationContext;
 
     /**
-     * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量
+     * 通过 AutowiringSpringBeanJobFactory 类实现的 ApplicationContextAware , 将其存入静态变量
      */
     public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         JobContextUtil.applicationContext = applicationContext;

@@ -25,10 +25,14 @@
           </el-form-item>
           <el-form-item label="运行类型" prop="classType">
             <el-col :span="18">
-              <el-select v-model="autoTaskInfo.classType">
-                <el-option label="SpringId" value="1"></el-option>
-                <el-option label="BeanClass" value="2"></el-option>
-              </el-select>
+<!--              <el-select v-model="autoTaskInfo.classType">-->
+<!--                <el-option label="SpringId" value="1"></el-option>-->
+<!--                <el-option label="BeanClass" value="2"></el-option>-->
+<!--              </el-select>-->
+              <custom-select v-model="autoTaskInfo.classType"
+                             :datasource="classTypeSelect"
+                             placeholder="请选择运行类型">
+              </custom-select>
             </el-col>
           </el-form-item>
           <el-form-item label="运行的类" prop="runClass">
@@ -129,6 +133,7 @@
         },
         systemModuleSelect: [],
         sendMailSelect: [],
+        classTypeSelect: [],
         rulesForm: {
           methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
           cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
@@ -144,9 +149,10 @@
       this.optionType = this.$route.query.optionType;
       this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
       this.sendMailSelect = JSON.parse(this.$route.query.sendMailSelect);
+      this.classTypeSelect = JSON.parse(this.$route.query.classTypeSelect);
       if (this.optionType === 'edit') {
         this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
-        console.info(this.autoTaskInfo.classType)
+        // console.info(this.autoTaskInfo.classType)
       }
     },
     methods: {

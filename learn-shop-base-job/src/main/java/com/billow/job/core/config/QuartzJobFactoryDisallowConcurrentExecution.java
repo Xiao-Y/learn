@@ -24,7 +24,7 @@ public class QuartzJobFactoryDisallowConcurrentExecution implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         ScheduleJobVo scheduleJob = (ScheduleJobVo) context.getMergedJobDataMap().get(JobCst.SCHEDULE_JOB_VO);
         try {
-            TaskUtils.invokMethod(scheduleJob);
+            TaskUtils.invok(scheduleJob);
         } catch (Exception e) {
             JobExecutionException ex = new JobExecutionException(e);
             // 设置 将自动 去除 这个任务的触发器,所以这个任务不会再执行

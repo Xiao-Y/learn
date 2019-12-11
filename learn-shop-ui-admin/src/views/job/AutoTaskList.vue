@@ -209,6 +209,7 @@
         activeNames: ['1'],
         systemModuleSelect: [],// 系统模块的下拉数据源
         sendMailSelect: [],// 是否发送邮件下拉数据源
+        classTypeSelect: [],// 运行类型下拉数据源
         dialogTableVisible: false,// 打开日志窗口
         tableTitle: '',// 执行日志
         autoTaskInfo: {},// 用于打开日志
@@ -233,6 +234,9 @@
       });
       LoadJobDataDictionary('sendMailType').then(res => {
         this.sendMailSelect = res.resData;
+      });
+      LoadJobDataDictionary('classType').then(res => {
+        this.classTypeSelect = res.resData;
       });
       // 请数据殂
       this.loadDataList();
@@ -269,7 +273,8 @@
           query: {
             optionType: 'add',
             systemModuleSelect: JSON.stringify(this.systemModuleSelect),
-            sendMailSelect: JSON.stringify(this.sendMailSelect)
+            sendMailSelect: JSON.stringify(this.sendMailSelect),
+            classTypeSelect: JSON.stringify(this.classTypeSelect)
           }
         });
       },
@@ -285,7 +290,8 @@
             optionType: 'edit',
             autoTaskEdit: JSON.stringify(row),
             systemModuleSelect: JSON.stringify(this.systemModuleSelect),
-            sendMailSelect: JSON.stringify(this.sendMailSelect)
+            sendMailSelect: JSON.stringify(this.sendMailSelect),
+            classTypeSelect: JSON.stringify(this.classTypeSelect)
           }
         });
       },

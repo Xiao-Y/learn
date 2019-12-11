@@ -39,7 +39,7 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
     public Page<ScheduleJobLogPo> findAutoTaskLog(ScheduleJobLogVo scheduleJobLogVo) {
         ScheduleJobLogPo scheduleJobLogPo = ConvertUtils.convert(scheduleJobLogVo, ScheduleJobLogPo.class);
         Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
-        Pageable pageable = new PageRequest(scheduleJobLogVo.getPageNo(), scheduleJobLogVo.getPageSize(), sort);
+        Pageable pageable = PageRequest.of(scheduleJobLogVo.getPageNo(), scheduleJobLogVo.getPageSize(), sort);
         Page<ScheduleJobLogPo> page = scheduleJobLogDao.findAll(pageable);
         return page;
     }

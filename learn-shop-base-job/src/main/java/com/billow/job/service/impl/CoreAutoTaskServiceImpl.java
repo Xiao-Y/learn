@@ -116,7 +116,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
             boolean beanFlag = true;
             Class<?> clazz = null;
             // bean相关检查
-            if (JobCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
+            if (JobCst.CLASS_TYPE_SPRING_BEAN.equals(classType)) {
                 try {
                     Object bean = JobContextUtil.getBean(runClass);
                     clazz = bean.getClass();

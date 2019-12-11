@@ -28,19 +28,33 @@ import java.util.List;
 @Slf4j
 public class TaskUtils {
 
+    public static void invok(ScheduleJobVo scheduleJob) throws Exception {
+        String classType = scheduleJob.getClassType();
+
+        switch (classType) {
+            case JobCst.CLASS_TYPE_SPRING_BEAN:
+            case JobCst.CLASS_TYPE_PACKAGE_CLASS:
+                TaskUtils.invokMethod(scheduleJob);
+                break;
+            case JobCst.CLASS_TYPE_HTTP:
+                JobService jobService = JobContextUtil.getBean(JobCst.JOB_SERVICE_IMPL);
+//                jobService.post();
+        }
+    }
+
     /**
      * 通过反射调用scheduleJob中定义的方法
      *
      * @param scheduleJob
      */
-    public static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
+    private static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
         Object object = null;
         Class<?> clazz;
         String classType = scheduleJob.getClassType();
         String runClass = scheduleJob.getRunClass();
-        if (JobCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
+        if (JobCst.CLASS_TYPE_SPRING_BEAN.equals(classType)) {
             object = JobContextUtil.getBean(runClass);
-        } else if (JobCst.CLASS_TYPE_BEAN_CLASS.equals(classType)) {
+        } else if (JobCst.CLASS_TYPE_PACKAGE_CLASS.equals(classType)) {
             clazz = Class.forName(runClass);
             object = clazz.newInstance();
         }

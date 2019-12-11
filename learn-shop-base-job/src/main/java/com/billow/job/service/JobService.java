@@ -19,4 +19,25 @@ public interface JobService {
      * @date 2019/9/27 16:53
      */
     void sendMail(MailEx mailEx);
+
+    /**
+     * 发送 mq 请求
+     *
+     * @param jsonParam
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/12/6 15:09
+     */
+    void sendMQ(String jsonParam);
+
+    /**
+     * http 请求的 post 方法
+     *
+     * @param url
+     * @param jsonParam
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/12/6 15:07
+     */
+    void post(String url, String jsonParam);
 }

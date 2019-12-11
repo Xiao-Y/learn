@@ -38,7 +38,7 @@ public class ScheduleJobPo extends BasePo implements Serializable {
     // 描述
     private String description;
 
-    // 任务执行时调用类的类型，1-springId，2-beanClass
+    // 任务执行时调用类的类型，1-springId，2-beanClass,3-http,4-mq
     private String classType;
 
     // 任务执行时调用类或者springId

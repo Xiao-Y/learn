@@ -22,7 +22,11 @@ public class JobCst {
     public static final String JOB_SERVICE_IMPL = "jobServiceImpl";
 
     // 执行类型：1-spring id
-    public static final String CLASS_TYPE_SPRING_ID = "1";
+    public static final String CLASS_TYPE_SPRING_BEAN = "1";
     // 执行类型：2-全类名
-    public static final String CLASS_TYPE_BEAN_CLASS = "2";
+    public static final String CLASS_TYPE_PACKAGE_CLASS = "2";
+    // 执行类型：3-http请求
+    public static final String CLASS_TYPE_HTTP = "3";
+    // 执行类型：4-MQ请求
+    public static final String CLASS_TYPE_MQ = "4";
 }
