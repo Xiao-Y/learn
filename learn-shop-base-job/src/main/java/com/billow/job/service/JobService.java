@@ -23,21 +23,21 @@ public interface JobService {
     /**
      * 发送 mq 请求
      *
-     * @param jsonParam
+     * @param routingKey mq 的路由 key
+     * @param param      携带的参数
      * @return void
      * @author LiuYongTao
      * @date 2019/12/6 15:09
      */
-    void sendMQ(String jsonParam);
+    void sendMQ(String routingKey, String param);
 
     /**
-     * http 请求的 post 方法
+     * http 请求的 get 方法
      *
      * @param url
-     * @param jsonParam
      * @return void
      * @author LiuYongTao
      * @date 2019/12/6 15:07
      */
-    void post(String url, String jsonParam);
+    void httpGet(String url);
 }

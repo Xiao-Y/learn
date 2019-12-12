@@ -30,4 +30,6 @@ public class ScheduleJobVo extends ScheduleJobPo implements Serializable {
 
     // 执行时间，分钟
     private String runTime;
+    // 自动任务日志id,唯一
+    private String logId;
 }

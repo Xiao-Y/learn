@@ -26,6 +26,9 @@ import java.io.Serializable;
 @Table(name = "sys_schedule_job_log")
 public class ScheduleJobLogPo extends BasePo implements Serializable {
 
+    // 日志id,唯一
+    private String logId;
+
     // 任务名称
     private String jobName;
 

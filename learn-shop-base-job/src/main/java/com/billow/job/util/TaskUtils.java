@@ -1,5 +1,6 @@
 package com.billow.job.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.billow.job.constant.JobCst;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.pojo.ex.MailEx;
@@ -17,7 +18,9 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 自动任务工具类
@@ -30,6 +33,9 @@ public class TaskUtils {
 
     public static void invok(ScheduleJobVo scheduleJob) throws Exception {
         String classType = scheduleJob.getClassType();
+        String logId = scheduleJob.getLogId();
+
+        JobService jobService = JobContextUtil.getBean(JobCst.JOB_SERVICE_IMPL);
 
         switch (classType) {
             case JobCst.CLASS_TYPE_SPRING_BEAN:
@@ -37,8 +43,16 @@ public class TaskUtils {
                 TaskUtils.invokMethod(scheduleJob);
                 break;
             case JobCst.CLASS_TYPE_HTTP:
-                JobService jobService = JobContextUtil.getBean(JobCst.JOB_SERVICE_IMPL);
-//                jobService.post();
+                String url = scheduleJob.getHttpUrl() + "?logId=" + logId;
+                jobService.httpGet(url);
+                break;
+            case JobCst.CLASS_TYPE_MQ:
+                Map<String, Object> param = new HashMap<>();
+                param.put("logId", logId);
+                jobService.sendMQ(scheduleJob.getRoutingKey(), JSONObject.toJSONString(param));
+                break;
+            default:
+                log.error("classType:{},暂未实现", classType);
         }
     }
 
@@ -123,6 +137,7 @@ public class TaskUtils {
         ScheduleJobLogVo logDto = null;
         if (scheduleJob.getIsSaveLog()) {
             logDto = new ScheduleJobLogVo();
+            logDto.setLogId(scheduleJob.getLogId());
             logDto.setJobId(scheduleJob.getId());
             logDto.setJobGroup(scheduleJob.getJobGroup());
             logDto.setJobName(scheduleJob.getJobName());

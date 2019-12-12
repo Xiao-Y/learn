@@ -23,13 +23,13 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void sendMQ(String jsonParam) {
+    public void sendMQ(String routingKey, String param) {
         logger.error(message);
         throw new RuntimeException(message);
     }
 
     @Override
-    public void post(String url, String jsonParam) {
+    public void httpGet(String url) {
         logger.error(message);
         throw new RuntimeException(message);
     }
