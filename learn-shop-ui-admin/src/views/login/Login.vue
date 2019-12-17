@@ -15,8 +15,6 @@
             <el-input type="password" placeholder="密码" v-model="loginForm.password"
                       @keyup.enter.native="handleLogin"></el-input>
           </el-form-item>
-          <!-- `checked` 为 true 或 false -->
-          <!-- <el-checkbox v-model="checked">记住密码</el-checkbox> -->
           <div class="bm-btn clearfix">
             <el-button class="login-btn fl" @click.native.prevent="handleLogin">登录</el-button>
             <el-button class="rec-btn fr" @click.native.prevent="dataRecovery" :disabled="true">
