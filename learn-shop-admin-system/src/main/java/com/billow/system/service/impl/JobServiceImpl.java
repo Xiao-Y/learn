@@ -2,6 +2,7 @@ package com.billow.system.service.impl;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.billow.cloud.common.properties.ConfigCommonProperties;
 import com.billow.email.service.MailService;
 import com.billow.job.pojo.ex.MailEx;
 import com.billow.job.service.JobService;
@@ -34,6 +35,8 @@ public class JobServiceImpl implements JobService {
     private RestTemplate restTemplate;
     @Autowired
     private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private ConfigCommonProperties configCommonProperties;
 
     @Override
     public void sendMail(MailEx mailEx) {
@@ -48,7 +51,8 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void sendMQ(String routingKey, String param) {
-        rabbitTemplate.convertAndSend(routingKey, param);
+        String runJobExchange = configCommonProperties.getMq().getExchange().getRunJob();
+        rabbitTemplate.convertAndSend(runJobExchange, routingKey, param);
     }
 
 

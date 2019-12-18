@@ -70,24 +70,28 @@
               <el-form-item label="更新时间">
                 <el-date-picker type="datetime" v-model="props.row.updateTime" readonly></el-date-picker>
               </el-form-item>
-              <!--              <el-form-item label="BeanClass">-->
-              <!--                <span>{{ props.row.beanClass }}</span>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="SpringId">-->
-              <!--                <span>{{ props.row.springId }}</span>-->
-              <!--              </el-form-item>-->
+              <!-- 1-springId，2-beanClass,3-http,4-mq -->
               <el-form-item label="运行类型">
-                <el-select v-model="props.row.classType" disabled>
-                  <el-option label="SpringId" value="1"></el-option>
-                  <el-option label="BeanClass" value="2"></el-option>
-                </el-select>
+                <custom-select v-model="props.row.classType"
+                               :datasource="classTypeSelect"
+                               placeholder="请选择运行类型"
+                               disabled="true">
+                </custom-select>
               </el-form-item>
-              <el-form-item label="运行的类">
-                <el-input v-model="props.row.runClass" readonly>
-                </el-input>
+
+              <template v-if="props.row.classType === '1' || props.row.classType === '2'">
+                <el-form-item label="运行的类">
+                  <el-input v-model="props.row.runClass" readonly/>
+                </el-form-item>
+                <el-form-item label="执行方法">
+                  <span>{{ props.row.methodName }}</span>
+                </el-form-item>
+              </template>
+              <el-form-item label="HTTP URL" v-if="props.row.classType === '3'">
+                <span>{{ props.row.httpUrl }}</span>
               </el-form-item>
-              <el-form-item label="执行方法">
-                <span>{{ props.row.methodName }}</span>
+              <el-form-item label="Routing Key" v-if="props.row.classType === '4'">
+                <span>{{ props.row.routingKey }}</span>
               </el-form-item>
               <el-form-item label="串行/并行">
                 <el-switch v-model="props.row.isConcurrent" active-text="串行" active-value="0" inactive-text="并行"
@@ -109,14 +113,16 @@
                                disabled>
                 </custom-select>
               </el-form-item>
-              <el-form-item label="邮件模板">
-                <custom-sel-mail-template v-model="props.row.templateId" :input-read-only="true"
-                                          :button-disabled="true"></custom-sel-mail-template>
-              </el-form-item>
-              <el-form-item label="邮件接收人" v-if="props.row.isSendMail != '0'">
-                <el-input type="textarea" v-model="props.row.mailReceive" placeholder="多个接收人用英文封号分割开"
-                          readonly></el-input>
-              </el-form-item>
+              <template v-if="props.row.isSendMail != '0'">
+                <el-form-item label="邮件模板">
+                  <custom-sel-mail-template v-model="props.row.templateId" :input-read-only="true"
+                                            :button-disabled="true"></custom-sel-mail-template>
+                </el-form-item>
+                <el-form-item label="邮件接收人">
+                  <el-input type="textarea" v-model="props.row.mailReceive" placeholder="多个接收人用英文封号分割开"
+                            readonly></el-input>
+                </el-form-item>
+              </template>
               <el-form-item label="任务状态">
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
                            inactive-value="0"

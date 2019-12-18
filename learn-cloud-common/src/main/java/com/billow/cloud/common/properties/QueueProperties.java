@@ -9,8 +9,11 @@ import lombok.Data;
 @Data
 public class QueueProperties {
 
+    private String executeSql;
+    private String runJobTest;
+
+
     private String sendMail;
     private String sendMailDlx;
     private String sendMailTrt;
-    private String executeSql;
 }

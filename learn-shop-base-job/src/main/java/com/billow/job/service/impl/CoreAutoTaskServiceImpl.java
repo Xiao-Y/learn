@@ -112,6 +112,10 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
             }
         }
         if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
+
+            if (!JobCst.CLASS_TYPE_SPRING_BEAN.equals(classType) && !JobCst.CLASS_TYPE_PACKAGE_CLASS.equals(classType)) {
+                return scheduleJobVo;
+            }
             // bean能否获取标识
             boolean beanFlag = true;
             Class<?> clazz = null;
@@ -124,7 +128,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
                     message += "springId错误，未获取相关Bean！<br>";
                     beanFlag = false;
                 }
-            } else {
+            } else if (JobCst.CLASS_TYPE_PACKAGE_CLASS.equals(classType)) {
                 try {
                     clazz = Class.forName(runClass);
                     clazz.newInstance();

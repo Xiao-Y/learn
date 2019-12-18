@@ -25,27 +25,38 @@
           </el-form-item>
           <el-form-item label="运行类型" prop="classType">
             <el-col :span="18">
-<!--              <el-select v-model="autoTaskInfo.classType">-->
-<!--                <el-option label="SpringId" value="1"></el-option>-->
-<!--                <el-option label="BeanClass" value="2"></el-option>-->
-<!--              </el-select>-->
               <custom-select v-model="autoTaskInfo.classType"
                              :datasource="classTypeSelect"
+                             @change="changeClassType"
                              placeholder="请选择运行类型">
               </custom-select>
             </el-col>
           </el-form-item>
-          <el-form-item label="运行的类" prop="runClass">
+          <template v-if="autoTaskInfo.classType === '1' || autoTaskInfo.classType === '2'">
+            <el-form-item label="运行的类" prop="runClass">
+              <el-col :span="18">
+                <el-input placeholder="请输入内容" v-model="autoTaskInfo.runClass" class="input-with-select">
+                </el-input>
+              </el-col>
+            </el-form-item>
+            <el-form-item label="执行方法" prop="methodName">
+              <el-col :span="18">
+                <el-input v-model="autoTaskInfo.methodName" placeholder="请输入内容"></el-input>
+              </el-col>
+            </el-form-item>
+          </template>
+          <el-form-item label="HTTP URL" prop="httpUrl" v-if="autoTaskInfo.classType === '3'">
             <el-col :span="18">
-              <el-input placeholder="请输入内容" v-model="autoTaskInfo.runClass" class="input-with-select">
-              </el-input>
+              <el-input v-model="autoTaskInfo.httpUrl" placeholder="请输入内容"/>
             </el-col>
           </el-form-item>
-          <el-form-item label="执行方法" prop="methodName">
+
+          <el-form-item label="Routing Key" prop="routingKey" v-if="autoTaskInfo.classType === '4'">
             <el-col :span="18">
-              <el-input v-model="autoTaskInfo.methodName" placeholder="请输入内容"></el-input>
+              <el-input v-model="autoTaskInfo.routingKey" placeholder="需要配置MQ的路由"/>
             </el-col>
           </el-form-item>
+
           <el-form-item label="任务状态" prop="jobStatus">
             <el-switch v-model="autoTaskInfo.jobStatus" @change="validIndChange" active-text="启用" active-value="1"
                        inactive-text="停止"
@@ -70,19 +81,22 @@
           <el-form-item label="是否发送邮件" prop="isSendMail">
             <custom-select v-model="autoTaskInfo.isSendMail"
                            :datasource="sendMailSelect"
+                           @change="checkSendMail"
                            placeholder="请选择是否发送邮件">
             </custom-select>
           </el-form-item>
-          <el-form-item label="邮件接收人" prop="mailReceive" v-if="autoTaskInfo.isSendMail != '0'" required>
-            <el-col :span="18">
-              <el-input type="textarea" v-model="autoTaskInfo.mailReceive" placeholder="多个接收人用英文封号分割开"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="邮件模板" prop="templateId" v-if="autoTaskInfo.isSendMail != '0'" required>
-            <el-col :span="18">
-              <custom-sel-mail-template v-model="autoTaskInfo.templateId"></custom-sel-mail-template>
-            </el-col>
-          </el-form-item>
+          <template v-if="autoTaskInfo.isSendMail != '0'">
+            <el-form-item label="邮件接收人" prop="mailReceive">
+              <el-col :span="18">
+                <el-input type="textarea" v-model="autoTaskInfo.mailReceive" placeholder="优先使用指定的收件人,多个接收人用英文封号分割开"></el-input>
+              </el-col>
+            </el-form-item>
+            <el-form-item label="邮件模板" prop="templateId" required>
+              <el-col :span="18">
+                <custom-sel-mail-template v-model="autoTaskInfo.templateId"></custom-sel-mail-template>
+              </el-col>
+            </el-form-item>
+          </template>
           <el-form-item label="任务描述" prop="description">
             <el-col :span="18">
               <el-input type="textarea" v-model="autoTaskInfo.description" required></el-input>
@@ -117,8 +131,8 @@
         optionType: '', // 操作类型，edit,add
         autoTaskInfo: {
           jobName: "",
-          beanClass: "",
-          springId: "",
+          httpUrl: "",
+          routingKey: "",
           jobGroup: "5",
           jobStatus: "1",
           isConcurrent: "1",
@@ -127,6 +141,7 @@
           cronExpression: "",
           classType: "1",
           runClass: null,
+          methodName: null,
           templateId: null,
           isSaveLog: true,
           validInd: true
@@ -142,6 +157,8 @@
           templateId: [{required: true, message: '请选择邮件模板', trigger: 'blur'}],
           description: [{required: true, message: '请输入任务描述', trigger: 'blur'}],
           runClass: [{required: true, message: '请输入运行的类', trigger: 'blur'}],
+          routingKey: [{required: true, message: '请输入Routing Key', trigger: 'blur'}],
+          httpUrl: [{required: true, message: '请输入请求的URL', trigger: 'blur'}],
         }
       };
     },
@@ -152,7 +169,6 @@
       this.classTypeSelect = JSON.parse(this.$route.query.classTypeSelect);
       if (this.optionType === 'edit') {
         this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
-        // console.info(this.autoTaskInfo.classType)
       }
     },
     methods: {
@@ -200,25 +216,20 @@
       onReset(autoTaskInfo) {
         this.$refs[autoTaskInfo].resetFields();
       },
-      // changeClassType() {
-      //   // this.autoTaskInfo.beanClass = null;
-      //   // this.autoTaskInfo.springId = null;
-      // },
-      // // 规则校验：beanClass
-      // validateBeanClass(rule, value, callback) {
-      //   this.$refs.autoTaskInfo.validateField('springId');
-      //   callback();
-      // },
-      // // 规则校验：springId
-      // validateSpringId(rule, value, callback) {
-      //   if (value != '' && this.autoTaskInfo.beanClass != '') {
-      //     callback(new Error('BeanClass 与 SpringId 不能同时存在!'));
-      //   } else if (value === '' && this.autoTaskInfo.beanClass === '') {
-      //     callback(new Error('BeanClass 与 SpringId 不能同时为空!'));
-      //   } else {
-      //     callback();
-      //   }
-      // },
+      changeClassType() {
+        this.autoTaskInfo.runClass = null;
+        this.autoTaskInfo.methodName = null;
+        this.autoTaskInfo.routingKey = null;
+        this.autoTaskInfo.httpUrl = null;
+        this.$refs['autoTaskInfo'].clearValidate(['runClass', 'methodName', 'routingKey', 'httpUrl']);
+      },
+      checkSendMail() {
+        // 不发送邮件时
+        if (this.autoTaskInfo.isSendMail === '0') {
+          this.autoTaskInfo.mailReceive = null;
+          this.autoTaskInfo.templateId = null;
+        }
+      },
       // 规则校验：cronExp
       validateCronExp(rule, value, callback) {
         if (value === '' && this.autoTaskInfo.jobStatus === '1') {
@@ -228,8 +239,8 @@
         }
       },
       validateMailReceive(rule, value, callback) {
-        if (value === '') {
-          callback(new Error('发送邮件状态，邮件地址不能为空'));
+        if (value === '' || value === null) {
+          callback();
         } else {
           value = value.replace(/\s*|\t|\r|\n/g, '');
           this.autoTaskInfo.mailReceive = value;
@@ -255,12 +266,6 @@
           this.$message.info('有效标志为无效时，自动任务状态只能是停止');
         }
       },
-      // validateSendMail() {
-      //   if (this.autoTaskInfo.isSendMail !== '0' && !this.autoTaskInfo.isSaveLog) {
-      //     this.autoTaskInfo.isSaveLog = true;
-      //     this.$message.info('需要发送邮件时，必要要记录日志');
-      //   }
-      // },
     }
   };
 </script>

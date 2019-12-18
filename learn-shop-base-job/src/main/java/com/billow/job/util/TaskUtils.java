@@ -111,7 +111,6 @@ public class TaskUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
         return rs;
@@ -158,6 +157,7 @@ public class TaskUtils {
                 ScheduleJobLogService scheduleJobLogService = JobContextUtil.getBean(JobCst.SCHEDULE_JOB_LOG_SERVICE_IMPL);
                 scheduleJobLogService.insert(logDto);
             } catch (Exception e) {
+                e.printStackTrace();
                 log.error("自动任务日志插入失败：{}", e.getMessage());
             }
         }
