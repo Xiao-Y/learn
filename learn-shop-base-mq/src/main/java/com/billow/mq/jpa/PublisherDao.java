@@ -1,6 +1,6 @@
-package com.billow.mq.stored.mysql.dao;
+package com.billow.mq.jpa;
 
-import com.billow.mq.stored.mysql.po.PublisherPo;
+import com.billow.mq.po.PublisherPo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

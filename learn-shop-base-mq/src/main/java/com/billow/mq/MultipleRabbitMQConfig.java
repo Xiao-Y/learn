@@ -3,7 +3,6 @@ package com.billow.mq;
 import com.billow.mq.properties.CustomProperties;
 import com.billow.mq.properties.MqProperties;
 import com.billow.mq.service.StoredOperations;
-import com.billow.mq.stored.mysql.service.impl.StoredOperationsByMysql;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -32,12 +31,6 @@ public class MultipleRabbitMQConfig {
 
     @Autowired
     private StoredOperations storedOperations;
-
-    @Bean
-    @ConditionalOnMissingBean(StoredOperations.class)
-    public StoredOperations storedOperationsByMysql() {
-        return new StoredOperationsByMysql();
-    }
 
     /**
      * 默认实现的重试时间因子

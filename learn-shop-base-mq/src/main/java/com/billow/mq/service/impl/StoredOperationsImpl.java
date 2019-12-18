@@ -1,14 +1,13 @@
-package com.billow.mq.stored.mysql.service.impl;
+package com.billow.mq.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.billow.mq.MessageWithTime;
 import com.billow.mq.enums.PublisherStatusEnum;
 import com.billow.mq.service.StoredOperations;
-import com.billow.mq.stored.mysql.dao.PublisherDao;
-import com.billow.mq.stored.mysql.po.PublisherPo;
+import com.billow.mq.service.PublisherOper;
+import com.billow.mq.po.PublisherPo;
 import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -20,10 +19,10 @@ import java.util.List;
  * Created by shuai on 2019/5/26.
  */
 @Component
-public class StoredOperationsByMysql implements StoredOperations {
+public class StoredOperationsImpl implements StoredOperations {
 
     @Autowired
-    private PublisherDao publisherDao;
+    private PublisherOper publisherOper;
 
     @Override
     public void saveInitMessage(String rabbitTemplateName, String correlationId, String exchange, String routingKey,
@@ -41,7 +40,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         publisherPo.setNextRetry(retryDate);
         publisherPo.setCreateTime(new Date());
         publisherPo.setUpdateTime(new Date());
-        publisherDao.save(publisherPo);
+        publisherOper.save(publisherPo);
 
     }
 
@@ -54,7 +53,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         // sql .... update mq success
         publisher.setStatus(PublisherStatusEnum.SUCCESS.getStatus());
         publisher.setUpdateTime(new Date());
-        publisherDao.save(publisher);
+        publisherOper.update(publisher);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         // sql .... update mq fail
         publisher.setStatus(PublisherStatusEnum.FAIL.getStatus());
         publisher.setUpdateTime(new Date());
-        publisherDao.save(publisher);
+        publisherOper.update(publisher);
     }
 
     @Override
@@ -79,7 +78,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         publisher.setTryCount(tryCount);
         publisher.setNextRetry(nextRetry);
         publisher.setUpdateTime(new Date());
-        publisherDao.save(publisher);
+        publisherOper.update(publisher);
     }
 
     @Override
@@ -101,8 +100,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         PublisherPo publisherQuery = new PublisherPo();
         publisherQuery.setStatus(PublisherStatusEnum.INIT.getStatus());
         publisherQuery.setRabbitTemplateName(rabbitTemplateName);
-        Example example = Example.of(publisherQuery);
-        List<PublisherPo> publisherPos = publisherDao.findAll(example);
+        List<PublisherPo> publisherPos = publisherOper.findAll(publisherQuery);
         for (PublisherPo publisherPo : publisherPos) {
             // 获取超时的失败消息
             if (publisherPo.getNextRetry().getTime() < new Date().getTime()) {
@@ -128,8 +126,7 @@ public class StoredOperationsByMysql implements StoredOperations {
         PublisherPo publisherQuery = new PublisherPo();
         publisherQuery.setCorrelationId(correlationId);
         publisherQuery.setRabbitTemplateName(rabbitTemplateName);
-        Example example = Example.of(publisherQuery);
-        List<PublisherPo> list = publisherDao.findAll(example);
+        List<PublisherPo> list = publisherOper.findAll(publisherQuery);
         if (CollectionUtils.isEmpty(list) || list.size() > 1) {
             return null;
         }

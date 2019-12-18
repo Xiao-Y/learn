@@ -1,4 +1,4 @@
-package com.billow.mq.stored.mysql.po;
+package com.billow.mq.po;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
