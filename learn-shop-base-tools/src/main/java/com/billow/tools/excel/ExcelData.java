@@ -20,6 +20,44 @@ public class ExcelData<T> implements Serializable {
     private static final long serialVersionUID = -8434436282620768376L;
 
     /**
+     * 页签名称
+     */
+    private String sheetName = "Sheet1";
+    /**
+     * 数据源，使用 @Title 时，必须要填写
+     */
+    private List<T> objData;
+    /**
+     * 数据模型，使用 @Title 时，必须要填写
+     */
+    private Class<?> clazz;
+    /**
+     * 数据模型，数据已经写入的行数
+     */
+    private int endDataIndex = 0;
+    /**
+     * 表头，非 @Title 时，必须要填写
+     */
+    private LinkedHashMap<String, String> titles;
+
+    /**
+     * 非 @Title 时，数据集
+     */
+    private ArrayList<HashMap<String, Object>> rows;
+
+    /**
+     * 标题样式
+     */
+    private Map<String, HSSFCellStyle> titlesHSSFCellStyle = new HashMap<>();
+
+    /**
+     * 行样式
+     */
+    private Map<String, HSSFCellStyle> rowsHSSFCellStyle = new HashMap<>();
+
+    /**
+     * 通过 @Tatle 模型，构建数据,使用默认 sheetName：Sheet1
+     *
      * @param objData 数据源
      * @param clazz   数据模型
      * @return
@@ -32,9 +70,11 @@ public class ExcelData<T> implements Serializable {
     }
 
     /**
-     * @param sheetName    页签名称
-     * @param objData 数据源
-     * @param clazz   数据模型
+     * 通过 @Tatle 模型，构建数据,使用自定义 sheetName
+     *
+     * @param sheetName 页签名称
+     * @param objData   数据源
+     * @param clazz     数据模型
      * @return
      * @author LiuYongTao
      * @date
@@ -46,6 +86,8 @@ public class ExcelData<T> implements Serializable {
     }
 
     /**
+     * 通过自定义 titles 和数据集,使用默认 sheetName：Sheet1
+     *
      * @param titles 表头
      * @param rows   数据源
      * @return
@@ -58,9 +100,11 @@ public class ExcelData<T> implements Serializable {
     }
 
     /**
-     * @param sheetName   页签名称
-     * @param titles 表头
-     * @param rows   数据源
+     * 通过自定义 titles 和数据集,使用自定义 sheetName
+     *
+     * @param sheetName 页签名称
+     * @param titles    表头
+     * @param rows      数据源
      * @return
      * @author LiuYongTao
      * @date
@@ -70,35 +114,6 @@ public class ExcelData<T> implements Serializable {
         this.titles = titles;
         this.rows = rows;
     }
-
-    /**
-     * 页签名称
-     */
-    private String sheetName = "Sheet1";
-    /**
-     * 数据源，必须要填写
-     */
-    private List<T> objData;
-    /**
-     * 数据模型，使用 @Title 时，必须要填写
-     */
-    private Class<?> clazz;
-    /**
-     * 数据模型，标题从第几行可以写，默认为第一行
-     */
-    private int titleIndex = 0;
-    /**
-     * 表头，非 @Title 时，必须要填写
-     */
-    private LinkedHashMap<String, String> titles;
-
-    /**
-     * 数据
-     */
-    private ArrayList<HashMap<String, Object>> rows;
-
-    private Map<String, HSSFCellStyle> titlesHSSFCellStyle = new HashMap<>();
-    private Map<String, HSSFCellStyle> rowsHSSFCellStyle = new HashMap<>();
 
     public String getSheetName() {
         return sheetName;
@@ -120,12 +135,12 @@ public class ExcelData<T> implements Serializable {
         return rows;
     }
 
-    public int getTitleIndex() {
-        return titleIndex;
+    public int getEndDataIndex() {
+        return endDataIndex;
     }
 
-    public ExcelData setTitleIndex(int titleIndex) {
-        this.titleIndex = titleIndex;
+    public ExcelData setEndDataIndex(int endDataIndex) {
+        this.endDataIndex = endDataIndex;
         return this;
     }
 
@@ -133,15 +148,21 @@ public class ExcelData<T> implements Serializable {
         return titlesHSSFCellStyle;
     }
 
-    public void setTitlesHSSFCellStyle(Map<String, HSSFCellStyle> titlesHSSFCellStyle) {
+    public ExcelData setTitlesHSSFCellStyle(Map<String, HSSFCellStyle> titlesHSSFCellStyle) {
         this.titlesHSSFCellStyle = titlesHSSFCellStyle;
+        return this;
     }
 
     public Map<String, HSSFCellStyle> getRowsHSSFCellStyle() {
         return rowsHSSFCellStyle;
     }
 
-    public void setRowsHSSFCellStyle(Map<String, HSSFCellStyle> rowsHSSFCellStyle) {
+    public ExcelData setRowsHSSFCellStyle(Map<String, HSSFCellStyle> rowsHSSFCellStyle) {
         this.rowsHSSFCellStyle = rowsHSSFCellStyle;
+        return this;
+    }
+
+    private void checkData() {
+
     }
 }

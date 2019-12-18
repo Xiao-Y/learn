@@ -40,8 +40,8 @@ public class ExcelUtils {
      *
      * @param response
      * @param fileName 文件名
-     * @param data     需要的参数 String name, objData, clazz <br/>
-     *                 或者String name, titles, rows;
+     * @param data     需要的参数 sheetName, objData, clazz <br/>
+     *                 或者sheetName, titles, rows;
      * @return void
      * @author LiuYongTao
      * @date 2018/7/9 11:39
@@ -94,11 +94,10 @@ public class ExcelUtils {
                 String sheetName = data.getSheetName();
                 HSSFSheet sheet = wb.createSheet(sheetName);
                 wb.setSheetName(i, sheetName);
-                writeExcel(wb, sheet, data);
+                exportExcel(wb, sheet, data);
             }
             wb.write(out);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -117,10 +116,9 @@ public class ExcelUtils {
         try (HSSFWorkbook wb = new HSSFWorkbook()) {
             String sheetName = data.getSheetName();
             HSSFSheet sheet = wb.createSheet(sheetName);
-            writeExcel(wb, sheet, data);
+            exportExcel(wb, sheet, data);
             wb.write(out);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -135,7 +133,7 @@ public class ExcelUtils {
      * @author LiuYongTao
      * @date 2019/12/17 17:55
      */
-    public static void writeExcel(HSSFWorkbook wb, HSSFSheet sheet, ExcelData data) throws NoSuchFieldException, IllegalAccessException {
+    public static void exportExcel(HSSFWorkbook wb, HSSFSheet sheet, ExcelData data) throws NoSuchFieldException, IllegalAccessException {
         //获取标题
         LinkedHashMap<String, String> titles = data.getTitles();
         if (ToolsUtils.isEmpty(titles)) {
@@ -147,9 +145,9 @@ public class ExcelUtils {
             rows = getExcelRows(data, titles.keySet());
         }
         //写入标题
-        writeTitlesToExcel(wb, sheet, titles, data.getTitleIndex(), data.getTitlesHSSFCellStyle());
+        writeTitlesToExcel(wb, sheet, titles, data.getEndDataIndex(), data.getTitlesHSSFCellStyle());
         //写入数据
-        writeRowsToExcel(wb, sheet, titles, rows, data.getTitleIndex(), data.getRowsHSSFCellStyle());
+        writeRowsToExcel(wb, sheet, titles, rows, data.getEndDataIndex(), data.getRowsHSSFCellStyle());
     }
 
     /**
@@ -183,7 +181,7 @@ public class ExcelUtils {
         Class clazz = data.getClazz();
         Field[] declaredFields = clazz.getDeclaredFields();
 
-        LinkedHashMap<String, Integer> mapTemp = new LinkedHashMap<>();
+        LinkedHashMap<String, Double> mapTemp = new LinkedHashMap<>();
         // 获取标记 @Title 的属性和 order
         for (Field field : declaredFields) {
             field.setAccessible(true);
@@ -193,10 +191,10 @@ public class ExcelUtils {
             }
         }
         // 对order 进行排序
-        Map<String, Integer> map = sortByValue(mapTemp);
+        Map<String, Double> map = sortByValue(mapTemp);
         // 获取 @Title 中的name
         LinkedHashMap<String, String> titles = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+        for (Map.Entry<String, Double> entry : map.entrySet()) {
             String key = entry.getKey();
             Field field = clazz.getDeclaredField(key);
             Title title = field.getAnnotation(Title.class);
@@ -219,18 +217,18 @@ public class ExcelUtils {
      * @param wb                  HSSFWorkbook
      * @param sheet               HSSFSheet
      * @param titles              标题集合
-     * @param titleIndex          标题的起始行，
+     * @param endDataIndex        标题的起始行，
      * @param titlesHSSFCellStyle 标题样式
      * @return void
      * @author LiuYongTao
      * @date 2018/7/9 11:39
      */
     private static void writeTitlesToExcel(HSSFWorkbook wb, HSSFSheet sheet, LinkedHashMap<String, String> titles,
-                                           int titleIndex, Map<String, HSSFCellStyle> titlesHSSFCellStyle) {
+                                           int endDataIndex, Map<String, HSSFCellStyle> titlesHSSFCellStyle) {
         int colIndex = 0;
 
         HSSFCellStyle titleStyle = wb.createCellStyle();
-        HSSFRow titleRow = sheet.createRow(titleIndex);
+        HSSFRow titleRow = sheet.createRow(endDataIndex);
 
         for (Map.Entry<String, String> entry : titles.entrySet()) {
             HSSFCell cell = titleRow.createCell(colIndex);
@@ -252,19 +250,19 @@ public class ExcelUtils {
      * @param sheet             HSSFSheet
      * @param titles            标题集
      * @param rows              行数据
-     * @param titleIndex        已写入数据行
+     * @param endDataIndex      已写入数据行
      * @param rowsHSSFCellStyle
      * @return void
      * @author LiuYongTao
      * @date 2019/12/17 18:02
      */
     private static void writeRowsToExcel(HSSFWorkbook wb, HSSFSheet sheet, LinkedHashMap<String, String> titles,
-                                         ArrayList<HashMap<String, Object>> rows, int titleIndex,
+                                         ArrayList<HashMap<String, Object>> rows, int endDataIndex,
                                          Map<String, HSSFCellStyle> rowsHSSFCellStyle) {
         HSSFCellStyle dataStyle = wb.createCellStyle();
 
         //标题的行数
-        int rowStartIndex = titleIndex + 1;
+        int rowStartIndex = endDataIndex + 1;
         // 遍历数据源(每个HashMap中key 与titles中的key 相同)
         for (HashMap<String, Object> rowData : rows) {
             HSSFRow dataRow = sheet.createRow(rowStartIndex);

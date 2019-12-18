@@ -27,13 +27,13 @@ public @interface Title {
     String name() default "";
 
     /**
-     * 第几个位置,从0开始
+     * 标题排序
      *
      * @return int
      * @author LiuYongTao
      * @date 2018/7/10 8:45
      */
-    int order() default 99999;
+    double order() default 99999;
 
     /**
      * 当是 name 为空时，否使用属性名称作为标题，默认为 true
