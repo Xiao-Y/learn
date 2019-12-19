@@ -44,7 +44,7 @@
               <el-switch v-model="mailTemplateInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
             </el-col>
           </el-form-item>
-          <el-form-item label="运行SQL" prop="runSql" v-show="pageShow.runSqlShow" required>
+          <el-form-item label="运行SQL" prop="runSql" v-if="pageShow.runSqlShow" required>
             <el-col :span="18">
               <el-input type="textarea" v-model="mailTemplateInfo.runSql" rows="6"></el-input>
             </el-col>

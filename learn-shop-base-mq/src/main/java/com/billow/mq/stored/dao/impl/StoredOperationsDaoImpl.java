@@ -78,7 +78,7 @@ public class StoredOperationsDaoImpl implements StoredOperationsDao {
         }
 
         Object[] objects = query.toArray(new Object[query.size()]);
-        List<PublisherPo> publisherPos = jdbcTemplate.query(sql, objects, new BeanPropertyRowMapper(PublisherPo.class));
+        List<PublisherPo> publisherPos = jdbcTemplate.query(sql, objects, new BeanPropertyRowMapper<>(PublisherPo.class));
         return publisherPos;
     }
 }
