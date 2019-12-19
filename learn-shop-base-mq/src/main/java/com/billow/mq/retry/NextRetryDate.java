@@ -1,4 +1,4 @@
-package com.billow.mq;
+package com.billow.mq.retry;
 
 import java.util.Date;
 

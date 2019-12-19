@@ -1,8 +1,14 @@
-package com.billow.mq;
+package com.billow.mq.config;
 
+import com.billow.mq.retry.NextRetryDate;
+import com.billow.mq.retry.NextRetryDateDefault;
+import com.billow.mq.retry.RetrySendMessage;
+import com.billow.mq.StoredRabbitTemplate;
 import com.billow.mq.properties.CustomProperties;
 import com.billow.mq.properties.MqProperties;
-import com.billow.mq.service.StoredOperations;
+import com.billow.mq.stored.dao.StoredOperationsDao;
+import com.billow.mq.stored.service.StoredOperationsService;
+import com.billow.mq.stored.dao.impl.StoredOperationsDaoImpl;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -30,7 +36,20 @@ public class MultipleRabbitMQConfig {
     private MqProperties mqProperties;
 
     @Autowired
-    private StoredOperations storedOperations;
+    private StoredOperationsService storedOperationsService;
+
+    /**
+     * 默认实现消息操作记录
+     *
+     * @return com.billow.mq.stored.dao.StoredOperationsDao
+     * @author LiuYongTao
+     * @date 2019/12/19 9:51
+     */
+    @Bean
+    @ConditionalOnMissingBean(StoredOperationsDao.class)
+    public StoredOperationsDao storedOperationsDaoImplDefault() {
+        return new StoredOperationsDaoImpl();
+    }
 
     /**
      * 默认实现的重试时间因子
@@ -66,7 +85,7 @@ public class MultipleRabbitMQConfig {
             @Qualifier("publicConnectionFactory") ConnectionFactory connectionFactory,
             @Value("${v1.spring.rabbitmq.template.mandatory}") Boolean mandatory) {
         CustomProperties custom = mqProperties.getCustom();
-        StoredRabbitTemplate publicRabbitTemplate = new StoredRabbitTemplate(connectionFactory, storedOperations,
+        StoredRabbitTemplate publicRabbitTemplate = new StoredRabbitTemplate(connectionFactory, storedOperationsService,
                 custom.getTemplateName(), custom.getReceiveRetryCount(), custom.getDeliveryMode(), nextRetryDateDefault());
         publicRabbitTemplate.setMandatory(mandatory);
         publicRabbitTemplate.setConfirmCallback(publicRabbitTemplate);

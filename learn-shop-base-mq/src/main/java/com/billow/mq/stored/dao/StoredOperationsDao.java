@@ -1,10 +1,10 @@
-package com.billow.mq.service;
+package com.billow.mq.stored.dao;
 
-import com.billow.mq.po.PublisherPo;
+import com.billow.mq.stored.po.PublisherPo;
 
 import java.util.List;
 
-public interface PublisherOper {
+public interface StoredOperationsDao {
 
     void save(PublisherPo publisherPo);
 

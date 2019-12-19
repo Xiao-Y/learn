@@ -1,13 +1,16 @@
-package com.billow.mq;
+package com.billow.mq.stored.vo;
 
 import org.springframework.amqp.core.Message;
 
 /**
- * Created by shuai on 2019/5/10.
+ * 消息模型
+ *
+ * @author LiuYongTao
+ * @date 2019/12/19 9:43
  */
 public class MessageWithTime {
 
-//    // 发送时间
+    //    // 发送时间
 //    private Long time;
     // 交换机名
     private String exchange;
@@ -20,7 +23,7 @@ public class MessageWithTime {
     // 消息状态
     private String status;
 
-    public MessageWithTime(Integer tryCount, String exchange, String routingKey,String status, Message message) {
+    public MessageWithTime(Integer tryCount, String exchange, String routingKey, String status, Message message) {
         this.tryCount = tryCount;
         this.exchange = exchange;
         this.routingKey = routingKey;
