@@ -1,6 +1,6 @@
 此组件是基于 rabbitmq 的消息中间件，保证消息100%发送成功。
 
-默认支持数据库为 mysql，所以需要依赖 learn-shop-base-jpa组件,自动新建表mq_publisher，
+默认支持数据库为 mysql，所以需要依赖 spring-boot-starter-jdbc组件,手动新建表mq_publisher（sql在resources下），
 如果想要使用其它保存方式请实现 StoredOperations 接口。
 
 使用方法：
@@ -58,9 +58,22 @@ private StoredRabbitTemplate storedRabbitTemplate;
 </dependency>
 ```
 
-4.由于 PublisherPo 在包 com.billow.mq.stored.mysql.po 下，可能你的系统的 po 文件可能在 com.xx.xx.cc 下
-所以需要在启动类上添加以下注解:
-```java
-@EntityScan(basePackages = {"com.billow.mq", "com.xx.xx.cc"})
-@EnableJpaRepositories(basePackages = {"com.billow.mq", "com.xx.xx.cc"})
+4.sql
+```sql
+DROP TABLE IF EXISTS `mq_publisher`;
+CREATE TABLE `mq_publisher`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `body` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `correlation_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  `exchange_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `message` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `rabbit_template_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `routing_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_time` datetime(0) NULL DEFAULT NULL,
+  `next_retry` datetime(0) NULL DEFAULT NULL,
+  `try_count` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 ```
