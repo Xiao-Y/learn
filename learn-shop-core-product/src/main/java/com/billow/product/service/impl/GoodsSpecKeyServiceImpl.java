@@ -9,7 +9,7 @@ import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.vo.GoodsSpecKeyVo;
 import com.billow.product.service.GoodsSpecKeyService;
-import com.billow.tools.generator.OrderNumUtil;
+import com.billow.tools.generator.NumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
         for (GoodsSpecKeyVo goodsSpecKeyVo : goodsSpecKeyVos) {
             String id = goodsSpecKeyVo.getId();
             if (ToolsUtils.isEmpty(id)) {
-                goodsSpecKeyVo.setSpecNo(OrderNumUtil.makeOrderNum("SP"));
+                goodsSpecKeyVo.setSpecNo(NumUtil.makeOrderNum("SP"));
                 GoodsSpecKeyPo convert = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);
                 goodsSpecKeyDao.insert(convert);
                 ConvertUtils.convert(convert, goodsSpecKeyVo);

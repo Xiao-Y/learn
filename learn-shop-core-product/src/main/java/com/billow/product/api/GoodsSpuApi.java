@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
-import com.billow.tools.generator.OrderNumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

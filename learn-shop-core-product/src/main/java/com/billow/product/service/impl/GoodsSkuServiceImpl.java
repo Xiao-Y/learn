@@ -10,7 +10,6 @@ import com.billow.product.dao.GoodsSkuDao;
 import com.billow.product.dao.GoodsSkuSpecValueDao;
 import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.dao.GoodsSpecValueDao;
-import com.billow.product.dao.GoodsSpuSpecDao;
 import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
@@ -18,7 +17,7 @@ import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.vo.GoodsSkuSpecValueVo;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 import com.billow.product.service.GoodsSkuService;
-import com.billow.tools.generator.OrderNumUtil;
+import com.billow.tools.generator.NumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -156,7 +155,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
     public void add(GoodsSkuVo vo) {
         // 插入 sku
         GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
-        po.setSkuNo(OrderNumUtil.makeOrderNum("SK"));
+        po.setSkuNo(NumUtil.makeOrderNum("SK"));
         po.setShopId("0");
         goodsSkuDao.insert(po);
         String skuId = po.getId();

@@ -15,7 +15,7 @@ import com.billow.product.pojo.po.GoodsSpuSpecPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
 import com.billow.product.service.GoodsSpuSpecService;
-import com.billow.tools.generator.OrderNumUtil;
+import com.billow.tools.generator.NumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,7 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
         GoodsSpuPo po = ConvertUtils.convert(goodsSpuVo, GoodsSpuPo.class);
         String id = goodsSpuVo.getId();
         if (ToolsUtils.isEmpty(id)) {
-            po.setSpuNo(OrderNumUtil.makeOrderNum("PG"));
+            po.setSpuNo(NumUtil.makeOrderNum("PG"));
         }
         this.saveOrUpdate(po);
 
