@@ -1,12 +1,7 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.tools.utlis.ToolsUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import com.billow.job.common.CustomPage;
 import com.billow.job.pojo.ex.TestRunCronEx;
 import com.billow.job.pojo.po.ScheduleJobLogPo;
 import com.billow.job.pojo.po.ScheduleJobPo;
@@ -16,10 +11,15 @@ import com.billow.job.service.CoreAutoTaskService;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.TaskUtils;
+import com.billow.tools.utlis.ToolsUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,8 +51,8 @@ public class CoreAutoTaskApi extends BaseApi {
 
     @ApiOperation("查询自动任务列表")
     @PostMapping("/findAutoTask")
-    public Page<ScheduleJobPo> findAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) {
-        Page<ScheduleJobPo> jods = scheduleJobService.selectAll(scheduleJobVo);
+    public CustomPage<ScheduleJobPo> findAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) {
+        CustomPage<ScheduleJobPo> jods = scheduleJobService.selectAll(scheduleJobVo);
         return jods;
     }
 
@@ -111,7 +111,7 @@ public class CoreAutoTaskApi extends BaseApi {
 
     @ApiOperation("查询自动任务执行日志")
     @PostMapping("/findAutoTaskLog")
-    public Page<ScheduleJobLogPo> findAutoTaskLog(@RequestBody ScheduleJobLogVo scheduleJobLogVo) {
+    public CustomPage<ScheduleJobLogPo> findAutoTaskLog(@RequestBody ScheduleJobLogVo scheduleJobLogVo) {
         return scheduleJobLogService.findAutoTaskLog(scheduleJobLogVo);
     }
 

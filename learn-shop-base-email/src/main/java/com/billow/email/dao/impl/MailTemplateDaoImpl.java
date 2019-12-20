@@ -74,14 +74,9 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
 
     @Override
     public MailTemplatePo findById(Long id) {
-        List<Object> param = new ArrayList<>();
-        MailTemplatePo mailTemplatePo = new MailTemplatePo();
-        mailTemplatePo.setId(id);
-        String sql = this.genQuery(mailTemplatePo, param);
-        Object[] objects = param.toArray(new Object[param.size()]);
-        sql = select_sql + sql;
+        String sql = select_sql + " and id = ?";
         log.debug("sql:{}", sql);
-        return jdbcTemplate.queryForObject(sql, objects, new BeanPropertyRowMapper<>(MailTemplatePo.class));
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(MailTemplatePo.class));
     }
 
     @Override

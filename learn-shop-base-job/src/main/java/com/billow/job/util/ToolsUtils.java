@@ -29,4 +29,24 @@ public class ToolsUtils {
     public static <T> boolean isNotEmpty(List<T> list) {
         return !isEmpty(list);
     }
+
+    /**
+     * 计算总页数
+     *
+     * @param pageSize
+     * @param total
+     * @return int
+     * @author LiuYongTao
+     * @date 2019/12/19 15:56
+     */
+    public static int getPages(Integer pageSize, Integer total) {
+        if (pageSize == 0) {
+            return 0;
+        }
+        int pages = total / pageSize;
+        if (total % pageSize != 0) {
+            pages++;
+        }
+        return pages;
+    }
 }

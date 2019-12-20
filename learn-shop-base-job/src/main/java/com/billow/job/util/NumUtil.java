@@ -1,4 +1,4 @@
-package com.billow.tools.generator;
+package com.billow.job.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.Date;
  * @author liuyongtao
  * @create 2017-10-24 17:53
  */
-public class OrderNumUtil {
+public class NumUtil {
     /**
      * 锁对象，可以为任意对象
      */

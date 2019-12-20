@@ -2,8 +2,8 @@ package com.billow.job.core.config;
 
 import com.billow.job.constant.JobCst;
 import com.billow.job.pojo.vo.ScheduleJobVo;
+import com.billow.job.util.NumUtil;
 import com.billow.job.util.TaskUtils;
-import com.billow.tools.generator.OrderNumUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -22,7 +22,7 @@ public class QuartzJobFactory implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         ScheduleJobVo scheduleJob = (ScheduleJobVo) context.getMergedJobDataMap().get(JobCst.SCHEDULE_JOB_VO);
         try {
-            scheduleJob.setLogId(OrderNumUtil.makeOrderNum("LG"));
+            scheduleJob.setLogId(NumUtil.makeOrderNum("LG"));
             TaskUtils.invok(scheduleJob);
         } catch (Exception e) {
             JobExecutionException ex = new JobExecutionException(e);
