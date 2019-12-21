@@ -1,12 +1,13 @@
 package com.billow.system.api;
 
+import com.billow.email.common.CustomPage;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import com.billow.email.service.MailTemplateService;
+import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,9 +32,12 @@ public class MailTemplateApi {
     @Autowired
     private MailTemplateService mailTemplateService;
 
+    @Autowired
+    private UserTools userTools;
+
     @ApiOperation("根据条件查询邮件模板信息")
     @PostMapping("/findMailTemplateList")
-    public Page<MailTemplateVo> findMailTemplateList(@RequestBody MailTemplateVo mailTemplateVo) {
+    public CustomPage<MailTemplateVo> findMailTemplateList(@RequestBody MailTemplateVo mailTemplateVo) {
         return mailTemplateService.findMailTemplateList(mailTemplateVo);
     }
 
@@ -53,21 +57,22 @@ public class MailTemplateApi {
     @ApiOperation("根据ID禁用邮件模板")
     @PutMapping("/prohibitMailTemplateById/{id}")
     public MailTemplateVo prohibitMailTemplateById(@PathVariable Long id) {
-        MailTemplateVo permissionVo = mailTemplateService.prohibitMailTemplateById(id);
+        MailTemplateVo permissionVo = mailTemplateService.prohibitMailTemplateById(id, userTools.getCurrentUserCode());
         return permissionVo;
     }
 
     @ApiOperation("添加邮件模板信息")
     @PostMapping("/saveMailTemplate")
     public MailTemplateVo saveMailTemplate(@RequestBody MailTemplateVo permissionVo) {
-        mailTemplateService.saveMailTemplate(permissionVo);
+        mailTemplateService.saveMailTemplate(permissionVo, userTools.getCurrentUserCode());
         return permissionVo;
     }
 
     @ApiOperation("更新邮件模板信息")
     @PutMapping("/updateMailTemplate")
     public MailTemplateVo updateMailTemplate(@RequestBody MailTemplateVo permissionVo) {
-        mailTemplateService.updateMailTemplate(permissionVo);
+        permissionVo.setUpdaterCode(userTools.getCurrentUserCode());
+        mailTemplateService.updateMailTemplate(permissionVo, userTools.getCurrentUserCode());
         return permissionVo;
     }
 

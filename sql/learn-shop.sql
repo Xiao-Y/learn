@@ -11,76 +11,11 @@
  Target Server Version : 80017
  File Encoding         : 65001
 
- Date: 07/11/2019 16:24:55
+ Date: 11/12/2019 17:26:14
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for cp_product
--- ----------------------------
-DROP TABLE IF EXISTS `cp_product`;
-CREATE TABLE `cp_product`  (
-  `id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
-  `creator_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `updater_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '有效标志',
-  `dele_flag` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除标志，0-删除，1-正常',
-  `commodity_info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品信息',
-  `grade` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级',
-  `unit_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '单价',
-  `locality_growth` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '产地',
-  `packing` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '包装',
-  `spec` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '规格',
-  `commodity_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `status` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态：0-无货，1-有货',
-  `quantity` int(255) NULL DEFAULT NULL COMMENT '销售数量',
-  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图片名称',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of cp_product
--- ----------------------------
-INSERT INTO `cp_product` VALUES ('1190094653702959106', 'admin', 'admin', '2019-11-01 10:34:11', '2019-11-01 11:01:32', b'1', '0', '123', '一级', 1.00, '232', '23', '23', '123', '1', 1000, NULL);
-INSERT INTO `cp_product` VALUES ('1190095071354974210', 'admin', NULL, '2019-11-01 10:35:51', NULL, b'1', '0', '23', '一级', 22.00, '23', '23', '12', '23', '1', 1000, NULL);
-INSERT INTO `cp_product` VALUES ('1190095968122310658', 'admin', 'admin', '2019-11-01 10:39:24', '2019-11-01 10:39:24', b'1', '0', '55', '一级', 5.00, '57', '55', '5', '55', '1', 1000, NULL);
-INSERT INTO `cp_product` VALUES ('1190103030382432258', 'admin', 'admin', '2019-11-01 11:07:28', '2019-11-01 11:07:28', b'1', '1', '888', '一级', 88.00, '88', '8', '88', '88', '1', 1000, NULL);
-
--- ----------------------------
--- Table structure for mq_publisher
--- ----------------------------
-DROP TABLE IF EXISTS `mq_publisher`;
-CREATE TABLE `mq_publisher`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `body` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `correlation_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `exchange_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `message` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `rabbit_template_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `routing_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `next_retry` datetime(0) NULL DEFAULT NULL,
-  `try_count` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 155 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mq_publisher
--- ----------------------------
-INSERT INTO `mq_publisher` VALUES (148, '发送测试消息：2019-10-18 03:58:47.139', '18fc80ae-98a8-45d8-862b-b642a3fd3e37', '2019-10-18 15:58:54', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0xOCAwMzo1ODo0Ny4xMzk=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"18fc80ae-98a8-45d8-862b-b642a3fd3e37\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-18 15:59:35', '2019-10-18 15:59:35', 3);
-INSERT INTO `mq_publisher` VALUES (149, '发送测试消息：2019-10-18 04:00:21.434', '21ccc9da-4ecd-48ea-ad13-20c6f14a8145', '2019-10-18 16:00:28', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0xOCAwNDowMDoyMS40MzQ=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"21ccc9da-4ecd-48ea-ad13-20c6f14a8145\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-18 16:01:25', '2019-10-18 16:01:23', 3);
-INSERT INTO `mq_publisher` VALUES (150, '发送测试消息：2019-10-18 04:01:12.326', 'cb2cf066-b178-4887-b04f-ac721e7c0e6c', '2019-10-18 16:01:12', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0xOCAwNDowMToxMi4zMjY=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"cb2cf066-b178-4887-b04f-ac721e7c0e6c\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-18 16:02:10', '2019-10-18 16:02:08', 3);
-INSERT INTO `mq_publisher` VALUES (151, '发送测试消息：2019-10-30 04:10:22.036', '8e0465ab-39a3-4c04-b286-3cbb21d820aa', '2019-10-30 16:10:27', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMDoyMi4wMzY=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"8e0465ab-39a3-4c04-b286-3cbb21d820aa\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-30 16:11:25', '2019-10-30 16:11:23', 3);
-INSERT INTO `mq_publisher` VALUES (152, '发送测试消息：2019-10-30 04:10:39.851', '90ddf788-9830-4e7d-84ea-a38f16e4bb76', '2019-10-30 16:10:40', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMDozOS44NTE=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"90ddf788-9830-4e7d-84ea-a38f16e4bb76\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-30 16:11:35', '2019-10-30 16:11:33', 3);
-INSERT INTO `mq_publisher` VALUES (153, '发送测试消息：2019-10-30 04:11:42.596', 'fc960ac3-4dad-4ddb-8123-f2a33996ecfe', '2019-10-30 16:11:43', 'sendMailExchange', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMTo0Mi41OTY=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"fc960ac3-4dad-4ddb-8123-f2a33996ecfe\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '1', '2019-10-30 16:11:43', '2019-10-30 16:11:53', 0);
-INSERT INTO `mq_publisher` VALUES (154, '发送测试消息：2019-10-30 04:12:20.085', '719831d9-d605-48fb-80b8-b11bafe5795c', '2019-10-30 16:12:20', 'sendMailExchange', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMCAwNDoxMjoyMC4wODU=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"719831d9-d605-48fb-80b8-b11bafe5795c\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '1', '2019-10-30 16:12:20', '2019-10-30 16:12:30', 0);
-INSERT INTO `mq_publisher` VALUES (155, '发送测试消息：2019-10-31 10:13:33.717', '11266413-b96c-424b-aa11-593720e72639', '2019-10-31 10:13:34', 'sendMailExchange22', '{\"body\":\"5Y+R6YCB5rWL6K+V5raI5oGv77yaMjAxOS0xMC0zMSAxMDoxMzozMy43MTc=\",\"messageProperties\":{\"contentLength\":0,\"contentType\":\"application/octet-stream\",\"correlationIdString\":\"11266413-b96c-424b-aa11-593720e72639\",\"deliveryMode\":\"NON_PERSISTENT\",\"deliveryTag\":0,\"headers\":{},\"priority\":0}}', 'publicRabbitTemplate', 'sendmailRouteKey', '2', '2019-10-31 10:14:30', '2019-10-31 10:14:28', 3);
 
 -- ----------------------------
 -- Table structure for oauth_client_details
@@ -104,13 +39,296 @@ CREATE TABLE `oauth_client_details`  (
 -- ----------------------------
 -- Records of oauth_client_details
 -- ----------------------------
-INSERT INTO `oauth_client_details` VALUES ('app', NULL, 'app', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://www.baidu.com', NULL, NULL, NULL, NULL, 'true');
-INSERT INTO `oauth_client_details` VALUES ('authServe', '', 'authServe', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://127.0.0.1:9999/login', '', NULL, NULL, '', 'true');
-INSERT INTO `oauth_client_details` VALUES ('client1', NULL, 'client1', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://127.0.0.1:8080/client1/login', NULL, NULL, NULL, NULL, 'true');
-INSERT INTO `oauth_client_details` VALUES ('learn-shop-admin-system', NULL, 'learn-shop-admin-system', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://127.0.0.1:8811/admin-system/login', NULL, 1200, 5000, NULL, 'true');
-INSERT INTO `oauth_client_details` VALUES ('swagger2', '', 'swagger2', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://127.0.0.1:8771/webjars/springfox-swagger-ui/oauth2-redirect.html', '', 1200, 5000, NULL, 'true');
-INSERT INTO `oauth_client_details` VALUES ('swagger3', '', 'swagger3', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://127.0.0.1:8811/admin-system/webjars/springfox-swagger-ui/oauth2-redirect.html', '', 1200, 5000, NULL, 'true');
-INSERT INTO `oauth_client_details` VALUES ('webapp', NULL, 'webapp', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://baidu.com', NULL, NULL, NULL, NULL, 'true');
+INSERT INTO `oauth_client_details` VALUES ('app', NULL, '$2a$10$UlElt.ITQMLozDPlUP8XlujwBuximrmgwNdR2Lyu6YLgCCzrlCdCO', 'app', 'authorization_code,password,refresh_token,client_credentials', '', NULL, NULL, NULL, NULL, 'true');
+INSERT INTO `oauth_client_details` VALUES ('swagger', NULL, '$2a$10$yz3pEBFe/P7u/eUNwwhqguoZC5JqgE9OOI.4K.5JavC3LxYbGGNea', 'webapp', 'authorization_code,password,refresh_token,client_credentials', '', NULL, NULL, NULL, NULL, 'true');
+INSERT INTO `oauth_client_details` VALUES ('webapp', NULL, '$2a$10$o/d.vjkwAVMV.IAh3TuE0Om3.BrT/l4sLQYDUNfbzzmJ2oJRnnfxi', 'webapp', 'authorization_code,password,refresh_token,client_credentials', '', NULL, NULL, NULL, NULL, 'true');
+
+-- ----------------------------
+-- Table structure for p_goods_brand
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_brand`;
+CREATE TABLE `p_goods_brand`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `brand_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌名称',
+  `brand_sort` bigint(20) NOT NULL COMMENT '分类排序',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '品牌表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_brand
+-- ----------------------------
+INSERT INTO `p_goods_brand` VALUES ('1', '品牌A', 1, b'1', '2019-11-27 15:32:15', 'billow', '2019-11-27 15:32:18', 'billow');
+
+-- ----------------------------
+-- Table structure for p_goods_category
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_category`;
+CREATE TABLE `p_goods_category`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `category_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
+  `category_sort` bigint(20) NOT NULL COMMENT '分类排序',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '分类表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_category
+-- ----------------------------
+INSERT INTO `p_goods_category` VALUES ('1', '手机', 1, b'1', '2019-12-05 03:35:36', 'admin', '2019-11-27 15:32:52', 'billow');
+INSERT INTO `p_goods_category` VALUES ('1202067484162646018', '服装', 1, b'1', '2019-12-05 03:43:20', 'admin', '2019-12-04 03:29:56', 'admin');
+
+-- ----------------------------
+-- Table structure for p_goods_safeguard
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_safeguard`;
+CREATE TABLE `p_goods_safeguard`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `safeguard_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '保障名称',
+  `price` int(11) NOT NULL COMMENT '保障价格',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '增值保障' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for p_goods_sku
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_sku`;
+CREATE TABLE `p_goods_sku`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `sku_no` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'sku编号,唯一',
+  `sku_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'sku名称(冗余spu_name)',
+  `price` int(11) NOT NULL COMMENT '售价',
+  `stock` int(11) NOT NULL COMMENT '库存',
+  `shop_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商铺id,为0表示自营',
+  `spu_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'spu_id',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'sku表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_sku
+-- ----------------------------
+INSERT INTO `p_goods_sku` VALUES ('1', '11', '黑色/3G/全网', 4500, 234, '1', '1', b'1', '2019-12-06 02:29:01', 'admin', '2019-11-27 15:40:00', 'billow');
+INSERT INTO `p_goods_sku` VALUES ('1201395049750822913', 'SK20191202145755306000', '28/黑色', 2, 11, '0', '1199888438628667393', b'1', '2019-12-06 02:27:51', 'admin', '2019-12-02 06:57:55', 'admin');
+INSERT INTO `p_goods_sku` VALUES ('1201400232639688706', 'SK20191202151831003000', '29/白色', 1, 2, '0', '1199888438628667393', b'1', '2019-12-06 02:27:55', 'admin', '2019-12-02 07:18:31', 'admin');
+INSERT INTO `p_goods_sku` VALUES ('1201410770031587329', 'SK20191202160023366001', '30/白色', 77, 12, '0', '1199888438628667393', b'1', '2019-12-06 02:27:59', 'admin', '2019-12-02 08:00:23', 'admin');
+INSERT INTO `p_goods_sku` VALUES ('1202499587371134978', 'SK20191205160657646001', '黑色/6G/电信', 8000, 38, '0', '1', b'1', '2019-12-06 02:29:05', 'admin', '2019-12-05 08:06:58', 'admin');
+INSERT INTO `p_goods_sku` VALUES ('2', '22', '黑色/6G/联通', 5200, 123, '1', '1', b'1', '2019-12-06 02:29:11', 'admin', '2019-11-27 15:40:24', 'billow');
+INSERT INTO `p_goods_sku` VALUES ('3', '33', '白色/3G/全网', 4100, 213, '1', '1', b'1', '2019-12-06 02:29:15', 'admin', '2019-11-27 15:40:56', 'billow');
+INSERT INTO `p_goods_sku` VALUES ('4', '44', '白色/6G/联通', 5100, 342, '1', '1', b'1', '2019-12-06 02:29:18', 'admin', '2019-11-27 15:41:21', 'billow');
+
+-- ----------------------------
+-- Table structure for p_goods_sku_safeguard
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_sku_safeguard`;
+CREATE TABLE `p_goods_sku_safeguard`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `sku_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'sku_id',
+  `safeguard_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'safeguard_id',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'sku增值保障' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for p_goods_sku_spec_value
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_sku_spec_value`;
+CREATE TABLE `p_goods_sku_spec_value`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `sku_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'sku_id',
+  `spec_key_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格id(冗余)',
+  `spec_value_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格值id',
+  `sku_spec_sort` bigint(20) NULL DEFAULT NULL COMMENT '规格值排序',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'sku规格值' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_sku_spec_value
+-- ----------------------------
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1', '1', '1', '1', 0, b'1', '2019-12-06 02:29:01', 'admin', '2019-12-06 02:29:01', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202499587379523585', '1202499587371134978', '1', '1', 0, b'1', '2019-12-06 02:29:05', 'admin', '2019-12-06 02:29:05', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202520902970851329', '1', '2', '3', 1, b'1', '2019-12-06 02:29:01', 'admin', '2019-12-06 02:29:01', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202520931945103361', '1202499587371134978', '2', '4', 1, b'1', '2019-12-06 02:29:05', 'admin', '2019-12-06 02:29:05', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202522996863877122', '1', '1202499148936343553', '1202499254636998657', 2, b'1', '2019-12-06 02:29:01', 'admin', '2019-12-06 02:29:01', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202767899514601473', '1201395049750822913', '1202068694793904130', '1202121559390523393', 0, b'1', '2019-12-06 02:27:51', 'admin', '2019-12-06 02:27:51', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202767924248412161', '1201400232639688706', '1202068694793904130', '1202432132590301185', 0, b'1', '2019-12-06 02:27:55', 'admin', '2019-12-06 02:27:55', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202767945287041026', '1201410770031587329', '1202068694793904130', '1202432207697702914', 0, b'1', '2019-12-06 02:27:59', 'admin', '2019-12-06 02:27:59', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202767945312206849', '1201410770031587329', '1202068694806487041', '1202432378846277634', 1, b'1', '2019-12-06 02:27:59', 'admin', '2019-12-06 02:27:59', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202776634358112257', '1201395049750822913', '1202068694806487041', '1202432342808817665', 1, b'1', '2019-12-06 02:27:51', 'admin', '2019-12-06 02:27:51', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202776651986771969', '1201400232639688706', '1202068694806487041', '1202432378846277634', 1, b'1', '2019-12-06 02:27:55', 'admin', '2019-12-06 02:27:55', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202776753119830017', '1202499587371134978', '1202499148936343553', '1202499193807007745', 2, b'1', '2019-12-06 02:29:05', 'admin', '2019-12-06 02:29:05', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202776770832375809', '2', '1202499148936343553', '1202499227214639106', 2, b'1', '2019-12-06 02:29:11', 'admin', '2019-12-06 02:29:11', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202776786993029122', '3', '1202499148936343553', '1202499254636998657', 2, b'1', '2019-12-06 02:29:15', 'admin', '2019-12-06 02:29:15', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('1202776812112715777', '4', '1202499148936343553', '1202499227214639106', 2, b'1', '2019-12-06 02:29:18', 'admin', '2019-12-06 02:29:18', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('3', '2', '1', '1', 0, b'1', '2019-12-06 02:29:11', 'admin', '2019-12-06 02:29:11', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('4', '2', '2', '4', 1, b'1', '2019-12-06 02:29:11', 'admin', '2019-12-06 02:29:11', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('5', '3', '1', '2', 0, b'1', '2019-12-06 02:29:15', 'admin', '2019-12-06 02:29:15', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('6', '3', '2', '3', 1, b'1', '2019-12-06 02:29:15', 'admin', '2019-12-06 02:29:15', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('7', '4', '1', '2', 0, b'1', '2019-12-06 02:29:18', 'admin', '2019-12-06 02:29:18', 'admin');
+INSERT INTO `p_goods_sku_spec_value` VALUES ('8', '4', '2', '4', 1, b'1', '2019-12-06 02:29:18', 'admin', '2019-12-06 02:29:18', 'admin');
+
+-- ----------------------------
+-- Table structure for p_goods_spec_key
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_spec_key`;
+CREATE TABLE `p_goods_spec_key`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `spec_no` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格编号',
+  `spec_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格名称',
+  `key_sort` bigint(20) NOT NULL COMMENT '规格排序',
+  `category_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类id',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '规格表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_spec_key
+-- ----------------------------
+INSERT INTO `p_goods_spec_key` VALUES ('1', '11', '颜色', 1, '1', b'1', '2019-12-05 08:05:13', 'admin', '2019-11-27 15:35:10', 'billow');
+INSERT INTO `p_goods_spec_key` VALUES ('1202068694793904130', 'SP20191204113444852003', '尺寸', 1, '1202067484162646018', b'1', '2019-12-05 03:38:33', 'admin', '2019-12-04 03:34:45', 'admin');
+INSERT INTO `p_goods_spec_key` VALUES ('1202068694806487041', 'SP20191204113444855004', '颜色', 2, '1202067484162646018', b'1', '2019-12-05 03:38:33', 'admin', '2019-12-04 03:34:45', 'admin');
+INSERT INTO `p_goods_spec_key` VALUES ('1202499148936343553', 'SP20191205160513115000', '网络', 0, '1', b'1', '2019-12-05 08:05:13', 'admin', '2019-12-05 08:05:13', 'admin');
+INSERT INTO `p_goods_spec_key` VALUES ('2', '22', '内存', 2, '1', b'1', '2019-12-05 08:05:13', 'admin', '2019-11-27 15:35:28', 'billow');
+
+-- ----------------------------
+-- Table structure for p_goods_spec_value
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_spec_value`;
+CREATE TABLE `p_goods_spec_value`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `spec_key_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格id',
+  `spec_value` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格值',
+  `value_sort` bigint(20) NOT NULL COMMENT '规格排序',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '规格值表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_spec_value
+-- ----------------------------
+INSERT INTO `p_goods_spec_value` VALUES ('1', '1', '黑色', 1, b'1', '2019-12-05 07:56:21', 'admin', '2019-11-27 15:35:57', 'billow');
+INSERT INTO `p_goods_spec_value` VALUES ('1202121559390523393', '1202068694793904130', '28', 1, b'1', '2019-12-05 03:38:49', 'admin', '2019-12-04 07:04:49', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202432132590301185', '1202068694793904130', '29', 0, b'1', '2019-12-05 03:38:55', 'admin', '2019-12-05 03:38:55', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202432207697702914', '1202068694793904130', '30', 0, b'1', '2019-12-05 03:39:13', 'admin', '2019-12-05 03:39:13', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202432279986532353', '1202068694806487041', '红色', 0, b'1', '2019-12-05 03:39:30', 'admin', '2019-12-05 03:39:30', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202432342808817665', '1202068694806487041', '黑色', 0, b'1', '2019-12-05 03:39:45', 'admin', '2019-12-05 03:39:45', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202432378846277634', '1202068694806487041', '白色', 0, b'1', '2019-12-05 03:39:54', 'admin', '2019-12-05 03:39:54', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202497544564731905', '1', '黄色', 0, b'1', '2019-12-05 07:58:51', 'admin', '2019-12-05 07:58:51', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202498700045152257', '1', '纯色', 0, b'1', '2019-12-05 08:03:35', 'admin', '2019-12-05 08:03:26', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202499193807007745', '1202499148936343553', '电信', 0, b'1', '2019-12-05 08:05:24', 'admin', '2019-12-05 08:05:24', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202499227214639106', '1202499148936343553', '联通', 0, b'1', '2019-12-05 08:05:32', 'admin', '2019-12-05 08:05:32', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('1202499254636998657', '1202499148936343553', '全网', 0, b'1', '2019-12-05 08:05:38', 'admin', '2019-12-05 08:05:38', 'admin');
+INSERT INTO `p_goods_spec_value` VALUES ('2', '1', '白色', 2, b'1', '2019-11-27 15:36:26', 'billow', '2019-11-27 15:36:30', 'billow');
+INSERT INTO `p_goods_spec_value` VALUES ('3', '2', '3G', 1, b'1', '2019-11-27 15:37:43', 'billow', '2019-11-27 15:37:47', 'billow');
+INSERT INTO `p_goods_spec_value` VALUES ('4', '2', '6G', 2, b'1', '2019-11-27 15:38:04', 'billow', '2019-11-27 15:38:09', 'billow');
+
+-- ----------------------------
+-- Table structure for p_goods_spu
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_spu`;
+CREATE TABLE `p_goods_spu`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `spu_no` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品编号，唯一',
+  `goods_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
+  `low_price` int(11) NOT NULL COMMENT '最低售价',
+  `stock` bigint(20) NULL DEFAULT NULL COMMENT '总库存量',
+  `category_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类id',
+  `brand_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌id',
+  `spu_sort` bigint(20) NOT NULL COMMENT '商品排序',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_spu_no`(`spu_no`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'spu表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_spu
+-- ----------------------------
+INSERT INTO `p_goods_spu` VALUES ('1', '11', 'iphone11', 5523, 9000, '1', '1', 1, b'1', '2019-12-06 02:28:56', 'admin', '2019-11-27 15:34:12', 'billow');
+INSERT INTO `p_goods_spu` VALUES ('1199888438628667393', 'PG20191128111111224000', 'Iphone7', 12212, 22, '1202067484162646018', '23', 33, b'1', '2019-12-06 02:27:40', 'admin', '2019-11-28 03:11:11', 'admin');
+
+-- ----------------------------
+-- Table structure for p_goods_spu_spec
+-- ----------------------------
+DROP TABLE IF EXISTS `p_goods_spu_spec`;
+CREATE TABLE `p_goods_spu_spec`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `spu_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'spu_id',
+  `spec_key_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'spec_key_id',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'spu规格表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_goods_spu_spec
+-- ----------------------------
+INSERT INTO `p_goods_spu_spec` VALUES ('1202776587499347970', '1199888438628667393', '1202068694793904130', b'1', '2019-12-06 02:27:40', 'admin', '2019-12-06 02:27:40', 'admin');
+INSERT INTO `p_goods_spu_spec` VALUES ('1202776587507736578', '1199888438628667393', '1202068694806487041', b'1', '2019-12-06 02:27:40', 'admin', '2019-12-06 02:27:40', 'admin');
+INSERT INTO `p_goods_spu_spec` VALUES ('1202776907491188737', '1', '1', b'1', '2019-12-06 02:28:56', 'admin', '2019-12-06 02:28:56', 'admin');
+INSERT INTO `p_goods_spu_spec` VALUES ('1202776907491188738', '1', '2', b'1', '2019-12-06 02:28:56', 'admin', '2019-12-06 02:28:56', 'admin');
+INSERT INTO `p_goods_spu_spec` VALUES ('1202776907499577346', '1', '1202499148936343553', b'1', '2019-12-06 02:28:56', 'admin', '2019-12-06 02:28:56', 'admin');
+
+-- ----------------------------
+-- Table structure for p_shop_info
+-- ----------------------------
+DROP TABLE IF EXISTS `p_shop_info`;
+CREATE TABLE `p_shop_info`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `shop_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '店铺名称',
+  `shop_sort` bigint(20) NOT NULL COMMENT '店铺排序',
+  `valid_ind` bit(1) NULL DEFAULT NULL COMMENT '是否有效',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
+  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '店铺表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of p_shop_info
+-- ----------------------------
+INSERT INTO `p_shop_info` VALUES ('1', 'bilow的门店', 1, b'1', '2019-11-27 15:31:32', 'billow', '2019-11-27 15:31:40', 'billow');
 
 -- ----------------------------
 -- Table structure for r_role_menu
@@ -126,11 +344,15 @@ CREATE TABLE `r_role_menu`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1647 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1651 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_menu
 -- ----------------------------
+INSERT INTO `r_role_menu` VALUES (138, 1, 137, '2019-12-04 01:25:38', 'admin', '2019-12-04 01:25:38', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (140, 1, 7, '2019-12-04 01:33:53', 'admin', '2019-12-04 01:33:53', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (141, 1, 137, '2019-12-04 01:33:53', 'admin', '2019-12-04 01:33:53', 'admin', b'1');
+INSERT INTO `r_role_menu` VALUES (142, 1, 139, '2019-12-04 01:33:53', 'admin', '2019-12-04 01:33:53', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (1381, 1, 1, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (1382, 1, 25, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
 INSERT INTO `r_role_menu` VALUES (1383, 1, 26, '2019-08-30 23:03:35', 'admin', '2019-08-30 23:03:35', 'admin', b'1');
@@ -190,11 +412,40 @@ CREATE TABLE `r_role_permission`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2779 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2794 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_role_permission
 -- ----------------------------
+INSERT INTO `r_role_permission` VALUES (11, 1, 10, '2019-11-27 07:30:44', 'admin', '2019-11-27 07:30:44', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (37, 1, 36, '2019-11-27 07:50:29', 'admin', '2019-11-27 07:50:29', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (41, 1, 40, '2019-11-28 02:19:29', 'admin', '2019-11-28 02:19:29', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (106, 1, 105, '2019-11-28 02:49:19', 'admin', '2019-11-28 02:49:19', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (107, 1, 104, '2019-11-28 02:49:19', 'admin', '2019-11-28 02:49:19', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (108, 1, 103, '2019-11-28 02:49:19', 'admin', '2019-11-28 02:49:19', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (109, 1, 102, '2019-11-28 02:49:19', 'admin', '2019-11-28 02:49:19', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (110, 1, 101, '2019-11-28 02:49:19', 'admin', '2019-11-28 02:49:19', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (116, 1, 115, '2019-11-28 11:54:35', 'admin', '2019-11-28 11:54:35', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (117, 1, 112, '2019-11-28 11:54:35', 'admin', '2019-11-28 11:54:35', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (118, 1, 111, '2019-11-28 11:54:35', 'admin', '2019-11-28 11:54:35', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (119, 1, 113, '2019-11-28 11:54:35', 'admin', '2019-11-28 11:54:35', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (120, 1, 114, '2019-11-28 11:54:35', 'admin', '2019-11-28 11:54:35', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (123, 1, 122, '2019-11-29 02:54:50', 'admin', '2019-11-29 02:54:50', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (124, 1, 121, '2019-11-29 02:54:50', 'admin', '2019-11-29 02:54:50', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (131, 1, 130, '2019-12-04 01:16:36', 'admin', '2019-12-04 01:16:36', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (132, 1, 129, '2019-12-04 01:16:36', 'admin', '2019-12-04 01:16:36', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (133, 1, 128, '2019-12-04 01:16:36', 'admin', '2019-12-04 01:16:36', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (134, 1, 127, '2019-12-04 01:16:36', 'admin', '2019-12-04 01:16:36', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (135, 1, 126, '2019-12-04 01:16:36', 'admin', '2019-12-04 01:16:36', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (136, 1, 125, '2019-12-04 01:16:36', 'admin', '2019-12-04 01:16:36', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (144, 1, 143, '2019-12-04 03:30:57', 'admin', '2019-12-04 03:30:57', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (147, 1, 145, '2019-12-04 06:52:55', 'admin', '2019-12-04 06:52:55', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (148, 1, 146, '2019-12-04 06:52:55', 'admin', '2019-12-04 06:52:55', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (150, 1, 149, '2019-12-04 06:58:34', 'admin', '2019-12-04 06:58:34', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (152, 1, 151, '2019-12-04 07:04:26', 'admin', '2019-12-04 07:04:26', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (154, 1, 153, '2019-12-05 03:25:40', 'admin', '2019-12-05 03:25:40', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (156, 1, 155, '2019-12-05 03:40:41', 'admin', '2019-12-05 03:40:41', 'admin', b'1');
+INSERT INTO `r_role_permission` VALUES (158, 1, 157, '2019-12-05 08:49:10', 'admin', '2019-12-05 08:49:10', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2594, 1, 1, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2595, 1, 2, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
 INSERT INTO `r_role_permission` VALUES (2596, 1, 3, '2019-08-30 23:03:37', 'admin', '2019-08-30 23:03:37', 'admin', b'1');
@@ -318,7 +569,7 @@ CREATE TABLE `r_user_role`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 156 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 155 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of r_user_role
@@ -408,7 +659,7 @@ CREATE TABLE `sys_data_dictionary`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 162 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_data_dictionary
@@ -439,6 +690,10 @@ INSERT INTO `sys_data_dictionary` VALUES (23, 'userGroupType', 'GeneralMg', '总
 INSERT INTO `sys_data_dictionary` VALUES (24, 'applyType', 'leave', '请假申请', 'adminSystem', 1, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
 INSERT INTO `sys_data_dictionary` VALUES (25, 'mailType', '4', 'FreeMarker邮件', 'adminSystem', 2, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
 INSERT INTO `sys_data_dictionary` VALUES (26, 'mailType', '5', 'Thymeleaf邮件', 'adminSystem', 2, b'1', '2019-07-11 14:06:47', 'admin', '2019-07-11 14:06:56', 'admin');
+INSERT INTO `sys_data_dictionary` VALUES (159, 'classType', '1', 'SpringBean', 'publicJob', 0, b'1', '2019-12-06 03:35:44', 'admin', '2019-12-06 07:17:22', 'admin');
+INSERT INTO `sys_data_dictionary` VALUES (160, 'classType', '2', 'PackageClass', 'publicJob', 1, b'1', '2019-12-06 03:36:15', 'admin', '2019-12-06 07:17:34', 'admin');
+INSERT INTO `sys_data_dictionary` VALUES (161, 'classType', '3', 'HTTP', 'publicJob', 2, b'1', '2019-12-06 07:18:02', 'admin', '2019-12-06 07:18:02', 'admin');
+INSERT INTO `sys_data_dictionary` VALUES (162, 'classType', '4', 'SendMQ', 'publicJob', 3, b'1', '2019-12-06 07:18:25', 'admin', '2019-12-06 07:18:40', 'admin');
 
 -- ----------------------------
 -- Table structure for sys_mail_template
@@ -498,7 +753,7 @@ CREATE TABLE `sys_menu`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 139 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -510,9 +765,9 @@ INSERT INTO `sys_menu` VALUES (4, 'sysMenuListIndex', '菜单管理', 2, b'1', '
 INSERT INTO `sys_menu` VALUES (5, 'job', '自动任务', NULL, b'1', 'clock_fill', '', 99, '2019-04-23 15:41:51', 'admin', '2019-09-13 09:45:45', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (6, 'jobAutoTaskListIndex', '自动任务', 5, b'1', 'clock', '', 1, '2019-04-23 15:41:51', 'admin', '2019-09-13 09:46:04', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (7, 'pro', '产品系统', NULL, b'1', 'manage_fill', '', 10, '2019-04-23 15:41:51', 'admin', '2019-09-13 09:42:02', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (8, 'proProductListIndex', '产品管理', 7, b'1', 'manage', '', 2, '2019-04-23 15:41:51', 'admin', '2019-09-13 09:43:54', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (9, 'proProductEdit', '修改产品信息', 8, b'0', 'editor', '', 3, '2019-04-23 15:41:51', 'admin', '2019-09-13 09:44:08', 'admin', b'1');
-INSERT INTO `sys_menu` VALUES (10, 'proProductImageEdit', '修改产品图片', 8, b'0', 'brush_fill', '', 4, '2019-04-23 15:41:51', 'admin', '2019-09-13 09:44:21', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (8, 'proGoodsSpuListIndex', '产品管理', 7, b'1', 'manage', '', 2, '2019-04-23 15:41:51', 'admin', '2019-11-28 02:36:45', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (9, 'proGoodsSpuEdit', '修改产品信息', 8, b'0', 'editor', '', 3, '2019-04-23 15:41:51', 'admin', '2019-11-28 02:39:13', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (10, 'proGoodsSpuImageEdit', '修改产品图片', 8, b'0', 'brush_fill', '', 4, '2019-04-23 15:41:51', 'admin', '2019-11-28 02:37:44', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (11, 'sysRoleListIndex', '角色管理', 2, b'1', 'addressbook_fill', '', 2, '2019-04-23 15:41:51', 'admin', '2019-09-13 09:48:08', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (12, 'sysPermissionListIndex', '权限管理', 2, b'1', 'flashlight_fill', NULL, 3, '2019-07-10 15:22:05', 'admin', '2019-09-13 09:48:39', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (13, 'sysPermissionEdit', '修改权限信息', 12, b'0', 'brush_fill', NULL, 1, '2019-07-10 17:42:20', 'admin', '2019-09-13 09:48:50', 'admin', b'1');
@@ -537,6 +792,8 @@ INSERT INTO `sys_menu` VALUES (44, 'workbenchApplyList', '我要申请', 42, b'1
 INSERT INTO `sys_menu` VALUES (46, 'workbenchApplyInfo', '申请信息', 44, b'0', 'brush_fill', NULL, 1, '2019-09-07 11:05:44', 'admin', '2019-09-13 09:39:23', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (47, 'sysDataDictionaryList', '数据字典', 2, b'1', 'qrcode_fill', NULL, 95, '2019-11-07 08:51:33', 'admin', '2019-11-07 11:14:04', 'admin', b'1');
 INSERT INTO `sys_menu` VALUES (48, 'sysDataDictionaryEdit', '修改数据字典', 47, b'0', 'brush_fill', NULL, 0, '2019-11-07 16:07:39', 'admin', '2019-11-07 16:16:37', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (137, 'proGoodsCategoryListIndex', '产品分类', 7, b'1', 'stealth_fill', NULL, 0, '2019-12-04 01:25:13', 'admin', '2019-12-04 01:25:13', 'admin', b'1');
+INSERT INTO `sys_menu` VALUES (139, 'proGoodsCategoryEdit', '修改产品分类', 137, b'0', 'browse', NULL, 0, '2019-12-04 01:33:44', 'admin', '2019-12-04 01:34:16', 'admin', b'1');
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -558,7 +815,7 @@ CREATE TABLE `sys_permission`  (
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `pid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 157 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_permission
@@ -572,6 +829,7 @@ INSERT INTO `sys_permission` VALUES (6, '根据id查询菜单信息', NULL, '/me
 INSERT INTO `sys_permission` VALUES (7, '修改、添加菜单信息', NULL, '/menuApi/saveOrUpdateMenu', '1', '修改、添加菜单信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:01:40', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (8, '删除菜单信息', NULL, '/menuApi/delMenuByIds', '1', '根据ID 删除菜单信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:02:24', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (9, '查询角色列表信息', '', '/roleApi/findRoleList', '1', '根据条件查询角色列表信息', b'1', '2019-04-23 15:41:51', 'admin', '2019-07-12 14:02:50', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (10, '根据 spuId 查询 spu 规格表数据', 'GoodsSpuSpecApi-findSpuSpec', '/goodsSpuSpecApi/findSpuSpec/**', '2', '根据 spuId 查询 spu 规格表数据', b'1', '2019-11-27 07:29:59', 'admin', '2019-11-27 07:29:59', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (12, '查询数据字典', '', '/dataDictionaryApi/findDataDictionary/**', '1', '从数据字典中获取下拉列表', b'1', '2019-07-11 14:11:09', 'admin', '2019-08-07 15:47:37', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (13, '查询角色权限', '3123', '/roleApi/findPermissionByRoleId/**', '1', '根据角色查询出权限ID', b'1', '2019-07-11 17:21:50', 'admin', '2019-07-12 13:57:24', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (14, '查询权限信息', '23', '/permissionApi/findPermissionList', '1', '根据条件查询权限信息', b'1', '2019-07-11 17:22:24', 'admin', '2019-07-12 13:57:35', 'admin', NULL, NULL, NULL);
@@ -596,9 +854,11 @@ INSERT INTO `sys_permission` VALUES (32, '加载下拉列表角色信息', 'Role
 INSERT INTO `sys_permission` VALUES (33, '根据id查询有效的用户角色', 'UserApi-findRoleIdsByUserId', '/userApi/findRoleIdsByUserId/**', '4', '根据id查询有效的用户角色', b'1', '2019-07-30 18:21:41', 'admin', '2019-07-30 18:21:41', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (34, '根据id查询角色信息', 'RoleApi-findRoleById', '/roleApi/findRoleById', '1', '根据id查询角色信息', b'1', '2019-07-31 12:34:18', 'admin', '2019-07-31 12:34:18', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (35, '查询 userCode 的个数', 'UserApi-checkUserCode', '/userApi/checkUserCode/**', '4', '查询 userCode 的个数', b'1', '2019-08-03 16:50:10', 'admin', '2019-08-06 18:09:32', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (36, '通过 spuId 获取商品 sku 信息', 'GoodsSkuApi-findGoodsSku', '/goodsSkuApi/findGoodsSku/**', '2', '通过 spuId 获取商品 sku 信息', b'1', '2019-11-27 07:50:19', 'admin', '2019-11-27 07:50:19', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (37, '查询 roleCode 的个数', 'RoleApi-checkRoleCode', '/roleApi/checkRoleCode/**', '1', '查询 roleCode 的个数', b'1', '2019-08-07 10:32:32', 'admin', '2019-08-07 10:33:39', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (38, '单个上传文件', 'FileApi-singleUpload', '/fileApi/singleUpload/**', '1', '文件处理API', b'1', '2019-08-08 09:14:29', 'admin', '2019-08-08 11:35:45', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (39, '修改用户头像', 'UserApi-updateUserIcon', '/userApi/updateUserIcon', '4', '修改用户头像', b'1', '2019-08-08 14:34:21', 'admin', '2019-08-08 14:34:21', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (40, '查询分页spu表数据', 'GoodsSpuApi-list', '/goodsSpuApi/list', '2', '查询分页spu表数据', b'1', '2019-11-28 02:19:22', 'admin', '2019-11-28 02:19:22', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (41, '初始化所有缓存', 'CacheApi-initAll', '/cacheApi/initAll', '1', '初始化所有缓存', b'1', '2019-08-10 12:15:54', 'admin', '2019-08-10 14:04:06', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (42, '初始化指定的缓存', 'CacheApi-initCacheByType', '/cacheApi/init/**', '1', '初始化指定的缓存，initDictionary,initRoleMenu,initRolePermission', b'1', '2019-08-10 12:16:40', 'admin', '2019-08-10 12:16:40', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (43, '查询自动任务列表', 'CoreAutoTaskApi-findAutoTask', '/coreAutoTaskApi/findAutoTask', '5', '查询自动任务列表', b'1', '2019-08-12 16:35:36', 'admin', '2019-08-12 16:35:36', 'admin', NULL, NULL, NULL);
@@ -659,6 +919,32 @@ INSERT INTO `sys_permission` VALUES (97, '根据id删除数据字典', 'DataDict
 INSERT INTO `sys_permission` VALUES (98, '根据id禁用数据字典', 'DataDictionaryApi-prohibit', '/dataDictionaryApi/prohibit/**', '1', '根据id禁用数据字典', b'1', '2019-11-07 11:12:14', 'admin', '2019-11-07 11:12:26', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (99, '字典下拉字段分类', 'DataDictionaryApi-findFieldType', '/dataDictionaryApi/findFieldType', '1', '字典下拉字段分类', b'1', '2019-11-07 11:15:37', 'admin', '2019-11-07 11:15:37', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (100, '字典下拉系统模块', 'DataDictionaryApi-findSysModule', '/dataDictionaryApi/findSysModule', '1', '字典下拉系统模块', b'1', '2019-11-07 13:56:14', 'admin', '2019-11-07 13:56:14', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (101, '根据id查询spu表数据', 'GoodsSpuApi-getById', '/goodsSpuApi/getById/**', '2', '根据id查询spu表数据', b'1', '2019-11-28 02:46:26', 'admin', '2019-11-28 02:46:26', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (102, '新增spu表数据', 'GoodsSpuApi-add', '/goodsSpuApi/add', '2', '新增spu表数据', b'1', '2019-11-28 02:47:12', 'admin', '2019-11-28 02:47:12', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (103, '删除spu表数据', 'GoodsSpuApi-delById', '/goodsSpuApi/delById/**', '2', '删除spu表数据', b'1', '2019-11-28 02:47:46', 'admin', '2019-11-28 02:47:46', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (104, '更新spu表数据', 'GoodsSpuApi-update', '/goodsSpuApi/update', '2', '更新spu表数据', b'1', '2019-11-28 02:48:28', 'admin', '2019-11-28 02:48:28', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (105, '根据ID禁用spu表数据', 'GoodsSpuApi-prohibitById', '/goodsSpuApi/prohibitById/**', '2', '根据ID禁用spu表数据', b'1', '2019-11-28 02:49:04', 'admin', '2019-11-28 02:49:04', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (111, '根据id查询sku表数据', 'GoodsSkuApi-getById', '/goodsSkuApi/getById/**', '2', '根据id查询sku表数据', b'1', '2019-11-28 11:51:13', 'admin', '2019-11-28 11:53:16', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (112, '新增sku表数据', 'GoodsSkuApi-add', '/goodsSkuApi/add', '2', '新增sku表数据', b'1', '2019-11-28 11:51:39', 'admin', '2019-11-28 11:53:27', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (113, '删除sku表数据', 'GoodsSkuApi-delById', '/goodsSkuApi/delById/**', '2', '删除sku表数据', b'1', '2019-11-28 11:52:08', 'admin', '2019-11-28 11:53:04', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (114, '更新sku表数据', 'GoodsSkuApi-update', '/goodsSkuApi/update', '2', '更新sku表数据', b'1', '2019-11-28 11:52:43', 'admin', '2019-11-28 11:52:43', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (115, '根据ID禁用sku表数据', 'GoodsSkuApi-prohibitById', '/goodsSkuApi/prohibitById/**', '2', '根据ID禁用sku表数据', b'1', '2019-11-28 11:54:15', 'admin', '2019-11-28 11:54:15', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (121, '通过 CategoryId 查询出所有的规格 KEY', 'GoodsSpecKeyApi-findListByCategoryId', '/goodsSpecKeyApi/findListByCategoryId/**', '2', '通过 CategoryId 查询出所有的规格 KEY', b'1', '2019-11-29 02:53:47', 'admin', '2019-11-29 02:53:47', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (122, '通过 SpecKeyId 查询出所有的规格 Value', 'GoodsSpecValueApi-findListBySpecKeyId', '/goodsSpecValueApi/findListBySpecKeyId/**', '2', '通过 SpecKeyId 查询出所有的规格 Value', b'1', '2019-11-29 02:54:42', 'admin', '2019-11-29 02:54:42', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (125, '查询分页分类表数据', 'GoodsCategoryApi-list', '/goodsCategoryApi/list', '2', '查询分页分类表数据', b'1', '2019-12-04 00:55:04', 'admin', '2019-12-04 00:55:04', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (126, '根据id查询分类表数据', 'GoodsCategoryApi-getById', '/goodsCategoryApi/getById/**', '2', '根据id查询分类表数据', b'1', '2019-12-04 00:55:41', 'admin', '2019-12-04 00:55:41', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (127, '新增分类表数据', 'GoodsCategoryApi-add', '/goodsCategoryApi/add', '2', '新增分类表数据', b'1', '2019-12-04 00:56:23', 'admin', '2019-12-04 00:56:23', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (128, '删除分类表数据', 'GoodsCategoryApi-delById', '/goodsCategoryApi/delById/**', '2', '删除分类表数据', b'1', '2019-12-04 01:15:39', 'admin', '2019-12-04 01:15:39', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (129, '更新分类表数据', 'GoodsCategoryApi-update', '/goodsCategoryApi/update', '2', '更新分类表数据', b'1', '2019-12-04 01:16:02', 'admin', '2019-12-04 01:16:02', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (130, '根据ID禁用分类表数据', 'GoodsCategoryApi-prohibitById', '/goodsCategoryApi/prohibitById/**', '2', '根据ID禁用分类表数据', b'1', '2019-12-04 01:16:23', 'admin', '2019-12-04 01:16:23', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (143, '保存一组规格信息', 'GoodsSpecKeyApi-saveList', '/goodsSpecKeyApi/saveList', '2', '保存一组规格信息', b'1', '2019-12-04 03:30:48', 'admin', '2019-12-04 03:30:48', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (145, '新增规格值表数据', 'GoodsSpecValueApi-add', '/goodsSpecValueApi/add', '2', '新增规格值表数据', b'1', '2019-12-04 06:51:51', 'admin', '2019-12-04 06:51:51', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (146, '根据id禁用规格值信息', 'GoodsSpecValueApi-prohibitById', '/goodsSpecValueApi/prohibitById/**', '2', '根据id禁用规格值信息', b'1', '2019-12-04 06:52:25', 'admin', '2019-12-04 06:52:25', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (149, '更新规格值信息', 'GoodsSpecValueApi-update', '/goodsSpecValueApi/update', '2', '更新规格值信息', b'1', '2019-12-04 06:58:24', 'admin', '2019-12-04 06:58:24', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (151, '删除规格值表数据', 'GoodsSpecValueApi-delById', '/goodsSpecValueApi/delById/**', '2', '删除规格值表数据', b'1', '2019-12-04 07:04:18', 'admin', '2019-12-04 07:04:18', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (153, '查询分类下拉列表数据', 'GoodsCategoryApi-findCategorySelect', '/goodsCategoryApi/findCategorySelect', '2', '查询分类下拉列表数据', b'1', '2019-12-05 03:25:34', 'admin', '2019-12-05 03:25:34', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (155, '删除规格表数据', 'GoodsSpecKeyApi-delById', '/goodsSpecKeyApi/delById/**', '2', '删除规格表数据', b'1', '2019-12-05 03:40:33', 'admin', '2019-12-05 03:40:33', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (157, '根据 spuId 查询 spu 规格Key数据', 'GoodsSpuSpecApi-findSpuSpecKey', '/goodsSpuSpecApi/findSpuSpecKey/**', '2', '根据 spuId 查询 spu 规格Key数据', b'1', '2019-12-05 08:49:04', 'admin', '2019-12-05 08:49:04', 'admin', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -675,7 +961,7 @@ CREATE TABLE `sys_role`  (
   `role_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `role_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -690,92 +976,80 @@ INSERT INTO `sys_role` VALUES (8, '2019-08-08 18:07:43', 'admin', '2019-08-08 18
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_schedule_job`;
 CREATE TABLE `sys_schedule_job`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `job_status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `spring_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `bean_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `method_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `cron_expression` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `is_concurrent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `is_exception_stop` bit(1) NULL DEFAULT NULL,
-  `is_save_log` bit(1) NULL DEFAULT NULL,
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `is_send_mail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `mail_receive` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `class_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `run_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `template_id` bigint(20) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+ `id` bigint(20) NOT NULL AUTO_INCREMENT,
+ `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `job_status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `routing_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `http_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `method_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `cron_expression` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `is_concurrent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `is_exception_stop` bit(1) NULL DEFAULT NULL,
+ `is_save_log` bit(1) NULL DEFAULT NULL,
+ `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `valid_ind` bit(1) NULL DEFAULT NULL,
+ `create_time` datetime(0) NULL DEFAULT NULL,
+ `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `update_time` datetime(0) NULL DEFAULT NULL,
+ `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `is_send_mail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `mail_receive` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `class_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `run_class` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `template_id` bigint(20) NULL DEFAULT NULL,
+ PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- ----------------------------
 -- Records of sys_schedule_job
 -- ----------------------------
-INSERT INTO `sys_schedule_job` VALUES (2, '5', '123', '0', '', '1231', '123', '', '1', b'1', b'0', '123123', b'0', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_schedule_job` VALUES (4, '2', '123', '0', '23123', '123131', '123', '123', '1', b'1', b'0', '123123', b'1', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_schedule_job` VALUES (5, '5', '234', '0', '', 'com.billow.job.autoTask.TestAutoTask', 'test', '1/10 * * * * ? *', '1', b'1', b'1', '234234', b'1', NULL, NULL, NULL, NULL, '1', 'liuytsz@sinosoft.com.cn', NULL, NULL, NULL);
+INSERT INTO `sys_schedule_job` VALUES (2, '5', 'DataDictionaryService', '0', '1', 'dataDictionaryServiceImpl', 'findFieldType', '0/5 * * * * ? *', '1', b'1', b'0', NULL, '0', NULL, '123123', b'1', NULL, NULL, '2019-12-06 03:19:49', 'admin');
+INSERT INTO `sys_schedule_job` VALUES (4, '2', '123', '0', NULL, NULL, '123', '123', '1', b'1', b'0', NULL, '0', NULL, '123123', b'1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_schedule_job` VALUES (5, '5', '234', '0', '2', 'com.billow.job.autoTask.TestAutoTask', 'test', '1/10 * * * * ? *', '1', b'1', b'1', NULL, '1', 'liuytsz@sinosoft.com.cn', '234234', b'1', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_schedule_job_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_schedule_job_log`;
 CREATE TABLE `sys_schedule_job_log`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `info` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `is_success` bit(1) NULL DEFAULT NULL,
-  `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `job_id` bigint(20) NULL DEFAULT NULL,
-  `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `run_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+ `id` bigint(20) NOT NULL AUTO_INCREMENT,
+ `log_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+ `create_time` datetime(0) NULL DEFAULT NULL,
+ `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `update_time` datetime(0) NULL DEFAULT NULL,
+ `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `valid_ind` bit(1) NULL DEFAULT NULL,
+ `info` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+ `is_success` bit(1) NULL DEFAULT NULL,
+ `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `job_id` bigint(20) NULL DEFAULT NULL,
+ `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ `run_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+ PRIMARY KEY (`id`) USING BTREE,
+ UNIQUE INDEX `log_id_uq`(`log_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- ----------------------------
 -- Records of sys_schedule_job_log
 -- ----------------------------
-INSERT INTO `sys_schedule_job_log` VALUES (1, '2019-09-27 17:38:55', 'JOB-AUTO', '2019-09-27 17:38:55', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (2, '2019-09-27 17:39:03', 'JOB-AUTO', '2019-09-27 17:39:03', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (3, '2019-09-27 17:39:13', 'JOB-AUTO', '2019-09-27 17:39:13', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (4, '2019-09-27 17:39:23', 'JOB-AUTO', '2019-09-27 17:39:23', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (5, '2019-09-27 17:39:33', 'JOB-AUTO', '2019-09-27 17:39:33', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (6, '2019-09-27 17:39:43', 'JOB-AUTO', '2019-09-27 17:39:43', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (7, '2019-09-27 17:39:53', 'JOB-AUTO', '2019-09-27 17:39:53', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (8, '2019-09-27 17:40:03', 'JOB-AUTO', '2019-09-27 17:40:03', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (9, '2019-09-27 17:52:44', 'JOB-AUTO', '2019-09-27 17:52:44', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (10, '2019-09-27 17:52:53', 'JOB-AUTO', '2019-09-27 17:52:53', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (11, '2019-09-27 17:53:03', 'JOB-AUTO', '2019-09-27 17:53:03', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (12, '2019-09-27 17:53:13', 'JOB-AUTO', '2019-09-27 17:53:13', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-INSERT INTO `sys_schedule_job_log` VALUES (13, '2019-09-27 17:53:23', 'JOB-AUTO', '2019-09-27 17:53:23', 'JOB-AUTO', NULL, NULL, b'1', '5', 5, '234', '0天0小时0分2秒');
-
--- ----------------------------
--- Table structure for sys_white_list
--- ----------------------------
-DROP TABLE IF EXISTS `sys_white_list`;
-CREATE TABLE `sys_white_list`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `valid_ind` bit(1) NULL DEFAULT NULL,
-  `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `mark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `module` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `port` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `sys_schedule_job_log` VALUES (1, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:38:55', 'JOB-AUTO', '2019-09-27 17:38:55', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (2, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:03', 'JOB-AUTO', '2019-09-27 17:39:03', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (3, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:13', 'JOB-AUTO', '2019-09-27 17:39:13', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (4, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:23', 'JOB-AUTO', '2019-09-27 17:39:23', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (5, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:33', 'JOB-AUTO', '2019-09-27 17:39:33', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (6, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:43', 'JOB-AUTO', '2019-09-27 17:39:43', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (7, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:53', 'JOB-AUTO', '2019-09-27 17:39:53', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (8, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:40:03', 'JOB-AUTO', '2019-09-27 17:40:03', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (9, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:52:44', 'JOB-AUTO', '2019-09-27 17:52:44', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (10, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:52:53', 'JOB-AUTO', '2019-09-27 17:52:53', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (11, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:03', 'JOB-AUTO', '2019-09-27 17:53:03', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (12, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:13', 'JOB-AUTO', '2019-09-27 17:53:13', 'JOB-AUTO');
+INSERT INTO `sys_schedule_job_log` VALUES (13, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:23', 'JOB-AUTO', '2019-09-27 17:53:23', 'JOB-AUTO');
 
 -- ----------------------------
 -- Table structure for u_leave
@@ -825,7 +1099,7 @@ CREATE TABLE `u_user`  (
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `group_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of u_user
@@ -841,324 +1115,5 @@ INSERT INTO `u_user` VALUES (9, '12AAA', '12AAA', '1', '$2a$10$rR4JP/smtel2Vd1VW
 INSERT INTO `u_user` VALUES (10, '124', '123234', NULL, '$2a$10$XI2CS.KB/BV6SMV/vrUMhekF.OA/WmyLNSlGganjlW33I9ep6hI7G', '130000,130300,130321', NULL, '13425875445', NULL, NULL, b'1', '2019-08-01 18:41:25', 'admin', '2019-08-06 10:18:17', 'admin', NULL);
 INSERT INTO `u_user` VALUES (12, '567', '5467', '2', '$2a$10$wwi1IkMUwtCX3HCAfaB5YuJpw.KMrShtvIOhusIIB1HQZA/ugJ0um', '140000,140400,140423', '2019-08-06 15:44:02', '15545487445', NULL, '123123', b'1', '2019-08-06 15:44:16', 'admin', '2019-08-07 10:54:57', 'admin', NULL);
 INSERT INTO `u_user` VALUES (13, '45', '45', '3', '$2a$10$hPB0APphoJ.rcLU8wKJsouaDxq9zMwZw2MGmGCG4ar.wXWy4Oiily', '140000,140100,140105', '2019-08-06 15:44:42', '18925454145', NULL, '4564', b'1', '2019-08-06 15:44:59', 'admin', '2019-08-06 15:44:59', 'admin', NULL);
-
-
--- ----------------------------
--- Table structure for p_goods_brand
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_brand`;
-CREATE TABLE `p_goods_brand`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `brand_name`   varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '品牌名称',
-    `brand_sort`   bigint(20)                                              NOT NULL COMMENT '分类排序',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '品牌表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_brand
--- ----------------------------
-INSERT INTO `p_goods_brand`
-VALUES ('1', '品牌A', 1, b'1', '2019-11-27 15:32:15', 'billow', '2019-11-27 15:32:18', 'billow');
-
--- ----------------------------
--- Table structure for p_goods_category
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_category`;
-CREATE TABLE `p_goods_category`
-(
-    `id`            varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `category_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '分类名称',
-    `category_sort` bigint(20)                                              NOT NULL COMMENT '分类排序',
-    `valid_ind`     bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`   datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`   datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '分类表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_category
--- ----------------------------
-INSERT INTO `p_goods_category`
-VALUES ('1', '奢侈品牌', 1, b'1', '2019-11-27 15:32:48', 'billow', '2019-11-27 15:32:52', 'billow');
-
--- ----------------------------
--- Table structure for p_goods_safeguard
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_safeguard`;
-CREATE TABLE `p_goods_safeguard`
-(
-    `id`             varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `safeguard_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '保障名称',
-    `price`          int(11)                                                 NOT NULL COMMENT '保障价格',
-    `valid_ind`      bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`    datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`    datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '增值保障'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for p_goods_sku
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_sku`;
-CREATE TABLE `p_goods_sku`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `sku_no`       varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'sku编号,唯一',
-    `sku_name`     varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'sku名称(冗余spu_name)',
-    `price`        int(11)                                                 NOT NULL COMMENT '售价',
-    `stock`        int(11)                                                 NOT NULL COMMENT '库存',
-    `shop_id`      varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '商铺id,为0表示自营',
-    `spu_id`       varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'spu_id',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = 'sku表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_sku
--- ----------------------------
-INSERT INTO `p_goods_sku`
-VALUES ('1', '11', '黑色3G', 4500, 234, '1', '1', b'1', '2019-11-27 15:39:55', 'billow', '2019-11-27 15:40:00', 'billow');
-INSERT INTO `p_goods_sku`
-VALUES ('2', '22', '黑色6G', 5200, 123, '1', '1', b'1', '2019-11-27 15:40:20', 'billow', '2019-11-27 15:40:24', 'billow');
-INSERT INTO `p_goods_sku`
-VALUES ('3', '33', '白色3G', 4100, 213, '1', '1', b'1', '2019-11-27 15:40:52', 'billow', '2019-11-27 15:40:56', 'billow');
-INSERT INTO `p_goods_sku`
-VALUES ('4', '44', '白色6G', 5100, 342, '1', '1', b'1', '2019-11-27 15:41:18', 'billow', '2019-11-27 15:41:21', 'billow');
-
--- ----------------------------
--- Table structure for p_goods_sku_safeguard
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_sku_safeguard`;
-CREATE TABLE `p_goods_sku_safeguard`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `sku_id`       varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'sku_id',
-    `safeguard_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'safeguard_id',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = 'sku增值保障'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for p_goods_sku_spec_value
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_sku_spec_value`;
-CREATE TABLE `p_goods_sku_spec_value`
-(
-    `id`            varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `sku_id`        varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'sku_id',
-    `spec_key_id`   varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '规格id(冗余)',
-    `spec_value_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '规格值id',
-    `valid_ind`     bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`   datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`   datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = 'sku规格值'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_sku_spec_value
--- ----------------------------
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('1', '1', '1', '1', b'1', '2019-11-27 15:41:50', 'billow', '2019-11-27 15:41:53', 'billow');
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('2', '1', '2', '3', b'1', '2019-11-27 15:42:24', 'billow', '2019-11-27 15:42:30', 'billow');
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('3', '2', '1', '1', b'1', '2019-11-27 15:41:50', 'billow', '2019-11-27 15:41:53', 'billow');
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('4', '2', '2', '4', b'1', '2019-11-27 15:41:50', 'billow', '2019-11-27 15:41:53', 'billow');
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('5', '3', '1', '2', b'1', '2019-11-27 15:41:50', 'billow', '2019-11-27 15:41:53', 'billow');
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('6', '3', '2', '3', b'1', '2019-11-27 15:41:50', 'billow', '2019-11-27 15:41:53', 'billow');
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('7', '4', '1', '2', b'1', '2019-11-27 15:41:50', 'billow', '2019-11-27 15:41:53', 'billow');
-INSERT INTO `p_goods_sku_spec_value`
-VALUES ('8', '4', '2', '4', b'1', '2019-11-27 15:41:50', 'billow', '2019-11-27 15:41:53', 'billow');
-
--- ----------------------------
--- Table structure for p_goods_spec_key
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_spec_key`;
-CREATE TABLE `p_goods_spec_key`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `spec_no`      varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '规格编号',
-    `spec_name`    varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '规格名称',
-    `key_sort`     bigint(20)                                              NOT NULL COMMENT '规格排序',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '规格表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_spec_key
--- ----------------------------
-INSERT INTO `p_goods_spec_key`
-VALUES ('1', '11', '颜色', 1, b'1', '2019-11-27 15:35:07', 'billow', '2019-11-27 15:35:10', 'billow');
-INSERT INTO `p_goods_spec_key`
-VALUES ('2', '22', '内存', 2, b'1', '2019-11-27 15:35:25', 'billow', '2019-11-27 15:35:28', 'billow');
-
--- ----------------------------
--- Table structure for p_goods_spec_value
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_spec_value`;
-CREATE TABLE `p_goods_spec_value`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `spec_key_id`  varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '规格id',
-    `spec_value`   varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '规格值',
-    `value_sort`   bigint(20)                                              NOT NULL COMMENT '规格排序',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '规格值表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_spec_value
--- ----------------------------
-INSERT INTO `p_goods_spec_value`
-VALUES ('1', '1', '黑色', 1, b'1', '2019-11-27 15:35:53', 'billow', '2019-11-27 15:35:57', 'billow');
-INSERT INTO `p_goods_spec_value`
-VALUES ('2', '1', '白色', 2, b'1', '2019-11-27 15:36:26', 'billow', '2019-11-27 15:36:30', 'billow');
-INSERT INTO `p_goods_spec_value`
-VALUES ('3', '2', '3G', 1, b'1', '2019-11-27 15:37:43', 'billow', '2019-11-27 15:37:47', 'billow');
-INSERT INTO `p_goods_spec_value`
-VALUES ('4', '2', '6G', 2, b'1', '2019-11-27 15:38:04', 'billow', '2019-11-27 15:38:09', 'billow');
-
--- ----------------------------
--- Table structure for p_goods_spu
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_spu`;
-CREATE TABLE `p_goods_spu`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `spu_no`       varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '商品编号，唯一',
-    `goods_name`   varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '商品名称',
-    `low_price`    int(11)                                                 NOT NULL COMMENT '最低售价',
-    `stock`        bigint(20)                                              NULL DEFAULT NULL COMMENT '总库存量',
-    `category_id`  varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '分类id',
-    `brand_id`     varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '品牌id',
-    `spu_sort`     bigint(20)                                              NOT NULL COMMENT '商品排序',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `uk_spu_no` (`spu_no`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = 'spu表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_spu
--- ----------------------------
-INSERT INTO `p_goods_spu`
-VALUES ('1', '11', 'iphone11', 5523, 9000, '1', '1', 1, b'1', '2019-11-27 15:34:06', 'billow', '2019-11-27 15:34:12',
-        'billow');
-
--- ----------------------------
--- Table structure for p_goods_spu_spec
--- ----------------------------
-DROP TABLE IF EXISTS `p_goods_spu_spec`;
-CREATE TABLE `p_goods_spu_spec`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `spu_id`       varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'spu_id',
-    `spec_key_id`  varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'spec_key_id',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = 'spu规格表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_goods_spu_spec
--- ----------------------------
-INSERT INTO `p_goods_spu_spec`
-VALUES ('1', '1', '1', b'1', '2019-11-27 15:38:42', 'billow', '2019-11-27 15:38:46', 'billow');
-INSERT INTO `p_goods_spu_spec`
-VALUES ('2', '1', '2', b'1', '2019-11-27 15:38:56', 'billow', '2019-11-27 15:39:01', 'billow');
-
--- ----------------------------
--- Table structure for p_shop_info
--- ----------------------------
-DROP TABLE IF EXISTS `p_shop_info`;
-CREATE TABLE `p_shop_info`
-(
-    `id`           varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '主键',
-    `shop_name`    varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '店铺名称',
-    `shop_sort`    bigint(20)                                              NOT NULL COMMENT '店铺排序',
-    `valid_ind`    bit(1)                                                  NULL DEFAULT NULL COMMENT '是否有效',
-    `update_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '最后更新时间',
-    `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后更新人',
-    `create_time`  datetime(0)                                             NULL DEFAULT NULL COMMENT '创建时间',
-    `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '店铺表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of p_shop_info
--- ----------------------------
-INSERT INTO `p_shop_info`
-VALUES ('1', 'bilow的门店', 1, b'1', '2019-11-27 15:31:32', 'billow', '2019-11-27 15:31:40', 'billow');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,7 +1,7 @@
 package com.billow.email.service;
 
+import com.billow.email.common.CustomPage;
 import com.billow.email.pojo.vo.MailTemplateVo;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Map;
@@ -29,11 +29,11 @@ public interface MailTemplateService {
      * 根据条件查询邮件模板信息
      *
      * @param mailTemplateVo
-     * @return org.springframework.data.domain.Page<com.billow.system.com.billow.email.pojo.vo.MailTemplateVo>
+     * @return com.billow.email.common.CustomPage
      * @author LiuYongTao
-     * @date 2019/8/21 14:47
+     * @date 2019/12/19 14:56
      */
-    Page<MailTemplateVo> findMailTemplateList(MailTemplateVo mailTemplateVo);
+    CustomPage<MailTemplateVo> findMailTemplateList(MailTemplateVo mailTemplateVo);
 
 
     /**
@@ -70,31 +70,34 @@ public interface MailTemplateService {
      * 根据ID禁用邮件模板
      *
      * @param id
+     * @param userCode
      * @return com.billow.system.com.billow.email.pojo.vo.MailTemplateVo
      * @author LiuYongTao
      * @date 2019/8/21 15:51
      */
-    MailTemplateVo prohibitMailTemplateById(Long id);
+    MailTemplateVo prohibitMailTemplateById(Long id, String userCode);
 
     /**
      * 添加邮件模板信息
      *
      * @param permissionVo
+     * @param userCode
      * @return void
      * @author LiuYongTao
      * @date 2019/8/21 15:51
      */
-    void saveMailTemplate(MailTemplateVo permissionVo);
+    void saveMailTemplate(MailTemplateVo permissionVo, String userCode);
 
     /**
      * 更新邮件模板信息
      *
      * @param permissionVo
+     * @param userCode
      * @return void
      * @author LiuYongTao
      * @date 2019/8/21 15:52
      */
-    void updateMailTemplate(MailTemplateVo permissionVo);
+    void updateMailTemplate(MailTemplateVo permissionVo, String userCode);
 
     /**
      * 查询 mailCode 的个数

@@ -1,15 +1,12 @@
 package com.billow.job.service.impl;
 
+import com.billow.job.common.CustomPage;
 import com.billow.job.dao.ScheduleJobLogDao;
 import com.billow.job.pojo.po.ScheduleJobLogPo;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.util.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,11 +33,8 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
     }
 
     @Override
-    public Page<ScheduleJobLogPo> findAutoTaskLog(ScheduleJobLogVo scheduleJobLogVo) {
+    public CustomPage<ScheduleJobLogPo> findAutoTaskLog(ScheduleJobLogVo scheduleJobLogVo) {
         ScheduleJobLogPo scheduleJobLogPo = ConvertUtils.convert(scheduleJobLogVo, ScheduleJobLogPo.class);
-        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
-        Pageable pageable = new PageRequest(scheduleJobLogVo.getPageNo(), scheduleJobLogVo.getPageSize(), sort);
-        Page<ScheduleJobLogPo> page = scheduleJobLogDao.findAll(pageable);
-        return page;
+        return scheduleJobLogDao.findByPage(scheduleJobLogPo, scheduleJobLogVo.getPageNo(), scheduleJobLogVo.getPageSize());
     }
 }

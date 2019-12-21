@@ -76,6 +76,7 @@
         <lombok.version>1.16.14</lombok.version>
         <activiti.version>6.0.0</activiti.version>
         <swagger-bootstrap.version>1.9.5</swagger-bootstrap.version>
+        <apache.poi.version>4.1.1</apache.poi.version>
     </properties>
 
     <dependencyManagement>
@@ -153,11 +154,11 @@
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${springfox.swagger2.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>swagger-bootstrap-ui</artifactId>
-                <version>${swagger-bootstrap.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.github.xiaoymin</groupId>-->
+<!--                <artifactId>swagger-bootstrap-ui</artifactId>-->
+<!--                <version>${swagger-bootstrap.version}</version>-->
+<!--            </dependency>-->
             <!-- 自动任务 -->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
@@ -230,6 +231,12 @@
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-spring-boot-starter-basic</artifactId>
                 <version>${activiti.version}</version>
+            </dependency>
+            <!-- poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${apache.poi.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

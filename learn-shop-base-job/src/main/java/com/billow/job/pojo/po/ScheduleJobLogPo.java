@@ -1,13 +1,8 @@
 package com.billow.job.pojo.po;
 
-import com.billow.jpa.base.pojo.BasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -22,27 +17,20 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_schedule_job_log")
+// sys_schedule_job_log
 public class ScheduleJobLogPo extends BasePo implements Serializable {
-
+    // 日志id,唯一
+    private String logId;
     // 任务名称
     private String jobName;
-
     // 任务分组
     private String jobGroup;
-
     // 自动任务id
     private Long jobId;
-
-    @Lob
-    @Type(type = "text")
     // 错误信息
     private String info;
-
     // 是否执行成功
     private Boolean isSuccess;
-
     // 执行时间
     private String runTime;
 }

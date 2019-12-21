@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'admin-system/actDeployApi';
+const baseUrl = '../admin-system/actDeployApi';
 
 /**
  * 根据条件查询流程部署信息

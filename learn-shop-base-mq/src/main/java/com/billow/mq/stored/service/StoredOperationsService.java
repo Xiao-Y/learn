@@ -1,6 +1,6 @@
-package com.billow.mq.service;
+package com.billow.mq.stored.service;
 
-import com.billow.mq.MessageWithTime;
+import com.billow.mq.stored.vo.MessageWithTime;
 import org.springframework.amqp.core.Message;
 
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author LiuYongTao
  * @date 2019/9/30 10:42
  */
-public interface StoredOperations {
+public interface StoredOperationsService {
 
     /**
      * 存储初始化 mq 信息

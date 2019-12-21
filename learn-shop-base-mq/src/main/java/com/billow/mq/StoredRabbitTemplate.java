@@ -1,7 +1,9 @@
 package com.billow.mq;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.mq.service.StoredOperations;
+import com.billow.mq.retry.NextRetryDate;
+import com.billow.mq.stored.service.StoredOperationsService;
+import com.billow.mq.stored.vo.MessageWithTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -47,22 +49,22 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
     /**
      * MyStoredRabbitTemplate的操作，插入，更新，数据
      */
-    private StoredOperations storedOperations;
+    private StoredOperationsService storedOperationsService;
 
     private NextRetryDate nextRetryDate;
 
     /**
      * @param connectionFactory  rabbitmq连接工厂
-     * @param storedOperations   重试策略
+     * @param storedOperationsService   重试策略
      * @param rabbitTemplateName 自定义名字
      * @param receiveRetryCount  消费失败后重新放入队列中重试次数
      * @param deliveryMode       设置消息是否持久化。2-Persistent表示持久化，1-Non-persistent表示不持久化
      */
-    public StoredRabbitTemplate(ConnectionFactory connectionFactory, StoredOperations storedOperations,
+    public StoredRabbitTemplate(ConnectionFactory connectionFactory, StoredOperationsService storedOperationsService,
                                 String rabbitTemplateName, int receiveRetryCount, int deliveryMode, NextRetryDate nextRetryDate) {
         super(connectionFactory);
         this.rabbitTemplateName = rabbitTemplateName;
-        this.storedOperations = storedOperations;
+        this.storedOperationsService = storedOperationsService;
         this.receiveRetryCount = receiveRetryCount;
         this.deliveryMode = deliveryMode;
         this.nextRetryDate = nextRetryDate;
@@ -81,12 +83,12 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
             LOGGER.info("{} 发送RabbitMQ消息 ack确认: [{}], error[{}]", rabbitTemplateName, ack, cause);
             return;
         }
-        MessageWithTime messageWithTime = storedOperations.findMessageByCorrelationId(rabbitTemplateName, correlationData.getId());
+        MessageWithTime messageWithTime = storedOperationsService.findMessageByCorrelationId(rabbitTemplateName, correlationData.getId());
         if (!ack) {
             LOGGER.info("{} 发送RabbitMQ消息 ack确认 失败: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime), JSON.toJSONString(cause));
         } else {
             LOGGER.info("{} 发送RabbitMQ消息 ack确认 成功: [{}], error[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime), JSON.toJSONString(cause));
-            storedOperations.updateStautsSuccess(rabbitTemplateName, correlationData.getId());
+            storedOperationsService.updateStautsSuccess(rabbitTemplateName, correlationData.getId());
         }
     }
 
@@ -185,7 +187,7 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
             // 获取下次重试时间
             Date retryDate = nextRetryDate.nextRetryDate(tryCount);
             // 存储
-            storedOperations.saveInitMessage(rabbitTemplateName, id, exchange, routingKey, message, retryDate, tryCount);
+            storedOperationsService.saveInitMessage(rabbitTemplateName, id, exchange, routingKey, message, retryDate, tryCount);
             // 发送消息
             this.send(exchange, routingKey, message, new CorrelationData(id));
         } catch (Throwable e) {
@@ -202,7 +204,7 @@ public class StoredRabbitTemplate extends RabbitTemplate implements RabbitTempla
         return rabbitTemplateName;
     }
 
-    public StoredOperations getStoredOperations() {
-        return storedOperations;
+    public StoredOperationsService getStoredOperationsService() {
+        return storedOperationsService;
     }
 }

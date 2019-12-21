@@ -247,6 +247,12 @@ public class QuartzManager {
             log.warn("jobGroup{},jobName:{} 已经存在", jobGroup, jobName);
             return;
         }
+        // 检查cron表达式是否为空
+        if(ToolsUtils.isEmpty(job.getCronExpression())){
+            log.warn("CronExpression 为空，不通创建触发器，添加 Job");
+            return;
+        }
+
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);

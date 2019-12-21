@@ -1,4 +1,4 @@
-learn-shop-base-email 依赖 learn-shop-base-jpa（自动添加）,此组件用于发送邮件。
+learn-shop-base-email 依赖 spring-boot-starter-jdbc（自动添加）,此组件用于发送邮件。
 
 支持freemarker，thymeleaf，html，markdown模板邮件，可以指定参数，指定运行SQL（${}用于替换文本参数，#{}用于替换SQL参数）。
 
@@ -30,13 +30,6 @@ spring:
       cache: false
       prefix: classpath:/templates/ # 邮件模板的位置，一定要配置
 ````
-
-2. 由于 MailTemplatePo 在包 com.billow.email.pojo.po 下，可能你的系统的 po 文件可能在 com.xx.xx.cc 下
-所以需要在启动类上添加以下注解:
-```java
-@EntityScan(basePackages = {"com.billow.email", "com.xx.xx.cc"})
-@EnableJpaRepositories(basePackages = {"com.billow.email", "com.xx.xx.cc"})
-```
 
 3.pom.xml
 ```xml

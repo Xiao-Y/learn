@@ -54,9 +54,8 @@ public class GoodsSkuApi {
     @ApiOperation(value = "新增sku表数据")
     @PostMapping(value = "/add")
     public GoodsSkuVo add(@RequestBody GoodsSkuVo goodsSkuVo) {
-        GoodsSkuPo po = ConvertUtils.convert(goodsSkuVo, GoodsSkuPo.class);
-        goodsSkuService.save(po);
-        return ConvertUtils.convert(po, GoodsSkuVo.class);
+        goodsSkuService.add(goodsSkuVo);
+        return goodsSkuVo;
     }
 
     @ApiOperation(value = "删除sku表数据")
@@ -68,9 +67,8 @@ public class GoodsSkuApi {
     @ApiOperation(value = "更新sku表数据")
     @PutMapping(value = "/update")
     public GoodsSkuVo update(@RequestBody GoodsSkuVo goodsSkuVo) {
-        GoodsSkuPo po = ConvertUtils.convert(goodsSkuVo, GoodsSkuPo.class);
-        goodsSkuService.updateById(po);
-        return ConvertUtils.convert(po, GoodsSkuVo.class);
+        goodsSkuService.update(goodsSkuVo);
+        return goodsSkuVo;
     }
 
     @ApiOperation("根据ID禁用sku表数据")
@@ -81,7 +79,7 @@ public class GoodsSkuApi {
 
     @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
     @GetMapping(value = "/findGoodsSku/{spuId}")
-    public List<GoodsSkuVo> findGoodsSku(@PathVariable String spuId){
+    public List<GoodsSkuVo> findGoodsSku(@PathVariable String spuId) {
         return goodsSkuService.findGoodsSku(spuId);
     }
 }

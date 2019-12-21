@@ -22,4 +22,5 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class GoodsSkuSpecValueVo extends GoodsSkuSpecValuePo implements Serializable {
 
+    private String specValue;
 }

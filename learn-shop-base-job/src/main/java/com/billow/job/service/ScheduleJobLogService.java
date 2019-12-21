@@ -1,9 +1,9 @@
 package com.billow.job.service;
 
 
+import com.billow.job.common.CustomPage;
 import com.billow.job.pojo.po.ScheduleJobLogPo;
 import com.billow.job.pojo.vo.ScheduleJobLogVo;
-import org.springframework.data.domain.Page;
 
 /**
  * 自动任务信息日志接口<br>
@@ -30,9 +30,9 @@ public interface ScheduleJobLogService {
      * 查询执行日志
      *
      * @param scheduleJobLogVo
-     * @return org.springframework.data.domain.Page<com.billow.job.pojo.po.ScheduleJobLogPo>
+     * @return com.billow.job.common.CustomPage<com.billow.job.pojo.po.ScheduleJobLogPo>
      * @author LiuYongTao
-     * @date 2019/8/16 16:17
+     * @date 2019/12/20 18:12
      */
-    Page<ScheduleJobLogPo> findAutoTaskLog(ScheduleJobLogVo scheduleJobLogVo);
+    CustomPage<ScheduleJobLogPo> findAutoTaskLog(ScheduleJobLogVo scheduleJobLogVo);
 }

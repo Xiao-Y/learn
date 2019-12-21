@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'admin-system/actProcDefApi';
+const baseUrl = '../admin-system/actProcDefApi';
 
 /**
  * 根据条件查询流程定义信息

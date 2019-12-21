@@ -25,8 +25,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableCircuitBreaker
 @ComponentScan("com.billow")
 // mq 模块和自动任务也有实例类所有需要扫描
-@EntityScan(basePackages = {"com.billow.job", "com.billow.mq"})
-@EnableJpaRepositories(basePackages = {"com.billow.job", "com.billow.mq"})
+@EntityScan(basePackages = {"com.billow.job"})
+@EnableJpaRepositories(basePackages = {"com.billow.job"})
 public class PublicJobApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(PublicJobApp.class, args));

@@ -21,5 +21,6 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class GoodsSpecValueVo extends GoodsSpecValuePo implements Serializable {
-
+    // 页面只读
+    private boolean readonly = true;
 }

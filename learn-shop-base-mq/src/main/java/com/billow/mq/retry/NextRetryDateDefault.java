@@ -1,4 +1,4 @@
-package com.billow.mq;
+package com.billow.mq.retry;
 
 import com.billow.mq.properties.CustomProperties;
 import com.billow.mq.properties.MqProperties;
@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 
 /**
+ * 默认实现下次重试测试
+ *
  * @author liuyongtao
  * @create 2019-10-18 15:22
  */

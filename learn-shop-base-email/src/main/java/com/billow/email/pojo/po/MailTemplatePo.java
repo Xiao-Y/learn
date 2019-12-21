@@ -1,14 +1,11 @@
 package com.billow.email.pojo.po;
 
-import com.billow.jpa.base.pojo.BasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 邮件模板
@@ -18,9 +15,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_mail_template")
-public class MailTemplatePo extends BasePo implements Serializable {
+public class MailTemplatePo extends BasePage implements Serializable {
 
     public MailTemplatePo() {
     }
@@ -32,6 +27,9 @@ public class MailTemplatePo extends BasePo implements Serializable {
         this.descritpion = descritpion;
     }
 
+    // 主键id
+    private Long id;
+
     // 邮件标识，唯一
     private String mailCode;
 
@@ -41,18 +39,12 @@ public class MailTemplatePo extends BasePo implements Serializable {
     // 数据来源，1-固定内容，2-SQL查询，3-参数设置,4-混合（2、3都有）
     private String dataSources;
 
-    @Lob
-    @Type(type = "text")
     // 数据来源为2-SQL查询时，sql 不能为空
     private String runSql;
 
-    @Lob
-    @Type(type = "text")
     // 邮件模板
     private String mailTemp;
 
-    @Lob
-    @Type(type = "text")
     // 邮件Markdown模板
     private String mailMarkdown;
 
@@ -73,4 +65,18 @@ public class MailTemplatePo extends BasePo implements Serializable {
 
     // 是否带附件，true-单，false-不带
     private Boolean attachment;
+
+    // 有效标志
+    private Boolean validInd;
+
+    // 创建人
+    private String creatorCode;
+    // 更新人
+    private String updaterCode;
+    // 创建时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
+    private Date createTime;
+    // 更新时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
+    private Date updateTime;
 }

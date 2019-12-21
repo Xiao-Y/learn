@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'admin-system/permissionApi';
+const baseUrl = '../admin-system/permissionApi';
 
 /**
  * 查询所有权限信息

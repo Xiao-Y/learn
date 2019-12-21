@@ -1,13 +1,18 @@
 package com.billow.system.service.impl;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.billow.cloud.common.properties.ConfigCommonProperties;
 import com.billow.email.service.MailService;
 import com.billow.job.pojo.ex.MailEx;
 import com.billow.job.service.JobService;
 import com.billow.system.properties.CustomProperties;
+import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +31,12 @@ public class JobServiceImpl implements JobService {
     private MailService mailService;
     @Autowired
     private CustomProperties customProperties;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private ConfigCommonProperties configCommonProperties;
 
     @Override
     public void sendMail(MailEx mailEx) {
@@ -36,5 +47,18 @@ public class JobServiceImpl implements JobService {
 
         mailService.sendTemplateMail(customProperties.getMail().getFrom(), mailEx.getToEmails(), mailEx.getSubject(),
                 mailEx.getMailTemplateId(), parameter);
+    }
+
+    @Override
+    public void sendMQ(String routingKey, String param) {
+        String runJobExchange = configCommonProperties.getMq().getExchange().getRunJob();
+        rabbitTemplate.convertAndSend(runJobExchange, routingKey, param);
+    }
+
+
+    @Override
+    public void httpGet(String url) {
+//        restTemplate.getForObject(url, String.class);
+        HttpUtil.get(url);
     }
 }

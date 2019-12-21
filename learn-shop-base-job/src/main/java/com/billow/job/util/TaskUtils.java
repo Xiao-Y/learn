@@ -1,5 +1,6 @@
 package com.billow.job.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.billow.job.constant.JobCst;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
 import com.billow.job.pojo.ex.MailEx;
@@ -17,7 +18,9 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 自动任务工具类
@@ -28,19 +31,46 @@ import java.util.List;
 @Slf4j
 public class TaskUtils {
 
+    private static final String USER_CODE = "JOB-AUTO";
+
+    public static void invok(ScheduleJobVo scheduleJob) throws Exception {
+        String classType = scheduleJob.getClassType();
+        String logId = scheduleJob.getLogId();
+
+        JobService jobService = JobContextUtil.getBean(JobCst.JOB_SERVICE_IMPL);
+
+        switch (classType) {
+            case JobCst.CLASS_TYPE_SPRING_BEAN:
+            case JobCst.CLASS_TYPE_PACKAGE_CLASS:
+                TaskUtils.invokMethod(scheduleJob);
+                break;
+            case JobCst.CLASS_TYPE_HTTP:
+                String url = scheduleJob.getHttpUrl() + "?logId=" + logId;
+                jobService.httpGet(url);
+                break;
+            case JobCst.CLASS_TYPE_MQ:
+                Map<String, Object> param = new HashMap<>();
+                param.put("logId", logId);
+                jobService.sendMQ(scheduleJob.getRoutingKey(), JSONObject.toJSONString(param));
+                break;
+            default:
+                log.error("classType:{},暂未实现", classType);
+        }
+    }
+
     /**
      * 通过反射调用scheduleJob中定义的方法
      *
      * @param scheduleJob
      */
-    public static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
+    private static void invokMethod(ScheduleJobVo scheduleJob) throws Exception {
         Object object = null;
         Class<?> clazz;
         String classType = scheduleJob.getClassType();
         String runClass = scheduleJob.getRunClass();
-        if (JobCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
+        if (JobCst.CLASS_TYPE_SPRING_BEAN.equals(classType)) {
             object = JobContextUtil.getBean(runClass);
-        } else if (JobCst.CLASS_TYPE_BEAN_CLASS.equals(classType)) {
+        } else if (JobCst.CLASS_TYPE_PACKAGE_CLASS.equals(classType)) {
             clazz = Class.forName(runClass);
             object = clazz.newInstance();
         }
@@ -83,7 +113,6 @@ public class TaskUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
         return rs;
@@ -109,14 +138,16 @@ public class TaskUtils {
         ScheduleJobLogVo logDto = null;
         if (scheduleJob.getIsSaveLog()) {
             logDto = new ScheduleJobLogVo();
+            logDto.setLogId(scheduleJob.getLogId());
             logDto.setJobId(scheduleJob.getId());
             logDto.setJobGroup(scheduleJob.getJobGroup());
             logDto.setJobName(scheduleJob.getJobName());
             logDto.setIsSuccess(isSuccess);
             logDto.setRunTime(scheduleJob.getRunTime());
-            logDto.setCreatorCode("JOB-AUTO");
+            logDto.setValidInd(true);
+            logDto.setCreatorCode(USER_CODE);
             logDto.setCreateTime(new Date());
-            logDto.setUpdaterCode("JOB-AUTO");
+            logDto.setUpdaterCode(USER_CODE);
             logDto.setUpdateTime(new Date());
             if (exception != null) {
                 StringWriter sw = new StringWriter();
@@ -129,6 +160,7 @@ public class TaskUtils {
                 ScheduleJobLogService scheduleJobLogService = JobContextUtil.getBean(JobCst.SCHEDULE_JOB_LOG_SERVICE_IMPL);
                 scheduleJobLogService.insert(logDto);
             } catch (Exception e) {
+                e.printStackTrace();
                 log.error("自动任务日志插入失败：{}", e.getMessage());
             }
         }
@@ -140,7 +172,8 @@ public class TaskUtils {
                 ScheduleJobVo scheduleJobVo = scheduleJobService.findByIdAndValidIndIsTrueAndIsStopIsTrue(scheduleJob.getId());
                 if (scheduleJobVo != null) {
                     scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
-                    scheduleJobService.updateByPk(scheduleJobVo);
+                    scheduleJobVo.setUpdaterCode(USER_CODE);
+                    scheduleJobService.updateById(scheduleJobVo);
                 }
             } catch (Exception e) {
                 log.error("自动任务修改失败：{}", e.getMessage());

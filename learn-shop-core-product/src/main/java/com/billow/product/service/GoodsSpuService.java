@@ -36,4 +36,14 @@ public interface GoodsSpuService extends IService<GoodsSpuPo> {
      * @since 2019-11-27
      */
     boolean prohibitById(String id);
+
+    /**
+     * 添加或者更新
+     *
+     * @param goodsSpuVo
+     * @return void
+     * @author LiuYongTao
+     * @date 2019/12/5 17:04
+     */
+    void addOrUpdate(GoodsSpuVo goodsSpuVo);
 }

@@ -14,7 +14,10 @@
               <el-input v-model="queryFilter.goodsName" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="分类名称" prop="categoryId">
-              <el-input v-model="queryFilter.categoryId" placeholder="请输入内容"></el-input>
+              <custom-select v-model="queryFilter.categoryId"
+                             :datasource="categorySelect"
+                             placeholder="请选择商品分类">
+              </custom-select>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -72,7 +75,11 @@
                 <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
               </el-form-item>
               <el-form-item label="分类名称">
-                <span>{{ scope.row.categoryId }}</span>
+                <custom-select v-model="scope.row.categoryId"
+                               :datasource="categorySelect"
+                               :value-key="scope.row.id"
+                               disabled placeholder="请选择商品分类">
+                </custom-select>
               </el-form-item>
               <el-form-item label="商品排序">
                 <span>{{ scope.row.spuSort }}</span>
@@ -85,20 +92,23 @@
     <!-- 分页组件  -->
     <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
     <el-dialog :title="tableTitle" :visible.sync="dialogTableVisible" v-if="dialogTableVisible">
-      <good-sku-list :spuId="spuId" v-if="dialogTableVisible"/>
+      <good-sku-list :spuId="spuId" :category-id="categoryId" v-if="dialogTableVisible"/>
     </el-dialog>
   </div>
 </template>
 
 
 <script>
-  import {FindListByPage, ProhibitById,DelById} from "../../api/product/GoodsSpuApi";
+  import {FindListByPage, ProhibitById, DelById} from "../../api/product/GoodsSpuApi";
+  import {FindCategorySelect} from "../../api/product/GoodsCategoryApi";
+
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
   import pageMixins from "../../utils/pageMixins";
 
   // ===== component start
   import GoodSkuList from './GoodsSkuList.vue';
+  import CustomSelect from '../../components/common/CustomSelect.vue';
 
   import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
   import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
@@ -106,16 +116,19 @@
 
   export default {
     components: {
+      CustomSelect,
       GoodSkuList,
       ButtonGroupOption,
       ButtonGroupQuery,
       CustomPage
     },
+    mixins: [pageMixins],
     data() {
       return {
-        dialogTableVisible:false,// 打开SKU窗口
+        dialogTableVisible: false,// 打开SKU窗口
         tableTitle: '',// SPU name
         spuId: null,// 商品ID
+        categoryId: null,// 商品分类id
         queryFilter: {
           // 查询条件
           spuNo: null,
@@ -123,10 +136,14 @@
           categoryId: null
         },
         tableData: [],
-        activeNames: ['1']
+        activeNames: ['1'],
+        categorySelect: [],
       }
     },
     created() {
+      FindCategorySelect().then(res => {
+        this.categorySelect = res.resData;
+      });
       // 请数据殂
       this.loadDataList();
     },
@@ -158,7 +175,7 @@
           name: 'proGoodsSpuEdit',
           query: {
             optionType: 'add',
-            systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+            categorySelect: JSON.stringify(this.categorySelect)
           }
         });
       },
@@ -168,14 +185,14 @@
           query: {
             optionType: 'edit',
             goodsSpuEdit: JSON.stringify(row),
-            // systemModuleSelect: JSON.stringify(this.systemModuleSelect)
+            categorySelect: JSON.stringify(this.categorySelect)
           }
         });
       },
       handleDelete(row, index) {
         var _this = this;
 
-        VueUtils.confirmDel(row.url, () => {
+        VueUtils.confirmDel(row.goodsName, () => {
           DelById(row.id).then(res => {
             _this.tableData.splice(index, 1);
             _this.$message({
@@ -188,7 +205,7 @@
       handleProhibit(row, index) {
         var _this = this;
 
-        VueUtils.confirmInd(row.url, () => {
+        VueUtils.confirmInd(row.goodsName, () => {
           ProhibitById(row.id).then(res => {
             row.validInd = res.resData.validInd;
             _this.$message({
@@ -198,9 +215,10 @@
           });
         });
       },
-      handleSku(row,index){
+      handleSku(row, index) {
         this.dialogTableVisible = true;
         this.spuId = row.id;
+        this.categoryId = row.categoryId;
         this.tableTitle = row.goodsName;
       }
     },

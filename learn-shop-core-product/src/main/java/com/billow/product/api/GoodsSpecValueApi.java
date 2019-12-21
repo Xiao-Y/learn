@@ -1,6 +1,7 @@
 package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.vo.GoodsSpecValueVo;
 import com.billow.product.service.GoodsSpecValueService;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -77,5 +80,11 @@ public class GoodsSpecValueApi {
     @PutMapping("/prohibitById/{id}")
     public boolean prohibitById(@PathVariable String id) {
         return goodsSpecValueService.prohibitById(id);
+    }
+
+    @ApiOperation(value = "通过 SpecKeyId 查询出所有的规格 Value")
+    @GetMapping(value = "/findListBySpecKeyId/{specKeyId}")
+    public List<GoodsSpecValueVo> findListBySpecKeyId(@PathVariable("specKeyId") String specKeyId) {
+        return goodsSpecValueService.findListBySpecKeyId(specKeyId);
     }
 }

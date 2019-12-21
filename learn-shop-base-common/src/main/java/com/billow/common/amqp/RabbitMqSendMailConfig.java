@@ -46,7 +46,7 @@ public class RabbitMqSendMailConfig implements MqCommon {
     }
 
     @Bean
-    public Binding sendBinding() {
+    public Binding sendMailBinding() {
         return BindingBuilder.bind(this.sendMailQueue())
                 .to(this.sendMailExchange())
                 .with(this.getRouteKey());

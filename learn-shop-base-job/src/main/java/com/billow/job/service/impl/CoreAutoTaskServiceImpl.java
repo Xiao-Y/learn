@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
 
@@ -26,7 +28,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updateJobStatus(ScheduleJobVo dto) throws Exception {
-        ScheduleJobVo scheduleJobVo = scheduleJobService.selectByPK(dto.getId());
+        ScheduleJobVo scheduleJobVo = scheduleJobService.findById(dto.getId());
 
         if (dto.getValidInd() != null) {
             scheduleJobVo.setValidInd(dto.getValidInd());
@@ -46,15 +48,17 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
             quartzManager.pauseJob(scheduleJobVo);
         }
         scheduleJobVo.setJobStatus(jobStatus);
-        scheduleJobService.updateByPk(scheduleJobVo);
+        scheduleJobVo.setUpdateTime(new Date());
+        scheduleJobVo.setUpdaterCode(dto.getUpdaterCode());
+        scheduleJobService.updateById(scheduleJobVo);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deleteAutoTask(Long jobId) throws Exception {
-        ScheduleJobVo scheduleJobVo = scheduleJobService.selectByPK(jobId);
+        ScheduleJobVo scheduleJobVo = scheduleJobService.findById(jobId);
         quartzManager.deleteJob(scheduleJobVo);
-        scheduleJobService.deleteByPK(jobId);
+        scheduleJobService.deleteById(jobId);
     }
 
     @Override
@@ -76,7 +80,11 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
                 quartzManager.pauseJob(scheduleJobVo);
             }
         }
-        scheduleJobService.save(scheduleJobVo);
+        if (null != scheduleJobVo.getId()) {
+            scheduleJobService.updateById(scheduleJobVo);
+        } else {
+            scheduleJobService.save(scheduleJobVo);
+        }
     }
 
     @Override
@@ -112,11 +120,15 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
             }
         }
         if (AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus().equals(jobStatus)) {
+
+            if (!JobCst.CLASS_TYPE_SPRING_BEAN.equals(classType) && !JobCst.CLASS_TYPE_PACKAGE_CLASS.equals(classType)) {
+                return scheduleJobVo;
+            }
             // bean能否获取标识
             boolean beanFlag = true;
             Class<?> clazz = null;
             // bean相关检查
-            if (JobCst.CLASS_TYPE_SPRING_ID.equals(classType)) {
+            if (JobCst.CLASS_TYPE_SPRING_BEAN.equals(classType)) {
                 try {
                     Object bean = JobContextUtil.getBean(runClass);
                     clazz = bean.getClass();
@@ -124,7 +136,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
                     message += "springId错误，未获取相关Bean！<br>";
                     beanFlag = false;
                 }
-            } else {
+            } else if (JobCst.CLASS_TYPE_PACKAGE_CLASS.equals(classType)) {
                 try {
                     clazz = Class.forName(runClass);
                     clazz.newInstance();

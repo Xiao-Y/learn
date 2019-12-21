@@ -129,9 +129,8 @@ public class ConvertUtils {
      * @return
      */
     public static <PO, VO> List<VO> convert(List<PO> pos, Class<VO> voClass) {
-        List<VO> vos = null;
+        List<VO> vos = new ArrayList<>();
         if (ToolsUtils.isNotEmpty(pos)) {
-            vos = new ArrayList<>();
             for (PO po : pos) {
                 vos.add(convert(po, voClass));
             }

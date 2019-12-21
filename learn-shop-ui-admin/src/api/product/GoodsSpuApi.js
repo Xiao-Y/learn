@@ -2,15 +2,15 @@ import request from '@/utils/request'
 
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'core-product/goodsSpuApi';
+const baseUrl = '../core-product/goodsSpuApi';
 
 /**
  * 根据条件查询商品信息
- * @param goodsSpuFilter
+ * @param queryFilter
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
-export const FindListByPage = goodsSpuFilter => requestUtils.post(baseUrl + '/list', Object.assign(goodsSpuFilter));
+export const FindListByPage = queryFilter => requestUtils.post(baseUrl + '/list', Object.assign(queryFilter));
 
 
 /**

@@ -14,13 +14,13 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author billow
- * @since 2019-11-27
+ * @since 2019-11-29
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("p_goods_category")
-@ApiModel(value="GoodsCategoryPo对象", description="分类表")
+@ApiModel(value = "GoodsCategoryPo对象", description = "分类表")
 public class GoodsCategoryPo extends BasePo {
 
     private static final long serialVersionUID = 1L;

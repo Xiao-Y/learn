@@ -1,22 +1,18 @@
 package com.billow.job.service.impl;
 
+import com.billow.job.common.CustomPage;
 import com.billow.job.dao.ScheduleJobDao;
 import com.billow.job.pojo.po.ScheduleJobPo;
 import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 自动任务
@@ -33,35 +29,26 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Override
     public List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo) {
         ScheduleJobPo scheduleJobPo = ConvertUtils.convert(scheduleJobVo, ScheduleJobPo.class);
-        ExampleMatcher matcher = getExampleMatcher();
-        Example<ScheduleJobPo> example = Example.of(scheduleJobPo, matcher);
-        List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findAll(example);
+        List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findAll(scheduleJobPo);
         return ConvertUtils.convert(scheduleJobPos, ScheduleJobVo.class);
     }
 
-    private ExampleMatcher getExampleMatcher() {
-        return ExampleMatcher.matching()
-                //全部模糊查询，即%{address}%
-                .withMatcher("jobName", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withMatcher("jobGroup", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withMatcher("methodName", ExampleMatcher.GenericPropertyMatchers.contains());
-    }
-
     @Override
-    public ScheduleJobVo selectByPK(Long id) {
-        Optional<ScheduleJobPo> scheduleJobPo = scheduleJobDao.findById(id);
-        return ConvertUtils.convert(scheduleJobPo.get(), ScheduleJobVo.class);
+    public ScheduleJobVo findById(Long id) {
+        ScheduleJobPo scheduleJobPo = scheduleJobDao.findById(id);
+        return ConvertUtils.convert(scheduleJobPo, ScheduleJobVo.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateByPk(ScheduleJobVo dto) {
-        this.save(dto);
+    public void updateById(ScheduleJobVo dto) {
+        dto.setUpdateTime(new Date());
+        scheduleJobDao.updateById(dto);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void deleteByPK(Long id) {
+    public void deleteById(Long id) {
         scheduleJobDao.deleteById(id);
     }
 
@@ -69,18 +56,17 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(ScheduleJobVo dto) {
         ScheduleJobPo scheduleJobPo = ConvertUtils.convert(dto, ScheduleJobPo.class);
+        scheduleJobPo.setCreateTime(new Date());
+        scheduleJobPo.setUpdateTime(new Date());
+        scheduleJobPo.setUpdaterCode(dto.getCreatorCode());
         ScheduleJobPo save = scheduleJobDao.save(scheduleJobPo);
         ConvertUtils.convert(save, dto);
     }
 
     @Override
-    public Page<ScheduleJobPo> selectAll(ScheduleJobVo scheduleJobVo) {
+    public CustomPage<ScheduleJobPo> findAll(ScheduleJobVo scheduleJobVo) {
         ScheduleJobPo scheduleJobPo = ConvertUtils.convert(scheduleJobVo, ScheduleJobPo.class);
-        Pageable pageable = PageRequest.of(scheduleJobVo.getPageNo(), scheduleJobVo.getPageSize());
-        ExampleMatcher matcher = getExampleMatcher();
-        Example<ScheduleJobPo> example = Example.of(scheduleJobPo, matcher);
-        Page<ScheduleJobPo> page = scheduleJobDao.findAll(example, pageable);
-        return page;
+        return scheduleJobDao.findByPage(scheduleJobPo, scheduleJobVo.getPageNo(), scheduleJobVo.getPageSize());
     }
 
     @Override

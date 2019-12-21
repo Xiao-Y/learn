@@ -12,6 +12,8 @@ import com.billow.product.service.GoodsCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 分类表 服务实现类
@@ -43,6 +45,12 @@ public class GoodsCategoryServiceImpl extends ServiceImpl<GoodsCategoryDao, Good
         LambdaQueryWrapper<GoodsCategoryPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsCategoryPo::getId, id);
         return goodsCategoryDao.update(po, wrapper) >= 1;
+    }
+
+    @Override
+    public List<GoodsCategoryPo> findList(GoodsCategoryVo goodsCategoryVo) {
+        LambdaQueryWrapper<GoodsCategoryPo> wrapper = Wrappers.lambdaQuery();
+        return goodsCategoryDao.selectList(wrapper);
     }
 }
 

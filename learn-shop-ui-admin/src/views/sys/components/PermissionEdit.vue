@@ -56,7 +56,7 @@
           permissionCode: '',
           url: '',
           systemModule: '',
-          descritpion: '',
+          descritpion: null,
           systemModules: [],
           validInd: true
         },
@@ -101,6 +101,17 @@
       },
       onReset(permissionInfo) {
         this.$refs[permissionInfo].resetFields();
+      }
+    },
+    watch: {
+      'permissionInfo.permissionName'() {
+        this.permissionInfo.descritpion = this.permissionInfo.permissionName;
+      },
+      'permissionInfo.url'() {
+        var splitAt = this.permissionInfo.url.split("/");
+        if (splitAt[1] && splitAt[2]) {
+          this.permissionInfo.permissionCode = splitAt[1].replace(splitAt[1][0], splitAt[1][0].toUpperCase()) + "-" + splitAt[2]
+        }
       }
     }
   };

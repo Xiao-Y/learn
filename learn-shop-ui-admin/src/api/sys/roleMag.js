@@ -1,7 +1,7 @@
 import requestUtils from '../../utils/requestUtils'
 
 
-const baseUrl = 'admin-system/roleApi';
+const baseUrl = '../admin-system/roleApi';
 
 /**
  * 根据条件查询角色信息

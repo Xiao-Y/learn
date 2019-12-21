@@ -6,10 +6,11 @@ eureka:
     serviceUrl:
       defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
   instance:
-#    prefer-ip-address: true
-#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-    #status-page-url: http://${spring.cloud.client.ip-address}:${server.port}/swagger-ui.html # api文档页面
-    status-page-url: http://127.0.0.1:${server.port}/swagger-ui.html # api文档页面
+    hostname: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    status-page-url: http://${spring.cloud.client.ip-address}:${server.port}/swagger-ui.html # api文档页面
+
 
 feign: #远程连接
   hystrix: #熔断器配置

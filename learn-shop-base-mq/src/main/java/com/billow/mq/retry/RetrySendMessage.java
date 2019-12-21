@@ -1,7 +1,9 @@
-package com.billow.mq;
+package com.billow.mq.retry;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.mq.service.StoredOperations;
+import com.billow.mq.StoredRabbitTemplate;
+import com.billow.mq.stored.service.StoredOperationsService;
+import com.billow.mq.stored.vo.MessageWithTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -24,7 +26,7 @@ public class RetrySendMessage {
     /**
      * StoredRabbitTemplate的操作，插入，更新，数据
      */
-    private StoredOperations storedOperations;
+    private StoredOperationsService storedOperationsService;
     /**
      * StoredRabbitTemplate的操作,发送消息
      */
@@ -39,7 +41,7 @@ public class RetrySendMessage {
 
     public RetrySendMessage(StoredRabbitTemplate storedRabbitTemplate, Integer retryCount, Integer cacheThreshold, NextRetryDate nextRetryDate) {
         this.storedRabbitTemplate = storedRabbitTemplate;
-        this.storedOperations = storedRabbitTemplate.getStoredOperations();
+        this.storedOperationsService = storedRabbitTemplate.getStoredOperationsService();
         this.rabbitTemplateName = storedRabbitTemplate.getRabbitTemplateName();
         this.retryCount = retryCount;
         this.cacheThreshold = cacheThreshold;
@@ -53,7 +55,7 @@ public class RetrySendMessage {
     public void startRetry() {
         try {
             // 需要重新投递，投递失败的mq消息
-            List<MessageWithTime> list = storedOperations.findRetryMessage(rabbitTemplateName);
+            List<MessageWithTime> list = storedOperationsService.findRetryMessage(rabbitTemplateName);
             if (CollectionUtils.isEmpty(list)) {
                 return;
             }
@@ -73,10 +75,10 @@ public class RetrySendMessage {
                     ++tryCount;
                     // 获取下次重试时间
                     Date retryDate = nextRetryDate.nextRetryDate(tryCount);
-                    storedOperations.updateNextRetry(rabbitTemplateName, correlationId, retryDate, tryCount);
+                    storedOperationsService.updateNextRetry(rabbitTemplateName, correlationId, retryDate, tryCount);
                     LOGGER.info("{} RabbitMQ 补偿发送, messageWithTime:[{}]", rabbitTemplateName, JSON.toJSONString(messageWithTime));
                 } else {// 超过最大重试次数，更新消息为失败，人工介入
-                    storedOperations.updateStautsFail(rabbitTemplateName, correlationId);
+                    storedOperationsService.updateStautsFail(rabbitTemplateName, correlationId);
                 }
             }
             // 打印警告

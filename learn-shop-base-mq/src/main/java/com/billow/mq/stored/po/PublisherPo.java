@@ -1,13 +1,8 @@
-package com.billow.mq.stored.mysql.po;
+package com.billow.mq.stored.po;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -15,12 +10,8 @@ import java.util.Date;
  * @create 2019-09-30 9:02
  */
 @Data
-@Entity
-@Table(name = "mq_publisher")
 public class PublisherPo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String exchangeName;

@@ -3,12 +3,16 @@ package com.billow.product.pojo.vo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.billow.product.pojo.po.GoodsSkuPo;
+import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
+import com.billow.product.pojo.po.GoodsSpecValuePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,10 +29,9 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 public class GoodsSkuVo extends GoodsSkuPo implements Serializable {
 
+    // 规格key 和 规格值，页面显示
+    private String specKeyValueName;
     // 规格key 和 规格值
-    private Map<String, String> specKeyValue = new LinkedHashMap<>();
+    private List<GoodsSkuSpecValueVo> goodsSkuSpecValueVos = new ArrayList<>();
 
-    public String getSpecKeyValue() {
-        return JSONObject.toJSONString(specKeyValue);
-    }
 }

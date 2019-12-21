@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  * 填充共有字段
@@ -153,5 +156,52 @@ public class FieldUtils {
             basePo = getSuperclassBytrgClassName(clazz.getSuperclass(), trgClassName);
         }
         return basePo;
+    }
+
+    /**
+     * entity转换成map
+     * key为属性名,value为值
+     *
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/7/9 11:53
+     */
+    public static <T> LinkedHashMap<String, Object> entityToMap(T t) throws Exception {
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+
+        Field[] fields = t.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            String name = field.getName();
+            Object value = field.get(t);
+            map.put(name, value);
+        }
+        return map;
+    }
+
+    /**
+     * 获取指定属性的值
+     *
+     * @return java.util.HashMap<java.lang.String, java.lang.Object>
+     * @author LiuYongTao
+     * @date 2018/7/10 9:08
+     */
+    public static <T> HashMap<String, Object> entityToMap(T t, Set<String> setTitles) throws NoSuchFieldException, IllegalAccessException {
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        Class<?> clazz = t.getClass();
+
+        for (String titleCode : setTitles) {
+            if (ToolsUtils.isNotEmpty(titleCode)) {
+                Field field = clazz.getDeclaredField(titleCode);
+                field.setAccessible(true);
+                String name = field.getName();
+                Object value = field.get(t);
+                map.put(name, value);
+            }
+
+        }
+        return map;
     }
 }

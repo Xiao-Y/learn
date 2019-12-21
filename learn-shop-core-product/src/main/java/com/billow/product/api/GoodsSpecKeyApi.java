@@ -19,16 +19,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * <p>
  * 规格表 前端控制器
  * </p>
  *
  * @author billow
- * @since 2019-11-27
  * @version v1.0
+ * @since 2019-11-27
  */
-@Api(tags = {"GoodsSpecKeyApi"},value = "规格表")
+@Api(tags = {"GoodsSpecKeyApi"}, value = "规格表")
 @RestController
 @RequestMapping("/goodsSpecKeyApi")
 public class GoodsSpecKeyApi {
@@ -40,20 +42,20 @@ public class GoodsSpecKeyApi {
 
     @ApiOperation(value = "查询分页规格表数据")
     @PostMapping(value = "/list")
-    public IPage<GoodsSpecKeyPo> findListByPage(@RequestBody GoodsSpecKeyVo goodsSpecKeyVo){
+    public IPage<GoodsSpecKeyPo> findListByPage(@RequestBody GoodsSpecKeyVo goodsSpecKeyVo) {
         return goodsSpecKeyService.findListByPage(goodsSpecKeyVo);
     }
 
     @ApiOperation(value = "根据id查询规格表数据")
     @GetMapping(value = "/getById/{id}")
-    public GoodsSpecKeyVo getById(@PathVariable("id") String id){
+    public GoodsSpecKeyVo getById(@PathVariable("id") String id) {
         GoodsSpecKeyPo po = goodsSpecKeyService.getById(id);
         return ConvertUtils.convert(po, GoodsSpecKeyVo.class);
     }
 
     @ApiOperation(value = "新增规格表数据")
     @PostMapping(value = "/add")
-    public GoodsSpecKeyVo add(@RequestBody GoodsSpecKeyVo goodsSpecKeyVo){
+    public GoodsSpecKeyVo add(@RequestBody GoodsSpecKeyVo goodsSpecKeyVo) {
         GoodsSpecKeyPo po = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);
         goodsSpecKeyService.save(po);
         return ConvertUtils.convert(po, GoodsSpecKeyVo.class);
@@ -61,13 +63,13 @@ public class GoodsSpecKeyApi {
 
     @ApiOperation(value = "删除规格表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id){
+    public boolean delById(@PathVariable("id") String id) {
         return goodsSpecKeyService.removeById(id);
     }
 
     @ApiOperation(value = "更新规格表数据")
     @PutMapping(value = "/update")
-    public GoodsSpecKeyVo update(@RequestBody GoodsSpecKeyVo goodsSpecKeyVo){
+    public GoodsSpecKeyVo update(@RequestBody GoodsSpecKeyVo goodsSpecKeyVo) {
         GoodsSpecKeyPo po = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);
         goodsSpecKeyService.updateById(po);
         return ConvertUtils.convert(po, GoodsSpecKeyVo.class);
@@ -77,5 +79,17 @@ public class GoodsSpecKeyApi {
     @PutMapping("/prohibitById/{id}")
     public boolean prohibitById(@PathVariable String id) {
         return goodsSpecKeyService.prohibitById(id);
+    }
+
+    @ApiOperation(value = "通过 CategoryId 查询出所有的规格 KEY")
+    @GetMapping(value = "/findListByCategoryId/{categoryId}")
+    public List<GoodsSpecKeyPo> findListByCategoryId(@PathVariable("categoryId") String categoryId) {
+        return goodsSpecKeyService.findListByCategoryId(categoryId);
+    }
+
+    @ApiOperation(value = "保存一组规格信息")
+    @PostMapping(value = "/saveList")
+    public  List<GoodsSpecKeyVo> saveList(@RequestBody List<GoodsSpecKeyVo> goodsSpecKeyVos) {
+        return goodsSpecKeyService.saveList(goodsSpecKeyVos);
     }
 }

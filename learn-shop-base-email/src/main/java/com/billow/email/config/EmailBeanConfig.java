@@ -1,5 +1,7 @@
 package com.billow.email.config;
 
+import com.billow.email.dao.MailTemplateDao;
+import com.billow.email.dao.impl.MailTemplateDaoImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -43,5 +45,11 @@ public class EmailBeanConfig {
         // 执行初始化
         executor.initialize();
         return executor.getThreadPoolExecutor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(MailTemplateDao.class)
+    public MailTemplateDao mailTemplateDaoDefault() {
+        return new MailTemplateDaoImpl();
     }
 }

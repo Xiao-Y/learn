@@ -14,10 +14,23 @@ import org.slf4j.LoggerFactory;
 public class JobServiceImpl implements JobService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+    String message = "请配置 JobService 接口的实现.bean name 为 jobServiceImpl";
 
     @Override
     public void sendMail(MailEx mailEx) {
-        logger.warn("请配置 JobService 接口的实现.bean name 为 jobServiceImpl");
-        throw new RuntimeException("请配置 JobService 接口的实现.bean name 为 jobServiceImpl");
+        logger.error(message);
+        throw new RuntimeException(message);
+    }
+
+    @Override
+    public void sendMQ(String routingKey, String param) {
+        logger.error(message);
+        throw new RuntimeException(message);
+    }
+
+    @Override
+    public void httpGet(String url) {
+        logger.error(message);
+        throw new RuntimeException(message);
     }
 }
