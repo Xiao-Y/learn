@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'admin-system/applyApi';
+const baseUrl = '../admin-system/applyApi';
 
 /************************ 申请相关 ****************************/
 // // 定义申请页面映射

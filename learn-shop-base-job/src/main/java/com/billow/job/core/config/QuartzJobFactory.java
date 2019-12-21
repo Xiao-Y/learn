@@ -22,7 +22,7 @@ public class QuartzJobFactory implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         ScheduleJobVo scheduleJob = (ScheduleJobVo) context.getMergedJobDataMap().get(JobCst.SCHEDULE_JOB_VO);
         try {
-            scheduleJob.setLogId(NumUtil.makeOrderNum("LG"));
+            scheduleJob.setLogId(NumUtil.makeNum("LG"));
             TaskUtils.invok(scheduleJob);
         } catch (Exception e) {
             JobExecutionException ex = new JobExecutionException(e);

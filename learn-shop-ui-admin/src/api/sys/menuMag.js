@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'admin-system/menuApi';
+const baseUrl = '../admin-system/menuApi';
 
 /**
  * 获取父菜单信息

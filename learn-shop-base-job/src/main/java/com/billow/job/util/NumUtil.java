@@ -26,7 +26,7 @@ public class NumUtil {
     /**
      * 生成非重复订单号，理论上限1毫秒1000个，可扩展
      */
-    public static String makeOrderNum() {
+    public static String makeNum() {
         // 最终生成的订单号
         String finOrderNum = "";
         synchronized (lockObj) {
@@ -47,7 +47,7 @@ public class NumUtil {
     /**
      * 生成非重复订单号，理论上限1毫秒1000个，可扩展
      */
-    public static String makeOrderNum(String pix) {
+    public static String makeNum(String pix) {
         // 最终生成的订单号
         String finOrderNum = "";
         synchronized (lockObj) {
@@ -69,11 +69,11 @@ public class NumUtil {
 //        // 测试多线程调用订单号生成工具
 //        try {
 //            for (int i = 0; i < 200; i++) {
-//                System.out.println(OrderNumUtil.makeOrderNum());
+//                System.out.println(OrderNumUtil.makeNum());
 //                /*Thread t1 = new Thread(new Runnable() {
 //                    public void run() {
 //                        OrderNumUtil makeOrder = new OrderNumUtil();
-//                        makeOrder.makeOrderNum("a");
+//                        makeOrder.makeNum("a");
 //                    }
 //                }, "at" + i);
 //                t1.start();
@@ -81,7 +81,7 @@ public class NumUtil {
 //                Thread t2 = new Thread(new Runnable() {
 //                    public void run() {
 //                        OrderNumUtil makeOrder = new OrderNumUtil();
-//                        makeOrder.makeOrderNum("b");
+//                        makeOrder.makeNum("b");
 //                    }
 //                }, "bt" + i);
 //                t2.start();*/

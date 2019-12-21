@@ -1,7 +1,7 @@
 import requestUtils from '../../utils/requestUtils'
 
 
-const baseUrl = 'admin-user/userApi';
+const baseUrl = '../admin-user/userApi';
 
 /**
  * 根据条件查询用户信息

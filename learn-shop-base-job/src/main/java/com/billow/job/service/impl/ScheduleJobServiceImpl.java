@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,20 +34,21 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    public ScheduleJobVo selectByPK(Long id) {
+    public ScheduleJobVo findById(Long id) {
         ScheduleJobPo scheduleJobPo = scheduleJobDao.findById(id);
         return ConvertUtils.convert(scheduleJobPo, ScheduleJobVo.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateByPk(ScheduleJobVo dto) {
+    public void updateById(ScheduleJobVo dto) {
+        dto.setUpdateTime(new Date());
         scheduleJobDao.updateById(dto);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void deleteByPK(Long id) {
+    public void deleteById(Long id) {
         scheduleJobDao.deleteById(id);
     }
 
@@ -54,12 +56,15 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(ScheduleJobVo dto) {
         ScheduleJobPo scheduleJobPo = ConvertUtils.convert(dto, ScheduleJobPo.class);
+        scheduleJobPo.setCreateTime(new Date());
+        scheduleJobPo.setUpdateTime(new Date());
+        scheduleJobPo.setUpdaterCode(dto.getCreatorCode());
         ScheduleJobPo save = scheduleJobDao.save(scheduleJobPo);
         ConvertUtils.convert(save, dto);
     }
 
     @Override
-    public CustomPage<ScheduleJobPo> selectAll(ScheduleJobVo scheduleJobVo) {
+    public CustomPage<ScheduleJobPo> findAll(ScheduleJobVo scheduleJobVo) {
         ScheduleJobPo scheduleJobPo = ConvertUtils.convert(scheduleJobVo, ScheduleJobPo.class);
         return scheduleJobDao.findByPage(scheduleJobPo, scheduleJobVo.getPageNo(), scheduleJobVo.getPageSize());
     }

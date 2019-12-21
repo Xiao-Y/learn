@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'core-product/goodsSpuApi';
+const baseUrl = '../core-product/goodsSpuApi';
 
 /**
  * 根据条件查询商品信息

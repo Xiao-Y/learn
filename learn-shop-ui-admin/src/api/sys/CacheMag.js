@@ -1,7 +1,7 @@
 import requestUtils from '../../utils/requestUtils'
 
 
-const baseUrl = 'admin-system/cacheApi';
+const baseUrl = '../admin-system/cacheApi';
 
 /**
  * 初始化所有缓存

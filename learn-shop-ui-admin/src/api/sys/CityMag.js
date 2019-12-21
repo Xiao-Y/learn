@@ -4,7 +4,7 @@ import requestUtils from '../../utils/requestUtils'
     setCityData
   } from '../../utils/cookieUtils';
 
-const baseUrl = 'admin-system/cityApi';
+const baseUrl = '../admin-system/cityApi';
 
 /**
  * 查询省市区树形结构

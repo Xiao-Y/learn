@@ -158,7 +158,7 @@
     </el-row>
     <!-- 分页组件  -->
     <custom-page :queryPage="queryFilter" @onQuery="loadDataList"></custom-page>
-    <el-dialog :title="tableTitle" :visible.sync="dialogTableVisible" v-if="dialogTableVisible">
+    <el-dialog :title="tableTitle" :visible.sync="dialogTableVisible" v-if="dialogTableVisible" width="70%">
       <auto-task-log-list :autoTaskInfo="autoTaskInfo"></auto-task-log-list>
     </el-dialog>
   </div>
@@ -339,7 +339,8 @@
       },
       // 执行日志
       handleRunLog(row, index) {
-        this.tableTitle = "[ " + row.jobGroup + "-" + row.jobName + " ] 的执行日志";
+        var jobGroupName = this.systemModuleSelect.find(f=>f.fieldValue === row.jobGroup).fieldDisplay;
+        this.tableTitle = "JobGroup:[" + jobGroupName + "],JobName:[" + row.jobName + " ] 的执行日志";
         Object.assign(this.autoTaskInfo, row);
         Object.assign(this.autoTaskInfo, {systemModuleSelect: this.systemModuleSelect});
         this.dialogTableVisible = true;

@@ -144,7 +144,8 @@
           methodName: null,
           templateId: null,
           isSaveLog: true,
-          validInd: true
+          validInd: true,
+          isExceptionStop:true,
         },
         systemModuleSelect: [],
         sendMailSelect: [],
@@ -232,7 +233,7 @@
       },
       // 规则校验：cronExp
       validateCronExp(rule, value, callback) {
-        if (value === '' && this.autoTaskInfo.jobStatus === '1') {
+        if ((value == '' || value === null) && this.autoTaskInfo.jobStatus === '1') {
           callback(new Error('启动状态，Cron表达式不能为空'));
         } else {
           callback();

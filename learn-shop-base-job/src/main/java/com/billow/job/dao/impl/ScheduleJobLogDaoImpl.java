@@ -107,8 +107,12 @@ public class ScheduleJobLogDaoImpl implements ScheduleJobLogDao {
             sql += " and job_group = ? ";
             queryParam.add(scheduleJobLogPo.getJobGroup());
         }
-        if (scheduleJobLogPo.getJobId() != null) {
+        if (scheduleJobLogPo.getLogId() != null) {
             sql += " and log_id = ? ";
+            queryParam.add(scheduleJobLogPo.getLogId());
+        }
+        if (scheduleJobLogPo.getJobId() != null) {
+            sql += " and job_id = ? ";
             queryParam.add(scheduleJobLogPo.getJobId());
         }
         if (scheduleJobLogPo.getIsSuccess() != null) {

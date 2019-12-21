@@ -25,18 +25,18 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
 
     private static final String table = "sys_schedule_job";
 
-    private static String columnSql = "creator_code,updater_code,create_time,update_time,valid_ind,job_name,job_group," +
+    private static String columnSql = " creator_code,updater_code,create_time,update_time,valid_ind,job_name,job_group," +
             "job_status,cron_expression,description,class_type,run_class,http_url,routing_key,is_concurrent,method_name," +
             "is_exception_stop,is_save_log,is_send_mail,template_id,mail_receive ";
 
-    private static String columnSql2 = "id,creator_code as creatorCode,updater_code as updaterCode,create_time as createTime," +
+    private static String columnSql2 = " id,creator_code as creatorCode,updater_code as updaterCode,create_time as createTime," +
             "update_time as updateTime,valid_ind as validInd,job_name as jobName,job_group as jobGroup," +
             "job_status as jobStatus,cron_expression as cronExpression,description,class_type as classType," +
             "run_class as runClass,http_url as httpUrl,routing_key as routingKey,is_concurrent as isConcurrent," +
             "method_name as methodName, is_exception_stop as isExceptionStop,is_save_log as isSaveLog," +
             "is_send_mail as isSendMail,template_id as templateId,mail_receive as mailReceive ";
 
-    private static String updateSql = "creator_code = ?,updater_code = ?,create_time = ?,update_time = ?,valid_ind = ?,job_name = ?,job_group = ?," +
+    private static String updateSql = " updater_code = ?,update_time = ?,valid_ind = ?,job_name = ?,job_group = ?," +
             "job_status = ?,cron_expression = ?,description = ?,class_type = ?,run_class = ?,http_url = ?,routing_key = ?,is_concurrent = ?,method_name = ?," +
             "is_exception_stop = ?,is_save_log = ?,is_send_mail = ?,template_id = ?,mail_receive = ? ";
 
@@ -64,7 +64,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
     @Override
     public int countByJobNameAndJobGroup(String jobName, String jobGroup) {
         String sql = "select count(1) from " + table + " where job_name = ? and job_group = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{jobName, jobGroup}, new BeanPropertyRowMapper<>(Integer.class));
+        return jdbcTemplate.queryForObject(sql, new Object[]{jobName, jobGroup}, Integer.class);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
             ps.setBoolean(17, scheduleJobPo.getIsExceptionStop());
             ps.setBoolean(18, scheduleJobPo.getIsSaveLog());
             ps.setString(19, scheduleJobPo.getIsSendMail());
-            ps.setLong(20, scheduleJobPo.getTemplateId());
+            ps.setObject(20, scheduleJobPo.getTemplateId());
             ps.setString(21, scheduleJobPo.getMailReceive());
             return ps;
         }, keyHolder);
@@ -129,14 +129,13 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
 
     @Override
     public void updateById(ScheduleJobPo scheduleJobPo) {
-        String sql = "update " + table + "set " + updateSql + " where id = ?";
-        jdbcTemplate.update(sql, scheduleJobPo.getCreatorCode(),
-                scheduleJobPo.getUpdaterCode(),
-                scheduleJobPo.getCreateTime(),
+        String sql = "update " + table + " set " + updateSql + " where id = ?";
+        jdbcTemplate.update(sql, scheduleJobPo.getUpdaterCode(),
                 scheduleJobPo.getUpdateTime(),
                 scheduleJobPo.getValidInd(),
                 scheduleJobPo.getJobName(),
                 scheduleJobPo.getJobGroup(),
+
                 scheduleJobPo.getJobStatus(),
                 scheduleJobPo.getCronExpression(),
                 scheduleJobPo.getDescription(),
@@ -145,6 +144,8 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
                 scheduleJobPo.getHttpUrl(),
                 scheduleJobPo.getRoutingKey(),
                 scheduleJobPo.getIsConcurrent(),
+                scheduleJobPo.getMethodName(),
+
                 scheduleJobPo.getIsExceptionStop(),
                 scheduleJobPo.getIsSaveLog(),
                 scheduleJobPo.getIsSendMail(),

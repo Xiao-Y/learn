@@ -27,11 +27,11 @@ public interface ScheduleJobService {
     List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo);
 
 
-    ScheduleJobVo selectByPK(Long id);
+    ScheduleJobVo findById(Long id);
 
-    void updateByPk(ScheduleJobVo dto);
+    void updateById(ScheduleJobVo dto);
 
-    void deleteByPK(Long id);
+    void deleteById(Long id);
 
     void save(ScheduleJobVo scheduleJobVo);
 
@@ -41,7 +41,7 @@ public interface ScheduleJobService {
      * @param scheduleJobVo
      * @return
      */
-    CustomPage<ScheduleJobPo> selectAll(ScheduleJobVo scheduleJobVo);
+    CustomPage<ScheduleJobPo> findAll(ScheduleJobVo scheduleJobVo);
 
     /**
      * 通过id 查询出有效的并且是否异常停止为true的自动任务

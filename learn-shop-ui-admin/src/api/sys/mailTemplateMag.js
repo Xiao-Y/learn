@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'admin-system/mailTemplateApi';
+const baseUrl = '../admin-system/mailTemplateApi';
 
 /**
  * 根据条件查询邮件模板信息

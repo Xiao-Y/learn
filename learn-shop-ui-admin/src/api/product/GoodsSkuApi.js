@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'core-product/goodsSkuApi';
+const baseUrl = '../core-product/goodsSkuApi';
 
 /**
  * 根据 spuId 查询 sku 信息

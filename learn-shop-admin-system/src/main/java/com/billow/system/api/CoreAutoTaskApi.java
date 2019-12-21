@@ -12,6 +12,7 @@ import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.TaskUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -48,11 +49,13 @@ public class CoreAutoTaskApi extends BaseApi {
     private ScheduleJobLogService scheduleJobLogService;
     @Autowired
     private CoreAutoTaskService coreAutoTaskService;
+    @Autowired
+    private UserTools userTools;
 
     @ApiOperation("查询自动任务列表")
     @PostMapping("/findAutoTask")
     public CustomPage<ScheduleJobPo> findAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) {
-        CustomPage<ScheduleJobPo> jods = scheduleJobService.selectAll(scheduleJobVo);
+        CustomPage<ScheduleJobPo> jods = scheduleJobService.findAll(scheduleJobVo);
         return jods;
     }
 
@@ -71,6 +74,7 @@ public class CoreAutoTaskApi extends BaseApi {
         dto.setId(jobId);
         dto.setJobStatus(jobStatus);
         dto.setValidInd(validInd);
+        dto.setUpdaterCode(userTools.getCurrentUserCode());
         coreAutoTaskService.updateJobStatus(dto);
     }
 
@@ -84,6 +88,7 @@ public class CoreAutoTaskApi extends BaseApi {
     @ApiOperation("保存自动任务")
     @PostMapping("/saveAutoTask")
     public ScheduleJobVo saveAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
+        scheduleJobVo.setCreatorCode(userTools.getCurrentUserCode());
         coreAutoTaskService.saveAutoTask(scheduleJobVo);
         return scheduleJobVo;
     }

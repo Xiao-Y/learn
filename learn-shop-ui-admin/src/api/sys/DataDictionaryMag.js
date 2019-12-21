@@ -1,6 +1,6 @@
 import requestUtils from '../../utils/requestUtils'
 
-const baseUrl = 'admin-system/dataDictionaryApi';
+const baseUrl = '../admin-system/dataDictionaryApi';
 
 
 /**

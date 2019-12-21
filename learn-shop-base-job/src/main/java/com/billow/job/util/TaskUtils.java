@@ -31,6 +31,8 @@ import java.util.Map;
 @Slf4j
 public class TaskUtils {
 
+    private static final String USER_CODE = "JOB-AUTO";
+
     public static void invok(ScheduleJobVo scheduleJob) throws Exception {
         String classType = scheduleJob.getClassType();
         String logId = scheduleJob.getLogId();
@@ -142,9 +144,10 @@ public class TaskUtils {
             logDto.setJobName(scheduleJob.getJobName());
             logDto.setIsSuccess(isSuccess);
             logDto.setRunTime(scheduleJob.getRunTime());
-            logDto.setCreatorCode("JOB-AUTO");
+            logDto.setValidInd(true);
+            logDto.setCreatorCode(USER_CODE);
             logDto.setCreateTime(new Date());
-            logDto.setUpdaterCode("JOB-AUTO");
+            logDto.setUpdaterCode(USER_CODE);
             logDto.setUpdateTime(new Date());
             if (exception != null) {
                 StringWriter sw = new StringWriter();
@@ -169,7 +172,8 @@ public class TaskUtils {
                 ScheduleJobVo scheduleJobVo = scheduleJobService.findByIdAndValidIndIsTrueAndIsStopIsTrue(scheduleJob.getId());
                 if (scheduleJobVo != null) {
                     scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
-                    scheduleJobService.updateByPk(scheduleJobVo);
+                    scheduleJobVo.setUpdaterCode(USER_CODE);
+                    scheduleJobService.updateById(scheduleJobVo);
                 }
             } catch (Exception e) {
                 log.error("自动任务修改失败：{}", e.getMessage());
