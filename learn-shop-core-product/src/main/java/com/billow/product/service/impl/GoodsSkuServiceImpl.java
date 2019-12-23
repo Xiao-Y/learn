@@ -155,7 +155,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
     public void add(GoodsSkuVo vo) {
         // 插入 sku
         GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
-        po.setSkuNo(NumUtil.makeOrderNum("SK"));
+        po.setSkuNo(NumUtil.makeNum("SK"));
         po.setShopId("0");
         goodsSkuDao.insert(po);
         String skuId = po.getId();

@@ -76,7 +76,7 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
         GoodsSpuPo po = ConvertUtils.convert(goodsSpuVo, GoodsSpuPo.class);
         String id = goodsSpuVo.getId();
         if (ToolsUtils.isEmpty(id)) {
-            po.setSpuNo(NumUtil.makeOrderNum("PG"));
+            po.setSpuNo(NumUtil.makeNum("PG"));
         }
         this.saveOrUpdate(po);
 

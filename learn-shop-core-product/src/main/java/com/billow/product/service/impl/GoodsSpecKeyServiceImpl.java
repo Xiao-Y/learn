@@ -65,7 +65,7 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
         for (GoodsSpecKeyVo goodsSpecKeyVo : goodsSpecKeyVos) {
             String id = goodsSpecKeyVo.getId();
             if (ToolsUtils.isEmpty(id)) {
-                goodsSpecKeyVo.setSpecNo(NumUtil.makeOrderNum("SP"));
+                goodsSpecKeyVo.setSpecNo(NumUtil.makeNum("SP"));
                 GoodsSpecKeyPo convert = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);
                 goodsSpecKeyDao.insert(convert);
                 ConvertUtils.convert(convert, goodsSpecKeyVo);
