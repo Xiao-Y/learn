@@ -221,7 +221,6 @@ public class QrGenUtil {
      */
     public static Result zxingCodeAnalyze(String path) {
         try {
-            MultiFormatReader formatReader = new MultiFormatReader();
             File file = new File(path);
             if (file.exists()) {
                 BufferedImage image = ImageIO.read(file);
@@ -230,8 +229,8 @@ public class QrGenUtil {
                 BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
                 Map hints = new HashMap();
                 hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-                Result result = formatReader.decode(binaryBitmap, hints);
-                return result;
+                MultiFormatReader formatReader = new MultiFormatReader();
+                return formatReader.decode(binaryBitmap, hints);
             }
         } catch (IOException e) {
             e.printStackTrace();
