@@ -1,5 +1,7 @@
 package com.billow.email.service;
 
+import com.billow.email.pojo.vo.MailServiceVo;
+
 import java.util.Map;
 
 /**
@@ -13,53 +15,26 @@ public interface MailService {
     /**
      * 发送模板邮件
      *
-     * @param fromEmail 发送人
      * @param toEmails  接收人
      * @param subject   主题
-     * @param id  邮件id
+     * @param id        邮件id
      * @param parameter 邮件参数
      */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter);
-
-    /**
-     * 发送模板邮件,带附件的
-     *
-     * @param fromEmail 发送人
-     * @param toEmails  接收人
-     * @param subject   主题
-     * @param id  邮件id
-     * @param parameter 邮件参数
-     * @param filePath  附件路径
-     */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter, String filePath);
+    void sendTemplateMail(String toEmails, String subject, Long id, Map<String, Object> parameter);
 
     /**
      * 发送模板邮件
      *
-     * @param fromEmail 发送人
      * @param toEmails  接收人
      * @param subject   主题
      * @param mailCode  邮件code
      * @param parameter 邮件参数
      */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter);
-
-    /**
-     * 发送模板邮件,带附件的
-     *
-     * @param fromEmail 发送人
-     * @param toEmails  接收人
-     * @param subject   主题
-     * @param mailCode  邮件code
-     * @param parameter 邮件参数
-     * @param filePath  附件路径
-     */
-    void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter, String filePath);
+    void sendTemplateMail(String toEmails, String subject, String mailCode, Map<String, Object> parameter);
 
     /**
      * 发送简单邮件
      *
-     * @param fromEmail 发送人
      * @param toEmails  接收人
      * @param subject   主题
      * @param content   内容
@@ -67,12 +42,11 @@ public interface MailService {
      * @author LiuYongTao
      * @date 2019/8/20 19:31
      */
-    void sendSimpleMail(String fromEmail, String toEmails, String subject, String content);
+    void sendSimpleMail(String toEmails, String subject, String content);
 
     /**
      * 发送HTML邮件
      *
-     * @param fromEmail 发送人
      * @param toEmails  接收人
      * @param subject   主题
      * @param content   内容
@@ -80,20 +54,15 @@ public interface MailService {
      * @author LiuYongTao
      * @date 2019/8/20 19:32
      */
-    void sendHtmlMail(String fromEmail, String toEmails, String subject, String content);
+    void sendHtmlMail(String toEmails, String subject, String content);
 
     /**
-     * 发送含有附件的邮件
+     * 发送邮件
      *
-     * @param fromEmail 发送人
-     * @param toEmails  接收人
-     * @param subject   主题
-     * @param content   内容
-     * @param filePath  附件路径
-     * @param isHtml    是否html 邮件
+     * @param mailServiceVo
      * @return void
      * @author LiuYongTao
-     * @date 2019/8/20 19:32
+     * @date 2020/1/9 14:30
      */
-    void sendAttachmentsMail(String fromEmail, String toEmails, String subject, String content, String filePath, boolean isHtml);
+    void sendMail(MailServiceVo mailServiceVo);
 }

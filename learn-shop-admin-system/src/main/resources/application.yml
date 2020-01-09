@@ -24,18 +24,18 @@ spring:
     bus:
       trace:
         enabled: true #开启消息跟踪
-  mail:
-    host: smtp.exmail.qq.com
-    port: 465
-    username: XXXXXX
-    password: XXXXXX
-    default-encoding: utf-8
-    properties:
-      mail:
-        smtp:
-          socketFactory:
-            class: javax.net.ssl.SSLSocketFactory
-          auth: true
+#  mail:
+#    host: smtp.exmail.qq.com
+#    port: 465
+#    username: XXXXXX
+#    password: XXXXXX
+#    default-encoding: utf-8
+#    properties:
+#      mail:
+#        smtp:
+#          socketFactory:
+#            class: javax.net.ssl.SSLSocketFactory
+#          auth: true
   activiti:
     check-process-definitions: false #校验流程文件，默认校验resources下的processes文件夹里的流程文件
     mail-server-use-ssl: true
@@ -63,3 +63,7 @@ custom:
     start-init-data: false #启动时，是否初始数据（首次启动时需要设置为true,默认为true）
   mail:
     from: ${spring.mail.username} #系统对外发送邮件的地址
+    host: smtp.exmail.qq.com
+    port: 465
+    username: XXXXXX
+    password: XXXXXX

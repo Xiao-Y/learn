@@ -1,21 +1,17 @@
 package com.billow.email.service.impl;
 
 import com.billow.email.constant.MailCst;
+import com.billow.email.pojo.vo.MailServiceVo;
 import com.billow.email.pojo.vo.MailTemplateVo;
+import com.billow.email.service.EmailSender;
 import com.billow.email.service.MailService;
 import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.util.Map;
 
 @Slf4j
@@ -23,93 +19,44 @@ import java.util.Map;
 public class MailServiceImpl implements MailService {
 
     @Autowired
-    private JavaMailSender mailSender;
+    private EmailSender mailSender;
     @Autowired
     private MailTemplateService mailTemplateService;
 
     @Async("emailExecutor")
     @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter) {
-        this.sendTemplateMail(fromEmail, toEmails, subject, id, parameter, null);
-    }
-
-    @Async("emailExecutor")
-    @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, Long id, Map<String, Object> parameter, String filePath) {
-        MailTemplateVo mailTemplateVo = mailTemplateService.findByIdAndValidIndIsTrue(id);
-        if (mailTemplateVo == null) {
-            throw new RuntimeException("id:" + id + ",没有查询到模板信息");
-        }
-        this.sendTemplateMail(fromEmail, toEmails, subject, mailTemplateVo.getMailCode(), parameter, filePath);
-    }
-
-    @Async("emailExecutor")
-    @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter) {
-        this.sendTemplateMail(fromEmail, toEmails, subject, mailCode, parameter, null);
-    }
-
-    @Async("emailExecutor")
-    @Override
-    public void sendTemplateMail(String fromEmail, String toEmails, String subject, String mailCode, Map<String, Object> parameter, String filePath) {
+    public void sendTemplateMail(String toEmails, String subject, Long id, Map<String, Object> parameter) {
         try {
-            log.info("开始发送模板邮件！");
-            log.debug("fromEmail:{},toEmails:{},subject:{},mailCode:{},filePath:{}", fromEmail, toEmails, subject, mailCode, filePath);
-            log.debug("parameter:{}", parameter);
-            String fromEmailTemp = fromEmail;
-            String toEmailsTemp = toEmails;
-            String subjectTemp = subject;
-            // 获取邮件信息
-            MailTemplateVo mailTemplateVo = mailTemplateService.genMailContent(mailCode, parameter);
-
-            log.debug(mailTemplateVo.toString());
-
-            // 优先使用指定的，如果为空，使用数据库中配置的
-            if (ToolsUtils.isEmpty(toEmailsTemp)) {
-                toEmailsTemp = mailTemplateVo.getToEmails();
-                if (ToolsUtils.isEmpty(toEmailsTemp)) {
-                    throw new RuntimeException("邮件接收人为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 toEmails");
-                }
-            }
-            if (ToolsUtils.isEmpty(subjectTemp)) {
-                toEmailsTemp = mailTemplateVo.getSubject();
-                if (ToolsUtils.isEmpty(toEmailsTemp)) {
-                    throw new RuntimeException("邮件主题为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 subject");
-                }
-            }
-
-            Boolean attachment = mailTemplateVo.getAttachment();
-            if (attachment == null) {
-                attachment = false;
-            }
-            if (attachment && ToolsUtils.isEmpty(filePath)) {
-                throw new RuntimeException("邮件附件为空。请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 attachment");
-            }
-
-            // 获取邮件内容，发送邮件
-            String mailContent = mailTemplateVo.getMailContent();
-            String mailType = mailTemplateVo.getMailType();
-            boolean isHteml = !MailCst.SYS_FC_DATA_MAIL_COMMON.equals(mailType);
-            if (attachment) {
-                this.sendAttachmentsMail(fromEmailTemp, toEmailsTemp, subjectTemp, mailContent, filePath, isHteml);
-            } else {
-                if (isHteml) {
-                    this.sendHtmlMail(fromEmailTemp, toEmailsTemp, subjectTemp, mailContent);
-                } else {
-                    this.sendSimpleMail(fromEmailTemp, toEmailsTemp, subjectTemp, mailContent);
-                }
-
-            }
+            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, null);
+            mailServiceVo.setId(id);
+            mailServiceVo.setParameter(parameter);
+            this.sendMail(mailServiceVo);
+            log.info("模板邮件发送成功！id:{}", id);
         } catch (Exception e) {
-            log.error("模板邮件发送失败：{}", e.getMessage());
+            log.error("发送模板邮件时发生异常！{}", e.getMessage());
         }
     }
 
     @Async("emailExecutor")
     @Override
-    public void sendSimpleMail(String fromEmail, String toEmails, String subject, String content) {
+    public void sendTemplateMail(String toEmails, String subject, String mailCode, Map<String, Object> parameter) {
         try {
-            this.sendMail(fromEmail, toEmails, subject, content, null, false);
+            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, null);
+            mailServiceVo.setMailCode(mailCode);
+            mailServiceVo.setParameter(parameter);
+            this.sendMail(mailServiceVo);
+            log.info("模板邮件发送成功！mailCode:{}", mailCode);
+        } catch (Exception e) {
+            log.error("发送模板邮件时发生异常！{}", e.getMessage());
+        }
+    }
+
+    @Async("emailExecutor")
+    @Override
+    public void sendSimpleMail(String toEmails, String subject, String content) {
+        try {
+            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, content);
+            this.sendMail(mailServiceVo);
             log.info("简单邮件发送成功！");
         } catch (Exception e) {
             log.error("发送简单邮件时发生异常！{}", e.getMessage());
@@ -118,9 +65,11 @@ public class MailServiceImpl implements MailService {
 
     @Async("emailExecutor")
     @Override
-    public void sendHtmlMail(String fromEmail, String toEmails, String subject, String content) {
+    public void sendHtmlMail(String toEmails, String subject, String content) {
         try {
-            this.sendMail(fromEmail, toEmails, subject, content, null, true);
+            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, content);
+            mailServiceVo.setHtml(true);
+            this.sendMail(mailServiceVo);
             log.info("html邮件发送成功");
         } catch (Exception e) {
             log.error("发送html邮件时发生异常！{}", e.getMessage());
@@ -129,42 +78,103 @@ public class MailServiceImpl implements MailService {
 
     @Async("emailExecutor")
     @Override
-    public void sendAttachmentsMail(String fromEmail, String toEmails, String subject, String content, String filePath, boolean isHtml) {
-        MimeMessage message = mailSender.createMimeMessage();
+    public void sendMail(MailServiceVo mailServiceVo) {
         try {
-            this.sendMail(fromEmail, toEmails, subject, content, filePath, isHtml);
-            log.info("带附件的邮件已经发送。");
+            log.info("开始发送邮件！");
+            log.debug("mailServiceVo:{}", mailServiceVo);
+            // 检查数据
+            MailTemplateVo mailTemplateVo = this.checkAndSettingData(mailServiceVo);
+            log.debug("mailTemplateVo:{}", mailTemplateVo);
+            mailSender.send(mailTemplateVo);
+            log.info("结束发送邮件！");
         } catch (Exception e) {
-            log.error("发送带附件的邮件时发生异常！{}", e.getMessage());
+            log.error("邮件发送失败：{}", e.getMessage());
         }
     }
 
     /**
-     * 发送邮件
+     * 数据查询并设置数据
      *
-     * @param fromEmail 发送人
-     * @param toEmails  接收人
-     * @param subject   主题
-     * @param content   内容
-     * @param filePath  附件路径
-     * @param isHtml    是否html 邮件
-     * @return void
+     * @param mailServiceVo
+     * @return com.billow.email.pojo.vo.MailTemplateVo
      * @author LiuYongTao
-     * @date 2019/9/24 10:02
+     * @date 2020/1/9 12:32
      */
-    private void sendMail(String fromEmail, String toEmails, String subject, String content, String filePath, boolean isHtml) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(fromEmail);
-        helper.setTo(toEmails);
-        helper.setSubject(subject);
-        helper.setText(content, isHtml);
-
-        if (ToolsUtils.isNotEmpty(filePath)) {
-            FileSystemResource file = new FileSystemResource(new File(filePath));
-            String fileName = filePath.substring(filePath.lastIndexOf(File.separator));
-            helper.addAttachment(fileName, file);
+    private MailTemplateVo checkAndSettingData(MailServiceVo mailServiceVo) throws Exception {
+        MailTemplateVo mailTemplateVo = new MailTemplateVo();
+        // 获取邮件模板 code
+        Long id = mailServiceVo.getId();
+        String mailCode = mailServiceVo.getMailCode();
+        if (id != null) {
+            mailTemplateVo = mailTemplateService.findByIdAndValidIndIsTrue(id);
+            if (mailTemplateVo == null) {
+                throw new RuntimeException("id:" + id + ",没有查询到模板信息");
+            } else {
+                mailCode = mailTemplateVo.getMailCode();
+            }
         }
-        mailSender.send(message);
+        // 获取邮件信息
+        if (ToolsUtils.isNotEmpty(mailCode)) {
+            mailTemplateVo = mailTemplateService.genMailContent(mailCode, mailServiceVo.getParameter());
+        } else {
+            mailTemplateVo.setMailContent(mailServiceVo.getMailContent());
+        }
+        // 邮件服务器
+        mailTemplateVo.setEmailServer(mailServiceVo.getEmailServer());
+        // 邮件服务器端口
+        mailTemplateVo.setEmailPort(mailServiceVo.getEmailPort());
+        // 邮箱用户名
+        mailTemplateVo.setUsername(mailServiceVo.getUsername());
+        // 邮箱密码
+        mailTemplateVo.setPassword(mailServiceVo.getPassword());
+        // 发件人
+        mailTemplateVo.setFromEmail(mailServiceVo.getFromEmail());
+        // 抄送人邮箱，多个邮箱以“;”分隔
+        mailTemplateVo.setCcEmails(mailServiceVo.getCcEmails());
+        // 密抄送人邮箱，多个邮箱以“;”分隔
+        mailTemplateVo.setBccEmails(mailServiceVo.getBccEmails());
+        // 是否发送的模板邮件
+        boolean isTemplateMail = false;
+        if (id != null || ToolsUtils.isNotEmpty(mailCode)) {
+            isTemplateMail = true;
+        }
+        // 收件人，优先使用指定的，如果为空，使用数据库中配置的
+        String toEmailsTemp = mailServiceVo.getToEmails();
+        if (ToolsUtils.isNotEmpty(toEmailsTemp)) {
+            mailTemplateVo.setToEmails(toEmailsTemp);
+        }
+        if (ToolsUtils.isEmpty(mailTemplateVo.getToEmails())) {
+            String message = "邮件接收人为空。";
+            if (isTemplateMail) {
+                message += "请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 toEmails";
+            } else {
+                message += "请设置 MailServiceVo 中的 toEmails";
+            }
+            throw new RuntimeException(message);
+        }
+        // 邮件主题，优先使用指定的，如果为空，使用数据库中配置的
+        String subjectTemp = mailServiceVo.getSubject();
+        if (ToolsUtils.isNotEmpty(subjectTemp)) {
+            mailTemplateVo.setSubject(subjectTemp);
+        }
+        if (ToolsUtils.isEmpty(mailTemplateVo.getSubject())) {
+            String message = "邮件主题为空。";
+            if (isTemplateMail) {
+                message += "请去 sys_mail_template 表中配置 mailCode：" + mailCode + " 的模板的 subject";
+            } else {
+                message += "请设置 MailServiceVo 中的 subject";
+            }
+            throw new RuntimeException(message);
+        }
+        // 是否有附件
+        mailTemplateVo.setAttachment(ToolsUtils.isNotEmpty(mailServiceVo.getAttachments()));
+        // 是否html 邮件
+        String mailType = mailTemplateVo.getMailType();
+        boolean isHtml = !MailCst.SYS_FC_DATA_MAIL_COMMON.equals(mailType);
+        if (ToolsUtils.isEmpty(mailType)) {
+            isHtml = mailServiceVo.isHtml();
+        }
+        mailTemplateVo.setHtml(isHtml);
+        return mailTemplateVo;
     }
 }
