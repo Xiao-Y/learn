@@ -45,6 +45,9 @@ spring:
     mode: HTML5
     cache: false
     prefix: classpath:/templates/
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates/
 
 
 

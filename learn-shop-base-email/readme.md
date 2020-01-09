@@ -17,6 +17,9 @@ spring:
     mode: HTML5
     cache: false
     prefix: classpath:/templates/ # 邮件模板的位置，一定要配置
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates/ # 邮件模板的位置，一定要配置
     
 custom:
   mail:
