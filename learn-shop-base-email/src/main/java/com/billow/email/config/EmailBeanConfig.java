@@ -4,6 +4,7 @@ import com.billow.email.dao.MailTemplateDao;
 import com.billow.email.dao.impl.MailTemplateDaoImpl;
 import com.billow.email.perproties.MailPerproties;
 import com.billow.email.service.EmailSender;
+import com.billow.email.service.impl.EmailSenderImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -53,12 +54,27 @@ public class EmailBeanConfig {
         return executor.getThreadPoolExecutor();
     }
 
+    /**
+     * spring 管理 邮件发送
+     *
+     * @return com.billow.email.service.EmailSender
+     * @author LiuYongTao
+     * @date 2020/1/10 8:27
+     */
     @Bean
-    public EmailSender emailSender() {
-        return new EmailSender(mailPerproties.getHost(), mailPerproties.getPort(), mailPerproties.getFrom(),
+    @ConditionalOnMissingBean(EmailSender.class)
+    public EmailSender emailSenderDefault() {
+        return new EmailSenderImpl(mailPerproties.getHost(), mailPerproties.getPort(), mailPerproties.getFrom(),
                 mailPerproties.getUsername(), mailPerproties.getPassword());
     }
 
+    /**
+     * 邮件模板保存数据库的方法
+     *
+     * @return com.billow.email.dao.MailTemplateDao
+     * @author LiuYongTao
+     * @date 2020/1/10 8:36
+     */
     @Bean
     @ConditionalOnMissingBean(MailTemplateDao.class)
     public MailTemplateDao mailTemplateDaoDefault() {
