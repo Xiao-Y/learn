@@ -6,7 +6,6 @@ import com.billow.email.perproties.MailPerproties;
 import com.billow.email.service.EmailSender;
 import com.billow.email.service.impl.EmailSenderImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,9 +26,6 @@ public class EmailBeanConfig {
     private static final int maximumPoolSize = 10;
     // 任务的排队队列
     private static final int capacity = 512;
-
-    @Autowired
-    private MailPerproties mailPerproties;
 
     /**
      * 邮件线程池配置
@@ -63,9 +59,8 @@ public class EmailBeanConfig {
      */
     @Bean
     @ConditionalOnMissingBean(EmailSender.class)
-    public EmailSender emailSenderDefault() {
-        return new EmailSenderImpl(mailPerproties.getHost(), mailPerproties.getPort(), mailPerproties.getFrom(),
-                mailPerproties.getUsername(), mailPerproties.getPassword());
+    public EmailSender emailSenderDefault(MailPerproties mailPerproties) {
+        return new EmailSenderImpl(mailPerproties);
     }
 
     /**

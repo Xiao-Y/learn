@@ -120,9 +120,9 @@ public class MailServiceImpl implements MailService {
             mailTemplateVo.setMailContent(mailServiceVo.getMailContent());
         }
         // 邮件服务器
-        mailTemplateVo.setEmailServer(mailServiceVo.getEmailServer());
+        mailTemplateVo.setHost(mailServiceVo.getHost());
         // 邮件服务器端口
-        mailTemplateVo.setEmailPort(mailServiceVo.getEmailPort());
+        mailTemplateVo.setPort(mailServiceVo.getPort());
         // 邮箱用户名
         mailTemplateVo.setUsername(mailServiceVo.getUsername());
         // 邮箱密码
@@ -133,6 +133,8 @@ public class MailServiceImpl implements MailService {
         mailTemplateVo.setCcEmails(mailServiceVo.getCcEmails());
         // 密抄送人邮箱，多个邮箱以“;”分隔
         mailTemplateVo.setBccEmails(mailServiceVo.getBccEmails());
+        // 附件
+        mailTemplateVo.setAttachments(mailServiceVo.getAttachments());
         // 是否发送的模板邮件
         boolean isTemplateMail = false;
         if (id != null || ToolsUtils.isNotEmpty(mailCode)) {
@@ -166,8 +168,6 @@ public class MailServiceImpl implements MailService {
             }
             throw new RuntimeException(message);
         }
-        // 是否有附件
-        mailTemplateVo.setAttachment(ToolsUtils.isNotEmpty(mailServiceVo.getAttachments()));
         // 是否html 邮件
         String mailType = mailTemplateVo.getMailType();
         boolean isHtml = !MailCst.SYS_FC_DATA_MAIL_COMMON.equals(mailType);

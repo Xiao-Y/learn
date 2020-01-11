@@ -25,9 +25,9 @@ public class MailServiceVo {
     // 邮件发送人密码。当指定发件人时，username和password不能为空时
     private String password;
     // 邮件服务器
-    private String emailServer;
+    private String host;
     // 邮件服务器端口
-    private String emailPort;
+    private String port;
     // 邮件接收人
     private String toEmails;
     // 抄送人邮箱，多个邮箱以“;”分隔

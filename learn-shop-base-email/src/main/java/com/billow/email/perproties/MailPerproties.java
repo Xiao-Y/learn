@@ -24,4 +24,15 @@ public class MailPerproties {
     private String username;
     // 邮箱密码
     private String password;
+    // 发送邮件协议名称
+    private String protocol = "smtp";
+    // 是否开启dubug,开发时使用
+    private Boolean debug = false;
+    // 开启 ssl
+    private Boolean ssl = true;
+    // TLS加密
+    private Boolean starttls = true;
+    // 用户验证并返回Session
+    private Boolean auth = true;
+
 }

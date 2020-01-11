@@ -1,5 +1,6 @@
 package com.billow.email.service.impl;
 
+import com.billow.email.perproties.MailPerproties;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import com.billow.email.service.EmailSender;
 import com.billow.email.utils.ToolsUtils;
@@ -30,55 +31,48 @@ import java.util.Properties;
  */
 @Slf4j
 public class EmailSenderImpl implements EmailSender {
-    // 邮件服务器
-    private String emailServer;
-    // 邮件服务器商品
-    private String emailPort;
-    // 平台的默认的发送人
-    private String platformFrom;
-    // 平台的默认邮件用户名
-    private String platformUsername;
-    // 平台的默认邮件密码
-    private String platformPassword;
 
-    public EmailSenderImpl(String emailServer, String emailPort, String platformFrom, String platformUsername, String platformPassword) {
-        this.emailServer = emailServer;
-        this.emailPort = emailPort;
-        this.platformFrom = platformFrom;
-        this.platformUsername = platformUsername;
-        this.platformPassword = platformPassword;
+    private MailPerproties mailPerproties;
+
+    public EmailSenderImpl(MailPerproties mailPerproties) {
+        this.mailPerproties = mailPerproties;
     }
 
     @Override
     public void send(MailTemplateVo mailTemplateVo) throws Exception {
-        if (ToolsUtils.isEmpty(mailTemplateVo.getFromEmail()) || ToolsUtils.isEmpty(mailTemplateVo.getPassword()) || ToolsUtils.isEmpty(mailTemplateVo.getUsername())) {
-            mailTemplateVo.setFromEmail(platformFrom);
-            mailTemplateVo.setUsername(platformUsername);
-            mailTemplateVo.setPassword(platformPassword);
+        if (ToolsUtils.isEmpty(mailTemplateVo.getFromEmail()) || ToolsUtils.isEmpty(mailTemplateVo.getPassword())
+                || ToolsUtils.isEmpty(mailTemplateVo.getUsername())) {
+            mailTemplateVo.setFromEmail(mailPerproties.getFrom());
+            mailTemplateVo.setUsername(mailPerproties.getUsername());
+            mailTemplateVo.setPassword(mailPerproties.getPassword());
         }
-        if (ToolsUtils.isEmpty(mailTemplateVo.getEmailPort())) {
-            mailTemplateVo.setEmailPort(emailPort);
+        if (ToolsUtils.isEmpty(mailTemplateVo.getPort())) {
+            mailTemplateVo.setPort(mailPerproties.getPort());
         }
-        if (ToolsUtils.isEmpty(mailTemplateVo.getEmailServer())) {
-            mailTemplateVo.setEmailServer(emailServer);
+        if (ToolsUtils.isEmpty(mailTemplateVo.getHost())) {
+            mailTemplateVo.setHost(mailPerproties.getHost());
         }
         log.debug("MailServiceVo:{}", mailTemplateVo);
         // 校验数据
         this.checkData(mailTemplateVo);
-        //获取系统属性，主要用于设置邮件相关的参数。
+        // 获取系统属性，主要用于设置邮件相关的参数。
         Properties properties = System.getProperties();
-        //设置邮件传输服务器，由于本次是发送邮件操作，所需我们需要配置smtp协议，按outlook官方同步邮件的要求，依次配置协议地址，端口号和加密方法
-        properties.setProperty("mail.smtp.host", mailTemplateVo.getEmailServer());
-        properties.setProperty("mail.smtp.port", mailTemplateVo.getEmailPort());
-        properties.setProperty("mail.smtp.ssl.trust", mailTemplateVo.getEmailServer());
+        // 设置邮件传输服务器，由于本次是发送邮件操作，所需我们需要配置smtp协议，按outlook官方同步邮件的要求，依次配置协议地址，端口号和加密方法
+        properties.setProperty("mail.smtp.host", mailTemplateVo.getHost());
+        // 邮件服务器端口
+        properties.setProperty("mail.smtp.port", mailTemplateVo.getPort());
+        // smtp host设为可信任
+        properties.setProperty("mail.smtp.ssl.trust", mailTemplateVo.getHost());
         // 发送邮件协议名称
-        properties.setProperty("mail.transport.protocol", "smtp");
+        properties.setProperty("mail.transport.protocol", mailPerproties.getProtocol());
         //用户验证并返回Session，开启用户验证，设置发送邮箱的账号密码。
-        properties.setProperty("mail.smtp.auth", "true");
-        properties.setProperty("mail.smtp.starttls.enable", "true");
-        properties.setProperty("mail.smtp.ssl", "true");
+        properties.setProperty("mail.smtp.auth", mailPerproties.getAuth().toString());
+        // TLS加密
+        properties.setProperty("mail.smtp.starttls.enable", mailPerproties.getStarttls().toString());
+        // 开启 ssl
+        properties.setProperty("mail.smtp.ssl.enable", mailPerproties.getSsl().toString());
         //开启debug调试，控制台会打印相关信息
-        properties.setProperty("mail.debug", "false");
+        properties.setProperty("mail.debug", mailPerproties.getDebug().toString());
         // 需要切换发送人，所以不能使用 getDefaultInstance
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
@@ -118,7 +112,11 @@ public class EmailSenderImpl implements EmailSender {
         }
         // 3.添加文本内容
         MimeBodyPart textPart = new MimeBodyPart();
-        textPart.setText(mailTemplateVo.getMailContent());
+        if (mailTemplateVo.isHtml()) {
+            textPart.setContent(mailTemplateVo.getMailContent(), "text/html; charset=utf-8");
+        } else {
+            textPart.setText(mailTemplateVo.getMailContent());
+        }
         multipart.addBodyPart(textPart);
         // 4.绑定消息对象
         message.setContent(multipart);
@@ -136,10 +134,10 @@ public class EmailSenderImpl implements EmailSender {
      */
     private void checkData(MailTemplateVo mailTemplateVo) {
         String message = "";
-        if (ToolsUtils.isEmpty(mailTemplateVo.getEmailServer())) {
+        if (ToolsUtils.isEmpty(mailTemplateVo.getHost())) {
             message += "邮件服务器为空。请配置 custom.mail.host 或设置 MailServiceVo 中的 emailServer \n";
         }
-        if (ToolsUtils.isEmpty(mailTemplateVo.getEmailPort())) {
+        if (ToolsUtils.isEmpty(mailTemplateVo.getPort())) {
             message += "邮服务器端口为空。请配置 custom.mail.port 或设置 MailServiceVo 中的 emailPort \n";
         }
         if (ToolsUtils.isEmpty(mailTemplateVo.getUsername())) {
