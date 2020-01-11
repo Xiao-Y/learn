@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,14 +49,17 @@ public class GoodsSpuApp {
             AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
             model.setOutTradeNo(UUID.randomUUID().toString());
             model.setSubject("我就买一个商品");
-            model.setTotalAmount("0.11");
+            model.setTotalAmount("0.01");
+//            model.setTimeoutExpress("90m");
             String qrCode = aliPayScanService.tradePrecreate(model);
-            QrGenUtil.zxingCodeCreate(qrCode, "C:/Users/Administrator/Desktop/b.jpg", 250, null);
+            System.out.println("=====================");
+            System.out.println(qrCode);
+            QrGenUtil.zxingCodeCreate(qrCode, "C:/Users/Administrator/Desktop/b.jpg", 350, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        GoodsSpuPo po = goodsSpuService.getById(id);
-        return ConvertUtils.convert(po, GoodsSpuVo.class);
+//        GoodsSpuPo po = goodsSpuService.getById(id);
+//        return ConvertUtils.convert(po, GoodsSpuVo.class);
+        return null;
     }
-
 }

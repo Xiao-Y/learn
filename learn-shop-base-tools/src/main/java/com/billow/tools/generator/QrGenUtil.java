@@ -116,7 +116,7 @@ public class QrGenUtil {
             // 设置编码
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             // 设置容错率最高
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             hints.put(EncodeHintType.MARGIN, 1);
             // 1、生成二维码
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
