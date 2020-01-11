@@ -181,11 +181,6 @@ public class TaskUtils {
         }
 
         if (!JobCst.JOB_FC_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendMail())) {
-            if (ToolsUtils.isEmpty(scheduleJob.getMailReceive())) {
-                log.error("邮件发送失败，接收邮件人为空");
-                return;
-            }
-
             try {
                 MailEx mailEx = new MailEx();
                 mailEx.setJobId(scheduleJob.getId());

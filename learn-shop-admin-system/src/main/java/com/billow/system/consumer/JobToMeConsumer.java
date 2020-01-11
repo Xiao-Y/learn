@@ -1,9 +1,9 @@
 package com.billow.system.consumer;
 
 import com.alibaba.fastjson.JSONObject;
+import com.billow.email.perproties.MailPerproties;
 import com.billow.email.service.MailService;
 import com.billow.job.pojo.ex.MailEx;
-import com.billow.system.properties.CustomProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,14 +22,11 @@ public class JobToMeConsumer {
 
     @Autowired
     private MailService mailService;
-    @Autowired
-    private CustomProperties customProperties;
 
     @RabbitListener(queues = "${config.mq.queue.sendMail}")
     @RabbitHandler
     public void sendMail(MailEx mailEx) throws Exception {
         log.info(JSONObject.toJSONString(mailEx));
-        mailService.sendTemplateMail(customProperties.getMail().getFrom(), mailEx.getToEmails(), mailEx.getSubject(),
-                mailEx.getMailTemplateId(), null);
+        mailService.sendTemplateMail(mailEx.getToEmails(), mailEx.getSubject(), mailEx.getMailTemplateId(), null);
     }
 }

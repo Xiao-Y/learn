@@ -63,9 +63,6 @@ public class MailTemplatePo extends BasePage implements Serializable {
     // 使用 Thymeleaf 或者 Freemarker 时，sql 结果集是否单行，true-单行，false-多行
     private Boolean singleResult;
 
-    // 是否带附件，true-单，false-不带
-    private Boolean attachment;
-
     // 有效标志
     private Boolean validInd;
 

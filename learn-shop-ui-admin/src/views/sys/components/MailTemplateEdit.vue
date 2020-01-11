@@ -76,11 +76,6 @@
               <el-input type="textarea" v-model="mailTemplateInfo.mailTemp" rows="10"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="存在附件" prop="attachment">
-            <el-col :span="18">
-              <el-switch v-model="mailTemplateInfo.attachment" active-text="是" inactive-text="否"></el-switch>
-            </el-col>
-          </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="validSubmit">保存</el-button>
             <el-button type="warning" @click="dialogMarkdownVisible = true" v-if="pageShow.mailMarkdownButtonShow">
