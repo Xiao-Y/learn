@@ -30,7 +30,7 @@ public class MailServiceImpl implements MailService {
         mailServiceVo.setId(id);
         mailServiceVo.setParameter(parameter);
         this.sendMail(mailServiceVo);
-        log.info("模板邮件发送成功！id:{}", id);
+        log.info("模板邮件发送成功！");
     }
 
     @Async("emailExecutor")
@@ -40,7 +40,7 @@ public class MailServiceImpl implements MailService {
         mailServiceVo.setMailCode(mailCode);
         mailServiceVo.setParameter(parameter);
         this.sendMail(mailServiceVo);
-        log.info("模板邮件发送成功！mailCode:{}", mailCode);
+        log.info("模板邮件发送成功！");
     }
 
     @Async("emailExecutor")
@@ -69,7 +69,7 @@ public class MailServiceImpl implements MailService {
         MailTemplateVo mailTemplateVo = this.checkAndSettingData(mailServiceVo);
         log.debug("mailTemplateVo:{}", mailTemplateVo);
         mailSender.send(mailTemplateVo);
-        log.info("结束发送邮件！");
+        log.info("结束发送邮件！id:{},mailCode:{}", mailTemplateVo.getId(), mailTemplateVo.getMailCode());
     }
 
     /**
