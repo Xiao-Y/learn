@@ -56,7 +56,7 @@
           </el-form-item>
           <el-form-item label="模板名称" prop="templateName" v-if="pageShow.templateNameShow" required>
             <el-col :span="18">
-              <el-input v-model="mailTemplateInfo.templateName" rows="6"></el-input>
+              <el-input v-model="mailTemplateInfo.templateName" rows="6" aria-placeholder="请输入模板文件的名称"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="收件人邮箱" prop="toEmails">
@@ -147,6 +147,7 @@
           templateName: [{validator: this.validatetemplateName, trigger: 'blur'}],
           descritpion: [{required: true, message: '请输入邮件模板描述', trigger: 'blur'}],
           toEmails: [{validator: this.validateToEmails, trigger: 'blur'}],
+          templateName: [{required: true, message: '请输入模板名称', trigger: 'blur'}],
         }
       };
     },
@@ -221,20 +222,16 @@
         this.dialogMarkdownVisible = false;
       },
       pageShowChange() {
-        this.initPageShow();
+        this.$refs['mailTemplateInfo'].clearValidate();
         // 默认
-        // runSqlShow: false,
-        // singleResultShow: false,
-        // templateNameShow: false,
-        // mailTempShow: true,
-        // mailMarkdownButtonShow: false
+        this.initPageShow();
         // 邮件类型，1-普通邮件，2-html邮件,4-FreeMarker 模板邮件,5-Thymeleaf 模板邮件
         var mailType = this.mailTemplateInfo.mailType;
         // 数据来源，1-固定内容，2-SQL查询，3-参数设置,4-混合（2、3都有）
         var dataSources = this.mailTemplateInfo.dataSources;
 
-        console.info("mailType:", mailType)
-        console.info("dataSources:", dataSources)
+        // console.info("mailType:", mailType)
+        // console.info("dataSources:", dataSources)
 
         // 4-FreeMarker 模板邮件,5-Thymeleaf
         if (mailType === '4' || mailType === '5') {
@@ -245,8 +242,8 @@
         if (mailType === '2') {
           this.pageShow.mailMarkdownButtonShow = true;
         }
-        // 1-固定内容
-        if (dataSources !== '1') {
+        // 1-固定内容,3-参数设置
+        if (dataSources !== '1' && dataSources !== '3') {
           this.pageShow.runSqlShow = true;
           if (mailType === '4' || mailType === '5') {
             this.pageShow.singleResultShow = true;

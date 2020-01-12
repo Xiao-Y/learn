@@ -25,71 +25,51 @@ public class MailServiceImpl implements MailService {
 
     @Async("emailExecutor")
     @Override
-    public void sendTemplateMail(String toEmails, String subject, Long id, Map<String, Object> parameter) {
-        try {
-            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, null);
-            mailServiceVo.setId(id);
-            mailServiceVo.setParameter(parameter);
-            this.sendMail(mailServiceVo);
-            log.info("模板邮件发送成功！id:{}", id);
-        } catch (Exception e) {
-            log.error("发送模板邮件时发生异常！{}", e.getMessage());
-        }
+    public void sendTemplateMail(String toEmails, String subject, Long id, Map<String, Object> parameter) throws Exception {
+        MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, null);
+        mailServiceVo.setId(id);
+        mailServiceVo.setParameter(parameter);
+        this.sendMail(mailServiceVo);
+        log.info("模板邮件发送成功！");
     }
 
     @Async("emailExecutor")
     @Override
-    public void sendTemplateMail(String toEmails, String subject, String mailCode, Map<String, Object> parameter) {
-        try {
-            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, null);
-            mailServiceVo.setMailCode(mailCode);
-            mailServiceVo.setParameter(parameter);
-            this.sendMail(mailServiceVo);
-            log.info("模板邮件发送成功！mailCode:{}", mailCode);
-        } catch (Exception e) {
-            log.error("发送模板邮件时发生异常！{}", e.getMessage());
-        }
+    public void sendTemplateMail(String toEmails, String subject, String mailCode, Map<String, Object> parameter) throws Exception {
+        MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, null);
+        mailServiceVo.setMailCode(mailCode);
+        mailServiceVo.setParameter(parameter);
+        this.sendMail(mailServiceVo);
+        log.info("模板邮件发送成功！");
     }
 
     @Async("emailExecutor")
     @Override
-    public void sendSimpleMail(String toEmails, String subject, String content) {
-        try {
-            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, content);
-            this.sendMail(mailServiceVo);
-            log.info("简单邮件发送成功！");
-        } catch (Exception e) {
-            log.error("发送简单邮件时发生异常！{}", e.getMessage());
-        }
+    public void sendSimpleMail(String toEmails, String subject, String content) throws Exception {
+        MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, content);
+        this.sendMail(mailServiceVo);
+        log.info("简单邮件发送成功！");
     }
 
     @Async("emailExecutor")
     @Override
-    public void sendHtmlMail(String toEmails, String subject, String content) {
-        try {
-            MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, content);
-            mailServiceVo.setHtml(true);
-            this.sendMail(mailServiceVo);
-            log.info("html邮件发送成功");
-        } catch (Exception e) {
-            log.error("发送html邮件时发生异常！{}", e.getMessage());
-        }
+    public void sendHtmlMail(String toEmails, String subject, String content) throws Exception {
+        MailServiceVo mailServiceVo = MailServiceVo.getInstance(toEmails, subject, content);
+        mailServiceVo.setHtml(true);
+        this.sendMail(mailServiceVo);
+        log.info("html邮件发送成功");
     }
 
     @Async("emailExecutor")
     @Override
-    public void sendMail(MailServiceVo mailServiceVo) {
-        try {
-            log.info("开始发送邮件！");
-            log.debug("mailServiceVo:{}", mailServiceVo);
-            // 检查数据
-            MailTemplateVo mailTemplateVo = this.checkAndSettingData(mailServiceVo);
-            log.debug("mailTemplateVo:{}", mailTemplateVo);
-            mailSender.send(mailTemplateVo);
-            log.info("结束发送邮件！");
-        } catch (Exception e) {
-            log.error("邮件发送失败：{}", e.getMessage());
-        }
+    public void sendMail(MailServiceVo mailServiceVo) throws Exception {
+        log.info("开始发送邮件！");
+        log.debug("mailServiceVo:{}", mailServiceVo);
+        // 检查数据
+        MailTemplateVo mailTemplateVo = this.checkAndSettingData(mailServiceVo);
+        log.debug("mailTemplateVo:{}", mailTemplateVo);
+        mailSender.send(mailTemplateVo);
+        log.info("结束发送邮件！id:{},mailCode:{}", mailTemplateVo.getId(), mailTemplateVo.getMailCode());
     }
 
     /**
@@ -101,6 +81,7 @@ public class MailServiceImpl implements MailService {
      * @date 2020/1/9 12:32
      */
     private MailTemplateVo checkAndSettingData(MailServiceVo mailServiceVo) throws Exception {
+        log.debug("开始检查数据！");
         MailTemplateVo mailTemplateVo = new MailTemplateVo();
         // 获取邮件模板 code
         Long id = mailServiceVo.getId();
@@ -175,6 +156,7 @@ public class MailServiceImpl implements MailService {
             isHtml = mailServiceVo.isHtml();
         }
         mailTemplateVo.setHtml(isHtml);
+        log.debug("结束检查数据！");
         return mailTemplateVo;
     }
 }

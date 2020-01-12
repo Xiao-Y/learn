@@ -20,7 +20,7 @@ public interface MailService {
      * @param id        邮件id
      * @param parameter 邮件参数
      */
-    void sendTemplateMail(String toEmails, String subject, Long id, Map<String, Object> parameter);
+    void sendTemplateMail(String toEmails, String subject, Long id, Map<String, Object> parameter) throws Exception;
 
     /**
      * 发送模板邮件
@@ -30,7 +30,7 @@ public interface MailService {
      * @param mailCode  邮件code
      * @param parameter 邮件参数
      */
-    void sendTemplateMail(String toEmails, String subject, String mailCode, Map<String, Object> parameter);
+    void sendTemplateMail(String toEmails, String subject, String mailCode, Map<String, Object> parameter) throws Exception;
 
     /**
      * 发送简单邮件
@@ -42,7 +42,7 @@ public interface MailService {
      * @author LiuYongTao
      * @date 2019/8/20 19:31
      */
-    void sendSimpleMail(String toEmails, String subject, String content);
+    void sendSimpleMail(String toEmails, String subject, String content) throws Exception;
 
     /**
      * 发送HTML邮件
@@ -54,7 +54,7 @@ public interface MailService {
      * @author LiuYongTao
      * @date 2019/8/20 19:32
      */
-    void sendHtmlMail(String toEmails, String subject, String content);
+    void sendHtmlMail(String toEmails, String subject, String content) throws Exception;
 
     /**
      * 发送邮件
@@ -64,5 +64,5 @@ public interface MailService {
      * @author LiuYongTao
      * @date 2020/1/9 14:30
      */
-    void sendMail(MailServiceVo mailServiceVo);
+    void sendMail(MailServiceVo mailServiceVo) throws Exception;
 }

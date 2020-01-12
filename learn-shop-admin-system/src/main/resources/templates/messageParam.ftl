@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>消息通知</title>
+    <title>消息通知-fm-参数</title>
 </head>
 
 <style type="text/css">
@@ -32,11 +32,13 @@
     <h2>邮件消息通知</h2>
     <table id="customers">
         <tr>
+            <th>LogId</th>
             <th>MessageCode</th>
             <th>MessageStatus</th>
             <th>Cause</th>
         </tr>
         <tr>
+            <td>${(logId)!""}</td>
             <td>${(messageCode)!""}</td>
             <td>${(messageStatus)!""}</td>
             <td>${(cause)!""}</td>
