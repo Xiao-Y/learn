@@ -11,19 +11,13 @@ import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ConvertUtils;
 import com.billow.email.utils.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
-//import org.hibernate.SQLQuery;
-//import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.thymeleaf.TemplateEngine;
 
-//import javax.persistence.EntityManager;
-//import javax.persistence.PersistenceContext;
-//import javax.persistence.Query;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,14 +34,8 @@ import java.util.Set;
 @Service
 public class MailTemplateServiceImpl implements MailTemplateService {
 
-    //    @PersistenceContext
-//    private EntityManager entityManager;
     @Autowired
     private MailTemplateDao mailTemplateDao;
-    @Autowired
-    private FreeMarkerConfigurer freeMarkerConfigurer;
-    @Autowired
-    private TemplateEngine templateEngine;
     @Autowired
     private Map<String, MailContentBuild> mailContentBuilds;
 
@@ -202,7 +190,8 @@ public class MailTemplateServiceImpl implements MailTemplateService {
     }
 
     @Override
-    public Map<String, Object> runSQLSingleResult(Map<String, Object> parameter, String runSql) {
+    public Map<String, Object> runSQLSingleResult(Map<String, Object> parameter, String runSql) throws Exception {
+        log.debug("原始SQL:{}", runSql);
         if (ToolsUtils.isEmpty(runSql)) {
             throw new RuntimeException("查询SQL不能为空");
         }
@@ -210,14 +199,17 @@ public class MailTemplateServiceImpl implements MailTemplateService {
             // 替换参数
             runSql = this.replaceContent(runSql, parameter, MailCst.SQL_PLACEHOLDER);
         }
-//        Query nativeQuery = entityManager.createNativeQuery(runSql);
-//        nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-//        return (Map<String, Object>) nativeQuery.getSingleResult();
-        return mailTemplateDao.runSqlSingleResult(runSql);
+        log.debug("执行SQL:{}", runSql);
+        try {
+            return mailTemplateDao.runSqlSingleResult(runSql);
+        } catch (Exception e) {
+            throw new RuntimeException("SQL执行异常或者没有查询到数据，请查询sql:" + runSql + "\r\n异常信息：" + e.getMessage());
+        }
     }
 
     @Override
-    public List<Map<String, Object>> runSQLResultList(Map<String, Object> parameter, String runSql) {
+    public List<Map<String, Object>> runSQLResultList(Map<String, Object> parameter, String runSql) throws Exception {
+        log.debug("原始SQL:{}", runSql);
         if (ToolsUtils.isEmpty(runSql)) {
             throw new RuntimeException("查询SQL不能为空");
         }
@@ -225,10 +217,12 @@ public class MailTemplateServiceImpl implements MailTemplateService {
             // 替换参数
             runSql = this.replaceContent(runSql, parameter, MailCst.SQL_PLACEHOLDER);
         }
-//        Query nativeQuery = entityManager.createNativeQuery(runSql);
-//        nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-//        return (List<Map<String, Object>>) nativeQuery.getResultList();
-        return mailTemplateDao.runSqlResultList(runSql);
+        log.debug("执行SQL:{}", runSql);
+        try {
+            return mailTemplateDao.runSqlResultList(runSql);
+        } catch (Exception e) {
+            throw new RuntimeException("SQL执行异常或者没有查询到数据，请查询sql:" + runSql + "\r\n异常信息：" + e.getMessage());
+        }
     }
 
     @Override

@@ -38,25 +38,29 @@ public class JobServiceImpl implements JobService {
     private ConfigCommonProperties configCommonProperties;
 
     @Override
-    public void sendMail(MailEx mailEx) {
+    public void sendMail(MailEx mailEx) throws Exception {
         log.info(JSONObject.toJSONString(mailEx));
 
         Map<String, Object> parameter = new HashMap<>();
-        parameter.put("logId", mailEx.getLogId().toString());
+        parameter.put("logId", mailEx.getLogId());
+        parameter.put("messageCode", "code-009");
+        parameter.put("messageStatus", "satus-8");
+        parameter.put("cause", "No");
+        parameter.put("mailCode", "messageParamSQL-FreeMarker");
 
-//        mailService.sendTemplateMail(mailEx.getToEmails(), mailEx.getSubject(),
-//                mailEx.getMailTemplateId(), parameter);
+        mailService.sendTemplateMail(mailEx.getToEmails(), mailEx.getSubject(),
+                mailEx.getMailTemplateId(), parameter);
 
-        MailServiceVo serviceVo = MailServiceVo.getInstance("lyongtao123@126.com", mailEx.getSubject(), "测试附件");
-//        serviceVo.setHost("smtp.qq.com");
-//        serviceVo.setFromEmail("lyongtao1234@qq.com");
-//        serviceVo.setUsername("lyongtao1234@qq.com");
-//        serviceVo.setPassword("htamatujqlpkbeji");
-        Map<String, String> attachments = serviceVo.getAttachments();
-        File file = new File("D:\\uploadfile\\usericon\\11.jpg");
-        String fileToString = FileUtils.fileToString(file);
-        attachments.put("11.jpg", fileToString);
-        mailService.sendMail(serviceVo);
+//        MailServiceVo serviceVo = MailServiceVo.getInstance("lyongtao123@126.com", mailEx.getSubject(), "测试附件");
+////        serviceVo.setHost("smtp.qq.com");
+////        serviceVo.setFromEmail("lyongtao1234@qq.com");
+////        serviceVo.setUsername("lyongtao1234@qq.com");
+////        serviceVo.setPassword("htamatujqlpkbeji");
+//        Map<String, String> attachments = serviceVo.getAttachments();
+//        File file = new File("D:\\uploadfile\\usericon\\11.jpg");
+//        String fileToString = FileUtils.fileToString(file);
+//        attachments.put("11.jpg", fileToString);
+//        mailService.sendMail(serviceVo);
     }
 
     @Override

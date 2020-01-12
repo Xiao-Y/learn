@@ -118,7 +118,7 @@ public interface MailTemplateService {
      * @author LiuYongTao
      * @date 2019/8/21 8:33
      */
-    Map<String, Object> runSQLSingleResult(Map<String, Object> parameter, String runSql);
+    Map<String, Object> runSQLSingleResult(Map<String, Object> parameter, String runSql) throws Exception;
 
     /**
      * 运行sql 得到结果
@@ -129,7 +129,7 @@ public interface MailTemplateService {
      * @author LiuYongTao
      * @date 2019/8/21 8:33
      */
-    List<Map<String, Object>> runSQLResultList(Map<String, Object> parameter, String runSql);
+    List<Map<String, Object>> runSQLResultList(Map<String, Object> parameter, String runSql) throws Exception;
 
     /**
      * 替换字符串中的参数

@@ -18,7 +18,7 @@ public interface JobService {
      * @author LiuYongTao
      * @date 2019/9/27 16:53
      */
-    void sendMail(MailEx mailEx);
+    void sendMail(MailEx mailEx) throws Exception;
 
     /**
      * 发送 mq 请求
