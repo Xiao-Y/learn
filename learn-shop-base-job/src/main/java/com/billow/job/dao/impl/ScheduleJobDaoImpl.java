@@ -222,6 +222,10 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
             sql += " and valid_ind = ? ";
             queryParam.add(scheduleJobPo.getValidInd());
         }
+        if (scheduleJobPo.getJobStatus() != null) {
+            sql += " and job_status = ? ";
+            queryParam.add(scheduleJobPo.getJobStatus());
+        }
         return sql;
     }
 }

@@ -35,4 +35,7 @@ public class DataDictionaryPo extends BasePo implements Serializable {
 
     @ApiModelProperty("字段排序")
     private Integer fieldOrder;
+
+    @ApiModelProperty("说明")
+    private String descritpion;
 }

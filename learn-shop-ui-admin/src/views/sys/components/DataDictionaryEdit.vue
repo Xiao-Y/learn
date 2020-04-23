@@ -5,40 +5,26 @@
       <article>
         <el-form ref="dataDictionaryInfo" :model="dataDictionaryInfo" label-width="100px" size="mini">
           <el-form-item label="系统模块" prop="systemModule">
-            <el-select
-              v-model="dataDictionaryInfo.systemModule"
-              filterable
-              allow-create
-              default-first-option
+            <custom-select v-model="dataDictionaryInfo.systemModule"
+              :datasource="systemModuleSelect"
               placeholder="请选择数据字典系统模块">
-              <el-option
-                v-for="item in systemModuleSelect"
-                :key="item.fieldValue"
-                :label="item.fieldDisplay"
-                :value="item.fieldValue">
-              </el-option>
-            </el-select>
+            </custom-select>
           </el-form-item>
           <el-form-item label="字典类型" prop="fieldType">
-            <el-select
-              v-model="dataDictionaryInfo.fieldType"
-              filterable
+            <custom-select v-model="dataDictionaryInfo.fieldType"
               allow-create
-              default-first-option
+              :datasource="fieldTypeSelect"
               placeholder="请选择数据字典类型">
-              <el-option
-                v-for="item in fieldTypeSelect"
-                :key="item.fieldValue"
-                :label="item.fieldDisplay"
-                :value="item.fieldValue">
-              </el-option>
-            </el-select>
+            </custom-select>
           </el-form-item>
           <el-form-item label="字段VALUE" prop="fieldValue">
             <el-input v-model="dataDictionaryInfo.fieldValue" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="字段显示" prop="fieldDisplay">
             <el-input v-model="dataDictionaryInfo.fieldDisplay" placeholder="请输入内容"></el-input>
+          </el-form-item>
+          <el-form-item label="字段说明" prop="descritpion">
+            <el-input v-model="dataDictionaryInfo.descritpion" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="字段排序" prop="fieldOrder">
             <el-input-number v-model="dataDictionaryInfo.fieldOrder" :min="0"></el-input-number>
@@ -74,6 +60,7 @@
           fieldType: '',
           fieldValue: '',
           fieldDisplay: '',
+          descritpion: '',
           fieldOrder: 0,
           validInd: true
         },

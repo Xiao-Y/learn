@@ -40,6 +40,7 @@
           <el-table-column label="字段VALUE" prop="fieldValue"></el-table-column>
           <el-table-column label="字段显示" prop="fieldDisplay"></el-table-column>
           <el-table-column label="字段排序" prop="fieldOrder"></el-table-column>
+          <el-table-column label="字段说明" prop="descritpion"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
@@ -57,12 +58,6 @@
                 </el-form-item>
                 <el-form-item label="是否有效">
                   <el-switch v-model="scope.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
-                </el-form-item>
-                <el-form-item label="收件人邮箱">
-                  <el-input type="textarea" v-model="scope.row.toEmails" disabled></el-input>
-                </el-form-item>
-                <el-form-item label="数据字典主题">
-                  <el-input type="textarea" v-model="scope.row.subject" disabled></el-input>
                 </el-form-item>
               </el-form>
             </template>
