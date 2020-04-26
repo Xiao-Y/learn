@@ -8,7 +8,7 @@ package com.billow.tools.enums;
  */
 public enum SubmitTypeEnum {
 
-    submit("submit", null),
+    submit("submit", "1"),
     reSubmit("reSubmit", "1"),
     cancel("cancel", "0"),
     agree("agree", "1"),

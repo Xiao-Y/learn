@@ -7,8 +7,11 @@ package com.billow.aop.global.commons;
  * @create 2019-11-01 9:07
  */
 public class CustomPage {
+    // 分页数据列表
     private Object tableData;
+    // 总记录数
     private long recordCount;
+    // 总页数据
     private long totalPages;
 
     public Object getTableData() {

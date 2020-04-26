@@ -187,7 +187,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         nativeQuery = entityManager.createNativeQuery(sqlCount.toString());
         BigInteger o = (BigInteger) nativeQuery.getSingleResult();
         CustomPage<Map<String, Object>> page = new CustomPage<>(pageSize, o.longValue());
-        page.setContent(resultList);
+        page.setTableData(resultList);
         return page;
     }
 

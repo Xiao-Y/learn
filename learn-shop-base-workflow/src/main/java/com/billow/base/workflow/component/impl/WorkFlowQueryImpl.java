@@ -129,7 +129,7 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
             vo.setSuspendedCascade(count > 0);
             return vo;
         }).collect(Collectors.toList());
-        page.setContent(processDefinitionVos);
+        page.setTableData(processDefinitionVos);
 
         return page;
     }
