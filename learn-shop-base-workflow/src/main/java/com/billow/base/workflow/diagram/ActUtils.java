@@ -1,6 +1,5 @@
 package com.billow.base.workflow.diagram;
 
-import com.billow.base.workflow.utils.PageUtils;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
 import org.activiti.bpmn.model.SequenceFlow;
@@ -9,21 +8,17 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntityImpl;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -120,7 +115,8 @@ public class ActUtils {
 //            List<HistoricActivityInstance> historicActivityInstances = PageUtils.converListToList(highLightedActivitList, HistoricActivityInstance.class);
             // 高亮线路id集合
             BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
-            List<String> highLightedFlows = this.getHighLightedFlows(bpmnModel, highLightedActivitList);
+//            List<String> highLightedFlows = this.getHighLightedFlows(bpmnModel, highLightedActivitList);
+            List<String> highLightedFlows = this.getExecutedFlows(bpmnModel, highLightedActivitList);
             logger.debug("Executed flow : {}", highLightedFlows);
             // 高亮环节id集合
             List<String> highLightedActivities = new ArrayList<>();
@@ -309,5 +305,79 @@ public class ActUtils {
             List<String> ids = runtimeService.getActiveActivityIds(exe.getId());
             activityIds.addAll(ids);
         }
+    }
+
+    /**
+     * 获取已经执行过的流程线，用于高亮显示
+     *
+     * @param bpmnModel
+     * @param historicActivityInstances
+     * @return java.util.List<java.lang.String>
+     * @author LiuYongTao
+     * @date 2020/4/26 16:49
+     */
+    private List<String> getExecutedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
+        // 流转线ID集合
+        List<String> flowIdList = new ArrayList<String>();
+        // 全部活动实例
+        List<FlowNode> historicFlowNodeList = new LinkedList<FlowNode>();
+        // 已完成的历史活动节点
+        List<HistoricActivityInstance> finishedActivityInstanceList = new LinkedList<HistoricActivityInstance>();
+        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
+            historicFlowNodeList.add((FlowNode) bpmnModel.getMainProcess()
+                    .getFlowElement(historicActivityInstance.getActivityId(), true));
+            if (historicActivityInstance.getEndTime() != null) {
+                finishedActivityInstanceList.add(historicActivityInstance);
+            }
+        }
+
+        // 遍历已完成的活动实例，从每个实例的outgoingFlows中找到已执行的
+        FlowNode currentFlowNode = null;
+        for (HistoricActivityInstance currentActivityInstance : finishedActivityInstanceList) {
+            // 获得当前活动对应的节点信息及outgoingFlows信息
+            currentFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(currentActivityInstance.getActivityId(), true);
+            List<SequenceFlow> sequenceFlowList = currentFlowNode.getOutgoingFlows();
+
+            /**
+             * 遍历outgoingFlows并找到已已流转的 满足如下条件认为已已流转：
+             * 1.当前节点是并行网关或包含网关，则通过outgoingFlows能够在历史活动中找到的全部节点均为已流转
+             * 2.当前节点是以上两种类型之外的，通过outgoingFlows查找到的时间最近的流转节点视为有效流转
+             */
+            FlowNode targetFlowNode = null;
+            if ("parallelGateway".equals(currentActivityInstance.getActivityType())
+                    || "inclusiveGateway".equals(currentActivityInstance.getActivityType())) {
+                // 遍历历史活动节点，找到匹配Flow目标节点的
+                for (SequenceFlow sequenceFlow : sequenceFlowList) {
+                    targetFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(sequenceFlow.getTargetRef(),
+                            true);
+                    if (historicFlowNodeList.contains(targetFlowNode)) {
+                        flowIdList.add(sequenceFlow.getId());
+                    }
+                }
+            } else {
+                //这里添加判断为多分支的情况下，取出该任务的id
+                int sourceId = 0;
+                if (sequenceFlowList.size() > 1) {
+                    for (SequenceFlow sequenceFlow : sequenceFlowList) {
+                        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
+                            if (sequenceFlow.getSourceRef().equals(historicActivityInstance.getActivityId())) {
+                                sourceId = Integer.parseInt(historicActivityInstance.getId());
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                // 遍历历史活动节点，找到匹配Flow目标节点的 ,根据先执行的任务小于后执行任务id，添加该节点执行的id是否小于流程分支的执行id判断是否需要高亮, 这种方法不适用并发下的uuid主键生成策略
+                for (SequenceFlow sequenceFlow : sequenceFlowList) {
+                    for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
+                        if (historicActivityInstance.getActivityId().equals(sequenceFlow.getTargetRef()) && sourceId < Integer.parseInt(historicActivityInstance.getId())) {
+                            flowIdList.add(sequenceFlow.getId());
+                        }
+                    }
+                }
+            }
+        }
+        return flowIdList;
     }
 }

@@ -156,6 +156,11 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     @Override
+    public void setAssignee(String taskId, String userId) {
+        taskService.setAssignee(taskId, userId);
+    }
+
+    @Override
     public void claim(String taskId, String userId) {
         taskService.claim(taskId, userId);
     }

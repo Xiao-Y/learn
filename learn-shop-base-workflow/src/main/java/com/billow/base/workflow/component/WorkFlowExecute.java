@@ -139,6 +139,17 @@ public interface WorkFlowExecute {
      */
     void addCandidateGroup(String taskId, String groupId);
 
+    /**
+     * 设置任务所属人
+     *
+     * @param taskId
+     * @param userId
+     * @return void
+     * @author LiuYongTao
+     * @date 2020/4/26 17:28
+     */
+    void setAssignee(String taskId, String userId);
+
 
     /**
      * 认领任务

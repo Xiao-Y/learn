@@ -37,5 +37,20 @@ spring:
     url: jdbc:mysql://ip:port/XXX?useUnicode=true&characterEncoding=utf8&useSSL=false
 ````
 
+### 三、使用 activiti modelet 构建 bpmn 流程图
+下载 activiti-app 修改 `activiti-app\WEB-INF\classes\META-INF\activiti-app` 路径下的`activiti-app.properties`中的数据库配置文件
+```properties
+datasource.url=jdbc:mysql://127.0.0.1:3306/learn?characterEncoding=UTF-8
+datasource.username=root
+datasource.password=root
+```
+还可以修改用户名、密码和角色
+```properties
+admin.email=admin
+admin.password=test
+admin.lastname=Administrator
+```
+启动 tomcat 后，使用以上配置的用户名和密码登陆 
+
 **注意：**
 启动类上需要添加 @ComponentScan("com.billow") 扫描路径

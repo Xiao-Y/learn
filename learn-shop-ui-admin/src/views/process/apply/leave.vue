@@ -66,6 +66,7 @@
           comment: '',
           approveStatus: '0',
           procInstId: '',
+          assignee:'', // 指定下一个任务处理人，用于驳回
           submitType: '' // 提交类型:submit-提交，reSubmit-重新提交,cancel-取消申请，agree-同意，reject-驳回
         },
         rulesForm: {
@@ -138,7 +139,9 @@
         if (this.leaveInfo.id) {
           FindApplyById(this.leaveInfo.id).then(res => {
             if (res.resData && res.resData != '') {
-              Object.assign(this.leaveInfo, JSON.parse(res.resData));
+              var applyData = res.resData.applyData;
+              this.leaveInfo.assignee = res.resData.applyUserCode;
+              Object.assign(this.leaveInfo, JSON.parse(applyData));
               // 上一次的提交类型
               if (this.leaveInfo.submitType === 'reject') {
                 // 退回修改的

@@ -32,7 +32,7 @@ export const DeleteApplyInfoById = (id) => requestUtils.del(baseUrl + '/deleteAp
  * @constructor
  */
 export const ViewExecutionImgById = id => {
-  return baseUrl + '/viewExecutionImgById/' + id;
+  return '../admin-system/deployImageAction/viewExecutionImgById/' + id;
 };
 
 /**

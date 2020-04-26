@@ -111,12 +111,6 @@ public class ApplyApi {
 //        return taskVos;
 //    }
 
-    @ApiOperation(value = "查看活动的流程图（显示运行轨迹）")
-    @GetMapping("/viewExecutionImgById/{executionId}")
-    public void viewDeployImgById(@PathVariable String executionId, HttpServletResponse response) throws Exception {
-        workFlowQuery.genActiveProccessImage(executionId, response);
-    }
-
     @ApiOperation(value = "删除已经结束的申请")
     @DeleteMapping("/deleteApplyInfoById/{id}")
     public void submitLeave(@PathVariable Long id) {
@@ -125,10 +119,9 @@ public class ApplyApi {
 
     @ApiOperation(value = "根据ID查询申请信息")
     @GetMapping("/findApplyById/{id}")
-    public String findApplyById(@PathVariable Long id) {
+    public ApplyInfoVo findApplyById(@PathVariable Long id) {
         ApplyInfoVo applyInfoVo = applyInfoService.findLeaveById(id);
-        String applyData = applyInfoVo.getApplyData();
-        return applyData;
+        return applyInfoVo;
     }
 
     @ApiOperation(value = "通过流程实例id 查询批注信息")

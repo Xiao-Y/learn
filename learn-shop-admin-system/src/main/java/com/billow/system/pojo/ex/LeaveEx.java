@@ -36,6 +36,12 @@ public class LeaveEx {
 //    @ApiModelProperty("任务ID")
 //    private String taskId;
 
+    @ApiModelProperty("指定流程处理人")
+    private String assignee;
+
+    @ApiModelProperty("指定任务节点")
+    private String taskCode;
+
     @ApiModelProperty("提交类型:submit-提交，reSubmit-重新提交,cancel-取消申请，agree-同意，reject-驳回")
     private String submitType;
 }
