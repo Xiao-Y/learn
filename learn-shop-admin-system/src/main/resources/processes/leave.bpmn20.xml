@@ -6,7 +6,11 @@
     <userTask id="apply" name="用户申请"></userTask>
     <userTask id="approval" name="hr审核" activiti:candidateGroups="hr"></userTask>
     <exclusiveGateway id="sid-6FE28C36-3802-4D3F-93E4-8A08CFA2DABC"></exclusiveGateway>
-    <endEvent id="sid-11CEF6D7-BDDF-432B-B7E4-C0DD0A281A3A"></endEvent>
+    <endEvent id="sid-11CEF6D7-BDDF-432B-B7E4-C0DD0A281A3A">
+      <extensionElements>
+        <activiti:executionListener event="end" delegateExpression="${customExecutionListener}"></activiti:executionListener>
+      </extensionElements>
+    </endEvent>
     <sequenceFlow id="_2" sourceRef="apply" targetRef="approval">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${transFlag=="1"}]]></conditionExpression>
     </sequenceFlow>

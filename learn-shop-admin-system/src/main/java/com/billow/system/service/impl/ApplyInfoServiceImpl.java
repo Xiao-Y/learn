@@ -28,6 +28,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -195,7 +196,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     @Override
     public Page<ApplyInfoVo> myStartProdeList(ApplyInfoVo applyInfoVo) {
         ApplyInfoPo applyInfoPo = ConvertUtils.convert(applyInfoVo, ApplyInfoPo.class);
-        Pageable pageable = new PageRequest(applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
+        Pageable pageable = PageRequest.of(applyInfoVo.getPageNo(), applyInfoVo.getPageSize(), Sort.Direction.DESC, "createTime");
         Page<ApplyInfoVo> page = applyInfoDao.findAll(Example.of(applyInfoPo), pageable).map(this::applyInfoPoToVo);
         return page;
     }

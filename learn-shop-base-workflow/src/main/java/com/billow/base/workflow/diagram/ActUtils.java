@@ -18,9 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 流程图生成工具
@@ -32,22 +30,6 @@ import java.util.Map;
 public class ActUtils {
 
     private static Logger logger = LoggerFactory.getLogger(ActUtils.class);
-
-//    private ActUtils() {
-//        ProcessEngine defaultProcessEngine = ProcessEngines.getDefaultProcessEngine();
-//        historyService = defaultProcessEngine.getHistoryService();
-//        repositoryService = defaultProcessEngine.getRepositoryService();
-//        runtimeService = defaultProcessEngine.getRuntimeService();
-//    }
-//
-//    private static class ActHolder {
-//        private final static ActUtils actUtils = new ActUtils();
-//    }
-//
-//    public static ActUtils getInstance() {
-//        return ActHolder.actUtils;
-//    }
-
 
     @Autowired
     private HistoryService historyService;
@@ -97,9 +79,6 @@ public class ActUtils {
             return imageStream;
         }
         try {
-            // 查询Execution对象
-//            Execution execution = runtimeService.createExecutionQuery().executionId(executionId).singleResult();
-//            String processInstanceId = execution.getProcessInstanceId();
             // 查询历史流程实例
             HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(processInstanceId)
@@ -112,11 +91,9 @@ public class ActUtils {
             List<HistoricActivityInstance> highLightedActivitList = historyService.createHistoricActivityInstanceQuery()
                     .processInstanceId(processInstanceId)
                     .list();
-//            List<HistoricActivityInstance> historicActivityInstances = PageUtils.converListToList(highLightedActivitList, HistoricActivityInstance.class);
             // 高亮线路id集合
             BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
-//            List<String> highLightedFlows = this.getHighLightedFlows(bpmnModel, highLightedActivitList);
-            List<String> highLightedFlows = this.getExecutedFlows(bpmnModel, highLightedActivitList);
+            List<String> highLightedFlows = this.getHighLightedFlows(bpmnModel, highLightedActivitList);
             logger.debug("Executed flow : {}", highLightedFlows);
             // 高亮环节id集合
             List<String> highLightedActivities = new ArrayList<>();
@@ -135,91 +112,6 @@ public class ActUtils {
         }
         return imageStream;
     }
-
-//    /**
-//     * 获取已经执行过的流程线，用于高亮显示
-//     *
-//     * @param bpmnModel
-//     * @param historicActivityInstances
-//     * @return
-//     */
-//    private List<String> getHighLightedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
-//        // 解决:历史任务中存在多个相同任务时,连线异常
-//        List<HistoricActivityInstanceEntityImpl> historicActivityInstancesTemp =
-//                PageUtils.converListToList(historicActivityInstances, HistoricActivityInstanceEntityImpl.class);
-//        // 高亮流程已发生流转的线id集合
-//        List<String> highLightedFlowIds = new ArrayList<>();
-//        // 全部活动节点
-//        List<FlowNode> historicActivityNodes = new ArrayList<>();
-//        // 已完成的历史活动节点
-//        List<HistoricActivityInstance> finishedActivityInstances = new ArrayList<>();
-//
-//        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
-//            FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstance.getActivityId(), true);
-//            historicActivityNodes.add(flowNode);
-//            if (historicActivityInstance.getEndTime() != null) {
-//                finishedActivityInstances.add(historicActivityInstance);
-//            }
-//        }
-//
-//        FlowNode currentFlowNode;
-//        FlowNode targetFlowNode;
-//        // 遍历已完成的活动实例，从每个实例的outgoingFlows中找到已执行的
-//        for (HistoricActivityInstance currentActivityInstance : finishedActivityInstances) {
-//            // 获得当前活动对应的节点信息及outgoingFlows信息
-//            currentFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(currentActivityInstance.getActivityId(), true);
-//            List<SequenceFlow> sequenceFlows = currentFlowNode.getOutgoingFlows();
-//            /**
-//             * 遍历outgoingFlows并找到已已流转的 满足如下条件认为已已流转：
-//             * 1.当前节点是并行网关或兼容网关，则通过outgoingFlows能够在历史活动中找到的全部节点均为已流转
-//             * 2.当前节点是以上两种类型之外的，通过outgoingFlows查找到的时间最早的流转节点视为有效流转
-//             */
-//            if ("parallelGateway".equals(currentActivityInstance.getActivityType()) || "inclusiveGateway".equals(currentActivityInstance.getActivityType())) {
-//                // 遍历历史活动节点，找到匹配流程目标节点的
-//                for (SequenceFlow sequenceFlow : sequenceFlows) {
-//                    targetFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(sequenceFlow.getTargetRef(), true);
-//                    if (historicActivityNodes.contains(targetFlowNode)) {
-//                        highLightedFlowIds.add(sequenceFlow.getId());
-//                    }
-//                }
-//            } else {
-//                List<Map<String, Object>> tempMapList = new ArrayList<>();
-//                for (SequenceFlow sequenceFlow : sequenceFlows) {
-//                    // 解决:历史任务中存在多个相同任务时,连线异常
-//                    Iterator<HistoricActivityInstanceEntityImpl> iterator = historicActivityInstancesTemp.iterator();
-//                    while (iterator.hasNext()) {
-//                        HistoricActivityInstance historicActivityInstance = iterator.next();
-//                        if (historicActivityInstance.getActivityId().equals(sequenceFlow.getTargetRef())) {
-//                            Map<String, Object> map = new HashMap<>();
-//                            map.put("highLightedFlowId", sequenceFlow.getId());
-//                            map.put("highLightedFlowStartTime", historicActivityInstance.getStartTime().getTime());
-//                            tempMapList.add(map);
-//
-////                            highLightedFlowIds.add(sequenceFlow.getId());
-//                            // 比对等到结果后,就移除,避免历史任务中存在多个相同任务时,连线异常
-//                            iterator.remove();
-//
-//                        }
-//                    }
-//                }
-//
-//                if (!CollectionUtils.isEmpty(tempMapList)) {
-//                    // 遍历匹配的集合，取得开始时间最早的一个
-//                    long earliestStamp = 0L;
-//                    String highLightedFlowId = null;
-//                    for (Map<String, Object> map : tempMapList) {
-//                        long highLightedFlowStartTime = Long.valueOf(map.get("highLightedFlowStartTime").toString());
-//                        if (earliestStamp == 0 || earliestStamp >= highLightedFlowStartTime) {
-//                            highLightedFlowId = map.get("highLightedFlowId").toString();
-//                            earliestStamp = highLightedFlowStartTime;
-//                        }
-//                    }
-//                    highLightedFlowIds.add(highLightedFlowId);
-//                }
-//            }
-//        }
-//        return highLightedFlowIds;
-//    }
 
     /**
      * 获取已经执行过的流程线，用于高亮显示
@@ -305,79 +197,5 @@ public class ActUtils {
             List<String> ids = runtimeService.getActiveActivityIds(exe.getId());
             activityIds.addAll(ids);
         }
-    }
-
-    /**
-     * 获取已经执行过的流程线，用于高亮显示
-     *
-     * @param bpmnModel
-     * @param historicActivityInstances
-     * @return java.util.List<java.lang.String>
-     * @author LiuYongTao
-     * @date 2020/4/26 16:49
-     */
-    private List<String> getExecutedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
-        // 流转线ID集合
-        List<String> flowIdList = new ArrayList<String>();
-        // 全部活动实例
-        List<FlowNode> historicFlowNodeList = new LinkedList<FlowNode>();
-        // 已完成的历史活动节点
-        List<HistoricActivityInstance> finishedActivityInstanceList = new LinkedList<HistoricActivityInstance>();
-        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
-            historicFlowNodeList.add((FlowNode) bpmnModel.getMainProcess()
-                    .getFlowElement(historicActivityInstance.getActivityId(), true));
-            if (historicActivityInstance.getEndTime() != null) {
-                finishedActivityInstanceList.add(historicActivityInstance);
-            }
-        }
-
-        // 遍历已完成的活动实例，从每个实例的outgoingFlows中找到已执行的
-        FlowNode currentFlowNode = null;
-        for (HistoricActivityInstance currentActivityInstance : finishedActivityInstanceList) {
-            // 获得当前活动对应的节点信息及outgoingFlows信息
-            currentFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(currentActivityInstance.getActivityId(), true);
-            List<SequenceFlow> sequenceFlowList = currentFlowNode.getOutgoingFlows();
-
-            /**
-             * 遍历outgoingFlows并找到已已流转的 满足如下条件认为已已流转：
-             * 1.当前节点是并行网关或包含网关，则通过outgoingFlows能够在历史活动中找到的全部节点均为已流转
-             * 2.当前节点是以上两种类型之外的，通过outgoingFlows查找到的时间最近的流转节点视为有效流转
-             */
-            FlowNode targetFlowNode = null;
-            if ("parallelGateway".equals(currentActivityInstance.getActivityType())
-                    || "inclusiveGateway".equals(currentActivityInstance.getActivityType())) {
-                // 遍历历史活动节点，找到匹配Flow目标节点的
-                for (SequenceFlow sequenceFlow : sequenceFlowList) {
-                    targetFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(sequenceFlow.getTargetRef(),
-                            true);
-                    if (historicFlowNodeList.contains(targetFlowNode)) {
-                        flowIdList.add(sequenceFlow.getId());
-                    }
-                }
-            } else {
-                //这里添加判断为多分支的情况下，取出该任务的id
-                int sourceId = 0;
-                if (sequenceFlowList.size() > 1) {
-                    for (SequenceFlow sequenceFlow : sequenceFlowList) {
-                        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
-                            if (sequenceFlow.getSourceRef().equals(historicActivityInstance.getActivityId())) {
-                                sourceId = Integer.parseInt(historicActivityInstance.getId());
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                // 遍历历史活动节点，找到匹配Flow目标节点的 ,根据先执行的任务小于后执行任务id，添加该节点执行的id是否小于流程分支的执行id判断是否需要高亮, 这种方法不适用并发下的uuid主键生成策略
-                for (SequenceFlow sequenceFlow : sequenceFlowList) {
-                    for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
-                        if (historicActivityInstance.getActivityId().equals(sequenceFlow.getTargetRef()) && sourceId < Integer.parseInt(historicActivityInstance.getId())) {
-                            flowIdList.add(sequenceFlow.getId());
-                        }
-                    }
-                }
-            }
-        }
-        return flowIdList;
     }
 }
