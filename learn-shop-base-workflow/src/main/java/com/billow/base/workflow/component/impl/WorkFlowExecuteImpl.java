@@ -22,6 +22,7 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 工作流执行操作
@@ -156,6 +158,24 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     @Override
+    public void setAssignee(String procInstId, String userId, String taskCode) {
+        if (StringUtils.isEmpty(userId)) {
+            return;
+        }
+        List<Task> tasks = workFlowQuery.queryTasksByProcessId(procInstId);
+        tasks.stream().forEach(fe -> {
+            // 如果指定任务code ,则只设置指定的。否则设置所有的
+            if (StringUtils.isNotEmpty(taskCode)) {
+                if (Objects.equals(taskCode, fe.getTaskDefinitionKey())) {
+                    this.setAssignee(fe.getId(), userId);
+                }
+            } else {
+                this.setAssignee(fe.getId(), userId);
+            }
+        });
+    }
+
+    @Override
     public void setAssignee(String taskId, String userId) {
         taskService.setAssignee(taskId, userId);
     }
@@ -181,16 +201,16 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
         if (task == null) {
             throw new Exception("流程未启动或已执行完成，无法撤回");
         }
-        String applyUserId = getCurrentApplyUserId(task.getProcessInstanceId());
+        String applyUserId = workFlowQuery.queryCurrentApplyUserId(task.getProcessInstanceId());
         // 上一个task
-        HistoricTaskInstance preTask = getApplyUserTask(task.getProcessInstanceId(), backNum);
+        HistoricTaskInstance preTask = workFlowQuery.queryApplyUserTask(task.getProcessInstanceId(), backNum);
         if (preTask == null || preTask.getId() == null) {
             return;
         }
         String processDefinitionId = preTask.getProcessDefinitionId();
         BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
         //变量
-        HistoricActivityInstance myActivity = getCurrentApplyActivity(task.getExecutionId(), preTask.getId());
+        HistoricActivityInstance myActivity = workFlowQuery.queryCurrentApplyActivity(task.getExecutionId(), preTask.getId());
         String myActivityId = myActivity.getActivityId();
 
         //得到流程节点
@@ -211,7 +231,7 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
         //记录原活动方向，恢复原方向
         sourceNode.setOutgoingFlows(oriSequenceFlowList);
         // 设置任务候选人
-        setAssigneeUser(task, preTask.getAssignee());
+        this.setAssignee(task.getProcessInstanceId(),preTask.getAssignee(),null);
     }
 
     @Override
@@ -238,17 +258,6 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     /**
-     * 新任务设置候选人
-     *
-     * @param task
-     * @param applyUserId
-     */
-    private void setAssigneeUser(Task task, String applyUserId) {
-        Task newTask = workFlowQuery.queryTaskByProcessId(task.getProcessInstanceId());
-        taskService.setAssignee(newTask.getId(), applyUserId);
-    }
-
-    /**
      * 建立新方向
      *
      * @param task
@@ -267,7 +276,7 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
         identityService.setAuthenticatedUserId(applyUserId);
         taskService.addComment(task.getId(), task.getProcessInstanceId(), "驳回");
         //添加代理
-        taskService.setAssignee(task.getId(), userId);
+        this.setAssignee(task.getId(), userId);
         //完成任务
         task.setCategory("refuse");
         taskService.setVariableLocal(task.getId(), "reson", reason);
@@ -275,55 +284,5 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
         Task t =
                 taskService.createTaskQuery().active().processInstanceId(task.getProcessInstanceId()).singleResult();
         taskService.setVariableLocal(t.getId(), "reason", reason);
-    }
-
-    /**
-     * 获取当前流程的申请人
-     *
-     * @param processId
-     * @return
-     */
-    private String getCurrentApplyUserId(String processId) {
-        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processId)
-                .singleResult();
-        String applyUserId = processInstance.getStartUserId();
-        return applyUserId;
-    }
-
-    /**
-     * 获取当前任务的历史活动实例
-     *
-     * @param excutionId 任务执行id
-     * @param taskId     任务id
-     * @return
-     */
-    private HistoricActivityInstance getCurrentApplyActivity(String excutionId, String taskId) {
-        HistoricActivityInstance myActivity = null;
-        List<HistoricActivityInstance> haiList = historyService.createHistoricActivityInstanceQuery().executionId
-                (excutionId).finished().list();
-        for (HistoricActivityInstance hai : haiList) {
-            if (taskId.equals(hai.getTaskId())) {
-                myActivity = hai;
-                break;
-            }
-        }
-        return myActivity;
-    }
-
-    /**
-     * 得到申请流程用户的任务
-     *
-     * @param processInstanceId 流程实例id
-     * @param backNum           回退节点数
-     * @return
-     */
-    private HistoricTaskInstance getApplyUserTask(String processInstanceId, int backNum) {
-        List<HistoricTaskInstance> taskInstanceList = historyService.createHistoricTaskInstanceQuery()
-                .processInstanceId(processInstanceId).finished().orderByTaskCreateTime().asc().list();
-        // 如果返回数有误，直接返回空
-        if (backNum <= 0 || taskInstanceList.size() < backNum) {
-            return null;
-        }
-        return taskInstanceList.get(taskInstanceList.size() - backNum);
     }
 }

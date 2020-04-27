@@ -254,19 +254,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         Map<String, Object> variables = new HashMap<>();
         variables.put("transFlag", leaveEx.getTransFlag());
         workFlowExecute.commitProcess(taskId, variables);
-        // 如果指定了下一个任务处理人
-        if (ToolsUtils.isNotEmpty(leaveEx.getAssignee())) {
-            List<Task> tasks = workFlowQuery.queryTasksByProcessId(procInstId);
-            tasks.stream().forEach(fe -> {
-                // 如果指定任务code ,则只设置指定的。否则设置所有的
-                if (ToolsUtils.isNotEmpty(leaveEx.getTaskCode())) {
-                    if (leaveEx.getTaskCode().equals(fe.getTaskDefinitionKey())) {
-                        workFlowExecute.setAssignee(fe.getId(), leaveEx.getAssignee());
-                    }
-                } else {
-                    workFlowExecute.setAssignee(fe.getId(), leaveEx.getAssignee());
-                }
-            });
-        }
+        // 设置任务所属人，当 taskCode 为空时，会将新任务都分配给 userId ，否则只会分配指定的 taskCode
+        workFlowExecute.setAssignee(procInstId, leaveEx.getAssignee(), leaveEx.getTaskCode());
     }
 }

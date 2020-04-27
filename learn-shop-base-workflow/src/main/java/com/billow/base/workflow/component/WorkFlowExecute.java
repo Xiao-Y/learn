@@ -140,13 +140,25 @@ public interface WorkFlowExecute {
     void addCandidateGroup(String taskId, String groupId);
 
     /**
-     * 设置任务所属人
+     * 设置任务所属人，当 taskCode 为空时，会将新任务都分配给 userId ，否则只会分配指定的 taskCode
+     *
+     * @param procInstId 流程实例id
+     * @param userId     用户id
+     * @param taskCode   任务code
+     * @return void
+     * @author LiuYongTao
+     * @date 2020/4/27 9:56
+     */
+    void setAssignee(String procInstId, String userId, String taskCode);
+
+    /**
+     * 通过 taskId 设置任务处理人
      *
      * @param taskId
      * @param userId
      * @return void
      * @author LiuYongTao
-     * @date 2020/4/26 17:28
+     * @date 2020/4/27 10:06
      */
     void setAssignee(String taskId, String userId);
 

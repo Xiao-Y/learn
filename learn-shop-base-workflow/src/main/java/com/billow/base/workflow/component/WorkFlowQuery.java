@@ -5,6 +5,8 @@ import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.DeploymentVo;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import com.billow.base.workflow.vo.TaskVo;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 
 import javax.servlet.http.HttpServletResponse;
@@ -172,7 +174,7 @@ public interface WorkFlowQuery {
     /**
      * 通过流程实例id 查询批注信息
      *
-     * @param procInstId
+     * @param procInstId 流程实例id
      * @return java.util.List<com.billow.base.workflow.vo.CommentVo>
      * @author billow
      * @date 2019/9/8 11:01
@@ -182,10 +184,36 @@ public interface WorkFlowQuery {
     /**
      * 是否挂起,0-不存在，1-活动，2-挂起
      *
-     * @param procInstId
+     * @param procInstId 流程实例id
      * @return int
      * @author billow
      * @date 2019/9/8 17:21
      */
     int querySuspensionStatus(String procInstId);
+
+    /**
+     * 获取当前流程的申请人
+     *
+     * @param processId 流程实例id
+     * @return
+     */
+    String queryCurrentApplyUserId(String processId);
+
+    /**
+     * 获取当前任务的历史活动实例
+     *
+     * @param excutionId 任务执行id
+     * @param taskId     任务id
+     * @return
+     */
+    HistoricActivityInstance queryCurrentApplyActivity(String excutionId, String taskId);
+
+    /**
+     * 查询上一个task
+     *
+     * @param procInstId 流程实例id
+     * @param backNum    回退节点数
+     * @return
+     */
+    HistoricTaskInstance queryApplyUserTask(String procInstId, int backNum);
 }

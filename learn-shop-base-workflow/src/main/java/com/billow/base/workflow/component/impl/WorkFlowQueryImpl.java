@@ -12,12 +12,15 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.Execution;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -26,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -321,5 +323,38 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
             }
         }
         return 1;
+    }
+
+    @Override
+    public String queryCurrentApplyUserId(String processId) {
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processId)
+                .singleResult();
+        String applyUserId = processInstance.getStartUserId();
+        return applyUserId;
+    }
+
+    @Override
+    public HistoricActivityInstance queryCurrentApplyActivity(String excutionId, String taskId) {
+        HistoricActivityInstance myActivity = null;
+        List<HistoricActivityInstance> haiList = historyService.createHistoricActivityInstanceQuery().executionId
+                (excutionId).finished().list();
+        for (HistoricActivityInstance hai : haiList) {
+            if (taskId.equals(hai.getTaskId())) {
+                myActivity = hai;
+                break;
+            }
+        }
+        return myActivity;
+    }
+
+    @Override
+    public HistoricTaskInstance queryApplyUserTask(String processInstanceId, int backNum) {
+        List<HistoricTaskInstance> taskInstanceList = historyService.createHistoricTaskInstanceQuery()
+                .processInstanceId(processInstanceId).finished().orderByTaskCreateTime().asc().list();
+        // 如果返回数有误，直接返回空
+        if (backNum <= 0 || taskInstanceList.size() < backNum) {
+            return null;
+        }
+        return taskInstanceList.get(taskInstanceList.size() - backNum);
     }
 }
