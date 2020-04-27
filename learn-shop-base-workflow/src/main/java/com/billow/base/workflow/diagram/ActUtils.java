@@ -103,8 +103,7 @@ public class ActUtils {
             }
             logger.debug("Executed activity: {}", highLightedActivities);
             // 得到正在执行的Activity的Id
-            List<String> activityIds = new ArrayList<>();
-            this.getCurrrentActivity(processInstanceId, activityIds);
+            List<String> activityIds = this.getCurrrentActivity(processInstanceId);
             logger.debug("Current activity ids : {}", activityIds);
             imageStream = new CustomProcessDiagramGenerator().generateDiagram(bpmnModel, highLightedActivities, highLightedFlows, activityIds);
         } catch (Exception e) {
@@ -124,14 +123,14 @@ public class ActUtils {
      */
     public List<String> getHighLightedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //24小时制
-        List<String> highFlows = new ArrayList<String>(); // 用以保存高亮的线flowId
+        List<String> highFlows = new ArrayList<>(); // 用以保存高亮的线flowId
 
         // 对历史流程节点进行遍历
         for (int i = 0; i < historicActivityInstances.size() - 1; i++) {
             // 获得当前活动对应的节点信息
             FlowNode activityImpl = (FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstances.get(i).getActivityId());
             // 用以保存后续开始时间相同的节点
-            List<FlowNode> sameStartTimeNodes = new ArrayList<FlowNode>();
+            List<FlowNode> sameStartTimeNodes = new ArrayList<>();
             //找到紧跟在后面的一个节点
             FlowNode sameActivityImpl1 = null;
             // 第一个节点
@@ -185,17 +184,18 @@ public class ActUtils {
      * 获取流程当前的节点
      *
      * @param processInstanceId
-     * @param activityIds
-     * @return void
+     * @return java.util.List<java.lang.String>
      * @author LiuYongTao
      * @date 2019/8/27 8:57
      */
-    private void getCurrrentActivity(String processInstanceId, List<String> activityIds) {
+    private List<String> getCurrrentActivity(String processInstanceId) {
+        List<String> activityIds = new ArrayList<>();
         // 查询流程当前活动的执行对象，代办任务节点
         List<Execution> executions = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
         for (Execution exe : executions) {
             List<String> ids = runtimeService.getActiveActivityIds(exe.getId());
             activityIds.addAll(ids);
         }
+        return activityIds;
     }
 }
