@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -19,13 +20,15 @@ public class RedisCacheConfig {
 
     private static Logger logger = LoggerFactory.getLogger(RedisCacheConfig.class);
 
-    @Autowired
+    // 有可能不使用redis缓存
+    @Autowired(required = false)
     private LettuceConnectionFactory connectionFactory;
 
-    @Value("${spring.redis.cacheDatabase}")
-    private Integer cacheDatabase = 15;
+    @Value("${spring.redis.cacheDatabase:15}")
+    private Integer cacheDatabase;
 
     @Bean
+    @ConditionalOnBean(LettuceConnectionFactory.class)
     public RedisTemplate<String, Object> redisCacheTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         connectionFactory.setDatabase(cacheDatabase);

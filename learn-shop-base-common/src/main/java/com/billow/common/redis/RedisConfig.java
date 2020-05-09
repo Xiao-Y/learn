@@ -49,27 +49,4 @@ public class RedisConfig {
     public RedisTemplate<?, ?> redisTemplate() {
         return new StringRedisTemplate(getConnectionFactory());
     }
-
-
-//    @Bean
-//    @ConfigurationProperties(prefix = "spring.redis")
-//    public JedisPoolConfig getRedisConfig() {
-//        JedisPoolConfig config = new JedisPoolConfig();
-//        return config;
-//    }
-//
-//    @Bean
-//    @ConfigurationProperties(prefix = "spring.redis")
-//    public JedisConnectionFactory getConnectionFactory() {
-//        JedisPoolConfig config = getRedisConfig();
-//        JedisConnectionFactory factory = new JedisConnectionFactory(config);
-//        logger.info("JedisConnectionFactory bean init success.");
-//        return factory;
-//    }
-//
-//
-//    @Bean
-//    public RedisTemplate<?, ?> redisTemplate() {
-//        return new StringRedisTemplate(getConnectionFactory());
-//    }
 }
