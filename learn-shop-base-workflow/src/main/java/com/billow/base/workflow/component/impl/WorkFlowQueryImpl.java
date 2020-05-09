@@ -8,6 +8,7 @@ import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.DeploymentVo;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import com.billow.base.workflow.vo.TaskVo;
+import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -58,6 +59,8 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
     private TaskService taskService;
     @Autowired
     private ActUtils actUtils;
+    @Autowired
+    private FormService formService;
 
     @Override
     public List<DeploymentVo> queryDeployment(DeploymentVo deploymentVo) {
@@ -295,8 +298,14 @@ public class WorkFlowQueryImpl implements WorkFlowQuery {
                 .processDefinitionKey(key).
                         latestVersion().
                         singleResult();
+
+
         ProcessDefinitionVo vo = new ProcessDefinitionVo();
-        BeanUtils.copyProperties(processDefinition, vo);
+        if(processDefinition != null){
+            BeanUtils.copyProperties(processDefinition, vo);
+            Object renderedStartForm = formService.getRenderedStartForm(processDefinition.getId());
+            System.out.println(renderedStartForm);
+        }
         return vo;
     }
 

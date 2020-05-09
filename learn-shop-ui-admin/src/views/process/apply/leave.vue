@@ -49,10 +49,12 @@
 
 <script>
   import {
-    SubmitLeave,
-    FindApplyById,
     CommitLeaveProcess
   } from "../../../api/proc/applyMag";
+    import {
+    SubmitLeave,
+    FindApplyById
+  } from "../../../api/proc/apply/leaveApi";
 
   export default {
     data() {

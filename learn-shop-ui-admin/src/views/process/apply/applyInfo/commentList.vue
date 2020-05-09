@@ -23,9 +23,6 @@
             <el-form-item label="动作">
               <span>{{ scope.row.action }}</span>
             </el-form-item>
-<!--            <el-form-item label="说明">-->
-<!--              <el-input type="textarea" v-model="scope.row.fullMessage" disabled></el-input>-->
-<!--            </el-form-item>-->
           </el-form>
         </template>
       </el-table-column>
