@@ -2,6 +2,7 @@ package com.billow.common.redis;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtils {
 
     @Autowired
+    @Qualifier("redisTemplate")
     private RedisTemplate<String, String> redisTemplate;
 
     /**
@@ -32,8 +34,8 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public void setString(String key, String value) {
-        Assert.notNull(key,"key is not empty");
-        Assert.notNull(value,"value is not empty");
+        Assert.notNull(key, "key is not empty");
+        Assert.notNull(value, "value is not empty");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, value);
@@ -49,9 +51,9 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public void setString(String key, String value, long l, TimeUnit timeUnit) {
-        Assert.notNull(key,"key is not empty");
-        Assert.notNull(value,"value is not empty");
-        Assert.notNull(timeUnit,"timeUnit is not empty");
+        Assert.notNull(key, "key is not empty");
+        Assert.notNull(value, "value is not empty");
+        Assert.notNull(timeUnit, "timeUnit is not empty");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, value, l, timeUnit);
@@ -67,7 +69,7 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public <T> void setObj(String key, T value) {
-        Assert.notNull(key,"key is not empty");
+        Assert.notNull(key, "key is not empty");
 //        Assert.notNull(value,"value is not empty");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
@@ -84,9 +86,9 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public <T> void setObj(String key, T value, long l, TimeUnit timeUnit) {
-        Assert.notNull(key,"key is not empty");
-        Assert.notNull(value,"value is not empty");
-        Assert.notNull(timeUnit,"timeUnit is not empty");
+        Assert.notNull(key, "key is not empty");
+        Assert.notNull(value, "value is not empty");
+        Assert.notNull(timeUnit, "timeUnit is not empty");
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, JSONObject.toJSONString(value), l, timeUnit);

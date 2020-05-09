@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class CodeGenerator {
 
+    String projectPath = System.getProperty("user.dir") + "/learn-shop-base-mybatis";
+
     /**
      * 自定义配置
      *
@@ -33,27 +35,22 @@ public class CodeGenerator {
      * @date 2019/10/29 9:46
      */
     private InjectionConfig getInjectionConfig(PackageConfig pc) {
-        String projectPath = System.getProperty("user.dir") + "/learn-shop-base-mybatis";
-        // 如果模板引擎是 freemarker
-        String templatePath = "/templates/mapper.xml.ftl";
-        // 如果模板引擎是 velocity
-//        String templatePath = "/templates/mapper.xml.vm";
+        String srcJava = "/src/main/java/com/billow/";
+        String srcRes = "/src/main/resources";
 
-        // 自定义配置
-        InjectionConfig cfg = new InjectionConfig() {
-            @Override
-            public void initMap() {
-            }
-        };
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
 
+        // 如果模板引擎是 freemarker
+        String templatePath = "/template/mapper.xml.ftl";
+        // 如果模板引擎是 velocity
+//        String templatePath = "/templates/mapper.xml.vm";
         // 自定义配置:mapper.xml
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + "/src/main/resources/mapper/" + tableInfo.getXmlName() + StringPool.DOT_XML;
+                return projectPath + srcRes + "/mapper/" + tableInfo.getXmlName() + StringPool.DOT_XML;
             }
         });
 
@@ -63,7 +60,17 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/api/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
+                return projectPath + srcJava + pc.getModuleName() + "/api/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
+            }
+        });
+
+        // 自定义配置:dao.java
+        templatePath = "/template/mapper.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + srcJava + pc.getModuleName() + "/dao/" + tableInfo.getMapperName() + StringPool.DOT_JAVA;
             }
         });
 
@@ -73,7 +80,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/pojo/vo/" +
+                return projectPath + srcJava + pc.getModuleName() + "/pojo/vo/" +
                         tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "Vo" + StringPool.DOT_JAVA;
             }
         });
@@ -84,7 +91,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/service/" +
+                return projectPath + srcJava + pc.getModuleName() + "/service/" +
                         tableInfo.getServiceName() + StringPool.DOT_JAVA;
             }
         });
@@ -95,11 +102,17 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + "/src/main/java/com/billow/" + pc.getModuleName() + "/service/impl/" +
+                return projectPath + srcJava + pc.getModuleName() + "/service/impl/" +
                         tableInfo.getServiceImplName() + StringPool.DOT_JAVA;
             }
         });
 
+        // 自定义配置
+        InjectionConfig cfg = new InjectionConfig() {
+            @Override
+            public void initMap() {
+            }
+        };
         cfg.setFileOutConfigList(focList);
         return cfg;
     }
@@ -129,7 +142,6 @@ public class CodeGenerator {
      * @date 2019/10/29 9:07
      */
     private GlobalConfig getGlobalConfig() {
-        String projectPath = System.getProperty("user.dir") + "/learn-shop-base-mybatis";
         GlobalConfig gc = new GlobalConfig();
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("billow");
@@ -137,6 +149,7 @@ public class CodeGenerator {
         gc.setBaseResultMap(true);
         gc.setBaseColumnList(true);
         gc.setFileOverride(true);
+        gc.setEnableCache(true);
         gc.setIdType(IdType.ID_WORKER);
 
         gc.setServiceName("%sService");
@@ -173,6 +186,7 @@ public class CodeGenerator {
         templateConfig.setController(null);
         templateConfig.setService(null);
         templateConfig.setServiceImpl(null);
+        templateConfig.setMapper(null);
         mpg.setTemplate(templateConfig);
 
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
@@ -199,10 +213,9 @@ public class CodeGenerator {
 //        strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
-//        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setInclude("p_goods_brand","p_goods_category","p_goods_sku"
-                ,"p_goods_sku_spec_value","p_goods_spec_key","p_goods_spec_value","p_goods_spu","p_goods_spu_spec","p_shop_info");
+        strategy.setInclude("p_goods_brand", "p_goods_category", "p_goods_sku"
+                , "p_goods_sku_spec_value", "p_goods_spec_key", "p_goods_spec_value", "p_goods_spu", "p_goods_spu_spec", "p_shop_info");
         strategy.setTablePrefix("p_");
         return strategy;
     }

@@ -1,7 +1,9 @@
 package com.billow.product.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
+import org.apache.ibatis.annotations.CacheNamespace;
 
 /**
  * <p>
@@ -9,8 +11,9 @@ import com.billow.product.pojo.po.GoodsSpecValuePo;
  * </p>
  *
  * @author billow
- * @since 2019-11-27
+ * @since 2020-05-09
  */
+@CacheNamespace(implementation = MybatisRedisCache.class)
 public interface GoodsSpecValueDao extends BaseMapper<GoodsSpecValuePo> {
 
 }
