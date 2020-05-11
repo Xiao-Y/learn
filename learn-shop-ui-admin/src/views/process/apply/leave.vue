@@ -49,11 +49,11 @@
 
 <script>
   import {
-    CommitLeaveProcess
-  } from "../../../api/proc/applyMag";
-    import {
-    SubmitLeave,
     FindApplyById
+  } from "../../../api/proc/applyMag";
+  import {
+    SubmitLeave,
+    CommitLeaveProcess
   } from "../../../api/proc/apply/leaveApi";
 
   export default {
@@ -68,7 +68,7 @@
           comment: '',
           approveStatus: '0',
           procInstId: '',
-          assignee:'', // 指定下一个任务处理人，用于驳回
+          assignee: '', // 指定下一个任务处理人，用于驳回
           submitType: '' // 提交类型:submit-提交，reSubmit-重新提交,cancel-取消申请，agree-同意，reject-驳回
         },
         rulesForm: {

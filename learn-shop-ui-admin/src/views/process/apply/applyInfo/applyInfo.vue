@@ -22,7 +22,6 @@
 <script>
   // 申请页面---start 
   import leave from '../leave';
-  import leave2 from '../leave2';
   // 申请页面---end
   import CommentList from './commentList'; // 批注信息
   import ViewProcessImg from '../../ViewProcessImg'; // 流程图
@@ -33,8 +32,7 @@
       CommentList,
       ViewProcessImg,
       CommentList,
-      leave,
-      leave2
+      leave
     },
     data() {
       return {

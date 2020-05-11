@@ -3,19 +3,6 @@ import requestUtils from '../../utils/requestUtils'
 const baseUrl = '../admin-system/applyApi';
 
 /************************ 申请相关 ****************************/
-// // 定义申请页面映射
-// const apply = new Map();
-// apply.set("leave", "workbenchApplyLeave");
-//
-// /**
-//  * 获取申请页面
-//  * @param key
-//  * @returns {V}
-//  * @constructor
-//  */
-// export const FindApplyPage = (key) => {
-//   return apply.get(key);
-// };
 
 /**
  * 删除已经结束的申请
@@ -34,6 +21,13 @@ export const DeleteApplyInfoById = (id) => requestUtils.del(baseUrl + '/deleteAp
 export const ViewExecutionImgById = id => {
   return '../admin-system/deployImageAction/viewExecutionImgById/' + id;
 };
+
+/**
+ * 查询申请记录
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const FindApplyById = (id) => requestUtils.get(baseUrl + '/findApplyById/' + id);
 
 /**
  * 认领任务
@@ -81,17 +75,6 @@ export const MyStartProdeList = applyInfo => requestUtils.post(baseUrl + '/mySta
  * @constructor
  */
 export const LoadDataTaskList = taskInfo => requestUtils.post(baseUrl + '/queryMyTaskList', Object.assign(taskInfo));
-
-/*********************************** 请假相关 **************************************/
-/**
- * 提交任务
- * @param taskInfo
- * @param procInstId
- * @param taskId
- * @returns {*|Promise|Promise<any>}
- * @constructor
- */
-export const CommitLeaveProcess = (taskInfo, procInstId, taskId) => requestUtils.post(baseUrl + '/commitLeaveProcess/' + procInstId + '/' + taskId, Object.assign(taskInfo));
 
 /**
  * 通过流程实例id 查询批注信息
