@@ -45,21 +45,21 @@ public class GoodsSpuApp {
     @ApiOperation(value = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
     public GoodsSpuVo getById(@PathVariable("id") String id) {
-        try {
-            AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
-            model.setOutTradeNo(UUID.randomUUID().toString());
-            model.setSubject("我就买一个商品");
-            model.setTotalAmount("0.01");
-//            model.setTimeoutExpress("90m");
-            String qrCode = aliPayScanService.tradePrecreate(model);
-            System.out.println("=====================");
-            System.out.println(qrCode);
-            QrGenUtil.zxingCodeCreate(qrCode, "C:/Users/Administrator/Desktop/b.jpg", 350, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        GoodsSpuPo po = goodsSpuService.getById(id);
-//        return ConvertUtils.convert(po, GoodsSpuVo.class);
-        return null;
+//        try {
+//            AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
+//            model.setOutTradeNo(UUID.randomUUID().toString());
+//            model.setSubject("我就买一个商品");
+//            model.setTotalAmount("0.01");
+////            model.setTimeoutExpress("90m");
+//            String qrCode = aliPayScanService.tradePrecreate(model);
+//            System.out.println("=====================");
+//            System.out.println(qrCode);
+//            QrGenUtil.zxingCodeCreate(qrCode, "C:/Users/Administrator/Desktop/b.jpg", 350, null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+        GoodsSpuPo po = goodsSpuService.getById(id);
+        return ConvertUtils.convert(po, GoodsSpuVo.class);
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
-  <process id="leave" name="leave" isExecutable="true">
-    <documentation>请假申请</documentation>
+  <process id="leave2" name="leave2" isExecutable="true">
+    <documentation>请假申请2</documentation>
     <startEvent id="startEvent1"></startEvent>
-    <userTask id="apply" name="用户申请"></userTask>
+    <userTask id="apply" name="用户申请" activiti:formKey="apply_leave"></userTask>
     <userTask id="approval" name="hr审核" activiti:candidateGroups="hr"></userTask>
     <exclusiveGateway id="sid-6FE28C36-3802-4D3F-93E4-8A08CFA2DABC"></exclusiveGateway>
     <endEvent id="sid-11CEF6D7-BDDF-432B-B7E4-C0DD0A281A3A">
@@ -26,8 +26,8 @@
     </sequenceFlow>
     <sequenceFlow id="_1" sourceRef="startEvent1" targetRef="apply"></sequenceFlow>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_leave">
-    <bpmndi:BPMNPlane bpmnElement="leave" id="BPMNPlane_leave">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_leave2">
+    <bpmndi:BPMNPlane bpmnElement="leave2" id="BPMNPlane_leave2">
       <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
         <omgdc:Bounds height="30.0" width="30.0" x="90.0" y="160.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>

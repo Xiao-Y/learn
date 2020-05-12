@@ -21,9 +21,7 @@
         <module>learn-cloud-config</module>
         <module>learn-cloud-eureka</module>
         <module>learn-cloud-zuul</module>
-<!--        <module>learn-cloud-turbine</module>-->
         <module>learn-cloud-common</module>
-<!--        <module>learn-cloud-zipkin</module>-->
 
         <module>learn-shop-admin-system</module>
         <module>learn-shop-admin-user</module>
@@ -32,7 +30,6 @@
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
 
-        <module>learn-shop-public-job</module>
         <module>learn-shop-public-auth</module>
 
         <module>learn-shop-base-common</module>
@@ -68,7 +65,7 @@
         <fastjson.version>1.2.44</fastjson.version>
         <hutool.version>4.0.9</hutool.version>
         <lcn.last.version>4.1.0</lcn.last.version>
-        <spring.boot.redis.version>1.3.8.RELEASE</spring.boot.redis.version>
+        <spring.boot.redis.version>2.2.7.RELEASE</spring.boot.redis.version>
         <guava.version>27.1-jre</guava.version>
         <netty.all.version>4.1.42.Final</netty.all.version>
         <jjwt.version>0.7.0</jjwt.version>
@@ -201,7 +198,7 @@
             <!-- redis -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-redis</artifactId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring.boot.redis.version}</version>
             </dependency>
             <!-- IO通信 -->

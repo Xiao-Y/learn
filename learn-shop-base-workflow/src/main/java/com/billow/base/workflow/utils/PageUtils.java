@@ -43,7 +43,7 @@ public class PageUtils {
                 BeanUtils.copyProperties(sou, tar);
                 tarList.add(tar);
             }
-            page.setContent(tarList);
+            page.setTableData(tarList);
         } catch (Exception e) {
             log.error("PageUtils.converListToPage 发生了异常：", e);
         }

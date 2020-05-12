@@ -1,6 +1,5 @@
 package com.billow.base.workflow.diagram;
 
-import com.billow.base.workflow.utils.PageUtils;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
 import org.activiti.bpmn.model.SequenceFlow;
@@ -9,23 +8,17 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntityImpl;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 流程图生成工具
@@ -37,22 +30,6 @@ import java.util.Map;
 public class ActUtils {
 
     private static Logger logger = LoggerFactory.getLogger(ActUtils.class);
-
-//    private ActUtils() {
-//        ProcessEngine defaultProcessEngine = ProcessEngines.getDefaultProcessEngine();
-//        historyService = defaultProcessEngine.getHistoryService();
-//        repositoryService = defaultProcessEngine.getRepositoryService();
-//        runtimeService = defaultProcessEngine.getRuntimeService();
-//    }
-//
-//    private static class ActHolder {
-//        private final static ActUtils actUtils = new ActUtils();
-//    }
-//
-//    public static ActUtils getInstance() {
-//        return ActHolder.actUtils;
-//    }
-
 
     @Autowired
     private HistoryService historyService;
@@ -102,9 +79,6 @@ public class ActUtils {
             return imageStream;
         }
         try {
-            // 查询Execution对象
-//            Execution execution = runtimeService.createExecutionQuery().executionId(executionId).singleResult();
-//            String processInstanceId = execution.getProcessInstanceId();
             // 查询历史流程实例
             HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(processInstanceId)
@@ -117,7 +91,6 @@ public class ActUtils {
             List<HistoricActivityInstance> highLightedActivitList = historyService.createHistoricActivityInstanceQuery()
                     .processInstanceId(processInstanceId)
                     .list();
-//            List<HistoricActivityInstance> historicActivityInstances = PageUtils.converListToList(highLightedActivitList, HistoricActivityInstance.class);
             // 高亮线路id集合
             BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
             List<String> highLightedFlows = this.getHighLightedFlows(bpmnModel, highLightedActivitList);
@@ -130,8 +103,7 @@ public class ActUtils {
             }
             logger.debug("Executed activity: {}", highLightedActivities);
             // 得到正在执行的Activity的Id
-            List<String> activityIds = new ArrayList<>();
-            this.getCurrrentActivity(processInstanceId, activityIds);
+            List<String> activityIds = this.getCurrrentActivity(processInstanceId);
             logger.debug("Current activity ids : {}", activityIds);
             imageStream = new CustomProcessDiagramGenerator().generateDiagram(bpmnModel, highLightedActivities, highLightedFlows, activityIds);
         } catch (Exception e) {
@@ -139,91 +111,6 @@ public class ActUtils {
         }
         return imageStream;
     }
-
-//    /**
-//     * 获取已经执行过的流程线，用于高亮显示
-//     *
-//     * @param bpmnModel
-//     * @param historicActivityInstances
-//     * @return
-//     */
-//    private List<String> getHighLightedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
-//        // 解决:历史任务中存在多个相同任务时,连线异常
-//        List<HistoricActivityInstanceEntityImpl> historicActivityInstancesTemp =
-//                PageUtils.converListToList(historicActivityInstances, HistoricActivityInstanceEntityImpl.class);
-//        // 高亮流程已发生流转的线id集合
-//        List<String> highLightedFlowIds = new ArrayList<>();
-//        // 全部活动节点
-//        List<FlowNode> historicActivityNodes = new ArrayList<>();
-//        // 已完成的历史活动节点
-//        List<HistoricActivityInstance> finishedActivityInstances = new ArrayList<>();
-//
-//        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
-//            FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstance.getActivityId(), true);
-//            historicActivityNodes.add(flowNode);
-//            if (historicActivityInstance.getEndTime() != null) {
-//                finishedActivityInstances.add(historicActivityInstance);
-//            }
-//        }
-//
-//        FlowNode currentFlowNode;
-//        FlowNode targetFlowNode;
-//        // 遍历已完成的活动实例，从每个实例的outgoingFlows中找到已执行的
-//        for (HistoricActivityInstance currentActivityInstance : finishedActivityInstances) {
-//            // 获得当前活动对应的节点信息及outgoingFlows信息
-//            currentFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(currentActivityInstance.getActivityId(), true);
-//            List<SequenceFlow> sequenceFlows = currentFlowNode.getOutgoingFlows();
-//            /**
-//             * 遍历outgoingFlows并找到已已流转的 满足如下条件认为已已流转：
-//             * 1.当前节点是并行网关或兼容网关，则通过outgoingFlows能够在历史活动中找到的全部节点均为已流转
-//             * 2.当前节点是以上两种类型之外的，通过outgoingFlows查找到的时间最早的流转节点视为有效流转
-//             */
-//            if ("parallelGateway".equals(currentActivityInstance.getActivityType()) || "inclusiveGateway".equals(currentActivityInstance.getActivityType())) {
-//                // 遍历历史活动节点，找到匹配流程目标节点的
-//                for (SequenceFlow sequenceFlow : sequenceFlows) {
-//                    targetFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(sequenceFlow.getTargetRef(), true);
-//                    if (historicActivityNodes.contains(targetFlowNode)) {
-//                        highLightedFlowIds.add(sequenceFlow.getId());
-//                    }
-//                }
-//            } else {
-//                List<Map<String, Object>> tempMapList = new ArrayList<>();
-//                for (SequenceFlow sequenceFlow : sequenceFlows) {
-//                    // 解决:历史任务中存在多个相同任务时,连线异常
-//                    Iterator<HistoricActivityInstanceEntityImpl> iterator = historicActivityInstancesTemp.iterator();
-//                    while (iterator.hasNext()) {
-//                        HistoricActivityInstance historicActivityInstance = iterator.next();
-//                        if (historicActivityInstance.getActivityId().equals(sequenceFlow.getTargetRef())) {
-//                            Map<String, Object> map = new HashMap<>();
-//                            map.put("highLightedFlowId", sequenceFlow.getId());
-//                            map.put("highLightedFlowStartTime", historicActivityInstance.getStartTime().getTime());
-//                            tempMapList.add(map);
-//
-////                            highLightedFlowIds.add(sequenceFlow.getId());
-//                            // 比对等到结果后,就移除,避免历史任务中存在多个相同任务时,连线异常
-//                            iterator.remove();
-//
-//                        }
-//                    }
-//                }
-//
-//                if (!CollectionUtils.isEmpty(tempMapList)) {
-//                    // 遍历匹配的集合，取得开始时间最早的一个
-//                    long earliestStamp = 0L;
-//                    String highLightedFlowId = null;
-//                    for (Map<String, Object> map : tempMapList) {
-//                        long highLightedFlowStartTime = Long.valueOf(map.get("highLightedFlowStartTime").toString());
-//                        if (earliestStamp == 0 || earliestStamp >= highLightedFlowStartTime) {
-//                            highLightedFlowId = map.get("highLightedFlowId").toString();
-//                            earliestStamp = highLightedFlowStartTime;
-//                        }
-//                    }
-//                    highLightedFlowIds.add(highLightedFlowId);
-//                }
-//            }
-//        }
-//        return highLightedFlowIds;
-//    }
 
     /**
      * 获取已经执行过的流程线，用于高亮显示
@@ -236,14 +123,14 @@ public class ActUtils {
      */
     public List<String> getHighLightedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //24小时制
-        List<String> highFlows = new ArrayList<String>(); // 用以保存高亮的线flowId
+        List<String> highFlows = new ArrayList<>(); // 用以保存高亮的线flowId
 
         // 对历史流程节点进行遍历
         for (int i = 0; i < historicActivityInstances.size() - 1; i++) {
             // 获得当前活动对应的节点信息
             FlowNode activityImpl = (FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstances.get(i).getActivityId());
             // 用以保存后续开始时间相同的节点
-            List<FlowNode> sameStartTimeNodes = new ArrayList<FlowNode>();
+            List<FlowNode> sameStartTimeNodes = new ArrayList<>();
             //找到紧跟在后面的一个节点
             FlowNode sameActivityImpl1 = null;
             // 第一个节点
@@ -297,17 +184,18 @@ public class ActUtils {
      * 获取流程当前的节点
      *
      * @param processInstanceId
-     * @param activityIds
-     * @return void
+     * @return java.util.List<java.lang.String>
      * @author LiuYongTao
      * @date 2019/8/27 8:57
      */
-    private void getCurrrentActivity(String processInstanceId, List<String> activityIds) {
+    private List<String> getCurrrentActivity(String processInstanceId) {
+        List<String> activityIds = new ArrayList<>();
         // 查询流程当前活动的执行对象，代办任务节点
         List<Execution> executions = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
         for (Execution exe : executions) {
             List<String> ids = runtimeService.getActiveActivityIds(exe.getId());
             activityIds.addAll(ids);
         }
+        return activityIds;
     }
 }

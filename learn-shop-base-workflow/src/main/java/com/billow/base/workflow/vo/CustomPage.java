@@ -20,13 +20,13 @@ public class CustomPage<T> {
     // 每页要显示的记录数
     private Integer pageNo = PAGE_NO;
     // 总记录数
-    private long totalElements = RECORD_COUNT;
+    private long recordCount = RECORD_COUNT;
     // 总页数据
     private long totalPages = RECORD_COUNT;
 
     private Integer offset = PAGE_SIZE * PAGE_NO;
     // 分页数据
-    private List<T> content = new ArrayList<>();
+    private List<T> tableData = new ArrayList<>();
 
     public CustomPage() {
     }
@@ -35,38 +35,38 @@ public class CustomPage<T> {
      * 分页构造
      *
      * @param pageSize      页面大小
-     * @param totalElements 总记录数
+     * @param recordCount 总记录数
      * @author billow
      * @date 2019/8/25 12:29
      */
-    public CustomPage(Integer pageSize, long totalElements) {
-        this(pageSize, totalElements, null);
+    public CustomPage(Integer pageSize, long recordCount) {
+        this(pageSize, recordCount, null);
     }
 
     /**
      * 分页构造
      *
      * @param pageSize      页面大小
-     * @param totalElements 总记录数
-     * @param content       查询结果
+     * @param recordCount 总记录数
+     * @param tableData       查询结果
      * @author billow
      * @date 2019/8/25 12:29
      */
-    public CustomPage(Integer pageSize, long totalElements, List<T> content) {
+    public CustomPage(Integer pageSize, long recordCount, List<T> tableData) {
         this.pageSize = pageSize;
-        this.totalElements = totalElements;
-        this.content = content;
+        this.recordCount = recordCount;
+        this.tableData = tableData;
         this.offset = this.pageNo * this.pageSize;
         // 计算分页
-        this.totalPages = pageSize == null ? 0 : (int) Math.ceil((double) totalElements / (double) pageSize);
+        this.totalPages = pageSize == null ? 0 : (int) Math.ceil((double) recordCount / (double) pageSize);
     }
 
-    public long getTotalElements() {
-        return totalElements;
+    public long getRecordCount() {
+        return recordCount;
     }
 
-    public CustomPage<T> setTotalElements(long totalElements) {
-        this.totalElements = totalElements;
+    public CustomPage<T> setRecordCount(long recordCount) {
+        this.recordCount = recordCount;
         return this;
     }
 
@@ -79,12 +79,12 @@ public class CustomPage<T> {
         return this;
     }
 
-    public List<T> getContent() {
-        return content;
+    public List<T> getTableData() {
+        return tableData;
     }
 
-    public CustomPage<T> setContent(List<T> content) {
-        this.content = content;
+    public CustomPage<T> setTableData(List<T> tableData) {
+        this.tableData = tableData;
         return this;
     }
 

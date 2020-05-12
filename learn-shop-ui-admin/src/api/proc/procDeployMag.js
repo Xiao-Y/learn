@@ -36,5 +36,5 @@ export const Deploy = () => {
  * @constructor
  */
 export const ViewDeployImgById = id => {
-  return baseUrl + '/viewDeployImgById/' + id;
+  return '../admin-system/deployImageAction/viewDeployImgById/' + id;
 };

@@ -97,7 +97,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         }
 
 //        baseResponse.setRequestUrl()
-        log.info("\n响应参数：{} ", JSONObject.toJSONString(baseResponse));
+//        log.info("\n响应参数：{} ", JSONObject.toJSONString(baseResponse));
 
         // 处理返回值是String的情况
         if (body instanceof String) {

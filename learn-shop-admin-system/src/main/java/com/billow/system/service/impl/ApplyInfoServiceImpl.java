@@ -19,6 +19,7 @@ import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.activiti.engine.task.Task;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -187,14 +189,14 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         nativeQuery = entityManager.createNativeQuery(sqlCount.toString());
         BigInteger o = (BigInteger) nativeQuery.getSingleResult();
         CustomPage<Map<String, Object>> page = new CustomPage<>(pageSize, o.longValue());
-        page.setContent(resultList);
+        page.setTableData(resultList);
         return page;
     }
 
     @Override
     public Page<ApplyInfoVo> myStartProdeList(ApplyInfoVo applyInfoVo) {
         ApplyInfoPo applyInfoPo = ConvertUtils.convert(applyInfoVo, ApplyInfoPo.class);
-        Pageable pageable = new PageRequest(applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
+        Pageable pageable = PageRequest.of(applyInfoVo.getPageNo(), applyInfoVo.getPageSize(), Sort.Direction.DESC, "createTime");
         Page<ApplyInfoVo> page = applyInfoDao.findAll(Example.of(applyInfoPo), pageable).map(this::applyInfoPoToVo);
         return page;
     }
@@ -252,5 +254,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
         Map<String, Object> variables = new HashMap<>();
         variables.put("transFlag", leaveEx.getTransFlag());
         workFlowExecute.commitProcess(taskId, variables);
+        // 设置任务所属人，当 taskCode 为空时，会将新任务都分配给 userId ，否则只会分配指定的 taskCode
+        workFlowExecute.setAssignee(procInstId, leaveEx.getAssignee(), leaveEx.getTaskCode());
     }
 }

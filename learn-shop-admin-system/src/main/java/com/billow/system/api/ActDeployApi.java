@@ -78,10 +78,4 @@ public class ActDeployApi extends BaseApi {
     public void delProceDeployById(@PathVariable String deploymentId, @PathVariable boolean cascade) {
         workFlowExecute.deleteDeployment(deploymentId, cascade);
     }
-
-    @ApiOperation(value = "根据id获取原始的流程图")
-    @GetMapping("/viewDeployImgById/{deploymentId}")
-    public void viewDeployImgById(@PathVariable String deploymentId, HttpServletResponse response) throws Exception {
-        workFlowQuery.genOriginalProcessImage(deploymentId, response);
-    }
 }

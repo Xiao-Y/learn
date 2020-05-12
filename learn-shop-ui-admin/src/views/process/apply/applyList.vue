@@ -1,14 +1,6 @@
 <template>
   <div>
     <el-row>
-      <!--      <el-col :span="4" v-for="(o, index) in 12" :key="o" :offset="(index % 4) > 0 ? 2 : 0">-->
-      <!--        <el-card :body-style="{ padding: '0px' }">-->
-      <!--          <img src="../../../static/img/apply/leave.jpg" class="image" @click="leave">-->
-      <!--          <div style="padding: 15px;">-->
-      <!--            <span>我要请假</span>-->
-      <!--          </div>-->
-      <!--        </el-card>-->
-      <!--      </el-col>-->
       <el-col :span="4" :offset="0">
         <el-card :body-style="{ padding: '0px' }">
           <img src="../../../static/img/apply/leave.jpg" class="image" @click="onShow('leave')">
@@ -19,9 +11,9 @@
       </el-col>
       <el-col :span="4" :offset="2">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="../../../static/img/apply/leave.jpg" class="image" @click="onShow('leave')">
-          <div style="padding: 15px;" @click="onShow('leave')">
-            <span>我要请假</span>
+          <img src="../../../static/img/apply/leave.jpg" class="image" @click="onShow('leave2')">
+          <div style="padding: 15px;" @click="onShow('leave2')">
+            <span>我要请假2</span>
           </div>
         </el-card>
       </el-col>
@@ -43,6 +35,14 @@
     methods: {
       onShow(applyType) {
         FindDefByKey(applyType).then(res => {
+          if(!res.resData.deploymentId){
+            this.$notify.error({
+              title: '错误',
+              position: 'bottom-right',
+              message: '流程没有部署！'
+            });
+            return;
+          }
           this.$router.push({
             name: 'workbenchApplyInfo',
             query: {

@@ -5,10 +5,8 @@ import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.CommentVo;
 import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.TaskVo;
-import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
-import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -111,12 +108,6 @@ public class ApplyApi {
 //        return taskVos;
 //    }
 
-    @ApiOperation(value = "查看活动的流程图（显示运行轨迹）")
-    @GetMapping("/viewExecutionImgById/{executionId}")
-    public void viewDeployImgById(@PathVariable String executionId, HttpServletResponse response) throws Exception {
-        workFlowQuery.genActiveProccessImage(executionId, response);
-    }
-
     @ApiOperation(value = "删除已经结束的申请")
     @DeleteMapping("/deleteApplyInfoById/{id}")
     public void submitLeave(@PathVariable Long id) {
@@ -125,10 +116,9 @@ public class ApplyApi {
 
     @ApiOperation(value = "根据ID查询申请信息")
     @GetMapping("/findApplyById/{id}")
-    public String findApplyById(@PathVariable Long id) {
+    public ApplyInfoVo findApplyById(@PathVariable Long id) {
         ApplyInfoVo applyInfoVo = applyInfoService.findLeaveById(id);
-        String applyData = applyInfoVo.getApplyData();
-        return applyData;
+        return applyInfoVo;
     }
 
     @ApiOperation(value = "通过流程实例id 查询批注信息")
@@ -136,21 +126,5 @@ public class ApplyApi {
     public List<CommentVo> findCommentListByProcInstId(@PathVariable("procInstId") String procInstId) {
         List<CommentVo> commentVos = workFlowQuery.findCommentListByProcInstId(procInstId);
         return commentVos;
-    }
-
-    @ApiOperation(value = "提交请假申请")
-    @PostMapping("/submitLeave")
-    public void submitLeave(@RequestBody LeaveEx leaveEx) {
-        String operator = userTools.getCurrentUserCode();
-        applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveEx);
-    }
-
-    @ApiOperation(value = "提交请假任务")
-    @PostMapping("/commitLeaveProcess/{procInstId}/{taskId}")
-    public void commitLeaveProcess(@PathVariable("procInstId") String procInstId,
-                                   @PathVariable("taskId") String taskId,
-                                   @RequestBody LeaveEx leaveEx) {
-        String operator = userTools.getCurrentUserCode();
-        applyInfoService.commitLeaveProcess(operator, ApplyTypeEnum.LEAVE, leaveEx, procInstId, taskId);
     }
 }

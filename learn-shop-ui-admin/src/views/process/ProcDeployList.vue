@@ -87,6 +87,7 @@
         :on-error="uploadError"
         :before-upload="checkFile"
         :file-list="fileList"
+        :headers="headers"
         multiple
         :auto-upload="false">
         <el-button slot="trigger" size="mini" type="primary">选取文件</el-button>
@@ -122,6 +123,9 @@
   // ===== 工具类 start
   import VueUtils from "../../utils/vueUtils";
   import pageMixins from "../../utils/pageMixins";
+  import {
+    getAccessToken
+  } from '../../utils/cookieUtils';
 
   export default {
     components: {
@@ -145,11 +149,12 @@
         imageDialogVisible: false,
         fileList: [], // 上传文件列表
         deployAction: '',
-        deployImgSrc: ''
+        deployImgSrc: '',
+        headers:{}
       }
     },
     created() {
-      // 请数据殂
+      // 查询数据列表
       this.loadDataList();
     },
     //每次激活时
@@ -198,6 +203,9 @@
       startDeploy() {
         this.deployAction = Deploy();
         this.dialogVisible = true;
+        this.headers = {
+          "Authorization": "Bearer " + getAccessToken()
+        };
       },
       // 检查上传的文件类型
       checkFile(file) {
@@ -225,6 +233,8 @@
             position: 'bottom-right',
             type: 'success'
           });
+          // 查询数据列表
+          this.loadDataList();
         } else {
           this.$notify.error({
             title: '错误',
@@ -232,12 +242,16 @@
             message: file.name + ' 部署失败！'
           });
         }
-        console.log(res);
+        //console.log(res);
         this.fileList = [];
         this.dialogVisible = false;
       },
       uploadError(err, file, fileList) {
-
+        this.$notify.error({
+            title: '错误',
+            position: 'bottom-right',
+            message: file.name + ' 部署失败！'
+          });
       }
     }
   }
