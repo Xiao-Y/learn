@@ -21,9 +21,7 @@
         <module>learn-cloud-config</module>
         <module>learn-cloud-eureka</module>
         <module>learn-cloud-zuul</module>
-<!--        <module>learn-cloud-turbine</module>-->
         <module>learn-cloud-common</module>
-<!--        <module>learn-cloud-zipkin</module>-->
 
         <module>learn-shop-admin-system</module>
         <module>learn-shop-admin-user</module>
@@ -32,7 +30,6 @@
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
 
-        <module>learn-shop-public-job</module>
         <module>learn-shop-public-auth</module>
 
         <module>learn-shop-base-common</module>
