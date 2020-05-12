@@ -15,9 +15,11 @@ public class MybatisRedisCache implements Cache {
     private static final Logger log = LoggerFactory.getLogger(MybatisRedisCache.class);
 
     private String id; // cache instance id
+
     private static final long EXPIRE_TIME_IN_MINUTES = 30; // redis过期时间
 
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
     private RedisTemplate redisTemplate;
 
     public MybatisRedisCache(String id) {

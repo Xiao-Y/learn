@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
@@ -30,7 +31,8 @@ public class RedisConfig {
     private RedisProperties redisProperties;
 
     @Bean
-    public LettuceConnectionFactory getConnectionFactory() {
+    @Primary
+    public LettuceConnectionFactory lettuceConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setDatabase(redisProperties.getDatabase());
         redisStandaloneConfiguration.setHostName(redisProperties.getHost());
@@ -40,13 +42,14 @@ public class RedisConfig {
         LettuceClientConfiguration.LettuceClientConfigurationBuilder lettuceClientConfigurationBuilder = LettuceClientConfiguration.builder();
         LettuceConnectionFactory factory = new LettuceConnectionFactory(redisStandaloneConfiguration,
                 lettuceClientConfigurationBuilder.build());
-        logger.info("JedisConnectionFactory bean init success.");
+        logger.info("LettuceConnectionFactory bean init success.");
         return factory;
     }
 
 
     @Bean
+    @Primary
     public RedisTemplate<?, ?> redisTemplate() {
-        return new StringRedisTemplate(getConnectionFactory());
+        return new StringRedisTemplate(lettuceConnectionFactory());
     }
 }

@@ -6,10 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -20,18 +26,33 @@ public class RedisCacheConfig {
 
     private static Logger logger = LoggerFactory.getLogger(RedisCacheConfig.class);
 
-    // 有可能不使用redis缓存
-    @Autowired(required = false)
-    private LettuceConnectionFactory connectionFactory;
-
     @Value("${spring.redis.cacheDatabase:15}")
     private Integer cacheDatabase;
 
+    @Autowired
+    private RedisProperties redisProperties;
+
     @Bean
-    @ConditionalOnBean(LettuceConnectionFactory.class)
-    public RedisTemplate<String, Object> redisCacheTemplate() {
+    @ConditionalOnMissingBean(name = "redisCacheConnectionFactory")
+    public LettuceConnectionFactory redisCacheConnectionFactory() {
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisProperties.getHost());
+        redisStandaloneConfiguration.setPort(redisProperties.getPort());
+        redisStandaloneConfiguration.setPassword(RedisPassword.of(redisProperties.getPassword()));
+        redisStandaloneConfiguration.setDatabase(cacheDatabase);
+
+        LettuceClientConfiguration.LettuceClientConfigurationBuilder lettuceClientConfigurationBuilder = LettuceClientConfiguration.builder();
+        LettuceConnectionFactory factory = new LettuceConnectionFactory(redisStandaloneConfiguration,
+                lettuceClientConfigurationBuilder.build());
+        logger.info("redisCacheConnectionFactory bean init success.");
+        return factory;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = "redisCacheTemplate")
+    @ConditionalOnBean(name = "redisCacheConnectionFactory")
+    public RedisTemplate<String, Object> redisCacheTemplate(@Qualifier("redisCacheConnectionFactory") LettuceConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        connectionFactory.setDatabase(cacheDatabase);
         initDomainRedisTemplate(redisTemplate, connectionFactory);
         return redisTemplate;
     }
