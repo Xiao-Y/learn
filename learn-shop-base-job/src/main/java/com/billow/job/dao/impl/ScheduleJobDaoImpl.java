@@ -214,6 +214,10 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
             sql += " and is_send_mail = ? ";
             queryParam.add(scheduleJobPo.getIsSendMail());
         }
+        if (ToolsUtils.isNotEmpty(scheduleJobPo.getJobStatus())) {
+            sql += " and job_status = ? ";
+            queryParam.add(scheduleJobPo.getJobStatus());
+        }
         if (scheduleJobPo.getIsExceptionStop() != null) {
             sql += " and is_exception_stop = ? ";
             queryParam.add(scheduleJobPo.getIsExceptionStop());

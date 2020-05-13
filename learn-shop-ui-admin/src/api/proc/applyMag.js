@@ -83,3 +83,11 @@ export const LoadDataTaskList = taskInfo => requestUtils.post(baseUrl + '/queryM
  * @constructor
  */
 export const FindCommentListByProcInstId = procInstId => requestUtils.get(baseUrl + '/findCommentListByProcInstId/' + procInstId);
+
+/**
+ * 根据ID查询申请信息
+ * @param applyId
+ * @returns {*|Promise|Promise<any>}
+ * @constructor
+ */
+export const FindApplyById = applyId => requestUtils.get(baseUrl + '/findApplyById/' + applyId);

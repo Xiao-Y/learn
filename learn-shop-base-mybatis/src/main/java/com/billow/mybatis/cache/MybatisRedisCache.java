@@ -53,7 +53,7 @@ public class MybatisRedisCache implements Cache {
         redisTemplate.boundHashOps(getId()).put(key, value);
         redisTemplate.boundHashOps(getId()).expire(EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
         log.info("Put query result to redis");
-        log.debug("key=[{}],value=[{}]", key, value);
+//        log.debug("key=[{}],value=[{}]", key, value);
 
     }
 
@@ -62,7 +62,7 @@ public class MybatisRedisCache implements Cache {
         RedisTemplate redisTemplate = getRedisTemplate();
         Object value = redisTemplate.boundHashOps(getId()).get(key);
         log.info("Get cached query result from redis");
-        log.debug("key=[{}],value=[{}]", key, value);
+//        log.debug("key=[{}],value=[{}]", key, value);
         return value;
     }
 
@@ -71,7 +71,7 @@ public class MybatisRedisCache implements Cache {
         RedisTemplate redisTemplate = getRedisTemplate();
         Object value = redisTemplate.boundHashOps(getId()).delete(key);
         log.info("Remove cached query result from redis");
-        log.debug("key=[{}],value=[{}]", key, value);
+//        log.debug("key=[{}],value=[{}]", key, value);
         return value;
     }
 

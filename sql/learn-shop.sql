@@ -1001,17 +1001,6 @@ CREATE TABLE `sys_schedule_job`  (
  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-SET FOREIGN_KEY_CHECKS = 1;
-
--- ----------------------------
--- Records of sys_schedule_job
--- ----------------------------
-INSERT INTO `sys_schedule_job`(`id`, `job_group`, `job_name`, `job_status`, `class_type`, `routing_key`, `http_url`, `run_class`, `method_name`, `template_id`, `cron_expression`, `is_send_mail`, `mail_receive`, `is_concurrent`, `is_exception_stop`, `is_save_log`, `description`, `valid_ind`, `create_time`, `creator_code`, `update_time`, `updater_code`) VALUES (5, '5', '234', '0', '2', '', '', 'com.billow.system.autoTask.TestAutoTask', 'test', 2, '1/10 * * * * ? *', '1', 'lyongtao123@126.com', '1', b'1', b'1', 'html-固定内容', b'1', NULL, NULL, '2020-01-12 04:23:01', NULL);
-INSERT INTO `sys_schedule_job`(`id`, `job_group`, `job_name`, `job_status`, `class_type`, `routing_key`, `http_url`, `run_class`, `method_name`, `template_id`, `cron_expression`, `is_send_mail`, `mail_receive`, `is_concurrent`, `is_exception_stop`, `is_save_log`, `description`, `valid_ind`, `create_time`, `creator_code`, `update_time`, `updater_code`) VALUES (9, '5', '234443', '0', '2', NULL, NULL, 'com.billow.system.autoTask.TestAutoTask', 'test', 3, '0/5 * * * * ? *', '1', 'lyongtao123@126.com', '1', b'0', b'0', 'fm-param', b'1', NULL, NULL, '2020-01-12 04:33:22', NULL);
-INSERT INTO `sys_schedule_job`(`id`, `job_group`, `job_name`, `job_status`, `class_type`, `routing_key`, `http_url`, `run_class`, `method_name`, `template_id`, `cron_expression`, `is_send_mail`, `mail_receive`, `is_concurrent`, `is_exception_stop`, `is_save_log`, `description`, `valid_ind`, `create_time`, `creator_code`, `update_time`, `updater_code`) VALUES (11, '5', '123', '0', '2', NULL, NULL, 'com.billow.system.autoTask.TestAutoTask', 'test', 1, '0/5 * * * * ? *', '1', NULL, '1', b'1', b'1', 'html邮件，参数替换', b'1', NULL, NULL, '2020-01-12 04:33:33', 'admin');
-INSERT INTO `sys_schedule_job`(`id`, `job_group`, `job_name`, `job_status`, `class_type`, `routing_key`, `http_url`, `run_class`, `method_name`, `template_id`, `cron_expression`, `is_send_mail`, `mail_receive`, `is_concurrent`, `is_exception_stop`, `is_save_log`, `description`, `valid_ind`, `create_time`, `creator_code`, `update_time`, `updater_code`) VALUES (16, '5', 'fm-par&sql', '0', '2', NULL, NULL, 'com.billow.system.autoTask.TestAutoTask', 'test', 5, '0/5 * * * * ? *', '1', '', '1', b'1', b'0', 'fm-par&sql', b'1', '2020-01-12 04:35:19', 'admin', '2020-04-23 02:24:26', 'admin');
-INSERT INTO `sys_schedule_job`(`id`, `job_group`, `job_name`, `job_status`, `class_type`, `routing_key`, `http_url`, `run_class`, `method_name`, `template_id`, `cron_expression`, `is_send_mail`, `mail_receive`, `is_concurrent`, `is_exception_stop`, `is_save_log`, `description`, `valid_ind`, `create_time`, `creator_code`, `update_time`, `updater_code`) VALUES (17, '5', 'par&sql&n', '0', '2', NULL, NULL, 'com.billow.system.autoTask.TestAutoTask', 'test', 8, '0/5 * * * * ? *', '1', 'lyongtao123@126.com', '1', b'1', b'0', 'par&sql&n', b'1', '2020-01-12 05:36:16', 'admin', '2020-01-12 05:36:45', 'admin');
-
 -- ----------------------------
 -- Table structure for sys_schedule_job_log
 -- ----------------------------
@@ -1033,25 +1022,6 @@ CREATE TABLE `sys_schedule_job_log`  (
  PRIMARY KEY (`id`) USING BTREE,
  UNIQUE INDEX `log_id_uq`(`log_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
--- ----------------------------
--- Records of sys_schedule_job_log
--- ----------------------------
-INSERT INTO `sys_schedule_job_log` VALUES (1, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:38:55', 'JOB-AUTO', '2019-09-27 17:38:55', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (2, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:03', 'JOB-AUTO', '2019-09-27 17:39:03', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (3, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:13', 'JOB-AUTO', '2019-09-27 17:39:13', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (4, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:23', 'JOB-AUTO', '2019-09-27 17:39:23', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (5, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:33', 'JOB-AUTO', '2019-09-27 17:39:33', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (6, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:43', 'JOB-AUTO', '2019-09-27 17:39:43', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (7, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:53', 'JOB-AUTO', '2019-09-27 17:39:53', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (8, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:40:03', 'JOB-AUTO', '2019-09-27 17:40:03', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (9, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:52:44', 'JOB-AUTO', '2019-09-27 17:52:44', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (10, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:52:53', 'JOB-AUTO', '2019-09-27 17:52:53', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (11, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:03', 'JOB-AUTO', '2019-09-27 17:53:03', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (12, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:13', 'JOB-AUTO', '2019-09-27 17:53:13', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (13, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:23', 'JOB-AUTO', '2019-09-27 17:53:23', 'JOB-AUTO');
 
 -- ----------------------------
 -- Table structure for u_leave
