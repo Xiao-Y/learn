@@ -23,11 +23,11 @@ export const ViewExecutionImgById = id => {
 };
 
 /**
- * 查询申请记录
+ * 根据ID查询申请信息
  * @returns {*|AxiosPromise}
  * @constructor
  */
-export const FindApplyById = (id) => requestUtils.get(baseUrl + '/findApplyById/' + id);
+export const FindApplyById = applyId => requestUtils.get(baseUrl + '/findApplyById/' + applyId);
 
 /**
  * 认领任务
@@ -83,11 +83,3 @@ export const LoadDataTaskList = taskInfo => requestUtils.post(baseUrl + '/queryM
  * @constructor
  */
 export const FindCommentListByProcInstId = procInstId => requestUtils.get(baseUrl + '/findCommentListByProcInstId/' + procInstId);
-
-/**
- * 根据ID查询申请信息
- * @param applyId
- * @returns {*|Promise|Promise<any>}
- * @constructor
- */
-export const FindApplyById = applyId => requestUtils.get(baseUrl + '/findApplyById/' + applyId);

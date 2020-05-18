@@ -3,17 +3,17 @@
 ###Todo 列表
 
 ####API
-- [X] 商品 CEUD
+- [X] 商品 CRUD
 - [ ] 商品图片上传与处理
 - [X] 商品 SUK 与商品关联
-- [X] SUK 规格属性 CEUD
-- [ ] 店铺 CEUD
-- [X] 商品分类 CEUD
-- [X] 品牌 CEUD
+- [X] SUK 规格属性 CRUD
+- [ ] 店铺 CRUD
+- [X] 商品分类 CRUD
+- [X] 品牌 CRUD
 - [X] 品牌与商品关联
 - [X] 分类与商品关联
-- [ ] 优惠卷 CEUD
-- [ ] 收藏 CEUD
+- [ ] 优惠卷 CRUD
+- [ ] 收藏 CRUD
 
 ####APP
 - [ ] 商品显示

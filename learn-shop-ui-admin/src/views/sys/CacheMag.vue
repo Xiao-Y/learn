@@ -37,7 +37,11 @@
     methods: {
       clearCacheNamespace() {
         ClearCacheNamespace(this.cacheNamespace).then(res => {
-          this.$message.success("初始化正在执行...");
+          if (res.resData) {
+            this.$message.success("缓存更新成功！");
+          } else {
+            this.$message.error("缓存KEY不存在！");
+          }
         });
       },
       loadDataCacheAll() {

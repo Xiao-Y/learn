@@ -47,9 +47,7 @@ public class CacheApi extends BaseApi {
     @PutMapping("/clearCacheNamespace/{cacheNamespace}")
     @ApiOperation("清空指定mybatis产生的缓存")
     public boolean clearCacheNamespace(@PathVariable("cacheNamespace") String cacheNamespace) {
-        Boolean delete = redisCacheTemplate.delete(cacheNamespace);
-        System.out.println(delete);
-        return false;
+        return redisCacheTemplate.delete(cacheNamespace);
     }
 
 }
