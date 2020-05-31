@@ -1,21 +1,20 @@
 import requestUtils from '../../../utils/requestUtils'
 
-const baseUrl = '../admin-system/leaveApi';
+const baseUrl = '../admin-system/applyApi';
 
-/*********************************** 请假相关 **************************************/
 /**
  * 提交请假申请
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const SubmitLeave = (leaveInfo) => requestUtils.post(baseUrl + '/submitLeave', Object.assign(leaveInfo));
-
-/**
- * 提交任务
- * @param taskInfo
- * @param procInstId
- * @param taskId
+ * @param id
  * @returns {*|Promise|Promise<any>}
  * @constructor
  */
-export const CommitLeaveProcess = (taskInfo, procInstId, taskId) => requestUtils.post(baseUrl + '/commitLeaveProcess/' + procInstId + '/' + taskId, Object.assign(taskInfo));
+export const SubmitLeave = leaveInfo => requestUtils.post(baseUrl + '/submitLeave', Object.assign(leaveInfo));
+
+/************************* TODO 相关的 ******************************/
+/**
+ * 提交请假任务
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const CommitLeaveProcess = (leaveInfo, procInstId, taskId) => requestUtils.post(baseUrl
+  + '/commitLeaveProcess/' + procInstId + "/" + taskId, Object.assign(leaveInfo));

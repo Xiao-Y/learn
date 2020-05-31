@@ -946,6 +946,8 @@ INSERT INTO `sys_permission` VALUES (151, '删除规格值表数据', 'GoodsSpec
 INSERT INTO `sys_permission` VALUES (153, '查询分类下拉列表数据', 'GoodsCategoryApi-findCategorySelect', '/goodsCategoryApi/findCategorySelect', '2', '查询分类下拉列表数据', b'1', '2019-12-05 03:25:34', 'admin', '2019-12-05 03:25:34', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (155, '删除规格表数据', 'GoodsSpecKeyApi-delById', '/goodsSpecKeyApi/delById/**', '2', '删除规格表数据', b'1', '2019-12-05 03:40:33', 'admin', '2019-12-05 03:40:33', 'admin', NULL, NULL, NULL);
 INSERT INTO `sys_permission` VALUES (157, '根据 spuId 查询 spu 规格Key数据', 'GoodsSpuSpecApi-findSpuSpecKey', '/goodsSpuSpecApi/findSpuSpecKey/**', '2', '根据 spuId 查询 spu 规格Key数据', b'1', '2019-12-05 08:49:04', 'admin', '2019-12-05 08:49:04', 'admin', NULL, NULL, NULL);
+INSERT INTO `sys_permission` VALUES (434, '清空指定mybatis产生的缓存', 'CacheApi-clearCacheNamespace', '/cacheApi/clearCacheNamespace/**', '1', '清空指定mybatis产生的缓存', b'1', '2020-05-18 06:55:07', 'admin', '2020-05-18 06:55:07', 'admin', NULL, NULL, NULL);
+
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1018,6 +1020,7 @@ INSERT INTO `sys_schedule_job`(`id`, `job_group`, `job_name`, `job_status`, `htt
 DROP TABLE IF EXISTS `sys_schedule_job_log`;
 CREATE TABLE `sys_schedule_job_log`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `log_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `job_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `job_id` bigint(20) NULL DEFAULT NULL,
   `job_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -1029,25 +1032,9 @@ CREATE TABLE `sys_schedule_job_log`  (
   `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   `updater_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_schedule_job_log
--- ----------------------------
-INSERT INTO `sys_schedule_job_log` VALUES (1, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:38:55', 'JOB-AUTO', '2019-09-27 17:38:55', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (2, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:03', 'JOB-AUTO', '2019-09-27 17:39:03', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (3, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:13', 'JOB-AUTO', '2019-09-27 17:39:13', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (4, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:23', 'JOB-AUTO', '2019-09-27 17:39:23', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (5, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:33', 'JOB-AUTO', '2019-09-27 17:39:33', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (6, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:43', 'JOB-AUTO', '2019-09-27 17:39:43', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (7, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:39:53', 'JOB-AUTO', '2019-09-27 17:39:53', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (8, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:40:03', 'JOB-AUTO', '2019-09-27 17:40:03', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (9, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:52:44', 'JOB-AUTO', '2019-09-27 17:52:44', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (10, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:52:53', 'JOB-AUTO', '2019-09-27 17:52:53', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (11, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:03', 'JOB-AUTO', '2019-09-27 17:53:03', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (12, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:13', 'JOB-AUTO', '2019-09-27 17:53:13', 'JOB-AUTO');
-INSERT INTO `sys_schedule_job_log` VALUES (13, '5', 5, '234', b'1', '0天0小时0分2秒', NULL, NULL, '2019-09-27 17:53:23', 'JOB-AUTO', '2019-09-27 17:53:23', 'JOB-AUTO');
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `log_id_uq`(`log_id`) USING BTREE COMMENT '唯一'
+) ENGINE = InnoDB AUTO_INCREMENT = 744 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for u_leave

@@ -28,3 +28,6 @@ alipay:
 #    gatewayUrl: https://openapi.alipay.com/gateway.do # 生产
 #    charset: UTF-8 #编码格式,默认：UTF-8
 #    signType: RSA2 #商户生成签名字符串所使用的签名算法类型,默认：RSA2
+mybatis-plus:
+  configuration:
+    cache-enabled: true

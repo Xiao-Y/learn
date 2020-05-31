@@ -1,4 +1,4 @@
-CREATE OR REPLACE ALGORITHM = UNDEFINED DEFINER = `root`@`%` SQL SECURITY DEFINER VIEW `learn`.`v_mytasklist` AS SELECT
+CREATE OR REPLACE VIEW `learn`.`v_mytasklist` AS SELECT
 	`rt`.`EXECUTION_ID_` AS `executionId`,
 	`rt`.`ASSIGNEE_` AS `assignee`,
 	'' AS `groupId`,
