@@ -1,3 +1,5 @@
+spring boot 2 分支 2.x版本 不再维护
+
 所有配置文件都是从配置中心获取： <br/>
 配置文件：learn-cloud-config--->cloud-config-repo-->cloud-config-dev.properties <br/>
 修改后提交git后才能生效 <br/>
@@ -105,3 +107,5 @@ GET Read 取得一个资源<br/>
 PUT Update 更新一个资源。或新增一个含 id 资源(如果 id 不存在)<br/>
 
 DELETE Delete 删除一个资源<br/>
+
+
