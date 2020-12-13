@@ -24,7 +24,7 @@ public class UserTools {
     public static String BEARER_TYPE = "Bearer";
     public static String ACCESS_TOKEN = "access_token";
 
-    @Autowired
+    @Autowired(required = false)
     protected HttpServletRequest request;
 
     /**

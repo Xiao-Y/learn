@@ -43,6 +43,7 @@ http://localhost:8771/admin-user #用户相关 <br/>
 
 RabbitMQ: 管理页面 <br>
 http://localhost:15672 <br>
+用户名/密码：admin/admin123
 
 Druid: 管理页面 <br>
 http://localhost:<port>/druid <br>
@@ -54,7 +55,7 @@ http://localhost:8771/swagger-ui.html（查看聚合） <br>
 
 **注意**： <br/>
 0.特别提醒：如果使用本地配置文件需要修改learn-cloud-config下的resources里面的application.yml的search-locations修改为本地路径<br/>
-1.添加新服务时，要在learn-cloud-zuul中添加路由表 <br/>
+1.添加新服务时，要在learn-cloud-gateway中添加路由表 <br/>
 &nbsp;core-order: <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;path: /core-order/** <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;serviceId: learn-shop-core-order <br/>

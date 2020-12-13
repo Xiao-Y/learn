@@ -18,7 +18,7 @@
     </developers>
 
     <modules>
-        <module>learn-cloud-zuul</module>
+        <module>learn-cloud-gateway</module>
         <module>learn-cloud-common</module>
 
         <module>learn-shop-admin-system</module>
