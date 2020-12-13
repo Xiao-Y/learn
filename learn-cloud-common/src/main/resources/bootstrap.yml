@@ -1,16 +1,16 @@
 spring:
   cloud:
-    config:
-      name: ${spring.application.name},cloud-config,sys-config-mq,sys-config-db,sys-config-lcn,sys-config-redis #文件名称的前缀
-      label: 2.x #指明远程仓库的分支
-      profile: pro #dev 开发环境配置文件 #test 测试环境 #pro 正式环境
-      uri: http://119.23.27.78:8781/ #指明配置服务中心的网址
-#      profile: pro #dev 开发环境配置文件 #test 测试环境 #pro 正式环境
-#      uri: http://127.0.0.1:8781/ #指明配置服务中心的网址
-######## 多配置配置中心时使用 ############
-#      discovery:
-#        enabled: true #开启Config服务发现支持
-#        service-id: learn-cloud-config
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8761
+        file-extension: yml
+#        namespace: 49f70e21-df05-4ff5-b44f-7de24d039727 # dev
+        namespace: 80a76a22-f3cb-48f2-aa8d-64f94643ed22 # pro
+        # 配置公用文件
+        shared-dataids: cloud-config.properties,sys-config-db.properties,sys-config-mq.properties,sys-config-redis.properties
+        # 实时刷新文件
+        # refreshable-dataids:
+
 
 #日志配置
 #txManager日志
