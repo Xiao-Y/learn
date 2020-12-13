@@ -1,23 +1,12 @@
 server:
   port: 8811
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${config.eureka.client.serviceUrl.defaultZone} #注册中心地址
-  instance:
-    hostname: ${spring.cloud.client.ip-address}
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-    status-page-url: http://${spring.cloud.client.ip-address}:${server.port}/swagger-ui.html # api文档页面
-
 spring:
   cloud:
     nacos:
       discovery:
         namespace: ${config.register.namespace} # 命名空间
         server-addr: ${config.register.serverAddr} # 配置注册中心
-
   rabbitmq:
     host: ${config.mq.host} #rabbitMQ服务器地址
     port: ${config.mq.port}  #rabbitMQ服务器端口

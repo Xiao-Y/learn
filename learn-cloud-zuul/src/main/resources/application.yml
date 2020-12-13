@@ -16,13 +16,11 @@ spring:
     name: learn-cloud-zuul
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: ${config.zuul.static.locations}
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${config.eureka.client.serviceUrl.defaultZone}
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${config.register.namespace} # 命名空间
+        server-addr: ${config.register.serverAddr} # 配置注册中心
 
 # 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
 ribbon:
