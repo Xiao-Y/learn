@@ -42,54 +42,21 @@ public class SecurityBeanConfig {
     @Autowired
     private SecurityProperties securityProperties;
 
-    @Bean
-    public TokenStore jwtTokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
-    }
-
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey(securityProperties.getOauth2().getJwtSigningKey());
-        return converter;
-    }
+//    @Bean
+//    public TokenStore jwtTokenStore() {
+//        return new JwtTokenStore(jwtAccessTokenConverter());
+//    }
+//
+//    @Bean
+//    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//        converter.setSigningKey(securityProperties.getOauth2().getJwtSigningKey());
+//        return converter;
+//    }
 
     @Bean
     public ClientDetailsService customClientDetailsService() {
         return new JdbcClientDetailsService(dataSource);
-    }
-
-    /**
-     * 密码校验
-     *
-     * @return org.springframework.security.crypto.password.PasswordEncoder
-     * @author LiuYongTao
-     * @date 2018/11/26 9:51
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // 密码加密
-        return new BCryptPasswordEncoder();
-//        // 不加密密码
-//        return new PasswordEncoder() {
-//            @Override
-//            public String encode(CharSequence rawPassword) {
-//                return rawPassword.toString();
-//            }
-//
-//            @Override
-//            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-////                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
-//                return true;
-//            }
-//        };
-    }
-
-    @Bean
-    public DefaultTokenServices customTokenServices() {
-        DefaultTokenServices tokenService = new DefaultTokenServices();
-        tokenService.setTokenStore(jwtTokenStore());
-        return tokenService;
     }
 
     @Bean
@@ -97,42 +64,76 @@ public class SecurityBeanConfig {
         return new RestTemplate();
     }
 
-    /**
-     * token信息扩展
-     */
-    @Bean
-    public TokenEnhancer jwtTokenEnhancer() {
-        return (accessToken, authentication) -> {
-            Authentication userAuthentication = authentication.getUserAuthentication();
-            if (userAuthentication != null) {
-                String userName = userAuthentication.getName();
-                UserPo userPo = userDao.findUserInfoByUsercode(userName);
-                if (userDao != null) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("account", userPo.getUsername());
-                    map.put("createTime", userPo.getCreateTime().toString());
-                    map.put("state", String.valueOf(userPo.getValidInd()));
-                    Map<String, Object> additionalInformation = new HashMap<>();
-                    additionalInformation.put("user", JSONObject.toJSONString(map));
-                    ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
-                }
-            }
-            return accessToken;
-        };
-    }
-
-
-    @Bean
-    public WebResponseExceptionTranslator loggingExceptionTranslator() {
-        return new DefaultWebResponseExceptionTranslator() {
-            private Log log = LogFactory.getLog(getClass());
-
-            @Override
-            public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
-                //异常堆栈信息输出
-                log.error("异常堆栈信息", e);
-                return super.translate(e);
-            }
-        };
-    }
+//    /**
+//     * 密码校验
+//     *
+//     * @return org.springframework.security.crypto.password.PasswordEncoder
+//     * @author LiuYongTao
+//     * @date 2018/11/26 9:51
+//     */
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        // 密码加密
+//        return new BCryptPasswordEncoder();
+////        // 不加密密码
+////        return new PasswordEncoder() {
+////            @Override
+////            public String encode(CharSequence rawPassword) {
+////                return rawPassword.toString();
+////            }
+////
+////            @Override
+////            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+//////                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
+////                return true;
+////            }
+////        };
+//    }
+//
+//    @Bean
+//    public DefaultTokenServices customTokenServices() {
+//        DefaultTokenServices tokenService = new DefaultTokenServices();
+//        tokenService.setTokenStore(jwtTokenStore());
+//        return tokenService;
+//    }
+//
+//
+//    /**
+//     * token信息扩展
+//     */
+//    @Bean
+//    public TokenEnhancer jwtTokenEnhancer() {
+//        return (accessToken, authentication) -> {
+//            Authentication userAuthentication = authentication.getUserAuthentication();
+//            if (userAuthentication != null) {
+//                String userName = userAuthentication.getName();
+//                UserPo userPo = userDao.findUserInfoByUsercode(userName);
+//                if (userDao != null) {
+//                    Map<String, String> map = new HashMap<>();
+//                    map.put("account", userPo.getUsername());
+//                    map.put("createTime", userPo.getCreateTime().toString());
+//                    map.put("state", String.valueOf(userPo.getValidInd()));
+//                    Map<String, Object> additionalInformation = new HashMap<>();
+//                    additionalInformation.put("user", JSONObject.toJSONString(map));
+//                    ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
+//                }
+//            }
+//            return accessToken;
+//        };
+//    }
+//
+//
+//    @Bean
+//    public WebResponseExceptionTranslator loggingExceptionTranslator() {
+//        return new DefaultWebResponseExceptionTranslator() {
+//            private Log log = LogFactory.getLog(getClass());
+//
+//            @Override
+//            public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
+//                //异常堆栈信息输出
+//                log.error("异常堆栈信息", e);
+//                return super.translate(e);
+//            }
+//        };
+//    }
 }

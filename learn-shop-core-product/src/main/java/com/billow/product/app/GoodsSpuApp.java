@@ -1,7 +1,7 @@
 package com.billow.product.app;
 
-import com.alipay.api.domain.AlipayTradePrecreateModel;
-import com.billow.alipay.scan.service.AliPayScanService;
+//import com.alipay.api.domain.AlipayTradePrecreateModel;
+//import com.billow.alipay.scan.service.AliPayScanService;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
@@ -38,8 +38,8 @@ public class GoodsSpuApp {
 
     @Autowired
     private GoodsSpuService goodsSpuService;
-    @Autowired
-    private AliPayScanService aliPayScanService;
+//    @Autowired
+//    private AliPayScanService aliPayScanService;
 
 
     @ApiOperation(value = "根据id查询spu表数据")

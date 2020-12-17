@@ -5,11 +5,17 @@ spring:
         server-addr: 127.0.0.1:8761
         file-extension: yml
 #        namespace: 49f70e21-df05-4ff5-b44f-7de24d039727 # dev
-        namespace: 80a76a22-f3cb-48f2-aa8d-64f94643ed22 # pro
+#        namespace: 80a76a22-f3cb-48f2-aa8d-64f94643ed22 # pro
+        namespace: abf7c5c7-f727-47cb-87c7-33e84cd05fc6 # pro
         # 配置公用文件
-        shared-dataids: cloud-config.properties,sys-config-db.properties,sys-config-mq.properties,sys-config-redis.properties
-        # 实时刷新文件
-        # refreshable-dataids:
+        shared-configs[0]:
+          dataId: cloud-config.properties
+        shared-configs[1]:
+          dataId: sys-config-db.properties
+        shared-configs[2]:
+          dataId: sys-config-mq.properties
+        shared-configs[3]:
+          dataId: sys-config-redis.properties
 
 
 #日志配置

@@ -2,9 +2,9 @@ package com.billow.product.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.billow.alipay.scan.config.AliPayScanConfig;
-import com.billow.alipay.scan.service.AliPayScanService;
-import com.billow.alipay.scan.service.impl.AliPayScanServiceImpl;
+//import com.billow.alipay.scan.config.AliPayScanConfig;
+//import com.billow.alipay.scan.service.AliPayScanService;
+//import com.billow.alipay.scan.service.impl.AliPayScanServiceImpl;
 import com.billow.mybatis.handler.AuditMetaObjectHandler;
 import com.billow.product.properties.AliPayScanProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -51,14 +51,14 @@ public class BeanConfig {
      * @author LiuYongTao
      * @date 2019/12/27 10:45
      */
-    @Bean
-    public AliPayScanService aliPayScanService(AliPayScanProperties aliPayScanProperties) {
-        AliPayScanConfig aliPayScanConfig = new AliPayScanConfig();
-        aliPayScanConfig.setAppId(aliPayScanProperties.getAppId());
-        aliPayScanConfig.setAliPayPublicKey(aliPayScanProperties.getAliPayPublicKey());
-        aliPayScanConfig.setPrivateKey(aliPayScanProperties.getPrivateKey());
-        aliPayScanConfig.setGatewayUrl(aliPayScanProperties.getGatewayUrl());
-        aliPayScanConfig.setNotifyUrl(aliPayScanProperties.getNotifyUrl());
-        return new AliPayScanServiceImpl(aliPayScanConfig);
-    }
+//    @Bean
+//    public AliPayScanService aliPayScanService(AliPayScanProperties aliPayScanProperties) {
+//        AliPayScanConfig aliPayScanConfig = new AliPayScanConfig();
+//        aliPayScanConfig.setAppId(aliPayScanProperties.getAppId());
+//        aliPayScanConfig.setAliPayPublicKey(aliPayScanProperties.getAliPayPublicKey());
+//        aliPayScanConfig.setPrivateKey(aliPayScanProperties.getPrivateKey());
+//        aliPayScanConfig.setGatewayUrl(aliPayScanProperties.getGatewayUrl());
+//        aliPayScanConfig.setNotifyUrl(aliPayScanProperties.getNotifyUrl());
+//        return new AliPayScanServiceImpl(aliPayScanConfig);
+//    }
 }
