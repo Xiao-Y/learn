@@ -1,9 +1,9 @@
-package com.billow.gateway.config.security;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
+//package com.billow.gateway.security;
+//
+//import org.springframework.context.ApplicationContext;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
 
 ///**
 // * spring boot 2 新添加，与鉴权有关 @authService.hasPermission(request,authentication)

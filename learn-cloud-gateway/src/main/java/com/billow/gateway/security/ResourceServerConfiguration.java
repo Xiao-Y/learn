@@ -1,4 +1,4 @@
-//package com.billow.gateway.config.security;
+//package com.billow.gateway.security;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;

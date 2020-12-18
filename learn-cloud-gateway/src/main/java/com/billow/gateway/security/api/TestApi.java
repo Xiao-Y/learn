@@ -1,4 +1,4 @@
-package com.billow.gateway.api;
+package com.billow.gateway.security.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

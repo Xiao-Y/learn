@@ -1,6 +1,7 @@
-//package com.billow.gateway.filter;
+//package com.billow.gateway.security.filter;
 //
 //import com.billow.gateway.redis.RedisUtils;
+//import com.billow.gateway.security.properties.SecurityProperties;
 //import com.billow.tools.constant.RedisCst;
 //import com.billow.tools.utlis.ToolsUtils;
 //import com.billow.tools.utlis.UserTools;
@@ -13,6 +14,7 @@
 //import org.springframework.http.server.reactive.ServerHttpRequest;
 //import org.springframework.http.server.reactive.ServerHttpResponse;
 //import org.springframework.stereotype.Component;
+//import org.springframework.util.AntPathMatcher;
 //import org.springframework.web.server.ServerWebExchange;
 //import reactor.core.publisher.Mono;
 //
@@ -28,12 +30,16 @@
 // */
 //@Slf4j
 //@Component
-//public class BlacklistEditUserFilter implements GlobalFilter, Ordered {
+//public class BlackListEditUserFilter implements GlobalFilter, Ordered {
+//
+//    private AntPathMatcher antPathMatcher = new AntPathMatcher();
 //
 //    @Autowired
 //    private RedisUtils redisUtils;
 //    @Autowired
 //    private UserTools userTools;
+//    @Autowired
+//    private SecurityProperties securityProperties;
 //
 //    @Override
 //    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -41,10 +47,15 @@
 //        ServerHttpRequest request = exchange.getRequest();
 //
 //        String requestURI = request.getURI().getPath();
-//        if (requestURI.contains("login")) {
-//            return chain.filter(exchange);
+//        // 白名单直接通过
+//        List<String> urls = securityProperties.getWhiteList().getUrls();
+//        for (String url : urls) {
+//            log.info("白名单过滤：{}-->{}", url, requestURI);
+//            if (antPathMatcher.match(url, requestURI)) {
+//                return chain.filter(exchange);
+//            }
 //        }
-//
+//        // 过滤用户权限
 //        String currentUserCode = userTools.getCurrentUserCode();
 //        Map map = redisUtils.getObj(RedisCst.BLACKLIST_EDITUSER + currentUserCode, Map.class);
 //        if (ToolsUtils.isEmpty(map)) {

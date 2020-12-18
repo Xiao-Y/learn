@@ -1,9 +1,9 @@
-//package com.billow.gateway.config.security;
+//package com.billow.gateway.security;
 //
 //
 //import cn.hutool.core.convert.Convert;
-//import com.billow.gateway.config.security.vo.DataDictionaryVo;
-//import com.billow.gateway.config.security.vo.PermissionVo;
+//import com.billow.gateway.security.vo.DataDictionaryVo;
+//import com.billow.gateway.security.vo.PermissionVo;
 //import com.billow.gateway.redis.RedisUtils;
 //import com.billow.tools.constant.DictionaryType;
 //import com.billow.tools.constant.RedisCst;

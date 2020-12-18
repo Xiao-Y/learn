@@ -1,4 +1,4 @@
-package com.billow.gateway.config.security.vo;
+package com.billow.gateway.security.vo;
 
 import lombok.Data;
 
