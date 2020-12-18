@@ -6,9 +6,8 @@ import java.util.List;
 
 @Data
 public class UserDto {
-    private String username;
-    private String password;
     private Long id;
-    private int status;
+    private String username;
+    private String usercode;
     private List<String> roles;
 }

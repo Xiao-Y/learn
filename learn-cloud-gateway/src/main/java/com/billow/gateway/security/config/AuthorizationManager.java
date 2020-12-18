@@ -63,6 +63,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                 .flatMapIterable(Authentication::getAuthorities)
                 .map(GrantedAuthority::getAuthority)
                 .any(role -> {
+                    role = role.replace(AuthConstant.AUTHORITY_PREFIX, "");
                     List<PermissionVo> permissionVos = redisUtils.getArray(PERMISSION + role, PermissionVo.class);
                     if (permissionVos == null) {
                         return false;

@@ -32,51 +32,53 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-      - id: public-auth
-        # lb代表从注册中心获取服务，且已负载均衡方式转发
-        uri: lb://learn-shop-public-auth
-        predicates:
-          - Path=/public-auth/**
-        # 加上StripPrefix=1，否则转发到后端服务时会带上consumer前缀
-        filters:
-          - StripPrefix=1
-      - id: admin-system
-        # lb代表从注册中心获取服务，且已负载均衡方式转发
-        uri: lb://learn-shop-admin-system
-        predicates:
-          - Path=/admin-system/**
-      - id: admin-user
-        # lb代表从注册中心获取服务，且已负载均衡方式转发
-        uri: lb://learn-shop-admin-user
-        predicates:
-          - Path=/admin-user/**
-      - id: core-order
-        # lb代表从注册中心获取服务，且已负载均衡方式转发
-        uri: lb://learn-shop-core-order
-        predicates:
-          - Path=/core-order/**
-      - id: core-product
-        # lb代表从注册中心获取服务，且已负载均衡方式转发
-        uri: lb://learn-shop-core-product
-        predicates:
-          - Path=/core-product/**
-      - id: public-job
-        # lb代表从注册中心获取服务，且已负载均衡方式转发
-        uri: lb://learn-shop-public-job
-        predicates:
-        - Path=/public-job/**
+        - id: public-auth
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-public-auth
+          predicates:
+            - Path=/public-auth/**
+          # 加上StripPrefix=1，否则转发到后端服务时会带上consumer前缀
+          filters:
+            - StripPrefix=1
+        - id: admin-system
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-admin-system
+          predicates:
+            - Path=/admin-system/**
+        - id: admin-user
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-admin-user
+          predicates:
+            - Path=/admin-user/**
+        - id: core-order
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-core-order
+          predicates:
+            - Path=/core-order/**
+        - id: core-product
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-core-product
+          predicates:
+            - Path=/core-product/**
+        - id: public-job
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-public-job
+          predicates:
+            - Path=/public-job/**
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: 'http://localhost:8999/rsa/publicKey'
+          jwk-set-uri: 'http://localhost:8999/rsa/publicKey' # 获取公钥
 secure:
   white-list:
-    urls:
-      - "/actuator/**"
-      - "/login/**"
-      - "/public-auth/oauth/token"
-
+    - "/actuator/**"
+    - "/login/**"
+    - "/public-auth/oauth/token" #获取token
+    - "/userApi/*"  #获取用户信息
+  need-check:
+    - "/**/*Api/**"
+    - "/*Api/**"
 
 
 

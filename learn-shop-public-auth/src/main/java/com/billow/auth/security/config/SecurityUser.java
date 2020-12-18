@@ -22,6 +22,10 @@ public class SecurityUser implements UserDetails {
      */
     private String username;
     /**
+     * 用户code
+     */
+    private String usercode;
+    /**
      * 用户密码
      */
     private String password;
@@ -37,6 +41,7 @@ public class SecurityUser implements UserDetails {
     public SecurityUser(UserPo userPo, Collection<? extends GrantedAuthority> authorities) {
         this.setId(userPo.getId());
         this.setUsername(userPo.getUsername());
+        this.setUsercode(userPo.getUsercode());
         this.setPassword(userPo.getPassword());
         this.setEnabled(userPo.getValidInd());
         this.setAuthorities(authorities);

@@ -4,7 +4,6 @@ import cn.hutool.core.util.ArrayUtil;
 import com.billow.gateway.security.component.RestAuthenticationEntryPoint;
 import com.billow.gateway.security.component.RestfulAccessDeniedHandler;
 import com.billow.gateway.security.constant.AuthConstant;
-import com.billow.gateway.security.filter.WhiteListRemoveJwtFilter;
 import com.billow.gateway.security.properties.SecurityProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -35,7 +33,8 @@ public class ResourceServerConfig {
     private final SecurityProperties securityProperties;
     private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    private final WhiteListRemoveJwtFilter ignoreUrlsRemoveJwtFilter;
+    // 暂时不能用
+//    private final WhiteListRemoveJwtFilter ignoreUrlsRemoveJwtFilter;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -45,15 +44,17 @@ public class ResourceServerConfig {
         //自定义处理JWT请求头过期或签名错误的结果
         http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
         //对白名单路径，直接移除JWT请求头
-        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+//        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
         // 白名单
-        List<String> urls = securityProperties.getWhiteList().getUrls();
-        if (!CollectionUtils.isEmpty(urls)) {
+        List<String> whiteList = securityProperties.getWhiteList();
+        if (!CollectionUtils.isEmpty(whiteList)) {
             //白名单配置
-            http.authorizeExchange().pathMatchers(ArrayUtil.toArray(urls, String.class)).permitAll();
+            http.authorizeExchange().pathMatchers(ArrayUtil.toArray(whiteList, String.class)).permitAll();
         }
+        // 要权限的
+        List<String> needCheck = securityProperties.getNeedCheck();
         http.authorizeExchange()
-                .pathMatchers("/**/*Api/**", "/*Api/**")
+                .pathMatchers(ArrayUtil.toArray(needCheck, String.class))
                 .authenticated()
                 .anyExchange().access(authorizationManager)//鉴权管理器配置
                 .and().exceptionHandling()
