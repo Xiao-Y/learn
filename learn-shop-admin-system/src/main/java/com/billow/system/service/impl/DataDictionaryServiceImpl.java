@@ -39,8 +39,8 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
     public Page<DataDictionaryPo> listByPage(DataDictionaryVo dataDictionaryVo) {
         DataDictionaryPo convert = ConvertUtils.convert(dataDictionaryVo, DataDictionaryPo.class);
         DefaultSpec<DataDictionaryPo> defaultSpec = new DefaultSpec<>(convert);
-        Sort sort = new Sort(Sort.Direction.ASC, "fieldType", "fieldOrder");
-        Pageable pageable = new PageRequest(dataDictionaryVo.getPageNo(), dataDictionaryVo.getPageSize(), sort);
+        Sort sort = Sort.by(Sort.Direction.ASC, "fieldType", "fieldOrder");
+        Pageable pageable = PageRequest.of(dataDictionaryVo.getPageNo(), dataDictionaryVo.getPageSize(), sort);
         Page<DataDictionaryPo> page = dataDictionaryDao.findAll(defaultSpec, pageable);
         return page;
     }
@@ -83,7 +83,7 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
     public List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionaryVo dataDictionaryVo) {
         DataDictionaryPo convert = ConvertUtils.convert(dataDictionaryVo, DataDictionaryPo.class);
         DefaultSpec<DataDictionaryPo> defaultSpec = new DefaultSpec<>(convert);
-        Sort sort = new Sort(Sort.Direction.ASC, "fieldOrder");
+        Sort sort = Sort.by(Sort.Direction.ASC, "fieldOrder");
         List<DataDictionaryPo> dataDictionaryPos = dataDictionaryDao.findAll(defaultSpec, sort);
         List<DataDictionaryVo> dataDictionaryVos = ConvertUtils.convert(dataDictionaryPos, DataDictionaryVo.class);
         return dataDictionaryVos;

@@ -1,0 +1,39 @@
+server:
+  port: 8901
+
+feign: #远程连接
+  hystrix: #熔断器配置
+    enabled: true #启动熔断器
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true #Hystrix 是否启用超时时间
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000 #Hystrix断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
+          strategy: SEMAPHORE
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${config.register.namespace} # 命名空间
+        server-addr: ${config.register.serverAddr} # 配置注册中心
+    loadbalancer:
+      retry:
+        enabled: true #开启重试机制
+  rabbitmq:
+    host: ${config.mq.host} #rabbitMQ服务器地址
+    port: ${config.mq.port}  #rabbitMQ服务器端口
+    username: ${config.mq.username}
+    password: ${config.mq.password}
+    virtual-host: ${config.mq.virtual-host}
+
+
+ribbon:
+  ConnectTimeout: 1000 #ribbon请求连接的超时时间
+  ReadTimeout: 3000 #请求处理的超时时间
+  OkToRetryOnAllOperations: true #对所有请求操作都进行重试
+  MaxAutoRetries: 0 #对当前服务的重试次数（第一次分配给9082的时候，如果404，则再重试MaxAutoRetries次，如果还是404，则切换到其他服务MaxAutoRetriesNextServer决定）
+  MaxAutoRetriesNextServer: 5 #切换服务的次数(比如本次请求分配给9082处理，发现404，则切换分配给9081处理，如果还是404，则返回404给客户端）

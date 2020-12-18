@@ -6,6 +6,7 @@ import com.billow.auth.dao.UserRoleDao;
 import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
+import com.billow.auth.security.config.SecurityUser;
 import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String usercode) throws UsernameNotFoundException {
         logger.info("查询用户：{} 的信息...", usercode);
         Set<GrantedAuthority> authorities = new HashSet<>();
-        if(ToolsUtils.isEmpty(usercode)){
+        if (ToolsUtils.isEmpty(usercode)) {
             logger.error("用户名不能为空！");
             throw new UsernameNotFoundException("用户名不能为空！");
         }
@@ -79,6 +80,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             logger.error("用户：{}，未分配权限！", usercode);
             throw new UsernameNotFoundException("用户：" + usercode + "，未分配权限");
         }
-        return new User(userPo.getUsername(), userPo.getPassword(), authorities);
+        SecurityUser securityUser = new SecurityUser(userPo, authorities);
+        return securityUser;
     }
 }

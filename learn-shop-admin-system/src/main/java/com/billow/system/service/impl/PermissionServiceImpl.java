@@ -77,8 +77,8 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public Page<PermissionVo> findPermissionList(PermissionVo permissionVo) {
         PermissionSpec spec = new PermissionSpec(permissionVo);
-        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
-        Pageable pageable = new PageRequest(permissionVo.getPageNo(), permissionVo.getPageSize(), sort);
+        Sort sort = Sort.by(Sort.Direction.DESC, "updateTime");
+        Pageable pageable = PageRequest.of(permissionVo.getPageNo(), permissionVo.getPageSize(), sort);
         Page<PermissionVo> permissionVos = permissionDao.findAll(spec, pageable).map(this::convertToPermissionVo);
         return permissionVos;
     }
@@ -135,7 +135,7 @@ public class PermissionServiceImpl implements PermissionService {
         PermissionPo permissionPo = new PermissionPo();
         permissionPo.setValidInd(true);
         DefaultSpec<PermissionPo> defaultSpec = new DefaultSpec<>(permissionPo);
-        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
         List<PermissionPo> permissionPos = permissionDao.findAll(defaultSpec, sort);
         List<PermissionVo> permissionVos = new ArrayList<>();
         permissionPos.stream().forEach(f -> {

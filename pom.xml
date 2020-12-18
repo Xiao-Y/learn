@@ -18,9 +18,7 @@
     </developers>
 
     <modules>
-        <module>learn-cloud-config</module>
-        <module>learn-cloud-eureka</module>
-        <module>learn-cloud-zuul</module>
+        <module>learn-cloud-gateway</module>
         <module>learn-cloud-common</module>
 
         <module>learn-shop-admin-system</module>
@@ -50,7 +48,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.5.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
     </parent>
 
     <properties>
@@ -63,7 +61,7 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <fastjson.version>1.2.44</fastjson.version>
-        <hutool.version>4.0.9</hutool.version>
+        <hutool.version>5.5.2</hutool.version>
         <lcn.last.version>4.1.0</lcn.last.version>
         <spring.boot.redis.version>2.2.7.RELEASE</spring.boot.redis.version>
         <guava.version>27.1-jre</guava.version>
@@ -81,10 +79,19 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Greenwich.SR1</version>
+                <version>Hoxton.SR8</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2.2.1.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.billow</groupId>
                 <artifactId>learn-shop-base-common</artifactId>
@@ -201,18 +208,18 @@
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring.boot.redis.version}</version>
             </dependency>
-            <!-- IO通信 -->
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${netty.all.version}</version>
-            </dependency>
-            <!-- JWT token -->
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
+<!--            &lt;!&ndash; IO通信 &ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>io.netty</groupId>-->
+<!--                <artifactId>netty-all</artifactId>-->
+<!--                <version>${netty.all.version}</version>-->
+<!--            </dependency>-->
+<!--            &lt;!&ndash; JWT token &ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>io.jsonwebtoken</groupId>-->
+<!--                <artifactId>jjwt</artifactId>-->
+<!--                <version>${jjwt.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-io</artifactId>
@@ -235,14 +242,19 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>${apache.poi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>8.16</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
         <!-- 配置中心获取端 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
         <!--配置命名容错处理-->
         <dependency>

@@ -331,7 +331,7 @@ INSERT INTO `oauth_client_details` VALUES ('app', NULL, 'app', 'app', 'password,
 INSERT INTO `oauth_client_details` VALUES ('webapp', NULL, 'webapp', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://baidu.com', NULL, NULL, NULL, NULL, NULL);
 
 ```
-#### 二、修改：learn-cloud-zuul
+#### 二、修改：learn-cloud-gateway
 
 
 1、 在pom.xml中添加

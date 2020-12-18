@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public Page<UserVo> findUserList(UserVo userVo) {
         UserPo convert = ConvertUtils.convert(userVo, UserPo.class);
         DefaultSpec<UserPo> defaultSpec = new DefaultSpec<>(convert);
-        Pageable pageable = new PageRequest(userVo.getPageNo(), userVo.getPageSize());
+        Pageable pageable = PageRequest.of(userVo.getPageNo(), userVo.getPageSize());
         return userDao.findAll(defaultSpec, pageable).map(this::convertToUserVo);
     }
 

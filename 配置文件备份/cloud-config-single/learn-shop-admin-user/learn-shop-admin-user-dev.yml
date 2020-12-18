@@ -1,0 +1,32 @@
+server:
+  port: 8801
+
+
+feign: #远程连接
+  hystrix: #熔断器配置
+    enabled: true #启动熔断器
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true #Hystrix 是否启用超时时间
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000 #Hystrix断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
+          strategy: SEMAPHORE
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${config.register.namespace} # 命名空间
+        server-addr: ${config.register.serverAddr} # 配置注册中心
+  rabbitmq:
+    host: ${config.mq.host} #rabbitMQ服务器地址
+    port: ${config.mq.port}  #rabbitMQ服务器端口
+    username: ${config.mq.username}
+    password: ${config.mq.password}
+    virtual-host: ${config.mq.virtual-host}
+
+#测试
+words: ${server.port}

@@ -1,23 +1,18 @@
+采用 nacos 做为配置中心及路由中心
+
 所有配置文件都是从配置中心获取： <br/>
-配置文件：learn-cloud-config--->cloud-config-repo-->cloud-config-dev.properties <br/>
-修改后提交git后才能生效 <br/>
+配置文件：nacos--->dev-->cloud-config.properties <br/>
 
 公用组件<br/>
-learn-cloud-common  获取配置中心配置文件，除learn-cloud-config所有的learn-cloud-* 都要依赖 <br/>
+learn-cloud-common  获取配置中心配置文件，所有的learn-cloud-* 都要依赖 <br/>
 learn-shop-base-common  依赖learn-cloud-common，所有的learn-shop-admin-* 和learn-shop-core-* 都要依赖<br/>
 learn-shop-base-pojo  po和vo以及ex，所有的learn-shop-admin-* 和learn-shop-core-* 都要依赖<br/>
 learn-shop-base-tools 公用工具<br/>
 
 核心服务，端口：87**： <br/>
-learn-cloud-eureka  注册中心，端口：8761 <br/>
-learn-cloud-zuul    路由网关，端口：8771 <br/>
-learn-cloud-config  分布式配置中心，端口：8781 <br/>
-~~learn-cloud-turbine  熔断器控制聚合，端口：8791 <br/>
-learn-cloud-zipkin  追踪服务，端口：8751~~ <br/>
-
-公用业务服务，端口：80**： <br/>
-~~learn-shop-public-job 自动任务，端口：8011 <br/>
-learn-shop-public-tx 分布式事务管理中心，端口：8021~~<br/>
+nacos 注册中心，分布式配置中心 端口：8761 <br/>
+learn-cloud-getaway 路由网关，端口：8771 <br/>
+seata 分布式事务管理中心，端口：8721 <br/>
 
 后端业务服务，端口：88**： <br/>
 learn-shop-admin-user  用户管理服务，端口：8801 <br/>
@@ -31,33 +26,24 @@ learn-shop-core-product   购物车服务，端口：8911 <br/>
 
 
 项目启动顺序： <br/>
-* learn-cloud-config
-* learn-cloud-eureka
-* learn-cloud-zuul 可选
-* learn-cloud-turbine 可选
-* ~~learn-shop-public-tx 事务管理中心服务(tx-lcn)~~
-* ~~启动公用业务服务~~
+* nacos
+* seata
+* learn-cloud-getaway
 * 启动业务服务
 
 
 访问：（通过路由） <br/>
-注册中心： <br/>
-http://localhost:8761/eureka <br/>
+注册中心、配置中心： <br/>
+http://localhost:8761/nacos/index.html <br/>
+用户名/密码：nacos/nacos
 
 业务服务： <br/>
 http://localhost:8771/core-order #订单相关 <br/>
 http://localhost:8771/admin-user #用户相关 <br/>
 
-熔断器： <br/>
-~~访问：http://localhost:<port>/hystrix <br>
-输入：http://localhost:<port>/hystrix.stream~~ <br>
-
-熔断器聚合： <br/>
-~~访问：http://localhost:8791/hystrix <br>
-输入：http://localhost:<port>/hystrix.stream~~ <br>
-
 RabbitMQ: 管理页面 <br>
 http://localhost:15672 <br>
+用户名/密码：admin/admin123
 
 Druid: 管理页面 <br>
 http://localhost:<port>/druid <br>
@@ -67,13 +53,9 @@ http://localhost:<port>/swagger-ui.html（查看单个） <br>
 http://localhost:8771/swagger-ui.html（查看聚合） <br>
 或者进入注册中心点击实例链接直接查看<br/>
 
-~~LCN: 分布式事务管理中心页面 <br>
-http://localhost:<port>/index.html <br>
-或者进入注册中心点击实例链接直接查看~~<br/>
-
 **注意**： <br/>
 0.特别提醒：如果使用本地配置文件需要修改learn-cloud-config下的resources里面的application.yml的search-locations修改为本地路径<br/>
-1.添加新服务时，要在learn-cloud-zuul中添加路由表 <br/>
+1.添加新服务时，要在learn-cloud-gateway中添加路由表 <br/>
 &nbsp;core-order: <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;path: /core-order/** <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;serviceId: learn-shop-core-order <br/>

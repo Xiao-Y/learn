@@ -17,21 +17,25 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-
-auth:
-  security:
-    oauth2:
-      jwtSigningKey: billow
-    client:
-      client-id: webapp
-      client-secret: webapp
-      scope: webapp
-      grant-type: password
-      access-token-uri: http://127.0.0.1:${server.port}/oauth/token
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#auth:
+#  security:
+#    oauth2:
+#      jwtSigningKey: billow
+#    client:
+#      client-id: webapp
+#      client-secret: webapp
+#      scope: webapp
+#      grant-type: password
+#      access-token-uri: http://127.0.0.1:${server.port}/oauth/token
 
 # 日志
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        security: DEBUG
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
