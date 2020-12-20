@@ -82,8 +82,7 @@ secure:
   white-list:
     - "/actuator/**"              # 健康检查
     - "/userApi/*"                # 获取用户信息
-    - "/public-auth/login/**"     # 登陆
-    - "/public-auth/oauth/token"  # 获取token
+    - "/public-auth/oauth/token"  # 获取token或者刷新token
   need-check:
     - "/**/*Api/**"
     - "/*Api/**"
