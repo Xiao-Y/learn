@@ -70,12 +70,20 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: 'http://localhost:8999/rsa/publicKey' # 获取公钥
+
+# 自己定义安全配置
 secure:
+  client: # 登陆客户端配置
+    client-id: webapp
+    client-secret: webapp
+    scope: webapp
+    grant-type: password
+    access-token-uri: "http://learn-shop-public-auth/oauth/token"
   white-list:
-    - "/actuator/**"
-    - "/login/**"
-    - "/public-auth/oauth/token" #获取token
-    - "/userApi/*"  #获取用户信息
+    - "/actuator/**"              # 健康检查
+    - "/userApi/*"                # 获取用户信息
+    - "/public-auth/login/**"     # 登陆
+    - "/public-auth/oauth/token"  # 获取token
   need-check:
     - "/**/*Api/**"
     - "/*Api/**"

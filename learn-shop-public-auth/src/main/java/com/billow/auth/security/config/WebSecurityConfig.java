@@ -1,5 +1,8 @@
 package com.billow.auth.security.config;
 
+import cn.hutool.core.util.ArrayUtil;
+import com.billow.auth.security.properties.AuthProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +20,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private AuthProperties authProperties;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers("/rsa/publicKey").permitAll()
+                .antMatchers(ArrayUtil.toArray(authProperties.getWhiteList(), String.class)).permitAll()
                 .anyRequest().authenticated();
+
+
     }
 
     @Bean
@@ -36,22 +45,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 密码加密
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        // 不加密密码
-//        return new PasswordEncoder() {
-//            @Override
-//            public String encode(CharSequence rawPassword) {
-//                return rawPassword.toString();
-//            }
-//
-//            @Override
-//            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-////                return rawPassword.equals(Md5Encrypt.md5(encodedPassword));
-//                return true;
-//            }
-//        };
-//    }
-
 }

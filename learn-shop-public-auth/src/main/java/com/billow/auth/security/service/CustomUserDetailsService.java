@@ -1,4 +1,4 @@
-package com.billow.auth.service.impl;
+package com.billow.auth.security.service;
 
 import com.billow.auth.dao.RoleDao;
 import com.billow.auth.dao.UserDao;
@@ -6,14 +6,13 @@ import com.billow.auth.dao.UserRoleDao;
 import com.billow.auth.pojo.po.RolePo;
 import com.billow.auth.pojo.po.UserPo;
 import com.billow.auth.pojo.po.UserRolePo;
-import com.billow.auth.security.config.SecurityUser;
+import com.billow.auth.security.vo.SecurityUser;
 import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,26 +1,26 @@
 package com.billow.auth.security.config;
 
-import com.billow.auth.service.impl.CustomUserDetailsService;
-import lombok.AllArgsConstructor;
+import com.billow.auth.security.properties.AuthProperties;
+import com.billow.auth.security.properties.TokenProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,28 +33,20 @@ import java.util.List;
 public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private DataSource dataSource;
+    @Autowired
+    private AuthProperties authProperties;
     @Autowired
     private UserDetailsService customUserDetailsService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenEnhancer jwtTokenEnhancer;
-    @Autowired
-    @Qualifier("customClientDetailsService")
-    private ClientDetailsService customClientDetailsService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("client-app")
-                .secret(passwordEncoder.encode("123456"))
-                .scopes("all")
-                .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(86400);
         // 客户端访问方式配置数据在数据库中
-//        clients.withClientDetails(customClientDetailsService);
+        clients.withClientDetails(customClientDetailsService());
     }
 
     @Override
@@ -84,9 +76,17 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public KeyPair keyPair() {
+        TokenProperties token = authProperties.getToken();
+        String jwtFileName = token.getJwtFileName();
+        String jwtPassword = token.getJwtPassword();
+        String alias = token.getAlias();
         //从classpath下的证书中获取秘钥对
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456789".toCharArray());
-        return keyStoreKeyFactory.getKeyPair("jwt", "123456789".toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(jwtFileName), jwtPassword.toCharArray());
+        return keyStoreKeyFactory.getKeyPair(alias, jwtPassword.toCharArray());
     }
 
+    @Bean
+    public ClientDetailsService customClientDetailsService() {
+        return new JdbcClientDetailsService(dataSource);
+    }
 }

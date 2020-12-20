@@ -1,4 +1,4 @@
-package com.billow.auth.security.config;
+package com.billow.auth.security.vo;
 
 import com.billow.auth.pojo.po.UserPo;
 import lombok.Data;

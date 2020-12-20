@@ -1,4 +1,4 @@
-package com.billow.auth.security.properties;
+package com.billow.gateway.security.properties;
 
 import lombok.Data;
 
