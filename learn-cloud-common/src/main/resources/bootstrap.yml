@@ -2,10 +2,9 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8761
+        server-addr: 119.23.27.78:8761
         file-extension: yml
 #        namespace: 49f70e21-df05-4ff5-b44f-7de24d039727 # dev
-#        namespace: 80a76a22-f3cb-48f2-aa8d-64f94643ed22 # pro
         namespace: abf7c5c7-f727-47cb-87c7-33e84cd05fc6 # pro
         # 配置公用文件
         shared-configs[0]:
