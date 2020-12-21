@@ -1,7 +1,3 @@
-server:
-  port: 8801
-
-
 feign: #远程连接
   hystrix: #熔断器配置
     enabled: true #启动熔断器

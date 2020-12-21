@@ -8,6 +8,8 @@ swagger: #接口注解文档
       developer: billow #api开发者
       url: https://github.com/Xiao-Y/learn
       email: lyongtao123@126.com #api开发者
+server:
+  port: 8999
 
 spring:
   application:

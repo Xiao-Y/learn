@@ -9,7 +9,7 @@ swagger: #接口注解文档
       url: https://github.com/Xiao-Y/learn
       email: lyongtao123@126.com #api开发者
 server:
-  port: ${config.zuul.server.port}
+  port: 8771
 
 # 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
 ribbon:
