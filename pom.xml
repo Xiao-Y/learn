@@ -27,6 +27,7 @@
         <module>learn-shop-core-cart</module>
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
+        <module>learn-shop-core-search</module>
 
         <module>learn-shop-public-auth</module>
 

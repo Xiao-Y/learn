@@ -60,6 +60,10 @@ public class MenuApi extends BaseApi {
 
         HomeEx homeEx = new HomeEx();
         homeEx.setMenus(menuExes);
+
+        String user = request.getHeader("user");
+        System.out.println("=========>>>>" + user);
+
         return homeEx;
     }
 

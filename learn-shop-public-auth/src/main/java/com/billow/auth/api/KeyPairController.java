@@ -27,11 +27,4 @@ public class KeyPairController {
         RSAKey key = new RSAKey.Builder(publicKey).build();
         return new JWKSet(key).toJSONObject();
     }
-
-    @GetMapping("/rsa/doLogin")
-    public Map<String, Object> doLogin() {
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAKey key = new RSAKey.Builder(publicKey).build();
-        return new JWKSet(key).toJSONObject();
-    }
 }
