@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${config.register.namespace} # 命名空间
+        server-addr: ${config.register.serverAddr} # 配置注册中心

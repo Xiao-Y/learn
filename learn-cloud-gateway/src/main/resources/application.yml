@@ -60,6 +60,11 @@ spring:
           uri: lb://learn-shop-core-product
           predicates:
             - Path=/core-product/**
+        - id: core-search
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-core-search
+          predicates:
+            - Path=/core-search/**
         - id: public-job
           # lb代表从注册中心获取服务，且已负载均衡方式转发
           uri: lb://learn-shop-public-job

@@ -16,6 +16,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <!-- 修改对应的 elasticsearch 版本 -->
+        <elasticsearch.version>7.5.0</elasticsearch.version>
     </properties>
 
     <dependencies>

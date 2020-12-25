@@ -1,1 +1,10 @@
-
+server:
+  port: 8981
+  servlet:
+    context-path: /core-search
+spring:
+  application:
+    name: learn-shop-core-search
+  elasticsearch:
+    rest:
+      uris: http://127.0.0.1:9200
