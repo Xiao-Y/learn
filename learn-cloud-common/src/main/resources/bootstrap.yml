@@ -19,10 +19,10 @@ spring:
 
 #日志配置
 #txManager日志
-logging:
-  level:
-    com:
-      codingapi: debug
+#logging:
+#  level:
+#    com:
+#      codingapi: debug
 #logging:
 #  level:
 #    root: INFO
