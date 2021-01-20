@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <groupId>com.billow</groupId>
+    <artifactId>learn-shop-base</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>learn-shop-base-common</module>
+        <module>learn-shop-base-tools</module>
+        <module>learn-shop-base-aop</module>
+        <module>learn-shop-base-workflow</module>
+        <module>learn-shop-base-email</module>
+        <module>learn-shop-base-job</module>
+        <module>learn-shop-base-mq</module>
+        <module>learn-shop-base-jpa</module>
+        <module>learn-shop-base-mybatis</module>
+    </modules>
+</project>

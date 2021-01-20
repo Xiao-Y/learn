@@ -9,7 +9,7 @@ swagger: #接口注解文档
       url: https://github.com/Xiao-Y/learn
       email: lyongtao123@126.com #api开发者
 server:
-  port: 8771
+  port: 8772
 
 # 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
 ribbon:
@@ -88,6 +88,12 @@ secure:
     - "/actuator/**"              # 健康检查
     - "/userApi/*"                # 获取用户信息
     - "/public-auth/oauth/token"  # 获取token或者刷新token
+    - /v3/**
+    - /swagger-resources/**
+    - /swagger-resources
+    - /course/coursebase/**
+    - /swagger-ui/**
+    - /favicon.ico
   need-check:
     - "/**/*Api/**"
     - "/*Api/**"
@@ -144,8 +150,8 @@ secure:
 #      url: http://119.23.27.78:8011
 ##      url: http://127.0.0.1:8011
 # Logging configuration
-logging:
-  level: DEBUG
+#logging:
+#  level: DEBUG
 
 # security 配置
 #security:
