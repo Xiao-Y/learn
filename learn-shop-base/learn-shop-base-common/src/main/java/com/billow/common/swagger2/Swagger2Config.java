@@ -7,13 +7,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.GrantType;
-import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -23,6 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * 用于接口文档
@@ -65,7 +60,8 @@ public class Swagger2Config {
                 .apis(RequestHandlerSelectors.basePackage(this.basePackage))
                 .paths(PathSelectors.regex("^(?!auth).*$"))
                 .build()
-                .securityContexts(Collections.singletonList(securityContext()))
+//                .securityContexts(Collections.singletonList(securityContext()))
+                .securityContexts(securityContexts())
                 .securitySchemes(Collections.singletonList(securityScheme()));
     }
 
@@ -87,12 +83,24 @@ public class Swagger2Config {
                 .build();
     }
 
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(Collections.singletonList(new SecurityReference("OAuth2.0", scoper())))
-                .forPaths(PathSelectors.regex("^(?!auth).*$"))
-                .build();
+    private List<SecurityContext> securityContexts() {
+        return Collections.singletonList(
+                SecurityContext.builder()
+                        .securityReferences(
+                                Collections.singletonList(new SecurityReference("BASE_TOKEN",
+                                        new AuthorizationScope[]{new AuthorizationScope("global", "")}
+                                )))
+                        //.forPaths(PathSelectors.any())
+                        .build()
+        );
     }
+
+//    private SecurityContext securityContext() {
+//        return SecurityContext.builder()
+//                .securityReferences(Collections.singletonList(new SecurityReference("OAuth2.0", scoper())))
+//                .forPaths(PathSelectors.regex("^(?!auth).*$"))
+//                .build();
+//    }
 
     private SecurityScheme securityScheme() {
         GrantType grantType = new ResourceOwnerPasswordCredentialsGrant(tokenUrl);

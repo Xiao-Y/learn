@@ -57,7 +57,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <alibaba.druid.version>1.1.19</alibaba.druid.version>
-        <springfox.swagger2.version>3.0.0</springfox.swagger2.version>
+        <springfox.boot.starter.version>3.0.0</springfox.boot.starter.version>
         <quartz.version>2.2.1</quartz.version>
         <qrgen.version>2.0</qrgen.version>
         <commons-lang3.version>3.4</commons-lang3.version>
@@ -153,15 +153,20 @@
                 <version>${alibaba.druid.version}</version>
             </dependency>
             <!-- swagger2 -->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger2</artifactId>-->
+<!--                <version>${springfox.swagger2.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger-ui</artifactId>-->
+<!--                <version>${springfox.swagger2.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox.swagger2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox.swagger2.version}</version>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox.boot.starter.version}</version>
             </dependency>
 <!--            <dependency>-->
 <!--                <groupId>com.github.xiaoymin</groupId>-->

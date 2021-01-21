@@ -1,7 +1,6 @@
 //package com.billow.gateway.api;
 //
-//import com.billow.gateway.component.SwaggerProvider;
-//import com.billow.gateway.config.Swagger2Config;
+//import com.billow.gateway.swagger2.SwaggerProvider;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@
 //    private SecurityConfiguration securityConfiguration;
 //    @Autowired(required = false)
 //    private UiConfiguration uiConfiguration;
-//    @Autowired
+//
 //    private SwaggerProvider swaggerResources;
 //
 //    @Autowired

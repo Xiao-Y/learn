@@ -1,4 +1,5 @@
 swagger: #接口注解文档
+  enable: true # 是否开启swagger
   basepackage: com.billow.gateway.api #必须要有 GetMapping，PostMapping...
   service:
     name: ${spring.application.name} #api名称
@@ -9,7 +10,7 @@ swagger: #接口注解文档
       url: https://github.com/Xiao-Y/learn
       email: lyongtao123@126.com #api开发者
 server:
-  port: 8772
+  port: 8771
 
 # 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
 ribbon:
@@ -88,85 +89,15 @@ secure:
     - "/actuator/**"              # 健康检查
     - "/userApi/*"                # 获取用户信息
     - "/public-auth/oauth/token"  # 获取token或者刷新token
+    - "/public-auth/rsa/publicKey"  # 获取公钥
+    # swagger 配置
     - /v3/**
     - /swagger-resources/**
     - /swagger-resources
     - /course/coursebase/**
     - /swagger-ui/**
     - /favicon.ico
+    - /admin-system/v3/**
   need-check:
     - "/**/*Api/**"
     - "/*Api/**"
-
-
-
-
-
-
-
-#zuul:
-#  host:
-#    socket-timeout-millis: 50000
-#    connect-timeout-millis: 10000
-###  #添加代理头
-#  add-proxy-headers: true
-##  #敏感头信息
-#  sensitive-headers:
-#  routes:
-#    #服务认证和授权
-#    public-auth:
-#      path: /public-auth/**
-##      serviceId: learn-shop-public-auth
-##      url: http://119.23.27.78:8999
-#      url: http://127.0.0.1:8999
-#    #系统相关
-#    admin-system:
-#      path: /admin-system/**
-#      strip-prefix: false
-##      serviceId: learn-shop-admin-system
-##      url: http://119.23.27.78:8811
-#      url: http://127.0.0.1:8811
-#    #用户相关
-#    admin-user:
-#      path: /admin-user/**
-#      strip-prefix: false
-#      serviceId: learn-shop-admin-user
-#      url: http://119.23.27.78:8801
-##      url: http://127.0.0.1:8801
-#    #订单相关
-#    core-order:
-#      path: /core-order/**
-#      serviceId: learn-shop-core-order
-#    #商品相关
-#    core-product:
-#      path: /core-product/**
-#      strip-prefix: false
-##      serviceId: learn-shop-core-product
-#      url: http://127.0.0.1:8911
-#    public-job:
-#      path: /public-job/**
-#      strip-prefix: false
-##      serviceId: learn-shop-public-job
-#      url: http://119.23.27.78:8011
-##      url: http://127.0.0.1:8011
-# Logging configuration
-#logging:
-#  level: DEBUG
-
-# security 配置
-#security:
-#  sessions: NEVER
-#  oauth2:
-#    client:
-#      client-id: webapp
-#      client-secret: webapp
-#      scope: webapp
-#      user-authorization-uri: ${custom.security.auth-server}/oauth/authorize #请求认证的地址
-#      access-token-uri: ${custom.security.auth-server}/oauth/token #请求令牌的地址
-#    resource:
-#      user-info-uri: ${custom.security.auth-server}/user #获取用户信息的地址
-#      prefer-token-info: false
-# 自定义配置
-#custom:
-#  security:
-#    auth-server: http://127.0.0.1:8999
