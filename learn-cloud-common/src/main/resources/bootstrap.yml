@@ -16,6 +16,12 @@ spring:
         shared-configs[3]:
           dataId: sys-config-redis.properties
 
+swagger: #接口注解文档
+  client: # 登陆客户端配置
+    client-id: swagger
+    client-secret: swagger
+    scope: swagger
+    access-token-uri: "http://127.0.0.1:8771/public-auth/oauth/token"
 
 #日志配置
 #txManager日志

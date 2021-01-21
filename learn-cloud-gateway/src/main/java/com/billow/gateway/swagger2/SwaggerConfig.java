@@ -10,17 +10,22 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 
 import java.util.*;
 
 /**
  * swagger配制
  *
- * @author teler
- * @date 2020-12-30
+ * @author liuyongtao
+ * @since 2021-1-21 14:04
  */
 @Configuration
-public class SwaggerConfig2 {
+public class SwaggerConfig {
+
+    @Value("${swagger.enable:true}")
+    private Boolean enable;
 
     @Value("${swagger.basepackage}")
     private String basePackage;
@@ -37,49 +42,60 @@ public class SwaggerConfig2 {
     @Value("${swagger.service.contact.email}")
     private String email;
 
-    private String tokenUrl = "http://127.0.0.1:8999/oauth/token";
+    @Value("${swagger.client.access-token-uri}")
+    private String tokenUrl;
+    @Value("${swagger.client.client-id}")
+    private String clientId;
+    @Value("${swagger.client.client-secret}")
+    private String clientSecret;
+    @Value("${swagger.client.scope}")
+    private String scope;
 
-    @Value("${swagger.enable:true}")
-    private Boolean enable;
-
-    private static final String CLIENT_ID = "swagger";
-    private static final String CLIENT_SECRET = "swagger";
-    private static final String SCOPE = "webapp";
+    public static final String SCHEME_NAME_OAUTH2 = "OAuth 2.0 Authentication";
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
                 //资源
                 .pathMapping("/")
-//                .globalResponses(HttpMethod.GET, new ArrayList<>())
-//                .globalResponses(HttpMethod.PUT, new ArrayList<>())
-//                .globalResponses(HttpMethod.POST, new ArrayList<>())
-//                .globalResponses(HttpMethod.DELETE, new ArrayList<>())
                 //是否启动
                 .enable(enable)
                 //头部信息
                 .apiInfo(apiInfo())
                 .select()
-                /**
-                 * RequestHandlerSelectors,配置要扫描接口的方式
-                 * basePackage指定要扫描的包
-                 * any()扫描所有，项目中的所有接口都会被扫描到
-                 * none()不扫描
-                 * withClassAnnotation()扫描类上的注解
-                 * withMethodAnnotation()扫描方法上的注解
-                 */
                 .apis(RequestHandlerSelectors.any())
                 //过滤某个路径
                 .paths(PathSelectors.any())
                 .build()
                 //协议
-                .protocols(newHashSet("https", "http"))
+                .protocols(new LinkedHashSet<>(Arrays.asList("https", "http")))
+                // 安全设置
                 .securityContexts(securityContexts())
                 .securitySchemes(securitySchemes());
     }
 
     /**
+     * 设置默认参数
+     *
+     * @return {@link SecurityConfiguration}
+     * @author liuyongtao
+     * @since 2021-1-21 14:06
+     */
+    @Bean
+    public SecurityConfiguration security() {
+        return SecurityConfigurationBuilder.builder()
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .scopeSeparator(scope)
+                .build();
+    }
+
+    /**
      * API 页面上半部分展示信息
+     *
+     * @return {@link ApiInfo}
+     * @author liuyongtao
+     * @since 2021-1-21 14:05
      */
     private ApiInfo apiInfo() {
         return (new ApiInfoBuilder())
@@ -90,35 +106,40 @@ public class SwaggerConfig2 {
                 .build();
     }
 
-    @SafeVarargs
-    private final <T> Set<T> newHashSet(T... ts) {
-        if (ts.length > 0) {
-            return new LinkedHashSet<>(Arrays.asList(ts));
-        }
-        return null;
-    }
-
     /**
      * 设置授权信息
+     *
+     * @return {@link List< SecurityScheme>}
+     * @author liuyongtao
+     * @since 2021-1-21 11:15
      */
     private List<SecurityScheme> securitySchemes() {
-        ApiKey apiKey = new ApiKey("Authorization", "token", io.swagger.v3.oas.models.security.SecurityScheme.In.HEADER.toString());
-        return Collections.singletonList(apiKey);
+        OAuth2Scheme scheme = new OAuth2Scheme(SCHEME_NAME_OAUTH2, "password", "OAuth2 密码模式认证",
+                "", tokenUrl, "", Arrays.asList(scoper()), new ArrayList<>());
+        return Collections.singletonList(scheme);
     }
 
     /**
-     * 授权信息全局应用
+     * swagger2 认证的安全上下文
+     *
+     * @return {@link List< SecurityContext>}
+     * @author liuyongtao
+     * @since 2021-1-21 14:04
      */
     private List<SecurityContext> securityContexts() {
-        return Collections.singletonList(
-                SecurityContext.builder()
-                        .securityReferences(Collections.singletonList(new SecurityReference("Authorization",
-                                new AuthorizationScope[]{new AuthorizationScope("global", "全局的认证")})))
-                        .build()
-        );
+        return Collections.singletonList(SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .build());
     }
 
+    private List<SecurityReference> defaultAuth() {
+        return Collections.singletonList(new SecurityReference(SCHEME_NAME_OAUTH2, scoper()));
+    }
 
+    private AuthorizationScope[] scoper() {
+        return new AuthorizationScope[]{
+                new AuthorizationScope(scope, scope + " scope is trusted!")
+        };
+    }
 }
-
 

@@ -26,7 +26,7 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
     @Override
     public List<SwaggerResource> get() {
         List<SwaggerResource> resources = new ArrayList<>();
-        resources.add(swaggerResource("cloud-zuul", API_URI));
+        resources.add(swaggerResource("cloud-gateway", API_URI));
 
         List<String> routes = new ArrayList<>();
         //取出gateway的route

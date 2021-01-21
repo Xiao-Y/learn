@@ -59,7 +59,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
         log.info("请求的方法URI：{}", requestURI);
         // swagger2 ui
         if (matcher.match("", requestURI)
-                || matcher.match("/**/v2/api-docs", requestURI)
+                || matcher.match("/**/v3/api-docs", requestURI)
                 || matcher.match("/**/swagger-resources", requestURI)
                 || matcher.match("/**/swagger-resources/configuration/security", requestURI)
                 || matcher.match("/**/swagger-resources/configuration/ui", requestURI)) {

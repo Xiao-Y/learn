@@ -92,12 +92,12 @@ secure:
     - "/public-auth/rsa/publicKey"  # 获取公钥
     # swagger 配置
     - /v3/**
+    - /**/v3/**
     - /swagger-resources/**
     - /swagger-resources
     - /course/coursebase/**
     - /swagger-ui/**
     - /favicon.ico
-    - /admin-system/v3/**
   need-check:
     - "/**/*Api/**"
     - "/*Api/**"
