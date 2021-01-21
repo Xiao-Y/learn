@@ -19,7 +19,8 @@ import java.util.List;
 @Component
 @ConfigurationProperties(prefix = "secure")
 public class SecurityProperties {
-
+    // 登陆客户端配置
+    private ClientProperties client = new ClientProperties();
     // 网关白名单配置
     private List<String> whiteList = new ArrayList<>();
     // 配置需要权限的

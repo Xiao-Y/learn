@@ -1,0 +1,29 @@
+package com.billow.search.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
+@Document(indexName = "book")
+public class Book {
+    @Id
+    private String id;
+
+    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    private String name;
+
+    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    private String title;
+
+    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    private String desc;
+}

@@ -2,12 +2,14 @@ swagger: #接口注解文档
   basepackage: com.billow.auth.api #必须要有 GetMapping，PostMapping...
   service:
     name: ${spring.application.name} #api名称
-    version: 1.0
+    version: 3.0
     description: 警告：此API仅用于测试，禁止任何商业用途，否则一切后果自行承担！！！ #api描述
     contact:
       developer: billow #api开发者
       url: https://github.com/Xiao-Y/learn
       email: lyongtao123@126.com #api开发者
+server:
+  port: 8999
 
 spring:
   application:
@@ -22,17 +24,13 @@ management:
     web:
       exposure:
         include: "*"
-#auth:
-#  security:
-#    oauth2:
-#      jwtSigningKey: billow
-#    client:
-#      client-id: webapp
-#      client-secret: webapp
-#      scope: webapp
-#      grant-type: password
-#      access-token-uri: http://127.0.0.1:${server.port}/oauth/token
-
+auth:
+  token:
+    alias: jwt
+    jwtFileName: jwt.jks
+    jwtPassword: 123456789
+  white-list:
+    - "/rsa/publicKey" # 获取公钥
 # 日志
 logging:
   level:

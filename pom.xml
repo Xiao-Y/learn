@@ -27,18 +27,20 @@
         <module>learn-shop-core-cart</module>
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
+        <module>learn-shop-core-search</module>
 
         <module>learn-shop-public-auth</module>
 
-        <module>learn-shop-base-common</module>
-        <module>learn-shop-base-tools</module>
-        <module>learn-shop-base-aop</module>
-        <module>learn-shop-base-workflow</module>
-        <module>learn-shop-base-email</module>
-        <module>learn-shop-base-job</module>
-        <module>learn-shop-base-mq</module>
-        <module>learn-shop-base-jpa</module>
-        <module>learn-shop-base-mybatis</module>
+<!--        <module>learn-shop-base-common</module>-->
+<!--        <module>learn-shop-base-tools</module>-->
+<!--        <module>learn-shop-base-aop</module>-->
+<!--        <module>learn-shop-base-workflow</module>-->
+<!--        <module>learn-shop-base-email</module>-->
+<!--        <module>learn-shop-base-job</module>-->
+<!--        <module>learn-shop-base-mq</module>-->
+<!--        <module>learn-shop-base-jpa</module>-->
+<!--        <module>learn-shop-base-mybatis</module>-->
+        <module>learn-shop-base</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -55,7 +57,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <alibaba.druid.version>1.1.19</alibaba.druid.version>
-        <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
+        <springfox.boot.starter.version>3.0.0</springfox.boot.starter.version>
         <quartz.version>2.2.1</quartz.version>
         <qrgen.version>2.0</qrgen.version>
         <commons-lang3.version>3.4</commons-lang3.version>
@@ -72,6 +74,9 @@
         <activiti.version>6.0.0</activiti.version>
         <swagger-bootstrap.version>1.9.5</swagger-bootstrap.version>
         <apache.poi.version>4.1.1</apache.poi.version>
+        <nimbus-jose-jwt.version>8.16</nimbus-jose-jwt.version>
+        <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+        <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
     </properties>
 
     <dependencyManagement>
@@ -79,7 +84,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Hoxton.SR8</version>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -87,7 +92,7 @@
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2.2.1.RELEASE</version>
+                <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -148,15 +153,20 @@
                 <version>${alibaba.druid.version}</version>
             </dependency>
             <!-- swagger2 -->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger2</artifactId>-->
+<!--                <version>${springfox.swagger2.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger-ui</artifactId>-->
+<!--                <version>${springfox.swagger2.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox.swagger2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox.swagger2.version}</version>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox.boot.starter.version}</version>
             </dependency>
 <!--            <dependency>-->
 <!--                <groupId>com.github.xiaoymin</groupId>-->
@@ -245,7 +255,7 @@
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
-                <version>8.16</version>
+                <version>${nimbus-jose-jwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

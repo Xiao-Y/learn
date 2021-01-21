@@ -22,6 +22,7 @@ learn-shop-admin-system  系统管理服务，端口：8811 <br/>
 learn-shop-core-order   购物车服务，端口：8901 <br/>
 learn-shop-core-cart   购物车服务，端口： <br/>
 learn-shop-core-product   购物车服务，端口：8911 <br/>
+learn-shop-core-search   搜索服务，端口：8981 <br/>
 
 
 

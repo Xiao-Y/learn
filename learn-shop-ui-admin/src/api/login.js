@@ -3,7 +3,7 @@ import requestUtils from '../utils/requestUtils'
 
 const baseUrl = '../public-auth';
 
-export const login = (username, password) => requestUtils.post(baseUrl + '/login', {
+export const login = (username, password) => requestUtils.post('../userApi/login', {
   username: username,
   password: password
 });

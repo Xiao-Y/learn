@@ -1,5 +1,6 @@
 package com.billow.auth.security.config;
 
+import com.billow.auth.security.vo.SecurityUser;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;

@@ -1,9 +1,7 @@
 package com.billow.gateway.security.config;
 
-import cn.hutool.core.convert.Convert;
 import com.billow.gateway.redis.RedisUtils;
 import com.billow.gateway.security.constant.AuthConstant;
-import com.billow.gateway.security.constant.RedisConstant;
 import com.billow.gateway.security.vo.DataDictionaryVo;
 import com.billow.gateway.security.vo.PermissionVo;
 import com.billow.tools.constant.DictionaryType;
@@ -11,7 +9,6 @@ import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -36,8 +33,6 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
 
     private final static String PERMISSION = RedisCst.ROLE_PERMISSION_KEY;
     private final static String DICTIONARY = RedisCst.COMM_DICTIONARY_SYS_MODULE;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -54,9 +49,6 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                 .filter(f -> DictionaryType.SYS_FC_SYSTEM_MODULE.equals(f.getFieldType()))
                 .collect(Collectors.toMap(DataDictionaryVo::getFieldValue, DataDictionaryVo::getFieldDisplay));
 
-//        Object obj = redisTemplate.opsForHash().get(RedisConstant.RESOURCE_ROLES_KEY, uri.getPath());
-//        List<String> authorities = Convert.toList(String.class, obj);
-//        authorities = authorities.stream().map(i -> i = AuthConstant.AUTHORITY_PREFIX + i).collect(Collectors.toList());
         //认证通过且角色匹配的用户可访问当前路径
         return mono
                 .filter(Authentication::isAuthenticated)

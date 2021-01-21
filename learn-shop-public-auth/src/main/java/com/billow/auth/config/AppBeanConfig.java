@@ -1,6 +1,6 @@
 package com.billow.auth.config;
 
-import com.billow.auth.service.impl.CustomUserDetailsService;
+import com.billow.auth.security.service.CustomUserDetailsService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,527 +1,400 @@
-# springcloud 之 zuul、spring security、oauth2 的整合：
-> zuul为微服务的网关，所有的访问服务的api都要通过网关转发到内网对应的服务。spring security、oauth2为认证和授权中心，负责整个微服务api的安全
+@[TOC](目录)
 
-#### 一、添加：learn-shop-public-auth 认证、授权中心
-1、 在pom.xml中添加
+源码地址：[看这里，看这里，看这里](https://github.com/Xiao-Y/learn/tree/3.x)
+
+>gateway为微服务的网关，所有的访问服务的api都要通过网关转发到内网对应的服务。spring security、oauth2为认证和授权中心，负责整个微服务api的安全
+
+版本说明：
 ```xml
-<dependencies>
-    <!-- 注册中心 -->
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-eureka</artifactId>
-    </dependency>
-    <!-- spring security 相关 -->
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-security</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-data</artifactId>
-    </dependency>
-    <!-- oauth2 -->
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-oauth2</artifactId>
-    </dependency>
-    <!-- spring data jpa -->
-    <dependency>
+    <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <!-- redis：token 保存在redis中 -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-redis</artifactId>
-    </dependency>
-    <!-- mysql驱动 -->
-    <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-    </dependency>
-    <!-- druid 连接池 -->
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>druid</artifactId>
-    </dependency>
-    <!-- json工具 -->
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>fastjson</artifactId>
-    </dependency>
-</dependencies>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.4.RELEASE</version>
+    </parent>
 ```
-2、添加配置文件
-
-
-2.1. 认证服务：AuthorizationServerConfig.java
-```java
-import com.alibaba.druid.pool.DruidDataSource;
-import com.billow.auth.security.DomainUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
-
-
-@Configuration
-@EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private DomainUserDetailsService domainUserDetailsService;
-    @Autowired
-    private DruidDataSource dataSource;
-    @Autowired
-    private RedisConnectionFactory connectionFactory;
-
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints
-                .authenticationManager(authenticationManager)
-                .userDetailsService(domainUserDetailsService)
-                .tokenStore(getTokenStore())
-                .tokenServices(defaultTokenServices());
-    }
-
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer
-                .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()")
-                .allowFormAuthenticationForClients();
-    }
-
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        // 客户端访问方式配置数据在数据库中
-        clients.withClientDetails(clientDetails());
-    }
-
-    @Bean
-    public ClientDetailsService clientDetails() {
-        return new JdbcClientDetailsService(dataSource);
-    }
-
-    @Primary
-    @Bean
-    public DefaultTokenServices defaultTokenServices() {
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(getTokenStore());
-        tokenServices.setSupportRefreshToken(true);
-        tokenServices.setClientDetailsService(clientDetails());
-        // token有效期自定义设置，默认12小时
-        tokenServices.setAccessTokenValiditySeconds(60 * 60 * 12); 
-        // 默认30天，这里修改
-        tokenServices.setRefreshTokenValiditySeconds(60 * 60 * 24 * 7);
-        return tokenServices;
-    }
-
-    @Bean
-    public TokenStore getTokenStore() {
-        return new RedisTokenStore(connectionFactory);
-    }
-}
+```xml
+	<dependency>
+	    <groupId>org.springframework.cloud</groupId>
+	    <artifactId>spring-cloud-dependencies</artifactId>
+	    <version>Hoxton.SR8</version>
+	    <type>pom</type>
+	    <scope>import</scope>
+	</dependency>
 ```
 
-2.2. 资源服务 ResourceServerConfig.java
-```java
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+# 1）learn-shop-public-auth（认证中心）
+>认证中心，主要是用于用户的登陆认证，发放token
 
-@Configuration
-@EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .and()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
-    }
-}
+## 1、生成JKS
+使用jdk的keytool生成jks,记住生成的时填入的密码
 ```
+keytool -genkeypair
+```
+将生成的 jwt.jks 文件放到 resources 目录下
 
-2.3. spring security 的配置文件 WebSecurityConfig.java
+## 2、添加pom.xml中主要依赖
+ ```xml
+		<dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-security</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.springframework.cloud</groupId>
+         <artifactId>spring-cloud-starter-oauth2</artifactId>
+     </dependency>
+		<dependency>
+         <groupId>com.nimbusds</groupId>
+         <artifactId>nimbus-jose-jwt</artifactId>
+         <version>8.16</version>
+     </dependency>
+ ```
+## 3、添加主要类
+### 3.1 目录结构及主要类说明
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20201224114116554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5b25nMTIyMw==,size_16,color_FFFFFF,t_70)
+### 3.2 WebSecurityConfig
+下面展示一些 `内联代码片`。
+
 ```java
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+    private AuthProperties authProperties;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .csrf().disable()
-                .httpBasic();
+
+        http.authorizeRequests()
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
+                // 配置的白名单
+                .antMatchers(ArrayUtil.toArray(authProperties.getWhiteList(), String.class)).permitAll()
+                .anyRequest().authenticated();
+
+
     }
 
+    @Bean
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/favor.ioc");
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         // 密码加密
-        // return new BCryptPasswordEncoder();
-        // 不加密密码
-        return new PasswordEncoder() {
-
-            @Override
-            public String encode(CharSequence charSequence) {
-                return charSequence.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return true;
-            }
-        };
+        return new BCryptPasswordEncoder();
     }
 }
+```
+3.3 Oauth2ServerConfig 配置
+```java
+@Configuration
+@EnableAuthorizationServer
+public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private AuthProperties authProperties;
+    @Autowired
+    private UserDetailsService customUserDetailsService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtTokenEnhancer jwtTokenEnhancer;
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        // 客户端访问方式配置数据在数据库中
+        clients.withClientDetails(customClientDetailsService());
+    }
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+        List<TokenEnhancer> delegates = new ArrayList<>();
+        delegates.add(jwtTokenEnhancer);
+        delegates.add(accessTokenConverter());
+        enhancerChain.setTokenEnhancers(delegates); //配置JWT的内容增强器
+        endpoints.authenticationManager(authenticationManager)
+                .userDetailsService(customUserDetailsService) //配置加载用户信息的服务
+                .accessTokenConverter(accessTokenConverter())
+                .tokenEnhancer(enhancerChain);
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.allowFormAuthenticationForClients();
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setKeyPair(keyPair());
+        return jwtAccessTokenConverter;
+    }
+
+    @Bean
+    public KeyPair keyPair() {
+        TokenProperties token = authProperties.getToken();
+        String jwtFileName = token.getJwtFileName();
+        String jwtPassword = token.getJwtPassword();
+        String alias = token.getAlias();
+        //从classpath下的证书中获取秘钥对
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(jwtFileName), jwtPassword.toCharArray());
+        return keyStoreKeyFactory.getKeyPair(alias, jwtPassword.toCharArray());
+    }
+
+    @Bean
+    public ClientDetailsService customClientDetailsService() {
+        return new JdbcClientDetailsService(dataSource);
+    }
+}
 ```
 
-2.4. 实现登陆用户信息查询 DomainUserDetailsService.java
+### 3.4 JwtTokenEnhancer
 ```java
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+@Component
+public class JwtTokenEnhancer implements TokenEnhancer {
+    @Override
+    public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        Map<String, Object> info = new HashMap<>();
+        //把用户ID设置到JWT中
+        info.put("id", securityUser.getId());
+        info.put("usercode",securityUser.getUsercode());
+        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
+        return accessToken;
+    }
+}
+```
+### 3.5 CustomUserDetailsService
+```java
+public class CustomUserDetailsService implements UserDetailsService {
 
-import java.util.HashSet;
-import java.util.Set;
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-@Service
-public class DomainUserDetailsService implements UserDetailsService {
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 查询用户的权限(我是写死的)
         Set<GrantedAuthority> userAuthotities = new HashSet<>();
         userAuthotities.add(new SimpleGrantedAuthority("query-demo"));
+        UserPo userPo = new UserPo("admin",passwordEncoder.encode("admin"));
         // 注意如果在WebSecurityConfig.java 中使用的密文时，这个地方也要使用密文
-        // return new User("admin", "$2a$10$XOVs4Z1YtPKqKwQVywG9j.xLAqXYRQLGZMGMrZDNbtl6pUC0Weteq", userAuthotities);
-        return new User("admin", "admin", userAuthotities);
+        return new SecurityUser(userPo , userAuthotities);
     }
 }
 ```
 
-2.5. 添加启动类 AuthServerApplication.java
-```java
-@SpringBootApplication
-@EnableDiscoveryClient
-public class AuthServerApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(AuthServerApplication.class, args);
-    }
-}
-```
-
-2.6. 修改：application.yml（重要）
-```yaml
-
-....
-security:
-  oauth2:
-    resource:
-      filter-order: 3      
-....
-
-```
-2.7. druid 和reids 的配置文件我就不贴了，网上多的是
-
-3、 添加用户查询api UserController.java
+## 4、添加公钥访问地址
 ```java
 @RestController
-public class UserController {
+public class KeyPairController {
 
-    @GetMapping("/user")
-    public Principal user(Principal user) {
-        return user;
+    @Autowired
+    private KeyPair keyPair;
+
+    /**
+     * 获取RSA公钥
+     *
+     * @return
+     */
+    @GetMapping("/rsa/publicKey")
+    public Map<String, Object> getKey() {
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAKey key = new RSAKey.Builder(publicKey).build();
+        return new JWKSet(key).toJSONObject();
     }
 }
 ```
-
-4、 oauth_client_details 为客户端访问方式
-```sql
-
-DROP TABLE IF EXISTS `oauth_client_details`;
-CREATE TABLE `oauth_client_details`  (
-  `client_id` varchar(48) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `resource_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `client_secret` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `scope` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `authorized_grant_types` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `web_server_redirect_uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `authorities` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `access_token_validity` int(11) NULL DEFAULT NULL,
-  `refresh_token_validity` int(11) NULL DEFAULT NULL,
-  `additional_information` varchar(4096) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `autoapprove` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`client_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of oauth_client_details
--- ----------------------------
-INSERT INTO `oauth_client_details` VALUES ('app', NULL, 'app', 'app', 'password,refresh_token', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('webapp', NULL, 'webapp', 'app', 'authorization_code,password,refresh_token,client_credentials', 'http://baidu.com', NULL, NULL, NULL, NULL, NULL);
-
-```
-#### 二、修改：learn-cloud-gateway
-
-
-1、 在pom.xml中添加
-
-```xml
-
-....
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-security</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-oauth2</artifactId>
-</dependency>
-....
-
+## 5、添加配置文件
+```yml
+auth:
+  token:
+    alias: jwt
+    jwtFileName: jwt.jks
+    jwtPassword: 123456789
+  white-list:
+    - "/rsa/publicKey" # 获取公钥
 ```
 
-2、 配置文件中添加
+# 2）learn-cloud-gateway（资源中心）
+> 资源中心主要于鉴定用户是否有权限访问该资源
+## 1、目录结构
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20201224144152573.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5b25nMTIyMw==,size_16,color_FFFFFF,t_70)
+## 2、AuthorizationManager
+```java
+@Slf4j
+@Component
+public class AuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+    private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-2.1 修改 application.yml
-```yaml
-....
+    private final static String PERMISSION = RedisCst.ROLE_PERMISSION_KEY;
+    private final static String DICTIONARY = RedisCst.COMM_DICTIONARY_SYS_MODULE;
 
-zuul:
-  # 添加代理头
-  add-proxy-headers: true
-  # 敏感头信息（重要）
-  sensitive-headers:
-  routes:
-    #服务认证和授权
-    uaa:
-      path: /uaa/**
-      serviceId: learn-shop-public-auth
-      
-security:
-  basic:
-    enabled: false
-  oauth2:
-    client:
-      access-token-uri: http://learn-shop-public-auth/uaa/oauth/token
-      user-authorization-uri: http://learn-shop-public-auth/uaa/oauth/authorize
-    resource:
-      user-info-uri: http://learn-shop-public-auth/uaa/user
-      prefer-token-info: false
-management:
+    @Autowired
+    private RedisUtils redisUtils;
+
+    @Override
+    public Mono<AuthorizationDecision> check(Mono<Authentication> mono, AuthorizationContext authorizationContext) {
+        //从Redis中获取当前路径可访问角色列表
+        URI uri = authorizationContext.getExchange().getRequest().getURI();
+        String targetURI = uri.getPath();
+        log.info("<<<=== targetURI:{}", targetURI);
+        // 获取 redis 中数据字典的数据
+        Map<String, String> dictionaryMap = redisUtils.getArray(DICTIONARY + DictionaryType.SYS_MC_SYSTEM_MODULE, DataDictionaryVo.class)
+                .stream()
+                .filter(f -> DictionaryType.SYS_FC_SYSTEM_MODULE.equals(f.getFieldType()))
+                .collect(Collectors.toMap(DataDictionaryVo::getFieldValue, DataDictionaryVo::getFieldDisplay));
+
+        //认证通过且角色匹配的用户可访问当前路径
+        return mono
+                .filter(Authentication::isAuthenticated)
+                .flatMapIterable(Authentication::getAuthorities)
+                .map(GrantedAuthority::getAuthority)
+                .any(role -> {
+                    role = role.replace(AuthConstant.AUTHORITY_PREFIX, "");
+                    List<PermissionVo> permissionVos = redisUtils.getArray(PERMISSION + role, PermissionVo.class);
+                    if (permissionVos == null) {
+                        return false;
+                    }
+                    for (PermissionVo permissionVo : permissionVos) {
+                        if (ToolsUtils.isEmpty(permissionVo.getSystemModule())) {
+                            String sourceURI = permissionVo.getUrl();
+                            log.info("===>>> sourceURI:{}", sourceURI);
+                            if (antPathMatcher.match(sourceURI, targetURI)) {
+                                log.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);
+                                return true;
+                            }
+                        } else {
+                            String[] split = permissionVo.getSystemModule().split(",");
+                            for (String s : split) {
+                                String sourceURI = "/" + dictionaryMap.get(s) + permissionVo.getUrl();
+                                log.info("===>>> sourceURI:{}", sourceURI);
+                                if (antPathMatcher.match(sourceURI, targetURI)) {
+                                    log.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                })
+                .map(AuthorizationDecision::new)
+                .defaultIfEmpty(new AuthorizationDecision(false));
+    }
+
+}
+```
+
+## 3、ResourceServerConfig
+```java
+@AllArgsConstructor
+@Configuration
+@EnableWebFluxSecurity
+public class ResourceServerConfig {
+    private final AuthorizationManager authorizationManager;
+    private final SecurityProperties securityProperties;
+    private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    // 暂时不能用
+//    private final WhiteListRemoveJwtFilter ignoreUrlsRemoveJwtFilter;
+
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        // jwt 增加
+        http.oauth2ResourceServer().jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter());
+        //自定义处理JWT请求头过期或签名错误的结果
+        http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
+        //对白名单路径，直接移除JWT请求头
+//        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+        // 白名单
+        List<String> whiteList = securityProperties.getWhiteList();
+        if (!CollectionUtils.isEmpty(whiteList)) {
+            //白名单配置
+            http.authorizeExchange().pathMatchers(ArrayUtil.toArray(whiteList, String.class)).permitAll();
+        }
+        // 要权限的
+        List<String> needCheck = securityProperties.getNeedCheck();
+        http.authorizeExchange()
+                .pathMatchers(ArrayUtil.toArray(needCheck, String.class))
+                .authenticated()
+                .anyExchange().access(authorizationManager)//鉴权管理器配置
+                .and().exceptionHandling()
+                .accessDeniedHandler(restfulAccessDeniedHandler)//处理未授权
+                .authenticationEntryPoint(restAuthenticationEntryPoint)//处理未认证
+                .and().csrf().disable();
+        return http.build();
+    }
+
+    @Bean
+    public Converter<Jwt, ? extends Mono<? extends AbstractAuthenticationToken>> jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix(AuthConstant.AUTHORITY_PREFIX);
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(AuthConstant.AUTHORITY_CLAIM_NAME);
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
+    }
+
+}
+```
+## 4、配置文件
+```yml
+spring:
+  application:
+    name: learn-cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: public-auth
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-public-auth
+          predicates:
+            - Path=/public-auth/**
+          # 加上StripPrefix=1，否则转发到后端服务时会带上consumer前缀
+          filters:
+            - StripPrefix=1
+        - id: admin-system
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-admin-system
+          predicates:
+            - Path=/admin-system/**
   security:
-    enabled: false
-    
-.....
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: 'http://localhost:8999/rsa/publicKey' # 获取公钥
+
+# 自己定义安全配置
+secure:
+  client: # 登陆客户端配置
+    client-id: webapp
+    client-secret: webapp
+    scope: webapp
+    grant-type: password
+    access-token-uri: "http://learn-shop-public-auth/oauth/token"
+  white-list:
+    - "/actuator/**"              # 健康检查
+    - "/userApi/*"                # 获取用户信息
+    - "/public-auth/oauth/token"  # 获取token或者刷新token
+  need-check:
+    - "/**/*Api/**"
+    - "/*Api/**"
 
 ```
 
-2.2. spring security 的配置文件 SecurityConfig.java
-```java
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+源码地址：[看这里，看这里，看这里](https://github.com/Xiao-Y/learn/tree/3.x)
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-    }
-}
-```
-
-2.3. 在 ZuulApp.java 开启sso
-添加：
-```java
-@EnableOAuth2Sso
-```
-
-#### 三、修改：learn-shop-admin-user
-1、修改pom.xml 文件
-```xml
-
-....
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-security</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-oauth2</artifactId>
-</dependency>
-....
-
-```
-
-2、添加配置文件
-
-
-2.1. 资源服务 ResourceServerConfig.java
-```java
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-
-import javax.servlet.http.HttpServletResponse;
-
-
-@Configuration
-@EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .and()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
-    }
-}
-```
-
-2.2. 在 AdminUserApp 开启资源服务（控制方法的访问权限）
-添加：
-```java
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-``` 
-
-2.3. 修改 TestUserController.java 用于测试
-```java
-@RestController
-@RequestMapping("/testUser")
-public class TestUserController {
-
-    @GetMapping("/indexUser")
-    @PreAuthorize("hasAuthority('query-demo')")
-    public String indexUser() {
-        System.out.println("indexUser: " + name);
-        return "indexUser:---" + DateUtil.now();
-    }
-
-    @GetMapping("/findAll")
-    @PreAuthorize("hasAuthority('query-findAll')")
-    public String findAll() {
-        return "findAll:---" + DateUtil.now();
-    }
-
-    @PostMapping("/saveUser")
-    public String saveUser() {
-        return "saveUser:---" + DateUtil.now();
-    }
-}
-
-```
-
-#### 四、测试（使用 postmen）
-
-1、 password 模式：
-
-![avatar](temp/01get_access_token.jpg)
-
-![avatar](temp/02get_access_token.jpg)
-
-![avatar](temp/03get_user_info.jpg)
-
-![avatar](temp/04test_indexUser.jpg)
-
-2、authorization_code 模式：
-
-
-2.1、在浏览器中访问：
-
-http://localhost:8771/uaa/oauth/authorize?response_type=code&client_id=webapp&redirect_uri=http://baidu.com&state=123
-
-获取 code
-
-![avatar](temp/05get_code1.jpg)
-
-![avatar](temp/06get_code2.jpg)
-
-![avatar](temp/07get_code3.jpg)
-
-2.2、postmen中post 访问：
-
-http://localhost:8771/uaa/oauth/token?client_id=webapp&grant_type=authorization_code&code=ukg0Vy&client_secret=webapp&redirect_uri=http://baidu.com
-
-获取 access_token
-
-![avatar](temp/08get_access_token.jpg)
-
-![avatar](temp/09get_user_info.jpg)
-
-![avatar](temp/10test_indexUser.jpg)
+测试请参考
+[Spring Cloud 之 Zuul、Spring Security、Oauth2 的整合](https://blog.csdn.net/lyong1223/article/details/84261089)

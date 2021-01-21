@@ -2,7 +2,7 @@ swagger: #接口注解文档
   basepackage: com.billow.user.api #必须要有 GetMapping，PostMapping...
   service:
     name: ${spring.application.name} #api名称
-    version: 1.0
+    version: 3.0
     description: 警告：此API仅用于测试，禁止任何商业用途，否则一切后果自行承担！！！ #api描述
     contact:
       developer: billow #api开发者
@@ -10,6 +10,7 @@ swagger: #接口注解文档
       email: lyongtao123@126.com #api开发者
 
 server:
+  port: 8801
   context-path: /admin-user
 
 spring:
@@ -30,18 +31,6 @@ spring:
 ribbon:
   ReadTimeout: 15000
   ConnectTimeout: 10000
-#安全配置
-#security:
-#  oauth2:
-#    client:
-#      client-id: webapp
-#      client-secret: webapp
-#      user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
-#      access-token-uri: http://127.0.0.1:9999/oauth/token
-#    resource:
-#      jwt:
-#        key-uri: http://127.0.0.1:9999/oauth/token_key
-#      user-info-uri: http://127.0.0.1:9999/user #获取用户信息的地址
 
 # 显示 sql 的查询参数
 logging:
