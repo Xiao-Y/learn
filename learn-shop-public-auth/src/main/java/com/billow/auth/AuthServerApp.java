@@ -10,9 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @SpringBootApplication
 @ComponentScan("com.billow")
-public class AuthServerApplication {
+public class AuthServerApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthServerApplication.class, args);
+        SpringApplication.run(AuthServerApp.class, args);
     }
 }
