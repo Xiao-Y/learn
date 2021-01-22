@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 工作流查询测试
@@ -69,5 +70,11 @@ public class ActivitiQueryTests {
         }
         inputStream.close();
         outputStream.close();
+    }
+
+    public void tst(){
+        AtomicInteger integer = new AtomicInteger();
+        integer.compareAndSet(2,3);
+        Thread thread = new Thread();
     }
 }

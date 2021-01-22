@@ -18,12 +18,12 @@ public class Book {
     @Id
     private String id;
 
-    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = AnalyzerConstant.ANALYZER)
     private String name;
 
-    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = AnalyzerConstant.ANALYZER)
     private String title;
 
-    @Field(type = FieldType.Text, analyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = AnalyzerConstant.ANALYZER)
     private String desc;
 }
