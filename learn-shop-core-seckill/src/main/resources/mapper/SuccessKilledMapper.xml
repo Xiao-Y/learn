@@ -32,9 +32,9 @@
             usercode, seckill_id, kill_state
         </sql>
     <insert id="saveSuccessKilled" parameterType="com.billow.seckill.pojo.po.SuccessKilledPo">
-        insert into sk_success_killed(id, usercode, seckill_id, kill_state,
+        insert ignore into sk_success_killed(usercode, seckill_id, kill_state,
         valid_ind, create_time, creator_code, update_time, updater_code)
-        VALUES(#{killedPo.id}, #{killedPo.usercode}, #{killedPo.seckillId}, #{killedPo.killState},
+        VALUES(#{killedPo.usercode}, #{killedPo.seckillId}, #{killedPo.killState},
         #{killedPo.validInd}, #{killedPo.createTime}, #{killedPo.creatorCode}, #{killedPo.updateTime}, #{killedPo.updaterCode})
     </insert>
 
