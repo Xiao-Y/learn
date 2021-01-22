@@ -37,7 +37,7 @@ public class GoodsSkuSpecValueServiceImpl extends ServiceImpl<GoodsSkuSpecValueD
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsSkuSpecValuePo po = new GoodsSkuSpecValuePo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();

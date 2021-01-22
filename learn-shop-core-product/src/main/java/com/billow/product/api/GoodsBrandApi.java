@@ -46,7 +46,7 @@ public class GoodsBrandApi {
 
     @ApiOperation(value = "根据id查询品牌表数据")
     @GetMapping(value = "/getById/{id}")
-    public GoodsBrandVo getById(@PathVariable("id") String id){
+    public GoodsBrandVo getById(@PathVariable("id") Long id){
         GoodsBrandPo po = goodsBrandService.getById(id);
         return ConvertUtils.convert(po, GoodsBrandVo.class);
     }
@@ -61,7 +61,7 @@ public class GoodsBrandApi {
 
     @ApiOperation(value = "删除品牌表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id){
+    public boolean delById(@PathVariable("id") Long id){
         return goodsBrandService.removeById(id);
     }
 
@@ -75,7 +75,7 @@ public class GoodsBrandApi {
 
     @ApiOperation("根据ID禁用品牌表数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return goodsBrandService.prohibitById(id);
     }
 }

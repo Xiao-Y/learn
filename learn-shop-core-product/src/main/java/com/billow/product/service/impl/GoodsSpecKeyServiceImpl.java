@@ -43,7 +43,7 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsSpecKeyPo po = new GoodsSpecKeyPo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
@@ -52,7 +52,7 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
     }
 
     @Override
-    public List<GoodsSpecKeyPo> findListByCategoryId(String categoryId) {
+    public List<GoodsSpecKeyPo> findListByCategoryId(Long categoryId) {
         LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSpecKeyPo::getCategoryId, categoryId);
         wrapper.eq(GoodsSpecKeyPo::getValidInd, true);
@@ -63,7 +63,7 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
     @Transactional(rollbackFor = Exception.class)
     public List<GoodsSpecKeyVo> saveList(List<GoodsSpecKeyVo> goodsSpecKeyVos) {
         for (GoodsSpecKeyVo goodsSpecKeyVo : goodsSpecKeyVos) {
-            String id = goodsSpecKeyVo.getId();
+            Long id = goodsSpecKeyVo.getId();
             if (ToolsUtils.isEmpty(id)) {
                 goodsSpecKeyVo.setSpecNo(NumUtil.makeNum("SP"));
                 GoodsSpecKeyPo convert = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);

@@ -39,7 +39,7 @@ public class GoodsCategoryServiceImpl extends ServiceImpl<GoodsCategoryDao, Good
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsCategoryPo po = new GoodsCategoryPo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsCategoryPo> wrapper = Wrappers.lambdaQuery();

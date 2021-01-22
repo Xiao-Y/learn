@@ -61,7 +61,7 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsSpuPo po = new GoodsSpuPo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsSpuPo> wrapper = Wrappers.lambdaQuery();
@@ -74,7 +74,7 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
     public void addOrUpdate(GoodsSpuVo goodsSpuVo) {
         // 保存更新商品信息
         GoodsSpuPo po = ConvertUtils.convert(goodsSpuVo, GoodsSpuPo.class);
-        String id = goodsSpuVo.getId();
+        Long id = goodsSpuVo.getId();
         if (ToolsUtils.isEmpty(id)) {
             po.setSpuNo(NumUtil.makeNum("PG"));
         }
@@ -100,7 +100,7 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
                 skuSpecValuePo.setValidInd(false);
                 goodsSkuSpecValueDao.update(skuSpecValuePo, wrapper);
                 // 设置对应的 sku 为无效
-                Set<String> skuIds = skuSpecValuePos.stream().map(m -> m.getSkuId()).collect(Collectors.toSet());
+                Set<Long> skuIds = skuSpecValuePos.stream().map(m -> m.getSkuId()).collect(Collectors.toSet());
                 if(ToolsUtils.isNotEmpty(skuIds)){
                     LambdaQueryWrapper<GoodsSkuPo> wupdate = Wrappers.lambdaQuery();
                     wupdate.in(GoodsSkuPo::getId, skuIds);

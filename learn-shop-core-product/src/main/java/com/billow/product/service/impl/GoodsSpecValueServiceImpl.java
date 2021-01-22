@@ -41,7 +41,7 @@ public class GoodsSpecValueServiceImpl extends ServiceImpl<GoodsSpecValueDao, Go
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsSpecValuePo po = new GoodsSpecValuePo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsSpecValuePo> wrapper = Wrappers.lambdaQuery();
@@ -50,7 +50,7 @@ public class GoodsSpecValueServiceImpl extends ServiceImpl<GoodsSpecValueDao, Go
     }
 
     @Override
-    public List<GoodsSpecValueVo> findListBySpecKeyId(String specKeyId) {
+    public List<GoodsSpecValueVo> findListBySpecKeyId(Long specKeyId) {
         LambdaQueryWrapper<GoodsSpecValuePo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSpecValuePo::getSpecKeyId, specKeyId);
         List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectList(wrapper);

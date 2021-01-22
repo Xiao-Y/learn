@@ -37,7 +37,7 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandDao, GoodsBrand
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsBrandPo po = new GoodsBrandPo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsBrandPo> wrapper = Wrappers.lambdaQuery();

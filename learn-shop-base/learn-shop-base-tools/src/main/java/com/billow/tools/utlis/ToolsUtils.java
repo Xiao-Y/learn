@@ -113,6 +113,13 @@ public class ToolsUtils {
         return false;
     }
 
+    public static boolean isEmpty(Long str) {
+        if (str == null) {
+            return true;
+        }
+        return false;
+    }
+
     public static <T> boolean isEmpty(List<T> list) {
         if (list == null || list.size() < 1) {
             return true;
@@ -150,6 +157,10 @@ public class ToolsUtils {
     }
 
     public static boolean isNotEmpty(String str) {
+        return !isEmpty(str);
+    }
+
+    public static boolean isNotEmpty(Long str) {
         return !isEmpty(str);
     }
 

@@ -46,7 +46,7 @@ public class ShopInfoApi {
 
     @ApiOperation(value = "根据id查询店铺表数据")
     @GetMapping(value = "/getById/{id}")
-    public ShopInfoVo getById(@PathVariable("id") String id){
+    public ShopInfoVo getById(@PathVariable("id") Long id){
         ShopInfoPo po = shopInfoService.getById(id);
         return ConvertUtils.convert(po, ShopInfoVo.class);
     }
@@ -61,7 +61,7 @@ public class ShopInfoApi {
 
     @ApiOperation(value = "删除店铺表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id){
+    public boolean delById(@PathVariable("id") Long id){
         return shopInfoService.removeById(id);
     }
 
@@ -75,7 +75,7 @@ public class ShopInfoApi {
 
     @ApiOperation("根据ID禁用店铺表数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return shopInfoService.prohibitById(id);
     }
 }

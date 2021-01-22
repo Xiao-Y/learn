@@ -46,7 +46,7 @@ public class GoodsSkuSpecValueApi {
 
     @ApiOperation(value = "根据id查询sku规格值数据")
     @GetMapping(value = "/getById/{id}")
-    public GoodsSkuSpecValueVo getById(@PathVariable("id") String id){
+    public GoodsSkuSpecValueVo getById(@PathVariable("id") Long id){
         GoodsSkuSpecValuePo po = goodsSkuSpecValueService.getById(id);
         return ConvertUtils.convert(po, GoodsSkuSpecValueVo.class);
     }
@@ -61,7 +61,7 @@ public class GoodsSkuSpecValueApi {
 
     @ApiOperation(value = "删除sku规格值数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id){
+    public boolean delById(@PathVariable("id") Long id){
         return goodsSkuSpecValueService.removeById(id);
     }
 
@@ -75,7 +75,7 @@ public class GoodsSkuSpecValueApi {
 
     @ApiOperation("根据ID禁用sku规格值数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return goodsSkuSpecValueService.prohibitById(id);
     }
 }

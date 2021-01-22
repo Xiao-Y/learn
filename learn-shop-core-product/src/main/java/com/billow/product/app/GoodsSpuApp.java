@@ -43,7 +43,7 @@ public class GoodsSpuApp {
 
     @ApiOperation(value = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
-    public GoodsSpuVo getById(@PathVariable("id") String id) {
+    public GoodsSpuVo getById(@PathVariable("id") Long id) {
 //        try {
 //            AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
 //            model.setOutTradeNo(UUID.randomUUID().toString());

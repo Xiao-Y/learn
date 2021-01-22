@@ -28,7 +28,7 @@ public class GoodsSpuSpecPo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "spu_id")
-    private String spuId;
+    private Long spuId;
 
     @ApiModelProperty(value = "spec_key_id")
     private String specKeyId;
