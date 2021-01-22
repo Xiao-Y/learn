@@ -75,7 +75,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
         if (seckillPo == null) {
             return new ExposerVo(false, seckillId);
         }
-        if(seckillPo.getStock() < 1){
+        if (seckillPo.getStock() < 1) {
             throw new GlobalException(ResCodeEnum.RESCODE_ERROR_KILL_EMPTY);
         }
         // 当前时间
@@ -95,18 +95,20 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
 
     @Override
     @Transactional
-    public SeckillExecutionVo executionSeckill(String seckillId, String md5) {
+    public SeckillExecutionVo executionSeckill(String seckillId, String md5, String userCode) {
         // 校验 md5
         String md51 = this.getMD5(seckillId);
         if (!md51.equals(md5)) {
             throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
         }
         // 保存并校验订单
-        String userCode = userTools.getCurrentUserCode();
+//        String userCode = userTools.getCurrentUserCode();
         SuccessKilledPo killedPo = new SuccessKilledPo();
         killedPo.setSeckillId(seckillId);
         killedPo.setUsercode(userCode);
-        int size = successKilledDao.saveSuccessKilled(killedPo);
+        killedPo.setKillState(SeckillStatEnum.SUCCESS.getState());
+        int size = successKilledDao.insert(killedPo);
+//        int size = successKilledDao.saveSuccessKilled(killedPo);
         if (size <= 0) {
             throw new GlobalException(ResCodeEnum.RESCODE_ERROR_KILL_REPEAT);
         }

@@ -36,7 +36,8 @@ public class SeckillApp {
     @ApiOperation(value = "执行秒杀")
     @PostMapping(value = "/executionSeckill/{seckillId}")
     public SeckillExecutionVo executionSeckill(@PathVariable("seckillId") String seckillId,
-                                               @RequestParam String md5) {
-        return seckillService.executionSeckill(seckillId, md5);
+                                               @RequestParam("md5") String md5,
+                                               @RequestParam("userCode") String userCode) {
+        return seckillService.executionSeckill(seckillId, md5, userCode);
     }
 }

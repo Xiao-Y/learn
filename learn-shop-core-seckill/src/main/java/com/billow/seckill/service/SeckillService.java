@@ -58,5 +58,5 @@ public interface SeckillService extends IService<SeckillPo> {
      * @author liuyongtao
      * @since 2021-1-22 9:45
      */
-    SeckillExecutionVo executionSeckill(String seckillId, String md5);
+    SeckillExecutionVo executionSeckill(String seckillId, String md5, String userCode);
 }
