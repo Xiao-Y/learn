@@ -10,7 +10,9 @@ import com.billow.seckill.pojo.po.SuccessKilledPo;
 import com.billow.seckill.pojo.vo.SuccessKilledVo;
 import com.billow.seckill.service.SuccessKilledService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -37,12 +39,19 @@ public class SuccessKilledServiceImpl extends ServiceImpl<SuccessKilledDao, Succ
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         SuccessKilledPo po = new SuccessKilledPo();
         po.setValidInd(false);
         LambdaQueryWrapper<SuccessKilledPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(SuccessKilledPo::getId, id);
         return successKilledDao.update(po, wrapper) >= 1;
+    }
+
+    @Async
+    @Transactional
+    @Override
+    public void saveAsync(SuccessKilledPo entity) {
+        super.save(entity);
     }
 }
 

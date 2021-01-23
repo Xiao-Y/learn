@@ -2,6 +2,7 @@ package com.billow.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.billow.tools.utlis.UserTools;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,11 +40,13 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
         }
 
         String username = userTools.getCurrentUserCode();
-        if (metaObject.hasSetter(CREATOR_CODE)) {
-            this.setFieldValByName(CREATOR_CODE, username, metaObject);
-        }
-        if (metaObject.hasSetter(UPDATER_CODE)) {
-            this.setFieldValByName(UPDATER_CODE, username, metaObject);
+        if (StringUtils.isNotEmpty(username)) {
+            if (metaObject.hasSetter(CREATOR_CODE)) {
+                this.setFieldValByName(CREATOR_CODE, username, metaObject);
+            }
+            if (metaObject.hasSetter(UPDATER_CODE)) {
+                this.setFieldValByName(UPDATER_CODE, username, metaObject);
+            }
         }
     }
 

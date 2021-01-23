@@ -9,9 +9,6 @@ local expire = ARGV[2];
 
 --- 获取指定的库存
 local resultStock = redis.call("get", seckillStockKey);
---- 查询是否秒杀过
-local resultKilled = redis.call("get", seckillLockKey);
-
 --- 是否库存存在
 if not resultStock then
     return -4;
@@ -20,15 +17,21 @@ if tonumber(resultStock) <= 0 then
     return -4;
 end
 
---- 是否秒杀过
-if not resultKilled then
-    redis.call("set", seckillLockKey, successKillInfo);
-    redis.call('decr', seckillStockKey);
-    --- 由于lua脚本接收到参数都会转为String，所以要转成数字类型才能比较
-    if tonumber(expire) > 0 then
-        --- 设置过期时间
-        redis.call("expire", seckillLockKey, expire);
-    end
-    return 1;
+--- 查询是否秒杀过
+local isKilled = redis.call("exists", seckillLockKey);
+--- 已经秒杀过
+if isKilled then
+    return -1;
 end
-return -1;
+
+--- 设置秒杀信息
+redis.call("set", seckillLockKey, successKillInfo);
+--- 递减库存
+redis.call('decr', seckillStockKey);
+--- 由于lua脚本接收到参数都会转为String，所以要转成数字类型才能比较
+if tonumber(expire) > 0 then
+    --- 设置过期时间
+    redis.call("expire", seckillLockKey, expire);
+end
+return 1;
+

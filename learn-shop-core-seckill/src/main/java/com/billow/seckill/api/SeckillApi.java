@@ -37,7 +37,7 @@ public class SeckillApi {
 
     @ApiOperation(value = "根据id查询秒杀库存表数据")
     @GetMapping(value = "/findById/{id}")
-    public SeckillVo findById(@PathVariable("id") String id) {
+    public SeckillVo findById(@PathVariable("id") Long id) {
         SeckillPo po = seckillService.getById(id);
         return ConvertUtils.convert(po, SeckillVo.class);
     }
@@ -52,7 +52,7 @@ public class SeckillApi {
 
     @ApiOperation(value = "删除秒杀库存表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id) {
+    public boolean delById(@PathVariable("id") Long id) {
         return seckillService.removeById(id);
     }
 
@@ -66,7 +66,7 @@ public class SeckillApi {
 
     @ApiOperation("根据ID禁用秒杀库存表数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return seckillService.prohibitById(id);
     }
 }

@@ -36,4 +36,6 @@ public interface SuccessKilledService extends IService<SuccessKilledPo> {
      * @since 2021-01-21
      */
     boolean prohibitById(Long id);
+
+    void saveAsync(SuccessKilledPo entity);
 }

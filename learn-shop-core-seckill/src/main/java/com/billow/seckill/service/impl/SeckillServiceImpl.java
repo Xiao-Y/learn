@@ -1,6 +1,7 @@
 package com.billow.seckill.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -145,6 +146,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
         if (SeckillStatEnum.SUCCESS.equals(statEnum)) {
             // 构建返回数据
             successKilledVo = ConvertUtils.convert(killedPo, SuccessKilledVo.class);
+            // 保存秒杀订单数据
+            String killedPoJson = redisTemplate.opsForValue().get(seckillLockKey);
+            successKilledService.saveAsync(JSONObject.parseObject(killedPoJson, SuccessKilledPo.class));
+//            successKilledService.saveAsync(killedPo);
         }
         SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum, successKilledVo);
         log.info("秒杀信息：{}", JSON.toJSONString(executionVo));

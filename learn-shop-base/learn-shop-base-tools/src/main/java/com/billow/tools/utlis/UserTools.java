@@ -110,7 +110,12 @@ public class UserTools {
         if (request == null) {
             return null;
         }
-        return request.getParameter(ACCESS_TOKEN);
+        try {
+            return request.getParameter(ACCESS_TOKEN);
+        } catch (Exception e) {
+            logger.warn("getTokenByParameter 获取 token 信息异常");
+        }
+        return null;
     }
 
     /**
@@ -124,18 +129,22 @@ public class UserTools {
         if (request == null) {
             return null;
         }
-        Enumeration<String> headers = request.getHeaders("Authorization");
-        // 通常只有一个（大多数服务器都会强制这样做）
-        while (headers.hasMoreElements()) {
-            String value = headers.nextElement();
-            if ((value.toLowerCase().startsWith(BEARER_TYPE.toLowerCase()))) {
-                String authHeaderValue = value.substring(BEARER_TYPE.length()).trim();
-                int commaIndex = authHeaderValue.indexOf(',');
-                if (commaIndex > 0) {
-                    authHeaderValue = authHeaderValue.substring(0, commaIndex);
+        try {
+            Enumeration<String> headers = request.getHeaders("Authorization");
+            // 通常只有一个（大多数服务器都会强制这样做）
+            while (headers.hasMoreElements()) {
+                String value = headers.nextElement();
+                if ((value.toLowerCase().startsWith(BEARER_TYPE.toLowerCase()))) {
+                    String authHeaderValue = value.substring(BEARER_TYPE.length()).trim();
+                    int commaIndex = authHeaderValue.indexOf(',');
+                    if (commaIndex > 0) {
+                        authHeaderValue = authHeaderValue.substring(0, commaIndex);
+                    }
+                    return authHeaderValue;
                 }
-                return authHeaderValue;
             }
+        } catch (Exception e) {
+            logger.warn("getTokenByHeader 获取用户信息异常");
         }
         return null;
     }

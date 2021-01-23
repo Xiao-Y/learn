@@ -67,7 +67,7 @@ public class SuccessKilledApi {
 
     @ApiOperation("根据ID禁用秒杀成功明细表数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return successKilledService.prohibitById(id);
     }
 }
