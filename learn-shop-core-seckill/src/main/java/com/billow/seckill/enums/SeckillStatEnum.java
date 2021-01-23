@@ -11,7 +11,8 @@ public enum SeckillStatEnum {
     END(0, "秒杀结束"),
     REPEAT_KILL(-1, "重复秒杀"),
     INNER_ERROR(-2, "系统异常"),
-    DATA_REWRITE(-3, "数据串改");
+    DATA_REWRITE(-3, "数据串改"),
+    STOCK_OUT(-4, "库存不足");
 
     private int state;
     private String stateInfo;
@@ -29,7 +30,16 @@ public enum SeckillStatEnum {
         return stateInfo;
     }
 
-    public static SeckillStatEnum stateOf(int index) {
+    public static String stateOf(int index) {
+        for (SeckillStatEnum state : values()) {
+            if (state.getState() == index) {
+                return state.stateInfo;
+            }
+        }
+        return null;
+    }
+
+    public static SeckillStatEnum of(int index) {
         for (SeckillStatEnum state : values()) {
             if (state.getState() == index) {
                 return state;

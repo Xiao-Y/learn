@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,16 +27,18 @@ public class SeckillApp {
 
     @Autowired
     private SeckillService seckillService;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @ApiOperation(value = "生成秒杀链接")
     @GetMapping(value = "/genSeckillUrl/{seckillId}")
-    public ExposerVo genSeckillUrl(@PathVariable("seckillId") String seckillId) {
+    public ExposerVo genSeckillUrl(@PathVariable("seckillId") Long seckillId) {
         return seckillService.genSeckillUrl(seckillId);
     }
 
     @ApiOperation(value = "执行秒杀")
     @PostMapping(value = "/executionSeckill/{seckillId}")
-    public SeckillExecutionVo executionSeckill(@PathVariable("seckillId") String seckillId,
+    public SeckillExecutionVo executionSeckill(@PathVariable("seckillId") Long seckillId,
                                                @RequestParam("md5") String md5,
                                                @RequestParam("userCode") String userCode) {
         return seckillService.executionSeckill(seckillId, md5, userCode);

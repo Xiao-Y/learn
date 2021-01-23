@@ -37,7 +37,7 @@ public interface SeckillService extends IService<SeckillPo> {
      * @author billow
      * @since 2021-01-21
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 
     /**
      * 生成秒杀链接
@@ -47,7 +47,7 @@ public interface SeckillService extends IService<SeckillPo> {
      * @author liuyongtao
      * @since 2021-1-22 9:27
      */
-    ExposerVo genSeckillUrl(String seckillId);
+    ExposerVo genSeckillUrl(Long seckillId);
 
     /**
      * 执行秒杀
@@ -58,5 +58,5 @@ public interface SeckillService extends IService<SeckillPo> {
      * @author liuyongtao
      * @since 2021-1-22 9:45
      */
-    SeckillExecutionVo executionSeckill(String seckillId, String md5, String userCode);
+    SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode);
 }

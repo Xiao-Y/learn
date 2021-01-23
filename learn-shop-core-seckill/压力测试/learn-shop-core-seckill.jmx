@@ -52,7 +52,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="md5" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">0fd6831158ee14683b9ab9f1d7ab8222</stringProp>
+                <stringProp name="Argument.value">8b58de0762199aa87de27a4d643d1f5a</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">md5</stringProp>
@@ -70,7 +70,7 @@
           <stringProp name="HTTPSampler.port">8921</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/core-seckill/seckillApp/executionSeckill/1001?md5=0fd6831158ee14683b9ab9f1d7ab8222&amp;userCode=${userid}</stringProp>
+          <stringProp name="HTTPSampler.path">/core-seckill/seckillApp/executionSeckill/1002?md5=8b58de0762199aa87de27a4d643d1f5a&amp;userCode=${userid}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>

@@ -16,7 +16,7 @@ public class ExposerVo {
     /**
      * ID
      */
-    private String seckillId;
+    private Long seckillId;
     /**
      * 系统当前时间（毫秒）
      */
@@ -30,13 +30,13 @@ public class ExposerVo {
      */
     private long end;
 
-    public ExposerVo(boolean exposed, String md5, String seckillId) {
+    public ExposerVo(boolean exposed, String md5, Long seckillId) {
         this.exposed = exposed;
         this.md5 = md5;
         this.seckillId = seckillId;
     }
 
-    public ExposerVo(boolean exposed, String seckillId, long now, long start, long end) {
+    public ExposerVo(boolean exposed, Long seckillId, long now, long start, long end) {
         this.exposed = exposed;
         this.seckillId = seckillId;
         this.now = now;
@@ -44,7 +44,7 @@ public class ExposerVo {
         this.end = end;
     }
 
-    public ExposerVo(boolean exposed, String seckillId) {
+    public ExposerVo(boolean exposed, Long seckillId) {
         this.exposed = exposed;
         this.seckillId = seckillId;
     }

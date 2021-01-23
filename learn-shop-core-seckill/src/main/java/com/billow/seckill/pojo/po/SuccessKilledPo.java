@@ -29,7 +29,7 @@ public class SuccessKilledPo extends BasePo {
     private String usercode;
 
     @ApiModelProperty(value = "秒杀商品ID")
-    private String seckillId;
+    private Long seckillId;
 
     @ApiModelProperty(value = "秒杀状态标识:-0:无效 1:成功 2:已付款 3:已发货")
     private Integer killState;

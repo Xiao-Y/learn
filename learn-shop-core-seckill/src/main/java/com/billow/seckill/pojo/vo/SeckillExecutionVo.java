@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class SeckillExecutionVo {
 
-    private String seckillId;
+    private Long seckillId;
 
     //秒杀执行结果状态
     private int state;
@@ -23,14 +23,14 @@ public class SeckillExecutionVo {
     //秒杀成功的订单对象
     private SuccessKilledVo successKilledVo;
 
-    public SeckillExecutionVo(String seckillId, SeckillStatEnum seckillStatEnum, SuccessKilledVo successKilledVo) {
+    public SeckillExecutionVo(Long seckillId, SeckillStatEnum seckillStatEnum, SuccessKilledVo successKilledVo) {
         this.seckillId = seckillId;
         this.state = seckillStatEnum.getState();
         this.stateInfo = seckillStatEnum.getStateInfo();
         this.successKilledVo = successKilledVo;
     }
 
-    public SeckillExecutionVo(String seckillId, SeckillStatEnum seckillStatEnum) {
+    public SeckillExecutionVo(Long seckillId, SeckillStatEnum seckillStatEnum) {
         this.seckillId = seckillId;
         this.state = seckillStatEnum.getState();
         this.stateInfo = seckillStatEnum.getStateInfo();

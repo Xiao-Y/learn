@@ -35,5 +35,5 @@ public interface SuccessKilledService extends IService<SuccessKilledPo> {
      * @author billow
      * @since 2021-01-21
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 }
