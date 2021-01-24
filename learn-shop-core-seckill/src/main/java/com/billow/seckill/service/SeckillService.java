@@ -59,4 +59,13 @@ public interface SeckillService extends IService<SeckillPo> {
      * @since 2021-1-22 9:45
      */
     SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode);
+
+    /**
+     * 自动任务加载数据到缓存中
+     *
+     * @author xiaoy
+     * @since 2021/1/24 8:53
+     */
+    void loadSeckillJob();
+
 }

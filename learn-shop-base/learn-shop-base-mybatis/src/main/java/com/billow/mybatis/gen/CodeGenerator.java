@@ -143,7 +143,7 @@ public class CodeGenerator {
      */
     private GlobalConfig getGlobalConfig() {
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir(projectPath + "/src/main/java");
+        gc.setOutputDir(projectPath + "/src/test/java");
         gc.setAuthor("billow");
         gc.setOpen(false);
         gc.setBaseResultMap(true);
@@ -216,6 +216,8 @@ public class CodeGenerator {
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setInclude("sk_seckill", "sk_success_killed");
         strategy.setTablePrefix("sk_");
+        strategy.setEntityBooleanColumnRemoveIsPrefix(true);
+        strategy.setEntityTableFieldAnnotationEnable(true);
         return strategy;
     }
 

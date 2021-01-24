@@ -69,4 +69,10 @@ public class SeckillApi {
     public boolean prohibitById(@PathVariable Long id) {
         return seckillService.prohibitById(id);
     }
+
+    @ApiOperation(value = "自动任务加载数据到缓存中")
+    @GetMapping(value = "/loadSeckillJob")
+    public void loadSeckillJob() {
+        seckillService.loadSeckillJob();
+    }
 }

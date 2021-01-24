@@ -11,27 +11,28 @@ local expire = ARGV[2];
 local resultStock = redis.call("get", seckillStockKey);
 --- 是否库存存在
 if not resultStock then
-    return -4;
+    return -6;
 end
-if tonumber(resultStock) <= 0 then
+
+--- 库存为空或者小于等0时返回
+if resultStock == nil or tonumber(resultStock) <= 0 then
     return -4;
 end
 
---- 查询是否秒杀过
-local isKilled = redis.call("exists", seckillLockKey);
 --- 已经秒杀过
-if isKilled then
+if redis.call("get", seckillLockKey) then
     return -1;
 end
 
---- 设置秒杀信息
-redis.call("set", seckillLockKey, successKillInfo);
 --- 递减库存
-redis.call('decr', seckillStockKey);
---- 由于lua脚本接收到参数都会转为String，所以要转成数字类型才能比较
+redis.call("decr", seckillStockKey);
+--- 保存订单信息
+redis.call("set", seckillLockKey, successKillInfo);
+--- 转换分钟为秒
 if tonumber(expire) > 0 then
+    local paymentExp = tonumber(expire) * 60;
     --- 设置过期时间
-    redis.call("expire", seckillLockKey, expire);
+    redis.call("expire", seckillLockKey, paymentExp);
 end
 return 1;
 

@@ -2,6 +2,8 @@ package com.billow.job.service;
 
 import com.billow.job.pojo.ex.MailEx;
 
+import java.util.Map;
+
 /**
  * 自动任务发送邮件接口
  *
@@ -40,4 +42,14 @@ public interface JobService {
      * @date 2019/12/6 15:07
      */
     void httpGet(String url);
+
+    /**
+     * Feign 形式的 post 请示
+     *
+     * @param url
+     * @param body
+     * @author xiaoy
+     * @since 2021/1/24 14:52
+     */
+    void httpFeign(String url, Map<String, String> body);
 }

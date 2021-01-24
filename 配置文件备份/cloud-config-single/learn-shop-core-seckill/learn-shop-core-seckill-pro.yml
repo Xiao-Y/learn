@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${config.register.namespace} # 命名空间
+        server-addr: ${config.register.serverAddr} # 配置注册中心
+
+
+feign: #远程连接
+  hystrix: #熔断器配置
+    enabled: true #启动熔断器
+
+seckill:
+  gen-salt: wq<<.((0kkoe$$% # 设置盐值字符串，随便定义，用于混淆MD5值
+  load-data-start-before: 10 # 自动任务加载秒杀开始前多少分钟的数据加到缓存中（单位：分钟）
+  clear-data-end-arfer: 30 # 设置 redis 中秒杀活动结束后多少分钟数据过期（单位：分钟）
+  order-exp: 30 # 订单过期时间（单位：分钟）

@@ -45,7 +45,7 @@
               </el-col>
             </el-form-item>
           </template>
-          <el-form-item label="HTTP URL" prop="httpUrl" v-if="autoTaskInfo.classType === '3'">
+          <el-form-item label="HTTP URL" prop="httpUrl" v-if="autoTaskInfo.classType === '3' || autoTaskInfo.classType === '5'">
             <el-col :span="18">
               <el-input v-model="autoTaskInfo.httpUrl" placeholder="请输入内容"/>
             </el-col>

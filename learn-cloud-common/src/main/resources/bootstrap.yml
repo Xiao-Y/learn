@@ -4,6 +4,7 @@ spring:
       config:
         server-addr: 119.23.27.78:8761
         file-extension: yml
+        refresh-enabled: true
 #        namespace: 49f70e21-df05-4ff5-b44f-7de24d039727 # dev
         namespace: abf7c5c7-f727-47cb-87c7-33e84cd05fc6 # pro
         # 配置公用文件
