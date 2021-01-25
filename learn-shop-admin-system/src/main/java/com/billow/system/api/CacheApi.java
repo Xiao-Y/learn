@@ -6,12 +6,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * 缓存管理
@@ -28,8 +29,7 @@ public class CacheApi extends BaseApi {
     @Autowired
     private StartLoading startLoading;
 
-    @Autowired
-    @Qualifier("redisCacheTemplate")
+    @Resource
     protected RedisTemplate<String, Object> redisCacheTemplate;
 
     @PutMapping("/initAll")

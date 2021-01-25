@@ -79,6 +79,17 @@ http://localhost:8771/swagger-ui.html（查看聚合） <br>
 
 4.[swagger2注解](https://www.jianshu.com/p/12f4394462d5)使用说明 <br/>
 
+5. 注入 RedisTemplate 需要通过 `@Resource` 明确指定。因为两个使用的库不同，mybatis 默认使用的 15 号库。
+```java
+
+    // 正常设值的
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    // mybatis 设置缓存
+    @Resource
+    protected RedisTemplate<String, Object> redisCacheTemplate;
+```
 <br/>
 
 HTTP Method 与 CURD 数据处理操作对应<br/>

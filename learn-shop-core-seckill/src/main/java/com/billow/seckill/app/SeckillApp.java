@@ -7,7 +7,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -27,8 +26,6 @@ public class SeckillApp {
 
     @Autowired
     private SeckillService seckillService;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
 
     @ApiOperation(value = "生成秒杀链接")
     @GetMapping(value = "/genSeckillUrl/{seckillId}")
