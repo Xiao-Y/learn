@@ -134,7 +134,8 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
         // 库存key
         String seckillStockKey = this.genSeckillStockKey(seckillId);
         // 先查询库存
-        Long stock = redisUtils.getObj(seckillStockKey, Long.class);
+//        Long stock = redisUtils.getObj(seckillStockKey, Long.class);
+        Long stock = redisUtils.getObj(seckillStockKey);
         if (stock == null || stock <= 0) {
             SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT, null);
             log.info("===>> 秒杀信息：{}", JSON.toJSONString(executionVo));

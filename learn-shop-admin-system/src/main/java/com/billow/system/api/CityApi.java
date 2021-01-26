@@ -38,7 +38,7 @@ public class CityApi extends BaseApi {
     @GetMapping("/findCity/{parentCityId}")
     public List<CityEx> findCity(@PathVariable("parentCityId") String parentCityId) {
         // 从 redis 中获取
-        List<CityEx> redisData = redisUtils.getArray(RedisCst.COMM_CITY, CityEx.class);
+        List<CityEx> redisData = redisUtils.getList(RedisCst.COMM_CITY);
         if (ToolsUtils.isNotEmpty(redisData)) {
             return redisData;
         }

@@ -287,7 +287,7 @@ public class RoleServiceImpl implements RoleService {
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
             // 原始的
-            List<MenuEx> menuExs = redisUtils.getArray(RedisCst.ROLE_MENU_KEY + roleVo.getRoleCode(), MenuEx.class);
+            List<MenuEx> menuExs = redisUtils.getList(RedisCst.ROLE_MENU_KEY + roleVo.getRoleCode());
             if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
                 sourceMenuPo = menuExs.stream().filter(f -> !delMenuIdsTemp.contains(f))
@@ -368,7 +368,7 @@ public class RoleServiceImpl implements RoleService {
         // 如果角色是有效状态时，更新reids 中的信息
         if (roleVo.getValidInd()) {
             List<PermissionPo> sourcePermissionPo = null;
-            List<PermissionPo> permissionPos = redisUtils.getArray(RedisCst.ROLE_PERMISSION_KEY + roleVo.getRoleCode(), PermissionPo.class);
+            List<PermissionPo> permissionPos = redisUtils.getList(RedisCst.ROLE_PERMISSION_KEY + roleVo.getRoleCode());
             if (ToolsUtils.isNotEmpty(permissionPos)) {
                 List<Long> delPermissionIdsTemp = delPermissionIds;
                 // 过滤出本来就存在的权限（扫除掉需要删除的）

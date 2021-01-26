@@ -34,7 +34,8 @@ public class CommonUserRedis {
      * @date 2019/7/31 15:17
      */
     public void setBlacklistOnEditUser(String oldUsercode, String newUsercode, List<String> roleCodes) {
-        Map obj = redisUtils.getObj(RedisCst.BLACKLIST_EDITUSER + oldUsercode, Map.class);
+//        Map obj = redisUtils.getObj(RedisCst.BLACKLIST_EDITUSER + oldUsercode, Map.class);
+        Map obj = redisUtils.getObj(RedisCst.BLACKLIST_EDITUSER + oldUsercode);
         List<String> oldUser;
         if (obj == null) {
             obj = new HashMap<>();

@@ -47,7 +47,7 @@ public class CommonRoleMenuRedis {
         if (newRoleCode.equals(oldRoleCode)) {
             return;
         }
-        List<MenuEx> menuExs = redisUtils.getArray(ROLE_MENU_KEY + oldRoleCode, MenuEx.class);
+        List<MenuEx> menuExs = redisUtils.getList(ROLE_MENU_KEY + oldRoleCode);
         this.deleteRoleByRoleCode(oldRoleCode);
         redisUtils.setObj(ROLE_MENU_KEY + newRoleCode, menuExs);
     }
@@ -74,7 +74,7 @@ public class CommonRoleMenuRedis {
     public void deleteRoleMenuById(Set<String> ids) {
         Set<String> menuKeys = redisTemplate.keys(ROLE_MENU_KEY + "*");
         menuKeys.stream().forEach(f -> {
-            List<MenuEx> menuExes = redisUtils.getArray(f, MenuEx.class);
+            List<MenuEx> menuExes = redisUtils.getList(f);
 
             List<MenuEx> voList = menuExes.stream()
                     .filter(fi -> !ids.contains(fi.getId()))
@@ -94,7 +94,7 @@ public class CommonRoleMenuRedis {
     public void updateMeunById(MenuPo menuPo) {
         Set<String> menuKeys = redisTemplate.keys(ROLE_MENU_KEY + "*");
         menuKeys.stream().forEach(f -> {
-            List<MenuEx> menuExes = redisUtils.getArray(f, MenuEx.class);
+            List<MenuEx> menuExes = redisUtils.getList(f);
 
             List<MenuEx> voList = menuExes.stream()
                     .filter(fi -> !new Long(fi.getId()).equals(menuPo.getId()))
@@ -125,7 +125,7 @@ public class CommonRoleMenuRedis {
 
         Set<MenuEx> all = new HashSet<>();
         roleVos.stream().forEach(f -> {
-            List<MenuEx> menuPos = redisUtils.getArray(ROLE_MENU_KEY + f.getRoleCode(), MenuEx.class);
+            List<MenuEx> menuPos = redisUtils.getList(ROLE_MENU_KEY + f.getRoleCode());
             if (ToolsUtils.isNotEmpty(menuPos)) {
                 all.addAll(menuPos);
             }

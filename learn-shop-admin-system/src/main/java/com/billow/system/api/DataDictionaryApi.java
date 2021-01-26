@@ -57,7 +57,7 @@ public class DataDictionaryApi extends BaseApi {
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("systemModule") String systemModule, @PathVariable("fieldType") String fieldType) throws Exception {
         String redisKey = SYS_MODULE + systemModule;
         // 从 redis 中获取
-        List<DataDictionaryVo> redisData = redisUtils.getArray(redisKey, DataDictionaryVo.class);
+        List<DataDictionaryVo> redisData = redisUtils.getList(redisKey);
         if (ToolsUtils.isNotEmpty(redisData)) {
             return redisData.stream().filter(f -> f.getFieldType().equals(fieldType)).collect(Collectors.toList());
         }
