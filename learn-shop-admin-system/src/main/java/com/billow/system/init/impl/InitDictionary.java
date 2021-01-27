@@ -4,6 +4,7 @@ import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.DataDictionaryDao;
 import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
+import com.billow.system.pojo.vo.DataDictionaryVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class InitDictionary implements IStartLoading {
                 List<DataDictionaryPo> pos = entry.getValue();
                 pos.sort(Comparator.nullsLast(Comparator.comparing(DataDictionaryPo::getFieldOrder)));
 
-                redisUtils.setObj(key1 + systemModule, ConvertUtils.convertIgnoreBase(pos, DataDictionaryPo.class));
+                redisUtils.setObj(key1 + systemModule, ConvertUtils.convertIgnoreBase(pos, DataDictionaryVo.class));
             }
             log.info("======== end init Dictionary....");
         });
