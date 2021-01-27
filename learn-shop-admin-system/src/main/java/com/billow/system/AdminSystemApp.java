@@ -27,8 +27,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 @ComponentScan("com.billow")
 // 邮件模块和自动任务也有实例类所有需要扫描
-@EntityScan(basePackages = {"com.billow.email", "com.billow.system", "com.billow.job"})
-@EnableJpaRepositories(basePackages = {"com.billow.email", "com.billow.system", "com.billow.job"})
+@EntityScan
+@EnableJpaRepositories
 public class AdminSystemApp {
     public static void main(String[] args) {
         SpringContextUtil.setApplicationContext(SpringApplication.run(AdminSystemApp.class, args));

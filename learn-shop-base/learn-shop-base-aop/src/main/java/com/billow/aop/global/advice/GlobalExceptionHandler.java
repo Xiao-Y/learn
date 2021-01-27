@@ -4,9 +4,15 @@ import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * Created by billow.
@@ -27,6 +33,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GlobalException.class)
     public BaseResponse runtimeExceptionHandler(GlobalException ex) {
         return resultFormat(ex.getResCodeEnum(), ex);
+    }
+
+    /**
+     * 校验错误拦截处理
+     *
+     * @param exception 错误信息集合
+     * @return 错误信息
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public BaseResponse validationBodyException(MethodArgumentNotValidException exception) {
+        BindingResult result = exception.getBindingResult();
+        if (result.hasErrors()) {
+            List<ObjectError> errors = result.getAllErrors();
+            ObjectError e = errors.get(0);
+            FieldError fieldError = (FieldError) e;
+            log.error("Data check failure : object{" + fieldError.getObjectName() + "},field{" + fieldError.getField() +
+                    "},errorMessage{" + fieldError.getDefaultMessage() + "}");
+            return new BaseResponse(ResCodeEnum.RESCODE_BAD_REQUEST, fieldError.getDefaultMessage());
+        }
+        return new BaseResponse(ResCodeEnum.RESCODE_BAD_REQUEST, "校验失败！");
     }
 
 //    //运行时异常

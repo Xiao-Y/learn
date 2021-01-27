@@ -18,7 +18,7 @@ public enum ResCodeEnum {
     /**
      * "0001", "报文不可解析"
      */
-    RESCODE_BAD_REQUEST("0001", "报文不可解析"),
+    RESCODE_BAD_REQUEST("0001", "请求参数不可解析"),
     /**
      * "0002", "报文头错误"
      */

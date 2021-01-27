@@ -7,10 +7,12 @@ import com.billow.job.dao.impl.ScheduleJobLogDaoImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
+@ComponentScan("com.billow.job")
 public class JobBeanConfig {
 
     @Bean
