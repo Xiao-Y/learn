@@ -36,13 +36,18 @@ public class RedisCst {
      * 数据字典信息：COMM:CITY
      */
     public final static String COMM_CITY = "COMM:CITY";
+
+    /**
+     * 路由信息 COMM:ROUTE_INFO
+     */
+    public final static String GATEWAY_ROUTE_INFO = "COMM:ROUTE_INFO";
     /**
      * 数据恢复
      *
      * @author billow
      * @date 2019/8/11 13:53
      */
-    public final static String COMM_DATA_RECOVERY = "COMM:DataRecovery";
+    public final static String COMM_DATA_RECOVERY = "COMM:DATA_RECOVERY";
 
     /**
      * 黑名单-修改过用户信息：BLACKLIST:EDITUSER:xxx
@@ -51,17 +56,17 @@ public class RedisCst {
     /**
      * 黑名单-修改过用户信息：value 中的 key
      */
-    public final static String BLACKLIST_EDITUSER_OLDUSER = "oldUser";
+    public final static String BLACKLIST_EDITUSER_OLDUSER = "OLD_USER";
     /**
      * 黑名单-修改过用户信息：value 中的 key
      */
-    public final static String BLACKLIST_EDITUSER_ROLECODES = "roleCodes";
+    public final static String BLACKLIST_EDITUSER_ROLECODES = "ROLE_CODES";
     /**
-     * 秒杀用户锁定前缀。seckill:lock:seckillId
+     * 秒杀用户锁定前缀。SECKILL:LOCK:seckillId
      */
-    public final static String SECKILL_LOCK = "seckill:lock:";
+    public final static String SECKILL_LOCK = "SECKILL:LOCK:";
     /**
-     * 秒杀库存前缀，seckill:stock:seckillId:userCode
+     * 秒杀库存前缀，SECKILL:STOCK:seckillId:userCode
      */
-    public final static String SECKILL_STOCK = "seckill:stock:";
+    public final static String SECKILL_STOCK = "SECKILL:STOCK:";
 }
