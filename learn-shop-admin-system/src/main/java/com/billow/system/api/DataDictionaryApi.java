@@ -15,17 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +48,8 @@ public class DataDictionaryApi extends BaseApi {
     @Autowired
     @Qualifier("initDictionary")
     private IStartLoading initDictionary;
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     @ApiOperation(value = "查询数据字典，指定 systemModule 和 fieldType")
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
@@ -107,6 +106,7 @@ public class DataDictionaryApi extends BaseApi {
 
         return dataDictionaryPos;
     }
+
     @ApiOperation("字典下拉系统模块")
     @GetMapping("/findSysModule")
     public List<DataDictionaryPo> findSysModule() {
@@ -148,5 +148,22 @@ public class DataDictionaryApi extends BaseApi {
     public DataDictionaryVo prohibitById(@PathVariable Long id) {
         DataDictionaryVo dataDictionaryVo = dataDictionaryService.prohibitById(id);
         return dataDictionaryVo;
+    }
+
+    @ApiOperation(value = "加载缓存中路由信息")
+    @GetMapping("/findDataRouteCache")
+    public List<DataDictionaryVo> findDataRouteCache() {
+        List<DataDictionaryVo> vos = new ArrayList<>();
+        long id = 0;
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        Map<String, String> entries = opsForHash.entries(RedisCst.COMM_ROUTE_INFO);
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            DataDictionaryVo vo = new DataDictionaryVo();
+            vo.setId(id++);
+            vo.setFieldValue("http://" + entry.getValue());
+            vo.setFieldDisplay(entry.getKey());
+            vos.add(vo);
+        }
+        return vos;
     }
 }

@@ -32,6 +32,13 @@ export const LoadUserDataDictionary = (fieldType) => requestUtils.get(baseUrl + 
 export const LoadJobDataDictionary = (fieldType) => requestUtils.get(baseUrl + '/findDataDictionary/publicJob/' + fieldType);
 
 /**
+ * 加载缓存中路由信息
+ * @returns {*|Promise|Promise<unknown>}
+ * @constructor
+ */
+export const LoadRouteCacheData = () => requestUtils.get(baseUrl + '/findDataRouteCache');
+
+/**
  * 根据条件查询数据字典信息
  * @param data
  * @returns {*|Promise|Promise<any>}

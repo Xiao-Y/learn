@@ -40,7 +40,7 @@ public class RedisCst {
     /**
      * 路由信息 COMM:ROUTE_INFO
      */
-    public final static String GATEWAY_ROUTE_INFO = "COMM:ROUTE_INFO";
+    public final static String COMM_ROUTE_INFO = "COMM:ROUTE_INFO";
     /**
      * 数据恢复
      *
