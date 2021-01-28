@@ -38,7 +38,8 @@ public class ConvertUtils {
         try {
             vo = voClass.newInstance();
             String[] ignoreProperties = {FieldUtils.CREATE_TIME, FieldUtils.CREATOR_CODE,
-                    FieldUtils.UPDATER_CODE, FieldUtils.UPDATE_TIME, FieldUtils.VALID_IND
+                    FieldUtils.UPDATER_CODE, FieldUtils.UPDATE_TIME, FieldUtils.VALID_IND,
+                    FieldUtils.PAGE_SIZE, FieldUtils.PAGE_NO, FieldUtils.RECORD_COUNT
             };
             org.springframework.beans.BeanUtils.copyProperties(po, vo, ignoreProperties);
 //            FieldUtils.setValue(vo, FieldUtils.REQUEST_URL, null);

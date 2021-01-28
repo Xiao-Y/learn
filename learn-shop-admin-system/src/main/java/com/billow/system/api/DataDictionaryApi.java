@@ -15,11 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +45,6 @@ public class DataDictionaryApi extends BaseApi {
     @Autowired
     @Qualifier("initDictionary")
     private IStartLoading initDictionary;
-    @Resource
-    private RedisTemplate<String, String> redisTemplate;
 
     @ApiOperation(value = "查询数据字典，指定 systemModule 和 fieldType")
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
@@ -155,8 +150,7 @@ public class DataDictionaryApi extends BaseApi {
     public List<DataDictionaryVo> findDataRouteCache() {
         List<DataDictionaryVo> vos = new ArrayList<>();
         long id = 0;
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
-        Map<String, String> entries = opsForHash.entries(RedisCst.COMM_ROUTE_INFO);
+        Map<String, String> entries = redisUtils.getHashAll(RedisCst.COMM_ROUTE_INFO);
         for (Map.Entry<String, String> entry : entries.entrySet()) {
             DataDictionaryVo vo = new DataDictionaryVo();
             vo.setId(id++);

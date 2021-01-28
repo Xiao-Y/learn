@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 省市区管理
@@ -34,17 +38,29 @@ public class CityApi extends BaseApi {
     @Autowired
     private RedisUtils redisUtils;
 
-    @ApiOperation(value = "查询省市区")
-    @GetMapping("/findCity/{parentCityId}")
-    public List<CityEx> findCity(@PathVariable("parentCityId") String parentCityId) {
-        // 从 redis 中获取
-        List<CityEx> redisData = redisUtils.getList(RedisCst.COMM_CITY);
-        if (ToolsUtils.isNotEmpty(redisData)) {
-            return redisData;
-        }
-        List<CityEx> cityExes = cityService.findCityByParentCityId(parentCityId);
-        // 保存到 redis 中
-        redisUtils.setObj(RedisCst.COMM_CITY, cityExes);
-        return cityExes;
+    @ApiOperation(value = "查询所有")
+    @GetMapping("/findCity")
+    public Set<CityEx> findCity() {
+        return cityService.findCity();
+    }
+
+    /**
+     * 查询本级及以下所有
+     *
+     * @param cityId
+     * @return {@link List< CityEx>}
+     * @author liuyongtao
+     * @since 2021-1-28 14:29
+     */
+    @ApiOperation(value = "查询本级及以下所有")
+    @GetMapping("/findCity/{cityId}")
+    public List<CityEx> findCity(@PathVariable("cityId") String cityId) {
+        return cityService.findCityByParentCityId(cityId);
+    }
+
+    @ApiOperation(value = "查询城市的下级")
+    @GetMapping("/getCityLowerLevel/{cityId}")
+    public List<CityEx> getCityLowerLevel(@PathVariable("cityId") String cityId) {
+        return cityService.getCityLowerLevel(cityId);
     }
 }

@@ -95,7 +95,7 @@ public class FieldUtils {
      */
     public static void setValue(Object obj, String fieldName, Object value) {
         if (obj.getClass().getSimpleName().equals(Object.class.getSimpleName())) {
-            logger.error("{} 中未找到属性 {},setter fail...", obj.getClass().getName(), fieldName, value);
+            logger.warn("{} 中未找到属性 {},setter fail...", obj.getClass().getName(), fieldName, value);
             return;
         }
         setValue(obj, obj.getClass(), fieldName, value);

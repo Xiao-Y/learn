@@ -39,7 +39,7 @@ public class CacheApi extends BaseApi {
     }
 
     @PutMapping("/init/{cacheType}")
-    @ApiOperation("初始化指定的缓存，initDictionary,initRoleMenu,initRolePermission")
+    @ApiOperation("初始化指定的缓存，initDictionary,initRoleMenu,initRolePermission,initCity")
     public boolean initCacheByType(@PathVariable("cacheType") String cacheType) {
         return startLoading.init(cacheType);
     }
