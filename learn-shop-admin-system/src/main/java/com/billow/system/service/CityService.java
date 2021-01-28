@@ -21,7 +21,7 @@ public interface CityService {
      * @author billow
      * @date 2019/8/4 16:50
      */
-    List<CityEx> findCityByParentCityId(String cityId);
+    CityEx findCityByParentCityId(String cityId);
 
     /**
      * 查询城市的下级
@@ -42,4 +42,13 @@ public interface CityService {
      */
     Set<CityEx> findCity();
 
+    /**
+     * 根据城市id获取城市信息
+     *
+     * @param cityId
+     * @return {@link CityVo}
+     * @author liuyongtao
+     * @since 2021-1-28 20:24
+     */
+    CityVo findByCityId(String cityId);
 }

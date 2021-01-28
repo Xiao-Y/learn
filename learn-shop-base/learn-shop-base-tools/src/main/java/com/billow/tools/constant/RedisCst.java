@@ -33,9 +33,13 @@ public class RedisCst {
     public final static String COMM_DICTIONARY_FIELD_TYPE = "COMM:DIC_FIELD_TYPE";
 
     /**
-     * 数据字典信息：COMM:CITY
+     * 数据字典信息：COMM:CITY:TREE
      */
-    public final static String COMM_CITY = "COMM:CITY";
+    public final static String COMM_CITY_TREE = "COMM:CITY:TREE";
+    /**
+     * 数据字典信息：COMM:CITY:ONE
+     */
+    public final static String COMM_CITY_ONE = "COMM:CITY:ONE";
 
     /**
      * 路由信息 COMM:ROUTE_INFO

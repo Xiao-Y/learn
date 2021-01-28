@@ -7,6 +7,7 @@ import com.billow.system.pojo.po.CityPo;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +39,7 @@ public class InitCity implements IStartLoading {
     public boolean init() {
         log.info("======== start init City....");
         executorService.execute(() -> {
+            // 构建tree 结构的
             List<CityPo> cityPos = cityDao.findByValidIndIsTrue();
             Map<String, List<CityPo>> map = new HashMap<>();
             cityPos.stream().forEach(f -> {
@@ -48,7 +50,12 @@ public class InitCity implements IStartLoading {
                     map.put(f.getCityId(), collect);
                 }
             });
-            redisUtils.setHash(RedisCst.COMM_CITY, map);
+            redisUtils.setHash(RedisCst.COMM_CITY_TREE, map);
+            // 构建map结构
+            Map<String, CityPo> collect = cityPos.stream().collect(Collectors.toMap(CityPo::getCityId, v -> v));
+            if (MapUtils.isNotEmpty(collect)) {
+                redisUtils.setHash(RedisCst.COMM_CITY_ONE, collect);
+            }
             log.info("======== end init City....");
         });
         return true;

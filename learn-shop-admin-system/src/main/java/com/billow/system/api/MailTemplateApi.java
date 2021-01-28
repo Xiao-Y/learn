@@ -50,30 +50,30 @@ public class MailTemplateApi {
     @ApiOperation("根据ID删除邮件模板")
     @DeleteMapping("/deleteMailTemplateById/{id}")
     public MailTemplateVo deleteMailTemplateById(@PathVariable Long id) {
-        MailTemplateVo permissionVo = mailTemplateService.deleteMailTemplateById(id);
-        return permissionVo;
+        MailTemplateVo mailTemplateVo = mailTemplateService.deleteMailTemplateById(id);
+        return mailTemplateVo;
     }
 
     @ApiOperation("根据ID禁用邮件模板")
     @PutMapping("/prohibitMailTemplateById/{id}")
     public MailTemplateVo prohibitMailTemplateById(@PathVariable Long id) {
-        MailTemplateVo permissionVo = mailTemplateService.prohibitMailTemplateById(id, userTools.getCurrentUserCode());
-        return permissionVo;
+        MailTemplateVo mailTemplateVo = mailTemplateService.prohibitMailTemplateById(id, userTools.getCurrentUserCode());
+        return mailTemplateVo;
     }
 
     @ApiOperation("添加邮件模板信息")
     @PostMapping("/saveMailTemplate")
-    public MailTemplateVo saveMailTemplate(@RequestBody MailTemplateVo permissionVo) {
-        mailTemplateService.saveMailTemplate(permissionVo, userTools.getCurrentUserCode());
-        return permissionVo;
+    public MailTemplateVo saveMailTemplate(@RequestBody MailTemplateVo mailTemplateVo) {
+        mailTemplateService.saveMailTemplate(mailTemplateVo, userTools.getCurrentUserCode());
+        return mailTemplateVo;
     }
 
     @ApiOperation("更新邮件模板信息")
     @PutMapping("/updateMailTemplate")
-    public MailTemplateVo updateMailTemplate(@RequestBody MailTemplateVo permissionVo) {
-        permissionVo.setUpdaterCode(userTools.getCurrentUserCode());
-        mailTemplateService.updateMailTemplate(permissionVo, userTools.getCurrentUserCode());
-        return permissionVo;
+    public MailTemplateVo updateMailTemplate(@RequestBody MailTemplateVo mailTemplateVo) {
+        mailTemplateVo.setUpdaterCode(userTools.getCurrentUserCode());
+        mailTemplateService.updateMailTemplate(mailTemplateVo, userTools.getCurrentUserCode());
+        return mailTemplateVo;
     }
 
     @ApiOperation(value = "查询 mailCode 的个数")

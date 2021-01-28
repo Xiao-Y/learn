@@ -80,24 +80,24 @@ public interface MailTemplateService {
     /**
      * 添加邮件模板信息
      *
-     * @param permissionVo
+     * @param mailTemplateVo
      * @param userCode
      * @return void
      * @author LiuYongTao
      * @date 2019/8/21 15:51
      */
-    void saveMailTemplate(MailTemplateVo permissionVo, String userCode);
+    void saveMailTemplate(MailTemplateVo mailTemplateVo, String userCode);
 
     /**
      * 更新邮件模板信息
      *
-     * @param permissionVo
+     * @param mailTemplateVo
      * @param userCode
      * @return void
      * @author LiuYongTao
      * @date 2019/8/21 15:52
      */
-    void updateMailTemplate(MailTemplateVo permissionVo, String userCode);
+    void updateMailTemplate(MailTemplateVo mailTemplateVo, String userCode);
 
     /**
      * 查询 mailCode 的个数
