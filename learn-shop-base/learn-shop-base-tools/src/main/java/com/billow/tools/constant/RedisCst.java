@@ -19,15 +19,6 @@ public class RedisCst {
     public final static String ROLE_MENU_KEY = "ROLE:MENU:";
 
     /**
-     * 数据字典信息：COMM:DIC_SYS_MODULE:adminSystem
-     */
-    public final static String COMM_DICTIONARY_SYS_MODULE = "COMM:DIC_SYS_MODULE:";
-
-    /**
-     * 数据字典信息：COMM:DIC_SYS_MODULE:adminSystem,adminUser,publicJob
-     */
-    public final static String COMM_DICTIONARY_SYS_MODULE_LIST = "COMM:DIC_SYS_MODULE";
-    /**
      * 数据字典信息：COMM:DICTIONARY_FIELD_TYPE->dataSourcesType,mailType...
      */
     public final static String COMM_DICTIONARY_FIELD_TYPE = "COMM:DIC_FIELD_TYPE";

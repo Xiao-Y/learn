@@ -2,9 +2,7 @@ package com.billow.gateway.security.config;
 
 import com.billow.gateway.redis.RedisUtils;
 import com.billow.gateway.security.constant.AuthConstant;
-import com.billow.gateway.security.vo.DataDictionaryVo;
 import com.billow.gateway.security.vo.PermissionVo;
-import com.billow.tools.constant.DictionaryType;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +18,6 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 鉴权管理器，用于判断是否有资源的访问权限
@@ -29,10 +25,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class AuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     private final static String PERMISSION = RedisCst.ROLE_PERMISSION_KEY;
-    private final static String DICTIONARY = RedisCst.COMM_DICTIONARY_SYS_MODULE;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -43,12 +39,6 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         URI uri = authorizationContext.getExchange().getRequest().getURI();
         String targetURI = uri.getPath();
         log.info("<<<=== targetURI:{}", targetURI);
-        // 获取 redis 中数据字典的数据
-        Map<String, String> dictionaryMap = redisUtils.getArray(DICTIONARY + DictionaryType.SYS_MC_SYSTEM_MODULE, DataDictionaryVo.class)
-                .stream()
-                .filter(f -> DictionaryType.SYS_FC_SYSTEM_MODULE.equals(f.getFieldType()))
-                .collect(Collectors.toMap(DataDictionaryVo::getFieldValue, DataDictionaryVo::getFieldDisplay));
-
         //认证通过且角色匹配的用户可访问当前路径
         return mono
                 .filter(Authentication::isAuthenticated)
@@ -71,7 +61,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                         } else {
                             String[] split = permissionVo.getSystemModule().split(",");
                             for (String s : split) {
-                                String sourceURI = "/" + dictionaryMap.get(s) + permissionVo.getUrl();
+                                String sourceURI = "/" + s + permissionVo.getUrl();
                                 log.info("===>>> sourceURI:{}", sourceURI);
                                 if (antPathMatcher.match(sourceURI, targetURI)) {
                                     log.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);

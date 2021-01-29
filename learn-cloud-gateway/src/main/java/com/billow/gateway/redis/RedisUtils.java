@@ -3,12 +3,14 @@ package com.billow.gateway.redis;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -134,5 +136,31 @@ public class RedisUtils {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         String value = ops.get(key);
         return JSONObject.parseArray(value, clazz);
+    }
+
+    /**
+     * 通过 key 和 hash key 获取 map
+     *
+     * @param k hash key
+     * @return {@link Map < String,T>}
+     * @author liuyongtao
+     * @since 2021-1-28 8:24
+     */
+    public <T> T getHash(String k, String HK) {
+        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        return opsForHash.get(k, HK);
+    }
+
+    /**
+     * 通过  key 获取 map
+     *
+     * @param K key
+     * @return {@link Map< String,T>}
+     * @author liuyongtao
+     * @since 2021-1-28 8:24
+     */
+    public <T> Map<String, T> getHashAll(String K) {
+        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        return opsForHash.entries(K);
     }
 }
