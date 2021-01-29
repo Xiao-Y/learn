@@ -140,6 +140,25 @@ public class ConvertUtils {
     }
 
     /**
+     * Set<PO>Set<vo>深度复制（基本类型）
+     *
+     * @param pos
+     * @param voClass
+     * @param <PO>
+     * @param <VO>
+     * @return
+     */
+    public static <PO, VO> Set<VO> convert(Set<PO> pos, Class<VO> voClass) {
+        Set<VO> vos = new HashSet<>();
+        if (ToolsUtils.isNotEmpty(pos)) {
+            for (PO po : pos) {
+                vos.add(convert(po, voClass));
+            }
+        }
+        return vos;
+    }
+
+    /**
      * 将不为空值的属性从源对象中复制到目标对象中
      *
      * @param src    : 源对象

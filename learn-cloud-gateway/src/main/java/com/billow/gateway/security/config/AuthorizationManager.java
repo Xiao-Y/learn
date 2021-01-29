@@ -1,5 +1,7 @@
 package com.billow.gateway.security.config;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.billow.gateway.redis.RedisUtils;
 import com.billow.gateway.security.constant.AuthConstant;
 import com.billow.gateway.security.vo.PermissionVo;
@@ -46,7 +48,9 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                 .map(GrantedAuthority::getAuthority)
                 .any(role -> {
                     role = role.replace(AuthConstant.AUTHORITY_PREFIX, "");
-                    List<PermissionVo> permissionVos = redisUtils.getArray(PERMISSION + role, PermissionVo.class);
+                    String json = redisUtils.getHash(PERMISSION, role);
+                    List<PermissionVo> permissionVos = JSON.parseObject(json, new TypeReference<List<PermissionVo>>() {
+                    });
                     if (permissionVos == null) {
                         return false;
                     }

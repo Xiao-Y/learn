@@ -55,8 +55,7 @@ public class ResourceServerConfig {
         List<String> needCheck = securityProperties.getNeedCheck();
         http.authorizeExchange()
                 .pathMatchers(ArrayUtil.toArray(needCheck, String.class))
-                .authenticated()
-                .anyExchange().access(authorizationManager)//鉴权管理器配置
+                .access(authorizationManager)//鉴权管理器配置
                 .and().exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)//处理未授权
                 .authenticationEntryPoint(restAuthenticationEntryPoint)//处理未认证

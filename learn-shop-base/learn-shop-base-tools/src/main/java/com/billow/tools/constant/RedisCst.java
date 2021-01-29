@@ -11,7 +11,7 @@ public class RedisCst {
     /**
      * 角色的权限信息：ROLE:PERMISSION:ADMIN
      */
-    public final static String ROLE_PERMISSION_KEY = "ROLE:PERMISSION:";
+    public final static String ROLE_PERMISSION_KEY = "ROLE:PERMISSION";
 
     /**
      * 角色的菜单信息：ROLE:MENU:ADMIN
