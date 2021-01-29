@@ -145,7 +145,7 @@
           jobName: "",
           httpUrl: "",
           routingKey: "",
-          jobGroup: "5",
+          jobGroup: "admin-system",
           jobStatus: "1",
           isConcurrent: "1",
           isSendMail: "0",

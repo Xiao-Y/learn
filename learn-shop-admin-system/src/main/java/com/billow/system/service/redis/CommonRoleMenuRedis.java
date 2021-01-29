@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -31,7 +32,7 @@ public class CommonRoleMenuRedis {
 
     @Autowired
     private RedisUtils redisUtils;
-    @Autowired
+    @Resource
     private RedisTemplate<String, String> redisTemplate;
 
     /**

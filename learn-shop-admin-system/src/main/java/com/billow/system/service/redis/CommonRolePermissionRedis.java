@@ -1,5 +1,7 @@
 package com.billow.system.service.redis;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.vo.PermissionVo;
@@ -9,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,8 +30,8 @@ public class CommonRolePermissionRedis {
 
     @Autowired
     private RedisUtils redisUtils;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+//    @Resource
+//    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 更新角色CODE
@@ -42,10 +46,13 @@ public class CommonRolePermissionRedis {
         if (newRoleCode.equals(oldRoleCode)) {
             return;
         }
-        List<PermissionVo> permissionVos = redisUtils.getList(ROLE_PERMISSION_KEY + oldRoleCode);
+        // 先取出旧值，再删除
+        String json = redisUtils.getHash(ROLE_PERMISSION_KEY, oldRoleCode);
+        List<PermissionVo> permissionVos = JSON.parseObject(json, new TypeReference<List<PermissionVo>>() {
+        });
         this.deleteRoleByRoleCode(oldRoleCode);
         List<PermissionPo> pos = ConvertUtils.convertIgnoreBase(permissionVos, PermissionPo.class);
-        redisUtils.setObj(ROLE_PERMISSION_KEY + newRoleCode, pos);
+        redisUtils.setHash(ROLE_PERMISSION_KEY, newRoleCode, JSON.toJSONString(pos));
     }
 
     /**
@@ -57,7 +64,7 @@ public class CommonRolePermissionRedis {
      * @date 2019/7/16 15:09
      */
     public void deleteRoleByRoleCode(String roleCode) {
-        redisTemplate.delete(ROLE_PERMISSION_KEY + roleCode);
+        redisUtils.delHash(ROLE_PERMISSION_KEY, roleCode);
     }
 
     /**
@@ -88,15 +95,19 @@ public class CommonRolePermissionRedis {
      * @date 2019/7/16 16:46
      */
     public void updatePermissionById(PermissionVo permissionVo) {
-        Set<String> roleKeys = redisTemplate.keys(ROLE_PERMISSION_KEY + "*");
-        roleKeys.stream().forEach(f -> {
-            List<PermissionVo> permissionVos = redisUtils.getList(f);
+        // 取出缓存中数据
+        Map<String, String> hashAll = redisUtils.getHashAll(ROLE_PERMISSION_KEY);
+        hashAll.entrySet().stream().forEach(f -> {
+            List<PermissionVo> permissionVos = JSON.parseObject(f.getValue(), new TypeReference<List<PermissionVo>>() {
+            });
+            // 移除旧权限信息
             List<PermissionPo> voList = permissionVos.stream()
                     .filter(fi -> !fi.getId().equals(permissionVo.getId()))
                     .map(m -> ConvertUtils.convertIgnoreBase(m, PermissionPo.class))
                     .collect(Collectors.toList());
+            // 把新的权限信息加入
             voList.add(ConvertUtils.convertIgnoreBase(permissionVo, PermissionPo.class));
-            redisUtils.setObj(f, voList);
+            redisUtils.setHash(ROLE_PERMISSION_KEY, f.getKey(), JSON.toJSONString(voList));
         });
     }
 

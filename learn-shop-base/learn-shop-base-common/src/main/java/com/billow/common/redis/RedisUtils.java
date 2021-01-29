@@ -237,4 +237,10 @@ public class RedisUtils {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         opsForHash.put(K, HK, v);
     }
+
+
+    public <T> void delHash(String K, String HK) {
+        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        opsForHash.delete(K, HK);
+    }
 }

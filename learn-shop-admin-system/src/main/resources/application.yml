@@ -64,7 +64,7 @@ custom:
     image-mapping: /displayImag # 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/
     markdown-img-path: /markdown # 图片保存的路径
     user-icon-img-path: /usericon # 图片保存的路径
-    start-init-data: true #启动时，是否初始数据（首次启动时需要设置为true,默认为true）
+    start-init-data: false #启动时，是否初始数据（首次启动时需要设置为true,默认为true）
   mail:
     from: ${spring.mail.username} #系统对外发送邮件的地址
     host: smtp.exmail.qq.com
