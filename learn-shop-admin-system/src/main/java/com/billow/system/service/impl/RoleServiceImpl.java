@@ -1,27 +1,18 @@
 package com.billow.system.service.impl;
 
 import com.billow.common.redis.RedisUtils;
-import com.billow.system.dao.MenuDao;
-import com.billow.system.dao.PermissionDao;
-import com.billow.system.dao.RoleDao;
-import com.billow.system.dao.RoleMenuDao;
-import com.billow.system.dao.RolePermissionDao;
-import com.billow.system.dao.UserRoleDao;
+import com.billow.system.dao.*;
 import com.billow.system.dao.spec.RoleSpec;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.ex.MenuEx;
-import com.billow.system.pojo.po.MenuPo;
-import com.billow.system.pojo.po.PermissionPo;
-import com.billow.system.pojo.po.RoleMenuPo;
-import com.billow.system.pojo.po.RolePermissionPo;
-import com.billow.system.pojo.po.RolePo;
-import com.billow.system.pojo.po.UserRolePo;
+import com.billow.system.pojo.po.*;
+import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
 import com.billow.system.service.RoleService;
 import com.billow.system.service.query.SelectRoleQuery;
-import com.billow.system.service.redis.CommonRoleMenuRedis;
-import com.billow.system.service.redis.CommonRolePermissionRedis;
+import com.billow.system.service.redis.RoleMenuRedisKit;
+import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.MathUtils;
@@ -34,14 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,9 +46,9 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMenuDao roleMenuDao;
     @Autowired
-    private CommonRolePermissionRedis commonRolePermissionRedis;
+    private RolePermissionRedisKit rolePermissionRedisKit;
     @Autowired
-    private CommonRoleMenuRedis commonRoleMenuRedis;
+    private RoleMenuRedisKit roleMenuRedisKit;
     @Autowired
     private PermissionDao permissionDao;
     @Autowired
@@ -152,12 +136,12 @@ public class RoleServiceImpl implements RoleService {
             RolePo one = roleDao.findById(id).get();
             // 如果是无效状态时，删除redis 中的信息
             if (!rolePo.getValidInd()) {
-                commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
-                commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+                rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
+                roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
             } else {
                 // 更新角色CODE
-                commonRolePermissionRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
-                commonRoleMenuRedis.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
+                rolePermissionRedisKit.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
+                roleMenuRedisKit.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
             }
         }
         rolePo = roleDao.save(rolePo);
@@ -214,7 +198,7 @@ public class RoleServiceImpl implements RoleService {
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
             // 原始的
-            List<MenuEx> menuExs = redisUtils.getList(RedisCst.ROLE_MENU_KEY + roleVo.getRoleCode());
+            List<MenuEx> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode());
             if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
                 sourceMenuPo = menuExs.stream().filter(f -> !delMenuIdsTemp.contains(f))
@@ -237,10 +221,10 @@ public class RoleServiceImpl implements RoleService {
                 newMenuPos.addAll(temp.values());
             }
             // 更新指定角色的菜单信息
-            commonRoleMenuRedis.updateRoleMenuByRoleCode(newMenuPos, roleVo.getRoleCode());
+            roleMenuRedisKit.updateRoleMenuByRoleCode(newMenuPos, roleVo.getRoleCode());
         } else {
             // 清除该角色的菜单信息
-            commonRoleMenuRedis.deleteRoleByRoleCode(roleVo.getRoleCode());
+            roleMenuRedisKit.deleteRoleByRoleCode(roleVo.getRoleCode());
         }
     }
 
@@ -295,11 +279,14 @@ public class RoleServiceImpl implements RoleService {
         // 如果角色是有效状态时，更新reids 中的信息
         if (roleVo.getValidInd()) {
             List<PermissionPo> sourcePermissionPo = null;
-            List<PermissionPo> permissionPos = redisUtils.getList(RedisCst.ROLE_PERMISSION_KEY + roleVo.getRoleCode());
-            if (ToolsUtils.isNotEmpty(permissionPos)) {
+            List<PermissionVo> permissionVos = rolePermissionRedisKit.getRolePeremissionByRoleCode(roleVo.getRoleCode());
+//            List<PermissionPo> permissionPos = redisUtils.getList(RedisCst.ROLE_PERMISSION_KEY + roleVo.getRoleCode());
+            if (ToolsUtils.isNotEmpty(permissionVos)) {
                 List<Long> delPermissionIdsTemp = delPermissionIds;
                 // 过滤出本来就存在的权限（扫除掉需要删除的）
-                sourcePermissionPo = permissionPos.stream().filter(f -> !delPermissionIdsTemp.contains(f.getId()))
+                sourcePermissionPo = permissionVos.stream()
+                        .filter(f -> !delPermissionIdsTemp.contains(f.getId()))
+                        .map(m -> ConvertUtils.convertIgnoreBase(m, PermissionPo.class))
                         .collect(Collectors.toList());
             }
             if (ToolsUtils.isNotEmpty(sourcePermissionPo)) {
@@ -312,10 +299,10 @@ public class RoleServiceImpl implements RoleService {
                 newPermissionPos.addAll(temp.values());
             }
             // 更新指定角色的权限信息
-            commonRolePermissionRedis.updateRolePermissionByRoleCode(newPermissionPos, roleVo.getRoleCode());
+            rolePermissionRedisKit.updateRolePermissionByRoleCode(newPermissionPos, roleVo.getRoleCode());
         } else {
             // 清除该角色的权限信息
-            commonRolePermissionRedis.deleteRoleByRoleCode(roleVo.getRoleCode());
+            rolePermissionRedisKit.deleteRoleByRoleCode(roleVo.getRoleCode());
         }
     }
 
@@ -346,7 +333,7 @@ public class RoleServiceImpl implements RoleService {
         }
         rolePermissionDao.saveAll(rolePermissionPos);
         // 删除 redis 信息
-        commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+        rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
         // 更新该角色的菜单为无效
         List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(roleId);
@@ -355,7 +342,7 @@ public class RoleServiceImpl implements RoleService {
         }
         roleMenuDao.saveAll(roleMenuPos);
         // 删除 redis 信息
-        commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+        roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
 
         return ConvertUtils.convert(one, RoleVo.class);
@@ -383,12 +370,12 @@ public class RoleServiceImpl implements RoleService {
         // 删除该角色的权限
         rolePermissionDao.deleteByRoleId(roleId);
         // 删除 redis 信息
-        commonRolePermissionRedis.deleteRoleByRoleCode(one.getRoleCode());
+        rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
         // 删除该角色的菜单
         roleMenuDao.deleteByRoleId(roleId);
         // 删除 redis 信息
-        commonRoleMenuRedis.deleteRoleByRoleCode(one.getRoleCode());
+        roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
         return ConvertUtils.convert(one, RoleVo.class);
     }

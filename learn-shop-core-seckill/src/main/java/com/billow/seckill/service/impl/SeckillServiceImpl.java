@@ -23,7 +23,6 @@ import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.FieldUtils;
-import com.billow.tools.utlis.UserTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,8 +72,6 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
     private DefaultRedisScript<Long> seckillScript;
     @Autowired
     private SeckillDao seckillDao;
-    @Autowired
-    private UserTools userTools;
     @Autowired
     private SuccessKilledService successKilledService;
     @Autowired

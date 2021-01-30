@@ -10,7 +10,7 @@ import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.service.PermissionService;
-import com.billow.system.service.redis.CommonRolePermissionRedis;
+import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private RolePermissionDao rolePermissionDao;
     @Autowired
-    private CommonRolePermissionRedis commonRolePermissionRedis;
+    private RolePermissionRedisKit rolePermissionRedisKit;
 
     @Override
     public Set<PermissionPo> findPermissionByRole(RolePo rolePo) {
@@ -99,7 +99,7 @@ public class PermissionServiceImpl implements PermissionService {
         PermissionPo permissionPo = permissionDao.findById(id).get();
         permissionDao.deleteById(id);
         // redis：删除所有角色所持有的该权限
-        commonRolePermissionRedis.deleteRolePermissionById(id);
+        rolePermissionRedisKit.deleteRolePermissionById(id);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
     }
 
@@ -116,7 +116,7 @@ public class PermissionServiceImpl implements PermissionService {
     public void updatePermission(PermissionVo permissionVo) {
         this.savePermission(permissionVo);
         // redis：通过权限 id 更新权限信息
-        commonRolePermissionRedis.updatePermissionById(permissionVo);
+        rolePermissionRedisKit.updatePermissionById(permissionVo);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class PermissionServiceImpl implements PermissionService {
         permissionPo.setValidInd(false);
         permissionDao.save(permissionPo);
         // redis：删除所有角色所持有的该权限
-        commonRolePermissionRedis.deleteRolePermissionById(id);
+        rolePermissionRedisKit.deleteRolePermissionById(id);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
     }
 

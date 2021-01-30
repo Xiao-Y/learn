@@ -8,15 +8,9 @@ import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,14 +20,12 @@ import java.util.stream.Collectors;
  * @create 2019-07-16 15:05
  */
 @Service
-public class CommonRoleMenuRedis {
+public class RoleMenuRedisKit {
 
     public final static String ROLE_MENU_KEY = RedisCst.ROLE_MENU_KEY;
 
     @Autowired
     private RedisUtils redisUtils;
-    @Resource
-    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 更新角色CODE
@@ -45,12 +37,12 @@ public class CommonRoleMenuRedis {
      * @date 2019/7/16 16:45
      */
     public void updateRoleCode(String newRoleCode, String oldRoleCode) {
-        if (newRoleCode.equals(oldRoleCode)) {
+        if (Objects.equals(newRoleCode, oldRoleCode)) {
             return;
         }
-        List<MenuEx> menuExs = redisUtils.getList(ROLE_MENU_KEY + oldRoleCode);
+        List<MenuEx> menuExs = redisUtils.getHash(ROLE_MENU_KEY, oldRoleCode);
         this.deleteRoleByRoleCode(oldRoleCode);
-        redisUtils.setObj(ROLE_MENU_KEY + newRoleCode, menuExs);
+        redisUtils.setHash(ROLE_MENU_KEY, newRoleCode, menuExs);
     }
 
     /**
@@ -62,7 +54,7 @@ public class CommonRoleMenuRedis {
      * @date 2019/7/16 15:09
      */
     public void deleteRoleByRoleCode(String roleCode) {
-        redisTemplate.delete(ROLE_MENU_KEY + roleCode);
+        redisUtils.delHash(ROLE_MENU_KEY, roleCode);
     }
 
     /**
@@ -72,15 +64,15 @@ public class CommonRoleMenuRedis {
      * @author LiuYongTao
      * @date 2019/7/16 15:02
      */
-    public void deleteRoleMenuById(Set<String> ids) {
-        Set<String> menuKeys = redisTemplate.keys(ROLE_MENU_KEY + "*");
-        menuKeys.stream().forEach(f -> {
-            List<MenuEx> menuExes = redisUtils.getList(f);
-
-            List<MenuEx> voList = menuExes.stream()
+    public void deleteRoleMenuByIds(Set<String> ids) {
+        // 查询出所有 角色的菜单
+        Map<String, List<MenuEx>> hashAll = redisUtils.getHashAll(ROLE_MENU_KEY, MenuEx.class);
+        hashAll.entrySet().stream().forEach(f -> {
+            List<MenuEx> voList = f.getValue().stream()
                     .filter(fi -> !ids.contains(fi.getId()))
                     .collect(Collectors.toList());
-            redisUtils.setObj(f, voList);
+            // 过滤后重新填入
+            redisUtils.setHash(ROLE_MENU_KEY, f.getKey(), voList);
         });
     }
 
@@ -93,15 +85,16 @@ public class CommonRoleMenuRedis {
      * @date 2019/7/16 16:46
      */
     public void updateMeunById(MenuPo menuPo) {
-        Set<String> menuKeys = redisTemplate.keys(ROLE_MENU_KEY + "*");
-        menuKeys.stream().forEach(f -> {
-            List<MenuEx> menuExes = redisUtils.getList(f);
-
-            List<MenuEx> voList = menuExes.stream()
-                    .filter(fi -> !new Long(fi.getId()).equals(menuPo.getId()))
+        // 查询出所有 角色的菜单
+        Map<String, List<MenuEx>> hashAll = redisUtils.getHashAll(ROLE_MENU_KEY, MenuEx.class);
+        hashAll.entrySet().stream().forEach(f -> {
+            List<MenuEx> voList = f.getValue().stream()
+                    .filter(fi -> !menuPo.getId().equals(fi.getId()))
                     .collect(Collectors.toList());
+            // 加入新的
             voList.add(this.menuPoCoverMenuex(menuPo));
-            redisUtils.setObj(f, voList);
+            // 过滤后重新填入
+            redisUtils.setHash(ROLE_MENU_KEY, f.getKey(), voList);
         });
     }
 
@@ -115,27 +108,27 @@ public class CommonRoleMenuRedis {
      * @date 2019/7/16 16:57
      */
     public void updateRoleMenuByRoleCode(List<MenuPo> menuPos, String roleCode) {
-        List<MenuEx> exs = new ArrayList<>();
-        menuPos.forEach(item -> exs.add(this.menuPoCoverMenuex(item)));
-        redisUtils.setObj(ROLE_MENU_KEY + roleCode, exs);
+        List<MenuEx> exs = menuPos.stream()
+                .map(m -> this.menuPoCoverMenuex(m))
+                .collect(Collectors.toList());
+        redisUtils.setHash(ROLE_MENU_KEY, roleCode, exs);
     }
 
     public List<MenuEx> findMenusByRoles(List<RoleVo> roleVos) {
-
-        List<MenuEx> menuExes = new ArrayList<>();
-
-        Set<MenuEx> all = new HashSet<>();
+        // 读取缓存中的数据
+        List<MenuEx> all = new ArrayList<>();
         roleVos.stream().forEach(f -> {
-            List<MenuEx> menuPos = redisUtils.getList(ROLE_MENU_KEY + f.getRoleCode());
+            List<MenuEx> menuPos = redisUtils.getHash(ROLE_MENU_KEY, f.getRoleCode());
             if (ToolsUtils.isNotEmpty(menuPos)) {
                 all.addAll(menuPos);
             }
         });
-
+        // 没有数据直接返回
         if (ToolsUtils.isEmpty(all)) {
             return null;
         }
-
+        // 构建菜单层级
+        List<MenuEx> menuExes = new ArrayList<>();
         // 指出所有的父菜单
         all.stream().filter(f -> f.getPid() == null).forEach(f -> {
             MenuEx menuEx = new MenuEx();
@@ -157,11 +150,10 @@ public class CommonRoleMenuRedis {
      * @author LiuYongTao
      * @date 2019/7/23 10:07
      */
-    private void findChildren(Set<MenuEx> all, MenuEx menuEx) {
-
-        List<MenuEx> collect = all.stream().filter(f -> (f.getPid() != null && f.getPid().equals(new Long(menuEx.getId()))))
+    private void findChildren(List<MenuEx> all, MenuEx menuEx) {
+        List<MenuEx> collect = all.stream()
+                .filter(f -> (f.getPid() != null && f.getPid().equals(new Long(menuEx.getId()))))
                 .collect(Collectors.toList());
-
         if (ToolsUtils.isNotEmpty(collect)) {
             collect.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));
             menuEx.setChildren(collect);

@@ -15,11 +15,12 @@ public enum RdsKeyEnum {
     /**
      * "findMenus", "菜单管理里面的菜单树"，如 menusMag
      */
-    FIND_MENUS("findMenus", "菜单管理里面的菜单树"),
+//    FIND_MENUS("MENU:MENU_TREE", "菜单管理里面的菜单树"),
     /**
      * "findMenuById", "菜单管理里面的菜单树"，如 findMenuById:id
      */
-    FIND_MENU_BY_ID("findMenuById", "根据id查询菜单信息");
+//    FIND_MENU_BY_ID("MENU:MENU_ID", "根据id查询菜单信息")
+    ;
 
     private String key;
     private String value;

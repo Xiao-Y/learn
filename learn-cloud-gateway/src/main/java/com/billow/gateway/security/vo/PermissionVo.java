@@ -2,6 +2,8 @@ package com.billow.gateway.security.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 权限对象
  *
@@ -9,7 +11,7 @@ import lombok.Data;
  * @create 2019-07-16 14:33
  */
 @Data
-public class PermissionVo {
+public class PermissionVo  implements Serializable {
 
     private Long id;
     //权限名称

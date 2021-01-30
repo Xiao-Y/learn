@@ -82,7 +82,7 @@ public class RedisConfig {
 //        template.setConnectionFactory(factory);
 
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(String.class);
+        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
         //string 的序列化
         template.setKeySerializer(stringRedisSerializer);
 

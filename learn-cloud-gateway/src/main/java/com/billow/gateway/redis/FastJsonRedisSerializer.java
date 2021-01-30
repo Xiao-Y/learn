@@ -32,6 +32,6 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
         }
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
         String str = new String(bytes, DEFAULT_CHARSET);
-        return JSON.parseObject(str, clazz);
+        return (T)JSON.parseObject(str, clazz);
     }
 }

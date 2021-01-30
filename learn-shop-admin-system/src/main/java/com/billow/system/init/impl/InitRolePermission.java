@@ -1,6 +1,5 @@
 package com.billow.system.init.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.RoleDao;
 import com.billow.system.init.IStartLoading;
@@ -13,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -42,13 +38,13 @@ public class InitRolePermission implements IStartLoading {
     public boolean init() {
         log.info("======== start init Role Permission....");
         executorService.execute(() -> {
-            Map<String, String> map = new HashMap<>();
+            Map<String, Set<PermissionPo>> map = new HashMap<>();
             List<RolePo> rolePos = roleDao.findAll();
             for (RolePo rolePo : rolePos) {
                 Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
-                map.put(rolePo.getRoleCode(), JSON.toJSONString(permissionPos));
+                map.put(rolePo.getRoleCode(), permissionPos);
+                redisUtils.setHash(RedisCst.ROLE_PERMISSION_KEY, rolePo.getRoleCode(), new ArrayList<>(permissionPos));
             }
-            redisUtils.setHash(RedisCst.ROLE_PERMISSION_KEY, map);
             log.info("======== end init Role Permission....");
         });
         return true;

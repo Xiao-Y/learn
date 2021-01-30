@@ -59,7 +59,7 @@ public interface MenuService {
      * @author LiuYongTao
      * @date 2019/7/22 17:55
      */
-    Set<MenuEx> findMenuByRole(RolePo rolePo);
+    List<MenuEx> findMenuByRole(RolePo rolePo);
 
     /**
      * 查询 menuCode 的个数

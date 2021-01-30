@@ -13,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -46,11 +47,13 @@ public class InitRoleMenu implements IStartLoading {
                 log.info("======== end not init Role Menu....");
                 return;
             }
+            Map<String, List<MenuEx>> map = new HashMap<>();
             List<RolePo> rolePos = roleDao.findAll();
             for (RolePo rolePo : rolePos) {
-                Set<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
-                redisUtils.setObj(RedisCst.ROLE_MENU_KEY + rolePo.getRoleCode(), menuExs);
+                List<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
+                map.put(rolePo.getRoleCode(), menuExs);
             }
+            redisUtils.setHash(RedisCst.ROLE_MENU_KEY, map);
             log.info("======== end init Role Menu....");
         });
         return true;

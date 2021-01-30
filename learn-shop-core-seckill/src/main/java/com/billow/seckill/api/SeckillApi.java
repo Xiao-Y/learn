@@ -71,7 +71,7 @@ public class SeckillApi {
     }
 
     @ApiOperation(value = "自动任务加载数据到缓存中")
-    @GetMapping(value = "/loadSeckillJob")
+    @PostMapping("/loadSeckillJob")
     public void loadSeckillJob() {
         seckillService.loadSeckillJob();
     }

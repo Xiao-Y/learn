@@ -6,8 +6,6 @@ import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
-import com.billow.tools.enums.RdsKeyEnum;
-import com.billow.tools.utlis.ToolsUtils;
 import com.billow.tools.utlis.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,44 +62,19 @@ public class MenuApi extends BaseApi {
     @GetMapping("/findMenus")
     @ApiOperation(value = "菜单管理信息", notes = "菜单管理信息")
     public List<MenuEx> findMenus() {
-        List<MenuEx> menuExes = super.getRedisValues(RdsKeyEnum.FIND_MENUS, MenuEx.class);
-        if (ToolsUtils.isEmpty(menuExes)) {
-            menuExes = menuService.findMenus();
-            super.setRedisObject(RdsKeyEnum.FIND_MENUS.getKey(), menuExes);
-        }
-        return menuExes;
+        return menuService.findMenus();
     }
 
     @GetMapping("/findMenuById/{id}")
     @ApiOperation(value = "根据id查询菜单信息", notes = "根据id查询菜单信息")
     public MenuVo findMenuById(@PathVariable("id") Long id) {
-        StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
-        key.append(":");
-        key.append(id.toString());
-        MenuVo ex = super.getRedisValue(key.toString(), MenuVo.class);
-        if (ex == null) {
-            ex = menuService.findMenuById(id);
-            super.setRedisObject(key.toString(), ex);
-        }
-        ex.setValidInd(null);
-        return ex;
+        return menuService.findMenuById(id);
     }
 
     @PutMapping("/saveOrUpdateMenu")
     @ApiOperation(value = "修改、添加菜单信息", notes = "修改、添加菜单信息")
     public MenuVo saveOrUpdateMenu(@RequestBody MenuVo menuVo) throws Exception {
-        MenuVo vo = menuService.saveOrUpdateMenu(menuVo);
-
-        try {
-            redisTemplate.delete(RdsKeyEnum.FIND_MENUS.getKey());
-            StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
-            key.append(":");
-            key.append(vo.getId().toString());
-            super.setRedisObject(key.toString(), vo);
-        } catch (Exception e) {
-            log.error("redis 异常：", e);
-        }
-        return vo;
+        return menuService.saveOrUpdateMenu(menuVo);
     }
 
     @DeleteMapping("/delMenuByIds")
@@ -110,17 +83,6 @@ public class MenuApi extends BaseApi {
         //防止重复id
         Set<String> ids = menuVo.getIds();
         menuService.delMenuByIds(ids);
-        try {
-            redisTemplate.delete(RdsKeyEnum.FIND_MENUS.getKey());
-            for (String id : ids) {
-                StringBuilder key = new StringBuilder(RdsKeyEnum.FIND_MENU_BY_ID.getKey());
-                key.append(":");
-                key.append(id);
-                redisTemplate.delete(key.toString());
-            }
-        } catch (Exception e) {
-            log.error("redis 异常：", e);
-        }
         return menuVo;
     }
 

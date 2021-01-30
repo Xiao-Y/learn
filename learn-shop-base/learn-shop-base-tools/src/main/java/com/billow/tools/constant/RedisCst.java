@@ -16,7 +16,9 @@ public class RedisCst {
     /**
      * 角色的菜单信息：ROLE:MENU:ADMIN
      */
-    public final static String ROLE_MENU_KEY = "ROLE:MENU:";
+    public final static String ROLE_MENU_KEY = "ROLE:MENU";
+
+    //==============================================================================================
 
     /**
      * 数据字典信息：COMM:DICTIONARY_FIELD_TYPE->dataSourcesType,mailType...
@@ -44,6 +46,8 @@ public class RedisCst {
      */
     public final static String COMM_DATA_RECOVERY = "COMM:DATA_RECOVERY";
 
+    //==============================================================================================
+
     /**
      * 黑名单-修改过用户信息：BLACKLIST:EDITUSER:xxx
      */
@@ -56,6 +60,7 @@ public class RedisCst {
      * 黑名单-修改过用户信息：value 中的 key
      */
     public final static String BLACKLIST_EDITUSER_ROLECODES = "ROLE_CODES";
+    //==============================================================================================
     /**
      * 秒杀用户锁定前缀。SECKILL:LOCK:seckillId
      */
@@ -64,4 +69,16 @@ public class RedisCst {
      * 秒杀库存前缀，SECKILL:STOCK:seckillId:userCode
      */
     public final static String SECKILL_STOCK = "SECKILL:STOCK:";
+    //==============================================================================================
+
+    /**
+     * 菜单管理里面的菜单树，MENU:MENU_TREE
+     */
+    public final static String MENU_MENU_TREE = "MENU:MENU_TREE";
+
+    /**
+     * 根据id查询菜单信息，MENU:MENU_ID
+     */
+    public final static String MENU_MENU_ID = "MENU:MENU_ID";
+
 }

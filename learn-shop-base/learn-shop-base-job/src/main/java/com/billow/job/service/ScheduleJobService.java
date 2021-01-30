@@ -26,13 +26,41 @@ public interface ScheduleJobService {
      */
     List<ScheduleJobVo> findByJobStatus(ScheduleJobVo scheduleJobVo);
 
-
+    /**
+     * 通过id 查询自动任务
+     *
+     * @param id
+     * @return {@link ScheduleJobVo}
+     * @author liuyongtao
+     * @since 2021-1-29 19:50
+     */
     ScheduleJobVo findById(Long id);
 
+    /**
+     * 更新自动任务信息
+     *
+     * @param dto
+     * @author liuyongtao
+     * @since 2021-1-29 19:50
+     */
     void updateById(ScheduleJobVo dto);
 
+    /**
+     * 删除自动任务信息
+     *
+     * @param id
+     * @author liuyongtao
+     * @since 2021-1-29 19:51
+     */
     void deleteById(Long id);
 
+    /**
+     * 添加自动任务信息
+     *
+     * @param scheduleJobVo
+     * @author liuyongtao
+     * @since 2021-1-29 19:51
+     */
     void save(ScheduleJobVo scheduleJobVo);
 
     /**
