@@ -4,7 +4,6 @@ import com.billow.tools.exception.NullBeanException;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -14,7 +13,6 @@ import java.util.Map;
  * @author liuyongtao
  * @date 2017年4月18日 下午3:52:31
  */
-@Component
 public class SpringContextUtil {
 
     private static ApplicationContext applicationContext;

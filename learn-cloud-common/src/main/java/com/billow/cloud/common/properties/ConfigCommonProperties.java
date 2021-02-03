@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
  * @create 2019-08-11 10:55
  */
 @Data
-@Component
 @ConfigurationProperties(prefix = "config")
 public class ConfigCommonProperties {
 

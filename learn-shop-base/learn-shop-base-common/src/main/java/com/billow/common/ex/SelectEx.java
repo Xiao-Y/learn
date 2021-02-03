@@ -1,4 +1,4 @@
-package com.billow.common.business.ex;
+package com.billow.common.ex;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

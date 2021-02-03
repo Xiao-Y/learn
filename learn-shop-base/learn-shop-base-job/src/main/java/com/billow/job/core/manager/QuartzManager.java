@@ -37,7 +37,6 @@ import java.util.Set;
  * @date: 2017年5月6日 下午10:49:14
  */
 @Slf4j
-@Service
 public class QuartzManager {
 
     @Autowired

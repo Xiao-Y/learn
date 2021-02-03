@@ -1,7 +1,13 @@
 package com.billow.base.workflow.config;
 
+import com.billow.base.workflow.component.WorkFlowExecute;
+import com.billow.base.workflow.component.WorkFlowQuery;
+import com.billow.base.workflow.component.impl.WorkFlowExecuteImpl;
+import com.billow.base.workflow.component.impl.WorkFlowQueryImpl;
+import com.billow.base.workflow.diagram.ActUtils;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -25,5 +31,20 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
         springProcessEngineConfiguration.setActivityFontName(FONT)
                 .setLabelFontName(FONT)
                 .setAnnotationFontName(FONT);
+    }
+
+    @Bean
+    public ActUtils actUtils() {
+        return new ActUtils();
+    }
+
+    @Bean
+    public WorkFlowExecute workFlowExecute() {
+        return new WorkFlowExecuteImpl();
+    }
+
+    @Bean
+    public WorkFlowQuery workFlowQuery() {
+        return new WorkFlowQueryImpl();
     }
 }

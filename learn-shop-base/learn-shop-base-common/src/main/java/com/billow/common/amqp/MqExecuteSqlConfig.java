@@ -1,6 +1,5 @@
 package com.billow.common.amqp;
 
-import com.billow.cloud.common.properties.ConfigCommonProperties;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -16,21 +15,24 @@ import org.springframework.context.annotation.Configuration;
  * @create 2019-10-31 10:50
  */
 @Configuration
-public class MqExecuteSqlConfig {
+public class MqExecuteSqlConfig implements MqCommon {
 
     @Autowired
-    private ConfigCommonProperties configCommonProperties;
+    private BaseMqConfig baseMqConfig;
 
+    @Override
     public String getQueue() {
-        return this.configCommonProperties.getMq().getQueue().getExecuteSql();
+        return baseMqConfig.getQueue().getExecuteSql();
     }
 
+    @Override
     public String getExchange() {
-        return this.configCommonProperties.getMq().getExchange().getExecuteSql();
+        return baseMqConfig.getExchange().getExecuteSql();
     }
 
+    @Override
     public String getRouteKey() {
-        return this.configCommonProperties.getMq().getRouteKey().getExecuteSql();
+        return baseMqConfig.getRouteKey().getExecuteSql();
     }
 
     @Bean

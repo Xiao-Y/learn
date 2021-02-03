@@ -48,11 +48,11 @@ public class GlobalExceptionHandler {
             List<ObjectError> errors = result.getAllErrors();
             ObjectError e = errors.get(0);
             FieldError fieldError = (FieldError) e;
-            log.error("Data check failure : object{" + fieldError.getObjectName() + "},field{" + fieldError.getField() +
-                    "},errorMessage{" + fieldError.getDefaultMessage() + "}");
+            log.error("数据检查失败 : object{},field{},errorMessage}", fieldError.getObjectName(),
+                    fieldError.getField(), fieldError.getDefaultMessage());
             return new BaseResponse(ResCodeEnum.RESCODE_BAD_REQUEST, fieldError.getDefaultMessage());
         }
-        return new BaseResponse(ResCodeEnum.RESCODE_BAD_REQUEST, "校验失败！");
+        return new BaseResponse(ResCodeEnum.RESCODE_BAD_REQUEST, "参数异常！");
     }
 
 //    //运行时异常

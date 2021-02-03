@@ -3,7 +3,6 @@ package com.billow.common.redis;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +12,6 @@ import java.util.concurrent.TimeUnit;
  * @author liuyongtao
  * @since 2021-1-21 17:00
  */
-@Component
 public class RedissLockUtil {
 
     @Autowired

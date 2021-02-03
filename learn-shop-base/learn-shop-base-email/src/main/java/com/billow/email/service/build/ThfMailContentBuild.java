@@ -6,7 +6,6 @@ import com.billow.email.service.MailContentBuild;
 import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -21,7 +20,6 @@ import java.util.Map;
  * @author liuyongtao
  * @create 2019-09-29 9:33
  */
-@Service
 public class ThfMailContentBuild implements MailContentBuild {
 
     @Autowired

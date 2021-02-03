@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.thymeleaf.TemplateEngine;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +29,6 @@ import java.util.Set;
  * @create 2019-08-20 21:09
  */
 @Slf4j
-@Service
 public class MailTemplateServiceImpl implements MailTemplateService {
 
     @Autowired

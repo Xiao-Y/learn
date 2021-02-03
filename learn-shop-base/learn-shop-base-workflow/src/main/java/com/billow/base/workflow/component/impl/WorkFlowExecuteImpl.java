@@ -10,7 +10,6 @@ import org.activiti.bpmn.model.FlowNode;
 import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.engine.ActivitiException;
-import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
@@ -26,8 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
@@ -43,8 +40,6 @@ import java.util.Objects;
  * @author liuyongtao
  * @create 2019-08-25 10:38
  */
-@Component
-@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class WorkFlowExecuteImpl implements WorkFlowExecute {
 
     private static final Logger logger = LoggerFactory.getLogger(WorkFlowExecuteImpl.class);
@@ -58,14 +53,12 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     @Autowired
     private TaskService taskService;
     @Autowired
-    private HistoryService historyService;
-    @Autowired
     private IdentityService identityService;
     @Autowired
     private ManagementService managementService;
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Deployment deploy(String processName) {
         String fileName = processName + ".bpmn20.xml";
         String filePath = "processes/" + fileName;
@@ -77,7 +70,7 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Deployment deploy(String resourceName, InputStream inputStream) {
         Deployment deploy = repositoryService.createDeployment()
                 .addInputStream(resourceName, inputStream)
@@ -87,39 +80,43 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void deleteDeployment(String deploymentId, boolean cascade) {
         repositoryService.deleteDeployment(deploymentId, cascade);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void suspendProcess(String processDefinitionId) throws Exception {
         repositoryService.suspendProcessDefinitionById(processDefinitionId);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void suspendProcessCascade(String processDefinitionId) throws Exception {
         repositoryService.suspendProcessDefinitionById(processDefinitionId, true, null);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void activateProcess(String processDefinitionId) throws Exception {
         repositoryService.activateProcessDefinitionById(processDefinitionId);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void activateProcessCascade(String processDefinitionId) throws Exception {
         repositoryService.activateProcessDefinitionById(processDefinitionId, true, null);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public ProcessInstanceVo startProcessInstance(String operator, String key, String businessKey, Map<String, Object> variables) {
         return this.startProcessInstance(operator, "key", key, businessKey, variables);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public ProcessInstanceVo startProcessInstance(String operator, String processType, String pk, String businessKey, Map<String, Object> variables) {
         if (variables == null) {
             variables = new HashMap<>();
@@ -139,12 +136,13 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void commitProcess(String taskId) {
         taskService.complete(taskId);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void commitProcess(String taskId, Map<String, Object> variables) {
         if (variables == null) {
             variables = new HashMap<>();
@@ -153,11 +151,13 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addCandidateGroup(String taskId, String groupId) {
         taskService.addCandidateGroup(taskId, groupId);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void setAssignee(String procInstId, String userId, String taskCode) {
         if (StringUtils.isEmpty(userId)) {
             return;
@@ -176,26 +176,31 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void setAssignee(String taskId, String userId) {
         taskService.setAssignee(taskId, userId);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void claim(String taskId, String userId) {
         taskService.claim(taskId, userId);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void unclaim(String taskId) {
         taskService.unclaim(taskId);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void setAuthUser(String userId) {
         identityService.setAuthenticatedUserId(userId);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void rollBackTask(String taskId, String userId, String reason, String groupId, int backNum) throws Exception {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
@@ -231,16 +236,18 @@ public class WorkFlowExecuteImpl implements WorkFlowExecute {
         //记录原活动方向，恢复原方向
         sourceNode.setOutgoingFlows(oriSequenceFlowList);
         // 设置任务候选人
-        this.setAssignee(task.getProcessInstanceId(),preTask.getAssignee(),null);
+        this.setAssignee(task.getProcessInstanceId(), preTask.getAssignee(), null);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addComment(String userCode, String procInstId, String taskId, String comment) {
         identityService.setAuthenticatedUserId(userCode);
         taskService.addComment(taskId, procInstId, comment);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void jump(String taskId, String targetFlowElementId) {
         // 当前任务
         Task currentTask = taskService.createTaskQuery().taskId(taskId).singleResult();

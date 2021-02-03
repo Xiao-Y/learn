@@ -83,11 +83,9 @@ public class DataDictionaryApi extends BaseApi {
     @ApiOperation("字典下拉字段分类")
     @GetMapping("/findFieldType")
     public List<DataDictionaryPo> findFieldType() {
-        List<String> fieldTypes = this.getRedisValues(FIELD_TYPE_KEY, String.class);
+        List<String> fieldTypes = redisUtils.getHashKeys(RedisCst.COMM_ROUTE_INFO);
         if (ToolsUtils.isEmpty(fieldTypes)) {
             fieldTypes = dataDictionaryService.findFieldType();
-            // 放入缓存中
-            this.setRedisObject(FIELD_TYPE_KEY, fieldTypes);
         }
 
         List<DataDictionaryPo> dataDictionaryPos = new ArrayList<>();

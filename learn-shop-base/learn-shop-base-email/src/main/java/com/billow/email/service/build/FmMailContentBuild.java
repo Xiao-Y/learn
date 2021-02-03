@@ -7,7 +7,6 @@ import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ToolsUtils;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
@@ -22,7 +21,6 @@ import java.util.Map;
  * @author liuyongtao
  * @create 2019-09-29 9:12
  */
-@Service
 public class FmMailContentBuild implements MailContentBuild {
 
     @Autowired

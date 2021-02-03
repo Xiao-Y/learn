@@ -6,7 +6,6 @@ import com.billow.email.service.MailContentBuild;
 import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,6 @@ import java.util.Map;
  * @author liuyongtao
  * @create 2019-09-29 8:28
  */
-@Service
 public class HtmlMailContentBuild implements MailContentBuild {
 
     @Autowired

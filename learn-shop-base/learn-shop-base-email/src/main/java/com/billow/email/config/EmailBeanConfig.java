@@ -4,11 +4,19 @@ import com.billow.email.dao.MailTemplateDao;
 import com.billow.email.dao.impl.MailTemplateDaoImpl;
 import com.billow.email.perproties.MailPerproties;
 import com.billow.email.service.EmailSender;
+import com.billow.email.service.MailContentBuild;
+import com.billow.email.service.MailService;
+import com.billow.email.service.MailTemplateService;
+import com.billow.email.service.build.FmMailContentBuild;
+import com.billow.email.service.build.HtmlMailContentBuild;
+import com.billow.email.service.build.ThfMailContentBuild;
 import com.billow.email.service.impl.EmailSenderImpl;
+import com.billow.email.service.impl.MailServiceImpl;
+import com.billow.email.service.impl.MailTemplateServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -19,7 +27,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 @Configuration
 @EnableAsync
-@ComponentScan("com.billow.email")
+@EnableConfigurationProperties(MailPerproties.class) // 用于@Autowired注入
 public class EmailBeanConfig {
 
     // 线程池长期维持的线程数
@@ -76,5 +84,65 @@ public class EmailBeanConfig {
     @ConditionalOnMissingBean(MailTemplateDao.class)
     public MailTemplateDao mailTemplateDaoDefault() {
         return new MailTemplateDaoImpl();
+    }
+
+    /**
+     * 邮件服务类
+     *
+     * @return {@link MailService}
+     * @author liuyongtao
+     * @since 2021-2-3 11:45
+     */
+    @Bean
+    public MailService mailService() {
+        return new MailServiceImpl();
+    }
+
+    /**
+     * FreeMarker模板邮件构建器
+     *
+     * @return {@link MailService}
+     * @author liuyongtao
+     * @since 2021-2-3 11:45
+     */
+    @Bean
+    public MailContentBuild fmMailContentBuild() {
+        return new FmMailContentBuild();
+    }
+
+    /**
+     * 1-普通邮件,2-html邮件 内容构建
+     *
+     * @return {@link MailService}
+     * @author liuyongtao
+     * @since 2021-2-3 11:45
+     */
+    @Bean
+    public MailContentBuild htmlMailContentBuild() {
+        return new HtmlMailContentBuild();
+    }
+
+    /**
+     * Thymeleaf邮件模板构建器
+     *
+     * @return {@link MailService}
+     * @author liuyongtao
+     * @since 2021-2-3 11:45
+     */
+    @Bean
+    public MailContentBuild thfMailContentBuild() {
+        return new ThfMailContentBuild();
+    }
+
+    /**
+     * 邮件服务器类
+     *
+     * @return {@link MailService}
+     * @author liuyongtao
+     * @since 2021-2-3 11:45
+     */
+    @Bean
+    public MailTemplateService mailTemplateService() {
+        return new MailTemplateServiceImpl();
     }
 }

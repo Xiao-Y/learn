@@ -1,7 +1,7 @@
 package com.billow.aop.global.commons;
 
 /**
- * 分页数据
+ * 统一分页数据
  *
  * @author liuyongtao
  * @create 2019-11-01 9:07
