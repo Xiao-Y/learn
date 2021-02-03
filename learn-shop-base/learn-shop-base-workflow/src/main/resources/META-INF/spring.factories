@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.billow.base.workflow.config.ActivitiConfig
+org.springframework.context.annotation.ComponentScan=\
+com.billow.base.workflow
