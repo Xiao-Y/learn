@@ -46,7 +46,7 @@ public class GoodsSpuApi {
 
     @ApiOperation(value = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
-    public GoodsSpuVo getById(@PathVariable("id") String id) {
+    public GoodsSpuVo getById(@PathVariable("id") Long id) {
         GoodsSpuPo po = goodsSpuService.getById(id);
         return ConvertUtils.convert(po, GoodsSpuVo.class);
     }
@@ -60,7 +60,7 @@ public class GoodsSpuApi {
 
     @ApiOperation(value = "删除spu表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id) {
+    public boolean delById(@PathVariable("id") Long id) {
         return goodsSpuService.removeById(id);
     }
 
@@ -73,7 +73,7 @@ public class GoodsSpuApi {
 
     @ApiOperation("根据ID禁用spu表数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return goodsSpuService.prohibitById(id);
     }
 }

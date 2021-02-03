@@ -75,4 +75,9 @@ public class JobServiceImpl implements JobService {
 //        restTemplate.getForObject(url, String.class);
         HttpUtil.get(url);
     }
+
+    @Override
+    public void httpFeign(String url, Map<String, String> body) {
+        restTemplate.getForObject(url, String.class, body);
+    }
 }

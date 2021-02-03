@@ -37,7 +37,7 @@ public interface GoodsCategoryService extends IService<GoodsCategoryPo> {
      * @author billow
      * @since 2019-11-27
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 
     /**
      * 查询分类表数据

@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class CodeGenerator {
 
-    String projectPath = System.getProperty("user.dir") + "/learn-shop-base-mybatis";
+    String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
 
     /**
      * 自定义配置
@@ -35,8 +35,8 @@ public class CodeGenerator {
      * @date 2019/10/29 9:46
      */
     private InjectionConfig getInjectionConfig(PackageConfig pc) {
-        String srcJava = "/src/main/java/com/billow/";
-        String srcRes = "/src/main/resources";
+        String srcJava = "/src/test/java/com/billow/";
+        String srcRes = "/src/test/resources";
 
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
@@ -126,11 +126,11 @@ public class CodeGenerator {
      */
     private DataSourceConfig getDataSourceConfig() {
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false");
+        dsc.setUrl("jdbc:mysql://119.23.27.78:3308/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("root");
+        dsc.setUsername("learn_shop");
+        dsc.setPassword("pass123");
         return dsc;
     }
 
@@ -143,7 +143,7 @@ public class CodeGenerator {
      */
     private GlobalConfig getGlobalConfig() {
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir(projectPath + "/src/main/java");
+        gc.setOutputDir(projectPath + "/src/test/java");
         gc.setAuthor("billow");
         gc.setOpen(false);
         gc.setBaseResultMap(true);
@@ -214,9 +214,10 @@ public class CodeGenerator {
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setInclude("p_goods_brand", "p_goods_category", "p_goods_sku"
-                , "p_goods_sku_spec_value", "p_goods_spec_key", "p_goods_spec_value", "p_goods_spu", "p_goods_spu_spec", "p_shop_info");
-        strategy.setTablePrefix("p_");
+        strategy.setInclude("sk_seckill", "sk_success_killed");
+        strategy.setTablePrefix("sk_");
+        strategy.setEntityBooleanColumnRemoveIsPrefix(true);
+        strategy.setEntityTableFieldAnnotationEnable(true);
         return strategy;
     }
 
@@ -235,6 +236,8 @@ public class CodeGenerator {
         String parent = "";
         if (strategy.getTablePrefix()[0].equals("p_")) {
             parent = "product";
+        }if (strategy.getTablePrefix()[0].equals("sk_")) {
+            parent = "seckill";
         }
         pc.setParent("com.billow");
         pc.setModuleName(parent);

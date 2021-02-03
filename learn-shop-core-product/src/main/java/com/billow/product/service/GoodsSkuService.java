@@ -38,7 +38,7 @@ public interface GoodsSkuService extends IService<GoodsSkuPo> {
      * @author billow
      * @since 2019-11-27
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 
     /**
      * 通过 spuId 获取商品 sku 规格信息
@@ -48,7 +48,7 @@ public interface GoodsSkuService extends IService<GoodsSkuPo> {
      * @author LiuYongTao
      * @date 2019/11/27 14:18
      */
-    List<Map<String, Object>> findGoodsSkuSpec(String spuId);
+    List<Map<String, Object>> findGoodsSkuSpec(Long spuId);
 
     /**
      * 通过 spuId 获取商品 sku 信息
@@ -58,7 +58,7 @@ public interface GoodsSkuService extends IService<GoodsSkuPo> {
      * @author LiuYongTao
      * @date 2019/11/28 14:04
      */
-    List<GoodsSkuVo> findGoodsSku(String spuId);
+    List<GoodsSkuVo> findGoodsSku(Long spuId);
 
     /**
      * 新增sku表数据

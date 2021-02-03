@@ -4,7 +4,7 @@
 
     <groupId>com.billow</groupId>
     <artifactId>learn</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
 
     <developers>
         <developer>
@@ -19,7 +19,9 @@
 
     <modules>
         <module>learn-cloud-gateway</module>
+
         <module>learn-cloud-common</module>
+        <module>learn-shop-base</module>
 
         <module>learn-shop-admin-system</module>
         <module>learn-shop-admin-user</module>
@@ -30,17 +32,8 @@
         <module>learn-shop-core-search</module>
 
         <module>learn-shop-public-auth</module>
+        <module>learn-shop-core-seckill</module>
 
-<!--        <module>learn-shop-base-common</module>-->
-<!--        <module>learn-shop-base-tools</module>-->
-<!--        <module>learn-shop-base-aop</module>-->
-<!--        <module>learn-shop-base-workflow</module>-->
-<!--        <module>learn-shop-base-email</module>-->
-<!--        <module>learn-shop-base-job</module>-->
-<!--        <module>learn-shop-base-mq</module>-->
-<!--        <module>learn-shop-base-jpa</module>-->
-<!--        <module>learn-shop-base-mybatis</module>-->
-        <module>learn-shop-base</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -66,6 +59,7 @@
         <hutool.version>5.5.2</hutool.version>
         <lcn.last.version>4.1.0</lcn.last.version>
         <spring.boot.redis.version>2.2.7.RELEASE</spring.boot.redis.version>
+        <redisson.version>3.11.0</redisson.version>
         <guava.version>27.1-jre</guava.version>
         <netty.all.version>4.1.42.Final</netty.all.version>
         <jjwt.version>0.7.0</jjwt.version>
@@ -153,26 +147,11 @@
                 <version>${alibaba.druid.version}</version>
             </dependency>
             <!-- swagger2 -->
-<!--            <dependency>-->
-<!--                <groupId>io.springfox</groupId>-->
-<!--                <artifactId>springfox-swagger2</artifactId>-->
-<!--                <version>${springfox.swagger2.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>io.springfox</groupId>-->
-<!--                <artifactId>springfox-swagger-ui</artifactId>-->
-<!--                <version>${springfox.swagger2.version}</version>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>${springfox.boot.starter.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.github.xiaoymin</groupId>-->
-<!--                <artifactId>swagger-bootstrap-ui</artifactId>-->
-<!--                <version>${swagger-bootstrap.version}</version>-->
-<!--            </dependency>-->
             <!-- 自动任务 -->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
@@ -218,18 +197,11 @@
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring.boot.redis.version}</version>
             </dependency>
-<!--            &lt;!&ndash; IO通信 &ndash;&gt;-->
-<!--            <dependency>-->
-<!--                <groupId>io.netty</groupId>-->
-<!--                <artifactId>netty-all</artifactId>-->
-<!--                <version>${netty.all.version}</version>-->
-<!--            </dependency>-->
-<!--            &lt;!&ndash; JWT token &ndash;&gt;-->
-<!--            <dependency>-->
-<!--                <groupId>io.jsonwebtoken</groupId>-->
-<!--                <artifactId>jjwt</artifactId>-->
-<!--                <version>${jjwt.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-io</artifactId>
@@ -289,6 +261,20 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

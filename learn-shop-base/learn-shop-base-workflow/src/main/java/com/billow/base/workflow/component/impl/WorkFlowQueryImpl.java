@@ -44,7 +44,6 @@ import java.util.stream.Collectors;
  * @author liuyongtao
  * @create 2019-08-25 10:39
  */
-@Component
 public class WorkFlowQueryImpl implements WorkFlowQuery {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());

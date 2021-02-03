@@ -35,5 +35,5 @@ public interface GoodsSkuSpecValueService extends IService<GoodsSkuSpecValuePo> 
      * @author billow
      * @since 2019-11-27
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 }

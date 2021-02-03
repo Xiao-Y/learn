@@ -1,14 +1,15 @@
 package com.billow.mq.config;
 
-import com.billow.mq.retry.NextRetryDate;
-import com.billow.mq.retry.NextRetryDateDefault;
-import com.billow.mq.retry.RetrySendMessage;
 import com.billow.mq.StoredRabbitTemplate;
 import com.billow.mq.properties.CustomProperties;
 import com.billow.mq.properties.MqProperties;
+import com.billow.mq.retry.NextRetryDate;
+import com.billow.mq.retry.NextRetryDateDefault;
+import com.billow.mq.retry.RetrySendMessage;
 import com.billow.mq.stored.dao.StoredOperationsDao;
-import com.billow.mq.stored.service.StoredOperationsService;
 import com.billow.mq.stored.dao.impl.StoredOperationsDaoImpl;
+import com.billow.mq.stored.service.StoredOperationsService;
+import com.billow.mq.stored.service.impl.StoredOperationsServiceImpl;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -19,9 +20,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * MQ 配置
@@ -30,6 +33,8 @@ import org.springframework.context.annotation.Primary;
  * @date 2019/10/17 16:53
  */
 @Configuration
+@ConfigurationProperties(prefix = "v1.spring.rabbitmq")
+@PropertySource("classpath:rabbitmqcofnig.properties")
 public class MultipleRabbitMQConfig {
 
     @Autowired
@@ -114,5 +119,15 @@ public class MultipleRabbitMQConfig {
         factory.setPrefetchCount(prefetch);
         configurer.configure(factory, connectionFactory);
         return factory;
+    }
+
+    @Bean
+    public StoredOperationsService storedOperationsService() {
+        return new StoredOperationsServiceImpl();
+    }
+
+    @Bean
+    public MqProperties mqProperties() {
+        return new MqProperties();
     }
 }

@@ -1,7 +1,7 @@
 package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.billow.common.business.ex.SelectEx;
+import com.billow.common.ex.SelectEx;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.vo.GoodsCategoryVo;
 import com.billow.product.service.GoodsCategoryService;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,7 +49,7 @@ public class GoodsCategoryApi {
 
     @ApiOperation(value = "根据id查询分类表数据")
     @GetMapping(value = "/getById/{id}")
-    public GoodsCategoryVo getById(@PathVariable("id") String id) {
+    public GoodsCategoryVo getById(@PathVariable("id") Long id) {
         GoodsCategoryPo po = goodsCategoryService.getById(id);
         return ConvertUtils.convert(po, GoodsCategoryVo.class);
     }
@@ -65,7 +64,7 @@ public class GoodsCategoryApi {
 
     @ApiOperation(value = "删除分类表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id) {
+    public boolean delById(@PathVariable("id") Long id) {
         return goodsCategoryService.removeById(id);
     }
 
@@ -79,7 +78,7 @@ public class GoodsCategoryApi {
 
     @ApiOperation("根据ID禁用分类表数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return goodsCategoryService.prohibitById(id);
     }
 
@@ -91,7 +90,7 @@ public class GoodsCategoryApi {
         list.forEach(f -> {
             SelectEx ex = new SelectEx();
             ex.setFieldDisplay(f.getCategoryName());
-            ex.setFieldValue(f.getId());
+            ex.setFieldValue(f.getId().toString());
             ex.setFieldOrder(f.getCategorySort());
             selectExes.add(ex);
         });

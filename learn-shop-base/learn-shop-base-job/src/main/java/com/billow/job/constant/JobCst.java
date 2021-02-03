@@ -29,4 +29,6 @@ public class JobCst {
     public static final String CLASS_TYPE_HTTP = "3";
     // 执行类型：4-MQ请求
     public static final String CLASS_TYPE_MQ = "4";
+    // 执行类型：5-Feign 请求
+    public static final String CLASS_TYPE_FEIGN = "5";
 }

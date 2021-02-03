@@ -28,7 +28,7 @@ public class GoodsSkuSpecValuePo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "sku_id")
-    private String skuId;
+    private Long skuId;
 
     @ApiModelProperty(value = "规格id(冗余)")
     private String specKeyId;

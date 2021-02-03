@@ -25,4 +25,24 @@ public interface CityDao extends JpaRepository<CityPo, Long>, JpaSpecificationEx
      * @date 2019/8/4 13:54
      */
     List<CityPo> findByParentCityIdIsAndValidIndIsTrue(String parentCityId);
+
+    /**
+     * 查询出所有有效的城市信息
+     *
+     * @return {@link List< CityPo>}
+     * @author liuyongtao
+     * @since 2021-1-28 15:20
+     */
+    List<CityPo> findByValidIndIsTrue();
+
+    /**
+     * 查询城市信息
+     *
+     * @param cityId
+     * @return {@link CityPo}
+     * @author liuyongtao
+     * @since 2021-1-28 15:51
+     */
+    CityPo findByCityId(String cityId);
+
 }

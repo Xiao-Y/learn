@@ -7,7 +7,7 @@
 
     <groupId>com.billow</groupId>
     <artifactId>learn-shop-base-workflow</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>learn-shop-base-workflow</name>

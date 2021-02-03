@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 返回token 信息
  *
@@ -11,7 +13,7 @@ import lombok.Data;
  * @Date 2020/12/20 10:28
  **/
 @Data
-public class TokenVo {
+public class TokenVo  implements Serializable {
 
     private String tokenType;
     private String accessToken;

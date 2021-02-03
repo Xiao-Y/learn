@@ -3,7 +3,7 @@ package com.billow.user.api;
 import com.billow.common.base.BaseApi;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
-import com.billow.tools.utlis.UserTools;
+import com.billow.common.utils.UserTools;
 import com.billow.user.pojo.po.UserPo;
 import com.billow.user.pojo.vo.UserVo;
 import com.billow.user.service.UserService;

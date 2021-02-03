@@ -10,21 +10,17 @@ import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.properties.CustomProperties;
 import com.billow.system.service.MenuService;
-import com.billow.system.service.redis.CommonRoleMenuRedis;
+import com.billow.system.service.redis.MenuRedisKit;
+import com.billow.system.service.redis.RoleMenuRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,9 +38,11 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private RoleMenuDao roleMenuDao;
     @Autowired
-    private CommonRoleMenuRedis commonRoleMenuRedis;
+    private RoleMenuRedisKit roleMenuRedisKit;
     @Autowired
     private CustomProperties customProperties;
+    @Autowired
+    private MenuRedisKit menuRedisKit;
 
     @Override
     public List<MenuEx> homeMenus(MenuVo menuVo) {
@@ -58,8 +56,8 @@ public class MenuServiceImpl implements MenuService {
 
         // 先从 redis 中查询
         if (customProperties.getMenu().isReadCache()) {
-            pMenuExs = commonRoleMenuRedis.findMenusByRoles(roleVos);
-            if(ToolsUtils.isNotEmpty(pMenuExs)){
+            pMenuExs = roleMenuRedisKit.findMenusByRoles(roleVos);
+            if (ToolsUtils.isNotEmpty(pMenuExs)) {
                 return pMenuExs;
             }
         }
@@ -102,9 +100,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuEx> findMenus() {
+
+        List<MenuEx> menusTree = menuRedisKit.getMenusTree();
+        if (CollectionUtils.isNotEmpty(menusTree)) {
+            return menusTree;
+        }
         // 查询父级菜单
         List<MenuPo> menuPos = menuDao.findByPidIsNull();
-
         // 转换父级菜单
         List<MenuEx> pMenuExs = new ArrayList<>();
         if (ToolsUtils.isNotEmpty(menuPos)) {
@@ -112,13 +114,17 @@ public class MenuServiceImpl implements MenuService {
             // 递归查询子级菜单
             this.childenMenus(pMenuExs, null);
         }
-        return pMenuExs;
+        return menuRedisKit.setMenusTree(pMenuExs);
     }
 
     @Override
     public MenuVo findMenuById(Long id) {
+        MenuVo menuById = menuRedisKit.getMenuById(id);
+        if (menuById != null) {
+            return menuById;
+        }
         Optional<MenuPo> menuPo = menuDao.findById(id);
-        return ConvertUtils.convert(menuPo.orElse(new MenuPo()), MenuVo.class);
+        return menuRedisKit.setMenuById(ConvertUtils.convert(menuPo.orElse(new MenuPo()), MenuVo.class));
     }
 
     @Override
@@ -129,15 +135,21 @@ public class MenuServiceImpl implements MenuService {
         if (null != id) {
             one = menuDao.findById(id).get();
             ConvertUtils.copyNonNullProperties(menuVo, one);
-            // 更新 redis 中的菜单信息
-            commonRoleMenuRedis.updateMeunById(one);
         } else {
             menuVo.setValidInd(true);
             one = ConvertUtils.convert(menuVo, MenuPo.class);
         }
+        // 保存到数据库
         menuDao.save(one);
-
-        return ConvertUtils.convert(one, MenuVo.class);
+        // 更新缓存
+        if (null != id) {
+            roleMenuRedisKit.updateMeunById(one);
+            menuVo = menuRedisKit.updateMenuById(ConvertUtils.convert(one, MenuVo.class));
+        } else {
+            menuVo = menuRedisKit.setMenuById(ConvertUtils.convert(one, MenuVo.class));
+        }
+        menuRedisKit.delMenusTree();
+        return menuVo;
     }
 
     @Override
@@ -154,16 +166,18 @@ public class MenuServiceImpl implements MenuService {
                 menuDao.deleteById(new Long(id));
             }
         });
-        commonRoleMenuRedis.deleteRoleMenuById(ids);
+        roleMenuRedisKit.deleteRoleMenuByIds(ids);
+        menuRedisKit.delMenuByIds(ids);
+        menuRedisKit.delMenusTree();
     }
 
     @Override
-    public Set<MenuEx> findMenuByRole(RolePo rolePo) {
+    public List<MenuEx> findMenuByRole(RolePo rolePo) {
         List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(rolePo.getId());
-        Set<MenuEx> menuPos = roleMenuPos.stream().map(m -> {
+        List<MenuEx> menuPos = roleMenuPos.stream().map(m -> {
             MenuPo menuPo = menuDao.findById(m.getMenuId()).get();
-            return commonRoleMenuRedis.menuPoCoverMenuex(menuPo);
-        }).collect(Collectors.toSet());
+            return roleMenuRedisKit.menuPoCoverMenuex(menuPo);
+        }).collect(Collectors.toList());
         return menuPos;
     }
 
@@ -248,7 +262,7 @@ public class MenuServiceImpl implements MenuService {
             if (menuIds != null && !menuIds.contains(item.getId())) {
                 return;
             }
-            MenuEx ex = commonRoleMenuRedis.menuPoCoverMenuex(item);
+            MenuEx ex = roleMenuRedisKit.menuPoCoverMenuex(item);
             pMenuExs.add(ex);
         });
         pMenuExs.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));

@@ -38,7 +38,7 @@ public interface GoodsSpecValueService extends IService<GoodsSpecValuePo> {
      * @author billow
      * @since 2019-11-27
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 
     /**
      * 通过 SpecKeyId 查询出所有的规格 Value
@@ -48,5 +48,5 @@ public interface GoodsSpecValueService extends IService<GoodsSpecValuePo> {
      * @author LiuYongTao
      * @date 2019/11/29 10:31
      */
-    List<GoodsSpecValueVo> findListBySpecKeyId(String specKeyId);
+    List<GoodsSpecValueVo> findListBySpecKeyId(Long specKeyId);
 }

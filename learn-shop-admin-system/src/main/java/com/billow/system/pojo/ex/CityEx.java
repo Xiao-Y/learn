@@ -2,6 +2,7 @@ package com.billow.system.pojo.ex;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @create 2019-08-04 16:49
  */
 @Data
+@EqualsAndHashCode
 public class CityEx implements Serializable {
 
     @ApiModelProperty("城市 id")

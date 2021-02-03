@@ -3,7 +3,7 @@ package com.billow.system.api.apply;
 import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.service.ApplyInfoService;
 import com.billow.tools.enums.ApplyTypeEnum;
-import com.billow.tools.utlis.UserTools;
+import com.billow.common.utils.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

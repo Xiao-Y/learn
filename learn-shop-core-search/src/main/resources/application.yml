@@ -18,5 +18,6 @@ spring:
     name: learn-shop-core-search
   elasticsearch:
     rest:
+      connection-timeout: 10s
       uris:
         - http://127.0.0.1:9200

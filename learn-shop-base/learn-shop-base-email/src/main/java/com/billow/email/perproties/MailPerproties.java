@@ -2,7 +2,6 @@ package com.billow.email.perproties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * 邮件相关
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @create 2019-08-20 19:39
  */
 @Data
-@Component
 @ConfigurationProperties(prefix = "custom.mail")
 public class MailPerproties {
     // 发送邮件的地址

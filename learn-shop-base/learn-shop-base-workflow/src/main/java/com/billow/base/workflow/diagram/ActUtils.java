@@ -13,7 +13,6 @@ import org.activiti.engine.runtime.Execution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -26,7 +25,6 @@ import java.util.List;
  * @author liuyongtao
  * @create 2019-08-27 8:31
  */
-@Component
 public class ActUtils {
 
     private static Logger logger = LoggerFactory.getLogger(ActUtils.class);

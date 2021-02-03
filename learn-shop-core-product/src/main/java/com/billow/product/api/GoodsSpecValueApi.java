@@ -49,7 +49,7 @@ public class GoodsSpecValueApi {
 
     @ApiOperation(value = "根据id查询规格值表数据")
     @GetMapping(value = "/getById/{id}")
-    public GoodsSpecValueVo getById(@PathVariable("id") String id){
+    public GoodsSpecValueVo getById(@PathVariable("id") Long id){
         GoodsSpecValuePo po = goodsSpecValueService.getById(id);
         return ConvertUtils.convert(po, GoodsSpecValueVo.class);
     }
@@ -64,7 +64,7 @@ public class GoodsSpecValueApi {
 
     @ApiOperation(value = "删除规格值表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") String id){
+    public boolean delById(@PathVariable("id") Long id){
         return goodsSpecValueService.removeById(id);
     }
 
@@ -78,13 +78,13 @@ public class GoodsSpecValueApi {
 
     @ApiOperation("根据ID禁用规格值表数据")
     @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable String id) {
+    public boolean prohibitById(@PathVariable Long id) {
         return goodsSpecValueService.prohibitById(id);
     }
 
     @ApiOperation(value = "通过 SpecKeyId 查询出所有的规格 Value")
     @GetMapping(value = "/findListBySpecKeyId/{specKeyId}")
-    public List<GoodsSpecValueVo> findListBySpecKeyId(@PathVariable("specKeyId") String specKeyId) {
+    public List<GoodsSpecValueVo> findListBySpecKeyId(@PathVariable("specKeyId") Long specKeyId) {
         return goodsSpecValueService.findListBySpecKeyId(specKeyId);
     }
 }

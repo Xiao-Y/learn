@@ -35,7 +35,7 @@ public class GoodsSpuSpecApp {
 
     @ApiOperation(value = "根据 spuId 查询 spu 规格表数据")
     @GetMapping(value = "/findSpuSpec/{spuId}")
-    public List<Map<String, Object>> findSpuSpec(@PathVariable String spuId) {
+    public List<Map<String, Object>> findSpuSpec(@PathVariable Long spuId) {
         return goodsSpuSpecService.findSpuSpec(spuId);
     }
 }

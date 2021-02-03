@@ -84,7 +84,7 @@ public class GoodsSpuSpecApi {
 
     @ApiOperation(value = "根据 spuId 查询 spu 规格Key数据")
     @GetMapping(value = "/findSpuSpecKey/{spuId}")
-    public List<String> findSpuSpecKey(@PathVariable String spuId) {
+    public List<String> findSpuSpecKey(@PathVariable Long spuId) {
         return goodsSpuSpecService.findSpuSpecKey(spuId);
     }
 }

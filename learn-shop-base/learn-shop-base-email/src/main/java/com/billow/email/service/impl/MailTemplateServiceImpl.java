@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.thymeleaf.TemplateEngine;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +29,6 @@ import java.util.Set;
  * @create 2019-08-20 21:09
  */
 @Slf4j
-@Service
 public class MailTemplateServiceImpl implements MailTemplateService {
 
     @Autowired
@@ -141,30 +138,30 @@ public class MailTemplateServiceImpl implements MailTemplateService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void saveMailTemplate(MailTemplateVo permissionVo, String userCode) {
-        String toEmails = permissionVo.getToEmails();
+    public void saveMailTemplate(MailTemplateVo mailTemplateVo, String userCode) {
+        String toEmails = mailTemplateVo.getToEmails();
         if (ToolsUtils.isNotEmpty(toEmails)) {
-            permissionVo.setToEmails(toEmails.replaceAll("\\s*|\t|\r|\n", ""));
+            mailTemplateVo.setToEmails(toEmails.replaceAll("\\s*|\t|\r|\n", ""));
         }
-        permissionVo.setCreateTime(new Date());
-        permissionVo.setUpdateTime(new Date());
-        permissionVo.setUpdaterCode(userCode);
-        permissionVo.setCreatorCode(userCode);
-        MailTemplatePo mailTemplatePo = ConvertUtils.convert(permissionVo, MailTemplatePo.class);
+        mailTemplateVo.setCreateTime(new Date());
+        mailTemplateVo.setUpdateTime(new Date());
+        mailTemplateVo.setUpdaterCode(userCode);
+        mailTemplateVo.setCreatorCode(userCode);
+        MailTemplatePo mailTemplatePo = ConvertUtils.convert(mailTemplateVo, MailTemplatePo.class);
         MailTemplatePo save = mailTemplateDao.save(mailTemplatePo);
-        ConvertUtils.convert(save, permissionVo);
+        ConvertUtils.convert(save, mailTemplateVo);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateMailTemplate(MailTemplateVo permissionVo, String userCode) {
-        String toEmails = permissionVo.getToEmails();
+    public void updateMailTemplate(MailTemplateVo mailTemplateVo, String userCode) {
+        String toEmails = mailTemplateVo.getToEmails();
         if (ToolsUtils.isNotEmpty(toEmails)) {
-            permissionVo.setToEmails(toEmails.replaceAll("\\s*|\t|\r|\n", ""));
+            mailTemplateVo.setToEmails(toEmails.replaceAll("\\s*|\t|\r|\n", ""));
         }
-        permissionVo.setUpdateTime(new Date());
-        permissionVo.setUpdaterCode(userCode);
-        MailTemplatePo mailTemplatePo = ConvertUtils.convert(permissionVo, MailTemplatePo.class);
+        mailTemplateVo.setUpdateTime(new Date());
+        mailTemplateVo.setUpdaterCode(userCode);
+        MailTemplatePo mailTemplatePo = ConvertUtils.convert(mailTemplateVo, MailTemplatePo.class);
         mailTemplateDao.updateById(mailTemplatePo);
     }
 

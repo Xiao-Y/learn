@@ -37,7 +37,7 @@ public interface GoodsSpecKeyService extends IService<GoodsSpecKeyPo> {
      * @author billow
      * @since 2019-11-27
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 
     /**
      * 通过 CategoryId 查询出所有的规格 KEY
@@ -47,7 +47,7 @@ public interface GoodsSpecKeyService extends IService<GoodsSpecKeyPo> {
      * @author LiuYongTao
      * @date 2019/11/29 10:25
      */
-    List<GoodsSpecKeyPo> findListByCategoryId(String categoryId);
+    List<GoodsSpecKeyPo> findListByCategoryId(Long categoryId);
 
     /**
      * 保存一组规格信息

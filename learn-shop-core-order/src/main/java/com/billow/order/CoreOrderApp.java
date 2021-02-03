@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @ EnableEurekaClient 开启客户端发现
@@ -17,7 +16,6 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @EnableFeignClients //(basePackages={"com.billow.remote"})
 @ServletComponentScan
-@ComponentScan("com.billow")
 public class CoreOrderApp {
     public static void main(String[] args) {
         SpringApplication.run(CoreOrderApp.class, args);

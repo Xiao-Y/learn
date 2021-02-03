@@ -37,7 +37,7 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoDao, ShopInfoPo> im
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         ShopInfoPo po = new ShopInfoPo();
         po.setValidInd(false);
         LambdaQueryWrapper<ShopInfoPo> wrapper = Wrappers.lambdaQuery();

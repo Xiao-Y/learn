@@ -1,14 +1,13 @@
 package com.billow.mq.stored.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.mq.stored.vo.MessageWithTime;
 import com.billow.mq.enums.PublisherStatusEnum;
-import com.billow.mq.stored.service.StoredOperationsService;
 import com.billow.mq.stored.dao.StoredOperationsDao;
 import com.billow.mq.stored.po.PublisherPo;
+import com.billow.mq.stored.service.StoredOperationsService;
+import com.billow.mq.stored.vo.MessageWithTime;
 import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -16,9 +15,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by shuai on 2019/5/26.
+ * 保存mq消息
+ *
+ * @author liuyongtao
+ * @since 2021-2-3 12:00
  */
-@Component
 public class StoredOperationsServiceImpl implements StoredOperationsService {
 
     @Autowired
@@ -103,7 +104,7 @@ public class StoredOperationsServiceImpl implements StoredOperationsService {
         List<PublisherPo> publisherPos = storedOperationsDao.findAll(publisherQuery);
         for (PublisherPo publisherPo : publisherPos) {
             // 获取超时的失败消息
-            if (publisherPo.getNextRetry().getTime() < new Date().getTime()) {
+            if (publisherPo.getNextRetry().getTime() < System.currentTimeMillis()) {
                 Message message = JSON.parseObject(publisherPo.getMessage(), Message.class);
                 MessageWithTime messageWithTime = new MessageWithTime(publisherPo.getTryCount(), publisherPo.getExchangeName(),
                         publisherPo.getRoutingKey(), publisherPo.getStatus(), message);

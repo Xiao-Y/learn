@@ -53,6 +53,12 @@ public class TaskUtils {
                 param.put("logId", logId);
                 jobService.sendMQ(scheduleJob.getRoutingKey(), JSONObject.toJSONString(param));
                 break;
+            case JobCst.CLASS_TYPE_FEIGN:
+                url = scheduleJob.getHttpUrl();
+                Map<String, String> body = new HashMap<>();
+                body.put("logId", logId);
+                jobService.httpFeign(url, body);
+                break;
             default:
                 log.error("classType:{},暂未实现", classType);
         }

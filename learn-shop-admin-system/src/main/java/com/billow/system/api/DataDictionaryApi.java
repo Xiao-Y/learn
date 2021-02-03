@@ -15,17 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -40,9 +34,7 @@ import java.util.stream.Collectors;
 @Api(value = "数据字典管理")
 public class DataDictionaryApi extends BaseApi {
 
-    private final static String SYS_MODULE = RedisCst.COMM_DICTIONARY_SYS_MODULE;
     private final static String FIELD_TYPE_KEY = RedisCst.COMM_DICTIONARY_FIELD_TYPE;
-    private final static String SYS_MODULE_LIST = RedisCst.COMM_DICTIONARY_SYS_MODULE_LIST;
 
     @Autowired
     private DataDictionaryService dataDictionaryService;
@@ -55,11 +47,12 @@ public class DataDictionaryApi extends BaseApi {
     @ApiOperation(value = "查询数据字典，指定 systemModule 和 fieldType")
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("systemModule") String systemModule, @PathVariable("fieldType") String fieldType) throws Exception {
-        String redisKey = SYS_MODULE + systemModule;
         // 从 redis 中获取
-        List<DataDictionaryVo> redisData = redisUtils.getArray(redisKey, DataDictionaryVo.class);
+        List<DataDictionaryPo> redisData = redisUtils.getHash(FIELD_TYPE_KEY, systemModule);
         if (ToolsUtils.isNotEmpty(redisData)) {
-            return redisData.stream().filter(f -> f.getFieldType().equals(fieldType)).collect(Collectors.toList());
+            return redisData.stream().filter(f -> f.getFieldType().equals(fieldType))
+                    .map(m -> ConvertUtils.convertIgnoreBase(m, DataDictionaryVo.class))
+                    .collect(Collectors.toList());
         }
         DataDictionaryVo dataDictionaryVo = new DataDictionaryVo();
         dataDictionaryVo.setSystemModule(systemModule);
@@ -67,7 +60,7 @@ public class DataDictionaryApi extends BaseApi {
         dataDictionaryVo.setValidInd(true);
         List<DataDictionaryVo> dataDictionaryVos = dataDictionaryService.findDataDictionaryByCondition(dataDictionaryVo);
         // 保存到 redis 中
-        redisUtils.setObj(redisKey, ConvertUtils.convertIgnoreBase(dataDictionaryVos, DataDictionaryPo.class));
+        redisUtils.setHash(FIELD_TYPE_KEY, systemModule, ConvertUtils.convertIgnoreBase(dataDictionaryVos, DataDictionaryPo.class));
         return dataDictionaryVos;
     }
 
@@ -90,11 +83,9 @@ public class DataDictionaryApi extends BaseApi {
     @ApiOperation("字典下拉字段分类")
     @GetMapping("/findFieldType")
     public List<DataDictionaryPo> findFieldType() {
-        List<String> fieldTypes = this.getRedisValues(FIELD_TYPE_KEY, String.class);
+        List<String> fieldTypes = redisUtils.getHashKeys(RedisCst.COMM_ROUTE_INFO);
         if (ToolsUtils.isEmpty(fieldTypes)) {
             fieldTypes = dataDictionaryService.findFieldType();
-            // 放入缓存中
-            this.setRedisObject(FIELD_TYPE_KEY, fieldTypes);
         }
 
         List<DataDictionaryPo> dataDictionaryPos = new ArrayList<>();
@@ -107,23 +98,18 @@ public class DataDictionaryApi extends BaseApi {
 
         return dataDictionaryPos;
     }
+
     @ApiOperation("字典下拉系统模块")
     @GetMapping("/findSysModule")
     public List<DataDictionaryPo> findSysModule() {
-        List<String> sysModules = this.getRedisValues(SYS_MODULE_LIST, String.class);
-        if (ToolsUtils.isEmpty(sysModules)) {
-            sysModules = dataDictionaryService.findSysModule();
-            // 放入缓存中
-            this.setRedisObject(SYS_MODULE_LIST, sysModules);
-        }
-
-        List<DataDictionaryPo> dataDictionaryPos = new ArrayList<>();
-        sysModules.stream().forEach(sysModule -> {
+        Map<String, String> routeInfoMap = redisUtils.getHashAll(RedisCst.COMM_ROUTE_INFO);
+        List<DataDictionaryPo> dataDictionaryPos = routeInfoMap.entrySet().stream().map(m -> {
             DataDictionaryPo po = new DataDictionaryPo();
-            po.setFieldValue(sysModule);
-            po.setFieldDisplay(sysModule);
-            dataDictionaryPos.add(po);
-        });
+            po.setFieldValue(m.getKey());
+            po.setFieldDisplay(m.getKey());
+            return po;
+        }).collect(Collectors.toList());
+
 
         return dataDictionaryPos;
     }
@@ -148,5 +134,21 @@ public class DataDictionaryApi extends BaseApi {
     public DataDictionaryVo prohibitById(@PathVariable Long id) {
         DataDictionaryVo dataDictionaryVo = dataDictionaryService.prohibitById(id);
         return dataDictionaryVo;
+    }
+
+    @ApiOperation(value = "加载缓存中路由信息")
+    @GetMapping("/findDataRouteCache")
+    public List<DataDictionaryVo> findDataRouteCache() {
+        List<DataDictionaryVo> vos = new ArrayList<>();
+        long id = 0;
+        Map<String, String> routeInfoMap = redisUtils.getHashAll(RedisCst.COMM_ROUTE_INFO);
+        for (Map.Entry<String, String> entry : routeInfoMap.entrySet()) {
+            DataDictionaryVo vo = new DataDictionaryVo();
+            vo.setId(id++);
+            vo.setFieldValue("http://" + entry.getValue());
+            vo.setFieldDisplay(entry.getKey());
+            vos.add(vo);
+        }
+        return vos;
     }
 }

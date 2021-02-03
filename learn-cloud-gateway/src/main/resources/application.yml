@@ -66,6 +66,11 @@ spring:
           uri: lb://learn-shop-core-search
           predicates:
             - Path=/core-search/**
+        - id: core-seckill
+          # lb代表从注册中心获取服务，且已负载均衡方式转发
+          uri: lb://learn-shop-core-seckill
+          predicates:
+            - Path=/core-seckill/**
         - id: public-job
           # lb代表从注册中心获取服务，且已负载均衡方式转发
           uri: lb://learn-shop-public-job

@@ -11,13 +11,11 @@ import com.billow.job.util.JobContextUtil;
 import com.billow.job.util.ToolsUtils;
 import org.quartz.CronScheduleBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-@Service
 public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
 
     @Autowired

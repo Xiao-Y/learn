@@ -5,6 +5,8 @@ import com.billow.job.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 /**
  * 默认实现的自动任务服务类
  *
@@ -30,6 +32,12 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void httpGet(String url) {
+        logger.error(message);
+        throw new RuntimeException(message);
+    }
+
+    @Override
+    public void httpFeign(String url, Map<String, String> body) {
         logger.error(message);
         throw new RuntimeException(message);
     }

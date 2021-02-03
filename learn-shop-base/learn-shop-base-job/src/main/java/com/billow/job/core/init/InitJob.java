@@ -19,7 +19,6 @@ import java.util.List;
  * @date 2017年5月12日 下午6:44:08
  */
 @Slf4j
-@Component
 public class InitJob implements InitializingBean {
 
     @Autowired

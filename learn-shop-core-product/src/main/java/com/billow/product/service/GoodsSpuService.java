@@ -35,7 +35,7 @@ public interface GoodsSpuService extends IService<GoodsSpuPo> {
      * @author billow
      * @since 2019-11-27
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 
     /**
      * 添加或者更新

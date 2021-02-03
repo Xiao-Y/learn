@@ -45,7 +45,16 @@
               </el-col>
             </el-form-item>
           </template>
-          <el-form-item label="HTTP URL" prop="httpUrl" v-if="autoTaskInfo.classType === '3'">
+          <el-form-item label="路由路径" prop="routeInfo" v-if="autoTaskInfo.classType === '5'">
+            <el-col :span="18">
+              <custom-select v-model="autoTaskInfo.methodName"
+                             :datasource="routeInfoSelect"
+                             @change="changeRouteInfo"
+                             placeholder="请选择路由路径">
+              </custom-select>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="HTTP URL" prop="httpUrl" v-if="autoTaskInfo.classType === '3' || autoTaskInfo.classType === '5'">
             <el-col :span="18">
               <el-input v-model="autoTaskInfo.httpUrl" placeholder="请输入内容"/>
             </el-col>
@@ -115,6 +124,9 @@
 
 <script>
   import {SaveAutoTask, CheckAutoTask} from "../../../api/job/jobMag";
+  import {
+      LoadRouteCacheData
+  } from "../../../api/sys/DataDictionaryMag";
 
   import CustomSelect from '../../../components/common/CustomSelect.vue';
   import CustomCronInput from '../../../components/common/CustomCronInput.vue';
@@ -133,7 +145,7 @@
           jobName: "",
           httpUrl: "",
           routingKey: "",
-          jobGroup: "5",
+          jobGroup: "admin-system",
           jobStatus: "1",
           isConcurrent: "1",
           isSendMail: "0",
@@ -150,6 +162,7 @@
         systemModuleSelect: [],
         sendMailSelect: [],
         classTypeSelect: [],
+        routeInfoSelect: [],
         rulesForm: {
           methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
           cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
@@ -171,6 +184,9 @@
       if (this.optionType === 'edit') {
         this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
       }
+      LoadRouteCacheData().then().then(res => {
+          this.routeInfoSelect = res.resData;
+      });
     },
     methods: {
       // 校验提交
@@ -230,6 +246,9 @@
           this.autoTaskInfo.mailReceive = null;
           this.autoTaskInfo.templateId = null;
         }
+      },
+      changeRouteInfo(routeUrl){
+          this.autoTaskInfo.httpUrl = routeUrl;
       },
       // 规则校验：cronExp
       validateCronExp(rule, value, callback) {

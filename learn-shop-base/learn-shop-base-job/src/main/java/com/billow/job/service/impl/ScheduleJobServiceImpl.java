@@ -7,7 +7,6 @@ import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ import java.util.List;
  * @author liuyongtao
  * @create 2018-02-28 9:14
  */
-@Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
 
     @Autowired

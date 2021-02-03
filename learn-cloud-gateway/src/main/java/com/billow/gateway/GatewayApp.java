@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-@ComponentScan("com.billow")
 @EnableConfigurationProperties(SecurityProperties.class)
 public class GatewayApp {
 

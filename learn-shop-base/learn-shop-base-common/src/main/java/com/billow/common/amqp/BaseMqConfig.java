@@ -5,13 +5,15 @@ import com.billow.cloud.common.properties.ExchangeProperties;
 import com.billow.cloud.common.properties.QueueProperties;
 import com.billow.cloud.common.properties.RouteKeyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 /**
+ * 获取 mq 参数的基类
+ *
  * @author liuyongtao
  * @create 2019-09-29 15:53
  */
-@Component
+@Configuration
 public class BaseMqConfig {
 
     @Autowired

@@ -8,8 +8,8 @@
 
 package com.billow.tools.generator;
 
+import cn.hutool.core.lang.Assert;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.Random;

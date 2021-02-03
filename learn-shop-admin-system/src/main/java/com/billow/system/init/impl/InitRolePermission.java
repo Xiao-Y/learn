@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -39,10 +38,12 @@ public class InitRolePermission implements IStartLoading {
     public boolean init() {
         log.info("======== start init Role Permission....");
         executorService.execute(() -> {
+            Map<String, Set<PermissionPo>> map = new HashMap<>();
             List<RolePo> rolePos = roleDao.findAll();
             for (RolePo rolePo : rolePos) {
                 Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
-                redisUtils.setObj(RedisCst.ROLE_PERMISSION_KEY + rolePo.getRoleCode(), permissionPos);
+                map.put(rolePo.getRoleCode(), permissionPos);
+                redisUtils.setHash(RedisCst.ROLE_PERMISSION_KEY, rolePo.getRoleCode(), new ArrayList<>(permissionPos));
             }
             log.info("======== end init Role Permission....");
         });

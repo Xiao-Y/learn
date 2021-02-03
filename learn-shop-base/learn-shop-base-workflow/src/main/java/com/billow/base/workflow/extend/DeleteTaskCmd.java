@@ -20,6 +20,7 @@ public class DeleteTaskCmd extends NeedsActiveTaskCmd<String> {
         super(taskId);
     }
 
+    @Override
     public String execute(CommandContext commandContext, TaskEntity currentTask) {
         // 获取所需服务
         TaskEntityManagerImpl taskEntityManager = (TaskEntityManagerImpl) commandContext.getTaskEntityManager();
@@ -30,6 +31,7 @@ public class DeleteTaskCmd extends NeedsActiveTaskCmd<String> {
         return executionEntity.getId();
     }
 
+    @Override
     public String getSuspendedTaskException() {
         return "挂起的任务不能跳转";
     }

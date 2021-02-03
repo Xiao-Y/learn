@@ -18,7 +18,7 @@ public enum ResCodeEnum {
     /**
      * "0001", "报文不可解析"
      */
-    RESCODE_BAD_REQUEST("0001", "报文不可解析"),
+    RESCODE_BAD_REQUEST("0001", "请求参数不可解析"),
     /**
      * "0002", "报文头错误"
      */
@@ -95,6 +95,22 @@ public enum ResCodeEnum {
      * "0020", "密码错误"
      */
     RESCODE_ERROR_PASSWORD("0020", "密码错误"),
+    /**
+     * "0100", "秒杀成功"
+     */
+    RESCODE_ERROR_KILL_SUCCESS("0100", "秒杀成功"),
+    /**
+     * "0111", "重复秒杀"
+     */
+    RESCODE_ERROR_KILL_REPEAT("0111", "重复秒杀"),
+    /**
+     * "0112", "秒杀结束"
+     */
+    RESCODE_ERROR_KILL_CLOSE("0112", "秒杀结束"),
+    /**
+     * "0113", "库存不足"
+     */
+    RESCODE_ERROR_KILL_EMPTY("0113", "库存不足"),
     /**
      * "8888", "系统服务异常，熔断请求"
      */

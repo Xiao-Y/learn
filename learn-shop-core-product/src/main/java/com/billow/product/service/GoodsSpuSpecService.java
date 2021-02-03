@@ -38,7 +38,7 @@ public interface GoodsSpuSpecService extends IService<GoodsSpuSpecPo> {
      * @author billow
      * @since 2019-11-27
      */
-    boolean prohibitById(String id);
+    boolean prohibitById(Long id);
 
     /**
      * 根据 spuId 查询spu规格表数据
@@ -48,7 +48,7 @@ public interface GoodsSpuSpecService extends IService<GoodsSpuSpecPo> {
      * @author LiuYongTao
      * @date 2019/11/27 11:33
      */
-    List<Map<String, Object>> findSpuSpec(String spuId);
+    List<Map<String, Object>> findSpuSpec(Long spuId);
 
     /**
      * 根据 spuId 查询 spu 规格Key数据
@@ -58,6 +58,6 @@ public interface GoodsSpuSpecService extends IService<GoodsSpuSpecPo> {
      * @author LiuYongTao
      * @date 2019/12/5 16:33
      */
-    List<String> findSpuSpecKey(String spuId);
+    List<String> findSpuSpecKey(Long spuId);
 
 }

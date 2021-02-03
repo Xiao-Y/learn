@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableFeignClients("com.billow")
 @EnableDiscoveryClient
 @SpringBootApplication
-@ComponentScan("com.billow")
 @ServletComponentScan
 public class AdminUserApp {
 

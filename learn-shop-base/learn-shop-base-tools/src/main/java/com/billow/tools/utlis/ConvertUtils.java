@@ -1,24 +1,21 @@
 package com.billow.tools.utlis;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.stereotype.Component;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ReflectUtil;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- * 以静态变量保存Spring ApplicationContext, 可在任何代码任何地方任何时候中取出ApplicaitonContext.
+ * 转换工具
  *
  * @author liuyongtao
  * @date 2017年4月18日 下午3:52:31
  */
-@Component
 public class ConvertUtils {
 
     /**
@@ -38,9 +35,10 @@ public class ConvertUtils {
         try {
             vo = voClass.newInstance();
             String[] ignoreProperties = {FieldUtils.CREATE_TIME, FieldUtils.CREATOR_CODE,
-                    FieldUtils.UPDATER_CODE, FieldUtils.UPDATE_TIME, FieldUtils.VALID_IND
+                    FieldUtils.UPDATER_CODE, FieldUtils.UPDATE_TIME, FieldUtils.VALID_IND,
+                    FieldUtils.PAGE_SIZE, FieldUtils.PAGE_NO, FieldUtils.RECORD_COUNT
             };
-            org.springframework.beans.BeanUtils.copyProperties(po, vo, ignoreProperties);
+            BeanUtil.copyProperties(po, vo, ignoreProperties);
 //            FieldUtils.setValue(vo, FieldUtils.REQUEST_URL, null);
             FieldUtils.setValue(vo, FieldUtils.PAGE_SIZE, null);
             FieldUtils.setValue(vo, FieldUtils.PAGE_NO, null);
@@ -88,7 +86,7 @@ public class ConvertUtils {
         VO vo = null;
         try {
             vo = voClass.newInstance();
-            org.springframework.beans.BeanUtils.copyProperties(po, vo);
+            BeanUtil.copyProperties(po, vo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,7 +110,7 @@ public class ConvertUtils {
             throw new RuntimeException("VO 不能为空");
         }
         try {
-            org.springframework.beans.BeanUtils.copyProperties(po, vo);
+            BeanUtil.copyProperties(po, vo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,13 +137,32 @@ public class ConvertUtils {
     }
 
     /**
+     * Set<PO>Set<vo>深度复制（基本类型）
+     *
+     * @param pos
+     * @param voClass
+     * @param <PO>
+     * @param <VO>
+     * @return
+     */
+    public static <PO, VO> Set<VO> convert(Set<PO> pos, Class<VO> voClass) {
+        Set<VO> vos = new HashSet<>();
+        if (ToolsUtils.isNotEmpty(pos)) {
+            for (PO po : pos) {
+                vos.add(convert(po, voClass));
+            }
+        }
+        return vos;
+    }
+
+    /**
      * 将不为空值的属性从源对象中复制到目标对象中
      *
      * @param src    : 源对象
      * @param target :目标对象
      */
     public static <SRC, TARGET> void copyNonNullProperties(SRC src, TARGET target) {
-        BeanUtils.copyProperties(src, target, getNullProperties(src));
+        BeanUtil.copyProperties(src, target, getNullProperties(src));
     }
 
     /**
@@ -155,13 +172,12 @@ public class ConvertUtils {
      * @return
      */
     private static <SRC> String[] getNullProperties(SRC src) {
-        BeanWrapper srcBean = new BeanWrapperImpl(src);
-        PropertyDescriptor[] pds = srcBean.getPropertyDescriptors();
+        Field[] fields = ReflectUtil.getFields(src.getClass());
         Set<String> emptyName = new HashSet<>();
-        for (PropertyDescriptor p : pds) {
-            Object srcValue = srcBean.getPropertyValue(p.getName());
-            if (srcValue == null) {
-                emptyName.add(p.getName());
+        for (Field field : fields) {
+            Object value = ReflectUtil.getFieldValue(src, field);
+            if (value == null) {
+                emptyName.add(field.getName());
             }
         }
         String[] result = new String[emptyName.size()];

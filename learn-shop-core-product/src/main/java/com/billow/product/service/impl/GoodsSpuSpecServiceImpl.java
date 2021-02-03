@@ -50,7 +50,7 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsSpuSpecPo po = new GoodsSpuSpecPo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsSpuSpecPo> wrapper = Wrappers.lambdaQuery();
@@ -59,7 +59,7 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
     }
 
     @Override
-    public List<Map<String, Object>> findSpuSpec(String spuId) {
+    public List<Map<String, Object>> findSpuSpec(Long spuId) {
         List<Map<String, Object>> tree = new ArrayList<>();
         LambdaQueryWrapper<GoodsSpuSpecPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSpuSpecPo::getSpuId, spuId);
@@ -94,7 +94,7 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
     }
 
     @Override
-    public List<String> findSpuSpecKey(String spuId) {
+    public List<String> findSpuSpecKey(Long spuId) {
         LambdaQueryWrapper<GoodsSpuSpecPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSpuSpecPo::getSpuId, spuId);
         List<GoodsSpuSpecPo> goodsSpuSpecPos = goodsSpuSpecDao.selectList(wrapper);

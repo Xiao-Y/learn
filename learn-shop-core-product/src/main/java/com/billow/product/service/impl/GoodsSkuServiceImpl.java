@@ -60,7 +60,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
     }
 
     @Override
-    public boolean prohibitById(String id) {
+    public boolean prohibitById(Long id) {
         GoodsSkuPo po = new GoodsSkuPo();
         po.setValidInd(false);
         LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
@@ -69,7 +69,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
     }
 
     @Override
-    public List<Map<String, Object>> findGoodsSkuSpec(String spuId) {
+    public List<Map<String, Object>> findGoodsSkuSpec(Long spuId) {
         List<Map<String, Object>> list = new ArrayList<>();
 
         LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
@@ -96,7 +96,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
     }
 
     @Override
-    public List<GoodsSkuVo> findGoodsSku(String spuId) {
+    public List<GoodsSkuVo> findGoodsSku(Long spuId) {
 
         List<GoodsSkuVo> list = new ArrayList<>();
         Map<String, GoodsSpecKeyPo> specKey = new HashMap<>();
@@ -158,7 +158,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
         po.setSkuNo(NumUtil.makeNum("SK"));
         po.setShopId("0");
         goodsSkuDao.insert(po);
-        String skuId = po.getId();
+        Long skuId = po.getId();
 //        // 删除 sku 下的所有规格
 //        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
 //        wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
@@ -181,7 +181,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
         GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
         goodsSkuDao.updateById(po);
 
-        String skuId = po.getId();
+        Long skuId = po.getId();
         // 删除 sku 下的所有规格
         LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
