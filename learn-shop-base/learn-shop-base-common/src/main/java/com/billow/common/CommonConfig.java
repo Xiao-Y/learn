@@ -2,7 +2,7 @@ package com.billow.common;
 
 import com.billow.common.redis.RedisUtils;
 import com.billow.common.redis.RedissLockUtil;
-import com.billow.tools.utlis.UserTools;
+import com.billow.common.utils.UserTools;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

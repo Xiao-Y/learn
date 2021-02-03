@@ -1,5 +1,6 @@
-package com.billow.tools.utlis;
+package com.billow.common.utils;
 
+import com.billow.tools.utlis.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

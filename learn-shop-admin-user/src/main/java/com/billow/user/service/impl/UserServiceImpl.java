@@ -5,7 +5,7 @@ import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.billow.tools.utlis.UserTools;
+import com.billow.common.utils.UserTools;
 import com.billow.user.dao.UserDao;
 import com.billow.user.dao.UserRoleDao;
 import com.billow.user.pojo.ex.RoleEx;

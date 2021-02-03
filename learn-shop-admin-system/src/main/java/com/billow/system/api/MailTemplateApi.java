@@ -3,7 +3,7 @@ package com.billow.system.api;
 import com.billow.email.common.CustomPage;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import com.billow.email.service.MailTemplateService;
-import com.billow.tools.utlis.UserTools;
+import com.billow.common.utils.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
