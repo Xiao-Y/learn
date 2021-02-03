@@ -1,4 +1,4 @@
-package com.billow.aop.global.advice;
+package com.billow.aop.advice;
 
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;

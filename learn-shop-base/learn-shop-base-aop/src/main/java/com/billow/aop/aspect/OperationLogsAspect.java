@@ -1,4 +1,4 @@
-package com.billow.aop.global.aspect;
+package com.billow.aop.aspect;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -7,26 +7,24 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 @Aspect
 @Slf4j
 public class OperationLogsAspect {
 
-    @Pointcut("@annotation(com.billow.aop.global.annotation.OperationLog)")
+    @Pointcut("@annotation(com.billow.aop.annotation.OperationLog)")
     public void pointcut() {
     }
 
     @Around(value = "pointcut()")
     public Object operationLogController(ProceedingJoinPoint point) throws Throwable {
 
-        log.info("/****请求开始*******************************/");
+        log.info("/**************请求开始*********************/");
         long startTime = System.currentTimeMillis();
         //拦截目标
         Object[] args = point.getArgs();
@@ -38,7 +36,7 @@ public class OperationLogsAspect {
         } finally {
             long endTime = System.currentTimeMillis();
             log.info("总耗时：{}", endTime - startTime);
-            log.info("/****请求结束*******************************/");
+            log.info("/**************请求结束********************/");
         }
     }
 

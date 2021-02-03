@@ -1,6 +1,6 @@
 package com.billow.system.api;
 
-import com.billow.aop.global.annotation.OperationLog;
+import com.billow.aop.annotation.OperationLog;
 import com.billow.common.base.BaseApi;
 import com.billow.system.pojo.ex.HomeEx;
 import com.billow.system.pojo.ex.MenuEx;

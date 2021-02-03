@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2021-2-3 11:32
  */
 @Configuration
-public class CommonConfig {
+public class BaseCommonConfig {
 
     /**
      * redis分布式锁帮助类

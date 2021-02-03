@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.billow.common.CommonConfig,\
+com.billow.common.BaseCommonConfig,\
 com.billow.common.amqp.MqExecuteSqlConfig,\
 com.billow.common.amqp.MqRunJobTestConfig,\
 com.billow.common.amqp.RabbitMqSendMailConfig,\

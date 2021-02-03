@@ -1,12 +1,10 @@
 package com.billow.common.amqp;
 
 import com.billow.cloud.common.properties.ConfigCommonProperties;
-import com.billow.cloud.common.properties.DruidDSProperties;
 import com.billow.cloud.common.properties.ExchangeProperties;
 import com.billow.cloud.common.properties.QueueProperties;
 import com.billow.cloud.common.properties.RouteKeyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -16,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
  * @create 2019-09-29 15:53
  */
 @Configuration
-@EnableConfigurationProperties(ConfigCommonProperties.class) // 用于@Autowired注入
 public class BaseMqConfig {
 
     @Autowired
