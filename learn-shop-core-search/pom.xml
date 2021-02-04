@@ -23,35 +23,17 @@
     <dependencies>
         <dependency>
             <groupId>com.billow</groupId>
-            <artifactId>learn-cloud-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-tools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
             <artifactId>core-product-interface</artifactId>
         </dependency>
-        <!-- 远程连接 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <!-- 监控 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <!-- 重试机制 ，必须配，否则重试不生效 -->
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
-        <!-- 注册中心 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-common</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <groupId>mysql</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
