@@ -1,4 +1,4 @@
-package com.billow.search.pojo;
+package com.billow.search.constant;
 
 public class AnalyzerConstant {
 

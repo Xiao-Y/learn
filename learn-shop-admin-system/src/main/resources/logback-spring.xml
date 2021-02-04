@@ -3,7 +3,7 @@
     <!-- spring boot默认配置 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <springProperty scope="context" name="APP_PORT" source="server.port"/>
-    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="bootstrap" />
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="bootstrap"/>
 
     <!--  日志路径  -->
     <property name="LOG_HOME" value="/usr/local/app/logs"/>
@@ -18,10 +18,10 @@
 
     <!--  控制台日志格式  -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} [${APP_NAME} - ${APP_PORT}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} [${APP_NAME} - ${APP_PORT}] [%X{traceid}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     <!--  文件日志格式  -->
     <property name="FILE_LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${APP_NAME} - ${APP_PORT}] [%thread] %-5level %logger{50} - %msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${APP_NAME}] [${APP_PORT}] [%X{traceid}] [%thread] %-5level %logger{50} : %msg%n"/>
 
 
     <!--  控制台日志  -->
@@ -118,6 +118,39 @@
         </filter>
     </appender>
 
+    <!--日志存储位置（读取配置文件的路径）-->
+    <springProperty name="rabbitmqHost" source="config.mq.host" defaultValue="119.23.27.78"/>
+    <springProperty name="rabbitmqPort" source="config.mq.port" defaultValue="5672"/>
+    <springProperty name="rabbitmqVirtualHost" source="config.mq.virtual-host" defaultValue="/learn-default"/>
+    <springProperty name="rabbitmqUsername" source="config.mq.username" defaultValue="admin"/>
+    <springProperty name="rabbitmqPassword" source="config.mq.password" defaultValue="admin123"/>
+    <springProperty name="rabbitmqExchange" source="config.mq.exchange.logCollect" defaultValue="logCollectExchange"/>
+    <springProperty name="rabbitmqRouteKey" source="config.mq.routeKey.logCollect" defaultValue="logCollectRouteKey"/>
+
+    <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <encoder>
+            <!-- 文件日志格式 -->
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+        <host>${rabbitmqHost}</host>
+        <port>${rabbitmqPort}</port>
+        <virtualHost>${rabbitmqVirtualHost}</virtualHost>
+        <username>${rabbitmqUsername}</username>
+        <password>${rabbitmqPassword}</password>
+        <exchangeName>${rabbitmqExchange}</exchangeName>
+        <routingKeyPattern>${rabbitmqRouteKey}</routingKeyPattern>
+
+        <declareExchange>false</declareExchange>
+        <exchangeType>direct</exchangeType>
+        <generateId>true</generateId>
+        <charset>UTF-8</charset>
+        <durable>false</durable>
+        <deliveryMode>NON_PERSISTENT</deliveryMode>
+    </appender>
+
+
     <logger name="com.alibaba.nacos.client.config.impl" level="ERROR"/>
     <logger name="com.alibaba.cloud.sentinel.datasource.converter" level="ERROR"/>
     <logger name="com.billow" level="info"/>
@@ -129,5 +162,6 @@
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="AMQP"/>
     </root>
 </configuration>

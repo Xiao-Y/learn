@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class ExchangeProperties {
 
+    private String logCollect;
     private String executeSql;
     private String runJob;
 

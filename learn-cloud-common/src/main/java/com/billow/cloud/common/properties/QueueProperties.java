@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class QueueProperties {
 
+    private String logCollect;
     private String executeSql;
     private String runJobTest;
 

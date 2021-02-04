@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class RouteKeyProperties {
 
+    private String logCollect;
     private String executeSql;
     private String runJobTest;
 

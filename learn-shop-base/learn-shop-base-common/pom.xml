@@ -51,11 +51,6 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
-        <!-- alidruid做数据源和监控 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
         <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
