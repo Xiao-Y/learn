@@ -214,8 +214,25 @@ public class CodeGenerator {
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setInclude("sk_seckill", "sk_success_killed");
-        strategy.setTablePrefix("sk_");
+//        strategy.setInclude("sk_seckill", "sk_success_killed");
+//        strategy.setTablePrefix("sk_");
+
+        strategy.setInclude("p_goods_brand", "p_goods_category"
+                , "p_goods_category_brand"
+                , "p_goods_safeguard"
+                , "p_goods_sku"
+                , "p_goods_sku_safeguard"
+                , "p_goods_sku_spec_value"
+                , "p_goods_spec_key"
+                , "p_goods_spec_value"
+                , "p_goods_specification"
+                , "p_goods_spu"
+                , "p_goods_spu_detail"
+                , "p_goods_spu_spec"
+
+
+        );
+        strategy.setTablePrefix("p_");
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);
         strategy.setEntityTableFieldAnnotationEnable(true);
         return strategy;
@@ -236,7 +253,8 @@ public class CodeGenerator {
         String parent = "";
         if (strategy.getTablePrefix()[0].equals("p_")) {
             parent = "product";
-        }if (strategy.getTablePrefix()[0].equals("sk_")) {
+        }
+        if (strategy.getTablePrefix()[0].equals("sk_")) {
             parent = "seckill";
         }
         pc.setParent("com.billow");

@@ -31,5 +31,5 @@ alipay:
 #    signType: RSA2 #商户生成签名字符串所使用的签名算法类型,默认：RSA2
 mybatis-plus:
   configuration:
-    cache-enabled: true
+    cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

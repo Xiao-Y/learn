@@ -79,7 +79,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
         List<GoodsSkuPo> goodsSkuPos = goodsSkuDao.selectList(wrapper);
         goodsSkuPos.forEach(goodsSkuPo -> {
             Map<String, Object> value = new HashMap<>();
-            value.put("id", goodsSkuPo.getId());
+            value.put("id", goodsSkuPo.getId().toString());
             value.put("price", goodsSkuPo.getPrice());
             value.put("stock_num", goodsSkuPo.getStock());
 

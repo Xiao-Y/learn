@@ -8,11 +8,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.dao.GoodsSpecValueDao;
 import com.billow.product.dao.GoodsSpuSpecDao;
+import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpuSpecPo;
 import com.billow.product.pojo.vo.GoodsSpuSpecVo;
+import com.billow.product.service.GoodsSkuSpecValueService;
 import com.billow.product.service.GoodsSpuSpecService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +44,8 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
     private GoodsSpecKeyDao goodsSpecKeyDao;
     @Autowired
     private GoodsSpecValueDao goodsSpecValueDao;
+    @Autowired
+    private GoodsSkuSpecValueService goodsSkuSpecValueService;
 
     @Override
     public IPage<GoodsSpuSpecPo> findListByPage(GoodsSpuSpecVo goodsSpuSpecVo) {
@@ -71,28 +77,41 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
         goodsSpuSpecPos.forEach(goodsSpuSpecPo -> {
             Long specKeyId = goodsSpuSpecPo.getSpecKeyId();
             Map<String, Object> treeVal = new HashMap<>();
-            treeVal.put("k_s", specKeyId.toString());
-            // 查询规格名称
-            GoodsSpecKeyPo goodsSpecKeyPo = goodsSpecKeyDao.selectById(specKeyId);
-            treeVal.put("k", goodsSpecKeyPo.getSpecName());
+
             // 查询规格值
             List<Map<String, Object>> v = new ArrayList<>();
-            LambdaQueryWrapper<GoodsSpecValuePo> wrapper1 = Wrappers.lambdaQuery();
-            wrapper1.eq(GoodsSpecValuePo::getSpecKeyId, specKeyId);
-            List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectList(wrapper1);
-            goodsSpecValuePos.forEach(goodsSpecValuePo -> {
-                Map<String, Object> specValueVal = new HashMap<>();
-                specValueVal.put("id", goodsSpecValuePo.getId());
-                specValueVal.put("name", goodsSpecValuePo.getSpecValue());
-                specValueVal.put("imgUrl", "https://img.yzcdn.cn/1.jpg");
-                specValueVal.put("previewImgUrl", "https://img.yzcdn.cn/1p.jpg");
-                v.add(specValueVal);
-            });
-
-            treeVal.put("v", v);
-            tree.add(treeVal);
+            LambdaQueryWrapper<GoodsSkuSpecValuePo> queryWrapper = Wrappers.lambdaQuery();
+            queryWrapper.eq(GoodsSkuSpecValuePo::getSpuId, spuId)
+                    .eq(GoodsSkuSpecValuePo::getSpecKeyId, specKeyId);
+            List<GoodsSkuSpecValuePo> list = goodsSkuSpecValueService.list(queryWrapper);
+            Set<Long> specValueIds = list.stream().map(m -> m.getSpecValueId()).collect(Collectors.toSet());
+            if (CollectionUtils.isNotEmpty(specValueIds)) {
+                LambdaQueryWrapper<GoodsSpecValuePo> query = Wrappers.lambdaQuery();
+                query.in(GoodsSpecValuePo::getId, specValueIds);
+                List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectList(query);
+//            LambdaQueryWrapper<GoodsSpecValuePo> wrapper1 = Wrappers.lambdaQuery();
+//            wrapper1.eq(GoodsSpecValuePo::getSpecKeyId, specKeyId);
+//            List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectList(wrapper1);
+                goodsSpecValuePos.forEach(goodsSpecValuePo -> {
+                    Map<String, Object> specValueVal = new HashMap<>();
+                    specValueVal.put("id", goodsSpecValuePo.getId().toString());
+                    specValueVal.put("name", goodsSpecValuePo.getSpecValue());
+                    specValueVal.put("imgUrl", "https://img.yzcdn.cn/1.jpg");
+                    specValueVal.put("previewImgUrl", "https://img.yzcdn.cn/1p.jpg");
+                    v.add(specValueVal);
+                });
+                // 规格唯一标识
+                treeVal.put("k_s", specKeyId.toString());
+                // 查询规格名称
+                GoodsSpecKeyPo goodsSpecKeyPo = goodsSpecKeyDao.selectById(specKeyId);
+                treeVal.put("k", goodsSpecKeyPo.getSpecName());
+            }
+            // 不为空时才加入
+            if (CollectionUtils.isNotEmpty(v)) {
+                treeVal.put("v", v);
+                tree.add(treeVal);
+            }
         });
-
         return tree;
     }
 
