@@ -33,6 +33,8 @@ public class GoodsSkuSpecValueServiceImpl extends ServiceImpl<GoodsSkuSpecValueD
         LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<GoodsSkuSpecValuePo> selectPage = goodsSkuSpecValueDao.selectPage(page, wrapper);
+        Integer integer = goodsSkuSpecValueDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 

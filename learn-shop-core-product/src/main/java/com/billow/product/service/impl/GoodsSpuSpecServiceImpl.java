@@ -46,7 +46,10 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
         IPage<GoodsSpuSpecPo> page = new Page<>(goodsSpuSpecVo.getPageNo(), goodsSpuSpecVo.getPageSize());
         LambdaQueryWrapper<GoodsSpuSpecPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
-        return goodsSpuSpecDao.selectPage(page, wrapper);
+        IPage<GoodsSpuSpecPo> selectPage = goodsSpuSpecDao.selectPage(page, wrapper);
+        Integer integer = goodsSpuSpecDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
+        return selectPage;
     }
 
     @Override
@@ -66,9 +69,9 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
         // 查询出商品规格
         List<GoodsSpuSpecPo> goodsSpuSpecPos = goodsSpuSpecDao.selectList(wrapper);
         goodsSpuSpecPos.forEach(goodsSpuSpecPo -> {
-            String specKeyId = goodsSpuSpecPo.getSpecKeyId();
+            Long specKeyId = goodsSpuSpecPo.getSpecKeyId();
             Map<String, Object> treeVal = new HashMap<>();
-            treeVal.put("k_s", specKeyId);
+            treeVal.put("k_s", specKeyId.toString());
             // 查询规格名称
             GoodsSpecKeyPo goodsSpecKeyPo = goodsSpecKeyDao.selectById(specKeyId);
             treeVal.put("k", goodsSpecKeyPo.getSpecName());
@@ -94,7 +97,7 @@ public class GoodsSpuSpecServiceImpl extends ServiceImpl<GoodsSpuSpecDao, GoodsS
     }
 
     @Override
-    public List<String> findSpuSpecKey(Long spuId) {
+    public List<Long> findSpuSpecKey(Long spuId) {
         LambdaQueryWrapper<GoodsSpuSpecPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSpuSpecPo::getSpuId, spuId);
         List<GoodsSpuSpecPo> goodsSpuSpecPos = goodsSpuSpecDao.selectList(wrapper);

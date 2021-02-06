@@ -58,6 +58,6 @@ public interface GoodsSpuSpecService extends IService<GoodsSpuSpecPo> {
      * @author LiuYongTao
      * @date 2019/12/5 16:33
      */
-    List<String> findSpuSpecKey(Long spuId);
+    List<Long> findSpuSpecKey(Long spuId);
 
 }

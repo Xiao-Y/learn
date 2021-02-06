@@ -1,5 +1,6 @@
-package com.billow.seckill.config;
+package com.billow.aop.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -26,6 +27,8 @@ public class WebConfig implements WebMvcConfigurer {
 
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
+        // 忽略不存在的属性
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         // long 转 string
         SimpleModule simpleModule = new SimpleModule();
@@ -35,5 +38,6 @@ public class WebConfig implements WebMvcConfigurer {
         objectMapper.registerModule(simpleModule);
         converter.setObjectMapper(objectMapper);
         converters.add(converter);
+
     }
 }

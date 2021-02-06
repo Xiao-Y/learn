@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.billow.aop.config.AopConfig
+com.billow.aop.config.AopConfig,\
+com.billow.aop.config.WebConfig

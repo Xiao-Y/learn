@@ -1,15 +1,10 @@
 package com.billow.product.config;
 
-import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import org.springframework.context.annotation.Configuration;
+
 //import com.billow.alipay.scan.config.AliPayScanConfig;
 //import com.billow.alipay.scan.service.AliPayScanService;
 //import com.billow.alipay.scan.service.impl.AliPayScanServiceImpl;
-import com.billow.mybatis.handler.AuditMetaObjectHandler;
-import com.billow.product.properties.AliPayScanProperties;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author liuyongtao
@@ -17,31 +12,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class BeanConfig {
-
-    /**
-     * 审计数据插件
-     *
-     * @return AuditMetaObjectHandler
-     */
-    @Bean
-    @ConditionalOnMissingBean(name = "auditMetaObjectHandler")
-    public AuditMetaObjectHandler auditMetaObjectHandler() {
-        return new AuditMetaObjectHandler();
-    }
-
-    /**
-     * mybatis 分页插件
-     *
-     * @return com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor
-     * @author LiuYongTao
-     * @date 2019/11/1 10:41
-     */
-    @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        PaginationInterceptor page = new PaginationInterceptor();
-        page.setDialectType(DbType.MYSQL.getDb());
-        return page;
-    }
 
     /**
      * 支付宝，扫码支付

@@ -174,11 +174,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<MenuEx> findMenuByRole(RolePo rolePo) {
         List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(rolePo.getId());
-        List<MenuEx> menuPos = roleMenuPos.stream().map(m -> {
+        Set<MenuEx> menuPos = roleMenuPos.stream().map(m -> {
             MenuPo menuPo = menuDao.findById(m.getMenuId()).get();
             return roleMenuRedisKit.menuPoCoverMenuex(menuPo);
-        }).collect(Collectors.toList());
-        return menuPos;
+        }).collect(Collectors.toSet());
+        return new ArrayList<>(menuPos);
     }
 
     @Override

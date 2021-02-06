@@ -1,9 +1,8 @@
 package com.billow.product.pojo.po;
 
-import com.billow.mybatis.pojo.BasePo;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,38 +11,48 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * sku表
+ * sku表（stock keeping uint 库存量单位）
  * </p>
  *
  * @author billow
- * @since 2019-11-29
+ * @since 2021-02-05
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("p_goods_sku")
-@ApiModel(value="GoodsSkuPo对象", description="sku表")
+@ApiModel(value="GoodsSkuPo对象", description="sku表（stock keeping uint 库存量单位）")
 public class GoodsSkuPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "spu_id")
+    @TableField("spu_id")
+    private Long spuId;
+
     @ApiModelProperty(value = "sku编号,唯一")
+    @TableField("sku_no")
     private String skuNo;
 
+    @ApiModelProperty(value = "商品标题")
+    @TableField("title")
+    private String title;
+
     @ApiModelProperty(value = "sku名称(冗余spu_name)")
+    @TableField("sku_name")
     private String skuName;
 
-    @ApiModelProperty(value = "售价")
+    @ApiModelProperty(value = "销售价格，单位为分")
+    @TableField("price")
     private Integer price;
 
     @ApiModelProperty(value = "库存")
+    @TableField("stock")
     private Integer stock;
 
-    @ApiModelProperty(value = "商铺id,为0表示自营")
-    private String shopId;
-
-    @ApiModelProperty(value = "spu_id")
-    private String spuId;
+    @ApiModelProperty(value = "商品的图片，多个图片以‘,’分割")
+    @TableField("images")
+    private String images;
 
 
 }

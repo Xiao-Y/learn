@@ -57,6 +57,8 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
                 .eq(ToolsUtils.isNotEmpty(goodsSpuVo.getBrandId()), GoodsSpuPo::getBrandId, goodsSpuVo.getBrandId())
                 .eq(ToolsUtils.isNotEmpty(goodsSpuVo.getCategoryId()), GoodsSpuPo::getCategoryId, goodsSpuVo.getCategoryId());
         IPage<GoodsSpuPo> selectPage = goodsSpuDao.selectPage(page, wrapper);
+        Integer integer = goodsSpuDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 
@@ -80,12 +82,12 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
         }
         this.saveOrUpdate(po);
 
-        List<String> specKeys = goodsSpuVo.getSpecKeys();
+        List<Long> specKeys = goodsSpuVo.getSpecKeys();
         if (ToolsUtils.isNotEmpty(id)) {
             // 查询出原始的商品规格key
-            List<String> spuSpecKey = goodsSpuSpecService.findSpuSpecKey(id);
+            List<Long> spuSpecKey = goodsSpuSpecService.findSpuSpecKey(id);
             // 获取需要删除的规格key
-            List<String> delSpecKeys = spuSpecKey.stream().filter(f -> !specKeys.contains(f)).collect(Collectors.toList());
+            List<Long> delSpecKeys = spuSpecKey.stream().filter(f -> !specKeys.contains(f)).collect(Collectors.toList());
             if (ToolsUtils.isNotEmpty(delSpecKeys)) {
                 // 通过规格key 获取 所有涉及到的 sku
                 LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();

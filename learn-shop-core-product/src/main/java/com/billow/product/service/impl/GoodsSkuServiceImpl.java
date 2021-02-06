@@ -56,6 +56,8 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
         LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<GoodsSkuPo> selectPage = goodsSkuDao.selectPage(page, wrapper);
+        Integer integer = goodsSkuDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 
@@ -86,7 +88,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
             wrapper1.eq(GoodsSkuSpecValuePo::getSkuId, goodsSkuPo.getId());
             List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = goodsSkuSpecValueDao.selectList(wrapper1);
             goodsSkuSpecValuePos.forEach(goodsSkuSpecValuePo -> {
-                value.put(goodsSkuSpecValuePo.getSpecKeyId(), goodsSkuSpecValuePo.getSpecValueId());
+                value.put(goodsSkuSpecValuePo.getSpecKeyId().toString(), goodsSkuSpecValuePo.getSpecValueId());
             });
 
             list.add(value);
@@ -99,8 +101,8 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
     public List<GoodsSkuVo> findGoodsSku(Long spuId) {
 
         List<GoodsSkuVo> list = new ArrayList<>();
-        Map<String, GoodsSpecKeyPo> specKey = new HashMap<>();
-        Map<String, GoodsSpecValuePo> specValue = new HashMap<>();
+        Map<Long, GoodsSpecKeyPo> specKey = new HashMap<>();
+        Map<Long, GoodsSpecValuePo> specValue = new HashMap<>();
 
         LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSkuPo::getSpuId, spuId);
@@ -120,7 +122,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
 
                 // 获取规格对应的值
                 GoodsSpecKeyPo goodsSpecKeyPo;
-                String specKeyId = goodsSkuSpecValuePo.getSpecKeyId();
+                Long specKeyId = goodsSkuSpecValuePo.getSpecKeyId();
                 if (specKey.containsKey(specKeyId)) {
                     goodsSpecKeyPo = specKey.get(specKeyId);
                 } else {
@@ -129,7 +131,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
                 }
 
                 GoodsSpecValuePo goodsSpecValuePo;
-                String specValueId = goodsSkuSpecValuePo.getSpecValueId();
+                Long specValueId = goodsSkuSpecValuePo.getSpecValueId();
                 if (specValue.containsKey(specValueId)) {
                     goodsSpecValuePo = specValue.get(specValueId);
                 } else {
@@ -156,7 +158,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
         // 插入 sku
         GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
         po.setSkuNo(NumUtil.makeNum("SK"));
-        po.setShopId("0");
+//        po.setShopId("0");
         goodsSkuDao.insert(po);
         Long skuId = po.getId();
 //        // 删除 sku 下的所有规格

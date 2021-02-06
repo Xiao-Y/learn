@@ -1,9 +1,8 @@
 package com.billow.product.pojo.po;
 
-import com.billow.mybatis.pojo.BasePo;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author billow
- * @since 2019-11-29
+ * @since 2021-02-05
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,16 +27,16 @@ public class GoodsSpecKeyPo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "规格编号")
+    @TableField("spec_no")
     private String specNo;
 
     @ApiModelProperty(value = "规格名称")
+    @TableField("spec_name")
     private String specName;
 
     @ApiModelProperty(value = "规格排序")
+    @TableField("key_sort")
     private Long keySort;
-
-    @ApiModelProperty(value = "分类id")
-    private String categoryId;
 
 
 }

@@ -14,9 +14,9 @@ import java.util.Enumeration;
  * @author liuyongtao
  * @create 2019-07-30 8:49
  */
-public class ＭybatisUserTools {
+public class MybatisUserTools {
 
-    private Logger logger = LoggerFactory.getLogger(ＭybatisUserTools.class);
+    private Logger logger = LoggerFactory.getLogger(MybatisUserTools.class);
 
     public static String BEARER_TYPE = "Bearer";
     public static String ACCESS_TOKEN = "access_token";

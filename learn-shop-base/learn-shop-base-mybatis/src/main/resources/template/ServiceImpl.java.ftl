@@ -35,6 +35,11 @@ public class ${table.serviceImplName} extends ServiceImpl<${table.mapperName}, $
         LambdaQueryWrapper<${entity}> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<${entity}> selectPage = ${table.mapperName?uncap_first}.selectPage(page, wrapper);
+        <#if enableCache>
+        // 查询总条数
+        Integer total = ${table.mapperName?uncap_first}.selectCount(wrapper);
+        selectPage.setTotal(total);
+        </#if>
         return selectPage;
     }
 

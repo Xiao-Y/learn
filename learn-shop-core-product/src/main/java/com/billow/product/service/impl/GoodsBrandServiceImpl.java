@@ -33,6 +33,8 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandDao, GoodsBrand
         LambdaQueryWrapper<GoodsBrandPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<GoodsBrandPo> selectPage = goodsBrandDao.selectPage(page, wrapper);
+        Integer integer = goodsBrandDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 

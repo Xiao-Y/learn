@@ -1,7 +1,7 @@
 package com.billow.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.billow.mybatis.utils.ＭybatisUserTools;
+import com.billow.mybatis.utils.MybatisUserTools;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
     public static final String VALID_IND = "validInd";
 
     @Autowired
-    private ＭybatisUserTools ｍybatisUserTools;
+    private MybatisUserTools mybatisUserTools;
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -39,7 +39,7 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
             this.setFieldValByName(VALID_IND, true, metaObject);
         }
 
-        String username = ｍybatisUserTools.getCurrentUserCode();
+        String username = mybatisUserTools.getCurrentUserCode();
         if (StringUtils.isNotEmpty(username)) {
             if (metaObject.hasSetter(CREATOR_CODE)) {
                 this.setFieldValByName(CREATOR_CODE, username, metaObject);
@@ -56,7 +56,7 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
             this.setFieldValByName(UPDATE_TIME, new Date(), metaObject);
         }
         if (metaObject.hasSetter(UPDATER_CODE)) {
-            String username = ｍybatisUserTools.getCurrentUserCode();
+            String username = mybatisUserTools.getCurrentUserCode();
             this.setFieldValByName(UPDATER_CODE, username, metaObject);
         }
     }

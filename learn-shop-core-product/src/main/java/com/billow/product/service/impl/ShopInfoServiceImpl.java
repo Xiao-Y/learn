@@ -33,6 +33,8 @@ public class ShopInfoServiceImpl extends ServiceImpl<ShopInfoDao, ShopInfoPo> im
         LambdaQueryWrapper<ShopInfoPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<ShopInfoPo> selectPage = shopInfoDao.selectPage(page, wrapper);
+        Integer integer = shopInfoDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 

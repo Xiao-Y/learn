@@ -159,12 +159,12 @@
         created() {
             this.show = this.showSku;
 
-            var goodsId = "1";
+            var goodsId = "2";
 
             // 查询商品信息
             GetById(goodsId).then(res=>{
                 this.sku.price = res.resData.lowPrice/100;
-                this.sku.stock_num = res.resData.stock;
+                this.sku.stock_num = parseInt(res.resData.stock);
                 this.sku.collection_id = res.resData.id;
                 this.goods.title = res.resData.goodsName;
             });

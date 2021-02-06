@@ -103,6 +103,7 @@ secure:
     - /course/coursebase/**
     - /swagger-ui/**
     - /favicon.ico
+    - /**/*App/**
   need-check:
     - "/**/*Api/**"
     - "/*Api/**"

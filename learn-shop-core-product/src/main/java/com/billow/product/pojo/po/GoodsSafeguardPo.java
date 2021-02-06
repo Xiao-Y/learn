@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 品牌表
+ * 增值保障
  * </p>
  *
  * @author billow
@@ -20,23 +20,19 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("p_goods_brand")
-@ApiModel(value="GoodsBrandPo对象", description="品牌表")
-public class GoodsBrandPo extends BasePo {
+@TableName("p_goods_safeguard")
+@ApiModel(value="GoodsSafeguardPo对象", description="增值保障")
+public class GoodsSafeguardPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "品牌名称")
-    @TableField("brand_name")
-    private String brandName;
+    @ApiModelProperty(value = "保障名称")
+    @TableField("safeguard_name")
+    private String safeguardName;
 
-    @ApiModelProperty(value = "品牌的首字母")
-    @TableField("letter")
-    private String letter;
-
-    @ApiModelProperty(value = "品牌图片地址")
-    @TableField("image")
-    private String image;
+    @ApiModelProperty(value = "保障价格")
+    @TableField("price")
+    private Integer price;
 
 
 }
