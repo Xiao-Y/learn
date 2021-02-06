@@ -44,7 +44,7 @@ public interface GoodsSpuSpecService extends IService<GoodsSpuSpecPo> {
      * 根据 spuId 查询spu规格表数据
      *
      * @param spuId
-     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.String>>
      * @author LiuYongTao
      * @date 2019/11/27 11:33
      */

@@ -1,6 +1,7 @@
 package com.billow.mybatis.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @author LiuYongTao
  * @date 2018/4/27 11:46
  */
+@EqualsAndHashCode
 public abstract class BasePage implements Serializable {
 
     private static final Integer PAGE_SIZE = 10; // 每页要显示的记录数

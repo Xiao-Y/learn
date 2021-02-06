@@ -88,7 +88,7 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
             wrapper1.eq(GoodsSkuSpecValuePo::getSkuId, goodsSkuPo.getId());
             List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = goodsSkuSpecValueDao.selectList(wrapper1);
             goodsSkuSpecValuePos.forEach(goodsSkuSpecValuePo -> {
-                value.put(goodsSkuSpecValuePo.getSpecKeyId().toString(), goodsSkuSpecValuePo.getSpecValueId());
+                value.put(goodsSkuSpecValuePo.getSpecKeyId().toString(), goodsSkuSpecValuePo.getSpecValueId().toString());
             });
 
             list.add(value);
