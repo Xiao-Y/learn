@@ -2,6 +2,10 @@ package com.billow.search.pojo;
 
 import com.billow.search.constant.AnalyzerConstant;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -13,6 +17,10 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  * @author liuyongtao
  * @since 2021-2-7 17:23
  */
+@Data
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(indexName = "spu_info")
 public class SpuInfo {
 

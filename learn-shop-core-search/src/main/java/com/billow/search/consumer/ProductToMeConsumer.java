@@ -1,5 +1,7 @@
 package com.billow.search.consumer;
 
+import com.alibaba.fastjson.JSON;
+import com.billow.search.pojo.SpuInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -19,21 +21,23 @@ import org.springframework.stereotype.Component;
 public class ProductToMeConsumer {
 
     @Autowired
-    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    private ElasticsearchRestTemplate restTemplate;
 
     @Async("fxbDrawExecutor")
     @RabbitListener(queues = "${config.mq.queue.refreshEs}")
     @RabbitHandler
     public void refreshEs(String message) throws Exception {
-        log.info(message);
-        log.info("开始初始化 SQL...");
-        try {
-//            elasticsearchRestTemplate.exists()
-        } catch (Exception e) {
-            log.error("刷新 es 缓存异常");
-        }
-        log.info("完成初始化 SQL...");
+        log.info("获取的信息：{}", message);
+        SpuInfo spuInfo = JSON.parseObject(message, SpuInfo.class);
 
-        log.info("开始初始化 Redis ...");
+        try {
+            boolean exists = restTemplate.exists("1", SpuInfo.class);
+            if (!exists) {
+                restTemplate.save(spuInfo);
+            }
+        } catch (Exception e) {
+            log.error("刷新 es 缓存异常", e);
+        }
+        log.info("完成刷新...");
     }
 }

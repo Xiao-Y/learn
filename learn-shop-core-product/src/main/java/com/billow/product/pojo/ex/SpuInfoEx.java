@@ -1,6 +1,11 @@
 package com.billow.product.pojo.ex;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 商品信息
@@ -8,6 +13,11 @@ import io.swagger.annotations.ApiModelProperty;
  * @author liuyongtao
  * @since 2021-2-7 17:23
  */
+@Data
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
 public class SpuInfoEx {
 
     @ApiModelProperty(value = "spu_id")
