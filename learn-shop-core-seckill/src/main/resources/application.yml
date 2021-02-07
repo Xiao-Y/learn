@@ -20,3 +20,15 @@ mybatis-plus:
   configuration:
     cache-enabled: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+canal:
+  # instance 实例所在ip
+  host: 127.0.0.1
+  # tcp通信端口
+  port: 11111
+  # 账号  实例名称中设置的
+  username: canal
+  # 密码
+  password: canal
+  #实例名称
+  instance: leyou

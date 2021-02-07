@@ -16,4 +16,7 @@ public class RouteKeyProperties {
     private String sendMail;
     private String sendMailDlx;
     private String sendMailTrt;
+
+    // 刷新 es 缓存对列
+    private String refreshEs;
 }

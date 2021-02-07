@@ -16,4 +16,7 @@ public class ExchangeProperties {
     private String runJob;
 
     private String sendMail;
+
+    // 商品系统交换机
+    private String product;
 }

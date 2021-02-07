@@ -1,9 +1,11 @@
 package com.billow.cloud.common;
 
 import com.billow.cloud.common.properties.ConfigCommonProperties;
-//import com.billow.cloud.common.properties.DruidDSProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+//import com.billow.cloud.common.properties.DruidDSProperties;
 
 /**
  * @author liuyongtao
@@ -13,7 +15,8 @@ import org.springframework.context.annotation.Configuration;
 public class CommonConfig {
 
     @Bean
-    public ConfigCommonProperties configCommonProperties(){
+    @ConfigurationProperties(prefix = "config")
+    public ConfigCommonProperties configCommonProperties() {
         return new ConfigCommonProperties();
     }
 //
