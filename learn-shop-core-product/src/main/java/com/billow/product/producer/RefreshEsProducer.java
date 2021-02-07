@@ -32,7 +32,9 @@ public class RefreshEsProducer {
 
     public void sendRefreshEsInfo() {
         String message = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        publicRabbitTemplate.messageSendMQ(baseMqConfig.getExchange(),baseMqConfig.getRouteKey(),"");
+        publicRabbitTemplate.messageSendMQ(baseMqConfig.getExchange().getProduct(),
+                baseMqConfig.getRouteKey().getRefreshEs(),
+                "99999");
         log.info("【MQ发送内容】" + message);
     }
 

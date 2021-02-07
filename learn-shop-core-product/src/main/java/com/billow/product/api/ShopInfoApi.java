@@ -7,8 +7,7 @@ import com.billow.product.service.ShopInfoService;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,35 +24,35 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author billow
- * @since 2019-11-27
  * @version v1.0
+ * @since 2019-11-27
  */
-@Api(tags = {"ShopInfoApi"},value = "店铺表")
+@Slf4j
+@Api(tags = {"ShopInfoApi"}, value = "店铺表")
 @RestController
 @RequestMapping("/shopInfoApi")
 public class ShopInfoApi {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private ShopInfoService shopInfoService;
 
+
     @ApiOperation(value = "查询分页店铺表数据")
     @PostMapping(value = "/list")
-    public IPage<ShopInfoPo> findListByPage(@RequestBody ShopInfoVo shopInfoVo){
+    public IPage<ShopInfoPo> findListByPage(@RequestBody ShopInfoVo shopInfoVo) {
         return shopInfoService.findListByPage(shopInfoVo);
     }
 
     @ApiOperation(value = "根据id查询店铺表数据")
     @GetMapping(value = "/getById/{id}")
-    public ShopInfoVo getById(@PathVariable("id") Long id){
+    public ShopInfoVo getById(@PathVariable("id") Long id) {
         ShopInfoPo po = shopInfoService.getById(id);
         return ConvertUtils.convert(po, ShopInfoVo.class);
     }
 
     @ApiOperation(value = "新增店铺表数据")
     @PostMapping(value = "/add")
-    public ShopInfoVo add(@RequestBody ShopInfoVo shopInfoVo){
+    public ShopInfoVo add(@RequestBody ShopInfoVo shopInfoVo) {
         ShopInfoPo po = ConvertUtils.convert(shopInfoVo, ShopInfoPo.class);
         shopInfoService.save(po);
         return ConvertUtils.convert(po, ShopInfoVo.class);
@@ -61,13 +60,13 @@ public class ShopInfoApi {
 
     @ApiOperation(value = "删除店铺表数据")
     @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") Long id){
+    public boolean delById(@PathVariable("id") Long id) {
         return shopInfoService.removeById(id);
     }
 
     @ApiOperation(value = "更新店铺表数据")
     @PutMapping(value = "/update")
-    public ShopInfoVo update(@RequestBody ShopInfoVo shopInfoVo){
+    public ShopInfoVo update(@RequestBody ShopInfoVo shopInfoVo) {
         ShopInfoPo po = ConvertUtils.convert(shopInfoVo, ShopInfoPo.class);
         shopInfoService.updateById(po);
         return ConvertUtils.convert(po, ShopInfoVo.class);

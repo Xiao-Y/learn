@@ -12,6 +12,9 @@ import com.billow.product.service.GoodsSkuSpecValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * sku规格值 服务实现类
@@ -45,6 +48,14 @@ public class GoodsSkuSpecValueServiceImpl extends ServiceImpl<GoodsSkuSpecValueD
         LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSkuSpecValuePo::getId, id);
         return goodsSkuSpecValueDao.update(po, wrapper) >= 1;
+    }
+
+    @Override
+    public List<Long> findSpuSpecKey(Long id) {
+        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(GoodsSkuSpecValuePo::getSpecKeyId, id);
+        List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueDao.selectList(wrapper);
+        return skuSpecValuePos.stream().map(m -> m.getSpecKeyId()).collect(Collectors.toList());
     }
 }
 

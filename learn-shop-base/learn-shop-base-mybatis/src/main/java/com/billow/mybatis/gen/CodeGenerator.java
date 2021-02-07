@@ -228,9 +228,6 @@ public class CodeGenerator {
                 , "p_goods_specification"
                 , "p_goods_spu"
                 , "p_goods_spu_detail"
-                , "p_goods_spu_spec"
-
-
         );
         strategy.setTablePrefix("p_");
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);

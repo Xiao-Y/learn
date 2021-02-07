@@ -9,4 +9,5 @@ com.billow.common.redis.RedissonConfig,\
 com.billow.common.swagger2.SwaggerConfig,\
 com.billow.common.amqp.BaseMqConfig,\
 com.billow.common.amqp.MqLogCollectConfig,\
+com.billow.common.amqp.MqRefreshEsConfig,\
 com.billow.common.thread.ThreadExecutorConfig

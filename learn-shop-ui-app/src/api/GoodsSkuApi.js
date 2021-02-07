@@ -10,3 +10,11 @@ const baseUrl = '../core-product/goodsSkuApp';
  * @constructor
  */
 export const FindGoodsSku = spuId => http.get(baseUrl + '/findGoodsSku/' + spuId);
+
+/**
+ * 根据 spuId 查询 sku 规格表数据
+ * @param spuId
+ * @returns {*|Promise<AxiosResponse<T>>}
+ * @constructor
+ */
+export const FindSkuSpec = spuId => http.get(baseUrl + '/findSkuSpec/' + spuId);

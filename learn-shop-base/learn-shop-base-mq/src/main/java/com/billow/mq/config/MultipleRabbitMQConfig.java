@@ -33,9 +33,11 @@ import org.springframework.context.annotation.PropertySource;
  * @date 2019/10/17 16:53
  */
 @Configuration
-@ConfigurationProperties(prefix = "v1.spring.rabbitmq")
 @PropertySource("classpath:rabbitmqcofnig.properties")
 public class MultipleRabbitMQConfig {
+
+    @Value("${v1.spring.rabbitmq.template.mandatory}")
+    private Boolean mandatory;
 
     @Autowired
     private MqProperties mqProperties;
@@ -86,11 +88,9 @@ public class MultipleRabbitMQConfig {
 
     @Bean(name = "publicRabbitTemplate")
     @Primary
-    public StoredRabbitTemplate publicRabbitTemplate(
-            @Qualifier("publicConnectionFactory") ConnectionFactory connectionFactory,
-            @Value("${v1.spring.rabbitmq.template.mandatory}") Boolean mandatory) {
+    public StoredRabbitTemplate publicRabbitTemplate() {
         CustomProperties custom = mqProperties.getCustom();
-        StoredRabbitTemplate publicRabbitTemplate = new StoredRabbitTemplate(connectionFactory, storedOperationsService,
+        StoredRabbitTemplate publicRabbitTemplate = new StoredRabbitTemplate(publicConnectionFactory(), storedOperationsService,
                 custom.getTemplateName(), custom.getReceiveRetryCount(), custom.getDeliveryMode(), nextRetryDateDefault());
         publicRabbitTemplate.setMandatory(mandatory);
         publicRabbitTemplate.setConfirmCallback(publicRabbitTemplate);
@@ -127,6 +127,7 @@ public class MultipleRabbitMQConfig {
     }
 
     @Bean
+    @ConfigurationProperties(prefix = "v1.spring.rabbitmq")
     public MqProperties mqProperties() {
         return new MqProperties();
     }

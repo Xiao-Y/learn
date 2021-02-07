@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.vo.GoodsSkuSpecValueVo;
 
+import java.util.List;
+
 /**
  * <p>
  * sku规格值 服务类
@@ -36,4 +38,14 @@ public interface GoodsSkuSpecValueService extends IService<GoodsSkuSpecValuePo> 
      * @since 2019-11-27
      */
     boolean prohibitById(Long id);
+
+    /**
+     * 根据 spuId 查询出 skuId
+     *
+     * @param id
+     * @return {@link List< Long>}
+     * @author xiaoy
+     * @since 2021/2/6 15:34
+     */
+    List<Long> findSpuSpecKey(Long id);
 }

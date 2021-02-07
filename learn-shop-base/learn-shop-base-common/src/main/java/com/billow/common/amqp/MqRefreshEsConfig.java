@@ -46,7 +46,7 @@ public class MqRefreshEsConfig implements MqCommon {
     }
 
     @Bean
-    public Binding runJobTestBinding() {
+    public Binding refreshEsBinding() {
         return BindingBuilder.bind(this.refreshEsQueue())
                 .to(this.refreshEsExchange())
                 .with(this.getRouteKey());

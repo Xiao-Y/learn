@@ -40,8 +40,7 @@
 
 <script>
 
-    import {FindGoodsSku} from '../api/GoodsSkuApi';
-    import {FindSpuSpec} from '../api/GoodsSpuSpecApi';
+    import {FindGoodsSku,FindSkuSpec} from '../api/GoodsSkuApi';
     import {GetById} from '../api/GoodsSpuApi';
 
     export default {
@@ -173,7 +172,7 @@
                 this.sku.list = res.resData;
             });
             // 查询商品所有规格
-            FindSpuSpec(goodsId).then(res => {
+            FindSkuSpec(goodsId).then(res => {
                 this.sku.tree = res.resData;
                 // 如果商品无规格时，设置为 无规格商品
                 this.sku.none_sku = this.sku.tree.length == 0;
