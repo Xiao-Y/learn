@@ -1,4 +1,4 @@
-package com.billow.common.thread;
+package com.billow.tools.thread;
 
 import com.billow.tools.generator.UUID;
 

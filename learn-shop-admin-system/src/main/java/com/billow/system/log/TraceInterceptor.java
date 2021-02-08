@@ -1,6 +1,6 @@
 package com.billow.system.log;
 
-import com.billow.common.thread.TraceLogUtils;
+import com.billow.tools.thread.TraceLogUtils;
 import com.billow.tools.constant.CommonCst;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;

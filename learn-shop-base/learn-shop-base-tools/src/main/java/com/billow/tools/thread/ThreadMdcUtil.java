@@ -1,4 +1,4 @@
-package com.billow.common.thread;
+package com.billow.tools.thread;
 
 import com.billow.tools.constant.CommonCst;
 import org.slf4j.MDC;
@@ -64,6 +64,13 @@ public class ThreadMdcUtil {
         };
     }
 
+    /**
+     * 重写 ThreadPoolTaskExecutor 方法，加入 TraceId
+     *
+     *
+     * @author liuyongtao
+     * @since 2021-2-8 8:53
+     */
     public static class ThreadPoolTaskExecutorMdcWrapper extends ThreadPoolTaskExecutor {
         @Override
         public void execute(Runnable task) {
@@ -96,6 +103,13 @@ public class ThreadMdcUtil {
         }
     }
 
+    /**
+     * 重写 ThreadPoolExecutor 方法，加入 TraceId
+     *
+     *
+     * @author liuyongtao
+     * @since 2021-2-8 8:54
+     */
     public static class ThreadPoolExecutorMdcWrapper extends ThreadPoolExecutor {
         public ThreadPoolExecutorMdcWrapper(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
                                             BlockingQueue<Runnable> workQueue) {
@@ -139,6 +153,13 @@ public class ThreadMdcUtil {
         }
     }
 
+    /**
+     * 重写 ForkJoinPool 方法，加入 TraceId
+     *
+     *
+     * @author liuyongtao
+     * @since 2021-2-8 8:54
+     */
     public static class ForkJoinPoolMdcWrapper extends ForkJoinPool {
         public ForkJoinPoolMdcWrapper() {
             super();

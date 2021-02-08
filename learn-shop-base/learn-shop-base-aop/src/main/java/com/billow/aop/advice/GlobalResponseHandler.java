@@ -2,9 +2,12 @@ package com.billow.aop.advice;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.aop.commons.CustomPage;
+import com.billow.tools.constant.CommonCst;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
+import com.billow.tools.thread.ThreadMdcUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -102,7 +105,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 //        if (body instanceof String) {
 //            return JSONObject.toJSONString(BaseResponse.success(body));
 //        }
-
+        baseResponse.setTraceID(MDC.get(CommonCst.LOG_TRACE_ID));
         return baseResponse;
     }
 }
