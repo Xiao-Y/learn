@@ -119,7 +119,7 @@
     </appender>
 
     <!--日志存储位置（读取配置文件的路径）-->
-    <springProperty name="rabbitmqHost" source="config.mq.host" defaultValue="119.23.27.78"/>
+    <springProperty name="rabbitmqHost" source="config.mq.host" defaultValue="192.168.137.200"/>
     <springProperty name="rabbitmqPort" source="config.mq.port" defaultValue="5672"/>
     <springProperty name="rabbitmqVirtualHost" source="config.mq.virtual-host" defaultValue="/learn-default"/>
     <springProperty name="rabbitmqUsername" source="config.mq.username" defaultValue="admin"/>
@@ -162,6 +162,6 @@
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
-        <appender-ref ref="AMQP"/>
+<!--        <appender-ref ref="AMQP"/>-->
     </root>
 </configuration>

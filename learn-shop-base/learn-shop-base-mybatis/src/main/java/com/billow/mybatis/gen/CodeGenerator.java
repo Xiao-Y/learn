@@ -126,7 +126,7 @@ public class CodeGenerator {
      */
     private DataSourceConfig getDataSourceConfig() {
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://119.23.27.78:3308/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false");
+        dsc.setUrl("jdbc:mysql://192.168.137.200:3308/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("learn_shop");
