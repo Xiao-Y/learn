@@ -1,11 +1,11 @@
 --- 库存key
-local seckillStockKey = KEYS[1];
+seckillStockKey = KEYS[1];
 --- 秒杀key
-local seckillLockKey = KEYS[2];
+seckillLockKey = KEYS[2];
 --- 获取秒杀商品信息
-local successKillInfo = ARGV[1];
+successKillInfo = ARGV[1];
 --- 获取秒杀商品超时时间
-local expire = ARGV[2];
+expire = ARGV[2];
 
 --- 获取指定的库存
 local resultStock = redis.call("get", seckillStockKey);
