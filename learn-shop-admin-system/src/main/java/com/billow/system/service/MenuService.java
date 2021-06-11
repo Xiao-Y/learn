@@ -1,6 +1,8 @@
 package com.billow.system.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.system.pojo.ex.MenuEx;
+import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
@@ -9,7 +11,7 @@ import com.billow.system.pojo.vo.MenuVo;
 import java.util.List;
 import java.util.Set;
 
-public interface MenuService {
+public interface MenuService extends IService<MenuPo> {
 
     /**
      * 查询菜单

@@ -8,7 +8,7 @@
                      :page-sizes="pageSizes"
                      :current-page.sync="queryPage.pageNo"
                      :page-size="queryPage.pageSize"
-                     :total="queryPage.recordCount">
+                     :total="queryPage.recordCount | string2Number">
       </el-pagination>
     </div>
   </el-row>
@@ -34,13 +34,19 @@
       // 改变页面大小
       sizeChange(val) {
         this.queryPage.pageNo = 1;
-        this.queryPage.pageSize = val;
+        this.queryPage.pageSize = Number(val);
         this.$emit('onQuery');
       },
       // 翻页
       hcurrentChange(val) {
-        this.queryPage.pageNo = val;
+        this.queryPage.pageNo = Number(val);
         this.$emit('onQuery');
+      }
+    },
+    filters:{
+      string2Number: function(num) {
+        console.info("====>" + num)
+        return Number(num);
       }
     }
   }

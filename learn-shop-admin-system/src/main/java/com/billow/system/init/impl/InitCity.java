@@ -1,5 +1,7 @@
 package com.billow.system.init.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.CityDao;
 import com.billow.system.init.IStartLoading;
@@ -40,7 +42,9 @@ public class InitCity implements IStartLoading {
         log.info("======== start init City....");
         executorService.execute(() -> {
             // 构建tree 结构的
-            List<CityPo> cityPos = cityDao.findByValidIndIsTrue();
+            LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
+            wrapper.eq(CityPo::getValidInd, true);
+            List<CityPo> cityPos = cityDao.selectList(wrapper);
             Map<String, List<CityPo>> map = new HashMap<>();
             cityPos.stream().forEach(f -> {
                 List<CityPo> collect = cityPos.stream()

@@ -42,7 +42,7 @@ public class GoodsCategoryPo extends BasePo {
 
     @ApiModelProperty(value = "是否为父节点，0为否，1为是")
     @TableField("is_parent")
-    private Boolean parent;
+    private Boolean isParent;
 
 
 }

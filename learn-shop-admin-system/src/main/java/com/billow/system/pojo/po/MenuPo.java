@@ -1,46 +1,50 @@
 package com.billow.system.pojo.po;
 
-
-import com.billow.jpa.base.pojo.BasePo;
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.billow.mybatis.pojo.BasePo;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serializable;
+import lombok.experimental.Accessors;
 
 /**
- * 菜单
+ * <p>
  *
- * @author liuyongtao
- * @create 2018-05-16 13:57
+ * </p>
+ *
+ * @author billow
+ * @since 2021-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_menu")
-public class MenuPo extends BasePo implements Serializable {
+@Accessors(chain = true)
+@TableName("sys_menu")
+@ApiModel(value = "MenuPo对象", description = "")
+public class MenuPo extends BasePo {
 
-    @ApiModelProperty("菜单名称")
-    private String menuName;
+    private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("菜单CODE")
+    @TableField("menu_code")
     private String menuCode;
 
-    @ApiModelProperty("菜单描述")
-    private String descritpion;
+    @TableField("menu_name")
+    private String menuName;
 
-    @ApiModelProperty("父节点id")
+    @TableField("pid")
     private Long pid;
 
-    @ApiModelProperty("图标")
-    private String icon;
-
-    @ApiModelProperty("是否显示")
+    @TableField("display")
     private Boolean display;
 
-    @ApiModelProperty("显示的位置")
+    @TableField("icon")
+    private String icon;
+
+    @TableField("descritpion")
+    private String descritpion;
+
+    @TableField("sort_field")
     private Double sortField;
+
 
 }

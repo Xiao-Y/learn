@@ -9,19 +9,22 @@
     <property name="LOG_HOME" value="/usr/local/app/logs"/>
     <!--  mq 配置  -->
     <!--日志存储位置（读取配置文件的路径）-->
-    <springProperty name="rabbitmqHost" source="config.mq.host" defaultValue="119.23.27.78"/>
-    <springProperty name="rabbitmqPort" source="config.mq.port" defaultValue="5672"/>
-    <springProperty name="rabbitmqVirtualHost" source="config.mq.virtual-host" defaultValue="/learn-default"/>
-    <springProperty name="rabbitmqUsername" source="config.mq.username" defaultValue="admin"/>
-    <springProperty name="rabbitmqPassword" source="config.mq.password" defaultValue="admin123"/>
-    <springProperty name="rabbitmqExchange" source="config.mq.exchange.logCollect" defaultValue="logCollectExchange"/>
-    <springProperty name="rabbitmqRouteKey" source="config.mq.routeKey.logCollect" defaultValue="logCollectRouteKey"/>
+    <springProperty name="rabbitmqHost" source="config.mq.host"/>
+    <springProperty name="rabbitmqPort" source="config.mq.port"/>
+    <springProperty name="rabbitmqVirtualHost" source="config.mq.virtual-host"/>
+    <springProperty name="rabbitmqUsername" source="config.mq.username"/>
+    <springProperty name="rabbitmqPassword" source="config.mq.password"/>
+    <springProperty name="rabbitmqExchange" source="config.mq.logCollect.exchange"/>
+    <springProperty name="rabbitmqRouteKey" source="config.mq.logCollect.routeKey"/>
+    <springProperty name="rabbitmqLogLevel" source="config.mq.log-level"/>
 
     <!-- 彩色日志 -->
     <!-- 彩色日志依赖的渲染类 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
-    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
-    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
 
     <!--  控制台日志格式  -->
     <property name="CONSOLE_LOG_PATTERN"
@@ -149,6 +152,12 @@
         <charset>UTF-8</charset>
         <durable>false</durable>
         <deliveryMode>NON_PERSISTENT</deliveryMode>
+        <!-- 日志级别 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>${rabbitmqLogLevel}</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
 
 

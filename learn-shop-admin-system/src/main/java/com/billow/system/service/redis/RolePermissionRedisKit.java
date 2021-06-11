@@ -1,6 +1,7 @@
 package com.billow.system.service.redis;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
 import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.po.PermissionPo;
@@ -10,6 +11,7 @@ import com.billow.tools.utlis.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,7 +59,7 @@ public class RolePermissionRedisKit {
      * @date 2019/7/16 15:02
      */
     public void deleteRolePermissionById(Long id) {
-        Map<String, String> rolePermissionMap = this.getRolePermissionMap();
+        Map<String, JSONArray> rolePermissionMap = this.getRolePermissionMap();
         rolePermissionMap.entrySet().stream().forEach(f -> {
             List<PermissionVo> permissionVos = this.converJson2PermissionVo(f.getValue());
             List<PermissionVo> voList = permissionVos.stream()
@@ -78,7 +80,7 @@ public class RolePermissionRedisKit {
      */
     public void updatePermissionById(PermissionVo permissionVo) {
         // 取出缓存中数据
-        Map<String, String> hashAll = this.getRolePermissionMap();
+        Map<String, JSONArray> hashAll = this.getRolePermissionMap();
         hashAll.entrySet().stream().forEach(f -> {
             List<PermissionVo> permissionVos = this.converJson2PermissionVo(f.getValue());
             // 移除旧权限信息
@@ -126,8 +128,8 @@ public class RolePermissionRedisKit {
      * @author liuyongtao
      * @since 2021-1-30 8:22
      */
-    public List<PermissionVo> getRolePeremissionByRoleCode(String roleCode) {
-        String json = redisUtils.getHash(ROLE_PERMISSION_KEY, roleCode);
+    public List<PermissionVo> getRolePermissionByRoleCode(String roleCode) {
+        JSONArray json = redisUtils.getHash(ROLE_PERMISSION_KEY, roleCode);
         return this.converJson2PermissionVo(json);
     }
 
@@ -139,8 +141,11 @@ public class RolePermissionRedisKit {
      * @author liuyongtao
      * @since 2021-1-30 8:24
      */
-    public List<PermissionVo> converJson2PermissionVo(String json) {
-        return JSON.parseObject(json, new TypeReference<List<PermissionVo>>() {
+    public List<PermissionVo> converJson2PermissionVo(JSONArray json) {
+        if(json == null){
+            return new ArrayList<>();
+        }
+        return JSON.parseObject(json.toJSONString(), new TypeReference<List<PermissionVo>>() {
         });
     }
 
@@ -153,17 +158,17 @@ public class RolePermissionRedisKit {
      * @since 2021-1-30 8:26
      */
     public void setRolePermission(List<PermissionPo> permissionPos, String roleCode) {
-        redisUtils.setHash(ROLE_PERMISSION_KEY, roleCode, JSON.toJSONString(permissionPos));
+        redisUtils.setHash(ROLE_PERMISSION_KEY, roleCode, permissionPos);
     }
 
     /**
      * 查询出角色的信息
      *
-     * @return {@link Map< String, String>} key-roleCode,value-List<PermissionPo>
+     * @return {@link Map< String, JSONArray>} key-roleCode,value-List<PermissionPo>
      * @author liuyongtao
      * @since 2021-1-30 8:30
      */
-    public Map<String, String> getRolePermissionMap() {
+    public Map<String, JSONArray> getRolePermissionMap() {
         return redisUtils.getHashAll(ROLE_PERMISSION_KEY);
     }
 }

@@ -1,40 +1,56 @@
 package com.billow.system.pojo.po;
 
-
-import com.billow.jpa.base.pojo.BasePo;
+import com.billow.mybatis.pojo.BasePo;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serializable;
+import lombok.experimental.Accessors;
 
 /**
- * 权限
+ * <p>
+ * 
+ * </p>
  *
- * @author liuyongtao
- * @create 2018-05-16 13:57
+ * @author billow
+ * @since 2021-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_permission")
-public class PermissionPo extends BasePo implements Serializable {
+@Accessors(chain = true)
+@TableName("sys_permission")
+@ApiModel(value="PermissionPo对象", description="")
+public class PermissionPo extends BasePo {
 
-    @ApiModelProperty("权限名称")
+    private static final long serialVersionUID = 1L;
+
+    @TableField("permission_name")
     private String permissionName;
 
-    @ApiModelProperty("权限CODE")
+    @TableField("permission_code")
     private String permissionCode;
 
-    @ApiModelProperty("权限描述")
-    private String descritpion;
-
-    @ApiModelProperty("授权链接")
+    @TableField("url")
     private String url;
 
-    @ApiModelProperty("系统模块")
+    @TableField("system_module")
     private String systemModule;
+
+    @TableField("descritpion")
+    private String descritpion;
+
+    @TableField("display")
+    private Boolean display;
+
+    @TableField("icon")
+    private String icon;
+
+    @TableField("pid")
+    private Long pid;
+
 
 }

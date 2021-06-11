@@ -1,37 +1,25 @@
 package com.billow.system.dao;
 
 import com.billow.system.pojo.po.DataDictionaryPo;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import org.apache.ibatis.annotations.CacheNamespace;
+import com.billow.mybatis.cache.MybatisRedisCache;
 
 import java.util.List;
 
 /**
- * 数据字典
+ * <p>
+ *  Mapper 接口
+ * </p>
  *
- * @author LiuYongTao
- * @date 2019/7/11 10:56
+ * @author billow
+ * @since 2021-04-01
  */
-public interface DataDictionaryDao extends JpaRepository<DataDictionaryPo, Long>, JpaSpecificationExecutor<DataDictionaryPo> {
+@CacheNamespace(implementation = MybatisRedisCache.class)
+public interface DataDictionaryDao extends BaseMapper<DataDictionaryPo> {
 
-    /**
-     * 根据下拉字段分类
-     *
-     * @return java.util.List<java.lang.String>
-     * @author LiuYongTao
-     * @date 2019/11/7 9:33
-     */
-    @Query(value = "select distinct field_type from sys_data_dictionary ORDER BY field_type asc", nativeQuery = true)
     List<String> findFieldType();
 
-    /**
-     * 字典下拉系统模块
-     *
-     * @return java.util.List<java.lang.String>
-     * @author LiuYongTao
-     * @date 2019/11/7 13:50
-     */
-    @Query(value = "select distinct system_module from sys_data_dictionary ORDER BY system_module asc", nativeQuery = true)
     List<String> findSysModule();
 }

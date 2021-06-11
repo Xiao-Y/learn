@@ -1,12 +1,12 @@
 package com.billow.system.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +35,8 @@ public class PermissionApi {
 
     @ApiOperation("根据条件查询权限列表")
     @PostMapping("/findPermissionList")
-    public Page<PermissionVo> findPermissionList(@RequestBody PermissionVo permissionVo) throws Exception {
-        Page<PermissionVo> permissionList = permissionService.findPermissionList(permissionVo);
+    public IPage<PermissionVo> findPermissionList(@RequestBody PermissionVo permissionVo) throws Exception {
+        IPage<PermissionVo> permissionList = permissionService.findPermissionList(permissionVo);
         return permissionList;
     }
 

@@ -1,41 +1,47 @@
 package com.billow.system.pojo.po;
 
-import com.billow.jpa.base.pojo.BasePo;
-import io.swagger.annotations.ApiModelProperty;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.billow.mybatis.pojo.BasePo;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serializable;
+import lombok.experimental.Accessors;
 
 /**
- * 数据字典
+ * <p>
  *
- * @author liuyongtao
- * @create 2019-07-11 10:47
+ * </p>
+ *
+ * @author billow
+ * @since 2021-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_data_dictionary")
-public class DataDictionaryPo extends BasePo implements Serializable {
+@Accessors(chain = true)
+@TableName("sys_data_dictionary")
+@ApiModel(value = "DataDictionaryPo对象", description = "")
+public class DataDictionaryPo extends BasePo {
 
-    @ApiModelProperty("系统模块")
-    private String systemModule;
+    private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("下拉字段分类")
+    @TableField("field_type")
     private String fieldType;
 
-    @ApiModelProperty("显示的名称")
-    private String fieldDisplay;
-
-    @ApiModelProperty("显示名称的值")
+    @TableField("field_value")
     private String fieldValue;
 
-    @ApiModelProperty("字段排序")
+    @TableField("field_display")
+    private String fieldDisplay;
+
+    @TableField("system_module")
+    private String systemModule;
+
+    @TableField("field_order")
     private Integer fieldOrder;
 
-    @ApiModelProperty("说明")
+    @TableField("descritpion")
     private String descritpion;
+
+
 }

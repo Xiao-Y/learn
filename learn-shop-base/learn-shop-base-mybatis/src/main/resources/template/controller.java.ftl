@@ -1,8 +1,14 @@
 <#assign VO = table.entityName?substring(0,(table.entityName)?length-2) + "Vo">
 <#assign Vo = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "Vo">
+<#assign BD = table.entityName?substring(0,(table.entityName)?length-2) + "BuildParam">
+<#assign Bd = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "BuildParam">
+<#assign SC = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
+<#assign Sc = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
 package ${package.Controller};
 
+import com.billow.${package.ModuleName}.pojo.build.${BD};
 import com.billow.${package.ModuleName}.pojo.vo.${VO};
+import com.billow.${package.ModuleName}.pojo.search.${SC};
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.billow.${package.ModuleName}.service.${table.serviceName};
@@ -52,8 +58,8 @@ public class ${table.controllerName} {
 
     @ApiOperation(value = "查询分页${table.comment!}数据")
     @PostMapping(value = "/findListByPage")
-    public IPage<${entity}> findListByPage(@RequestBody ${VO} ${Vo}){
-        return ${table.serviceName?uncap_first}.findListByPage(${Vo});
+    public IPage<${entity}> findListByPage(@RequestBody ${SC} ${Sc}){
+        return ${table.serviceName?uncap_first}.findListByPage(${Sc});
     }
 
     @ApiOperation(value = "根据id查询${table.comment!}数据")
@@ -65,8 +71,8 @@ public class ${table.controllerName} {
 
     @ApiOperation(value = "新增${table.comment!}数据")
     @PostMapping(value = "/add")
-    public ${VO} add(@RequestBody ${VO} ${Vo}){
-        ${entity} po = ConvertUtils.convert(${Vo}, ${entity}.class);
+    public ${VO} add(@RequestBody ${BD} ${Bd}){
+        ${entity} po = ConvertUtils.convert(${Bd}, ${entity}.class);
         ${table.serviceName?uncap_first}.save(po);
         return ConvertUtils.convert(po, ${VO}.class);
     }
@@ -79,8 +85,8 @@ public class ${table.controllerName} {
 
     @ApiOperation(value = "更新${table.comment!}数据")
     @PutMapping(value = "/update")
-    public ${VO} update(@RequestBody ${VO} ${Vo}){
-        ${entity} po = ConvertUtils.convert(${Vo}, ${entity}.class);
+    public ${VO} update(@RequestBody ${BD} ${Bd}){
+        ${entity} po = ConvertUtils.convert(${Bd}, ${entity}.class);
         ${table.serviceName?uncap_first}.updateById(po);
         return ConvertUtils.convert(po, ${VO}.class);
     }
