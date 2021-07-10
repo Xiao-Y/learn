@@ -1,27 +1,41 @@
 package com.billow.system.pojo.po;
 
-
-import com.billow.jpa.base.pojo.BasePo;
+import com.billow.mybatis.pojo.BasePo;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serializable;
-
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author billow
+ * @since 2021-04-01
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_role")
-public class RolePo extends BasePo implements Serializable {
+@Accessors(chain = true)
+@TableName("sys_role")
+@ApiModel(value="RolePo对象", description="")
+public class RolePo extends BasePo {
 
-    @ApiModelProperty("角色名称")
-    private String roleName;
+    private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("角色CODE")
+    @TableField("descritpion")
+    private String descritpion;
+
+    @TableField("role_code")
     private String roleCode;
 
-    @ApiModelProperty("角色描述")
-    private String descritpion;
+    @TableField("role_name")
+    private String roleName;
+
+
 }

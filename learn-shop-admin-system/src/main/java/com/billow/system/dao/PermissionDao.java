@@ -1,13 +1,20 @@
 package com.billow.system.dao;
 
 import com.billow.system.pojo.po.PermissionPo;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.util.Optional;
+import org.apache.ibatis.annotations.CacheNamespace;
+import com.billow.mybatis.cache.MybatisRedisCache;
 
-public interface PermissionDao extends JpaRepository<PermissionPo, Long>, JpaSpecificationExecutor<PermissionPo> {
-
-    Optional<PermissionPo> findByIdAndValidIndIsTrue(Long permissionId);
+/**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author billow
+ * @since 2021-04-01
+ */
+@CacheNamespace(implementation = MybatisRedisCache.class)
+public interface PermissionDao extends BaseMapper<PermissionPo> {
 
 }

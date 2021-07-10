@@ -50,13 +50,13 @@ public class ScheduleJobLogDaoImpl implements ScheduleJobLogDao {
             ps.setString(6, scheduleJobLogPo.getLogId());
             ps.setString(7, scheduleJobLogPo.getJobName());
             ps.setString(8, scheduleJobLogPo.getJobGroup());
-            ps.setLong(9, scheduleJobLogPo.getJobId());
+            ps.setString(9, scheduleJobLogPo.getJobId());
             ps.setString(10, scheduleJobLogPo.getInfo());
             ps.setBoolean(11, scheduleJobLogPo.getIsSuccess());
             ps.setString(12, scheduleJobLogPo.getRunTime());
             return ps;
         }, keyHolder);
-        scheduleJobLogPo.setId(keyHolder.getKey().longValue());
+        scheduleJobLogPo.setId(keyHolder.getKey().toString());
         return scheduleJobLogPo;
     }
 

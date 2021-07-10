@@ -1,10 +1,8 @@
 <#assign VO = table.entityName?substring(0,(table.entityName)?length-2) + "Vo">
 package com.billow.${package.ModuleName}.pojo.vo;
 
-
-import com.billow.${package.ModuleName}.pojo.po.${table.entityName};
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -20,7 +18,26 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-public class ${VO} extends ${table.entityName} implements Serializable {
+public class ${VO} implements Serializable {
+<#if entitySerialVersionUID>
+    private static final long serialVersionUID = 1L;
+</#if>
+
+<#-- ----------  BEGIN 字段循环遍历  ---------->
+<#list table.fields as field>
+    <#if field.comment!?length gt 0>
+        <#if swagger2>
+    @ApiModelProperty(value = "${field.comment}")
+        <#else>
+    /**
+     * ${field.comment}
+     */
+        </#if>
+    </#if>
+    <#-- -----   存在字段填充设置   ----->
+    private ${field.propertyType} ${field.propertyName};
+
+</#list>
+<#------------  END 字段循环遍历  ---------->
 
 }

@@ -1,18 +1,22 @@
 package com.billow.system.init.impl;
 
-import com.billow.common.redis.RedisUtils;
-import com.billow.system.dao.RoleDao;
 import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.PermissionService;
+import com.billow.system.service.RoleService;
+import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -26,9 +30,9 @@ import java.util.concurrent.ExecutorService;
 public class InitRolePermission implements IStartLoading {
 
     @Autowired
-    private RedisUtils redisUtils;
+    private RolePermissionRedisKit rolePermissionRedisKit;
     @Autowired
-    private RoleDao roleDao;
+    private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
     @Resource(name = "fxbDrawExecutor")
@@ -38,12 +42,12 @@ public class InitRolePermission implements IStartLoading {
     public boolean init() {
         log.info("======== start init Role Permission....");
         executorService.execute(() -> {
-            Map<String, Set<PermissionPo>> map = new HashMap<>();
-            List<RolePo> rolePos = roleDao.findAll();
+            Map<String, List<PermissionPo>> map = new HashMap<>();
+            List<RolePo> rolePos = roleService.list();
             for (RolePo rolePo : rolePos) {
                 Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
-                map.put(rolePo.getRoleCode(), permissionPos);
-                redisUtils.setHash(RedisCst.ROLE_PERMISSION_KEY, rolePo.getRoleCode(), new ArrayList<>(permissionPos));
+//                map.put(rolePo.getRoleCode(), new ArrayList<>(permissionPos));
+                rolePermissionRedisKit.setRolePermission(new ArrayList<>(permissionPos), rolePo.getRoleCode());
             }
             log.info("======== end init Role Permission....");
         });

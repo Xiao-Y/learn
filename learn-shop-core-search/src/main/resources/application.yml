@@ -20,7 +20,7 @@ spring:
     rest:
       connection-timeout: 10s
       uris:
-        - http://127.0.0.1:9200
+        - http://192.168.137.200:9200
 feign:
   hystrix:
     enabled: true

@@ -63,7 +63,7 @@ public class CoreAutoTaskApi extends BaseApi {
     @ApiImplicitParams({@ApiImplicitParam(dataType = "Integer", name = "jobId", value = "自动任务id", required = true),
             @ApiImplicitParam(dataType = "String", name = "jobStatus", value = "任务状态，0-停止，1-启用", required = true)})
     @PutMapping(value = {"/updateJobStatus/{jobId}/{jobStatus}", "/updateJobValidInd/{jobId}/{validInd}"})
-    public void updateJobStatus(@PathVariable("jobId") Long jobId,
+    public void updateJobStatus(@PathVariable("jobId") String jobId,
                                 @PathVariable(value = "jobStatus", required = false) String jobStatus,
                                 @PathVariable(value = "validInd", required = false) Boolean validInd) throws Exception {
         // 不能同时为空
@@ -81,7 +81,7 @@ public class CoreAutoTaskApi extends BaseApi {
     @ApiOperation("根据任务id,删除自动任务")
     @ApiParam(name = "jobId", value = "自动任务id")
     @DeleteMapping("/deleteAutoTask/{jobId}")
-    public void deleteAutoTask(@PathVariable("jobId") Long jobId) throws Exception {
+    public void deleteAutoTask(@PathVariable("jobId") String jobId) throws Exception {
         coreAutoTaskService.deleteAutoTask(jobId);
     }
 

@@ -1,31 +1,52 @@
 package com.billow.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.common.redis.RedisUtils;
-import com.billow.system.dao.*;
-import com.billow.system.dao.spec.RoleSpec;
+import com.billow.system.dao.MenuDao;
+import com.billow.system.dao.PermissionDao;
+import com.billow.system.dao.RoleDao;
+import com.billow.system.dao.RoleMenuDao;
+import com.billow.system.dao.RolePermissionDao;
+import com.billow.system.dao.UserRoleDao;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.ex.MenuEx;
-import com.billow.system.pojo.po.*;
+import com.billow.system.pojo.po.MenuPo;
+import com.billow.system.pojo.po.PermissionPo;
+import com.billow.system.pojo.po.RoleMenuPo;
+import com.billow.system.pojo.po.RolePermissionPo;
+import com.billow.system.pojo.po.RolePo;
+import com.billow.system.pojo.po.UserRolePo;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
+import com.billow.system.service.RoleMenuService;
+import com.billow.system.service.RolePermissionService;
 import com.billow.system.service.RoleService;
-import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.service.redis.RoleMenuRedisKit;
 import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.MathUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +56,7 @@ import java.util.stream.Collectors;
  * @create 2018-11-05 16:16
  */
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements RoleService {
 
     @Autowired
     private UserRoleDao userRoleDao;
@@ -44,7 +65,11 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RolePermissionDao rolePermissionDao;
     @Autowired
+    private RolePermissionService rolePermissionService;
+    @Autowired
     private RoleMenuDao roleMenuDao;
+    @Autowired
+    private RoleMenuService roleMenuService;
     @Autowired
     private RolePermissionRedisKit rolePermissionRedisKit;
     @Autowired
@@ -61,11 +86,13 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleVo> findRoleListInfoByUserId(Long userId) {
         List<RoleVo> roleVos = new ArrayList<>();
-        List<UserRolePo> userRolePos = userRoleDao.findRoleIdByUserId(userId);
+        LambdaQueryWrapper<UserRolePo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(UserRolePo::getUserId, userId);
+        List<UserRolePo> userRolePos = userRoleDao.selectList(wrapper);
         if (ToolsUtils.isNotEmpty(userRolePos)) {
             userRolePos.stream().forEach(userRolePo -> {
-                Optional<RolePo> rolePo = roleDao.findById(userRolePo.getRoleId());
-                RoleVo roleVo = ConvertUtils.convert(rolePo.orElse(new RolePo()), RoleVo.class);
+                RolePo rolePo = roleDao.selectById(userRolePo.getRoleId());
+                RoleVo roleVo = ConvertUtils.convert(rolePo, RoleVo.class);
                 roleVos.add(roleVo);
             });
         }
@@ -73,24 +100,32 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Page<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception {
-        RoleSpec spec = new RoleSpec(roleVo);
-        Pageable pageable = PageRequest.of(roleVo.getPageNo(), roleVo.getPageSize());
-        Page<RolePo> rolePos = roleDao.findAll(spec, pageable);
+    public IPage<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception {
+        IPage<RolePo> page = new Page<>(roleVo.getPageNo(), roleVo.getPageSize());
+        LambdaQueryWrapper<RolePo> condition = Wrappers.lambdaQuery();
+        condition.eq(StringUtils.isNotEmpty(roleVo.getRoleCode()), RolePo::getRoleCode, roleVo.getRoleCode())
+                .like(StringUtils.isNotEmpty(roleVo.getRoleName()), RolePo::getRoleName, roleVo.getRoleName());
+        IPage<RolePo> rolePos = roleDao.selectPage(page, condition);
         return rolePos;
     }
 
     @Override
     public List<Long> findPermissionByRoleId(Long roleId) throws Exception {
         // 查询权限信息
-        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(roleId);
+        LambdaQueryWrapper<RolePermissionPo> condition = Wrappers.lambdaQuery();
+        condition.eq(RolePermissionPo::getRoleId, roleId)
+                .eq(RolePermissionPo::getValidInd, true);
+        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.selectList(condition);
         return rolePermissionPos.stream().map(m -> m.getPermissionId()).collect(Collectors.toList());
     }
 
     @Override
     public List<String> findMenuByRoleId(Long roleId) throws Exception {
         Set<String> delMenus = new HashSet<>();
-        List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(roleId);
+        LambdaQueryWrapper<RoleMenuPo> condition = Wrappers.lambdaQuery();
+        condition.eq(RoleMenuPo::getRoleId, roleId)
+                .eq(RoleMenuPo::getValidInd, true);
+        List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(condition);
         // 所有选种的菜单
         List<String> collect = roleMenuPos.stream()
                 .map(m -> m.getMenuId().toString())
@@ -101,7 +136,9 @@ public class RoleServiceImpl implements RoleService {
         while (iterator.hasNext()) {
             String next = iterator.next();
             // 查询子级菜单
-            List<MenuPo> chiledMenus = menuDao.findByPidEquals(new Long(next));
+            LambdaQueryWrapper<MenuPo> condition1 = Wrappers.lambdaQuery();
+            condition1.eq(MenuPo::getPid, new Long(next));
+            List<MenuPo> chiledMenus = menuDao.selectList(condition1);
             if (ToolsUtils.isNotEmpty(chiledMenus)) {
                 List<String> childeIds = chiledMenus.stream().map(m -> m.getId().toString()).collect(Collectors.toList());
                 // 比较所有选种的菜单中是否包含子级菜单
@@ -133,7 +170,7 @@ public class RoleServiceImpl implements RoleService {
         if (id != null) {
             // 表示是新添加的角色
             roleVo.setIsNewRole(false);
-            RolePo one = roleDao.findById(id).get();
+            RolePo one = roleDao.selectById(id);
             // 如果是无效状态时，删除redis 中的信息
             if (!rolePo.getValidInd()) {
                 rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
@@ -144,7 +181,7 @@ public class RoleServiceImpl implements RoleService {
                 roleMenuRedisKit.updateRoleCode(roleVo.getRoleCode(), one.getRoleCode());
             }
         }
-        rolePo = roleDao.save(rolePo);
+        this.saveOrUpdate(rolePo);
         ConvertUtils.convert(rolePo, roleVo);
         // 保存、更新数据库和 redis 中的角色权限信息
         this.saveOrUpdateRolePerssion(roleVo);
@@ -175,7 +212,12 @@ public class RoleServiceImpl implements RoleService {
                     .map(m -> new Long(m))
                     .collect(Collectors.toList());
             // 删除原始的关联菜单数据
-            roleMenuDao.deleteByRoleIdAndMenuIdIn(roleVo.getId(), delMenuIds);
+            if (CollectionUtils.isNotEmpty(delMenuIds)) {
+                LambdaQueryWrapper<RoleMenuPo> condition = Wrappers.lambdaQuery();
+                condition.eq(RoleMenuPo::getRoleId, roleVo.getId())
+                        .in(RoleMenuPo::getMenuId, delMenuIds);
+                roleMenuDao.delete(condition);
+            }
             // 分析需要插入新的
             menuChecked = menuChecked.stream().filter(f -> !oldMenuChecked.contains(f)).collect(Collectors.toList());
         }
@@ -189,11 +231,11 @@ public class RoleServiceImpl implements RoleService {
             roleMenuPo.setMenuId(new Long(m));
             roleMenuPo.setValidInd(true);
             if (roleVo.getValidInd()) {
-                newMenuPos.add(menuDao.findById(new Long(m)).get());
+                newMenuPos.add(menuDao.selectById(new Long(m)));
             }
             return roleMenuPo;
         }).collect(Collectors.toList());
-        roleMenuDao.saveAll(roleMenuPos);
+        roleMenuService.saveBatch(roleMenuPos);
 
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
@@ -251,7 +293,10 @@ public class RoleServiceImpl implements RoleService {
                     .collect(Collectors.toList());
             // 删除原始的关联权限数据
             if (ToolsUtils.isNotEmpty(delPermissionIds)) {
-                rolePermissionDao.deleteByRoleIdAndPermissionIdIn(roleVo.getId(), delPermissionIds);
+                LambdaQueryWrapper<RolePermissionPo> condition = Wrappers.lambdaQuery();
+                condition.eq(RolePermissionPo::getRoleId, roleVo.getId())
+                        .in(RolePermissionPo::getPermissionId, delPermissionIds);
+                rolePermissionDao.delete(condition);
             }
             // 分析需要插入新的
             permissionChecked = permissionChecked.stream().filter(f -> !oldPermissionChecked.contains(f))
@@ -269,17 +314,17 @@ public class RoleServiceImpl implements RoleService {
                 rolePermissionPo.setValidInd(true);
                 if (roleVo.getValidInd()) {
                     // 查询出该角色要更新的权限
-                    newPermissionPos.add(permissionDao.findById(new Long(m)).get());
+                    newPermissionPos.add(permissionDao.selectById(new Long(m)));
                 }
                 return rolePermissionPo;
             }).collect(Collectors.toList());
-            rolePermissionDao.saveAll(rolePermissionPos);
+            rolePermissionService.saveBatch(rolePermissionPos);
         }
 
         // 如果角色是有效状态时，更新reids 中的信息
         if (roleVo.getValidInd()) {
             List<PermissionPo> sourcePermissionPo = null;
-            List<PermissionVo> permissionVos = rolePermissionRedisKit.getRolePeremissionByRoleCode(roleVo.getRoleCode());
+            List<PermissionVo> permissionVos = rolePermissionRedisKit.getRolePermissionByRoleCode(roleVo.getRoleCode());
 //            List<PermissionPo> permissionPos = redisUtils.getList(RedisCst.ROLE_PERMISSION_KEY + roleVo.getRoleCode());
             if (ToolsUtils.isNotEmpty(permissionVos)) {
                 List<Long> delPermissionIdsTemp = delPermissionIds;
@@ -309,9 +354,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RoleVo prohibitRoleById(Long roleId) {
-        Optional<RolePo> optional = roleDao.findById(roleId);
+        RolePo one = roleDao.selectById(roleId);
         // 如果不存在，直接构建一个新的返回
-        if (!optional.isPresent()) {
+        if (one == null) {
             RoleVo roleVo = new RoleVo();
             roleVo.setId(roleId);
             roleVo.setValidInd(false);
@@ -322,25 +367,30 @@ public class RoleServiceImpl implements RoleService {
             return roleVo;
         }
         // 更新角色为无效
-        RolePo one = optional.get();
         one.setValidInd(false);
-        roleDao.save(one);
+        roleDao.updateById(one);
 
         // 更新该角色的权限为无效
-        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(roleId);
+        LambdaQueryWrapper<RolePermissionPo> condition = Wrappers.lambdaQuery();
+        condition.eq(RolePermissionPo::getRoleId, roleId)
+                .in(RolePermissionPo::getValidInd, true);
+        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.selectList(condition);
         for (RolePermissionPo rolePermissionPo : rolePermissionPos) {
             rolePermissionPo.setValidInd(false);
         }
-        rolePermissionDao.saveAll(rolePermissionPos);
+        rolePermissionService.saveBatch(rolePermissionPos);
         // 删除 redis 信息
         rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
         // 更新该角色的菜单为无效
-        List<RoleMenuPo> roleMenuPos = roleMenuDao.findByRoleIdIsAndValidIndIsTrue(roleId);
+        LambdaQueryWrapper<RoleMenuPo> condition1 = Wrappers.lambdaQuery();
+        condition1.eq(RoleMenuPo::getRoleId, roleId)
+                .in(RoleMenuPo::getValidInd, true);
+        List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(condition1);
         for (RoleMenuPo roleMenuPo : roleMenuPos) {
             roleMenuPo.setValidInd(false);
         }
-        roleMenuDao.saveAll(roleMenuPos);
+        roleMenuService.saveBatch(roleMenuPos);
         // 删除 redis 信息
         roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
@@ -351,9 +401,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RoleVo deleteRoleById(Long roleId) {
-        Optional<RolePo> optional = roleDao.findById(roleId);
+        RolePo one = roleDao.selectById(roleId);
         // 如果不存在，直接构建一个新的返回
-        if (!optional.isPresent()) {
+        if (one == null) {
             RoleVo roleVo = new RoleVo();
             roleVo.setId(roleId);
             roleVo.setValidInd(false);
@@ -364,16 +414,19 @@ public class RoleServiceImpl implements RoleService {
             return roleVo;
         }
         // 删除角色
-        RolePo one = optional.get();
-        roleDao.delete(one);
+        roleDao.deleteById(one);
 
         // 删除该角色的权限
-        rolePermissionDao.deleteByRoleId(roleId);
+        LambdaQueryWrapper<RolePermissionPo> condition1 = Wrappers.lambdaQuery();
+        condition1.eq(RolePermissionPo::getRoleId, roleId);
+        rolePermissionDao.delete(condition1);
         // 删除 redis 信息
         rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
         // 删除该角色的菜单
-        roleMenuDao.deleteByRoleId(roleId);
+        LambdaQueryWrapper<RoleMenuPo> condition2 = Wrappers.lambdaQuery();
+        condition2.eq(RoleMenuPo::getRoleId, roleId);
+        roleMenuDao.delete(condition2);
         // 删除 redis 信息
         roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
@@ -382,22 +435,24 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<DataDictionaryEx> findSelectRole() {
-        List<SelectRoleQuery> selectRole = roleDao.findSelectRole();
-        List<DataDictionaryEx> collect = selectRole.stream().map(m -> {
-            return new DataDictionaryEx(m.getId(), m.getRoleName() + "-" + m.getRoleCode(), m.getId());
-        }).collect(Collectors.toList());
+        List<RolePo> rolePos = this.list();
+        List<DataDictionaryEx> collect = rolePos.stream().map(m ->
+                new DataDictionaryEx(m.getId(), m.getRoleName() + "-" + m.getRoleCode(), m.getId()))
+                .collect(Collectors.toList());
         return collect;
     }
 
     @Override
     public List<RoleVo> findRoleById(List<Long> ids) {
-        List<RolePo> pos = roleDao.findByIdIn(ids);
+        List<RolePo> pos = roleDao.selectBatchIds(ids);
         return ConvertUtils.convertIgnoreBase(pos, RoleVo.class);
     }
 
     @Override
     public Integer countRoleCodeByRoleCode(String roleCode) {
-        return roleDao.countRoleCodeByRoleCode(roleCode);
+        LambdaQueryWrapper<RolePo> condition2 = Wrappers.lambdaQuery();
+        condition2.eq(RolePo::getRoleCode, roleCode);
+        return roleDao.selectCount(condition2);
     }
 
 }

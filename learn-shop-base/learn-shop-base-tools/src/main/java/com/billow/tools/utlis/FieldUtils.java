@@ -159,27 +159,6 @@ public class FieldUtils {
     }
 
     /**
-     * entity转换成map
-     * key为属性名,value为值
-     *
-     * @return void
-     * @author LiuYongTao
-     * @date 2018/7/9 11:53
-     */
-    public static <T> LinkedHashMap<String, Object> entityToMap(T t) throws Exception {
-        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-
-        Field[] fields = t.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            String name = field.getName();
-            Object value = field.get(t);
-            map.put(name, value);
-        }
-        return map;
-    }
-
-    /**
      * 获取指定属性的值
      *
      * @return java.util.HashMap<java.lang.String, java.lang.Object>

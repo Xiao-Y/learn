@@ -1,5 +1,5 @@
-<#assign VO = table.entityName?substring(0,(table.entityName)?length-2) + "Vo">
-<#assign Vo = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "Vo">
+<#assign SC = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
+<#assign Sc = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
 package com.billow.${package.ModuleName}.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.${package.ModuleName}.dao.${table.mapperName};
+import com.billow.${package.ModuleName}.pojo.search.${SC};
 import com.billow.${package.ModuleName}.pojo.po.${entity};
-import com.billow.${package.ModuleName}.pojo.vo.${VO};
 import com.billow.${package.ModuleName}.service.${table.serviceName};
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +30,8 @@ public class ${table.serviceImplName} extends ServiceImpl<${table.mapperName}, $
     private ${table.mapperName} ${table.mapperName?uncap_first};
 
     @Override
-    public IPage<${entity}> findListByPage(${VO} ${Vo}) {
-        IPage<${entity}> page = new Page<>(${Vo}.getPageNo(), ${Vo}.getPageSize());
+    public IPage<${entity}> findListByPage(${SC} ${Sc}) {
+        IPage<${entity}> page = new Page<>(${Sc}.getPageNo(), ${Sc}.getPageSize());
         LambdaQueryWrapper<${entity}> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<${entity}> selectPage = ${table.mapperName?uncap_first}.selectPage(page, wrapper);

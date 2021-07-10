@@ -1,19 +1,20 @@
 package com.billow.system.dao;
 
 import com.billow.system.pojo.po.UserRolePo;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.util.List;
+import org.apache.ibatis.annotations.CacheNamespace;
+import com.billow.mybatis.cache.MybatisRedisCache;
 
-public interface UserRoleDao extends JpaRepository<UserRolePo, Long> {
+/**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author billow
+ * @since 2021-04-01
+ */
+@CacheNamespace(implementation = MybatisRedisCache.class)
+public interface UserRoleDao extends BaseMapper<UserRolePo> {
 
-    /**
-     * 通过用户id 查询出角色id
-     *
-     * @param userId 用户id
-     * @return java.util.List<UserRolePo>
-     * @author LiuYongTao
-     * @date 2018/11/5 16:23
-     */
-    List<UserRolePo> findRoleIdByUserId(Long userId);
 }

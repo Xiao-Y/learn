@@ -1,5 +1,7 @@
 package com.billow.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.system.dao.WhiteListDao;
 import com.billow.system.pojo.po.WhiteListPo;
 import com.billow.system.pojo.vo.WhiteListVo;
@@ -22,7 +24,11 @@ public class WhiteListServiceImpl implements WhiteListService {
 
     @Override
     public List<WhiteListVo> findByIpAndModuleAndValidInd(String ip, String module, Boolean validind) {
-        List<WhiteListPo> whiteListPos = whiteListDao.findByIpAndModuleAndValidInd(ip, module, validind);
+        LambdaQueryWrapper<WhiteListPo> condition = Wrappers.lambdaQuery();
+        condition.eq(WhiteListPo::getIp, ip)
+                .eq(WhiteListPo::getModule, module)
+                .eq(WhiteListPo::getValidInd, validind);
+        List<WhiteListPo> whiteListPos = whiteListDao.selectList(condition);
         List<WhiteListVo> whiteListVos = ConvertUtils.convert(whiteListPos, WhiteListVo.class);
         return whiteListVos;
     }

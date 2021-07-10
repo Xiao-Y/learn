@@ -1,14 +1,15 @@
 package com.billow.system.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.PermissionVo;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
 
-public interface PermissionService {
+public interface PermissionService extends IService<PermissionPo> {
 
     /**
      * 通过角色令牌,查询角色的权限集合
@@ -28,7 +29,7 @@ public interface PermissionService {
      * @author LiuYongTao
      * @date 2019/7/9 15:59
      */
-    Page<PermissionVo> findPermissionList(PermissionVo permissionVo);
+    IPage<PermissionVo> findPermissionList(PermissionVo permissionVo);
 
     /**
      * 根据ID删除权限

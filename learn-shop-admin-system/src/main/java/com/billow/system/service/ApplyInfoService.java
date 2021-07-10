@@ -1,13 +1,14 @@
 package com.billow.system.service;
 
-import com.billow.base.workflow.vo.CustomPage;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
+import com.billow.system.pojo.po.MytasklistPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.tools.enums.ApplyTypeEnum;
-import org.springframework.data.domain.Page;
 
-public interface ApplyInfoService<T> {
+public interface ApplyInfoService extends IService<ApplyInfoPo> {
 
     /**
      * 提交申请信息，如果存在 applyType + StartApplyProcess 的实现类，会执行其中的方法
@@ -19,20 +20,7 @@ public interface ApplyInfoService<T> {
      * @author LiuYongTao
      * @date 2019/9/2 17:21
      */
-    void submitApplyInfo(String operator, ApplyTypeEnum applyType, T t);
-
-//    /**
-//     * 退回后重新提交，如果存在 applyType + StartApplyProcess 的实现类，会执行其中的方法
-//     *
-//     * @param applyType
-//     * @param id        申请信息id
-//     * @param taskId    任务id
-//     * @param t
-//     * @return void
-//     * @author billow
-//     * @date 2019/9/8 20:15
-//     */
-//    void submitReWorkApplyInfo(ApplyTypeEnum applyType, Long id, String taskId, T t);
+    <T> void submitApplyInfo(String operator, ApplyTypeEnum applyType, T t);
 
     /**
      * 加载我的任务任务列表（已签收和未签收的）
@@ -44,7 +32,7 @@ public interface ApplyInfoService<T> {
      * @author billow
      * @date 2019/9/3 20:03
      */
-    CustomPage queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize);
+    IPage<MytasklistPo> queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize);
 
     /**
      * 我发起的流程（所有的）
@@ -54,7 +42,7 @@ public interface ApplyInfoService<T> {
      * @author billow
      * @date 2019/9/8 17:15
      */
-    Page<ApplyInfoVo> myStartProdeList(ApplyInfoVo applyInfoVo);
+    IPage<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo);
 
     /**
      * 删除已经结束的申请

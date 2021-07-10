@@ -1,7 +1,7 @@
 package com.billow.system.pojo.ex;
 
 
-import com.billow.jpa.base.pojo.BasePo;
+import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

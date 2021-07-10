@@ -130,7 +130,7 @@
       },
       // 角色的 id
       roleId: {
-        type: Number,
+        type: String,
         default: null
       },
     },

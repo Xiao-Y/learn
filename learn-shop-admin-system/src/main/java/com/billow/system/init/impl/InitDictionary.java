@@ -4,6 +4,7 @@ import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.DataDictionaryDao;
 import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
+import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 public class InitDictionary implements IStartLoading {
 
     @Autowired
-    private DataDictionaryDao dataDictionaryDao;
+    private DataDictionaryService dataDictionaryService;
     @Autowired
     private RedisUtils redisUtils;
     @Resource(name = "fxbDrawExecutor")
@@ -37,7 +38,7 @@ public class InitDictionary implements IStartLoading {
     public boolean init() {
         log.info("======== start init Dictionary....");
         executorService.execute(() -> {
-            List<DataDictionaryPo> dataDictionaryPos = dataDictionaryDao.findAll();
+            List<DataDictionaryPo> dataDictionaryPos = dataDictionaryService.list();
             // 以 getFieldType 分组
             Map<String, List<DataDictionaryPo>> collect = dataDictionaryPos.stream()
                     .collect(Collectors.groupingBy(DataDictionaryPo::getFieldType));

@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 /**
  * 运行流程监听
  *
@@ -35,11 +33,10 @@ public class CustomExecutionListener implements ExecutionListener {
             String businessKey = execution.getProcessInstanceBusinessKey();
             if (businessKey != null) {
                 try {
-                    Optional<ApplyInfoPo> optional = applyInfoDao.findById(new Long(businessKey));
-                    if (optional.isPresent()) {
-                        ApplyInfoPo applyInfoPo = optional.get();
+                    ApplyInfoPo applyInfoPo = applyInfoDao.selectById(new Long(businessKey));
+                    if (applyInfoPo != null) {
                         applyInfoPo.setIsEnd(true);
-                        applyInfoDao.save(applyInfoPo);
+                        applyInfoDao.updateById(applyInfoPo);
                     }
                 } catch (Exception e) {
                     log.error("更新申请表 IsEnd 异常，", e);

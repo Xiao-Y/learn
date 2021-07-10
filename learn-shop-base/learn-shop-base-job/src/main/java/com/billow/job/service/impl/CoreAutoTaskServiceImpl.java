@@ -53,7 +53,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void deleteAutoTask(Long jobId) throws Exception {
+    public void deleteAutoTask(String jobId) throws Exception {
         ScheduleJobVo scheduleJobVo = scheduleJobService.findById(jobId);
         quartzManager.deleteJob(scheduleJobVo);
         scheduleJobService.deleteById(jobId);
@@ -102,7 +102,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
 
         if ((ToolsUtils.isEmpty(oldJobName) && ToolsUtils.isEmpty(oldJobGroup))
                 || !oldJobName.equals(jobName) || !oldJobGroup.equals(jobGroup)) {
-            int count = scheduleJobService.countByJobNameAndJobGroup(jobName, jobGroup);
+            long count = scheduleJobService.countByJobNameAndJobGroup(jobName, jobGroup);
             if (count > 0) {
                 message += "自动任务已经存在！<br>";
                 scheduleJobVo.setMessage(message);

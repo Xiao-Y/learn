@@ -44,25 +44,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public ScheduleJobPo findByIdAndValidIndIsTrueAndIsExceptionStopIsTrue(Long id) {
-        String select_sql = "select " + columnSql2 + " from " + table + " where 1=1 ";
-
-        List<Object> param = new ArrayList<>();
-
-        ScheduleJobPo scheduleJobPo = new ScheduleJobPo();
-        scheduleJobPo.setId(id);
-        scheduleJobPo.setValidInd(true);
-        scheduleJobPo.setIsExceptionStop(true);
-
-        String sql = this.genQuery(scheduleJobPo, param);
-        Object[] objects = param.toArray(new Object[param.size()]);
-        String sqlPage = select_sql + sql;
-        log.debug("sql:{}", sqlPage);
-        return jdbcTemplate.queryForObject(sqlPage, objects, new BeanPropertyRowMapper<>(ScheduleJobPo.class));
-    }
-
-    @Override
-    public int countByJobNameAndJobGroup(String jobName, String jobGroup) {
+    public long countByJobNameAndJobGroup(String jobName, String jobGroup) {
         String sql = "select count(1) from " + table + " where job_name = ? and job_group = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{jobName, jobGroup}, Integer.class);
     }
@@ -81,14 +63,14 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
     }
 
     @Override
-    public ScheduleJobPo findById(Long id) {
+    public ScheduleJobPo findById(String id) {
         String select_sql = "select " + columnSql2 + " from " + table + " where 1=1 and id = ?";
         log.debug("sql:{}", select_sql);
         return jdbcTemplate.queryForObject(select_sql, new Object[]{id}, new BeanPropertyRowMapper<>(ScheduleJobPo.class));
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         String sql = "delete from " + table + " where id = ?";
         log.debug("sql:{}", sql);
         jdbcTemplate.update(sql, id);
@@ -123,7 +105,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
             ps.setString(21, scheduleJobPo.getMailReceive());
             return ps;
         }, keyHolder);
-        scheduleJobPo.setId(keyHolder.getKey().longValue());
+        scheduleJobPo.setId(keyHolder.getKey().toString());
         return scheduleJobPo;
     }
 
@@ -213,10 +195,6 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
         if (ToolsUtils.isNotEmpty(scheduleJobPo.getIsSendMail())) {
             sql += " and is_send_mail = ? ";
             queryParam.add(scheduleJobPo.getIsSendMail());
-        }
-        if (ToolsUtils.isNotEmpty(scheduleJobPo.getJobStatus())) {
-            sql += " and job_status = ? ";
-            queryParam.add(scheduleJobPo.getJobStatus());
         }
         if (scheduleJobPo.getIsExceptionStop() != null) {
             sql += " and is_exception_stop = ? ";

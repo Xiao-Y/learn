@@ -1,55 +1,65 @@
 package com.billow.system.pojo.po;
 
-import com.billow.jpa.base.pojo.BasePo;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.billow.mybatis.pojo.BasePo;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serializable;
+import lombok.experimental.Accessors;
 
 /**
- * 中国省市区
+ * <p>
  *
- * @author liuyongtao
- * @create 2019-08-04 10:52
+ * </p>
+ *
+ * @author billow
+ * @since 2021-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_city")
-public class CityPo extends BasePo implements Serializable {
+@Accessors(chain = true)
+@TableName("sys_city")
+@ApiModel(value = "CityPo对象", description = "")
+public class CityPo extends BasePo {
 
-    @ApiModelProperty("城市 id")
+    private static final long serialVersionUID = 1L;
+
+    @TableField("city_id")
     private String cityId;
 
-    @ApiModelProperty("上级城市id")
+    @TableField("parent_city_id")
     private String parentCityId;
 
-    @ApiModelProperty("城市等级")
+    @TableField("level_type")
     private String levelType;
-    @ApiModelProperty("城市代码")
+
+    @ApiModelProperty(value = "地市code")
+    @TableField("city_code")
     private String cityCode;
 
-    @ApiModelProperty("城市名称")
+    @TableField("name")
     private String name;
 
-    @ApiModelProperty("城市缩写")
+    @TableField("short_name")
     private String shortName;
 
-    @ApiModelProperty("城市拼音")
+    @TableField("pin_yin")
     private String pinYin;
 
-    @ApiModelProperty("城市完整名称")
+    @TableField("merger_name")
     private String mergerName;
 
-    @ApiModelProperty("邮编")
+    @ApiModelProperty(value = "邮编")
+    @TableField("zip_code")
     private String zipCode;
 
-    @ApiModelProperty("纬度")
+    @TableField("lat")
     private String lat;
 
-    @ApiModelProperty("经度")
+    @TableField("lng")
     private String lng;
+
+
 }

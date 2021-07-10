@@ -1,12 +1,12 @@
 package com.billow.system.init.impl;
 
 import com.billow.common.redis.RedisUtils;
-import com.billow.system.dao.RoleDao;
 import com.billow.system.init.IStartLoading;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.properties.CustomProperties;
 import com.billow.system.service.MenuService;
+import com.billow.system.service.RoleService;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class InitRoleMenu implements IStartLoading {
     @Autowired
     private RedisUtils redisUtils;
     @Autowired
-    private RoleDao roleDao;
+    private RoleService roleService;
     @Autowired
     private MenuService menuService;
     @Autowired
@@ -48,7 +48,7 @@ public class InitRoleMenu implements IStartLoading {
                 return;
             }
             Map<String, List<MenuEx>> map = new HashMap<>();
-            List<RolePo> rolePos = roleDao.findAll();
+            List<RolePo> rolePos = roleService.list();
             for (RolePo rolePo : rolePos) {
                 List<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
                 map.put(rolePo.getRoleCode(), menuExs);

@@ -1,10 +1,15 @@
 package com.billow.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.billow.jpa.DefaultSpec;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.utils.MybatisKet;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RolePermissionDao;
-import com.billow.system.dao.spec.PermissionSpec;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
@@ -16,10 +21,6 @@ import com.billow.tools.utlis.ToolsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -38,7 +38,7 @@ import java.util.Set;
  * @create 2019-04-29 18:11
  */
 @Service
-public class PermissionServiceImpl implements PermissionService {
+public class PermissionServiceImpl extends ServiceImpl<PermissionDao, PermissionPo> implements PermissionService {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -55,19 +55,25 @@ public class PermissionServiceImpl implements PermissionService {
         Set<PermissionPo> permissionPos = new HashSet<>();
 
         // 查询权限信息
-        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.findByRoleIdIsAndValidIndIsTrue(rolePo.getId());
+        LambdaQueryWrapper<RolePermissionPo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(RolePermissionPo::getRoleId, rolePo.getId())
+                .eq(RolePermissionPo::getValidInd, true);
+        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.selectList(wrapper);
         if (CollectionUtils.isEmpty(rolePermissionPos)) {
             logger.warn("角色：{}，未分配权限！", rolePo.getRoleName());
             return permissionPos;
         }
 
         rolePermissionPos.stream().forEach(rp -> {
-            Optional<PermissionPo> permissionPo = permissionDao.findByIdAndValidIndIsTrue(rp.getPermissionId());
-            if (!permissionPo.isPresent()) {
+            PermissionPo permissionPo = permissionDao.selectById(rp.getPermissionId());
+            if (permissionPo.getValidInd() == null || !permissionPo.getValidInd()) {
+                permissionPo = null;
+            }
+            if (permissionPo == null) {
                 logger.warn("角色：{}，permissionId:{},未查询到信息！", rolePo.getRoleName(), rp.getId());
                 return;
             }
-            PermissionPo po = ConvertUtils.convertIgnoreBase(permissionPo.get(), PermissionPo.class);
+            PermissionPo po = ConvertUtils.convertIgnoreBase(permissionPo, PermissionPo.class);
             permissionPos.add(po);
         });
 
@@ -75,12 +81,12 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public Page<PermissionVo> findPermissionList(PermissionVo permissionVo) {
-        PermissionSpec spec = new PermissionSpec(permissionVo);
-        Sort sort = Sort.by(Sort.Direction.DESC, "updateTime");
-        Pageable pageable = PageRequest.of(permissionVo.getPageNo(), permissionVo.getPageSize(), sort);
-        Page<PermissionVo> permissionVos = permissionDao.findAll(spec, pageable).map(this::convertToPermissionVo);
-        return permissionVos;
+    public IPage<PermissionVo> findPermissionList(PermissionVo permissionVo) {
+        IPage<PermissionPo> page = new Page<>(permissionVo.getPageNo(), permissionVo.getPageSize());
+        PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
+        QueryWrapper<PermissionPo> conditionLike = MybatisKet.getConditionLike(convert);
+        conditionLike.orderByDesc("update_time");
+        return this.page(page, conditionLike).convert(this::convertToPermissionVo);
     }
 
     private PermissionVo convertToPermissionVo(PermissionPo permissionPo) {
@@ -96,7 +102,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo deletePermissionById(Long id) {
-        PermissionPo permissionPo = permissionDao.findById(id).get();
+        PermissionPo permissionPo = permissionDao.selectById(id);
         permissionDao.deleteById(id);
         // redis：删除所有角色所持有的该权限
         rolePermissionRedisKit.deleteRolePermissionById(id);
@@ -107,14 +113,14 @@ public class PermissionServiceImpl implements PermissionService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void savePermission(PermissionVo permissionVo) {
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
-        PermissionPo save = permissionDao.save(convert);
-        ConvertUtils.convert(save, permissionVo);
+        permissionDao.insert(convert);
+        ConvertUtils.convert(convert, permissionVo);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updatePermission(PermissionVo permissionVo) {
-        this.savePermission(permissionVo);
+        this.updateById(permissionVo);
         // redis：通过权限 id 更新权限信息
         rolePermissionRedisKit.updatePermissionById(permissionVo);
     }
@@ -122,9 +128,9 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo prohibitPermissionById(Long id) {
-        PermissionPo permissionPo = permissionDao.findById(id).get();
+        PermissionPo permissionPo = permissionDao.selectById(id);
         permissionPo.setValidInd(false);
-        permissionDao.save(permissionPo);
+        permissionDao.updateById(permissionPo);
         // redis：删除所有角色所持有的该权限
         rolePermissionRedisKit.deleteRolePermissionById(id);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
@@ -132,11 +138,11 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<PermissionVo> findPermissionAll() {
-        PermissionPo permissionPo = new PermissionPo();
-        permissionPo.setValidInd(true);
-        DefaultSpec<PermissionPo> defaultSpec = new DefaultSpec<>(permissionPo);
-        Sort sort = Sort.by(Sort.Direction.ASC, "id");
-        List<PermissionPo> permissionPos = permissionDao.findAll(defaultSpec, sort);
+
+        LambdaQueryWrapper<PermissionPo> condition = Wrappers.lambdaQuery();
+        condition.eq(PermissionPo::getValidInd, true);
+        condition.orderByAsc(PermissionPo::getId);
+        List<PermissionPo> permissionPos = permissionDao.selectList(condition);
         List<PermissionVo> permissionVos = new ArrayList<>();
         permissionPos.stream().forEach(f -> {
             permissionVos.add(this.convertToPermissionVo(f));

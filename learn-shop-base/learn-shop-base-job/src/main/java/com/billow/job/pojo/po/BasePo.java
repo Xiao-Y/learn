@@ -16,7 +16,7 @@ import java.util.Date;
 public class BasePo extends BasePage implements Serializable {
 
     // 主键id
-    private Long id;
+    private String id;
     // 创建人
     private String creatorCode;
     // 更新人
