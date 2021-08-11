@@ -63,4 +63,3 @@ config:
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 #    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
 #    com.itmuch.youran.persistence: ERROR
-
