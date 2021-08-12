@@ -17,18 +17,10 @@ public class LuaConfiguration {
      * @author xiaoy
      * @since 2021/1/23 12:06
      */
-    @Bean
+//    @Bean
     public DefaultRedisScript<Long> seckillScript() {
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("script/seckill.lua")));
-        redisScript.setResultType(Long.class);
-        return redisScript;
-    }
-
-    @Bean
-    public DefaultRedisScript<Long> seckillScript1() {
-        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
-        redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("script/seckill1.lua")));
         redisScript.setResultType(Long.class);
         return redisScript;
     }

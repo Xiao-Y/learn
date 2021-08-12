@@ -7,12 +7,14 @@ package com.billow.seckill.enums;
  * @since 2021-1-22 10:01
  */
 public enum SeckillStatEnum {
+    UNDEFIND(99, "未知"),
     SUCCESS(1, "秒杀成功"),
     END(0, "秒杀结束"),
     REPEAT_KILL(-1, "重复秒杀"),
     INNER_ERROR(-2, "系统异常"),
     DATA_REWRITE(-3, "数据串改"),
-    STOCK_OUT(-4, "库存不足");
+    STOCK_OUT(-4, "库存不足"),
+    PRODUCT_NOT_EXIST(-6, "商品不存在");
 
     private int state;
     private String stateInfo;

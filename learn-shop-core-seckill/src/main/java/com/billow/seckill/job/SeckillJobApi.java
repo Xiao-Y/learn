@@ -1,4 +1,4 @@
-package job;
+package com.billow.seckill.job;
 
 import com.billow.seckill.service.SeckillService;
 import io.swagger.annotations.Api;

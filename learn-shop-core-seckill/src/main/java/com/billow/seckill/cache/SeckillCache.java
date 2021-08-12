@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.billow.common.redis.RedisUtils;
 import com.billow.seckill.config.LuaConfiguration;
+import com.billow.seckill.enums.LuaScriptEnum;
 import com.billow.seckill.enums.SeckillStatEnum;
+import com.billow.seckill.pojo.po.SeckillPo;
 import com.billow.seckill.pojo.po.SuccessKilledPo;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +17,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,11 +57,8 @@ public class SeckillCache {
      * @see LuaConfiguration#seckillScript()
      * @since 2021-6-11 11:12
      */
-    @Resource
-    private DefaultRedisScript<Long> seckillScript;
-
-    @Resource
-    private DefaultRedisScript<Long> seckillScript1;
+//    @Resource
+    private DefaultRedisScript<String> seckillScript;
 
     /**
      * 库存缓存过期时间
@@ -75,6 +72,18 @@ public class SeckillCache {
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private RedisUtils redisUtils;
+
+    /**
+     * 生成 秒杀商品key
+     *
+     * @param seckillId 秒杀id
+     * @return {@link String}
+     * @author xiaoy
+     * @since 2021/1/24 10:03
+     */
+    public String genSeckillProductKey(Long seckillId) {
+        return RedisCst.genKey(RedisCst.SECKILL_PRODUCT, seckillId.toString());
+    }
 
     /**
      * 生成 库存key
@@ -112,7 +121,7 @@ public class SeckillCache {
      * @author liuyongtao
      * @since 2021-6-11 10:31
      */
-    public String updateSeckillCache(Long seckillId, Date endTime, Date nowDate, Integer stock) {
+    public String saveSeckillStockCache(Long seckillId, Date endTime, Date nowDate, Integer stock) {
         String seckillStockKey = this.genSeckillStockKey(seckillId);
         // 延迟后的时间
         long exp = endTime.getTime() - nowDate.getTime() + clearDataEndArferTime;
@@ -128,9 +137,9 @@ public class SeckillCache {
      * @author liuyongtao
      * @since 2021-6-11 10:34
      */
-    public long findSeckillStockCache(Long seckillId) {
+    public int findSeckillStockCache(Long seckillId) {
         String seckillStockKey = this.genSeckillStockKey(seckillId);
-        Long stock = redisUtils.getObj(seckillStockKey);
+        Integer stock = redisUtils.getObj(seckillStockKey);
         return stock == null ? 0 : stock;
     }
 
@@ -150,16 +159,22 @@ public class SeckillCache {
      */
     public SeckillStatEnum executeSeckill(SuccessKilledPo killedPo) {
         String successKilledJson = JSON.toJSONString(killedPo);
-        log.info("秒杀成功数据：{}", successKilledJson);
-        Long seckillId = killedPo.getSeckillId();
-        String userCode = killedPo.getUsercode();
-        String seckillLockKey = this.genSeckillLockKey(seckillId, userCode);
-        String seckillStockKey = this.genSeckillStockKey(seckillId);
-        List<String> keys = Arrays.asList(seckillStockKey, seckillLockKey);
+        log.info("秒杀成功时需要插入的订单数据：{}", successKilledJson);
+        String seckillLockKey = this.genSeckillLockKey(killedPo.getSeckillId(), killedPo.getUsercode());
+        String seckillStockKey = this.genSeckillStockKey(killedPo.getSeckillId());
         // 脚本配置，key 集合，秒杀商信息，付款过期时间（单位：秒）
-        Long execute = redisTemplate.execute(seckillScript, keys, successKilledJson, seckillOrderExp);
+//        List<String> keys = Arrays.asList(seckillStockKey, seckillLockKey);
+//        log.info("入参：seckillOrderExp:{},keys:{}", seckillOrderExp, keys);
+//        String execute = redisTemplate.execute(seckillScript, keys, successKilledJson, seckillOrderExp);
+        Long execute = LuaUtil.execute(LuaScriptEnum.SEC_KILL,
+                Arrays.asList(seckillStockKey, seckillLockKey),
+                successKilledJson,
+                seckillOrderExp);
+        if (execute == null) {
+            return SeckillStatEnum.UNDEFIND;
+        }
         SeckillStatEnum statEnum = SeckillStatEnum.of(execute.intValue());
-        log.info("seckillLockKey:{},statEnum:{}", seckillLockKey, statEnum);
+        log.info("返回值：execute：{} {}", execute, statEnum);
         return statEnum;
     }
 
@@ -178,18 +193,45 @@ public class SeckillCache {
         return JSONObject.parseObject(killedPoJson, SuccessKilledPo.class);
     }
 
-    public SeckillStatEnum executeSeckill1(SuccessKilledPo killedPo) {
-        String successKilledJson = JSON.toJSONString(killedPo);
-        log.info("秒杀成功数据：{}", successKilledJson);
-        Long seckillId = killedPo.getSeckillId();
-        String userCode = killedPo.getUsercode();
-        String seckillLockKey = this.genSeckillLockKey(seckillId, userCode);
-        String seckillStockKey = this.genSeckillStockKey(seckillId);
-        List<String> keys = Arrays.asList(seckillStockKey, seckillLockKey);
-        // 脚本配置，key 集合，秒杀商信息，付款过期时间（单位：秒）
-        Long execute = redisTemplate.execute(seckillScript, keys, successKilledJson, seckillOrderExp);
-        SeckillStatEnum statEnum = SeckillStatEnum.of(execute.intValue());
-        log.info("seckillLockKey:{},statEnum:{}", seckillLockKey, statEnum);
-        return statEnum;
+    /**
+     * 获取秒杀商品数据
+     *
+     * @param seckillId
+     * @return {@link SeckillPo}
+     * @author liuyongtao
+     * @since 2021-6-11 11:17
+     */
+    public SeckillPo findSeckillCache(Long seckillId) {
+        String seckillProductKey = this.genSeckillProductKey(seckillId);
+        String killedPoJson = redisTemplate.opsForValue().get(seckillProductKey);
+        return JSONObject.parseObject(killedPoJson, SeckillPo.class);
     }
+
+    /**
+     * 保存秒杀商品数据
+     *
+     * @param seckillPo
+     * @author liuyongtao
+     * @since 2021-6-11 11:17
+     */
+    public void saveSeckillCache(SeckillPo seckillPo) {
+        String seckillProductKey = this.genSeckillProductKey(seckillPo.getId());
+        redisUtils.setObj(seckillProductKey, seckillPo);
+    }
+
+//    public SeckillStatEnum executeSeckill1(SuccessKilledPo killedPo) {
+////        String successKilledJson = JSON.toJSONString(killedPo);
+////        log.info("秒杀成功数据：{}", successKilledJson);
+////        Long seckillId = killedPo.getSeckillId();
+////        String userCode = killedPo.getUsercode();
+////        String seckillLockKey = this.genSeckillLockKey(seckillId, userCode);
+////        String seckillStockKey = this.genSeckillStockKey(seckillId);
+////        List<String> keys = Arrays.asList(seckillStockKey, seckillLockKey);
+////        // 脚本配置，key 集合，秒杀商信息，付款过期时间（单位：秒）
+////        Long execute = redisTemplate.execute(seckillScript, keys, successKilledJson, seckillOrderExp);
+//////        SeckillStatEnum statEnum = SeckillStatEnum.of(execute.intValue());
+////        log.info("seckillLockKey:{},seckillStockKey:{},statEnum:{}", seckillLockKey, seckillStockKey, execute);
+//        this.executeSeckill(killedPo);
+//        return SeckillStatEnum.SUCCESS;
+//    }
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.seckill.cache.SeckillCache;
+import com.billow.seckill.cache.StockRedisKit;
 import com.billow.seckill.dao.SeckillDao;
 import com.billow.seckill.enums.SeckillStatEnum;
 import com.billow.seckill.pojo.po.SeckillPo;
@@ -22,6 +23,7 @@ import com.billow.tools.exception.GlobalException;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -58,6 +60,8 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
     private SuccessKilledService successKilledService;
     @Autowired
     private SeckillCache seckillCache;
+//    @Autowired
+//    private StockRedisKit stockRedisKit;
 
     @Override
     public IPage<SeckillPo> findListByPage(SeckillVo seckillVo) {
@@ -79,13 +83,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
 
     @Override
     public ExposerVo genSeckillUrl(Long seckillId) {
-        SeckillPo seckillPo = this.getById(seckillId);
+        SeckillPo seckillPo = seckillCache.findSeckillCache(seckillId);
         //说明没有查询到
         if (seckillPo == null) {
             return new ExposerVo(false, seckillId);
-        }
-        if (seckillPo.getStock() < 1) {
-            throw new GlobalException(ResCodeEnum.RESCODE_ERROR_KILL_EMPTY);
         }
         // 当前时间
         long nowLong = System.currentTimeMillis();
@@ -96,6 +97,11 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
         // 判断活动是否开始
         if (startLong > nowLong || nowLong > endLong) {
             return new ExposerVo(false, seckillId, nowLong, startLong, endLong);
+        }
+        // 判断库存
+        int stock = seckillCache.findSeckillStockCache(seckillId);
+        if (stock < 1) {
+            throw new GlobalException(ResCodeEnum.RESCODE_ERROR_KILL_EMPTY);
         }
         // 生成 md5 链接
         String md5 = this.getMD5(seckillId);
@@ -110,7 +116,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
         if (!md51.equals(md5)) {
             throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
         }
-        long stock = seckillCache.findSeckillStockCache(seckillId);
+        int stock = seckillCache.findSeckillStockCache(seckillId);
         if (stock <= 0) {
             SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT, null);
             log.info("===>> 秒杀信息：{}", JSON.toJSONString(executionVo));
@@ -131,7 +137,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
             successKilledVo = ConvertUtils.convert(killedPo, SuccessKilledVo.class);
             // 保存秒杀订单数据
             SuccessKilledPo successKilledPoCache = seckillCache.findSuccessKilledCache(seckillId, userCode);
-            successKilledService.saveAsync(successKilledPoCache);
+//            successKilledService.saveAsync(successKilledPoCache);
         }
         SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum, successKilledVo);
         log.info("秒杀信息：{}", JSON.toJSONString(executionVo));
@@ -150,7 +156,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
                 .eq(SeckillPo::getLoadCache, false);
         List<SeckillPo> seckillPos = this.list(wrapper);
         seckillPos.stream().forEach(f -> {
-            this.updateSeckillAndCache(now, f);
+            this.updatePojoAndCache(now, f);
         });
     }
 
@@ -162,12 +168,13 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
      * @author xiaoy
      * @since 2021/1/24 10:39
      */
-    private void updateSeckillAndCache(Date nowDate, SeckillPo seckillPo) {
+    private void updatePojoAndCache(Date nowDate, SeckillPo seckillPo) {
         try {
             seckillPo.setLoadCache(true);
             this.updateById(seckillPo);
             // 更新缓存
-            seckillCache.updateSeckillCache(seckillPo.getId(), seckillPo.getEndTime(), nowDate, seckillPo.getStock());
+            seckillCache.saveSeckillStockCache(seckillPo.getId(), seckillPo.getEndTime(), nowDate, seckillPo.getStock());
+            seckillCache.saveSeckillCache(seckillPo);
         } catch (Exception e) {
             log.error("自动任务：seckillStockKey:{} 加载缓存数据失败");
         }

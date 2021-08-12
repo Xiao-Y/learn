@@ -71,6 +71,10 @@ public class RedisCst {
      * 秒杀库存前缀，SECKILL:STOCK:{seckillId}:{userCode}
      */
     public final static String SECKILL_STOCK = "SECKILL:STOCK";
+    /**
+     * 秒杀商品信息前缀，SECKILL:PRODUCT:{seckillId}
+     */
+    public final static String SECKILL_PRODUCT = "SECKILL:PRODUCT";
     //==============================================================================================
 
     /**

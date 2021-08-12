@@ -89,13 +89,13 @@ public class SpringContextUtil {
      * @date 2017年4月18日 下午4:04:09
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getBean(Class<T> clazz) throws Exception {
+    public static <T> T getBean(Class<T> clazz){
         checkApplicationContext();
-        Map<String, T> bean = applicationContext.getBeansOfType(clazz);
+        T bean = applicationContext.getBean(clazz);
         if (bean == null) {
             throw new NullBeanException(clazz);
         }
-        return (T) bean;
+        return  bean;
     }
 
     /**

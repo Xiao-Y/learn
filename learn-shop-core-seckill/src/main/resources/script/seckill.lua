@@ -7,22 +7,22 @@ local successKillInfo = ARGV[1];
 --- 获取秒杀商品超时时间
 local expire = ARGV[2];
 
+--- 是否库存存在
+if (redis.call('exists', seckillStockKey) == 0) then
+    return -6;
+end ;
 --- 获取指定的库存
 local resultStock = redis.call("get", seckillStockKey);
---- 是否库存存在
-if not resultStock then
-    return -6;
-end
 
 --- 库存为空或者小于等0时返回
 if resultStock == nil or tonumber(resultStock) <= 0 then
     return -4;
-end
+end;
 
 --- 已经秒杀过
-if redis.call("get", seckillLockKey) then
+if (redis.call('exists', seckillLockKey) == 1) then
     return -1;
-end
+end ;
 
 --- 递减库存
 redis.call("decr", seckillStockKey);
