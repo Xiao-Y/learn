@@ -1,6 +1,7 @@
 package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.common.base.BaseApi;
 import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.vo.GoodsBrandVo;
 import com.billow.product.service.GoodsBrandService;
@@ -31,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"GoodsBrandApi"},value = "品牌表")
 @RestController
 @RequestMapping("/goodsBrandApi")
-public class GoodsBrandApi {
+public class GoodsBrandApi extends BaseApi {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 

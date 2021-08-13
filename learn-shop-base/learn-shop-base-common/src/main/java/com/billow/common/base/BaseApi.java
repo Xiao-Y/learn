@@ -1,5 +1,6 @@
 package com.billow.common.base;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author liuyongtao
  * @create 2018-05-19 14:40
  */
+@Slf4j
 public class BaseApi {
-
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Value("${spring.application.name}")
     protected String applicationName;
