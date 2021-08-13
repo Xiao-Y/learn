@@ -1,5 +1,6 @@
 package com.billow.seckill.api;
 
+import com.billow.seckill.pojo.search.SuccessKilledSearchParam;
 import com.billow.seckill.pojo.vo.SuccessKilledVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class SuccessKilledApi {
 
     @ApiOperation(value = "查询分页秒杀成功明细表数据")
     @PostMapping(value = "/findListByPage")
-    public IPage<SuccessKilledPo> findListByPage(@RequestBody SuccessKilledVo successKilledVo){
-        return successKilledService.findListByPage(successKilledVo);
+    public IPage<SuccessKilledPo> findListByPage(@RequestBody SuccessKilledSearchParam searchParam){
+        return successKilledService.findListByPage(searchParam);
     }
 
     @ApiOperation(value = "根据id查询秒杀成功明细表数据")

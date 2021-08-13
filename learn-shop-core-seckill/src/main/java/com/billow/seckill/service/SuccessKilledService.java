@@ -3,7 +3,7 @@ package com.billow.seckill.service;
 
 import com.billow.mybatis.base.HighLevelService;
 import com.billow.seckill.pojo.po.SuccessKilledPo;
-import com.billow.seckill.pojo.vo.SuccessKilledVo;
+import com.billow.seckill.pojo.search.SuccessKilledSearchParam;
 
 /**
  * <p>
@@ -14,7 +14,7 @@ import com.billow.seckill.pojo.vo.SuccessKilledVo;
  * @version v1.0
  * @since 2021-01-21
  */
-public interface SuccessKilledService extends HighLevelService<SuccessKilledPo, SuccessKilledVo> {
+public interface SuccessKilledService extends HighLevelService<SuccessKilledPo, SuccessKilledSearchParam> {
 
     /**
      * 异步保存秒杀信息

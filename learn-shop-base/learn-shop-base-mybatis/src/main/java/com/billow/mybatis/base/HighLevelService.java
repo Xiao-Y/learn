@@ -10,17 +10,17 @@ import com.billow.mybatis.pojo.BasePage;
  * @author liuyongtao
  * @since 2021-8-12 14:33
  */
-public interface HighLevelService<E, V extends BasePage> extends IService<E> {
+public interface HighLevelService<E, SP extends BasePage> extends IService<E> {
 
     /**
      * 分页查询
      *
-     * @param v 查询条件
+     * @param sp 查询条件
      * @return {@link IPage<E>}
      * @author liuyongtao
      * @since 2021-8-13 10:35
      */
-    IPage<E> findListByPage(V v);
+    IPage<E> findListByPage(SP sp);
 
     /**
      * 根据ID禁用数据

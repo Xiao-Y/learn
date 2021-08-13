@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @since 2021-8-12 14:23
  */
 @Slf4j
-public class HighLevelApi<S extends HighLevelService<E, V>, E, V extends BasePage> {
+public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> {
 
     @Autowired
     private S service;
@@ -33,9 +33,9 @@ public class HighLevelApi<S extends HighLevelService<E, V>, E, V extends BasePag
     protected Class<V> vClass = (Class<V>) this.getClass(2);
 
     @ApiOperation(value = "分页查询表数据")
-    @PostMapping(value = "/list")
-    public IPage<E> findListByPage(@RequestBody V v) {
-        return service.findListByPage(v);
+    @PostMapping(value = "/findListByPage")
+    public IPage<E> findListByPage(@RequestBody SP sp) {
+        return service.findListByPage(sp);
     }
 
     @ApiOperation(value = "根据id查询表数据")
@@ -47,8 +47,8 @@ public class HighLevelApi<S extends HighLevelService<E, V>, E, V extends BasePag
 
     @ApiOperation(value = "新增表数据")
     @PostMapping(value = "/add")
-    public V add(@RequestBody V v) {
-        E po = ConvertUtils.convert(v, eClass);
+    public V add(@RequestBody BP bp) {
+        E po = ConvertUtils.convert(bp, eClass);
         service.save(po);
         return ConvertUtils.convert(po, vClass);
     }
@@ -61,8 +61,8 @@ public class HighLevelApi<S extends HighLevelService<E, V>, E, V extends BasePag
 
     @ApiOperation(value = "更新表数据")
     @PutMapping(value = "/update")
-    public V update(@RequestBody V v) {
-        E po = ConvertUtils.convert(v, eClass);
+    public V update(@RequestBody SP sp) {
+        E po = ConvertUtils.convert(sp, eClass);
         service.updateById(po);
         return ConvertUtils.convert(po, vClass);
     }

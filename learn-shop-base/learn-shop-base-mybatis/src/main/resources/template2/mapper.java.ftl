@@ -14,7 +14,6 @@ import com.billow.mybatis.cache.MybatisRedisCache;
  * </p>
  *
  * @author ${author}
- * @version v2.0
  * @since ${date}
  */
 <#if enableCache>

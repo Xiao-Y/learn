@@ -239,7 +239,8 @@ public class CodeGenerator {
 //        strategy.setInclude("sk_seckill", "sk_success_killed");
 //        strategy.setTablePrefix("sk_");
 
-//        strategy.setInclude("p_goods_brand", "p_goods_category"
+        strategy.setInclude("p_goods_brand"
+//                , "p_goods_category"
 //                , "p_goods_category_brand"
 //                , "p_goods_safeguard"
 //                , "p_goods_sku"
@@ -250,18 +251,18 @@ public class CodeGenerator {
 //                , "p_goods_specification"
 //                , "p_goods_spu"
 //                , "p_goods_spu_detail"
-//        );
-//        strategy.setTablePrefix("p_");
+        );
+        strategy.setTablePrefix("p_");
 
-        strategy.setInclude("sys_apply_info",
-                "sys_city",
-                "sys_data_dictionary",
-                "sys_menu",
-                "sys_permission",
-                "sys_role",
-                "sys_white_list"
-                );
-        strategy.setTablePrefix("sys_");
+//        strategy.setInclude("sys_apply_info",
+//                "sys_city",
+//                "sys_data_dictionary",
+//                "sys_menu",
+//                "sys_permission",
+//                "sys_role",
+//                "sys_white_list"
+//                );
+//        strategy.setTablePrefix("sys_");
 //        strategy.setInclude("r_role_menu",
 //                "r_role_permission",
 //                "r_user_role"

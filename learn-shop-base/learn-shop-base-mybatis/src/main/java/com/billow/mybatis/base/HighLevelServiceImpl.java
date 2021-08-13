@@ -18,14 +18,14 @@ import com.billow.mybatis.pojo.BasePage;
  * @version v1.0
  * @since 2021-01-21
  */
-public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, V extends BasePage> extends ServiceImpl<M, E> implements HighLevelService<E, V> {
+public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extends BasePage> extends ServiceImpl<M, E> implements HighLevelService<E, SP> {
 
     @Override
-    public IPage<E> findListByPage(V v) {
-        IPage<E> page = new Page<>(v.getPageNo(), v.getPageSize());
+    public IPage<E> findListByPage(SP sp) {
+        IPage<E> page = new Page<>(sp.getPageNo(), sp.getPageSize());
         LambdaQueryWrapper<E> wrapper = Wrappers.lambdaQuery();
         // 查询条件
-        this.genQueryCondition(wrapper, v);
+        this.genQueryCondition(wrapper, sp);
         return baseMapper.selectPage(page, wrapper);
     }
 
@@ -41,11 +41,11 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, V extends
      * 分页查询的查询条件
      *
      * @param wrapper
-     * @param v
+     * @param sp
      * @author liuyongtao
      * @since 2021-8-13 10:20
      */
-    public void genQueryCondition(LambdaQueryWrapper<E> wrapper, V v) {
+    public void genQueryCondition(LambdaQueryWrapper<E> wrapper, SP sp) {
     }
 }
 

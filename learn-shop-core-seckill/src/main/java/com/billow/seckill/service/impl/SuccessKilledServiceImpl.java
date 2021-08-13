@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.seckill.dao.SuccessKilledDao;
 import com.billow.seckill.pojo.po.SuccessKilledPo;
-import com.billow.seckill.pojo.vo.SuccessKilledVo;
+import com.billow.seckill.pojo.search.SuccessKilledSearchParam;
 import com.billow.seckill.service.SuccessKilledService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,10 @@ import java.util.Objects;
  * @since 2021-01-21
  */
 @Service
-public class SuccessKilledServiceImpl extends HighLevelServiceImpl<SuccessKilledDao, SuccessKilledPo, SuccessKilledVo> implements SuccessKilledService {
+public class SuccessKilledServiceImpl extends HighLevelServiceImpl<SuccessKilledDao, SuccessKilledPo, SuccessKilledSearchParam> implements SuccessKilledService {
 
     @Override
-    public void genQueryCondition(LambdaQueryWrapper<SuccessKilledPo> wrapper, SuccessKilledVo successKilledVo) {
+    public void genQueryCondition(LambdaQueryWrapper<SuccessKilledPo> wrapper, SuccessKilledSearchParam successKilledVo) {
         wrapper.eq(Objects.nonNull(successKilledVo.getValidInd()), SuccessKilledPo::getValidInd, successKilledVo.getValidInd());
     }
 
