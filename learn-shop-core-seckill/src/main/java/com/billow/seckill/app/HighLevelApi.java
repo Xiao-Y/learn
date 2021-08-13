@@ -39,14 +39,14 @@ public class HighLevelApi<S extends HighLevelService<E, V>, E, V extends BasePag
     }
 
     @ApiOperation(value = "根据id查询表数据")
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/getById/{id}")
     public V getById(@PathVariable("id") Long id) {
         E po = service.getById(id);
         return ConvertUtils.convert(po, vClass);
     }
 
     @ApiOperation(value = "新增表数据")
-    @PostMapping
+    @PostMapping(value = "/add")
     public V add(@RequestBody V v) {
         E po = ConvertUtils.convert(v, eClass);
         service.save(po);
@@ -54,13 +54,13 @@ public class HighLevelApi<S extends HighLevelService<E, V>, E, V extends BasePag
     }
 
     @ApiOperation(value = "删除表数据")
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/delById/{id}")
     public boolean delById(@PathVariable("id") Long id) {
         return service.removeById(id);
     }
 
     @ApiOperation(value = "更新表数据")
-    @PutMapping
+    @PutMapping(value = "/update")
     public V update(@RequestBody V v) {
         E po = ConvertUtils.convert(v, eClass);
         service.updateById(po);
@@ -68,7 +68,7 @@ public class HighLevelApi<S extends HighLevelService<E, V>, E, V extends BasePag
     }
 
     @ApiOperation("根据ID禁用表数据")
-    @PutMapping("/prohibit/{id}")
+    @PutMapping("/prohibitById/{id}")
     public boolean prohibitById(@PathVariable Long id) {
         return service.prohibitById(id);
     }
