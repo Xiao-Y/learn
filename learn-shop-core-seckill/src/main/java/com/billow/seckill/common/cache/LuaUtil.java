@@ -1,6 +1,6 @@
-package com.billow.seckill.cache;
+package com.billow.seckill.common.cache;
 
-import com.billow.seckill.enums.LuaScriptEnum;
+import com.billow.seckill.common.enums.LuaScriptEnum;
 import com.billow.tools.utlis.SpringContextUtil;
 import org.redisson.api.RScript;
 import org.redisson.api.RedissonClient;

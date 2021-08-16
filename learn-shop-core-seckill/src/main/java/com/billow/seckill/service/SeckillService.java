@@ -1,12 +1,11 @@
 
 package com.billow.seckill.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.billow.seckill.pojo.po.SeckillPo;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.seckill.pojo.vo.ExposerVo;
-import com.billow.seckill.pojo.vo.SeckillExecutionVo;
-import com.billow.seckill.pojo.vo.SeckillVo;
+import com.billow.mybatis.base.HighLevelService;
+import com.billow.seckill.common.pojo.po.SeckillPo;
+import com.billow.seckill.common.pojo.search.SeckillSearchParam;
+import com.billow.seckill.common.pojo.vo.ExposerVo;
+import com.billow.seckill.common.pojo.vo.SeckillExecutionVo;
 
 /**
  * <p>
@@ -17,27 +16,7 @@ import com.billow.seckill.pojo.vo.SeckillVo;
  * @version v1.0
  * @since 2021-01-21
  */
-public interface SeckillService extends IService<SeckillPo> {
-
-    /**
-     * 分页查询
-     *
-     * @param seckillVo 查询条件
-     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.seckill.pojo.po.SeckillPo>
-     * @author billow
-     * @since 2021-01-21
-     */
-    IPage<SeckillPo> findListByPage(SeckillVo seckillVo);
-
-    /**
-     * 根据ID禁用数据
-     *
-     * @param id 主键id
-     * @return boolean
-     * @author billow
-     * @since 2021-01-21
-     */
-    boolean prohibitById(Long id);
+public interface SeckillService extends HighLevelService<SeckillPo, SeckillSearchParam> {
 
     /**
      * 生成秒杀链接

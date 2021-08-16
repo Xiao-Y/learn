@@ -1,7 +1,8 @@
-package com.billow.seckill.app;
+package com.billow.seckill.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.billow.common.base.BaseApi;
 import com.billow.mybatis.base.HighLevelService;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.tools.utlis.ConvertUtils;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @since 2021-8-12 14:23
  */
 @Slf4j
-public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> {
+public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> extends BaseApi {
 
     @Autowired
     private S service;

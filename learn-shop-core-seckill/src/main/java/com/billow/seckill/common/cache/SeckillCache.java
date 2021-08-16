@@ -1,13 +1,13 @@
-package com.billow.seckill.cache;
+package com.billow.seckill.common.cache;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.billow.common.redis.RedisUtils;
-import com.billow.seckill.config.LuaConfiguration;
-import com.billow.seckill.enums.LuaScriptEnum;
-import com.billow.seckill.enums.SeckillStatEnum;
-import com.billow.seckill.pojo.po.SeckillPo;
-import com.billow.seckill.pojo.po.SuccessKilledPo;
+import com.billow.seckill.common.config.LuaConfiguration;
+import com.billow.seckill.common.enums.LuaScriptEnum;
+import com.billow.seckill.common.enums.SeckillStatEnum;
+import com.billow.seckill.common.pojo.po.SeckillPo;
+import com.billow.seckill.common.pojo.po.SuccessKilledPo;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.billow.seckill.config;
+package com.billow.seckill.common.config;
 
 import com.billow.cloud.common.properties.ConfigCommonProperties;
 import com.billow.cloud.common.properties.MqProperties;

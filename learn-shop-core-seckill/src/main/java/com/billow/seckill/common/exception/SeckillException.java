@@ -1,4 +1,4 @@
-package com.billow.seckill.exception;
+package com.billow.seckill.common.exception;
 
 import com.billow.tools.enums.ResCodeEnum;
 

@@ -1,6 +1,7 @@
-package com.billow.seckill.pojo.search;
+package com.billow.seckill.common.pojo.vo;
 
-import com.billow.mybatis.pojo.BasePage;
+
+import com.billow.seckill.common.pojo.po.SeckillPo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,11 +15,11 @@ import java.io.Serializable;
  *
  * @author billow
  * @version v1.0
- * @since 2021-08-13
+ * @since 2021-01-21
  */
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class SeckillSearchParam extends BasePage implements Serializable {
+public class SeckillVo extends SeckillPo implements Serializable {
 
 }

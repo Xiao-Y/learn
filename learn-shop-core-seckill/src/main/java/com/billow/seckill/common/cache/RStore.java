@@ -1,4 +1,4 @@
-package com.billow.seckill.cache;
+package com.billow.seckill.common.cache;
 
 public interface RStore {
     /**

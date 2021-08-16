@@ -1,7 +1,6 @@
-package com.billow.seckill.config;
+package com.billow.seckill.common.config;
 
-import com.billow.seckill.enums.SeckillStatEnum;
-import org.springframework.context.annotation.Bean;
+import com.billow.seckill.common.enums.SeckillStatEnum;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.script.DefaultRedisScript;

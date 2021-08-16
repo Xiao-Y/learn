@@ -1,4 +1,4 @@
-package com.billow.seckill.pojo.search;
+package com.billow.seckill.common.pojo.search;
 
 import com.billow.mybatis.pojo.BasePage;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 秒杀成功明细表 信息
+ * 秒杀库存表 信息
  * </p>
  *
  * @author billow
@@ -19,8 +19,6 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class SuccessKilledSearchParam extends BasePage implements Serializable {
-
-    private Boolean validInd;
+public class SeckillSearchParam extends BasePage implements Serializable {
 
 }

@@ -1,4 +1,4 @@
-package com.billow.seckill.enums;
+package com.billow.seckill.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,7 +2,7 @@ package com.billow.seckill.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
-import com.billow.seckill.pojo.po.SeckillPo;
+import com.billow.seckill.common.pojo.po.SeckillPo;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Param;
 

@@ -9,7 +9,7 @@
     <!-- 3.请务修改 cache-ref 中的配置 -->
     <cache-ref namespace="com.billow.seckill.dao.SuccessKilledDao"/>
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.billow.seckill.pojo.po.SuccessKilledPo">
+    <resultMap id="BaseResultMap" type="com.billow.seckill.common.pojo.po.SuccessKilledPo">
         <result column="id" property="id"/>
         <result column="valid_ind" property="validInd"/>
         <result column="create_time" property="createTime"/>
@@ -31,7 +31,7 @@
                 updater_code,
             usercode, seckill_id, kill_state
         </sql>
-    <insert id="saveSuccessKilled" parameterType="com.billow.seckill.pojo.po.SuccessKilledPo">
+    <insert id="saveSuccessKilled" parameterType="com.billow.seckill.common.pojo.po.SuccessKilledPo">
         insert ignore into sk_success_killed(usercode, seckill_id, kill_state,
         valid_ind, create_time, creator_code, update_time, updater_code)
         VALUES(#{killedPo.usercode}, #{killedPo.seckillId}, #{killedPo.killState},

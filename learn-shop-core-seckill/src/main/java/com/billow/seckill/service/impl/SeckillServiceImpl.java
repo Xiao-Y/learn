@@ -2,20 +2,17 @@ package com.billow.seckill.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.seckill.cache.SeckillCache;
-import com.billow.seckill.cache.StockRedisKit;
+import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.seckill.common.cache.SeckillCache;
 import com.billow.seckill.dao.SeckillDao;
-import com.billow.seckill.enums.SeckillStatEnum;
-import com.billow.seckill.pojo.po.SeckillPo;
-import com.billow.seckill.pojo.po.SuccessKilledPo;
-import com.billow.seckill.pojo.vo.ExposerVo;
-import com.billow.seckill.pojo.vo.SeckillExecutionVo;
-import com.billow.seckill.pojo.vo.SeckillVo;
-import com.billow.seckill.pojo.vo.SuccessKilledVo;
+import com.billow.seckill.common.enums.SeckillStatEnum;
+import com.billow.seckill.common.pojo.po.SeckillPo;
+import com.billow.seckill.common.pojo.po.SuccessKilledPo;
+import com.billow.seckill.common.pojo.search.SeckillSearchParam;
+import com.billow.seckill.common.pojo.vo.ExposerVo;
+import com.billow.seckill.common.pojo.vo.SeckillExecutionVo;
+import com.billow.seckill.common.pojo.vo.SuccessKilledVo;
 import com.billow.seckill.service.SeckillService;
 import com.billow.seckill.service.SuccessKilledService;
 import com.billow.tools.enums.ResCodeEnum;
@@ -23,7 +20,6 @@ import com.billow.tools.exception.GlobalException;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -46,7 +42,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RefreshScope
-public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> implements SeckillService {
+public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, SeckillPo, SeckillSearchParam> implements SeckillService {
 
     // 设置盐值字符串，随便定义，用于混淆MD5值
     @Value("${seckill.gen-salt:wq<<.((0kkoe$$%}")
@@ -63,22 +59,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
 //    @Autowired
 //    private StockRedisKit stockRedisKit;
 
-    @Override
-    public IPage<SeckillPo> findListByPage(SeckillVo seckillVo) {
-        IPage<SeckillPo> page = new Page<>(seckillVo.getPageNo(), seckillVo.getPageSize());
-        LambdaQueryWrapper<SeckillPo> wrapper = Wrappers.lambdaQuery();
-        // 查询条件
-        IPage<SeckillPo> selectPage = seckillDao.selectPage(page, wrapper);
-        return selectPage;
-    }
 
     @Override
-    public boolean prohibitById(Long id) {
-        SeckillPo po = new SeckillPo();
-        po.setValidInd(false);
-        LambdaQueryWrapper<SeckillPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SeckillPo::getId, id);
-        return seckillDao.update(po, wrapper) >= 1;
+    public void genQueryCondition(LambdaQueryWrapper<SeckillPo> wrapper, SeckillSearchParam seckillSearchParam) {
+        super.genQueryCondition(wrapper, seckillSearchParam);
     }
 
     @Override
