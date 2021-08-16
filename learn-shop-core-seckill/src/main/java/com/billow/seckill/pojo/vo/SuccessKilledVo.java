@@ -1,6 +1,7 @@
-package com.billow.seckill.common.pojo.search;
+package com.billow.seckill.pojo.vo;
 
-import com.billow.mybatis.pojo.BasePage;
+
+import com.billow.seckill.pojo.po.SuccessKilledPo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,13 +15,11 @@ import java.io.Serializable;
  *
  * @author billow
  * @version v1.0
- * @since 2021-08-13
+ * @since 2021-01-21
  */
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class SuccessKilledSearchParam extends BasePage implements Serializable {
-
-    private Boolean validInd;
+public class SuccessKilledVo extends SuccessKilledPo implements Serializable {
 
 }

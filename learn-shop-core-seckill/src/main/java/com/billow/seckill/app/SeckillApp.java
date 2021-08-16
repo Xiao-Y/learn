@@ -2,8 +2,8 @@ package com.billow.seckill.app;
 
 import com.billow.common.base.BaseApi;
 import com.billow.common.utils.UserTools;
-import com.billow.seckill.common.pojo.vo.ExposerVo;
-import com.billow.seckill.common.pojo.vo.SeckillExecutionVo;
+import com.billow.seckill.pojo.vo.ExposerVo;
+import com.billow.seckill.pojo.vo.SeckillExecutionVo;
 import com.billow.seckill.service.SeckillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

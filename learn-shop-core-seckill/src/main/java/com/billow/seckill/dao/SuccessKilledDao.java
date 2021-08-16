@@ -1,6 +1,6 @@
 package com.billow.seckill.dao;
 
-import com.billow.seckill.common.pojo.po.SuccessKilledPo;
+import com.billow.seckill.pojo.po.SuccessKilledPo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import org.apache.ibatis.annotations.CacheNamespace;

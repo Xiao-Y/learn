@@ -1,4 +1,4 @@
-package com.billow.seckill.common.pojo.vo;
+package com.billow.seckill.pojo.vo;
 
 import com.billow.seckill.common.enums.SeckillStatEnum;
 import lombok.Data;

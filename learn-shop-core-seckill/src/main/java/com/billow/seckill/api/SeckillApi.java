@@ -1,9 +1,9 @@
 package com.billow.seckill.api;
 
-import com.billow.seckill.common.pojo.build.SeckillBuildParam;
-import com.billow.seckill.common.pojo.po.SeckillPo;
-import com.billow.seckill.common.pojo.search.SeckillSearchParam;
-import com.billow.seckill.common.pojo.vo.SeckillVo;
+import com.billow.seckill.pojo.build.SeckillBuildParam;
+import com.billow.seckill.pojo.po.SeckillPo;
+import com.billow.seckill.pojo.search.SeckillSearchParam;
+import com.billow.seckill.pojo.vo.SeckillVo;
 import com.billow.seckill.service.SeckillService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;

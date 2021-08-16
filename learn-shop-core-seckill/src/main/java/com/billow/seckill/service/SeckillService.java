@@ -2,10 +2,10 @@
 package com.billow.seckill.service;
 
 import com.billow.mybatis.base.HighLevelService;
-import com.billow.seckill.common.pojo.po.SeckillPo;
-import com.billow.seckill.common.pojo.search.SeckillSearchParam;
-import com.billow.seckill.common.pojo.vo.ExposerVo;
-import com.billow.seckill.common.pojo.vo.SeckillExecutionVo;
+import com.billow.seckill.pojo.po.SeckillPo;
+import com.billow.seckill.pojo.search.SeckillSearchParam;
+import com.billow.seckill.pojo.vo.ExposerVo;
+import com.billow.seckill.pojo.vo.SeckillExecutionVo;
 
 /**
  * <p>

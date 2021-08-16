@@ -1,7 +1,7 @@
-package com.billow.seckill.common.pojo.vo;
+package com.billow.seckill.pojo.vo;
 
 
-import com.billow.seckill.common.pojo.po.SuccessKilledPo;
+import com.billow.seckill.pojo.po.SeckillPo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 秒杀成功明细表 信息
+ * 秒杀库存表 信息
  * </p>
  *
  * @author billow
@@ -20,6 +20,6 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class SuccessKilledVo extends SuccessKilledPo implements Serializable {
+public class SeckillVo extends SeckillPo implements Serializable {
 
 }

@@ -1,4 +1,4 @@
-package com.billow.seckill.common.pojo.vo;
+package com.billow.seckill.pojo.vo;
 
 import lombok.Data;
 

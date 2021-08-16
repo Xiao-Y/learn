@@ -2,8 +2,8 @@
 package com.billow.seckill.service;
 
 import com.billow.mybatis.base.HighLevelService;
-import com.billow.seckill.common.pojo.po.SuccessKilledPo;
-import com.billow.seckill.common.pojo.search.SuccessKilledSearchParam;
+import com.billow.seckill.pojo.po.SuccessKilledPo;
+import com.billow.seckill.pojo.search.SuccessKilledSearchParam;
 
 /**
  * <p>

@@ -1,4 +1,4 @@
-package com.billow.seckill.common.pojo.po;
+package com.billow.seckill.pojo.po;
 
 import com.billow.mybatis.pojo.BasePo;
 import com.baomidou.mybatisplus.annotation.TableName;

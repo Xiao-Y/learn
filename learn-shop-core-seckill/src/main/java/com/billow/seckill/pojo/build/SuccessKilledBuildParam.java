@@ -1,4 +1,4 @@
-package com.billow.seckill.common.pojo.build;
+package com.billow.seckill.pojo.build;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

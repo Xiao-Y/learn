@@ -1,11 +1,11 @@
 package com.billow.seckill.api;
 
-import com.billow.seckill.common.pojo.build.SuccessKilledBuildParam;
-import com.billow.seckill.common.pojo.search.SuccessKilledSearchParam;
-import com.billow.seckill.common.pojo.vo.SuccessKilledVo;
+import com.billow.seckill.pojo.build.SuccessKilledBuildParam;
+import com.billow.seckill.pojo.search.SuccessKilledSearchParam;
+import com.billow.seckill.pojo.vo.SuccessKilledVo;
 import org.springframework.web.bind.annotation.*;
 import com.billow.seckill.service.SuccessKilledService;
-import com.billow.seckill.common.pojo.po.SuccessKilledPo;
+import com.billow.seckill.pojo.po.SuccessKilledPo;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
