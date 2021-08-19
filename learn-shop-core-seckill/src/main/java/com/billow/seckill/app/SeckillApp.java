@@ -46,8 +46,9 @@ public class SeckillApp extends BaseApi {
     @PostMapping(value = "/executionSeckill/{seckillId}")
     public SeckillExecutionVo executionSeckill(@PathVariable("seckillId") Long seckillId,
                                                @RequestParam("userCode") String userCode,
+                                               @RequestParam(value = "expire", required = false) Long expire,
                                                @RequestParam("md5") String md5) {
 //        String userCode = userTools.getCurrentUserCode();
-        return seckillService.executionSeckill(seckillId, md5, userCode);
+        return seckillService.executionSeckill(seckillId, md5, userCode, expire);
     }
 }

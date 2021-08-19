@@ -7,6 +7,8 @@ import com.billow.seckill.pojo.search.SeckillSearchParam;
 import com.billow.seckill.pojo.vo.ExposerVo;
 import com.billow.seckill.pojo.vo.SeckillExecutionVo;
 
+import java.util.Date;
+
 /**
  * <p>
  * 秒杀库存表 服务类
@@ -33,11 +35,13 @@ public interface SeckillService extends HighLevelService<SeckillPo, SeckillSearc
      *
      * @param seckillId 秒杀id
      * @param md5       校验码
+     * @param userCode  秒杀用户
+     * @param expire    到期时间
      * @return {@link SeckillExecutionVo}
      * @author liuyongtao
-     * @since 2021-1-22 9:45
+     * @since 2021-8-17 11:58
      */
-    SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode);
+    SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode, Long expire);
 
     /**
      * 自动任务加载数据到缓存中
@@ -47,4 +51,13 @@ public interface SeckillService extends HighLevelService<SeckillPo, SeckillSearc
      */
     void loadSeckillJob();
 
+    /**
+     * 更新秒杀商品信息，更新缓存
+     *
+     * @param nowDate   当前时间
+     * @param seckillPo 更新对象，（完整对象）
+     * @author xiaoy
+     * @since 2021/1/24 10:39
+     */
+    void updatePojoAndCache(Date nowDate, SeckillPo seckillPo);
 }
