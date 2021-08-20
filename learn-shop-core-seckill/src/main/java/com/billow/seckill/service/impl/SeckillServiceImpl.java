@@ -3,6 +3,7 @@ package com.billow.seckill.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.billow.common.amqp.MqSecKillOrderConfig;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.seckill.common.cache.SeckillCache;
 import com.billow.seckill.common.enums.SeckillStatEnum;
@@ -21,6 +22,7 @@ import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -67,6 +69,10 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     private SuccessKilledService successKilledService;
     @Autowired
     private SeckillCache seckillCache;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+    @Autowired
+    private MqSecKillOrderConfig mqSecKillOrderConfig;
 
     @Override
     public void genQueryCondition(LambdaQueryWrapper<SeckillPo> wrapper, SeckillSearchParam seckillSearchParam) {
@@ -125,6 +131,8 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         killedVo.setUsercode(userCode);
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
+
+        amqpTemplate.convertAndSend(mqSecKillOrderConfig.getExchange(), mqSecKillOrderConfig.getRouteKey(), killedVo);
         // 执行秒杀
         SeckillStatEnum statEnum = seckillCache.executeSeckill(killedVo);
         SuccessKilledVo successKilledVo = null;
@@ -195,7 +203,10 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         obj.add(seckillId.toString());
         obj.add(salt);
         if (Objects.nonNull(param)) {
-            Set<String> collect = Arrays.stream(param).map(Object::toString).collect(Collectors.toSet());
+            Set<String> collect = Arrays.stream(param)
+                    .filter(Objects::nonNull)
+                    .map(Object::toString)
+                    .collect(Collectors.toSet());
             obj.addAll(collect);
         }
         String md5 = DigestUtils.md5DigestAsHex(String.join("/", obj).getBytes());

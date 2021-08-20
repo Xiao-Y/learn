@@ -18,7 +18,7 @@ import java.util.Map;
  * @create 2019-09-29 15:24
  */
 @Configuration
-public class RabbitMqSendMailTTLConfig {
+public class MqSendMailTTLConfig {
 
     @Autowired
     private BaseMqConfig baseMqConfig;

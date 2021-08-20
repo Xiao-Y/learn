@@ -9,46 +9,46 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 执行sql 配置
+ * 发送邮件MQ配置
  *
  * @author liuyongtao
- * @create 2019-10-31 10:50
+ * @create 2019-09-29 15:24
  */
 @Configuration
-public class MqRunJobTestConfig implements MqCommon {
+public class MqSendMailConfig implements MqCommon {
 
     @Autowired
     private BaseMqConfig baseMqConfig;
 
     @Override
     public String getQueue() {
-        return baseMqConfig.getQueue().getRunJobTest();
+        return baseMqConfig.getQueue().getSendMail();
     }
 
     @Override
     public String getExchange() {
-        return baseMqConfig.getExchange().getRunJobTest();
+        return baseMqConfig.getExchange().getSendMail();
     }
 
     @Override
     public String getRouteKey() {
-        return baseMqConfig.getRouteKey().getRunJobTest();
+        return baseMqConfig.getRouteKey().getSendMail();
     }
 
     @Bean
-    public Queue runJobTestQueue() {
+    public Queue sendMailQueue() {
         return new Queue(this.getQueue());
     }
 
     @Bean
-    public DirectExchange runJobTestExchange() {
+    public DirectExchange sendMailExchange() {
         return new DirectExchange(this.getExchange());
     }
 
     @Bean
-    public Binding runJobTestBinding() {
-        return BindingBuilder.bind(this.runJobTestQueue())
-                .to(this.runJobTestExchange())
+    public Binding sendMailBinding() {
+        return BindingBuilder.bind(this.sendMailQueue())
+                .to(this.sendMailExchange())
                 .with(this.getRouteKey());
     }
 }

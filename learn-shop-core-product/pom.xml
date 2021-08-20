@@ -24,10 +24,6 @@
         </dependency>
         <dependency>
             <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-mq</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-aop</artifactId>
         </dependency>
         <dependency>

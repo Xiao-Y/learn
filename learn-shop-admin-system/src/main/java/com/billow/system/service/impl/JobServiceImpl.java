@@ -65,7 +65,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void sendMQ(String routingKey, String param) {
-        String runJobExchange = configCommonProperties.getMq().getExchange().getRunJob();
+        String runJobExchange = configCommonProperties.getMq().getExchange().getRunJobTest();
         rabbitTemplate.convertAndSend(runJobExchange, routingKey, param);
     }
 

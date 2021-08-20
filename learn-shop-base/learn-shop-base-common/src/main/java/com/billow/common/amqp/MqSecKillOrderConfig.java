@@ -9,46 +9,46 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 发送邮件MQ配置
+ * 秒杀订单 配置
  *
  * @author liuyongtao
- * @create 2019-09-29 15:24
+ * @since 2021-8-19 17:35
  */
 @Configuration
-public class RabbitMqSendMailConfig implements MqCommon {
+public class MqSecKillOrderConfig implements MqCommon {
 
     @Autowired
     private BaseMqConfig baseMqConfig;
 
     @Override
     public String getQueue() {
-        return baseMqConfig.getQueue().getSendMail();
+        return baseMqConfig.getQueue().getSecKillOrder();
     }
 
     @Override
     public String getExchange() {
-        return baseMqConfig.getExchange().getSendMail();
+        return baseMqConfig.getExchange().getSecKill();
     }
 
     @Override
     public String getRouteKey() {
-        return baseMqConfig.getRouteKey().getSendMail();
+        return baseMqConfig.getRouteKey().getSecKillOrder();
     }
 
     @Bean
-    public Queue sendMailQueue() {
+    public Queue secKillOrderQueue() {
         return new Queue(this.getQueue());
     }
 
     @Bean
-    public DirectExchange sendMailExchange() {
+    public DirectExchange secKillOrderExchange() {
         return new DirectExchange(this.getExchange());
     }
 
     @Bean
-    public Binding sendMailBinding() {
-        return BindingBuilder.bind(this.sendMailQueue())
-                .to(this.sendMailExchange())
+    public Binding secKillOrderBinding() {
+        return BindingBuilder.bind(this.secKillOrderQueue())
+                .to(this.secKillOrderExchange())
                 .with(this.getRouteKey());
     }
 }

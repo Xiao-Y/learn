@@ -1,9 +1,10 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.billow.common.BaseCommonConfig,\
 com.billow.common.amqp.MqExecuteSqlConfig,\
+com.billow.common.amqp.MqSecKillOrderConfig,\
 com.billow.common.amqp.MqRunJobTestConfig,\
-com.billow.common.amqp.RabbitMqSendMailConfig,\
-com.billow.common.amqp.RabbitMqSendMailTTLConfig,\
+com.billow.common.amqp.MqSendMailConfig,\
+com.billow.common.amqp.MqSendMailTTLConfig,\
 com.billow.common.redis.RedisConfig,\
 com.billow.common.redis.RedissonConfig,\
 com.billow.common.swagger2.SwaggerConfig,\

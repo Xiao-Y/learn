@@ -2,7 +2,6 @@ package com.billow.product.producer;
 
 import com.alibaba.fastjson.JSON;
 import com.billow.common.amqp.BaseMqConfig;
-import com.billow.mq.StoredRabbitTemplate;
 import com.billow.product.dao.GoodsBrandDao;
 import com.billow.product.dao.GoodsCategoryDao;
 import com.billow.product.dao.GoodsSpuDao;
@@ -14,6 +13,7 @@ import com.billow.product.service.GoodsSpuService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
 public class RefreshEsProducer {
 
     private final BaseMqConfig baseMqConfig;
-    private final StoredRabbitTemplate publicRabbitTemplate;
+    private final AmqpTemplate amqpTemplate;
     private final GoodsSpuService goodsSpuService;
     private final GoodsBrandDao goodsBrandDao;
     private final GoodsCategoryDao goodsCategoryDao;
@@ -85,7 +85,7 @@ public class RefreshEsProducer {
                 .setStock(goodsSpuPo.getStock())
                 .setSubTitle(goodsSpuPo.getSubTitle());
         String message = JSON.toJSONString(ex);
-        publicRabbitTemplate.messageSendMQ(baseMqConfig.getExchange().getProduct(),
+        amqpTemplate.convertAndSend(baseMqConfig.getExchange().getProduct(),
                 baseMqConfig.getRouteKey().getRefreshEs(), message);
         log.info("【MQ发送内容】" + message);
     }

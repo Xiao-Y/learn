@@ -20,7 +20,15 @@
         </dependency>
         <dependency>
             <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-jpa</artifactId>
+            <artifactId>learn-shop-base-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
