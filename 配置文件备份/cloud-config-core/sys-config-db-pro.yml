@@ -1,0 +1,33 @@
+ipAddress: 192.168.137.200
+####################################################################################################
+############################################ 主从分离 sharding-jdbc hikari 数据源配置 ################
+####################################################################################################
+spring:
+  shardingsphere:
+    datasource:
+      names: master,slave1,slave2
+      master: # 主数据源
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://${ipAddress}:36005/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
+        username: learn_shop
+        password: pass123
+      slave1: # 从数据源
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://${ipAddress}:36006/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
+        username: learn_shop_r
+        password: pass123
+      slave2: # 从数据源
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://${ipAddress}:36007/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
+        username: learn_shop_r
+        password: pass123
+    masterslave:
+      load-balance-algorithm-type: round_robin
+      name: dataSource
+      master-data-source-name: master
+      slave-data-source-names: slave1,slave2
+    props:
+      sql: true # 显示SQL
