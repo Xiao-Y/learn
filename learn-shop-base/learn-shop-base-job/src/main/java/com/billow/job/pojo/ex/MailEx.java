@@ -17,7 +17,7 @@ public class MailEx implements Serializable {
     }
 
     //自动任务id
-    private Long jobId;
+    private String jobId;
     // 任务名称
     private String jobName;
     //收件人邮箱，多个邮箱以“;”分隔
@@ -29,5 +29,5 @@ public class MailEx implements Serializable {
     // 邮件模板ID
     private Long mailTemplateId;
     // 日志id
-    private Long logId;
+    private String logId;
 }

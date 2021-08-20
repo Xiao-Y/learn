@@ -16,16 +16,23 @@ server:
 spring:
   application:
     name: learn-shop-admin-system #客户端名称
-  jpa: #JPA配置
-    generate-ddl: false
-    show-sql: true
-    hibernate:
-      ddl-auto: update
+#  jpa: #JPA配置
+#    generate-ddl: false
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
   cloud:
     bus:
       trace:
         enabled: true #开启消息跟踪
-#  mail:
+  data:
+    mongodb:
+      host: ${ipAddress}
+      port: 27017
+      database: learn
+      username: learn
+      password: pass123
+  #  mail:
 #    host: smtp.exmail.qq.com
 #    port: 465
 #    username: XXXXXX
@@ -51,7 +58,6 @@ spring:
     template-loader-path: classpath:/templates/
 
 
-
 custom:
   menu:
     read-cache: true #菜单优先从缓存中读出
@@ -71,3 +77,11 @@ custom:
     port: 465
     username: XXXXXX
     password: XXXXXX
+  thread-pool:
+    core-pool-size: 8 # 线程池长期维持的线程数 默认 8
+    maximum-pool-size: 10 # 线程数的上限 默认 10
+    capacity: 512 # 任务的排队队列 默认 512
+mybatis-plus:
+  configuration:
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

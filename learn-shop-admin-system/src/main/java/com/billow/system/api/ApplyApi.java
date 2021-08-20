@@ -1,18 +1,19 @@
 package com.billow.system.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.CommentVo;
-import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.TaskVo;
+import com.billow.common.utils.UserTools;
+import com.billow.system.pojo.po.ApplyInfoPo;
+import com.billow.system.pojo.po.MytasklistPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
-import com.billow.common.utils.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,10 +47,10 @@ public class ApplyApi {
 
     @ApiOperation(value = "查询个人任务列表")
     @PostMapping("/queryMyTaskList")
-    public CustomPage queryMyTaskList(@RequestBody ApplyInfoVo applyInfoVo) {
+    public IPage<MytasklistPo> queryMyTaskList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
         applyInfoVo.setAssignee(currentUserCode);
-        CustomPage applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getOffset(), applyInfoVo.getPageSize());
+        IPage<MytasklistPo> applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
         return applyInfoVoPage;
     }
 
@@ -65,11 +66,11 @@ public class ApplyApi {
 
     @ApiOperation(value = "我发起的流程（所有的）")
     @PostMapping("/myStartProdeList")
-    public Page myStartProdeList(@RequestBody ApplyInfoVo applyInfoVo) {
+    public IPage<ApplyInfoPo> myStartProdeList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
         applyInfoVo.setApplyUserCode(currentUserCode);
-        Page applyInfoVoPage = applyInfoService.myStartProdeList(applyInfoVo);
-        return applyInfoVoPage;
+        IPage<ApplyInfoPo> page = applyInfoService.myStartProdeList(applyInfoVo);
+        return page;
     }
 
     @ApiOperation(value = "我发起的流程数量（所有的）")

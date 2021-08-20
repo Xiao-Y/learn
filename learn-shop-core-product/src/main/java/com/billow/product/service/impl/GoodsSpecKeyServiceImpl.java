@@ -39,6 +39,8 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
         LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<GoodsSpecKeyPo> selectPage = goodsSpecKeyDao.selectPage(page, wrapper);
+        Integer integer = goodsSpecKeyDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 
@@ -54,7 +56,7 @@ public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsS
     @Override
     public List<GoodsSpecKeyPo> findListByCategoryId(Long categoryId) {
         LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSpecKeyPo::getCategoryId, categoryId);
+//        wrapper.eq(GoodsSpecKeyPo::getCategoryId, categoryId);
         wrapper.eq(GoodsSpecKeyPo::getValidInd, true);
         return goodsSpecKeyDao.selectList(wrapper);
     }

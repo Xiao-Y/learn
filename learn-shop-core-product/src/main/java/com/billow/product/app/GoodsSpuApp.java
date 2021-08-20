@@ -1,10 +1,10 @@
 package com.billow.product.app;
 
 //import com.alipay.api.domain.AlipayTradePrecreateModel;
+
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
-import com.billow.tools.generator.QrGenUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,11 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
 
 /**
  * <p>
@@ -37,27 +34,10 @@ public class GoodsSpuApp {
 
     @Autowired
     private GoodsSpuService goodsSpuService;
-//    @Autowired
-//    private AliPayScanService aliPayScanService;
-
 
     @ApiOperation(value = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
     public GoodsSpuVo getById(@PathVariable("id") Long id) {
-//        try {
-//            AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
-//            model.setOutTradeNo(UUID.randomUUID().toString());
-//            model.setSubject("我就买一个商品");
-//            model.setTotalAmount("0.01");
-////            model.setTimeoutExpress("90m");
-//            String qrCode = aliPayScanService.tradePrecreate(model);
-//            System.out.println("=====================");
-//            System.out.println(qrCode);
-//            QrGenUtil.zxingCodeCreate(qrCode, "C:/Users/Administrator/Desktop/b.jpg", 350, null);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
         GoodsSpuPo po = goodsSpuService.getById(id);
         return ConvertUtils.convert(po, GoodsSpuVo.class);
     }

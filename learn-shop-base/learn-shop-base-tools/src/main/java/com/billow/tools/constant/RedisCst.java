@@ -8,6 +8,8 @@ package com.billow.tools.constant;
  */
 public class RedisCst {
 
+    public final static String delimiter = ":";
+
     /**
      * 角色的权限信息：ROLE:PERMISSION:ADMIN
      */
@@ -62,13 +64,17 @@ public class RedisCst {
     public final static String BLACKLIST_EDITUSER_ROLECODES = "ROLE_CODES";
     //==============================================================================================
     /**
-     * 秒杀用户锁定前缀。SECKILL:LOCK:seckillId
+     * 秒杀用户锁定前缀。SECKILL:LOCK:{seckillId}:{userCode}
      */
-    public final static String SECKILL_LOCK = "SECKILL:LOCK:";
+    public final static String SECKILL_LOCK = "SECKILL:LOCK";
     /**
-     * 秒杀库存前缀，SECKILL:STOCK:seckillId:userCode
+     * 秒杀库存前缀，SECKILL:STOCK:{seckillId}:{userCode}
      */
-    public final static String SECKILL_STOCK = "SECKILL:STOCK:";
+    public final static String SECKILL_STOCK = "SECKILL:STOCK";
+    /**
+     * 秒杀商品信息前缀，SECKILL:PRODUCT:{seckillId}
+     */
+    public final static String SECKILL_PRODUCT = "SECKILL:PRODUCT";
     //==============================================================================================
 
     /**
@@ -80,5 +86,18 @@ public class RedisCst {
      * 根据id查询菜单信息，MENU:MENU_ID
      */
     public final static String MENU_MENU_ID = "MENU:MENU_ID";
+
+
+    /**
+     * 生成key
+     *
+     * @param obj
+     * @return {@link String}
+     * @author liuyongtao
+     * @since 2021-6-11 10:00
+     */
+    public static String genKey(String... obj) {
+        return String.join(delimiter, obj);
+    }
 
 }

@@ -1,43 +1,45 @@
 package com.billow.seckill.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.common.redis.RedisUtils;
+import com.billow.common.amqp.config.MqSecKillOrderConfig;
+import com.billow.common.amqp.expand.SendMessage;
+import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.seckill.common.cache.SeckillCache;
+import com.billow.seckill.common.enums.SeckillStatEnum;
 import com.billow.seckill.dao.SeckillDao;
-import com.billow.seckill.enums.SeckillStatEnum;
 import com.billow.seckill.pojo.po.SeckillPo;
 import com.billow.seckill.pojo.po.SuccessKilledPo;
+import com.billow.seckill.pojo.search.SeckillSearchParam;
 import com.billow.seckill.pojo.vo.ExposerVo;
 import com.billow.seckill.pojo.vo.SeckillExecutionVo;
-import com.billow.seckill.pojo.vo.SeckillVo;
 import com.billow.seckill.pojo.vo.SuccessKilledVo;
 import com.billow.seckill.service.SeckillService;
 import com.billow.seckill.service.SuccessKilledService;
-import com.billow.tools.constant.RedisCst;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -51,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 @RefreshScope
-public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> implements SeckillService {
+public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, SeckillPo, SeckillSearchParam> implements SeckillService {
 
     // 设置盐值字符串，随便定义，用于混淆MD5值
     @Value("${seckill.gen-salt:wq<<.((0kkoe$$%}")
@@ -59,51 +61,31 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
     // 自动任务加载秒杀开始前多少分钟的数据加到缓存中（单位：分钟）
     @Value("${seckill.load-data-start-before:10}")
     private long loadDataStartBefore;
-    // 设置 redis 中秒杀活动结束后多少分钟数据过期（单位：分钟）
-    @Value("${seckill.clear-data-end-arfer:30}")
-    private long clearDataEndArfer;
-    // 订单过期时间（单位：分钟）
-    @Value("${seckill.order-exp:30}")
-    private String seckillOrderExp;
-
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-    @Resource
-    private DefaultRedisScript<Long> seckillScript;
+    // url 失效时间（单位：秒）
+    @Value("${seckill.url-invalid:20}")
+    private long urlInvalid;
     @Autowired
     private SeckillDao seckillDao;
     @Autowired
     private SuccessKilledService successKilledService;
     @Autowired
-    private RedisUtils redisUtils;
+    private SeckillCache seckillCache;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+    @Autowired
+    private MqSecKillOrderConfig mqSecKillOrderConfig;
 
     @Override
-    public IPage<SeckillPo> findListByPage(SeckillVo seckillVo) {
-        IPage<SeckillPo> page = new Page<>(seckillVo.getPageNo(), seckillVo.getPageSize());
-        LambdaQueryWrapper<SeckillPo> wrapper = Wrappers.lambdaQuery();
-        // 查询条件
-        IPage<SeckillPo> selectPage = seckillDao.selectPage(page, wrapper);
-        return selectPage;
-    }
-
-    @Override
-    public boolean prohibitById(Long id) {
-        SeckillPo po = new SeckillPo();
-        po.setValidInd(false);
-        LambdaQueryWrapper<SeckillPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SeckillPo::getId, id);
-        return seckillDao.update(po, wrapper) >= 1;
+    public void genQueryCondition(LambdaQueryWrapper<SeckillPo> wrapper, SeckillSearchParam seckillSearchParam) {
+        super.genQueryCondition(wrapper, seckillSearchParam);
     }
 
     @Override
     public ExposerVo genSeckillUrl(Long seckillId) {
-        SeckillPo seckillPo = this.getById(seckillId);
+        SeckillPo seckillPo = seckillCache.findSeckillCache(seckillId);
         //说明没有查询到
         if (seckillPo == null) {
             return new ExposerVo(false, seckillId);
-        }
-        if (seckillPo.getStock() < 1) {
-            throw new GlobalException(ResCodeEnum.RESCODE_ERROR_KILL_EMPTY);
         }
         // 当前时间
         long nowLong = System.currentTimeMillis();
@@ -115,94 +97,98 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
         if (startLong > nowLong || nowLong > endLong) {
             return new ExposerVo(false, seckillId, nowLong, startLong, endLong);
         }
+        // 判断库存
+        int stock = seckillCache.findSeckillStockCache(seckillId);
+        if (stock < 1) {
+            throw new GlobalException(ResCodeEnum.RESCODE_ERROR_KILL_EMPTY);
+        }
+        Long expire = LocalDateTime.now().plusSeconds(urlInvalid).toEpochSecond(ZoneOffset.UTC);
         // 生成 md5 链接
-        String md5 = this.getMD5(seckillId);
-        return new ExposerVo(true, md5, seckillId);
+        String md5 = this.getMD5(seckillId, expire);
+        return new ExposerVo(true, md5, seckillId, expire);
     }
 
     @Override
     @Transactional
-    public SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode) {
+    public SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode, Long expire) {
         // 校验 md5
-        String md51 = this.getMD5(seckillId);
-        if (!md51.equals(md5)) {
-            throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
+        this.verifyMd5(seckillId, md5, expire);
+        if (Objects.nonNull(expire)) {
+            // 请求url 过期
+            if (expire < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
+                throw new GlobalException(ResCodeEnum.RESCODE_RULE_UNMATCH);
+            }
         }
-        // 库存key
-        String seckillStockKey = this.genSeckillStockKey(seckillId);
-        // 先查询库存
-//        Long stock = redisUtils.getObj(seckillStockKey, Long.class);
-        Long stock = redisUtils.getObj(seckillStockKey);
-        if (stock == null || stock <= 0) {
+        // 查询库存
+        int stock = seckillCache.findSeckillStockCache(seckillId);
+        if (stock <= 0) {
             SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT, null);
             log.info("===>> 秒杀信息：{}", JSON.toJSONString(executionVo));
             return executionVo;
         }
-
         // 构建订单数据
-        SuccessKilledPo killedPo = new SuccessKilledPo();
-        killedPo.setSeckillId(seckillId);
-        killedPo.setUsercode(userCode);
-        killedPo.setKillState(SeckillStatEnum.SUCCESS.getState());
-        FieldUtils.setCommonFieldByInsert(killedPo, userCode);
-        // 秒杀用户key
-        String seckillLockKey = this.genSeckillLockKey(seckillId, userCode);
-        List<String> keys = Arrays.asList(seckillStockKey, seckillLockKey);
-        // 脚本配置，key 集合，秒杀商信息，付款过期时间（单位：秒）
-        Long execute = redisTemplate.execute(seckillScript, keys, JSON.toJSONString(killedPo), seckillOrderExp);
-        SeckillStatEnum statEnum = SeckillStatEnum.of(execute.intValue());
+        SuccessKilledVo killedVo = new SuccessKilledVo();
+        killedVo.setSeckillId(seckillId);
+        killedVo.setUsercode(userCode);
+        killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
+        FieldUtils.setCommonFieldByInsert(killedVo, userCode);
+
+        SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
+        // 执行秒杀
+        SeckillStatEnum statEnum = seckillCache.executeSeckill(killedVo);
         SuccessKilledVo successKilledVo = null;
         // 秒杀成功
         if (SeckillStatEnum.SUCCESS.equals(statEnum)) {
             // 构建返回数据
-            successKilledVo = ConvertUtils.convert(killedPo, SuccessKilledVo.class);
+            successKilledVo = ConvertUtils.convert(killedVo, SuccessKilledVo.class);
             // 保存秒杀订单数据
-            String killedPoJson = redisTemplate.opsForValue().get(seckillLockKey);
-            successKilledService.saveAsync(JSONObject.parseObject(killedPoJson, SuccessKilledPo.class));
+            SuccessKilledPo successKilledPoCache = seckillCache.findSuccessKilledCache(seckillId, userCode);
+//            successKilledService.saveAsync(successKilledPoCache);
         }
         SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum, successKilledVo);
         log.info("秒杀信息：{}", JSON.toJSONString(executionVo));
         return executionVo;
     }
 
+    private void verifyMd5(Long seckillId, String md5, Long urlInvalid) {
+        String md51 = this.getMD5(seckillId, urlInvalid);
+        if (!StringUtils.equals(md51, md5)) {
+            throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
+        }
+    }
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void loadSeckillJob() {
-        log.info("动态刷新：加载延迟时间：{}，结束延迟时间：{}", loadDataStartBefore, clearDataEndArfer);
         long loadDataStartBeforeTime = loadDataStartBefore * 60 * 1000;
-        long clearDataEndArferTime = clearDataEndArfer * 60 * 1000;
         // 当前时间
         Date now = new Date();
         // 延迟加载时间
         Date loadDataDate = new Date(now.getTime() + loadDataStartBeforeTime);
         LambdaQueryWrapper<SeckillPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.ge(SeckillPo::getStartTime, loadDataDate)
+        wrapper.le(SeckillPo::getStartTime, loadDataDate)
+                .ge(SeckillPo::getEndTime, now)
                 .eq(SeckillPo::getLoadCache, false);
         List<SeckillPo> seckillPos = this.list(wrapper);
-        seckillPos.stream().forEach(f -> {
-            this.updateSeckillAndCache(clearDataEndArferTime, now, f);
+        seckillPos.forEach(f -> {
+            try {
+                this.updatePojoAndCache(now, f);
+            } catch (Exception e) {
+                log.error("自动任务：加载缓存数据失败.{}", e.getMessage(), e);
+            }
         });
     }
 
-    /**
-     * 更新秒杀商品信息，更新缓存
-     *
-     * @param clearDataEndArferTime 设置 redis 中秒杀活动结束后多少 毫秒 数据过期
-     * @param nowDate               当前时间
-     * @param seckillPo             更新对象，（完整对象）
-     * @author xiaoy
-     * @since 2021/1/24 10:39
-     */
-    private void updateSeckillAndCache(long clearDataEndArferTime, Date nowDate, SeckillPo seckillPo) {
-        String seckillStockKey = this.genSeckillStockKey(seckillPo.getId());
-        try {
-            seckillPo.setLoadCache(true);
-            this.updateById(seckillPo);
-            // 延迟后的时间
-            long exp = seckillPo.getEndTime().getTime() - nowDate.getTime() + clearDataEndArferTime;
-            redisUtils.setObj(seckillStockKey, seckillPo.getStock(), exp, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            log.error("自动任务：seckillStockKey:{} 加载缓存数据失败", seckillStockKey);
-        }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePojoAndCache(Date nowDate, SeckillPo seckillPo) {
+        seckillPo.setLoadCache(true);
+        this.updateById(seckillPo);
+        // 更新缓存
+        String seckillStockKey = seckillCache.saveSeckillStockCache(seckillPo.getId(), seckillPo.getEndTime(), nowDate, seckillPo.getStock());
+        log.info("seckillStockKey:{}", seckillStockKey);
+        String seckillProductKey = seckillCache.saveSeckillCache(seckillPo);
+        log.info("seckillProductKey:{}", seckillProductKey);
     }
 
     /**
@@ -213,35 +199,20 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillDao, SeckillPo> imple
      * @author liuyongtao
      * @since 2021-1-22 9:32
      */
-    private String getMD5(Long seckillId) {
-        String base = seckillId + "/" + salt;
-        String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
+    private String getMD5(Long seckillId, Object... param) {
+        Set<String> obj = new TreeSet<>();
+        obj.add(seckillId.toString());
+        obj.add(salt);
+        if (Objects.nonNull(param)) {
+            Set<String> collect = Arrays.stream(param)
+                    .filter(Objects::nonNull)
+                    .map(Object::toString)
+                    .collect(Collectors.toSet());
+            obj.addAll(collect);
+        }
+        String md5 = DigestUtils.md5DigestAsHex(String.join("/", obj).getBytes());
+        log.info("obj:{},md5:{}", obj, md5);
         return md5;
-    }
-
-    /**
-     * 生成 库存key
-     *
-     * @param seckillId 秒杀id
-     * @return {@link String}
-     * @author xiaoy
-     * @since 2021/1/24 10:03
-     */
-    private String genSeckillStockKey(Long seckillId) {
-        return RedisCst.SECKILL_STOCK + seckillId;
-    }
-
-    /**
-     * 秒杀用户key
-     *
-     * @param seckillId 秒杀id
-     * @param userCode  用户code
-     * @return {@link String}
-     * @author xiaoy
-     * @since 2021/1/24 10:05
-     */
-    private String genSeckillLockKey(Long seckillId, String userCode) {
-        return RedisCst.SECKILL_LOCK + seckillId + ":" + userCode;
     }
 }
 

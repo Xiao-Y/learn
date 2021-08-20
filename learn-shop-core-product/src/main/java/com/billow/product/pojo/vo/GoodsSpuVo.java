@@ -22,5 +22,6 @@ import java.util.List;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class GoodsSpuVo extends GoodsSpuPo implements Serializable {
-    private List<String> specKeys;
+    private List<Long> specKeys;
+    private List<Long> specValues;
 }

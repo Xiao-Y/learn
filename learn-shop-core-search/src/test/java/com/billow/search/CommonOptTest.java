@@ -1,6 +1,6 @@
 package com.billow.search;
 
-import com.billow.search.pojo.AnalyzerConstant;
+import com.billow.search.constant.AnalyzerConstant;
 import com.billow.search.pojo.Book;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.RequestOptions;

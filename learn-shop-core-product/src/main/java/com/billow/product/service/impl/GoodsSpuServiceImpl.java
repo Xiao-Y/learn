@@ -11,10 +11,9 @@ import com.billow.product.dao.GoodsSpuDao;
 import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpuPo;
-import com.billow.product.pojo.po.GoodsSpuSpecPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
+import com.billow.product.service.GoodsSkuSpecValueService;
 import com.billow.product.service.GoodsSpuService;
-import com.billow.product.service.GoodsSpuSpecService;
 import com.billow.tools.generator.NumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
@@ -41,11 +40,11 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
     @Autowired
     private GoodsSpuDao goodsSpuDao;
     @Autowired
-    private GoodsSpuSpecService goodsSpuSpecService;
-    @Autowired
     private GoodsSkuSpecValueDao goodsSkuSpecValueDao;
     @Autowired
     private GoodsSkuDao goodsSkuDao;
+    @Autowired
+    private GoodsSkuSpecValueService goodsSkuSpecValueService;
 
     @Override
     public IPage<GoodsSpuPo> findListByPage(GoodsSpuVo goodsSpuVo) {
@@ -57,6 +56,8 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
                 .eq(ToolsUtils.isNotEmpty(goodsSpuVo.getBrandId()), GoodsSpuPo::getBrandId, goodsSpuVo.getBrandId())
                 .eq(ToolsUtils.isNotEmpty(goodsSpuVo.getCategoryId()), GoodsSpuPo::getCategoryId, goodsSpuVo.getCategoryId());
         IPage<GoodsSpuPo> selectPage = goodsSpuDao.selectPage(page, wrapper);
+        Integer integer = goodsSpuDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 
@@ -80,12 +81,12 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
         }
         this.saveOrUpdate(po);
 
-        List<String> specKeys = goodsSpuVo.getSpecKeys();
+        List<Long> specKeys = goodsSpuVo.getSpecKeys();
         if (ToolsUtils.isNotEmpty(id)) {
             // 查询出原始的商品规格key
-            List<String> spuSpecKey = goodsSpuSpecService.findSpuSpecKey(id);
+            List<Long> spuSpecKey = goodsSkuSpecValueService.findSpuSpecKey(id);
             // 获取需要删除的规格key
-            List<String> delSpecKeys = spuSpecKey.stream().filter(f -> !specKeys.contains(f)).collect(Collectors.toList());
+            List<Long> delSpecKeys = spuSpecKey.stream().filter(f -> !specKeys.contains(f)).collect(Collectors.toList());
             if (ToolsUtils.isNotEmpty(delSpecKeys)) {
                 // 通过规格key 获取 所有涉及到的 sku
                 LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
@@ -109,17 +110,17 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
                     goodsSkuDao.update(skuPo, wupdate);
                 }
             }
-            // 删除原有的商品规格信息
-            LambdaQueryWrapper<GoodsSpuSpecPo> rwrapper = Wrappers.lambdaQuery();
-            rwrapper.eq(GoodsSpuSpecPo::getSpuId, id);
-            goodsSpuSpecService.remove(rwrapper);
+//            // 删除原有的商品规格信息
+//            LambdaQueryWrapper<GoodsSkuSpecValuePo> rwrapper = Wrappers.lambdaQuery();
+//            rwrapper.eq(GoodsSkuSpecValuePo::getSpuId, id);
+//            goodsSkuSpecValueService.remove(rwrapper);
         }
         // 重新保存商品规格信息
         specKeys.forEach(f -> {
-            GoodsSpuSpecPo spuSpecPo = new GoodsSpuSpecPo();
-            spuSpecPo.setSpuId(id);
-            spuSpecPo.setSpecKeyId(f);
-            goodsSpuSpecService.save(spuSpecPo);
+            GoodsSkuSpecValuePo skuSpecValuePo = new GoodsSkuSpecValuePo();
+            skuSpecValuePo.setSpuId(id);
+            skuSpecValuePo.setSpecKeyId(f);
+            goodsSkuSpecValueService.save(skuSpecValuePo);
         });
         ConvertUtils.convert(po, goodsSpuVo);
     }

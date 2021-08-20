@@ -49,4 +49,13 @@ public class CommonCst {
     public static final String CLASS_TYPE_SPRING_ID = "1";
     // 执行类型：2-全类名
     public static final String CLASS_TYPE_BEAN_CLASS = "2";
+    /**
+     * 日志跟踪id名。
+     */
+    public static final String LOG_TRACE_ID = "traceid";
+
+    /**
+     * 请求头跟踪id名。
+     */
+    public static final String HTTP_HEADER_TRACE_ID = "app_trace_id";
 }

@@ -33,7 +33,7 @@ public interface CoreAutoTaskService {
      * @throws Exception
      * @date 2017年5月12日 下午7:17:41
      */
-    void deleteAutoTask(Long jobId) throws Exception;
+    void deleteAutoTask(String jobId) throws Exception;
 
     /**
      * 保存/更新自动任务

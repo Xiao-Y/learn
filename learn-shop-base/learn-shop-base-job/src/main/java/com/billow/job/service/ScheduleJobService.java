@@ -34,7 +34,7 @@ public interface ScheduleJobService {
      * @author liuyongtao
      * @since 2021-1-29 19:50
      */
-    ScheduleJobVo findById(Long id);
+    ScheduleJobVo findById(String id);
 
     /**
      * 更新自动任务信息
@@ -52,7 +52,7 @@ public interface ScheduleJobService {
      * @author liuyongtao
      * @since 2021-1-29 19:51
      */
-    void deleteById(Long id);
+    void deleteById(String id);
 
     /**
      * 添加自动任务信息
@@ -79,7 +79,7 @@ public interface ScheduleJobService {
      * @author LiuYongTao
      * @date 2019/9/27 17:45
      */
-    ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id);
+    ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(String id);
 
     /**
      * 按照jobName，jobGroup统计已经添加的自动任务的数据量
@@ -90,5 +90,5 @@ public interface ScheduleJobService {
      * @author LiuYongTao
      * @date 2019/8/15 11:29
      */
-    int countByJobNameAndJobGroup(String jobName, String jobGroup);
+    long countByJobNameAndJobGroup(String jobName, String jobGroup);
 }

@@ -35,6 +35,8 @@ public class GoodsCategoryServiceImpl extends ServiceImpl<GoodsCategoryDao, Good
         LambdaQueryWrapper<GoodsCategoryPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<GoodsCategoryPo> selectPage = goodsCategoryDao.selectPage(page, wrapper);
+        Integer integer = goodsCategoryDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 

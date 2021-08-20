@@ -1,9 +1,10 @@
 package com.billow.product.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
 import org.apache.ibatis.annotations.CacheNamespace;
+import com.billow.mybatis.cache.MybatisRedisCache;
 
 /**
  * <p>
@@ -11,7 +12,7 @@ import org.apache.ibatis.annotations.CacheNamespace;
  * </p>
  *
  * @author billow
- * @since 2020-05-09
+ * @since 2021-02-06
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
 public interface GoodsSkuSpecValueDao extends BaseMapper<GoodsSkuSpecValuePo> {

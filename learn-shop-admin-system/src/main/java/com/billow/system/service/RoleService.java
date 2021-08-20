@@ -1,14 +1,14 @@
 package com.billow.system.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.system.pojo.ex.DataDictionaryEx;
-import com.billow.system.service.query.SelectRoleQuery;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.RoleVo;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface RoleService {
+public interface RoleService extends IService<RolePo> {
 
     /**
      * 通过用户id 查询用户角色信息
@@ -26,7 +26,7 @@ public interface RoleService {
      * @param roleVo
      * @return
      */
-    Page<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception;
+    IPage<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception;
 
     /**
      * 根据角色ID查询权限ID

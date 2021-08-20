@@ -85,6 +85,28 @@ public class CodeGenerator {
             }
         });
 
+        // 自定义配置:xxVo.java
+        templatePath = "/template/build.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + srcJava + pc.getModuleName() + "/pojo/build/" +
+                        tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "BuildParam" + StringPool.DOT_JAVA;
+            }
+        });
+
+        // 自定义配置:xxSearch.java
+        templatePath = "/template/search.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + srcJava + pc.getModuleName() + "/pojo/search/" +
+                        tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "SearchParam" + StringPool.DOT_JAVA;
+            }
+        });
+
         // 自定义配置:xxService.java
         templatePath = "/template/IService.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
@@ -126,9 +148,9 @@ public class CodeGenerator {
      */
     private DataSourceConfig getDataSourceConfig() {
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://119.23.27.78:3308/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false");
+        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false");
         // dsc.setSchemaName("public");
-        dsc.setDriverName("com.mysql.jdbc.Driver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("learn_shop");
         dsc.setPassword("pass123");
         return dsc;
@@ -214,8 +236,41 @@ public class CodeGenerator {
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setInclude("sk_seckill", "sk_success_killed");
-        strategy.setTablePrefix("sk_");
+//        strategy.setInclude("sk_seckill", "sk_success_killed");
+//        strategy.setTablePrefix("sk_");
+
+        strategy.setInclude("p_goods_brand"
+//                , "p_goods_category"
+//                , "p_goods_category_brand"
+//                , "p_goods_safeguard"
+//                , "p_goods_sku"
+//                , "p_goods_sku_safeguard"
+//                , "p_goods_sku_spec_value"
+//                , "p_goods_spec_key"
+//                , "p_goods_spec_value"
+//                , "p_goods_specification"
+//                , "p_goods_spu"
+//                , "p_goods_spu_detail"
+        );
+        strategy.setTablePrefix("p_");
+
+//        strategy.setInclude("sys_apply_info",
+//                "sys_city",
+//                "sys_data_dictionary",
+//                "sys_menu",
+//                "sys_permission",
+//                "sys_role",
+//                "sys_white_list"
+//                );
+//        strategy.setTablePrefix("sys_");
+//        strategy.setInclude("r_role_menu",
+//                "r_role_permission",
+//                "r_user_role"
+//        );
+//        strategy.setTablePrefix("r_");
+//        strategy.setInclude("v_mytasklist"
+//        );
+//        strategy.setTablePrefix("v_");
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);
         strategy.setEntityTableFieldAnnotationEnable(true);
         return strategy;
@@ -236,8 +291,12 @@ public class CodeGenerator {
         String parent = "";
         if (strategy.getTablePrefix()[0].equals("p_")) {
             parent = "product";
-        }if (strategy.getTablePrefix()[0].equals("sk_")) {
+        }
+        if (strategy.getTablePrefix()[0].equals("sk_")) {
             parent = "seckill";
+        }
+        if (strategy.getTablePrefix()[0].equals("sys_") || strategy.getTablePrefix()[0].equals("v_")) {
+            parent = "system";
         }
         pc.setParent("com.billow");
         pc.setModuleName(parent);

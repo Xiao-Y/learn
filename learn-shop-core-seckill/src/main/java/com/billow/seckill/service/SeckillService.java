@@ -1,12 +1,13 @@
 
 package com.billow.seckill.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.seckill.pojo.po.SeckillPo;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.seckill.pojo.search.SeckillSearchParam;
 import com.billow.seckill.pojo.vo.ExposerVo;
 import com.billow.seckill.pojo.vo.SeckillExecutionVo;
-import com.billow.seckill.pojo.vo.SeckillVo;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -17,27 +18,7 @@ import com.billow.seckill.pojo.vo.SeckillVo;
  * @version v1.0
  * @since 2021-01-21
  */
-public interface SeckillService extends IService<SeckillPo> {
-
-    /**
-     * 分页查询
-     *
-     * @param seckillVo 查询条件
-     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.seckill.pojo.po.SeckillPo>
-     * @author billow
-     * @since 2021-01-21
-     */
-    IPage<SeckillPo> findListByPage(SeckillVo seckillVo);
-
-    /**
-     * 根据ID禁用数据
-     *
-     * @param id 主键id
-     * @return boolean
-     * @author billow
-     * @since 2021-01-21
-     */
-    boolean prohibitById(Long id);
+public interface SeckillService extends HighLevelService<SeckillPo, SeckillSearchParam> {
 
     /**
      * 生成秒杀链接
@@ -54,11 +35,13 @@ public interface SeckillService extends IService<SeckillPo> {
      *
      * @param seckillId 秒杀id
      * @param md5       校验码
+     * @param userCode  秒杀用户
+     * @param expire    到期时间
      * @return {@link SeckillExecutionVo}
      * @author liuyongtao
-     * @since 2021-1-22 9:45
+     * @since 2021-8-17 11:58
      */
-    SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode);
+    SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode, Long expire);
 
     /**
      * 自动任务加载数据到缓存中
@@ -68,4 +51,13 @@ public interface SeckillService extends IService<SeckillPo> {
      */
     void loadSeckillJob();
 
+    /**
+     * 更新秒杀商品信息，更新缓存
+     *
+     * @param nowDate   当前时间
+     * @param seckillPo 更新对象，（完整对象）
+     * @author xiaoy
+     * @since 2021/1/24 10:39
+     */
+    void updatePojoAndCache(Date nowDate, SeckillPo seckillPo);
 }

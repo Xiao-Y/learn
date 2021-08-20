@@ -37,6 +37,8 @@ public class GoodsSpecValueServiceImpl extends ServiceImpl<GoodsSpecValueDao, Go
         LambdaQueryWrapper<GoodsSpecValuePo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         IPage<GoodsSpecValuePo> selectPage = goodsSpecValueDao.selectPage(page, wrapper);
+        Integer integer = goodsSpecValueDao.selectCount(wrapper);
+        selectPage.setTotal(integer);
         return selectPage;
     }
 

@@ -2,11 +2,9 @@ package com.billow.seckill.pojo.po;
 
 import com.billow.mybatis.pojo.BasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

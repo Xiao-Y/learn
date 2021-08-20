@@ -2,9 +2,11 @@ package com.billow.aop.advice;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.aop.commons.CustomPage;
+import com.billow.tools.constant.CommonCst;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by billow.
@@ -71,6 +74,9 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
             baseResponse = (BaseResponse) body;
         } else if (body instanceof LinkedHashMap) {
             Map<String, Object> map = (LinkedHashMap<String, Object>) body;
+            if (!Objects.equals(200, map.get("status"))) {
+                log.error("请求异常：{}", body);
+            }
             ResCodeEnum resCode = (ResCodeEnum) map.get("resCode");
             if (resCode == null) {
                 resCode = ResCodeEnum.RESCODE_OTHER_ERROR;
@@ -102,7 +108,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 //        if (body instanceof String) {
 //            return JSONObject.toJSONString(BaseResponse.success(body));
 //        }
-
+        baseResponse.setTraceID(MDC.get(CommonCst.LOG_TRACE_ID));
         return baseResponse;
     }
 }

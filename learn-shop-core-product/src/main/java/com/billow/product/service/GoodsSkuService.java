@@ -79,4 +79,14 @@ public interface GoodsSkuService extends IService<GoodsSkuPo> {
      * @date 2019/12/2 15:17
      */
     void update(GoodsSkuVo goodsSkuVo);
+
+    /**
+     * 根据 spuId 查询 sku 规格表数据
+     *
+     * @param spuId
+     * @return {@link List< Map< String, Object>>}
+     * @author xiaoy
+     * @since 2021/2/6 15:09
+     */
+    List<Map<String, Object>> findSpuSpec(Long spuId);
 }

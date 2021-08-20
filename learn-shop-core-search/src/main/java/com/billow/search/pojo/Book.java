@@ -1,5 +1,6 @@
 package com.billow.search.pojo;
 
+import com.billow.search.constant.AnalyzerConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

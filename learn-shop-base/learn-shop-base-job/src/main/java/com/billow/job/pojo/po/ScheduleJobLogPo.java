@@ -26,7 +26,7 @@ public class ScheduleJobLogPo extends BasePo implements Serializable {
     // 任务分组
     private String jobGroup;
     // 自动任务id
-    private Long jobId;
+    private String jobId;
     // 错误信息
     private String info;
     // 是否执行成功

@@ -32,7 +32,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    public ScheduleJobVo findById(Long id) {
+    public ScheduleJobVo findById(String id) {
         ScheduleJobPo scheduleJobPo = scheduleJobDao.findById(id);
         return ConvertUtils.convert(scheduleJobPo, ScheduleJobVo.class);
     }
@@ -41,12 +41,13 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void updateById(ScheduleJobVo dto) {
         dto.setUpdateTime(new Date());
-        scheduleJobDao.updateById(dto);
+        ScheduleJobPo scheduleJobPo = ConvertUtils.convert(dto, ScheduleJobPo.class);
+        scheduleJobDao.updateById(scheduleJobPo);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         scheduleJobDao.deleteById(id);
     }
 
@@ -68,13 +69,21 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     @Override
-    public ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(Long id) {
-        ScheduleJobPo po = scheduleJobDao.findByIdAndValidIndIsTrueAndIsExceptionStopIsTrue(id);
+    public ScheduleJobVo findByIdAndValidIndIsTrueAndIsStopIsTrue(String id) {
+        ScheduleJobPo po = null;
+        ScheduleJobPo scheduleJobPo = new ScheduleJobPo();
+        scheduleJobPo.setId(id);
+        scheduleJobPo.setValidInd(true);
+        scheduleJobPo.setIsExceptionStop(true);
+        List<ScheduleJobPo> scheduleJobPos = scheduleJobDao.findAll(scheduleJobPo);
+        if (scheduleJobPos != null && scheduleJobPos.size() > 0) {
+            po = scheduleJobPos.get(0);
+        }
         return ConvertUtils.convert(po, ScheduleJobVo.class);
     }
 
     @Override
-    public int countByJobNameAndJobGroup(String jobName, String jobGroup) {
+    public long countByJobNameAndJobGroup(String jobName, String jobGroup) {
         return scheduleJobDao.countByJobNameAndJobGroup(jobName, jobGroup);
     }
 }

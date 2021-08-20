@@ -4,6 +4,7 @@ import com.billow.mybatis.pojo.BasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author billow
- * @since 2019-11-29
+ * @since 2021-02-06
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,10 +29,16 @@ public class GoodsBrandPo extends BasePo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "品牌名称")
+    @TableField("brand_name")
     private String brandName;
 
-    @ApiModelProperty(value = "分类排序")
-    private Long brandSort;
+    @ApiModelProperty(value = "品牌的首字母")
+    @TableField("letter")
+    private String letter;
+
+    @ApiModelProperty(value = "品牌图片地址")
+    @TableField("image")
+    private String image;
 
 
 }

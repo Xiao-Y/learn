@@ -1,6 +1,8 @@
 package com.billow.system.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.system.pojo.ex.CityEx;
+import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.CityPo;
 import com.billow.system.pojo.vo.CityVo;
 
@@ -11,7 +13,7 @@ import java.util.Set;
  * @author liuyongtao
  * @create 2019-08-04 13:49
  */
-public interface CityService {
+public interface CityService extends IService<CityPo> {
 
     /**
      * 查询省市区

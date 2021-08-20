@@ -3,10 +3,20 @@
     <!-- spring boot默认配置 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <springProperty scope="context" name="APP_PORT" source="server.port"/>
-    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="bootstrap" />
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="bootstrap"/>
 
     <!--  日志路径  -->
     <property name="LOG_HOME" value="/usr/local/app/logs"/>
+    <!--  mq 配置  -->
+    <!--日志存储位置（读取配置文件的路径）-->
+    <springProperty name="rabbitmqHost" source="config.mq.host"/>
+    <springProperty name="rabbitmqPort" source="config.mq.port"/>
+    <springProperty name="rabbitmqVirtualHost" source="config.mq.virtual-host"/>
+    <springProperty name="rabbitmqUsername" source="config.mq.username"/>
+    <springProperty name="rabbitmqPassword" source="config.mq.password"/>
+    <springProperty name="rabbitmqExchange" source="config.mq.logCollect.exchange"/>
+    <springProperty name="rabbitmqRouteKey" source="config.mq.logCollect.routeKey"/>
+    <springProperty name="rabbitmqLogLevel" source="config.mq.log-level"/>
 
     <!-- 彩色日志 -->
     <!-- 彩色日志依赖的渲染类 -->
@@ -18,10 +28,13 @@
 
     <!--  控制台日志格式  -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} [${APP_NAME} - ${APP_PORT}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} [${APP_NAME} - ${APP_PORT}] [%X{traceid}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     <!--  文件日志格式  -->
     <property name="FILE_LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${APP_NAME} - ${APP_PORT}] [%thread] %-5level %logger{50} - %msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${APP_NAME}] [${APP_PORT}] [%X{traceid}] [%thread] %-5level %logger{50} : %msg%n"/>
+    <!--  MQ日志格式，请务修改：修改后需要修改elk  -->
+    <property name="MQ_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${APP_NAME}] [${APP_PORT}] [%X{traceid}] [%thread] %-5level %logger{50} : %msg%n"/>
 
 
     <!--  控制台日志  -->
@@ -33,7 +46,7 @@
         </encoder>
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>trace</level>
+            <level>debug</level>
         </filter>
     </appender>
 
@@ -118,6 +131,36 @@
         </filter>
     </appender>
 
+    <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <encoder>
+            <!-- 文件日志格式 -->
+            <pattern>${MQ_LOG_PATTERN}</pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+        <host>${rabbitmqHost}</host>
+        <port>${rabbitmqPort}</port>
+        <virtualHost>${rabbitmqVirtualHost}</virtualHost>
+        <username>${rabbitmqUsername}</username>
+        <password>${rabbitmqPassword}</password>
+        <exchangeName>${rabbitmqExchange}</exchangeName>
+        <routingKeyPattern>${rabbitmqRouteKey}</routingKeyPattern>
+
+        <declareExchange>false</declareExchange>
+        <exchangeType>direct</exchangeType>
+        <generateId>true</generateId>
+        <charset>UTF-8</charset>
+        <durable>false</durable>
+        <deliveryMode>NON_PERSISTENT</deliveryMode>
+        <!-- 日志级别 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>${rabbitmqLogLevel}</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
     <logger name="com.alibaba.nacos.client.config.impl" level="ERROR"/>
     <logger name="com.alibaba.cloud.sentinel.datasource.converter" level="ERROR"/>
     <logger name="com.billow" level="info"/>
@@ -129,5 +172,6 @@
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="AMQP"/>
     </root>
 </configuration>

@@ -1,93 +1,53 @@
 package com.billow.system.pojo.po;
 
-import com.billow.base.workflow.vo.CustomPage;
+import com.billow.mybatis.pojo.BasePo;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Type;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+import lombok.experimental.Accessors;
 
 /**
- * 申请信息
+ * <p>
  *
- * @author liuyongtao
- * @create 2019-09-02 17:09
+ * </p>
+ *
+ * @author billow
+ * @since 2021-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
-@Table(name = "sys_apply_info")
-@EntityListeners(AuditingEntityListener.class)
-public class ApplyInfoPo extends CustomPage<ApplyInfoPo> implements Serializable {
+@Accessors(chain = true)
+@TableName("sys_apply_info")
+@ApiModel(value = "ApplyInfoPo对象", description = "")
+public class ApplyInfoPo extends BasePo {
 
-    @ApiModelProperty("主键id")
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("创建人")
-    @CreatedBy
-    private String creatorCode;
-
-    @ApiModelProperty("更新人")
-    @LastModifiedBy
-    private String updaterCode;
-
-    @ApiModelProperty("创建时间")
-    @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
-    private Date createTime;
-
-    @ApiModelProperty("更新时间")
-    @LastModifiedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
-    private Date updateTime;
-
-    @ApiModelProperty("有效标志")
-    private Boolean validInd;
-
-    @ApiModelProperty("流程定义ID")
-    @Column(length = 36)
-    private String procDefId;
-
-    @ApiModelProperty("流程实例定义ID")
-    @Column(length = 36)
-    private String procInstId;
-
-    @ApiModelProperty("流程是否结束")
-    @Column(length = 1)
-    private Boolean isEnd;
-
-    @ApiModelProperty("申请数据，JSON 格式")
-    @Lob
-    @Type(type = "text")
-    @Column
+    @TableField("apply_data")
     private String applyData;
 
-    @ApiModelProperty("申请类型：")
-    @Column(length = 20)
+    @TableField("apply_type")
     private String applyType;
 
-    @ApiModelProperty("申请人CODE")
-    @Column(length = 20)
+    @TableField("apply_user_code")
     private String applyUserCode;
 
-    @ApiModelProperty("JSON 转换格式，暂时不用")
+    @TableField("is_end")
+    private Boolean isEnd;
+
+    @TableField("proc_def_id")
+    private String procDefId;
+
+    @TableField("proc_inst_id")
+    private String procInstId;
+
+    @TableField("vo_clazz")
     private String voClazz;
+
+
 }

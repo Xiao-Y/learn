@@ -8,16 +8,6 @@ import java.util.List;
 public interface ScheduleJobDao {
 
     /**
-     * 通过id 查询出有效的并且是否异常停止为true的自动任务
-     *
-     * @param id
-     * @return com.billow.job.pojo.po.ScheduleJobPo
-     * @author LiuYongTao
-     * @date 2019/9/27 17:44
-     */
-    ScheduleJobPo findByIdAndValidIndIsTrueAndIsExceptionStopIsTrue(Long id);
-
-    /**
      * 按照jobName，jobGroup统计已经添加的自动任务的数据量
      *
      * @param jobName
@@ -26,12 +16,12 @@ public interface ScheduleJobDao {
      * @author LiuYongTao
      * @date 2019/8/15 11:29
      */
-    int countByJobNameAndJobGroup(String jobName, String jobGroup);
+    long countByJobNameAndJobGroup(String jobName, String jobGroup);
 
     /**
      * 根据条件查询自动任务
      *
-     * @param scheduleJobPo 查询条件
+     * @param scheduleJobPo 查询条件(Id,ValidInd,ExceptionStop必须要，其它根据条件)
      * @return java.util.List<com.billow.job.pojo.po.ScheduleJobPo>
      * @author LiuYongTao
      * @date 2019/12/20 16:39
@@ -46,7 +36,7 @@ public interface ScheduleJobDao {
      * @author LiuYongTao
      * @date 2019/12/20 16:39
      */
-    ScheduleJobPo findById(Long id);
+    ScheduleJobPo findById(String id);
 
     /**
      * 通过主键删除自动任务
@@ -56,7 +46,7 @@ public interface ScheduleJobDao {
      * @author LiuYongTao
      * @date 2019/12/20 16:39
      */
-    void deleteById(Long id);
+    void deleteById(String id);
 
     /**
      * 保存自动任务

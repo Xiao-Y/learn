@@ -33,6 +33,7 @@
 
         <module>learn-shop-public-auth</module>
         <module>learn-shop-core-seckill</module>
+        <module>learn-shop-interface</module>
 
     </modules>
     <packaging>pom</packaging>
@@ -49,7 +50,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <alibaba.druid.version>1.1.19</alibaba.druid.version>
         <springfox.boot.starter.version>3.0.0</springfox.boot.starter.version>
         <quartz.version>2.2.1</quartz.version>
         <qrgen.version>2.0</qrgen.version>
@@ -71,6 +71,7 @@
         <nimbus-jose-jwt.version>8.16</nimbus-jose-jwt.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
+        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
     </properties>
 
     <dependencyManagement>
@@ -142,9 +143,9 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${alibaba.druid.version}</version>
+                <groupId>com.billow</groupId>
+                <artifactId>core-product-interface</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <!-- swagger2 -->
             <dependency>
@@ -201,6 +202,11 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>${redisson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${sharding-jdbc.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>

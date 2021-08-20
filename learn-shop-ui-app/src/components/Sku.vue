@@ -40,8 +40,7 @@
 
 <script>
 
-    import {FindGoodsSku} from '../api/GoodsSkuApi';
-    import {FindSpuSpec} from '../api/GoodsSpuSpecApi';
+    import {FindGoodsSku,FindSkuSpec} from '../api/GoodsSkuApi';
     import {GetById} from '../api/GoodsSpuApi';
 
     export default {
@@ -159,12 +158,12 @@
         created() {
             this.show = this.showSku;
 
-            var goodsId = "1";
+            var goodsId = "2";
 
             // 查询商品信息
             GetById(goodsId).then(res=>{
                 this.sku.price = res.resData.lowPrice/100;
-                this.sku.stock_num = res.resData.stock;
+                this.sku.stock_num = parseInt(res.resData.stock);
                 this.sku.collection_id = res.resData.id;
                 this.goods.title = res.resData.goodsName;
             });
@@ -173,7 +172,7 @@
                 this.sku.list = res.resData;
             });
             // 查询商品所有规格
-            FindSpuSpec(goodsId).then(res => {
+            FindSkuSpec(goodsId).then(res => {
                 this.sku.tree = res.resData;
                 // 如果商品无规格时，设置为 无规格商品
                 this.sku.none_sku = this.sku.tree.length == 0;
