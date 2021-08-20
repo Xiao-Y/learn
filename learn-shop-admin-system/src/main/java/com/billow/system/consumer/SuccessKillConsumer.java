@@ -1,6 +1,5 @@
-package com.billow.order.mq.consumer;
+package com.billow.system.consumer;
 
-import com.billow.order.pojo.vo.SuccessKilledVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,8 +16,8 @@ import org.springframework.stereotype.Component;
 public class SuccessKillConsumer {
 
     @RabbitHandler
-    @RabbitListener(queues = "${config.mq.queue.secKillToCoreOrder}")
-    public void secKillOrder(SuccessKilledVo data) throws Exception {
+    @RabbitListener(queues = "${config.mq.queue.secKillToAdminSystem}")
+    public void secKillOrder(Object data) throws Exception {
         log.info("====>>>data:{}", data);
     }
 }

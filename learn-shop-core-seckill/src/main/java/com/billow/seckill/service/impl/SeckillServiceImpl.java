@@ -3,7 +3,8 @@ package com.billow.seckill.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.common.amqp.MqSecKillOrderConfig;
+import com.billow.common.amqp.config.MqSecKillOrderConfig;
+import com.billow.common.amqp.expand.SendMessage;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.seckill.common.cache.SeckillCache;
 import com.billow.seckill.common.enums.SeckillStatEnum;
@@ -132,7 +133,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
 
-        amqpTemplate.convertAndSend(mqSecKillOrderConfig.getExchange(), mqSecKillOrderConfig.getRouteKey(), killedVo);
+        SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         // 执行秒杀
         SeckillStatEnum statEnum = seckillCache.executeSeckill(killedVo);
         SuccessKilledVo successKilledVo = null;

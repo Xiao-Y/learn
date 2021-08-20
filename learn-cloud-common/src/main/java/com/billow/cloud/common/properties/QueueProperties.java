@@ -13,8 +13,10 @@ public class QueueProperties {
     private String logCollect;
     // 重置sql
     private String executeSql;
-    // 秒杀订单
-    private String secKillOrder;
+    // 订单系统接收秒杀订单
+    private String secKillToCoreOrder;
+    // system系统接收秒杀订单
+    private String secKillToAdminSystem;
     // 运行定时任务
     private String runJobTest;
 

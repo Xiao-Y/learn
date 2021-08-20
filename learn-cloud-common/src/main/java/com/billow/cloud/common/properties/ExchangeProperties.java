@@ -23,6 +23,6 @@ public class ExchangeProperties {
 
     // 商品系统交换机
     private String product;
-    // 秒杀系统交换机
-    private String secKill;
+    // 秒杀订单交换机
+    private String secKillOrder;
 }

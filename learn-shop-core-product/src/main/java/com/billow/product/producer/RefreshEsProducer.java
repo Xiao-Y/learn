@@ -1,7 +1,7 @@
 package com.billow.product.producer;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.common.amqp.BaseMqConfig;
+import com.billow.common.amqp.config.BaseMqConfig;
 import com.billow.product.dao.GoodsBrandDao;
 import com.billow.product.dao.GoodsCategoryDao;
 import com.billow.product.dao.GoodsSpuDao;

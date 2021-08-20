@@ -11,7 +11,7 @@ import com.billow.system.pojo.po.RoleMenuPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
-import com.billow.system.properties.CustomProperties;
+import com.billow.system.common.properties.CustomProperties;
 import com.billow.system.service.MenuService;
 import com.billow.system.service.redis.MenuRedisKit;
 import com.billow.system.service.redis.RoleMenuRedisKit;

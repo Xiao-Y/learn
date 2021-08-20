@@ -13,8 +13,6 @@ public class RouteKeyProperties {
     private String logCollect;
     // 重置sql
     private String executeSql;
-    // 秒杀订单
-    private String secKillOrder;
     // 运行定时任务
     private String runJobTest;
 

@@ -1,7 +1,7 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
-import com.billow.system.init.StartLoading;
+import com.billow.system.common.init.StartLoading;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
