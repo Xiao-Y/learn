@@ -1,6 +1,5 @@
 package com.billow.seckill.service.impl;
 
-import cn.hutool.core.date.LocalDateTimeUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -16,14 +15,12 @@ import com.billow.seckill.pojo.vo.ExposerVo;
 import com.billow.seckill.pojo.vo.SeckillExecutionVo;
 import com.billow.seckill.pojo.vo.SuccessKilledVo;
 import com.billow.seckill.service.SeckillService;
-import com.billow.seckill.service.SuccessKilledService;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.utlis.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -68,13 +65,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     @Value("${seckill.order-exp:30}")
     private int seckillOrderExp;
     @Autowired
-    private SeckillDao seckillDao;
-    @Autowired
-    private SuccessKilledService successKilledService;
-    @Autowired
     private SeckillCache seckillCache;
-    @Autowired
-    private AmqpTemplate amqpTemplate;
     @Autowired
     private MqSecKillOrderConfig mqSecKillOrderConfig;
 
@@ -112,10 +103,9 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     }
 
     @Override
-    @Transactional
-    public SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode, Long expire) {
+    public SeckillExecutionVo executionSeckill(String md5, Long seckillId, String userCode, Long expire) {
         // 校验 md5
-        this.verifyMd5(seckillId, md5, expire);
+        this.verifyMd5(md5, seckillId, expire);
         if (Objects.nonNull(expire)) {
             // 请求url 过期
             if (expire < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
@@ -134,7 +124,6 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         killedVo.setSeckillId(seckillId);
         killedVo.setUsercode(userCode);
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
-//        killedVo.setExpire(LocalDateTimeUtil.now().plusMinutes(seckillOrderExp));
         killedVo.setExpire(DateUtils.addMinutes(new Date(), seckillOrderExp));
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
         // 执行秒杀
@@ -146,13 +135,6 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum);
         log.info("秒杀信息：{}", JSON.toJSONString(executionVo));
         return executionVo;
-    }
-
-    private void verifyMd5(Long seckillId, String md5, Long urlInvalid) {
-        String md51 = this.getMD5(seckillId, urlInvalid);
-        if (!StringUtils.equals(md51, md5)) {
-            throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
-        }
     }
 
     @Override
@@ -185,7 +167,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         // 更新缓存
         String seckillStockKey = seckillCache.saveSeckillStockCache(seckillPo.getId(), seckillPo.getEndTime(), nowDate, seckillPo.getStock());
         log.info("seckillStockKey:{}", seckillStockKey);
-        String seckillProductKey = seckillCache.saveSeckillCache(seckillPo);
+        String seckillProductKey = seckillCache.saveSeckillCache(seckillPo, nowDate);
         log.info("seckillProductKey:{}", seckillProductKey);
     }
 
@@ -211,6 +193,22 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         String md5 = DigestUtils.md5DigestAsHex(String.join("/", obj).getBytes());
         log.info("obj:{},md5:{}", obj, md5);
         return md5;
+    }
+
+    /**
+     * 验证MD5
+     *
+     * @param md5
+     * @param seckillId
+     * @param param
+     * @author liuyongtao
+     * @since 2021-8-21 14:23
+     */
+    private void verifyMd5(String md5, Long seckillId, Object... param) {
+        String md51 = this.getMD5(seckillId, param);
+        if (!StringUtils.equals(md51, md5)) {
+            throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
+        }
     }
 }
 

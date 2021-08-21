@@ -19,9 +19,10 @@ public interface SuccessKilledService extends HighLevelService<SuccessKilledPo, 
     /**
      * 异步保存秒杀信息
      *
-     * @param successKilledPo
+     * @param seckillId
+     * @param userCode
      * @author liuyongtao
-     * @since 2021-8-13 10:30
+     * @since 2021-8-21 11:41
      */
-    void saveAsync(SuccessKilledPo successKilledPo);
+    void saveAsync(Long seckillId, String userCode);
 }
