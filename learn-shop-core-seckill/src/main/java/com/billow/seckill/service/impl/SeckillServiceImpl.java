@@ -1,6 +1,5 @@
 package com.billow.seckill.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.common.amqp.config.MqSecKillOrderConfig;
@@ -58,12 +57,15 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     // 自动任务加载秒杀开始前多少分钟的数据加到缓存中（单位：分钟）
     @Value("${seckill.load-data-start-before:10}")
     private long loadDataStartBefore;
+    // 提前 loadDataStartBefore 加载秒杀商品数据
+    private long loadDataStartBeforeTime = loadDataStartBefore * 60 * 1000;
     // url 失效时间（单位：秒）
     @Value("${seckill.url-invalid:20}")
     private long urlInvalid;
     // 订单过期时间（单位：分钟）
     @Value("${seckill.order-exp:30}")
     private int seckillOrderExp;
+    
     @Autowired
     private SeckillCache seckillCache;
     @Autowired
@@ -115,15 +117,20 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         // 查询库存
         int stock = seckillCache.findSeckillStockCache(seckillId);
         if (stock <= 0) {
-            SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT, null);
-            log.info("===>> 秒杀信息：{}", JSON.toJSONString(executionVo));
-            return executionVo;
+            return new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT);
+        }
+        // 获取秒杀商品数据
+        SeckillPo seckillPo = seckillCache.findSeckillCache(seckillId);
+        if (Objects.isNull(seckillPo)) {
+            return new SeckillExecutionVo(seckillId, SeckillStatEnum.END);
         }
         // 构建订单数据
         SuccessKilledVo killedVo = new SuccessKilledVo();
         killedVo.setSeckillId(seckillId);
         killedVo.setUsercode(userCode);
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
+        Integer paymentExp = seckillPo.getPaymentExp();
+        seckillOrderExp = paymentExp == null ? seckillOrderExp : paymentExp;
         killedVo.setExpire(DateUtils.addMinutes(new Date(), seckillOrderExp));
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
         // 执行秒杀
@@ -132,15 +139,12 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         if (SeckillStatEnum.SUCCESS.equals(statEnum)) {
             SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         }
-        SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum);
-        log.info("秒杀信息：{}", JSON.toJSONString(executionVo));
-        return executionVo;
+        return new SeckillExecutionVo(seckillId, statEnum);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void loadSeckillJob() {
-        long loadDataStartBeforeTime = loadDataStartBefore * 60 * 1000;
         // 当前时间
         Date now = new Date();
         // 延迟加载时间

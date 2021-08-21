@@ -51,7 +51,7 @@ public class SeckillPo extends BasePo {
 
     @ApiModelProperty(value = "支付过期时间（单位：分钟）")
     @TableField("payment_exp")
-    private Long paymentExp;
+    private Integer paymentExp;
 
     @ApiModelProperty(value = "是否已经加载过")
     @TableField("is_load_cache")

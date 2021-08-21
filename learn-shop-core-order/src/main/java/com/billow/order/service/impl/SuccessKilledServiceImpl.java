@@ -30,6 +30,9 @@ public class SuccessKilledServiceImpl extends HighLevelServiceImpl<SuccessKilled
     @Autowired
     private SeckillCache seckillCache;
 
+    @Autowired
+    private SuccessKilledDao successKilledDao;
+
     @Async
     @Transactional
     @Override
@@ -40,7 +43,7 @@ public class SuccessKilledServiceImpl extends HighLevelServiceImpl<SuccessKilled
             log.info("没有查询到秒杀订单：seckillId：{},userCode:{}", seckillId, userCode);
             return;
         }
-        super.save(successKilledPo);
+        successKilledDao.saveIgnore(successKilledPo);
     }
 }
 

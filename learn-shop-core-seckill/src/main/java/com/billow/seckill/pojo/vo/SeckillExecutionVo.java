@@ -1,7 +1,9 @@
 package com.billow.seckill.pojo.vo;
 
+import com.alibaba.fastjson.JSON;
 import com.billow.seckill.common.enums.SeckillStatEnum;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 秒杀返回对象
@@ -9,6 +11,7 @@ import lombok.Data;
  * @author liuyongtao
  * @since 2021-1-22 9:42
  */
+@Slf4j
 @Data
 public class SeckillExecutionVo {
 
@@ -34,5 +37,6 @@ public class SeckillExecutionVo {
         this.seckillId = seckillId;
         this.state = seckillStatEnum.getState();
         this.stateInfo = seckillStatEnum.getStateInfo();
+        log.info("===>> 秒杀信息：{}", JSON.toJSONString(this));
     }
 }
