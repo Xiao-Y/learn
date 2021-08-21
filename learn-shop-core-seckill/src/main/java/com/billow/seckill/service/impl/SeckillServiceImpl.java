@@ -1,5 +1,6 @@
 package com.billow.seckill.service.impl;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -10,7 +11,6 @@ import com.billow.seckill.common.cache.SeckillCache;
 import com.billow.seckill.common.enums.SeckillStatEnum;
 import com.billow.seckill.dao.SeckillDao;
 import com.billow.seckill.pojo.po.SeckillPo;
-import com.billow.seckill.pojo.po.SuccessKilledPo;
 import com.billow.seckill.pojo.search.SeckillSearchParam;
 import com.billow.seckill.pojo.vo.ExposerVo;
 import com.billow.seckill.pojo.vo.SeckillExecutionVo;
@@ -19,10 +19,10 @@ import com.billow.seckill.service.SeckillService;
 import com.billow.seckill.service.SuccessKilledService;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
-import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,6 +64,9 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     // url 失效时间（单位：秒）
     @Value("${seckill.url-invalid:20}")
     private long urlInvalid;
+    // 订单过期时间（单位：分钟）
+    @Value("${seckill.order-exp:30}")
+    private int seckillOrderExp;
     @Autowired
     private SeckillDao seckillDao;
     @Autowired
@@ -131,21 +134,16 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         killedVo.setSeckillId(seckillId);
         killedVo.setUsercode(userCode);
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
+//        killedVo.setExpire(LocalDateTimeUtil.now().plusMinutes(seckillOrderExp));
+        killedVo.setExpire(DateUtils.addMinutes(new Date(), seckillOrderExp));
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
-
-        SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         // 执行秒杀
         SeckillStatEnum statEnum = seckillCache.executeSeckill(killedVo);
-        SuccessKilledVo successKilledVo = null;
-        // 秒杀成功
+        // 秒杀成功，订单系统保存订单数据
         if (SeckillStatEnum.SUCCESS.equals(statEnum)) {
-            // 构建返回数据
-            successKilledVo = ConvertUtils.convert(killedVo, SuccessKilledVo.class);
-            // 保存秒杀订单数据
-            SuccessKilledPo successKilledPoCache = seckillCache.findSuccessKilledCache(seckillId, userCode);
-//            successKilledService.saveAsync(successKilledPoCache);
+            SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         }
-        SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum, successKilledVo);
+        SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum);
         log.info("秒杀信息：{}", JSON.toJSONString(executionVo));
         return executionVo;
     }

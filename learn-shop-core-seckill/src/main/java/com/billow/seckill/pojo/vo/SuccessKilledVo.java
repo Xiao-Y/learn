@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -31,6 +32,10 @@ public class SuccessKilledVo implements Serializable {
 
     @ApiModelProperty(value = "秒杀状态标识:-0:无效 1:成功 2:已付款 3:已发货")
     private Integer killState;
+
+    @ApiModelProperty(value = "秒杀订单过期时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date expire;
 
     // 创建人
     private String creatorCode;

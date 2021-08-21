@@ -50,7 +50,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcRes + "/mapper/" + tableInfo.getXmlName() + StringPool.DOT_XML;
+                return projectPath + srcRes + "/mapper/base/" + tableInfo.getXmlName() + StringPool.DOT_XML;
             }
         });
 
@@ -236,23 +236,23 @@ public class CodeGenerator {
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
         strategy.setControllerMappingHyphenStyle(true);
-//        strategy.setInclude("sk_seckill", "sk_success_killed");
-//        strategy.setTablePrefix("sk_");
+        strategy.setInclude("sk_seckill", "sk_success_killed");
+        strategy.setTablePrefix("sk_");
 
-        strategy.setInclude("p_goods_brand"
-//                , "p_goods_category"
-//                , "p_goods_category_brand"
-//                , "p_goods_safeguard"
-//                , "p_goods_sku"
-//                , "p_goods_sku_safeguard"
-//                , "p_goods_sku_spec_value"
-//                , "p_goods_spec_key"
-//                , "p_goods_spec_value"
-//                , "p_goods_specification"
-//                , "p_goods_spu"
-//                , "p_goods_spu_detail"
-        );
-        strategy.setTablePrefix("p_");
+//        strategy.setInclude("p_goods_brand"
+////                , "p_goods_category"
+////                , "p_goods_category_brand"
+////                , "p_goods_safeguard"
+////                , "p_goods_sku"
+////                , "p_goods_sku_safeguard"
+////                , "p_goods_sku_spec_value"
+////                , "p_goods_spec_key"
+////                , "p_goods_spec_value"
+////                , "p_goods_specification"
+////                , "p_goods_spu"
+////                , "p_goods_spu_detail"
+//        );
+//        strategy.setTablePrefix("p_");
 
 //        strategy.setInclude("sys_apply_info",
 //                "sys_city",

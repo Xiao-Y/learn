@@ -16,12 +16,4 @@ import com.billow.seckill.pojo.search.SuccessKilledSearchParam;
  */
 public interface SuccessKilledService extends HighLevelService<SuccessKilledPo, SuccessKilledSearchParam> {
 
-    /**
-     * 异步保存秒杀信息
-     *
-     * @param entity
-     * @author liuyongtao
-     * @since 2021-8-13 10:30
-     */
-    void saveAsync(SuccessKilledPo entity);
 }

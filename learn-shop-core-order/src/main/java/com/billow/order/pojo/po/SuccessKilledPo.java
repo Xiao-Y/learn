@@ -1,4 +1,4 @@
-package com.billow.seckill.pojo.po;
+package com.billow.order.pojo.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

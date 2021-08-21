@@ -15,10 +15,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @ EnableHystrixDashboard 开启熔断监控仪表盘
  * @ EnableCircuitBreaker 开启断路器
  */
-@EnableAsync
 @EnableFeignClients
-@EnableDiscoveryClient
 @SpringBootApplication
+@EnableDiscoveryClient
 @MapperScan("com.billow.*.dao")
 public class CoreSeckillApp {
     public static void main(String[] args) {

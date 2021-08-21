@@ -7,7 +7,7 @@ package com.billow.seckill.common.enums;
  * @since 2021-1-22 10:01
  */
 public enum SeckillStatEnum {
-    UNDEFIND(99, "未知"),
+    FAIL(99, "失败"),
     SUCCESS(1, "秒杀成功"),
     END(0, "秒杀结束"),
     REPEAT_KILL(-1, "重复秒杀"),

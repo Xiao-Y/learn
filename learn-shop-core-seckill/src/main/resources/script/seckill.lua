@@ -29,7 +29,7 @@ redis.call("decr", seckillStockKey);
 --- 保存秒杀成功信息
 redis.call("set", seckillLockKey, successKillInfo);
 --- 转换分钟为秒
-if tonumber(expire) > 0 then
+if expire ~= nil and tonumber(expire) > 0 then
     local paymentExp = tonumber(expire) * 60;
     --- 设置过期时间
     redis.call("expire", seckillLockKey, paymentExp);

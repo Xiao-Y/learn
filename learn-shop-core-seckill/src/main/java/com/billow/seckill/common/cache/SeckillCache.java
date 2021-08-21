@@ -43,15 +43,6 @@ public class SeckillCache {
     private long clearDataEndArfer;
 
     /**
-     * 订单过期时间（单位：分钟）
-     *
-     * @author liuyongtao
-     * @since 2021-6-11 11:21
-     */
-    @Value("${seckill.order-exp:30}")
-    private String seckillOrderExp;
-
-    /**
      * 秒杀 lua 脚本
      *
      * @author liuyongtao
@@ -163,14 +154,14 @@ public class SeckillCache {
         log.info("秒杀成功时需要插入的订单数据：{}", successKilledJson);
         String seckillLockKey = this.genSeckillLockKey(killedVo.getSeckillId(), killedVo.getUsercode());
         String seckillStockKey = this.genSeckillStockKey(killedVo.getSeckillId());
-        log.info("入参：seckillOrderExp:{},[seckillLockKey]->{},[seckillStockKey]->{}", seckillOrderExp, seckillLockKey, seckillStockKey);
+        log.info("入参：[seckillLockKey]->{},[seckillStockKey]->{}", seckillLockKey, seckillStockKey);
         // 脚本配置，key 集合，秒杀商信息，付款过期时间（单位：秒）
         Long execute = LuaUtil.execute(LuaScriptEnum.SEC_KILL,
                 Arrays.asList(seckillStockKey, seckillLockKey),
-                successKilledJson,
-                seckillOrderExp);
+                successKilledJson);
         if (execute == null) {
-            return SeckillStatEnum.UNDEFIND;
+            log.info("秒杀异常,[seckillLockKey]->{},[seckillStockKey]->{}", seckillLockKey, seckillStockKey);
+            return SeckillStatEnum.FAIL;
         }
         SeckillStatEnum statEnum = SeckillStatEnum.of(execute.intValue());
         log.info("返回值：execute：{} {}", execute, statEnum);

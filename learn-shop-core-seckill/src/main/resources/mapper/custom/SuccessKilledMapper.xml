@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.seckill.dao.SuccessKilledDao">
+
+    <!-- 开启二级缓存 -->
+    <!-- 注意：默认为 flushCache="true" useCache="true" -->
+    <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+    <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+    <!-- 3.请务修改 cache-ref 中的配置 -->
+    <cache-ref namespace="com.billow.seckill.dao.SuccessKilledDao"/>
+
+    <insert id="saveSuccessKilled" parameterType="com.billow.seckill.pojo.po.SuccessKilledPo">
+        insert ignore into sk_success_killed(usercode, seckill_id, kill_state,expire,
+                                             valid_ind, create_time, creator_code, update_time, updater_code)
+        VALUES (#{killedPo.usercode}, #{killedPo.seckillId}, #{killedPo.killState},#{killedPo.expire},
+                #{killedPo.validInd}, #{killedPo.createTime}, #{killedPo.creatorCode}, #{killedPo.updateTime},
+                #{killedPo.updaterCode})
+    </insert>
+
+</mapper>
