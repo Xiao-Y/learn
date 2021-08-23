@@ -236,8 +236,19 @@ public class CodeGenerator {
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setInclude("sk_seckill", "sk_success_killed");
-        strategy.setTablePrefix("sk_");
+
+        strategy.setInclude("oms_cart_item"
+                , "oms_company_address"
+                , "oms_order"
+                , "oms_order_item"
+                , "oms_order_operate_history"
+                , "oms_order_return_apply"
+                , "oms_order_return_reason"
+                , "oms_order_setting");
+        strategy.setTablePrefix("oms_");
+
+//        strategy.setInclude("sk_seckill", "sk_success_killed");
+//        strategy.setTablePrefix("sk_");
 
 //        strategy.setInclude("p_goods_brand"
 ////                , "p_goods_category"
@@ -291,12 +302,12 @@ public class CodeGenerator {
         String parent = "";
         if (strategy.getTablePrefix()[0].equals("p_")) {
             parent = "product";
-        }
-        if (strategy.getTablePrefix()[0].equals("sk_")) {
+        } else if (strategy.getTablePrefix()[0].equals("sk_")) {
             parent = "seckill";
-        }
-        if (strategy.getTablePrefix()[0].equals("sys_") || strategy.getTablePrefix()[0].equals("v_")) {
+        } else if (strategy.getTablePrefix()[0].equals("sys_") || strategy.getTablePrefix()[0].equals("v_")) {
             parent = "system";
+        } else if (strategy.getTablePrefix()[0].equals("oms_")) {
+            parent = "order";
         }
         pc.setParent("com.billow");
         pc.setModuleName(parent);
