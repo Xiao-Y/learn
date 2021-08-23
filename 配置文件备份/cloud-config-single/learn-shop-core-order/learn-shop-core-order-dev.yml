@@ -1,16 +1,3 @@
-feign: #远程连接
-  hystrix: #熔断器配置
-    enabled: true #启动熔断器
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          enabled: true #Hystrix 是否启用超时时间
-        isolation:
-          thread:
-            timeoutInMilliseconds: 8000 #Hystrix断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
-          strategy: SEMAPHORE
 spring:
   cloud:
     nacos:
@@ -26,7 +13,29 @@ spring:
     username: ${config.mq.username}
     password: ${config.mq.password}
     virtual-host: ${config.mq.virtual-host}
-
+    # 配置消息重试
+    listener:
+      simple:
+        acknowledge-mode: auto  # 自动ack
+        retry:
+          enabled: true
+          max-attempts: 1
+          initial-interval: 1000  # 重试初始间隔时间
+          multiplier: 2 # 间隔时间乘子，间隔时间*乘子=下一次的间隔时间，最大不能超过设置的最大间隔时间
+          max-interval: 10000   # 重试最大间隔时间
+feign: #远程连接
+  hystrix: #熔断器配置
+    enabled: true #启动熔断器
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true #Hystrix 是否启用超时时间
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000 #Hystrix断路器的超时时间，默认是1s，断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试
+          strategy: SEMAPHORE
 
 ribbon:
   ConnectTimeout: 1000 #ribbon请求连接的超时时间

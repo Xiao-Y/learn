@@ -4,7 +4,22 @@ spring:
       discovery:
         namespace: ${config.register.namespace} # 命名空间
         server-addr: ${config.register.serverAddr} # 配置注册中心
-
+  rabbitmq:
+    host: ${config.mq.host} #rabbitMQ服务器地址
+    port: ${config.mq.port}  #rabbitMQ服务器端口
+    username: ${config.mq.username}
+    password: ${config.mq.password}
+    virtual-host: ${config.mq.virtual-host}
+    # 配置消息重试
+    listener:
+      simple:
+        acknowledge-mode: auto  # 自动ack
+        retry:
+          enabled: true
+          max-attempts: 5
+          initial-interval: 1000  # 重试初始间隔时间
+          multiplier: 2 # 间隔时间乘子，间隔时间*乘子=下一次的间隔时间，最大不能超过设置的最大间隔时间
+          max-interval: 10000   # 重试最大间隔时间
 
 feign: #远程连接
   hystrix: #熔断器配置
