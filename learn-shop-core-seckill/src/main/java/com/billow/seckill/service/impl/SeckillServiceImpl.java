@@ -65,7 +65,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     // 订单过期时间（单位：分钟）
     @Value("${seckill.order-exp:30}")
     private int seckillOrderExp;
-    
+
     @Autowired
     private SeckillCache seckillCache;
     @Autowired
@@ -133,6 +133,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         seckillOrderExp = paymentExp == null ? seckillOrderExp : paymentExp;
         killedVo.setExpire(DateUtils.addMinutes(new Date(), seckillOrderExp));
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
+        SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         // 执行秒杀
         SeckillStatEnum statEnum = seckillCache.executeSeckill(killedVo);
         // 秒杀成功，订单系统保存订单数据
