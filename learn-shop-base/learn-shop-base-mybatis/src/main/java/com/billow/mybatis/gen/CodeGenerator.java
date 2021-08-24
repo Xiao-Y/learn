@@ -26,6 +26,7 @@ import java.util.List;
 public class CodeGenerator {
 
     String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
+    String template = "/template2";
 
     /**
      * 自定义配置
@@ -42,7 +43,7 @@ public class CodeGenerator {
         List<FileOutConfig> focList = new ArrayList<>();
 
         // 如果模板引擎是 freemarker
-        String templatePath = "/template/mapper.xml.ftl";
+        String templatePath = template + "/mapper.xml.ftl";
         // 如果模板引擎是 velocity
 //        String templatePath = "/templates/mapper.xml.vm";
         // 自定义配置:mapper.xml
@@ -55,7 +56,7 @@ public class CodeGenerator {
         });
 
         // 自定义配置:controller.java
-        templatePath = "/template/controller.java.ftl";
+        templatePath = template + "/controller.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -65,7 +66,7 @@ public class CodeGenerator {
         });
 
         // 自定义配置:dao.java
-        templatePath = "/template/mapper.java.ftl";
+        templatePath = template + "/mapper.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -75,7 +76,7 @@ public class CodeGenerator {
         });
 
         // 自定义配置:xxVo.java
-        templatePath = "/template/vo.java.ftl";
+        templatePath = template + "/vo.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -86,7 +87,7 @@ public class CodeGenerator {
         });
 
         // 自定义配置:xxVo.java
-        templatePath = "/template/build.java.ftl";
+        templatePath = template + "/build.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -97,7 +98,7 @@ public class CodeGenerator {
         });
 
         // 自定义配置:xxSearch.java
-        templatePath = "/template/search.java.ftl";
+        templatePath = template + "/search.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -108,7 +109,7 @@ public class CodeGenerator {
         });
 
         // 自定义配置:xxService.java
-        templatePath = "/template/IService.java.ftl";
+        templatePath = template + "/IService.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -119,7 +120,7 @@ public class CodeGenerator {
         });
 
         // 自定义配置:xxServiceImpl.java
-        templatePath = "/template/ServiceImpl.java.ftl";
+        templatePath = template + "/ServiceImpl.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -148,7 +149,7 @@ public class CodeGenerator {
      */
     private DataSourceConfig getDataSourceConfig() {
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false");
+        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("learn_shop");
@@ -237,15 +238,15 @@ public class CodeGenerator {
         strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
         strategy.setControllerMappingHyphenStyle(true);
 
-        strategy.setInclude("oms_cart_item"
-                , "oms_company_address"
-                , "oms_order"
-                , "oms_order_item"
-                , "oms_order_operate_history"
-                , "oms_order_return_apply"
-                , "oms_order_return_reason"
-                , "oms_order_setting");
-        strategy.setTablePrefix("oms_");
+//        strategy.setInclude("oms_cart_item"
+//                , "oms_company_address"
+//                , "oms_order"
+//                , "oms_order_item"
+//                , "oms_order_operate_history"
+//                , "oms_order_return_apply"
+//                , "oms_order_return_reason"
+//                , "oms_order_setting");
+//        strategy.setTablePrefix("oms_");
 
 //        strategy.setInclude("sk_seckill", "sk_success_killed");
 //        strategy.setTablePrefix("sk_");
@@ -278,10 +279,10 @@ public class CodeGenerator {
 //                "r_role_permission",
 //                "r_user_role"
 //        );
-//        strategy.setTablePrefix("r_");
-//        strategy.setInclude("v_mytasklist"
-//        );
-//        strategy.setTablePrefix("v_");
+        strategy.setTablePrefix("r_");
+        strategy.setInclude("v_mytasklist"
+        );
+        strategy.setTablePrefix("v_");
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);
         strategy.setEntityTableFieldAnnotationEnable(true);
         return strategy;
