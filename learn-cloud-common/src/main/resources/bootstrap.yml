@@ -5,7 +5,6 @@ spring:
         server-addr: 192.168.137.200:8848
         file-extension: yml
         refresh-enabled: true
-        #        namespace: 49f70e21-df05-4ff5-b44f-7de24d039727 # dev
         namespace: pro # pro
         # 配置公用文件
         shared-configs[0]:

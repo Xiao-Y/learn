@@ -5,8 +5,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-//import com.billow.cloud.common.properties.DruidDSProperties;
-
 /**
  * @author liuyongtao
  * @since 2021-2-3 16:15
@@ -19,9 +17,4 @@ public class CommonConfig {
     public ConfigCommonProperties configCommonProperties() {
         return new ConfigCommonProperties();
     }
-//
-//    @Bean
-//    public DruidDSProperties druidDSProperties(){
-//        return new DruidDSProperties();
-//    }
 }

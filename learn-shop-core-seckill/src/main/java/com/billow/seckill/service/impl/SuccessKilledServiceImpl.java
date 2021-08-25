@@ -6,9 +6,7 @@ import com.billow.seckill.dao.SuccessKilledDao;
 import com.billow.seckill.pojo.po.SuccessKilledPo;
 import com.billow.seckill.pojo.search.SuccessKilledSearchParam;
 import com.billow.seckill.service.SuccessKilledService;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -27,13 +25,6 @@ public class SuccessKilledServiceImpl extends HighLevelServiceImpl<SuccessKilled
     @Override
     public void genQueryCondition(LambdaQueryWrapper<SuccessKilledPo> wrapper, SuccessKilledSearchParam successKilledVo) {
         wrapper.eq(Objects.nonNull(successKilledVo.getValidInd()), SuccessKilledPo::getValidInd, successKilledVo.getValidInd());
-    }
-
-    @Async
-    @Transactional
-    @Override
-    public void saveAsync(SuccessKilledPo entity) {
-        super.save(entity);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.billow.common.amqp.config;
 
+import com.billow.common.amqp.MqConstant;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -85,8 +86,8 @@ public class MqSendMailTTLConfig {
     @Bean
     public Queue sendMailQueueDlx() {
         Map<String, Object> args = new HashMap<>();
-        args.put("x-dead-letter-exchange", this.getExchange());
-        args.put("x-dead-letter-routing-key", this.getRouteKeyTrt());
+        args.put(MqConstant.X_DEAD_LETTER_EXCHANGE, this.getExchange());
+        args.put(MqConstant.X_DEAD_LETTER_ROUTING_KEY, this.getRouteKeyTrt());
         return new Queue(this.getQueueDlx(), true, false, false, args);
     }
 

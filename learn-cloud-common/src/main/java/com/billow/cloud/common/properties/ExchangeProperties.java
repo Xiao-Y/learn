@@ -25,4 +25,6 @@ public class ExchangeProperties {
     private String product;
     // 秒杀订单交换机
     private String secKillOrder;
+    // 秒杀订单交换机(死信)
+    private String secKillOrderDlx;
 }

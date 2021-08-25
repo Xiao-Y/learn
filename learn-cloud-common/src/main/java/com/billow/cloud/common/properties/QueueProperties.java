@@ -15,6 +15,8 @@ public class QueueProperties {
     private String executeSql;
     // 订单系统接收秒杀订单
     private String secKillToCoreOrder;
+    // 订单系统接收秒杀订单（死信）
+    private String secKillToCoreOrderDlx;
     // system系统接收秒杀订单
     private String secKillToAdminSystem;
     // 运行定时任务

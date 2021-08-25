@@ -1,4 +1,4 @@
-ipAddress: 192.168.137.200
+db.service.ipAddress: 192.168.137.200
 ####################################################################################################
 ############################################ 主从分离 sharding-jdbc hikari 数据源配置 ################
 ####################################################################################################
@@ -9,19 +9,19 @@ spring:
       master: # 主数据源
         type: com.zaxxer.hikari.HikariDataSource
         driver-class: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://${ipAddress}:36005/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
+        jdbc-url: jdbc:mysql://${db.service.ipAddress}:36005/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         username: learn_shop
         password: pass123
       slave1: # 从数据源
         type: com.zaxxer.hikari.HikariDataSource
         driver-class: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://${ipAddress}:36006/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
+        jdbc-url: jdbc:mysql://${db.service.ipAddress}:36006/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         username: learn_shop_r
         password: pass123
       slave2: # 从数据源
         type: com.zaxxer.hikari.HikariDataSource
         driver-class: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://${ipAddress}:36007/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
+        jdbc-url: jdbc:mysql://${db.service.ipAddress}:36007/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         username: learn_shop_r
         password: pass123
     masterslave:

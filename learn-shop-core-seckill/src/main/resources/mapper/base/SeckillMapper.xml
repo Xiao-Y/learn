@@ -26,16 +26,13 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-                id,
+        id,
                 valid_ind,
                 create_time,
                 creator_code,
                 update_time,
                 updater_code,
             sku_no, goods_name, stock, start_time, end_time, remarks
-        </sql>
-    <update id="subStockById">
-        update sk_seckill set stock = stock -1 where stock > 0 and id = #{seckillId}
-    </update>
+    </sql>
 
 </mapper>

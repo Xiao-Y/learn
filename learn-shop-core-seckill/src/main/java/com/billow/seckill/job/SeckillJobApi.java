@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 秒杀自动任务
+ *
  * @author liuyongtao
  * @since 2021-6-11 11:25
  */

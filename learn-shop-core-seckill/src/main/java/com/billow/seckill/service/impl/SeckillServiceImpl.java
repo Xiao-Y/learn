@@ -1,6 +1,5 @@
 package com.billow.seckill.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.common.amqp.config.MqSecKillOrderConfig;
@@ -10,20 +9,17 @@ import com.billow.seckill.common.cache.SeckillCache;
 import com.billow.seckill.common.enums.SeckillStatEnum;
 import com.billow.seckill.dao.SeckillDao;
 import com.billow.seckill.pojo.po.SeckillPo;
-import com.billow.seckill.pojo.po.SuccessKilledPo;
 import com.billow.seckill.pojo.search.SeckillSearchParam;
 import com.billow.seckill.pojo.vo.ExposerVo;
 import com.billow.seckill.pojo.vo.SeckillExecutionVo;
 import com.billow.seckill.pojo.vo.SuccessKilledVo;
 import com.billow.seckill.service.SeckillService;
-import com.billow.seckill.service.SuccessKilledService;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
-import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -61,17 +57,17 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     // 自动任务加载秒杀开始前多少分钟的数据加到缓存中（单位：分钟）
     @Value("${seckill.load-data-start-before:10}")
     private long loadDataStartBefore;
+    // 提前 loadDataStartBefore 加载秒杀商品数据
+    private long loadDataStartBeforeTime = loadDataStartBefore * 60 * 1000;
     // url 失效时间（单位：秒）
     @Value("${seckill.url-invalid:20}")
     private long urlInvalid;
-    @Autowired
-    private SeckillDao seckillDao;
-    @Autowired
-    private SuccessKilledService successKilledService;
+    // 订单过期时间（单位：分钟）
+    @Value("${seckill.order-exp:30}")
+    private int seckillOrderExp;
+
     @Autowired
     private SeckillCache seckillCache;
-    @Autowired
-    private AmqpTemplate amqpTemplate;
     @Autowired
     private MqSecKillOrderConfig mqSecKillOrderConfig;
 
@@ -109,10 +105,9 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     }
 
     @Override
-    @Transactional
-    public SeckillExecutionVo executionSeckill(Long seckillId, String md5, String userCode, Long expire) {
+    public SeckillExecutionVo executionSeckill(String md5, Long seckillId, String userCode, Long expire) {
         // 校验 md5
-        this.verifyMd5(seckillId, md5, expire);
+        this.verifyMd5(md5, seckillId, expire);
         if (Objects.nonNull(expire)) {
             // 请求url 过期
             if (expire < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
@@ -122,45 +117,35 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         // 查询库存
         int stock = seckillCache.findSeckillStockCache(seckillId);
         if (stock <= 0) {
-            SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT, null);
-            log.info("===>> 秒杀信息：{}", JSON.toJSONString(executionVo));
-            return executionVo;
+            return new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT);
+        }
+        // 获取秒杀商品数据
+        SeckillPo seckillPo = seckillCache.findSeckillCache(seckillId);
+        if (Objects.isNull(seckillPo)) {
+            return new SeckillExecutionVo(seckillId, SeckillStatEnum.END);
         }
         // 构建订单数据
         SuccessKilledVo killedVo = new SuccessKilledVo();
         killedVo.setSeckillId(seckillId);
         killedVo.setUsercode(userCode);
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
+        Integer paymentExp = seckillPo.getPaymentExp();
+        seckillOrderExp = paymentExp == null ? seckillOrderExp : paymentExp;
+        killedVo.setExpire(DateUtils.addMinutes(new Date(), seckillOrderExp));
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
-
         SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         // 执行秒杀
         SeckillStatEnum statEnum = seckillCache.executeSeckill(killedVo);
-        SuccessKilledVo successKilledVo = null;
-        // 秒杀成功
+        // 秒杀成功，订单系统保存订单数据
         if (SeckillStatEnum.SUCCESS.equals(statEnum)) {
-            // 构建返回数据
-            successKilledVo = ConvertUtils.convert(killedVo, SuccessKilledVo.class);
-            // 保存秒杀订单数据
-            SuccessKilledPo successKilledPoCache = seckillCache.findSuccessKilledCache(seckillId, userCode);
-//            successKilledService.saveAsync(successKilledPoCache);
+            SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         }
-        SeckillExecutionVo executionVo = new SeckillExecutionVo(seckillId, statEnum, successKilledVo);
-        log.info("秒杀信息：{}", JSON.toJSONString(executionVo));
-        return executionVo;
-    }
-
-    private void verifyMd5(Long seckillId, String md5, Long urlInvalid) {
-        String md51 = this.getMD5(seckillId, urlInvalid);
-        if (!StringUtils.equals(md51, md5)) {
-            throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
-        }
+        return new SeckillExecutionVo(seckillId, statEnum);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void loadSeckillJob() {
-        long loadDataStartBeforeTime = loadDataStartBefore * 60 * 1000;
         // 当前时间
         Date now = new Date();
         // 延迟加载时间
@@ -187,7 +172,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         // 更新缓存
         String seckillStockKey = seckillCache.saveSeckillStockCache(seckillPo.getId(), seckillPo.getEndTime(), nowDate, seckillPo.getStock());
         log.info("seckillStockKey:{}", seckillStockKey);
-        String seckillProductKey = seckillCache.saveSeckillCache(seckillPo);
+        String seckillProductKey = seckillCache.saveSeckillCache(seckillPo, nowDate);
         log.info("seckillProductKey:{}", seckillProductKey);
     }
 
@@ -213,6 +198,22 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         String md5 = DigestUtils.md5DigestAsHex(String.join("/", obj).getBytes());
         log.info("obj:{},md5:{}", obj, md5);
         return md5;
+    }
+
+    /**
+     * 验证MD5
+     *
+     * @param md5
+     * @param seckillId
+     * @param param
+     * @author liuyongtao
+     * @since 2021-8-21 14:23
+     */
+    private void verifyMd5(String md5, Long seckillId, Object... param) {
+        String md51 = this.getMD5(seckillId, param);
+        if (!StringUtils.equals(md51, md5)) {
+            throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
+        }
     }
 }
 

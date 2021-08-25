@@ -49,6 +49,6 @@ public class SeckillApp extends BaseApi {
                                                @RequestParam(value = "expire", required = false) Long expire,
                                                @RequestParam("md5") String md5) {
 //        String userCode = userTools.getCurrentUserCode();
-        return seckillService.executionSeckill(seckillId, md5, userCode, expire);
+        return seckillService.executionSeckill( md5, seckillId,userCode, expire);
     }
 }
