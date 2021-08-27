@@ -3,7 +3,7 @@ package com.billow.seckill.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.seckill.pojo.po.SeckillProductRelationPo;
+import com.billow.seckill.pojo.po.SeckillProductPo;
 import com.billow.seckill.pojo.search.SeckillProductRelationSearchParam;
 
 /**
@@ -15,7 +15,7 @@ import com.billow.seckill.pojo.search.SeckillProductRelationSearchParam;
  * @version v1.0
  * @since 2021-08-27
  */
-public interface SeckillProductRelationService extends IService<SeckillProductRelationPo> {
+public interface SeckillProductService extends IService<SeckillProductPo> {
 
     /**
      * 分页查询
@@ -25,7 +25,7 @@ public interface SeckillProductRelationService extends IService<SeckillProductRe
      * @author billow
      * @since 2021-08-27
      */
-    IPage<SeckillProductRelationPo> findListByPage(SeckillProductRelationSearchParam seckillProductRelationSearchParam);
+    IPage<SeckillProductPo> findListByPage(SeckillProductRelationSearchParam seckillProductRelationSearchParam);
 
     /**
      * 根据ID禁用数据

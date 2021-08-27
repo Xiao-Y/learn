@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.seckill.common.cache.SeckillCache;
+import com.billow.seckill.common.cache.SeckillProductCache;
 import com.billow.seckill.common.enums.SeckillStatEnum;
 import com.billow.seckill.dao.SeckillDao;
 import com.billow.seckill.pojo.po.SeckillPo;
@@ -69,6 +70,8 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     private SeckillCache seckillCache;
     @Autowired
     private SuccessKilledService successKilledService;
+    @Autowired
+    private SeckillProductCache seckillProductCache;
 
     @Override
     public void genQueryCondition(LambdaQueryWrapper<SeckillPo> wrapper, SeckillSearchParam seckillSearchParam) {
@@ -76,11 +79,11 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     }
 
     @Override
-    public ExposerVo genSeckillUrl(Long seckillId) {
-        SeckillPo seckillPo = seckillCache.findSeckillCache(seckillId);
+    public ExposerVo genSeckillUrl(Long seckillProductId) {
+        SeckillPo seckillPo = seckillProductCache.findSeckillCache(seckillProductId);
         //说明没有查询到
         if (seckillPo == null) {
-            return new ExposerVo(false, seckillId);
+            return new ExposerVo(false, seckillProductId);
         }
         // 当前时间
         long nowLong = System.currentTimeMillis();
@@ -90,23 +93,23 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         long endLong = seckillPo.getEndTime().getTime();
         // 判断活动是否开始
         if (startLong > nowLong || nowLong > endLong) {
-            return new ExposerVo(false, seckillId, nowLong, startLong, endLong);
+            return new ExposerVo(false, seckillProductId, nowLong, startLong, endLong);
         }
         // 判断库存
-        int stock = seckillCache.findSeckillStockCache(seckillId);
+        int stock = seckillCache.findSeckillStockCache(seckillProductId);
         if (stock < 1) {
             throw new GlobalException(ResCodeEnum.RESCODE_ERROR_KILL_EMPTY);
         }
         Long expire = LocalDateTime.now().plusSeconds(urlInvalid).toEpochSecond(ZoneOffset.UTC);
         // 生成 md5 链接
-        String md5 = this.getMD5(seckillId, expire);
-        return new ExposerVo(true, md5, seckillId, expire);
+        String md5 = this.getMD5(seckillProductId, expire);
+        return new ExposerVo(true, md5, seckillProductId, expire);
     }
 
     @Override
-    public SeckillExecutionVo executionSeckill(String md5, Long seckillId, String userCode, Long expire) {
+    public SeckillExecutionVo executionSeckill(String md5, Long seckillProductId, String userCode, Long expire) {
         // 校验 md5
-        this.verifyMd5(md5, seckillId, expire);
+        this.verifyMd5(md5, seckillProductId, expire);
         if (Objects.nonNull(expire)) {
             // 请求url 过期
             if (expire < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
@@ -114,18 +117,18 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
             }
         }
         // 查询库存
-        int stock = seckillCache.findSeckillStockCache(seckillId);
+        int stock = seckillCache.findSeckillStockCache(seckillProductId);
         if (stock <= 0) {
-            return new SeckillExecutionVo(seckillId, SeckillStatEnum.STOCK_OUT);
+            return new SeckillExecutionVo(seckillProductId, SeckillStatEnum.STOCK_OUT);
         }
         // 获取秒杀商品数据
-        SeckillPo seckillPo = seckillCache.findSeckillCache(seckillId);
+        SeckillPo seckillPo = seckillCache.findSeckillCache(seckillProductId);
         if (Objects.isNull(seckillPo)) {
-            return new SeckillExecutionVo(seckillId, SeckillStatEnum.END);
+            return new SeckillExecutionVo(seckillProductId, SeckillStatEnum.END);
         }
         // 构建订单数据
         SuccessKilledVo killedVo = new SuccessKilledVo();
-        killedVo.setSeckillId(seckillId);
+        killedVo.setSeckillId(seckillProductId);
         killedVo.setUsercode(userCode);
         killedVo.setSkuNo(seckillPo.getSkuNo());
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
@@ -140,7 +143,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
             successKilledService.saveAsync(killedVo);
         }
         killedVo.setKillState(statEnum.getState());
-        return new SeckillExecutionVo(seckillId, statEnum, killedVo);
+        return new SeckillExecutionVo(seckillProductId, statEnum, killedVo);
     }
 
     @Override
@@ -179,14 +182,14 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     /**
      * 生成MD5值
      *
-     * @param seckillId
+     * @param seckillProductId
      * @return {@link String}
      * @author liuyongtao
      * @since 2021-1-22 9:32
      */
-    private String getMD5(Long seckillId, Object... param) {
+    private String getMD5(Long seckillProductId, Object... param) {
         Set<String> obj = new TreeSet<>();
-        obj.add(seckillId.toString());
+        obj.add(seckillProductId.toString());
         obj.add(salt);
         if (Objects.nonNull(param)) {
             Set<String> collect = Arrays.stream(param)
@@ -204,13 +207,13 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
      * 验证MD5
      *
      * @param md5
-     * @param seckillId
+     * @param seckillProductId
      * @param param
      * @author liuyongtao
      * @since 2021-8-21 14:23
      */
-    private void verifyMd5(String md5, Long seckillId, Object... param) {
-        String md51 = this.getMD5(seckillId, param);
+    private void verifyMd5(String md5, Long seckillProductId, Object... param) {
+        String md51 = this.getMD5(seckillProductId, param);
         if (!StringUtils.equals(md51, md5)) {
             throw new GlobalException(ResCodeEnum.RESCODE_SIGNATURE_ERROR);
         }

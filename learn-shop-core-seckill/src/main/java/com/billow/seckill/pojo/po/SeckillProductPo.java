@@ -24,33 +24,33 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 @TableName("sms_seckill_product_relation")
 @ApiModel(value="SeckillProductRelationPo对象", description="限时购与商品关系表。用于存储与限时购相关的商品信息，一个限时购中有多个场次，每个场次都可以设置不同活动商品。")
-public class SeckillProductRelationPo extends BasePo {
+public class SeckillProductPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "限时购id")
-    @TableField("flash_promotion_id")
-    private Long flashPromotionId;
+    @TableField("seckill_id")
+    private Long seckillId;
 
     @ApiModelProperty(value = "编号")
-    @TableField("flash_promotion_session_id")
-    private Long flashPromotionSessionId;
+    @TableField("seckill_session_id")
+    private Long seckillSessionId;
 
     @ApiModelProperty(value = "商品价格")
     @TableField("product_id")
     private Long productId;
 
     @ApiModelProperty(value = "限时购价格")
-    @TableField("flash_promotion_price")
-    private BigDecimal flashPromotionPrice;
+    @TableField("seckill_price")
+    private BigDecimal seckillPrice;
 
     @ApiModelProperty(value = "限时购数量")
-    @TableField("flash_promotion_count")
-    private Integer flashPromotionCount;
+    @TableField("seckill_count")
+    private Integer seckillCount;
 
     @ApiModelProperty(value = "每人限购数量")
-    @TableField("flash_promotion_limit")
-    private Integer flashPromotionLimit;
+    @TableField("seckill_limit")
+    private Integer seckillLimit;
 
     @ApiModelProperty(value = "排序")
     @TableField("sort")

@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.seckill.dao.SeckillProductRelationDao;
-import com.billow.seckill.pojo.po.SeckillProductRelationPo;
+import com.billow.seckill.dao.SeckillProductDao;
+import com.billow.seckill.pojo.po.SeckillProductPo;
 import com.billow.seckill.pojo.search.SeckillProductRelationSearchParam;
-import com.billow.seckill.service.SeckillProductRelationService;
+import com.billow.seckill.service.SeckillProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +22,17 @@ import org.springframework.stereotype.Service;
  * @since 2021-08-27
  */
 @Service
-public class SeckillProductRelationServiceImpl extends ServiceImpl<SeckillProductRelationDao, SeckillProductRelationPo> implements SeckillProductRelationService {
+public class SeckillProductServiceImpl extends ServiceImpl<SeckillProductDao, SeckillProductPo> implements SeckillProductService {
 
     @Autowired
-    private SeckillProductRelationDao seckillProductRelationDao;
+    private SeckillProductDao seckillProductRelationDao;
 
     @Override
-    public IPage<SeckillProductRelationPo> findListByPage(SeckillProductRelationSearchParam seckillProductRelationSearchParam) {
-        IPage<SeckillProductRelationPo> page = new Page<>(seckillProductRelationSearchParam.getPageNo(), seckillProductRelationSearchParam.getPageSize());
-        LambdaQueryWrapper<SeckillProductRelationPo> wrapper = Wrappers.lambdaQuery();
+    public IPage<SeckillProductPo> findListByPage(SeckillProductRelationSearchParam seckillProductRelationSearchParam) {
+        IPage<SeckillProductPo> page = new Page<>(seckillProductRelationSearchParam.getPageNo(), seckillProductRelationSearchParam.getPageSize());
+        LambdaQueryWrapper<SeckillProductPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
-        IPage<SeckillProductRelationPo> selectPage = seckillProductRelationDao.selectPage(page, wrapper);
+        IPage<SeckillProductPo> selectPage = seckillProductRelationDao.selectPage(page, wrapper);
         // 查询总条数
         Integer total = seckillProductRelationDao.selectCount(wrapper);
         selectPage.setTotal(total);
@@ -41,10 +41,10 @@ public class SeckillProductRelationServiceImpl extends ServiceImpl<SeckillProduc
 
     @Override
     public boolean prohibitById(String id) {
-        SeckillProductRelationPo po = new SeckillProductRelationPo();
+        SeckillProductPo po = new SeckillProductPo();
         po.setValidInd(false);
-        LambdaQueryWrapper<SeckillProductRelationPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(SeckillProductRelationPo::getId, id);
+        LambdaQueryWrapper<SeckillProductPo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(SeckillProductPo::getId, id);
         return seckillProductRelationDao.update(po, wrapper) >= 1;
     }
 }

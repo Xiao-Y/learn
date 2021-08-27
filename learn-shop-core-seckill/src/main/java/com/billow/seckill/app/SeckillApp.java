@@ -37,18 +37,18 @@ public class SeckillApp extends BaseApi {
     private UserTools userTools;
 
     @ApiOperation(value = "生成秒杀链接")
-    @GetMapping(value = "/genSeckillUrl/{seckillId}")
-    public ExposerVo genSeckillUrl(@PathVariable("seckillId") Long seckillId) {
-        return seckillService.genSeckillUrl(seckillId);
+    @GetMapping(value = "/genSeckillUrl/{seckillProductId}")
+    public ExposerVo genSeckillUrl(@PathVariable("seckillProductId") Long seckillProductId) {
+        return seckillService.genSeckillUrl(seckillProductId);
     }
 
     @ApiOperation(value = "执行秒杀")
-    @PostMapping(value = "/executionSeckill/{seckillId}")
-    public SeckillExecutionVo executionSeckill(@PathVariable("seckillId") Long seckillId,
+    @PostMapping(value = "/executionSeckill/{seckillProductId}")
+    public SeckillExecutionVo executionSeckill(@PathVariable("seckillProductId") Long seckillProductId,
                                                @RequestParam("userCode") String userCode,
                                                @RequestParam(value = "expire", required = false) Long expire,
                                                @RequestParam("md5") String md5) {
 //        String userCode = userTools.getCurrentUserCode();
-        return seckillService.executionSeckill( md5, seckillId,userCode, expire);
+        return seckillService.executionSeckill( md5, seckillProductId,userCode, expire);
     }
 }

@@ -2,7 +2,7 @@ package com.billow.seckill.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
-import com.billow.seckill.pojo.po.SeckillProductRelationPo;
+import com.billow.seckill.pojo.po.SeckillProductPo;
 import org.apache.ibatis.annotations.CacheNamespace;
 
 /**
@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.CacheNamespace;
  * @since 2021-08-27
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface SeckillProductRelationDao extends BaseMapper<SeckillProductRelationPo> {
+public interface SeckillProductDao extends BaseMapper<SeckillProductPo> {
 
 }
