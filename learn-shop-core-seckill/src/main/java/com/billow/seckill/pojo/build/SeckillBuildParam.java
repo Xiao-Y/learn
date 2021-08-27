@@ -9,41 +9,29 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 秒杀库存表 信息
+ * 限时购表。用于存储限时购活动的信息，包括开始时间、结束时间以及上下线状态。 信息
  * </p>
  *
  * @author billow
  * @version v1.0
- * @since 2021-08-13
+ * @since 2021-08-27
  */
 @Data
 @Accessors(chain = true)
 public class SeckillBuildParam implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "sku编号,唯一")
-    private String skuNo;
+    @ApiModelProperty(value = "标题")
+    private String title;
 
-    @ApiModelProperty(value = "商品名称")
-    private String goodsName;
+    @ApiModelProperty(value = "开始日期")
+    private LocalDateTime startDate;
 
-    @ApiModelProperty(value = "库存数量")
-    private Integer stock;
+    @ApiModelProperty(value = "结束日期")
+    private LocalDateTime endDate;
 
-    @ApiModelProperty(value = "秒杀开始时间")
-    private LocalDateTime startTime;
-
-    @ApiModelProperty(value = "秒杀结束时间")
-    private LocalDateTime endTime;
-
-    @ApiModelProperty(value = "支付过期时间（单位：分钟）")
-    private Long paymentExp;
-
-    @ApiModelProperty(value = "是否已经加载过")
-    private Boolean loadCache;
-
-    @ApiModelProperty(value = "商品说明")
-    private String remarks;
+    @ApiModelProperty(value = "上下线状态")
+    private Integer status;
 
 
 }

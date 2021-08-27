@@ -8,4 +8,25 @@
     <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
     <!-- 3.请务修改 cache-ref 中的配置 -->
     <cache-ref namespace="com.billow.seckill.dao.SuccessKilledDao"/>
+
+
+    <insert id="saveOrUpdate" parameterType="com.billow.seckill.pojo.po.SuccessKilledPo">
+        insert into sk_success_killed(id, usercode, seckill_id, kill_state, expire,
+                                      valid_ind, create_time, creator_code, update_time, updater_code)
+        values (#{id}, #{usercode}, #{seckillId}, #{killState}, #{expire},
+                #{validInd}, #{createTime}, #{creatorCode}, #{updateTime},
+                #{updaterCode})
+        on duplicate key update kill_state   = values(kill_state),
+                                expire       = values(expire),
+                                update_time  = values(update_time),
+                                updater_code = values(updater_code)
+    </insert>
+
+    <insert id="saveIgnore" parameterType="com.billow.seckill.pojo.po.SuccessKilledPo">
+        insert ignore into sk_success_killed(id, usercode, seckill_id, kill_state, expire,
+                                             valid_ind, create_time, creator_code, update_time, updater_code)
+        values (#{id}, #{usercode}, #{seckillId}, #{killState}, #{expire},
+                #{validInd}, #{createTime}, #{creatorCode}, #{updateTime},
+                #{updaterCode})
+    </insert>
 </mapper>

@@ -19,11 +19,20 @@ import org.apache.ibatis.annotations.Param;
 public interface SuccessKilledDao extends BaseMapper<SuccessKilledPo> {
 
     /**
+     * 唯一键重复时，更新
+     *
+     * @param successKilledPo
+     * @author liuyongtao
+     * @since 2021-8-21 15:53
+     */
+    void saveOrUpdate(SuccessKilledPo successKilledPo);
+
+    /**
      * 忽略异常的保存
      *
      * @param killedPo
      * @author liuyongtao
      * @since 2021-1-22 10:23
      */
-    int saveSuccessKilled(@Param("killedPo") SuccessKilledPo killedPo);
+    int saveIgnore(SuccessKilledPo killedPo);
 }

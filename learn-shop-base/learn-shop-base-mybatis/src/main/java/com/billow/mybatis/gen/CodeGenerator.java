@@ -248,6 +248,14 @@ public class CodeGenerator {
 //                , "oms_order_setting");
 //        strategy.setTablePrefix("oms_");
 
+
+        strategy.setInclude("sms_seckill"
+                , "sms_seckill_log"
+                , "sms_seckill_product_relation"
+                , "sms_seckill_session"
+        );
+        strategy.setTablePrefix("sms_");
+
 //        strategy.setInclude("sk_seckill", "sk_success_killed");
 //        strategy.setTablePrefix("sk_");
 
@@ -279,10 +287,10 @@ public class CodeGenerator {
 //                "r_role_permission",
 //                "r_user_role"
 //        );
-        strategy.setTablePrefix("r_");
-        strategy.setInclude("v_mytasklist"
-        );
-        strategy.setTablePrefix("v_");
+//        strategy.setTablePrefix("r_");
+//        strategy.setInclude("v_mytasklist"
+//        );
+//        strategy.setTablePrefix("v_");
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);
         strategy.setEntityTableFieldAnnotationEnable(true);
         return strategy;
@@ -303,7 +311,7 @@ public class CodeGenerator {
         String parent = "";
         if (strategy.getTablePrefix()[0].equals("p_")) {
             parent = "product";
-        } else if (strategy.getTablePrefix()[0].equals("sk_")) {
+        } else if (strategy.getTablePrefix()[0].equals("sk_") || strategy.getTablePrefix()[0].equals("sms_")) {
             parent = "seckill";
         } else if (strategy.getTablePrefix()[0].equals("sys_") || strategy.getTablePrefix()[0].equals("v_")) {
             parent = "system";

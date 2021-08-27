@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 限时购表。用于存储限时购活动的信息，包括开始时间、结束时间以及上下线状态。 信息
+ * 限时购与商品关系表。用于存储与限时购相关的商品信息，一个限时购中有多个场次，每个场次都可以设置不同活动商品。 信息
  * </p>
  *
  * @author billow
@@ -19,6 +19,6 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class SeckillSearchParam extends BasePage implements Serializable {
+public class SeckillProductRelationSearchParam extends BasePage implements Serializable {
 
 }

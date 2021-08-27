@@ -2,8 +2,6 @@ package com.billow.seckill.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.common.amqp.config.MqSecKillOrderConfig;
-import com.billow.common.amqp.expand.SendMessage;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.seckill.common.cache.SeckillCache;
 import com.billow.seckill.common.enums.SeckillStatEnum;
@@ -14,6 +12,7 @@ import com.billow.seckill.pojo.vo.ExposerVo;
 import com.billow.seckill.pojo.vo.SeckillExecutionVo;
 import com.billow.seckill.pojo.vo.SuccessKilledVo;
 import com.billow.seckill.service.SeckillService;
+import com.billow.seckill.service.SuccessKilledService;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.utlis.FieldUtils;
@@ -56,9 +55,9 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     private String salt;
     // 自动任务加载秒杀开始前多少分钟的数据加到缓存中（单位：分钟）
     @Value("${seckill.load-data-start-before:10}")
-    private long loadDataStartBefore;
+    private int loadDataStartBefore;
     // 提前 loadDataStartBefore 加载秒杀商品数据
-    private long loadDataStartBeforeTime = loadDataStartBefore * 60 * 1000;
+//    private long loadDataStartBeforeTime = loadDataStartBefore * 60 * 1000;
     // url 失效时间（单位：秒）
     @Value("${seckill.url-invalid:20}")
     private long urlInvalid;
@@ -69,7 +68,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     @Autowired
     private SeckillCache seckillCache;
     @Autowired
-    private MqSecKillOrderConfig mqSecKillOrderConfig;
+    private SuccessKilledService successKilledService;
 
     @Override
     public void genQueryCondition(LambdaQueryWrapper<SeckillPo> wrapper, SeckillSearchParam seckillSearchParam) {
@@ -128,19 +127,20 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         SuccessKilledVo killedVo = new SuccessKilledVo();
         killedVo.setSeckillId(seckillId);
         killedVo.setUsercode(userCode);
+        killedVo.setSkuNo(seckillPo.getSkuNo());
         killedVo.setKillState(SeckillStatEnum.SUCCESS.getState());
         Integer paymentExp = seckillPo.getPaymentExp();
         seckillOrderExp = paymentExp == null ? seckillOrderExp : paymentExp;
         killedVo.setExpire(DateUtils.addMinutes(new Date(), seckillOrderExp));
         FieldUtils.setCommonFieldByInsert(killedVo, userCode);
-        SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
         // 执行秒杀
         SeckillStatEnum statEnum = seckillCache.executeSeckill(killedVo);
         // 秒杀成功，订单系统保存订单数据
         if (SeckillStatEnum.SUCCESS.equals(statEnum)) {
-            SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
+            successKilledService.saveAsync(killedVo);
         }
-        return new SeckillExecutionVo(seckillId, statEnum);
+        killedVo.setKillState(statEnum.getState());
+        return new SeckillExecutionVo(seckillId, statEnum, killedVo);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
         // 当前时间
         Date now = new Date();
         // 延迟加载时间
-        Date loadDataDate = new Date(now.getTime() + loadDataStartBeforeTime);
+        Date loadDataDate = DateUtils.addMinutes(new Date(), loadDataStartBefore);
         LambdaQueryWrapper<SeckillPo> wrapper = Wrappers.lambdaQuery();
         wrapper.le(SeckillPo::getStartTime, loadDataDate)
                 .ge(SeckillPo::getEndTime, now)

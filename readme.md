@@ -51,7 +51,7 @@
 * mysql
 * redis
 * rabbtimq
-* nacos
+* nacos （单机启动命令：./startup.sh -m standalone）
 * learn-cloud-getaway
 * 启动业务服务
 
@@ -133,3 +133,7 @@ protected RedisTemplate<String, Object> redisCacheTemplate;
 > PUT Update 更新一个资源。或新增一个含 id 资源(如果 id 不存在)<br/>
 
 > DELETE Delete 删除一个资源<br/>
+
+# TODO
+1.缓存的调整
+2.订单释放

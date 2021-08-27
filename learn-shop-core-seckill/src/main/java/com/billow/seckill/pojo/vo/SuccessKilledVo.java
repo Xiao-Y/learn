@@ -1,6 +1,7 @@
 package com.billow.seckill.pojo.vo;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -36,6 +37,12 @@ public class SuccessKilledVo implements Serializable {
     @ApiModelProperty(value = "秒杀订单过期时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expire;
+
+    @ApiModelProperty(value = "sku编号,唯一")
+    private String skuNo;
+
+    @ApiModelProperty(value = "订单类型：0->正常订单；1->秒杀订单")
+    private Integer orderType;
 
     // 创建人
     private String creatorCode;
