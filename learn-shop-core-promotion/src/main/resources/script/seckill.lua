@@ -9,16 +9,16 @@ local seckillLimit = ARGV[1];
 if (redis.call('exists', seckillStockKey) == 0) then
     return -6;
 end ;
---- 获取指定的库存
-local resultStock = redis.call("get", seckillStockKey);
 
---- 库存为空或者小于等0时返回
-if resultStock == nil or tonumber(resultStock) <= 0 then
+--- 获取指定的库存，库存为空或者小于等0时返回
+local resultStock = redis.call("get", seckillStockKey);
+if (resultStock == nil or tonumber(resultStock) <= 0) then
     return -4;
 end ;
 
---- 已经秒杀过
-if (redis.call('exists', seckillCountKey) == 1 and redis.call('get', seckillCountKey) >= tonumber(seckillLimit)) then
+--- 已经秒杀的次数，达到上限时返回
+local seckillCount = redis.call('get', seckillCountKey)
+if (seckillCount ~= nil and tonumber(seckillCount) >= tonumber(seckillLimit)) then
     return -1;
 end ;
 

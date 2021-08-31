@@ -24,7 +24,7 @@ public class SeckillSessionCache {
     @Autowired
     private RedisUtils redisUtils;
 
-    public void saveSeckillSessionCache(Map<String, SeckillSessionCacheDto> collect) {
+    public void saveSeckillSessionCache(Map<String, String> collect) {
         redisUtils.setHash(RedisCst.SECKILL_SESSION, collect);
     }
 }

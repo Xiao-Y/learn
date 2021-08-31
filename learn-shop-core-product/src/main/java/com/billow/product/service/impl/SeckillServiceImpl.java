@@ -1,5 +1,6 @@
 package com.billow.product.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.cache.SeckillCache;
 import com.billow.product.common.enums.SeckillStatusEnum;
@@ -59,8 +60,8 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
                 .list();
         if (CollectionUtils.isNotEmpty(seckillPos)) {
             List<SeckillCacheDto> convert = ConvertUtils.convert(seckillPos, SeckillCacheDto.class);
-            Map<String, SeckillCacheDto> collect = convert.stream()
-                    .collect(Collectors.toMap(m -> m.getId().toString(), Function.identity()));
+            Map<String, String> collect = convert.stream()
+                    .collect(Collectors.toMap(m -> m.getId().toString(), JSON::toJSONString));
             seckillCache.saveSeckillCache(collect);
         }
     }

@@ -31,6 +31,6 @@ public class SeckillCache {
      * @since 2021-8-30 16:34
      */
     public SeckillCacheDto getSeckillCache(Long seckillId) {
-        return redisUtils.getHash(RedisCst.SECKILL_INFO, seckillId.toString());
+        return redisUtils.getHash(RedisCst.SECKILL_INFO, seckillId.toString(), SeckillCacheDto.class);
     }
 }

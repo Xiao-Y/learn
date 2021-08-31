@@ -263,6 +263,20 @@ public class RedisUtils {
     }
 
     /**
+     * 通过 key 和 hash key 获取 map
+     *
+     * @param k hash key
+     * @return {@link Map< String,T>}
+     * @author liuyongtao
+     * @since 2021-1-28 8:24
+     */
+    public <T> T getHash(String k, String hk, Class<T> clazz) {
+        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        T t = opsForHash.get(k, hk);
+        return JSONObject.parseObject(t.toString(),clazz);
+    }
+
+    /**
      * 保存一个 map 到 hash 中
      *
      * @param k   key
@@ -271,7 +285,7 @@ public class RedisUtils {
      * @since 2021-1-28 8:21
      */
     public <T> void setHash(String k, Map<String, T> map) {
-        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, T> opsForHash = stringRedisTemplate.opsForHash();
         opsForHash.putAll(k, map);
     }
 

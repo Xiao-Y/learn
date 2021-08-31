@@ -32,7 +32,7 @@ public class SeckillCache {
      * @author liuyongtao
      * @since 2021-8-30 16:34
      */
-    public void saveSeckillCache(Map<String, SeckillCacheDto> map) {
+    public void saveSeckillCache(Map<String, String> map) {
         redisUtils.setHash(RedisCst.SECKILL_INFO, map);
     }
 }

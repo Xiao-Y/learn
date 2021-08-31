@@ -76,7 +76,7 @@ public class SeckillServiceImpl implements SeckillService {
         // 秒杀链接过期时间
         Long expire = now.plusSeconds(urlInvalid).toEpochSecond(ZoneOffset.UTC);
         // 生成 md5 链接
-        String md5 = this.getMD5(seckillProductId, expire);
+        String md5 = this.getMD5(seckillProductId, null);
         return new ExposerVo(true, md5, seckillProductId, expire);
     }
 

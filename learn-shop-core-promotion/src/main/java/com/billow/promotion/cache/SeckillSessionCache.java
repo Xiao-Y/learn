@@ -31,6 +31,6 @@ public class SeckillSessionCache {
      * @since 2021-8-30 16:34
      */
     public SeckillSessionCacheDto getSeckillSessionCache(Long seckillSessionId) {
-        return redisUtils.getHash(RedisCst.SECKILL_SESSION, seckillSessionId.toString());
+        return redisUtils.getHash(RedisCst.SECKILL_SESSION, seckillSessionId.toString(), SeckillSessionCacheDto.class);
     }
 }

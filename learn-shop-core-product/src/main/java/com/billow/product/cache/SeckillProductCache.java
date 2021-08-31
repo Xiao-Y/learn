@@ -24,7 +24,7 @@ public class SeckillProductCache {
     @Autowired
     private RedisUtils redisUtils;
 
-    public void saveSeckillProductCache(Map<String, SeckillProductCacheDto> collect) {
+    public void saveSeckillProductCache(Map<String, String> collect) {
         redisUtils.setHash(RedisCst.SECKILL_PRODUCT_INFO, collect);
     }
 }
