@@ -26,7 +26,7 @@ import java.util.List;
 public class CodeGenerator {
 
     String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
-    String template = "/template2";
+    String template = "/template";
 
     /**
      * 自定义配置
@@ -251,7 +251,7 @@ public class CodeGenerator {
 
         strategy.setInclude("sms_seckill"
                 , "sms_seckill_log"
-                , "sms_seckill_product_relation"
+                , "sms_seckill_product"
                 , "sms_seckill_session"
         );
         strategy.setTablePrefix("sms_");
@@ -309,9 +309,9 @@ public class CodeGenerator {
         StrategyConfig strategy = mpg.getStrategy();
 
         String parent = "";
-        if (strategy.getTablePrefix()[0].equals("p_")) {
+        if (strategy.getTablePrefix()[0].equals("p_") || strategy.getTablePrefix()[0].equals("sms_")) {
             parent = "product";
-        } else if (strategy.getTablePrefix()[0].equals("sk_") || strategy.getTablePrefix()[0].equals("sms_")) {
+        } else if (strategy.getTablePrefix()[0].equals("sk_")) {
             parent = "seckill";
         } else if (strategy.getTablePrefix()[0].equals("sys_") || strategy.getTablePrefix()[0].equals("v_")) {
             parent = "system";

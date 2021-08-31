@@ -68,13 +68,23 @@ public class RedisCst {
      */
     public final static String SECKILL_LOCK = "SECKILL:LOCK";
     /**
-     * 秒杀库存前缀，SECKILL:STOCK:{seckillId}:{userCode}
+     * 秒杀库存前缀，SECKILL:PRODUCT:STOCK:{seckillProductId}
      */
-    public final static String SECKILL_STOCK = "SECKILL:STOCK";
+    public final static String SECKILL_PRODUCT_STOCK = "SECKILL:PRODUCT:STOCK";
     /**
-     * 秒杀商品信息前缀，SECKILL:PRODUCT:{seckillId}
+     * 秒杀商品信息前缀，SECKILL:PRODUCT:INFO:{seckillProductId}
      */
-    public final static String SECKILL_PRODUCT = "SECKILL:PRODUCT";
+    public final static String SECKILL_PRODUCT_INFO = "SECKILL:PRODUCT:INFO";
+
+    /**
+     * 秒杀商品信息前缀，SECKILL:INFO:{seckillId}
+     */
+    public final static String SECKILL_INFO = "SECKILL:INFO";
+
+    /**
+     * 秒杀场次信息前缀，SECKILL:SESSION:{seckillSessionId}
+     */
+    public final static String SECKILL_SESSION = "SECKILL:SESSION";
     //==============================================================================================
 
     /**
