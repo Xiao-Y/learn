@@ -1,13 +1,11 @@
 package com.billow.order.mq.consumer;
 
-import com.billow.order.pojo.vo.SuccessKilledVo;
-import com.billow.order.service.SuccessKilledService;
+import com.billow.order.pojo.vo.OrderMqVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,21 +18,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class SuccessKillConsumer {
 
-    @Autowired
-    private SuccessKilledService successKilledService;
-
     @RabbitHandler
-    @RabbitListener(queues = "${config.mq.queue.secKillToCoreOrder}")
-    public void secKillOrder(SuccessKilledVo data) {
-        log.info("秒杀订单数据:{}", data);
-        successKilledService.saveAsync(data.getSeckillId(), data.getUsercode());
+    @RabbitListener(queues = {"${config.mq.queue.secKillToCoreOrder}"})
+    public void secKillOrder(OrderMqVo data) {
+        log.info("订单数据:{}", data);
+        // TODO 查询商品数据，生成订单数据
+        // TODO 订单数据生成完成后，添加订单失效数据（延迟队列）。
     }
 
     @RabbitHandler
-    @RabbitListener(queues = "${config.mq.queue.secKillToCoreOrderDlx}")
-    public void secKillOrderDlx(SuccessKilledVo data, Message message) {
-        log.info("DLX-秒杀订单数据:{}", data);
-        log.info("DLX-秒杀订单数据:{}", message);
+    @RabbitListener(queues = {"${config.mq.queue.secKillToCoreOrderDlx}"})
+    public void secKillOrderDlx(OrderMqVo data, Message message) {
+        log.info("DLX-订单数据:{}", data);
+        log.info("DLX-订单数据:{}", message);
         MessageProperties messageProperties = message.getMessageProperties();
         String consumerQueue = messageProperties.getConsumerQueue();
         String receivedExchange = messageProperties.getReceivedExchange();

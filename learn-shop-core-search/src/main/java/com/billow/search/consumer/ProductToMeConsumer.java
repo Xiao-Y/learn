@@ -40,4 +40,29 @@ public class ProductToMeConsumer {
         }
         log.info("完成刷新...");
     }
+
+    /**
+     * 同步 mysql 数据到 es
+     *
+     * @param message
+     * @author liuyongtao
+     * @since 2021-9-1 15:34
+     */
+    @Async("fxbDrawExecutor")
+    @RabbitListener(queues = "canal_queue")
+    @RabbitHandler
+    public void syncEs(String message) throws Exception {
+        log.info("mysql：{}", message);
+        SpuInfo spuInfo = JSON.parseObject(message, SpuInfo.class);
+
+        try {
+            boolean exists = restTemplate.exists("1", SpuInfo.class);
+            if (!exists) {
+                restTemplate.save(spuInfo);
+            }
+        } catch (Exception e) {
+            log.error("刷新 es 缓存异常", e);
+        }
+        log.info("完成刷新...");
+    }
 }
