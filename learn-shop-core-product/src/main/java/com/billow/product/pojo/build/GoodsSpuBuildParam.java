@@ -67,7 +67,7 @@ public class GoodsSpuBuildParam implements Serializable {
     private Integer verifyStatus;
 
     @ApiModelProperty(value = "价格")
-    private BigDecimal price;
+    private Integer price;
 
     @ApiModelProperty(value = "最低售价")
     private Integer lowPrice;

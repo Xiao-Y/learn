@@ -90,7 +90,7 @@ public class GoodsSpuPo extends BasePo {
 
     @ApiModelProperty(value = "价格")
     @TableField("price")
-    private BigDecimal price;
+    private Integer price;
 
     @ApiModelProperty(value = "最低售价")
     @TableField("low_price")
