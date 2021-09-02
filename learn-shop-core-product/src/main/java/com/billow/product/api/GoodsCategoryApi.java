@@ -2,7 +2,9 @@ package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.ex.SelectEx;
+import com.billow.product.pojo.build.GoodsCategoryBuildParam;
 import com.billow.product.pojo.po.GoodsCategoryPo;
+import com.billow.product.pojo.search.GoodsCategorySearchParam;
 import com.billow.product.pojo.vo.GoodsCategoryVo;
 import com.billow.product.service.GoodsCategoryService;
 import com.billow.tools.utlis.ConvertUtils;
@@ -36,51 +38,10 @@ import java.util.List;
 @Api(tags = {"GoodsCategoryApi"}, value = "分类表")
 @RestController
 @RequestMapping("/goodsCategoryApi")
-public class GoodsCategoryApi {
+public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCategoryPo, GoodsCategoryVo, GoodsCategoryBuildParam, GoodsCategorySearchParam> {
 
     @Autowired
     private GoodsCategoryService goodsCategoryService;
-
-    @ApiOperation(value = "查询分页分类表数据")
-    @PostMapping(value = "/list")
-    public IPage<GoodsCategoryPo> findListByPage(@RequestBody GoodsCategoryVo goodsCategoryVo) {
-        return goodsCategoryService.findListByPage(goodsCategoryVo);
-    }
-
-    @ApiOperation(value = "根据id查询分类表数据")
-    @GetMapping(value = "/getById/{id}")
-    public GoodsCategoryVo getById(@PathVariable("id") Long id) {
-        GoodsCategoryPo po = goodsCategoryService.getById(id);
-        return ConvertUtils.convert(po, GoodsCategoryVo.class);
-    }
-
-    @ApiOperation(value = "新增分类表数据")
-    @PostMapping(value = "/add")
-    public GoodsCategoryVo add(@RequestBody GoodsCategoryVo goodsCategoryVo) {
-        GoodsCategoryPo po = ConvertUtils.convert(goodsCategoryVo, GoodsCategoryPo.class);
-        goodsCategoryService.save(po);
-        return ConvertUtils.convert(po, GoodsCategoryVo.class);
-    }
-
-    @ApiOperation(value = "删除分类表数据")
-    @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") Long id) {
-        return goodsCategoryService.removeById(id);
-    }
-
-    @ApiOperation(value = "更新分类表数据")
-    @PutMapping(value = "/update")
-    public GoodsCategoryVo update(@RequestBody GoodsCategoryVo goodsCategoryVo) {
-        GoodsCategoryPo po = ConvertUtils.convert(goodsCategoryVo, GoodsCategoryPo.class);
-        goodsCategoryService.updateById(po);
-        return ConvertUtils.convert(po, GoodsCategoryVo.class);
-    }
-
-    @ApiOperation("根据ID禁用分类表数据")
-    @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable Long id) {
-        return goodsCategoryService.prohibitById(id);
-    }
 
     @ApiOperation(value = "查询分类下拉列表数据")
     @PostMapping(value = "/findCategorySelect")

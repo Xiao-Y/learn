@@ -1,9 +1,7 @@
 package com.billow.product.pojo.vo;
 
-
-import com.billow.product.pojo.po.GoodsSkuSafeguardPo;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -15,11 +13,18 @@ import java.io.Serializable;
  *
  * @author billow
  * @version v1.0
- * @since 2021-02-06
+ * @since 2021-09-02
  */
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-public class GoodsSkuSafeguardVo extends GoodsSkuSafeguardPo implements Serializable {
+public class GoodsSkuSafeguardVo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "sku_id")
+    private Long skuId;
+
+    @ApiModelProperty(value = "safeguard_id")
+    private Long safeguardId;
+
 
 }

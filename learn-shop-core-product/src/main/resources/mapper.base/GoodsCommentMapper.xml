@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.product.dao.GoodsCommentDao">
+
+        <!-- 开启二级缓存 -->
+        <!-- 注意：默认为 flushCache="true" useCache="true" -->
+        <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+        <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+        <!-- 3.请务修改 cache-ref 中的配置 -->
+        <cache-ref namespace="com.billow.product.dao.GoodsCommentDao"/>
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.billow.product.pojo.po.GoodsCommentPo">
+                <result column="id" property="id"/>
+                <result column="valid_ind" property="validInd"/>
+                <result column="creator_code" property="creatorCode"/>
+                <result column="update_time" property="updateTime"/>
+                <result column="updater_code" property="updaterCode"/>
+                    <result column="spu_id" property="spuId"/>
+                    <result column="member_nick_name" property="memberNickName"/>
+                    <result column="product_name" property="productName"/>
+                    <result column="star" property="star"/>
+                    <result column="member_ip" property="memberIp"/>
+                    <result column="show_status" property="showStatus"/>
+                    <result column="sku_id" property="skuId"/>
+                    <result column="collect_couont" property="collectCouont"/>
+                    <result column="read_count" property="readCount"/>
+                    <result column="content" property="content"/>
+                    <result column="pics" property="pics"/>
+                    <result column="member_icon" property="memberIcon"/>
+                    <result column="replay_count" property="replayCount"/>
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+                id,
+                valid_ind,
+                creator_code,
+                update_time,
+                updater_code,
+            spu_id, member_nick_name, product_name, star, member_ip, show_status, sku_id, collect_couont, read_count, content, pics, member_icon, replay_count
+        </sql>
+
+</mapper>

@@ -1,9 +1,8 @@
 package com.billow.product.pojo.vo;
 
 
-import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -19,8 +18,23 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-public class GoodsSkuSpecValueVo extends GoodsSkuSpecValuePo implements Serializable {
+public class GoodsSkuSpecValueVo implements Serializable {
 
+    @ApiModelProperty(value = "sku_id")
+    private Long skuId;
+
+    @ApiModelProperty(value = "商品id")
+    private Long spuId;
+
+    @ApiModelProperty(value = "规格id(冗余)")
+    private Long specKeyId;
+
+    @ApiModelProperty(value = "规格值id")
+    private Long specValueId;
+
+    @ApiModelProperty(value = "规格值排序")
+    private Long skuSpecSort;
+
+    @ApiModelProperty(value = "规格值")
     private String specValue;
 }

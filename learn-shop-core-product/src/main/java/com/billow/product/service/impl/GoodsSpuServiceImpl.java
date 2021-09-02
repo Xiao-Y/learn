@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSkuDao;
 import com.billow.product.dao.GoodsSkuSpecValueDao;
 import com.billow.product.dao.GoodsSpuDao;
 import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpuPo;
+import com.billow.product.pojo.search.GoodsSpuSearchParam;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSkuSpecValueService;
 import com.billow.product.service.GoodsSpuService;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
  * @since 2019-11-27
  */
 @Service
-public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> implements GoodsSpuService {
+public class GoodsSpuServiceImpl extends HighLevelServiceImpl<GoodsSpuDao, GoodsSpuPo, GoodsSpuSearchParam> implements GoodsSpuService {
 
     @Autowired
     private GoodsSpuDao goodsSpuDao;
@@ -47,27 +49,12 @@ public class GoodsSpuServiceImpl extends ServiceImpl<GoodsSpuDao, GoodsSpuPo> im
     private GoodsSkuSpecValueService goodsSkuSpecValueService;
 
     @Override
-    public IPage<GoodsSpuPo> findListByPage(GoodsSpuVo goodsSpuVo) {
-        IPage<GoodsSpuPo> page = new Page<>(goodsSpuVo.getPageNo(), goodsSpuVo.getPageSize());
-        LambdaQueryWrapper<GoodsSpuPo> wrapper = Wrappers.lambdaQuery();
+    public void genQueryCondition(LambdaQueryWrapper<GoodsSpuPo> wrapper, GoodsSpuSearchParam goodsSpuSearchParam) {
         // 查询条件
-        wrapper.eq(ToolsUtils.isNotEmpty(goodsSpuVo.getSpuNo()), GoodsSpuPo::getSpuNo, goodsSpuVo.getSpuNo())
-                .like(ToolsUtils.isNotEmpty(goodsSpuVo.getGoodsName()), GoodsSpuPo::getGoodsName, goodsSpuVo.getGoodsName())
-                .eq(ToolsUtils.isNotEmpty(goodsSpuVo.getBrandId()), GoodsSpuPo::getBrandId, goodsSpuVo.getBrandId())
-                .eq(ToolsUtils.isNotEmpty(goodsSpuVo.getCategoryId()), GoodsSpuPo::getCategoryId, goodsSpuVo.getCategoryId());
-        IPage<GoodsSpuPo> selectPage = goodsSpuDao.selectPage(page, wrapper);
-        Integer integer = goodsSpuDao.selectCount(wrapper);
-        selectPage.setTotal(integer);
-        return selectPage;
-    }
-
-    @Override
-    public boolean prohibitById(Long id) {
-        GoodsSpuPo po = new GoodsSpuPo();
-        po.setValidInd(false);
-        LambdaQueryWrapper<GoodsSpuPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSpuPo::getId, id);
-        return goodsSpuDao.update(po, wrapper) >= 1;
+        wrapper.eq(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getSpuNo()), GoodsSpuPo::getSpuNo, goodsSpuSearchParam.getSpuNo())
+                .like(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getGoodsName()), GoodsSpuPo::getGoodsName, goodsSpuSearchParam.getGoodsName())
+                .eq(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getBrandId()), GoodsSpuPo::getBrandId, goodsSpuSearchParam.getBrandId())
+                .eq(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getCategoryId()), GoodsSpuPo::getCategoryId, goodsSpuSearchParam.getCategoryId());
     }
 
     @Override

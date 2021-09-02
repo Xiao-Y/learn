@@ -3,7 +3,9 @@ package com.billow.product.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.GoodsSkuPo;
+import com.billow.product.pojo.search.GoodsSkuSearchParam;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 
 import java.util.List;
@@ -18,27 +20,7 @@ import java.util.Map;
  * @version v1.0
  * @since 2019-11-27
  */
-public interface GoodsSkuService extends IService<GoodsSkuPo> {
-
-    /**
-     * 分页查询
-     *
-     * @param goodsSkuVo 查询条件
-     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.product.pojo.po.GoodsSkuPo>
-     * @author billow
-     * @since 2019-11-27
-     */
-    IPage<GoodsSkuPo> findListByPage(GoodsSkuVo goodsSkuVo);
-
-    /**
-     * 根据ID禁用数据
-     *
-     * @param id 主键id
-     * @return boolean
-     * @author billow
-     * @since 2019-11-27
-     */
-    boolean prohibitById(Long id);
+public interface GoodsSkuService extends HighLevelService<GoodsSkuPo, GoodsSkuSearchParam> {
 
     /**
      * 通过 spuId 获取商品 sku 规格信息

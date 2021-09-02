@@ -1,7 +1,9 @@
 package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.product.pojo.build.GoodsSkuBuildParam;
 import com.billow.product.pojo.po.GoodsSkuPo;
+import com.billow.product.pojo.search.GoodsSkuSearchParam;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 import com.billow.product.service.GoodsSkuService;
 import com.billow.tools.utlis.ConvertUtils;
@@ -30,52 +32,13 @@ import java.util.List;
  * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsSkuApi"}, value = "sku表")
+@Api(tags = {"GoodsSkuApi"}, value = "sku表（stock keeping uint 库存量单位）")
 @RestController
 @RequestMapping("/goodsSkuApi")
-public class GoodsSkuApi {
+public class GoodsSkuApi extends HighLevelApi<GoodsSkuService, GoodsSkuPo, GoodsSkuVo, GoodsSkuBuildParam, GoodsSkuSearchParam> {
 
     @Autowired
     private GoodsSkuService goodsSkuService;
-
-    @ApiOperation(value = "查询分页sku表数据")
-    @PostMapping(value = "/list")
-    public IPage<GoodsSkuPo> findListByPage(@RequestBody GoodsSkuVo goodsSkuVo) {
-        return goodsSkuService.findListByPage(goodsSkuVo);
-    }
-
-    @ApiOperation(value = "根据id查询sku表数据")
-    @GetMapping(value = "/getById/{id}")
-    public GoodsSkuVo getById(@PathVariable("id") Long id) {
-        GoodsSkuPo po = goodsSkuService.getById(id);
-        return ConvertUtils.convert(po, GoodsSkuVo.class);
-    }
-
-    @ApiOperation(value = "新增sku表数据")
-    @PostMapping(value = "/add")
-    public GoodsSkuVo add(@RequestBody GoodsSkuVo goodsSkuVo) {
-        goodsSkuService.add(goodsSkuVo);
-        return goodsSkuVo;
-    }
-
-    @ApiOperation(value = "删除sku表数据")
-    @DeleteMapping(value = "/delById/{id}")
-    public boolean delById(@PathVariable("id") Long id) {
-        return goodsSkuService.removeById(id);
-    }
-
-    @ApiOperation(value = "更新sku表数据")
-    @PutMapping(value = "/update")
-    public GoodsSkuVo update(@RequestBody GoodsSkuVo goodsSkuVo) {
-        goodsSkuService.update(goodsSkuVo);
-        return goodsSkuVo;
-    }
-
-    @ApiOperation("根据ID禁用sku表数据")
-    @PutMapping("/prohibitById/{id}")
-    public boolean prohibitById(@PathVariable Long id) {
-        return goodsSkuService.prohibitById(id);
-    }
 
     @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
     @GetMapping(value = "/findGoodsSku/{spuId}")

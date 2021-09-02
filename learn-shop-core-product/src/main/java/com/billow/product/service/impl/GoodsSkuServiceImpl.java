@@ -2,10 +2,8 @@ package com.billow.product.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSkuDao;
 import com.billow.product.dao.GoodsSkuSpecValueDao;
 import com.billow.product.dao.GoodsSpecKeyDao;
@@ -14,6 +12,7 @@ import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
+import com.billow.product.pojo.search.GoodsSkuSearchParam;
 import com.billow.product.pojo.vo.GoodsSkuSpecValueVo;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 import com.billow.product.service.GoodsSkuService;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> implements GoodsSkuService {
+public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, GoodsSkuPo, GoodsSkuSearchParam> implements GoodsSkuService {
 
     @Autowired
     private GoodsSkuDao goodsSkuDao;
@@ -57,26 +56,6 @@ public class GoodsSkuServiceImpl extends ServiceImpl<GoodsSkuDao, GoodsSkuPo> im
     private GoodsSpecValueDao goodsSpecValueDao;
     @Autowired
     private GoodsSkuSpecValueService goodsSkuSpecValueService;
-
-    @Override
-    public IPage<GoodsSkuPo> findListByPage(GoodsSkuVo goodsSkuVo) {
-        IPage<GoodsSkuPo> page = new Page<>(goodsSkuVo.getPageNo(), goodsSkuVo.getPageSize());
-        LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
-        // 查询条件
-        IPage<GoodsSkuPo> selectPage = goodsSkuDao.selectPage(page, wrapper);
-        Integer integer = goodsSkuDao.selectCount(wrapper);
-        selectPage.setTotal(integer);
-        return selectPage;
-    }
-
-    @Override
-    public boolean prohibitById(Long id) {
-        GoodsSkuPo po = new GoodsSkuPo();
-        po.setValidInd(false);
-        LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSkuPo::getId, id);
-        return goodsSkuDao.update(po, wrapper) >= 1;
-    }
 
     @Override
     public List<Map<String, Object>> findGoodsSkuSpec(Long spuId) {

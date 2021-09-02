@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSkuSpecValueDao;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
+import com.billow.product.pojo.search.GoodsSkuSpecValueSearchParam;
 import com.billow.product.pojo.vo.GoodsSkuSpecValueVo;
 import com.billow.product.service.GoodsSkuSpecValueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,30 +27,10 @@ import java.util.stream.Collectors;
  * @since 2019-11-27
  */
 @Service
-public class GoodsSkuSpecValueServiceImpl extends ServiceImpl<GoodsSkuSpecValueDao, GoodsSkuSpecValuePo> implements GoodsSkuSpecValueService {
+public class GoodsSkuSpecValueServiceImpl extends HighLevelServiceImpl<GoodsSkuSpecValueDao, GoodsSkuSpecValuePo, GoodsSkuSpecValueSearchParam> implements GoodsSkuSpecValueService {
 
     @Autowired
     private GoodsSkuSpecValueDao goodsSkuSpecValueDao;
-
-    @Override
-    public IPage<GoodsSkuSpecValuePo> findListByPage(GoodsSkuSpecValueVo goodsSkuSpecValueVo) {
-        IPage<GoodsSkuSpecValuePo> page = new Page<>(goodsSkuSpecValueVo.getPageNo(), goodsSkuSpecValueVo.getPageSize());
-        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
-        // 查询条件
-        IPage<GoodsSkuSpecValuePo> selectPage = goodsSkuSpecValueDao.selectPage(page, wrapper);
-        Integer integer = goodsSkuSpecValueDao.selectCount(wrapper);
-        selectPage.setTotal(integer);
-        return selectPage;
-    }
-
-    @Override
-    public boolean prohibitById(Long id) {
-        GoodsSkuSpecValuePo po = new GoodsSkuSpecValuePo();
-        po.setValidInd(false);
-        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSkuSpecValuePo::getId, id);
-        return goodsSkuSpecValueDao.update(po, wrapper) >= 1;
-    }
 
     @Override
     public List<Long> findSpuSpecKey(Long id) {

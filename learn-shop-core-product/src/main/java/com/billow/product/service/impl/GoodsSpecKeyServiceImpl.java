@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
+import com.billow.product.pojo.search.GoodsSpecKeySearchParam;
 import com.billow.product.pojo.vo.GoodsSpecKeyVo;
 import com.billow.product.service.GoodsSpecKeyService;
 import com.billow.tools.generator.NumUtil;
@@ -28,30 +30,10 @@ import java.util.List;
  * @since 2019-11-27
  */
 @Service
-public class GoodsSpecKeyServiceImpl extends ServiceImpl<GoodsSpecKeyDao, GoodsSpecKeyPo> implements GoodsSpecKeyService {
+public class GoodsSpecKeyServiceImpl extends HighLevelServiceImpl<GoodsSpecKeyDao, GoodsSpecKeyPo, GoodsSpecKeySearchParam> implements GoodsSpecKeyService {
 
     @Autowired
     private GoodsSpecKeyDao goodsSpecKeyDao;
-
-    @Override
-    public IPage<GoodsSpecKeyPo> findListByPage(GoodsSpecKeyVo goodsSpecKeyVo) {
-        IPage<GoodsSpecKeyPo> page = new Page<>(goodsSpecKeyVo.getPageNo(), goodsSpecKeyVo.getPageSize());
-        LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
-        // 查询条件
-        IPage<GoodsSpecKeyPo> selectPage = goodsSpecKeyDao.selectPage(page, wrapper);
-        Integer integer = goodsSpecKeyDao.selectCount(wrapper);
-        selectPage.setTotal(integer);
-        return selectPage;
-    }
-
-    @Override
-    public boolean prohibitById(Long id) {
-        GoodsSpecKeyPo po = new GoodsSpecKeyPo();
-        po.setValidInd(false);
-        LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSpecKeyPo::getId, id);
-        return goodsSpecKeyDao.update(po, wrapper) >= 1;
-    }
 
     @Override
     public List<GoodsSpecKeyPo> findListByCategoryId(Long categoryId) {
