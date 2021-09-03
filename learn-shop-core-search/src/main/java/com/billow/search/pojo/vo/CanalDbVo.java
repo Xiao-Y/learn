@@ -49,7 +49,7 @@ public class CanalDbVo {
     /**
      * 插入、修改时的新数据
      */
-    private Map<String, String> data;
+    private List<String> data;
 
     /**
      * 列名称和类型

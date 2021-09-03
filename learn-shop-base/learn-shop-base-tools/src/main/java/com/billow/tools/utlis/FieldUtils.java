@@ -1,13 +1,14 @@
 package com.billow.tools.utlis;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
@@ -182,5 +183,60 @@ public class FieldUtils {
 
         }
         return map;
+    }
+
+    /**
+     * 反射设置值,value 会转成对应的类型
+     *
+     * @param t
+     * @param fieldName
+     * @param value
+     * @author liuyongtao
+     * @since 2021-9-2 21:11
+     */
+    public static <T> void setStrValue(T t, String fieldName, String value) {
+        Object obj;
+        try {
+            obj = converValue(t, fieldName, value);
+        } catch (Exception e) {
+            return;
+        }
+        Field field = ReflectionUtils.findField(t.getClass(), fieldName);
+        if (field == null) {
+            return;
+        }
+        field.setAccessible(true);
+        try {
+            field.set(t, obj);
+        } catch (IllegalAccessException e) {
+            logger.error("set 异常:fieldName:{},value:{}", fieldName, value);
+        }
+    }
+
+    /**
+     * string 转换为对应的类型
+     *
+     * @param t
+     * @param fieldName
+     * @param value
+     * @return {@link Object}
+     * @author liuyongtao
+     * @since 2021-9-2 21:13
+     */
+    public static <T> Object converValue(T t, String fieldName, String value) throws Exception {
+        Field field = ReflectionUtils.findField(t.getClass(), fieldName);
+        if (field == null) {
+            throw new NoSuchFieldException("fieldName:" + fieldName + "不存在");
+        }
+        Object obj = null;
+        if (StringUtils.isNotBlank(value)) {
+            Class<?> type = field.getType();
+            if (type.isAssignableFrom(Long.class)) {
+                obj = new Long(value);
+            } else if (type.isAssignableFrom(Integer.class)) {
+                obj = new Integer(value);
+            }
+        }
+        return obj;
     }
 }

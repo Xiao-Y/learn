@@ -1,4 +1,4 @@
-package com.billow.search.config;
+package com.billow.search.common.config;
 
 import com.billow.cloud.common.properties.ConfigCommonProperties;
 import com.billow.cloud.common.properties.MqProperties;

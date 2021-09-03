@@ -1,4 +1,4 @@
-package com.billow.search.constant;
+package com.billow.search.common.cons;
 
 public class AnalyzerConstant {
 

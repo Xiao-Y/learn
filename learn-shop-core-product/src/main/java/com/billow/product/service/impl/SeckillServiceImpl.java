@@ -15,13 +15,10 @@ import com.billow.tools.utlis.ConvertUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -55,7 +52,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
 
     private void loadData() {
         List<SeckillPo> seckillPos = this.lambdaQuery()
-                .eq(SeckillPo::getStatus, SeckillStatusEnum.Yes.getStatus())
+                .eq(SeckillPo::getStatus, SeckillStatusEnum.UP.getStatus())
                 .ge(SeckillPo::getEndDate, LocalDateTime.now())
                 .list();
         if (CollectionUtils.isNotEmpty(seckillPos)) {

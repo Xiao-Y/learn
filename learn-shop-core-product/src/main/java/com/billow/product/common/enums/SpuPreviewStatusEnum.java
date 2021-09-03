@@ -4,16 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 限时购表状态
+ * 是否为预告商品：0->不是；1->是
  *
  * @author liuyongtao
- * @since 2021-8-31 16:05
+ * @since 2021-9-3 9:22
  */
 @Getter
 @AllArgsConstructor
-public enum SeckillStatusEnum {
-    UP(0, "上架"),
-    DOWN(1, "下架");
+public enum SpuPreviewStatusEnum {
+
+    NO(0, "不是"),
+    Yes(1, "是");
 
     private int status;
     private String desc;

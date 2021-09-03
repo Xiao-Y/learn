@@ -1,6 +1,6 @@
-package com.billow.search.pojo;
+package com.billow.search.pojo.po;
 
-import com.billow.search.constant.AnalyzerConstant;
+import com.billow.search.common.cons.AnalyzerConstant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

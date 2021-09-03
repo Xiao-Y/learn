@@ -4,16 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 限时购表状态
+ * 审核状态：0->未审核；1->审核通过
  *
  * @author liuyongtao
- * @since 2021-8-31 16:05
+ * @since 2021-9-3 9:22
  */
 @Getter
 @AllArgsConstructor
-public enum SeckillStatusEnum {
-    UP(0, "上架"),
-    DOWN(1, "下架");
+public enum SpuVerifyStatusEnum {
+
+    NOT_APPROVED(0, "未审核"),
+    APPROVED(1, "审核通过");
 
     private int status;
     private String desc;

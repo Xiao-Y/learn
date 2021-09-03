@@ -24,6 +24,11 @@ spring:
 feign:
   hystrix:
     enabled: true
+  client:
+    config:
+      default:
+        read-timeout: 30000
+        connect-timeout: 5000
 hystrix:
   command:
     default:

@@ -4,16 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 限时购表状态
+ * 推荐状态；0->不推荐；1->推荐
  *
  * @author liuyongtao
- * @since 2021-8-31 16:05
+ * @since 2021-9-3 9:22
  */
 @Getter
 @AllArgsConstructor
-public enum SeckillStatusEnum {
-    UP(0, "上架"),
-    DOWN(1, "下架");
+public enum SpuRecommandStatusEnum {
+
+    NO(0, "不推荐"),
+    Yes(1, "推荐");
 
     private int status;
     private String desc;

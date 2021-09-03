@@ -2,6 +2,8 @@ package com.billow.product.interfaces.api;
 
 import com.billow.product.interfaces.constant.ContextPath;
 import com.billow.product.interfaces.vo.GoodsBrandVo;
+import com.billow.product.interfaces.vo.GoodsCategoryVo;
+import com.billow.tools.resData.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-11-27
  */
 @RestController
-@RequestMapping(ContextPath.CORE_PRODUCT + "/goodsBrandApi")
-public interface GoodsBrandApi {
+@RequestMapping(ContextPath.CORE_PRODUCT)
+public interface CoreProductApi {
 
     /**
      * 根据id查询品牌表数据
@@ -28,6 +30,17 @@ public interface GoodsBrandApi {
      * @author xiaoy
      * @since 2021/2/4 16:20
      */
-    @GetMapping(value = "/getById/{id}")
-    GoodsBrandVo getById(@PathVariable("id") Long id);
+    @GetMapping(value = "/goodsBrandApi/getById/{id}")
+    BaseResponse<GoodsBrandVo> getBrandById(@PathVariable("id") Long id);
+
+    /**
+     * 根据id查询品牌表数据
+     *
+     * @param id
+     * @return {@link GoodsCategoryVo}
+     * @author xiaoy
+     * @since 2021/2/4 16:20
+     */
+    @GetMapping(value = "/goodsCategoryApi/getById/{id}")
+    BaseResponse<GoodsCategoryVo> getCategoryById(@PathVariable("id") Long id);
 }
