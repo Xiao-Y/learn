@@ -23,7 +23,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 
     @Override
     public GoodsInfoPo getById(Long id) {
-        return goodsInfoDao.findById(id).orElse(null);
+        return goodsInfoDao.findById(id).orElse(new GoodsInfoPo());
     }
 
     @Override

@@ -196,10 +196,6 @@ public class DbSyncEsConsumer {
                 }
                 // 查询 es 中是否存在
                 GoodsInfoPo goodsInfoPoOld = goodsInfoService.getById(goodsInfoVoNew.getSpuId());
-                // 如果 es 中不存在时
-                if (goodsInfoPoOld == null) {
-                    goodsInfoPoOld = new GoodsInfoPo();
-                }
                 if (!Objects.equals(goodsInfoPoOld.getBrandId(), goodsInfoVoNew.getBrandId())) {
                     try {
                         // 远程调用查询品牌
