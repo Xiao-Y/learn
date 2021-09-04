@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +74,9 @@ public class DbSyncEsConsumer {
     public void syncEs(String message) {
         log.info("mysql：{}", message);
         CanalDbVo canalDbVo = JSON.parseObject(message, CanalDbVo.class);
-        if (!"update".equalsIgnoreCase(canalDbVo.getType()) && !"INSERT".equalsIgnoreCase(canalDbVo.getType())) {
+        if (!"update".equalsIgnoreCase(canalDbVo.getType())
+                && !"INSERT".equalsIgnoreCase(canalDbVo.getType())
+                && !"DELETE".equalsIgnoreCase(canalDbVo.getType())) {
             return;
         }
         // 获取表名
@@ -87,7 +88,7 @@ public class DbSyncEsConsumer {
         log.info("有变化的表:{}", table);
         // 更新商品
         if (TABLE_PMS_GOODS_SPU.equalsIgnoreCase(table)) {
-            this.upateGoodsInfo(data);
+            this.upateGoodsInfo(data, canalDbVo.getType());
         } else if (TABLE_PMS_GOODS_CATEGORY.equalsIgnoreCase(table)) {// 更新分类
             updateGoodsInfoPartCategoryName(old, data);
         } else if (TABLE_PMS_GOODS_BRAND.equalsIgnoreCase(table)) {// 更新品牌
@@ -121,7 +122,8 @@ public class DbSyncEsConsumer {
                 request.setQuery(new TermQueryBuilder(FIELD_BRAND_ID, newVo.getId()));
                 StringBuilder script = new StringBuilder();
                 script.append("ctx._source['" + FIELD_BRAND_NAME + "']='").append(newVo.getBrandName()).append("';");
-                script.append("ctx._source['" + FIELD_UPDATE_TIME + "']='").append(DateUtils.getSimpleDateFormat()).append("';");
+                Date date = DateUtils.addHours(new Date(), -8);
+                script.append("ctx._source['" + FIELD_UPDATE_TIME + "']='").append(DateUtils.getSimpleDateFormat(date)).append("';");
                 request.setScript(new Script(script.toString()));
                 BulkByScrollResponse bulkByScrollResponse = restHighLevelClient.updateByQuery(request, RequestOptions.DEFAULT);
                 log.info("影响的条数:{}", bulkByScrollResponse.getUpdated());
@@ -157,7 +159,8 @@ public class DbSyncEsConsumer {
                 request.setQuery(new TermQueryBuilder(FIELD_CATEGORY_ID, goodsCategoryVoNew.getId()));
                 StringBuilder script = new StringBuilder();
                 script.append("ctx._source['" + FIELD_CATEGORY_NAME + "']='").append(goodsCategoryVoNew.getCategoryName()).append("';");
-                script.append("ctx._source['" + FIELD_UPDATE_TIME + "']='").append(DateUtils.getSimpleDateFormat()).append("';");
+                Date date = DateUtils.addHours(new Date(), -8);
+                script.append("ctx._source['" + FIELD_UPDATE_TIME + "']='").append(DateUtils.getSimpleDateFormat(date)).append("';");
                 request.setScript(new Script(script.toString()));
                 BulkByScrollResponse bulkByScrollResponse = restHighLevelClient.updateByQuery(request, RequestOptions.DEFAULT);
                 log.info("影响的条数:{}", bulkByScrollResponse.getUpdated());
@@ -171,18 +174,20 @@ public class DbSyncEsConsumer {
     /**
      * 通过主键刷新商品信息
      *
-     * @param data 更新后的所有字段和值
+     * @param data    更新后的所有字段和值
+     * @param optType 操作类型：CREATE，QUERY，INSERT，UPDATE，DELETE，ALTER
      * @author liuyongtao
      * @since 2021-9-2 21:18
      */
-    private void upateGoodsInfo(List<String> data) {
+    private void upateGoodsInfo(List<String> data, String optType) {
         for (String json : data) {
             // 更新后的所有字段和值
             GoodsSpuVo goodsInfoVoNew = JSON.parseObject(json, GoodsSpuVo.class);
             try {
                 // 没有审核通过或者不是上架
                 if (!Objects.equals(SpuVerifyStatusEnum.APPROVED.getStatus(), goodsInfoVoNew.getVerifyStatus())
-                        || !Objects.equals(SpuPublishStatusEnum.UP.getStatus(), goodsInfoVoNew.getPublishStatus())) {
+                        || !Objects.equals(SpuPublishStatusEnum.UP.getStatus(), goodsInfoVoNew.getPublishStatus())
+                        || "DELETE".equalsIgnoreCase(optType)) {
                     goodsInfoService.delById(goodsInfoVoNew.getSpuId());
                     log.info("移除es中的商品信息,spuId:{},goodsName:{},verifyStatus:{},publishStatus:{}",
                             goodsInfoVoNew.getSpuId(), goodsInfoVoNew.getGoodsName(),
