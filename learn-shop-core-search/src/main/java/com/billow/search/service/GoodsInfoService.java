@@ -3,6 +3,8 @@ package com.billow.search.service;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import org.springframework.data.domain.Page;
 
+import java.util.Map;
+
 /**
  * @author liuyongtao
  * @since 2021-9-2 20:04
@@ -46,4 +48,14 @@ public interface GoodsInfoService {
      * @since 2021-9-3 8:30
      */
     void delById(Long id);
+
+    /**
+     * 根据条件更新
+     *
+     * @param queryCondition 更新条件
+     * @param updateVal      更新值
+     * @author xiaoy
+     * @since 2021/9/4 19:17
+     */
+    long updateByCondition(Map<String, Object> queryCondition, Map<String, Object> updateVal) throws Exception;
 }
