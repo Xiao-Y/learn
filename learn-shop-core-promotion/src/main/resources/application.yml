@@ -1,0 +1,18 @@
+swagger: #接口注解文档
+  basepackage: com.billow.promotion #必须要有 GetMapping，PostMapping...
+  service:
+    name: ${spring.application.name} #api名称
+    version: 3.0
+    description: 警告：此API仅用于测试，禁止任何商业用途，否则一切后果自行承担！！！ #api描述
+    contact:
+      developer: billow #api开发者
+      url: https://github.com/Xiao-Y/learn
+      email: lyongtao123@126.com #api开发者
+
+server:
+  port: 8921
+  servlet:
+    context-path: /core-promotion
+spring:
+  application:
+    name: learn-shop-core-promotion #客户端名称

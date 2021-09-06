@@ -11,7 +11,8 @@ import org.apache.ibatis.annotations.CacheNamespace;
  * </p>
  *
  * @author billow
- * @since 2020-05-09
+ * @version v2.0
+ * @since 2021-09-02
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
 public interface ShopInfoDao extends BaseMapper<ShopInfoPo> {

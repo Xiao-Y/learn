@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.product.dao.GoodsBrandDao">
+
+        <!-- 开启二级缓存 -->
+        <!-- 注意：默认为 flushCache="true" useCache="true" -->
+        <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+        <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+        <!-- 3.请务修改 cache-ref 中的配置 -->
+        <cache-ref namespace="com.billow.product.dao.GoodsBrandDao"/>
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.billow.product.pojo.po.GoodsBrandPo">
+                <result column="id" property="id"/>
+                <result column="valid_ind" property="validInd"/>
+                <result column="update_time" property="updateTime"/>
+                <result column="updater_code" property="updaterCode"/>
+                <result column="create_time" property="createTime"/>
+                <result column="creator_code" property="creatorCode"/>
+                    <result column="first_letter" property="firstLetter"/>
+                    <result column="brand_name" property="brandName"/>
+                    <result column="brand_sort" property="brandSort"/>
+                    <result column="show_status" property="showStatus"/>
+                    <result column="product_count" property="productCount"/>
+                    <result column="logo" property="logo"/>
+                    <result column="big_pic" property="bigPic"/>
+                    <result column="brand_story" property="brandStory"/>
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+                id,
+                valid_ind,
+                update_time,
+                updater_code,
+                create_time,
+                creator_code,
+            first_letter, brand_name, brand_sort, show_status, product_count, logo, big_pic, brand_story
+        </sql>
+
+</mapper>

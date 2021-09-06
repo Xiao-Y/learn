@@ -2,11 +2,10 @@ package com.billow.search.api;
 
 import com.billow.product.interfaces.vo.GoodsBrandVo;
 import com.billow.search.dao.BookDao;
-import com.billow.search.feign.GoodsBrandFeign;
-import com.billow.search.pojo.Book;
+import com.billow.search.feign.CoreProductFeign;
+import com.billow.search.pojo.po.Book;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.document.Document;
@@ -25,20 +24,20 @@ public class TestApi {
     @Autowired
     private BookDao bookDao;
     @Autowired
-    private GoodsBrandFeign goodsBrandFeign;
+    private CoreProductFeign coreProductFeign;
 
-    /**
-     * 根据id查询品牌表数据
-     *
-     * @param id
-     * @return {@link GoodsBrandVo}
-     * @author xiaoy
-     * @since 2021/2/4 16:20
-     */
-    @GetMapping(value = "/getById/{id}")
-    public GoodsBrandVo getById(@PathVariable("id") Long id){
-       return goodsBrandFeign.getById(id);
-    }
+//    /**
+//     * 根据id查询品牌表数据
+//     *
+//     * @param id
+//     * @return {@link GoodsBrandVo}
+//     * @author xiaoy
+//     * @since 2021/2/4 16:20
+//     */
+//    @GetMapping(value = "/getById/{id}")
+//    public GoodsBrandVo getById(@PathVariable("id") Long id){
+//       return coreProductFeign.getBrandById(id);
+//    }
 
 
     @GetMapping("/test")

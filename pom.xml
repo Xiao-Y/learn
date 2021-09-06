@@ -32,8 +32,9 @@
         <module>learn-shop-core-search</module>
 
         <module>learn-shop-public-auth</module>
-        <module>learn-shop-core-seckill</module>
+        <module>learn-shop-core-promotion</module>
         <module>learn-shop-interface</module>
+        <module>learn-shop-app</module>
 
     </modules>
     <packaging>pom</packaging>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.product.dao.GoodsSpuDao">
+
+    <!-- 开启二级缓存 -->
+    <!-- 注意：默认为 flushCache="true" useCache="true" -->
+    <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+    <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+    <!-- 3.请务修改 cache-ref 中的配置 -->
+    <cache-ref namespace="com.billow.product.dao.GoodsSpuDao"/>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.billow.product.pojo.po.GoodsSpuPo">
+        <result column="id" property="id"/>
+        <result column="valid_ind" property="validInd"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updater_code" property="updaterCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_code" property="creatorCode"/>
+        <result column="spu_no" property="spuNo"/>
+        <result column="product_attribute_category_id" property="productAttributeCategoryId"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="keywords" property="keywords"/>
+        <result column="sub_title" property="subTitle"/>
+        <result column="detail_title" property="detailTitle"/>
+        <result column="pic" property="pic"/>
+        <result column="publish_status" property="publishStatus"/>
+        <result column="new_status" property="newStatus"/>
+        <result column="recommand_status" property="recommandStatus"/>
+        <result column="preview_status" property="previewStatus"/>
+        <result column="service_ids" property="serviceIds"/>
+        <result column="verify_status" property="verifyStatus"/>
+        <result column="price" property="price"/>
+        <result column="low_price" property="lowPrice"/>
+        <result column="sale" property="sale"/>
+        <result column="stock" property="stock"/>
+        <result column="low_stock" property="lowStock"/>
+        <result column="album_pics" property="albumPics"/>
+        <result column="description" property="description"/>
+        <result column="detail_desc" property="detailDesc"/>
+        <result column="detail_html" property="detailHtml"/>
+        <result column="detail_mobile_html" property="detailMobileHtml"/>
+        <result column="feight_template_id" property="feightTemplateId"/>
+        <result column="spu_sort" property="spuSort"/>
+        <result column="note" property="note"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+                valid_ind,
+                update_time,
+                updater_code,
+                create_time,
+                creator_code,
+            spu_no, product_attribute_category_id, category_id, brand_id, goods_name, keywords, sub_title, detail_title, pic, publish_status, new_status, recommand_status, preview_status, service_ids, verify_status, price, low_price, sale, stock, low_stock, album_pics, description, detail_desc, detail_html, detail_mobile_html, feight_template_id, spu_sort, note
+    </sql>
+
+</mapper>

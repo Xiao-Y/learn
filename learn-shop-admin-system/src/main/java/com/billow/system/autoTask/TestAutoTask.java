@@ -15,7 +15,7 @@ public class TestAutoTask {
 
     public void test() {
         try {
-            System.out.println("=====================" + TestAutoTask.class.getName() + "=====" + DateUtils.getSimpleDateFormat() + "======================");
+            System.out.println("=====================" + TestAutoTask.class.getName() + "=====" + DateUtils.getNow() + "======================");
             Thread.sleep(2000);
         } catch (Exception e) {
             logger.error("异常：", e);

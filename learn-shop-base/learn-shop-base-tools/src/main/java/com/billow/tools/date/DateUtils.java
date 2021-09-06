@@ -67,8 +67,13 @@ public class DateUtils {
         return days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
     }
 
-    public static String getSimpleDateFormat() {
+    public static String getNow() {
         DateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return myFormat.format(new Date());
+    }
+
+    public static String getSimpleDateFormat(Date date) {
+        DateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return myFormat.format(date);
     }
 }

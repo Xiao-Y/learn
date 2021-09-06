@@ -1,10 +1,9 @@
 
 package com.billow.product.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.ShopInfoPo;
-import com.billow.product.pojo.vo.ShopInfoVo;
+import com.billow.product.pojo.search.ShopInfoSearchParam;
 
 /**
  * <p>
@@ -12,28 +11,9 @@ import com.billow.product.pojo.vo.ShopInfoVo;
  * </p>
  *
  * @author billow
- * @version v1.0
- * @since 2019-11-27
+ * @version v2.0
+ * @since 2021-09-02
  */
-public interface ShopInfoService extends IService<ShopInfoPo> {
+public interface ShopInfoService extends HighLevelService<ShopInfoPo,ShopInfoSearchParam> {
 
-    /**
-     * 分页查询
-     *
-     * @param shopInfoVo 查询条件
-     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.product.pojo.po.ShopInfoPo>
-     * @author billow
-     * @since 2019-11-27
-     */
-    IPage<ShopInfoPo> findListByPage(ShopInfoVo shopInfoVo);
-
-    /**
-     * 根据ID禁用数据
-     *
-     * @param id 主键id
-     * @return boolean
-     * @author billow
-     * @since 2019-11-27
-     */
-    boolean prohibitById(Long id);
 }

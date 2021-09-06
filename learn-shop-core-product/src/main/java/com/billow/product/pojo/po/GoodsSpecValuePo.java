@@ -1,10 +1,8 @@
 package com.billow.product.pojo.po;
 
-import com.billow.mybatis.pojo.BasePo;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,12 +15,12 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author billow
- * @since 2021-02-06
+ * @since 2021-09-02
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("p_goods_spec_value")
+@TableName("pms_goods_spec_value")
 @ApiModel(value="GoodsSpecValuePo对象", description="规格值表")
 public class GoodsSpecValuePo extends BasePo {
 

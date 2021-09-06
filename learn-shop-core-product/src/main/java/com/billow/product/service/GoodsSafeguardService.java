@@ -1,10 +1,9 @@
 
 package com.billow.product.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.GoodsSafeguardPo;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.product.pojo.vo.GoodsSafeguardVo;
+import com.billow.product.pojo.search.GoodsSafeguardSearchParam;
 
 /**
  * <p>
@@ -12,28 +11,9 @@ import com.billow.product.pojo.vo.GoodsSafeguardVo;
  * </p>
  *
  * @author billow
- * @version v1.0
- * @since 2021-02-06
+ * @version v2.0
+ * @since 2021-09-02
  */
-public interface GoodsSafeguardService extends IService<GoodsSafeguardPo> {
+public interface GoodsSafeguardService extends HighLevelService<GoodsSafeguardPo,GoodsSafeguardSearchParam> {
 
-    /**
-     * 分页查询
-     *
-     * @param goodsSafeguardVo 查询条件
-     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.product.pojo.po.GoodsSafeguardPo>
-     * @author billow
-     * @since 2021-02-06
-     */
-    IPage<GoodsSafeguardPo> findListByPage(GoodsSafeguardVo goodsSafeguardVo);
-
-    /**
-     * 根据ID禁用数据
-     *
-     * @param id 主键id
-     * @return boolean
-     * @author billow
-     * @since 2021-02-06
-     */
-    boolean prohibitById(String id);
 }

@@ -33,6 +33,8 @@
 
 ## **3.后端业务服务，端口：88/89****
 
+> `learn-shop-app` app端，端口：8089
+> 
 > `learn-shop-admin-user` 用户管理服务，端口：8801
 >
 > `learn-shop-admin-system` 系统管理服务，端口：8811
@@ -45,13 +47,13 @@
 >
 > `learn-shop-core-search` 搜索服务，端口：8981
 >
-> `learn-shop-core-seckill` 秒杀服务，端口：8921
+> `learn-shop-core-promotion` 促销服务，端口：8921
 
 # 项目启动顺序
 * mysql
 * redis
 * rabbtimq
-* nacos
+* nacos （单机启动命令：./startup.sh -m standalone）
 * learn-cloud-getaway
 * 启动业务服务
 
@@ -133,3 +135,7 @@ protected RedisTemplate<String, Object> redisCacheTemplate;
 > PUT Update 更新一个资源。或新增一个含 id 资源(如果 id 不存在)<br/>
 
 > DELETE Delete 删除一个资源<br/>
+
+# TODO
+1.缓存的调整
+2.订单释放

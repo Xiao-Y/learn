@@ -1,13 +1,11 @@
 package com.billow.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSpecValueDao;
-import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
+import com.billow.product.pojo.search.GoodsSpecValueSearchParam;
 import com.billow.product.pojo.vo.GoodsSpecValueVo;
 import com.billow.product.service.GoodsSpecValueService;
 import com.billow.tools.utlis.ConvertUtils;
@@ -26,30 +24,10 @@ import java.util.List;
  * @since 2019-11-27
  */
 @Service
-public class GoodsSpecValueServiceImpl extends ServiceImpl<GoodsSpecValueDao, GoodsSpecValuePo> implements GoodsSpecValueService {
+public class GoodsSpecValueServiceImpl extends HighLevelServiceImpl<GoodsSpecValueDao, GoodsSpecValuePo, GoodsSpecValueSearchParam> implements GoodsSpecValueService {
 
     @Autowired
     private GoodsSpecValueDao goodsSpecValueDao;
-
-    @Override
-    public IPage<GoodsSpecValuePo> findListByPage(GoodsSpecValueVo goodsSpecValueVo) {
-        IPage<GoodsSpecValuePo> page = new Page<>(goodsSpecValueVo.getPageNo(), goodsSpecValueVo.getPageSize());
-        LambdaQueryWrapper<GoodsSpecValuePo> wrapper = Wrappers.lambdaQuery();
-        // 查询条件
-        IPage<GoodsSpecValuePo> selectPage = goodsSpecValueDao.selectPage(page, wrapper);
-        Integer integer = goodsSpecValueDao.selectCount(wrapper);
-        selectPage.setTotal(integer);
-        return selectPage;
-    }
-
-    @Override
-    public boolean prohibitById(Long id) {
-        GoodsSpecValuePo po = new GoodsSpecValuePo();
-        po.setValidInd(false);
-        LambdaQueryWrapper<GoodsSpecValuePo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSpecValuePo::getId, id);
-        return goodsSpecValueDao.update(po, wrapper) >= 1;
-    }
 
     @Override
     public List<GoodsSpecValueVo> findListBySpecKeyId(Long specKeyId) {

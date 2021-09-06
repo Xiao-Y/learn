@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.product.dao.ShopInfoDao">
+
+        <!-- 开启二级缓存 -->
+        <!-- 注意：默认为 flushCache="true" useCache="true" -->
+        <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+        <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+        <!-- 3.请务修改 cache-ref 中的配置 -->
+        <cache-ref namespace="com.billow.product.dao.ShopInfoDao"/>
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.billow.product.pojo.po.ShopInfoPo">
+                <result column="id" property="id"/>
+                <result column="valid_ind" property="validInd"/>
+                <result column="update_time" property="updateTime"/>
+                <result column="updater_code" property="updaterCode"/>
+                <result column="create_time" property="createTime"/>
+                <result column="creator_code" property="creatorCode"/>
+                    <result column="shop_name" property="shopName"/>
+                    <result column="shop_sort" property="shopSort"/>
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+                id,
+                valid_ind,
+                update_time,
+                updater_code,
+                create_time,
+                creator_code,
+            shop_name, shop_sort
+        </sql>
+
+</mapper>

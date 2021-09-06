@@ -53,22 +53,6 @@ public class RedisUtils {
     }
 
     /**
-     * 将对象转为json 保存到缓存
-     *
-     * @param key
-     * @param value
-     * @author liuyongtao
-     * @since 2021-1-30 10:37
-     */
-    public void setJson(String key, Object value) {
-        Assert.notNull(key, "key is not empty");
-        Assert.notNull(value, "value is not empty");
-
-        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
-        ops.set(key, JSON.toJSONString(value));
-    }
-
-    /**
      * 插入string类型的数据，设置失效时间
      *
      * @param key   key
@@ -87,6 +71,35 @@ public class RedisUtils {
     }
 
     /**
+     * 获取string类型的数据
+     *
+     * @param key key
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/5/24 12:29
+     */
+    public String getString(String key) {
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        return ops.get(key);
+    }
+
+    /**
+     * 将对象转为json 保存到缓存
+     *
+     * @param key
+     * @param value
+     * @author liuyongtao
+     * @since 2021-1-30 10:37
+     */
+    public void setJson(String key, Object value) {
+        Assert.notNull(key, "key is not empty");
+        Assert.notNull(value, "value is not empty");
+
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        ops.set(key, JSON.toJSONString(value));
+    }
+
+    /**
      * 将对象转为json 保存到缓存
      *
      * @param key
@@ -101,6 +114,23 @@ public class RedisUtils {
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
         ops.set(key, JSON.toJSONString(value), l, timeUnit);
     }
+
+    /**
+     * 获取object类型的数据（转对象）
+     *
+     * @param key key
+     * @return void
+     * @author LiuYongTao
+     * @date 2018/5/24 12:29
+     */
+    public <T> T getObj(String key, Class<T> tClass) {
+        String json = stringRedisTemplate.opsForValue().get(key);
+        if (Objects.isNull(json)) {
+            return null;
+        }
+        return JSON.parseObject(json, tClass);
+    }
+
 
     /**
      * 插入object类型的数据（转json）
@@ -136,19 +166,6 @@ public class RedisUtils {
     }
 
     /**
-     * 获取string类型的数据
-     *
-     * @param key key
-     * @return void
-     * @author LiuYongTao
-     * @date 2018/5/24 12:29
-     */
-    public String getString(String key) {
-        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
-        return ops.get(key);
-    }
-
-    /**
      * 获取object类型的数据（转对象）
      *
      * @param key key
@@ -174,10 +191,9 @@ public class RedisUtils {
      * @date 2018/5/24 12:29
      */
     public <T> List<T> getList(String key) {
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        Object value = ops.get(key);
+        Object value = redisTemplate.opsForValue().get(key);
         if (Objects.isNull(value)) {
-            return null;
+            return new ArrayList<>();
         }
         if (Set.class.isAssignableFrom(value.getClass())) {
             return new ArrayList<T>((Set) value);
@@ -246,6 +262,19 @@ public class RedisUtils {
         return opsForHash.get(k, hk);
     }
 
+    /**
+     * 通过 key 和 hash key 获取 map
+     *
+     * @param k hash key
+     * @return {@link Map< String,T>}
+     * @author liuyongtao
+     * @since 2021-1-28 8:24
+     */
+    public <T> T getHash(String k, String hk, Class<T> clazz) {
+        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        T t = opsForHash.get(k, hk);
+        return JSONObject.parseObject(t.toString(),clazz);
+    }
 
     /**
      * 保存一个 map 到 hash 中
@@ -256,7 +285,7 @@ public class RedisUtils {
      * @since 2021-1-28 8:21
      */
     public <T> void setHash(String k, Map<String, T> map) {
-        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, T> opsForHash = stringRedisTemplate.opsForHash();
         opsForHash.putAll(k, map);
     }
 

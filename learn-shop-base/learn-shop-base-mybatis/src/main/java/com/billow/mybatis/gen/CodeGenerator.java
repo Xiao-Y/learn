@@ -26,7 +26,7 @@ import java.util.List;
 public class CodeGenerator {
 
     String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
-    String template = "/template2";
+    String template = "/template";
 
     /**
      * 自定义配置
@@ -248,23 +248,34 @@ public class CodeGenerator {
 //                , "oms_order_setting");
 //        strategy.setTablePrefix("oms_");
 
+
+//        strategy.setInclude("sms_seckill"
+//                , "sms_seckill_log"
+//                , "sms_seckill_product"
+//                , "sms_seckill_session"
+//        );
+//        strategy.setTablePrefix("sms_");
+
 //        strategy.setInclude("sk_seckill", "sk_success_killed");
 //        strategy.setTablePrefix("sk_");
 
-//        strategy.setInclude("p_goods_brand"
-////                , "p_goods_category"
-////                , "p_goods_category_brand"
-////                , "p_goods_safeguard"
-////                , "p_goods_sku"
-////                , "p_goods_sku_safeguard"
-////                , "p_goods_sku_spec_value"
-////                , "p_goods_spec_key"
-////                , "p_goods_spec_value"
-////                , "p_goods_specification"
-////                , "p_goods_spu"
-////                , "p_goods_spu_detail"
-//        );
-//        strategy.setTablePrefix("p_");
+        strategy.setInclude("pms_goods_brand"
+                , "pms_goods_category"
+                , "pms_goods_comment"
+                , "pms_goods_comment_replay"
+                , "pms_goods_operate_log"
+                , "pms_goods_safeguard"
+                , "pms_goods_sku"
+                , "pms_goods_sku_safeguard"
+                , "pms_goods_sku_spec_value"
+                , "pms_goods_spec_key"
+                , "pms_goods_spec_value"
+                , "pms_goods_spu"
+                , "pms_goods_spu_spec"
+                , "pms_goods_vertify_record"
+                , "pms_shop_info"
+        );
+        strategy.setTablePrefix("pms_");
 
 //        strategy.setInclude("sys_apply_info",
 //                "sys_city",
@@ -279,10 +290,10 @@ public class CodeGenerator {
 //                "r_role_permission",
 //                "r_user_role"
 //        );
-        strategy.setTablePrefix("r_");
-        strategy.setInclude("v_mytasklist"
-        );
-        strategy.setTablePrefix("v_");
+//        strategy.setTablePrefix("r_");
+//        strategy.setInclude("v_mytasklist"
+//        );
+//        strategy.setTablePrefix("v_");
         strategy.setEntityBooleanColumnRemoveIsPrefix(true);
         strategy.setEntityTableFieldAnnotationEnable(true);
         return strategy;
@@ -301,7 +312,7 @@ public class CodeGenerator {
         StrategyConfig strategy = mpg.getStrategy();
 
         String parent = "";
-        if (strategy.getTablePrefix()[0].equals("p_")) {
+        if (strategy.getTablePrefix()[0].equals("pms_") || strategy.getTablePrefix()[0].equals("sms_")) {
             parent = "product";
         } else if (strategy.getTablePrefix()[0].equals("sk_")) {
             parent = "seckill";
