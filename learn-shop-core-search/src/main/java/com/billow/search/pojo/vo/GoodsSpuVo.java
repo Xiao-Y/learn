@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -102,7 +103,7 @@ public class GoodsSpuVo implements Serializable {
 
     @ApiModelProperty(value = "库存预警值")
     @JSONField(name = "low_stock")
-    private Integer lowStock;
+    private Long lowStock;
 
     @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
     @JSONField(name = "album_pics")
@@ -145,12 +146,12 @@ public class GoodsSpuVo implements Serializable {
     // 创建时间
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JSONField(name = "create_time")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     // 更新时间
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JSONField(name = "update_time")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     // 有效标志
     @JSONField(name = "valid_ind")

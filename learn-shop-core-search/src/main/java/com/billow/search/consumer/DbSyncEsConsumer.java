@@ -11,16 +11,10 @@ import com.billow.search.pojo.vo.GoodsBrandVo;
 import com.billow.search.pojo.vo.GoodsCategoryVo;
 import com.billow.search.pojo.vo.GoodsSpuVo;
 import com.billow.search.service.GoodsInfoService;
-import com.billow.tools.date.DateUtils;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.TermQueryBuilder;
-import org.elasticsearch.index.reindex.BulkByScrollResponse;
-import org.elasticsearch.index.reindex.UpdateByQueryRequest;
-import org.elasticsearch.script.Script;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
@@ -28,9 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.TimeZone;
 
 /**
  * 增量数据库同步数据到es（字段变更）
@@ -41,8 +41,6 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class DbSyncEsConsumer {
-
-    private final static String ES_INDEX_GOODS_INFO = "goods_info";
 
     private final static String TABLE_PMS_GOODS_SPU = "pms_goods_spu";
     private final static String TABLE_PMS_GOODS_CATEGORY = "pms_goods_category";
@@ -56,8 +54,6 @@ public class DbSyncEsConsumer {
 
     @Autowired
     private GoodsInfoService goodsInfoService;
-    @Autowired
-    private RestHighLevelClient restHighLevelClient;
     @Autowired
     private CoreProductFeign coreProductFeign;
 
@@ -106,6 +102,10 @@ public class DbSyncEsConsumer {
      * @since 2021-9-3 9:16
      */
     private void updateGoodsInfoPartBrandName(List<String> old, List<String> data) {
+        if (CollectionUtils.isEmpty(old)) {
+            log.info("pms_goods_brand 表插入新数据，old 为空，不更新");
+            return;
+        }
         for (int i = 0; i < old.size(); i++) {
             String oldJson = old.get(i);
             log.info("oldJson数据:{}", oldJson);
@@ -115,18 +115,14 @@ public class DbSyncEsConsumer {
             // 更新后的所有字段和值
             GoodsBrandVo newVo = JSON.parseObject(data.get(i), GoodsBrandVo.class);
             try {
-                UpdateByQueryRequest request = new UpdateByQueryRequest(ES_INDEX_GOODS_INFO);
-                // 版本冲突
-                request.setConflicts("proceed");
-                // 查询条件
-                request.setQuery(new TermQueryBuilder(FIELD_BRAND_ID, newVo.getId()));
-                StringBuilder script = new StringBuilder();
-                script.append("ctx._source['" + FIELD_BRAND_NAME + "']='").append(newVo.getBrandName()).append("';");
-                Date date = DateUtils.addHours(new Date(), -8);
-                script.append("ctx._source['" + FIELD_UPDATE_TIME + "']='").append(DateUtils.getSimpleDateFormat(date)).append("';");
-                request.setScript(new Script(script.toString()));
-                BulkByScrollResponse bulkByScrollResponse = restHighLevelClient.updateByQuery(request, RequestOptions.DEFAULT);
-                log.info("影响的条数:{}", bulkByScrollResponse.getUpdated());
+                // 更新条件
+                Map<String, Object> condition = new HashMap<>();
+                condition.put(FIELD_BRAND_ID, newVo.getId());
+                // 更新值
+                Map<String, Object> updateVle = new HashMap<>();
+                updateVle.put(FIELD_BRAND_NAME, newVo.getBrandName());
+                updateVle.put(FIELD_UPDATE_TIME, this.getStrNow());
+                goodsInfoService.updateByCondition(condition, updateVle);
             } catch (Exception e) {
                 log.error("es 更新商品分类异常:brandId:{},brandName:{},error:{}",
                         newVo.getId(), newVo.getBrandName(), e.getMessage(), e);
@@ -143,6 +139,10 @@ public class DbSyncEsConsumer {
      * @since 2021-9-3 9:16
      */
     private void updateGoodsInfoPartCategoryName(List<String> old, List<String> data) {
+        if (CollectionUtils.isEmpty(old)) {
+            log.info("pms_goods_category 表插入新数据，old 为空，不更新");
+            return;
+        }
         for (int i = 0; i < old.size(); i++) {
             String oldJson = old.get(i);
             log.info("oldJson数据:{}", oldJson);
@@ -152,18 +152,14 @@ public class DbSyncEsConsumer {
             // 更新后的所有字段和值
             GoodsCategoryVo goodsCategoryVoNew = JSON.parseObject(data.get(i), GoodsCategoryVo.class);
             try {
-                UpdateByQueryRequest request = new UpdateByQueryRequest(ES_INDEX_GOODS_INFO);
-                // 版本冲突
-                request.setConflicts("proceed");
-                // 查询条件
-                request.setQuery(new TermQueryBuilder(FIELD_CATEGORY_ID, goodsCategoryVoNew.getId()));
-                StringBuilder script = new StringBuilder();
-                script.append("ctx._source['" + FIELD_CATEGORY_NAME + "']='").append(goodsCategoryVoNew.getCategoryName()).append("';");
-                Date date = DateUtils.addHours(new Date(), -8);
-                script.append("ctx._source['" + FIELD_UPDATE_TIME + "']='").append(DateUtils.getSimpleDateFormat(date)).append("';");
-                request.setScript(new Script(script.toString()));
-                BulkByScrollResponse bulkByScrollResponse = restHighLevelClient.updateByQuery(request, RequestOptions.DEFAULT);
-                log.info("影响的条数:{}", bulkByScrollResponse.getUpdated());
+                // 更新条件
+                Map<String, Object> condition = new HashMap<>();
+                condition.put(FIELD_CATEGORY_ID, goodsCategoryVoNew.getId());
+                // 更新值
+                Map<String, Object> updateVle = new HashMap<>();
+                updateVle.put(FIELD_CATEGORY_NAME, goodsCategoryVoNew.getCategoryName());
+                updateVle.put(FIELD_UPDATE_TIME, this.getStrNow());
+                goodsInfoService.updateByCondition(condition, updateVle);
             } catch (Exception e) {
                 log.error("es 更新商品分类异常:categoryId:{},categoryName:{},error:{}",
                         goodsCategoryVoNew.getId(), goodsCategoryVoNew.getCategoryName(), e.getMessage(), e);
@@ -218,8 +214,15 @@ public class DbSyncEsConsumer {
                         log.error("远程调用查询分类异常:categoryId:{},error:{}", goodsInfoVoNew.getCategoryId(), e.getMessage(), e);
                     }
                 }
+                // 用于校验是否有es中的字段更新
+                GoodsInfoPo temp = new GoodsInfoPo();
+                BeanUtils.copyProperties(goodsInfoVoNew, temp);
+                if (temp.equals(goodsInfoPoOld)) {
+                    log.info("pms_goods_spu 没有要同步的字段");
+                    return;
+                }
                 BeanUtils.copyProperties(goodsInfoVoNew, goodsInfoPoOld);
-                goodsInfoPoOld.setUpdateTime(new Date());
+                goodsInfoPoOld.setUpdateTime(this.getLocalNow());
                 goodsInfoService.saveOrUpdate(goodsInfoPoOld);
                 log.info("更新数据 spuId:{}", goodsInfoPoOld.getSpuId());
             } catch (Exception e) {
@@ -228,4 +231,13 @@ public class DbSyncEsConsumer {
         }
     }
 
+    private String getStrNow() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        return df.format(new Date());
+    }
+
+    private LocalDateTime getLocalNow() {
+        return LocalDateTime.now(ZoneOffset.UTC);
+    }
 }
