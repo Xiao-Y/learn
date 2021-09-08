@@ -1,5 +1,6 @@
 package com.billow.search.api;
 
+import com.billow.aop.commons.CustomPage;
 import com.billow.search.common.cons.EsIndexConstant;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.search.GoodsInfoSearchParam;
@@ -47,11 +48,10 @@ public class GoodsInfoApi {
      * @since 2021-9-6 11:37
      */
     @PostMapping("/search")
-    public SearchHits<GoodsInfoPo> search(@RequestBody GoodsInfoSearchParam param,
-                                          @RequestParam(value = "pageSize", defaultValue = "2") Integer pageSize,
-                                          @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) {
-        SearchHits<GoodsInfoPo> searchHits = goodsInfoService.search(pageNo, pageSize, param);
-        return searchHits;
+    public CustomPage search(@RequestBody GoodsInfoSearchParam param,
+                             @RequestParam(value = "pageSize", defaultValue = "2") Integer pageSize,
+                             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) {
+        return goodsInfoService.search(pageNo, pageSize, param);
     }
 
     @PostMapping("/update")

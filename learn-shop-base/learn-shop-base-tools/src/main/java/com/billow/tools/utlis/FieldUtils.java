@@ -235,6 +235,8 @@ public class FieldUtils {
                 obj = new Long(value);
             } else if (type.isAssignableFrom(Integer.class)) {
                 obj = new Integer(value);
+            } else if (type.isAssignableFrom(String.class)) {
+                obj = value;
             }
         }
         return obj;

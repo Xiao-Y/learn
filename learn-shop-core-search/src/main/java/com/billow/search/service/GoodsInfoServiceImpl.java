@@ -1,5 +1,7 @@
 package com.billow.search.service;
 
+import com.billow.aop.commons.CustomPage;
+import com.billow.search.common.EsPageUtils;
 import com.billow.search.common.cons.EsIndexConstant;
 import com.billow.search.common.cons.FieldNameConstant;
 import com.billow.search.dao.GoodsInfoDao;
@@ -20,12 +22,14 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -109,7 +113,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
     }
 
     @Override
-    public SearchHits<GoodsInfoPo> search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) {
+    public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         // 构建查询条件
         if (StringUtils.isNotBlank(param.getSpuNo())) {
@@ -160,6 +164,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
                 .withPageable(pageRequest)
                 .withHighlightBuilder(highlightBuilder)
                 .build();
-        return template.search(nativeSearchQuery, GoodsInfoPo.class);
+        SearchHits<GoodsInfoPo> searchHits = template.search(nativeSearchQuery, GoodsInfoPo.class);
+        return EsPageUtils.page(searchHits, pageSize);
     }
 }

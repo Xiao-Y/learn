@@ -1,5 +1,6 @@
 package com.billow.search.service;
 
+import com.billow.aop.commons.CustomPage;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.search.GoodsInfoSearchParam;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -61,5 +62,5 @@ public interface GoodsInfoService {
      * @author liuyongtao
      * @since 2021-9-6 11:37
      */
-    SearchHits<GoodsInfoPo> search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param);
+    CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param);
 }
