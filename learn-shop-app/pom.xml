@@ -19,6 +19,10 @@
     <dependencies>
         <dependency>
             <groupId>com.billow</groupId>
+            <artifactId>core-product-interface</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
             <exclusions>
                 <exclusion>
@@ -89,7 +93,6 @@
                             <tasks>
                                 <copy todir="src/main/docker"
                                       file="target/${project.artifactId}.${project.packaging}">
-
                                 </copy>
                             </tasks>
                         </configuration>

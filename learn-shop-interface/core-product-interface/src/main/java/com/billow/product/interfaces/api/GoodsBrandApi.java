@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-11-27
  */
 @RestController
-@RequestMapping(ContextPath.CORE_PRODUCT)
-public interface CoreProductApi {
+@RequestMapping(ContextPath.CORE_PRODUCT + "/goodsBrandApi")
+public interface GoodsBrandApi {
 
     /**
      * 根据id查询品牌表数据
@@ -30,17 +30,6 @@ public interface CoreProductApi {
      * @author xiaoy
      * @since 2021/2/4 16:20
      */
-    @GetMapping(value = "/goodsBrandApi/getById/{id}")
+    @GetMapping(value = "/getById/{id}")
     BaseResponse<GoodsBrandVo> getBrandById(@PathVariable("id") Long id);
-
-    /**
-     * 根据id查询品牌表数据
-     *
-     * @param id
-     * @return {@link GoodsCategoryVo}
-     * @author xiaoy
-     * @since 2021/2/4 16:20
-     */
-    @GetMapping(value = "/goodsCategoryApi/getById/{id}")
-    BaseResponse<GoodsCategoryVo> getCategoryById(@PathVariable("id") Long id);
 }

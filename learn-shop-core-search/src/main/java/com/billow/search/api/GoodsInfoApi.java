@@ -1,23 +1,29 @@
 package com.billow.search.api;
 
-import com.billow.search.dao.GoodsInfoDao;
+import com.billow.search.common.cons.EsIndexConstant;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.search.GoodsInfoSearchParam;
 import com.billow.search.service.GoodsInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateResponse;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 商品搜索相关操作
+ *
  * @author liuyongtao
  * @since 2021-9-2 15:43
  */
@@ -27,8 +33,6 @@ public class GoodsInfoApi {
 
     @Autowired
     private ElasticsearchRestTemplate restTemplate;
-    @Autowired
-    private GoodsInfoDao goodsInfoDao;
     @Autowired
     private GoodsInfoService goodsInfoService;
 
@@ -50,35 +54,37 @@ public class GoodsInfoApi {
         return searchHits;
     }
 
-    @PostMapping("/save")
-    public GoodsInfoPo save() {
-        GoodsInfoPo goodsInfoPo = new GoodsInfoPo();
-        goodsInfoPo.setSpuId(1L);
-        goodsInfoPo.setSpuNo("SPU111");
-        goodsInfoPo.setGoodsName("有效的Java");
-        goodsInfoPo.setBrandId(1L);
-        goodsInfoPo.setBrandName("图好");
-        goodsInfoPo.setCategoryId(1L);
-        goodsInfoPo.setCategoryName("书籍");
-        goodsInfoPo.setSubTitle("一本好书");
-        goodsInfoPo.setKeywords("书，JAVA，编程，软件");
-        goodsInfoPo.setDetailTitle("书（拼音：shū），是汉语通用规范一级字 [1]  。最早见于甲骨文 [2]  。本义作动词，是书写、记述的意思；后引申为名词，指简册、典籍、文书、信函等。");
-//        goodsInfoPo.setUpdateTime(new Date());
-//        goodsInfoPo.setCreateTime(new Date());
-//        goodsInfoPo.setUpdateTime(LocalDateTime.now());
-//        goodsInfoPo.setCreateTime(LocalDateTime.now());
-        goodsInfoPo.setPic("123");
-        goodsInfoPo.setLowPrice(123);
-        goodsInfoPo.setLowStock(12343L);
-        return goodsInfoDao.save(goodsInfoPo);
-    }
-
     @PostMapping("/update")
     public UpdateResponse update() {
         Document document = Document.create();
         document.put("brandName", "图好图好");
         return restTemplate.update(UpdateQuery.builder("1")
                         .withDocument(document).build(),
-                IndexCoordinates.of("goods_info"));
+                IndexCoordinates.of(EsIndexConstant.ES_INDEX_GOODS_INFO));
+    }
+
+    @GetMapping("/searchIndex")
+    public boolean searchIndex() {
+        IndexOperations indexOps = restTemplate.indexOps(GoodsInfoPo.class);
+        return indexOps.exists();
+    }
+
+    @DeleteMapping("/deleteIndex")
+    public boolean deleteIndex() {
+        IndexOperations indexOps = restTemplate.indexOps(GoodsInfoPo.class);
+        return indexOps.delete();
+    }
+
+    @PutMapping("/createIndex")
+    public boolean createIndex() {
+        IndexOperations indexOps = restTemplate.indexOps(GoodsInfoPo.class);
+        return indexOps.create();
+    }
+
+    @PutMapping("/createMapping")
+    public boolean createMapping() {
+        IndexOperations indexOps = restTemplate.indexOps(GoodsInfoPo.class);
+        Document mapping = indexOps.createMapping(GoodsInfoPo.class);
+        return indexOps.putMapping(mapping);
     }
 }

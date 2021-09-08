@@ -2,11 +2,11 @@ package com.billow.search.pojo.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.billow.search.common.cons.AnalyzerConstant;
+import com.billow.search.common.cons.EsIndexConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -24,10 +24,9 @@ import java.util.Objects;
  * @since 2021-2-7 17:23
  */
 @Data
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "goods_info")
+@Document(indexName = EsIndexConstant.ES_INDEX_GOODS_INFO)
 public class GoodsInfoPo {
 
     // GoodsSpuPo
