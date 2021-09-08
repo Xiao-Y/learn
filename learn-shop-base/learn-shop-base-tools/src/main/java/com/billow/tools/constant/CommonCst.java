@@ -52,7 +52,7 @@ public class CommonCst {
     /**
      * 日志跟踪id名。
      */
-    public static final String LOG_TRACE_ID = "traceid";
+    public static final String LOG_TRACE_ID = "X-B3-TraceId";
 
     /**
      * 请求头跟踪id名。

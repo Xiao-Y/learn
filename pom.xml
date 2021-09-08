@@ -155,6 +155,11 @@
                 <artifactId>core-product-interface</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>core-search-interface</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>

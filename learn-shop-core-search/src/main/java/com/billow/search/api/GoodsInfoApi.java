@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
+@RequestMapping("/goodsInfoApi")
 public class GoodsInfoApi {
 
     @Autowired
@@ -51,6 +53,7 @@ public class GoodsInfoApi {
     public CustomPage search(@RequestBody GoodsInfoSearchParam param,
                              @RequestParam(value = "pageSize", defaultValue = "2") Integer pageSize,
                              @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) {
+        log.info("pageSize:{},pageNo:{},param:{}", pageSize, pageNo, param);
         return goodsInfoService.search(pageNo, pageSize, param);
     }
 

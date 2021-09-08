@@ -1,7 +1,5 @@
 package com.billow.app.controller;
 
-//import com.alipay.api.domain.AlipayTradePrecreateModel;
-
 import com.billow.app.feign.product.GoodsSpuFeign;
 import com.billow.product.interfaces.vo.GoodsSpuVo;
 import com.billow.tools.enums.ResCodeEnum;
