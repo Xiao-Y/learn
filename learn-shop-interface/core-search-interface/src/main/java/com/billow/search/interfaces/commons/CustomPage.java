@@ -1,4 +1,4 @@
-package com.billow.aop.commons;
+package com.billow.search.interfaces.commons;
 
 /**
  * 统一分页数据

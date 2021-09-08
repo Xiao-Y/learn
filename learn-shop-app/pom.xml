@@ -19,6 +19,19 @@
     <dependencies>
         <dependency>
             <groupId>com.billow</groupId>
+            <artifactId>core-product-interface</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>core-search-interface</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
             <exclusions>
                 <exclusion>
@@ -35,16 +48,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-aop</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>mybatis-plus-core</artifactId>
-                    <groupId>com.baomidou</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -89,7 +93,6 @@
                             <tasks>
                                 <copy todir="src/main/docker"
                                       file="target/${project.artifactId}.${project.packaging}">
-
                                 </copy>
                             </tasks>
                         </configuration>

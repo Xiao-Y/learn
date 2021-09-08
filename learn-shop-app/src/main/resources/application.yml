@@ -16,3 +16,20 @@ server:
 spring:
   application:
     name: learn-shop-app #客户端名称
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        read-timeout: 30000
+        connect-timeout: 5000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+

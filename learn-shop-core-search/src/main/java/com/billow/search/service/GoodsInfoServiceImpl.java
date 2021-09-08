@@ -1,6 +1,9 @@
 package com.billow.search.service;
 
+import com.billow.aop.commons.CustomPage;
+import com.billow.search.common.EsPageUtils;
 import com.billow.search.common.cons.EsIndexConstant;
+import com.billow.search.common.cons.FieldNameConstant;
 import com.billow.search.dao.GoodsInfoDao;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.search.GoodsInfoSearchParam;
@@ -19,12 +22,14 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -42,9 +47,9 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
     @Autowired
     private GoodsInfoDao goodsInfoDao;
     @Autowired
-    private RestHighLevelClient restHighLevelClient;
-    @Autowired
     private ElasticsearchRestTemplate template;
+    @Autowired
+    private RestHighLevelClient restHighLevelClient;
 
     @Override
     public GoodsInfoPo getById(Long id) {
@@ -108,28 +113,30 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
     }
 
     @Override
-    public SearchHits<GoodsInfoPo> search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) {
+    public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         // 构建查询条件
         if (StringUtils.isNotBlank(param.getSpuNo())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery("spuNo", param.getSpuNo()));
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_SPU_NO, param.getSpuNo()));
         }
         if (Objects.nonNull(param.getBrandId())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery("brandId", param.getBrandId()));
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_BRAND_ID, param.getBrandId()));
         }
         if (Objects.nonNull(param.getCategoryId())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery("categoryId", param.getCategoryId()));
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_CATEGORY_ID, param.getCategoryId()));
         }
         // 关键字搜索匹配，分词
         if (StringUtils.isNotBlank(param.getKeyWorlds())) {
             boolQueryBuilder.must(QueryBuilders.multiMatchQuery(param.getKeyWorlds(),
-                    "keywords", "goodsName", "brandName", "categoryName", "subTitle", "detailTitle"));
+                    FieldNameConstant.FIELD_KEYWORDS, FieldNameConstant.FIELD_GOODS_NAME,
+                    FieldNameConstant.FIELD_BRAND_NAME, FieldNameConstant.FIELD_CATEGORY_NAME,
+                    FieldNameConstant.FIELD_SUB_TITLE, FieldNameConstant.FIELD_DETAIL_TITLE));
         }
 
         // 价格范围查询
         if (StringUtils.isNotBlank(param.getPrice())) {
-            RangeQueryBuilder rangePrice = QueryBuilders.rangeQuery("priceRange");
-            String[] split = param.getPrice().split("~");
+            RangeQueryBuilder rangePrice = QueryBuilders.rangeQuery(FieldNameConstant.FIELD_PRICE_RANGE);
+            String[] split = param.getPrice().split(FieldNameConstant.FIELD_LINK_CHAR);
             Long low = StringUtils.isBlank(split[0]) ? 0L : Long.parseLong(split[0]);
             rangePrice.gte(low);
             if (split.length > 1) {
@@ -146,8 +153,8 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 
         // 结果高亮显示
         HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.field("subTitle")
-                .field("detailTitle")
+        highlightBuilder.field(FieldNameConstant.FIELD_SUB_TITLE)
+                .field(FieldNameConstant.FIELD_DETAIL_TITLE)
                 .preTags("<font color='red'>")
                 .postTags("</font>");
 
@@ -157,6 +164,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
                 .withPageable(pageRequest)
                 .withHighlightBuilder(highlightBuilder)
                 .build();
-        return template.search(nativeSearchQuery, GoodsInfoPo.class);
+        SearchHits<GoodsInfoPo> searchHits = template.search(nativeSearchQuery, GoodsInfoPo.class);
+        return EsPageUtils.page(searchHits, pageSize);
     }
 }

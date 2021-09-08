@@ -2,9 +2,12 @@ package com.billow.search.consumer;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.billow.search.common.cons.FieldNameConstant;
+import com.billow.search.common.cons.DbTableNameConstant;
 import com.billow.search.common.enums.SpuPublishStatusEnum;
 import com.billow.search.common.enums.SpuVerifyStatusEnum;
-import com.billow.search.feign.CoreProductFeign;
+import com.billow.search.feign.GoodsBrandFeign;
+import com.billow.search.feign.GoodsCategoryFeign;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.vo.CanalDbVo;
 import com.billow.search.pojo.vo.GoodsBrandVo;
@@ -42,20 +45,12 @@ import java.util.TimeZone;
 @Component
 public class DbSyncEsConsumer {
 
-    private final static String TABLE_PMS_GOODS_SPU = "pms_goods_spu";
-    private final static String TABLE_PMS_GOODS_CATEGORY = "pms_goods_category";
-    private final static String TABLE_PMS_GOODS_BRAND = "pms_goods_brand";
-
-    private final static String FIELD_BRAND_ID = "brandId";
-    private final static String FIELD_BRAND_NAME = "brandName";
-    private final static String FIELD_CATEGORY_ID = "categoryId";
-    private final static String FIELD_CATEGORY_NAME = "categoryName";
-    private final static String FIELD_UPDATE_TIME = "updateTime";
-
     @Autowired
     private GoodsInfoService goodsInfoService;
     @Autowired
-    private CoreProductFeign coreProductFeign;
+    private GoodsBrandFeign coreProductBrandFeign;
+    @Autowired
+    private GoodsCategoryFeign coreProductCategoryFeign;
 
     /**
      * 同步 mysql 数据到 es
@@ -83,11 +78,11 @@ public class DbSyncEsConsumer {
         List<String> data = canalDbVo.getData();
         log.info("有变化的表:{}", table);
         // 更新商品
-        if (TABLE_PMS_GOODS_SPU.equalsIgnoreCase(table)) {
+        if (DbTableNameConstant.TABLE_PMS_GOODS_SPU.equalsIgnoreCase(table)) {
             this.upateGoodsInfo(data, canalDbVo.getType());
-        } else if (TABLE_PMS_GOODS_CATEGORY.equalsIgnoreCase(table)) {// 更新分类
+        } else if (DbTableNameConstant.TABLE_PMS_GOODS_CATEGORY.equalsIgnoreCase(table)) {// 更新分类
             updateGoodsInfoPartCategoryName(old, data);
-        } else if (TABLE_PMS_GOODS_BRAND.equalsIgnoreCase(table)) {// 更新品牌
+        } else if (DbTableNameConstant.TABLE_PMS_GOODS_BRAND.equalsIgnoreCase(table)) {// 更新品牌
             updateGoodsInfoPartBrandName(old, data);
         }
         log.info("完成刷新...");
@@ -109,7 +104,7 @@ public class DbSyncEsConsumer {
         for (int i = 0; i < old.size(); i++) {
             String oldJson = old.get(i);
             log.info("oldJson数据:{}", oldJson);
-            if (!oldJson.contains(StrUtil.toUnderlineCase(FIELD_BRAND_NAME))) {
+            if (!oldJson.contains(StrUtil.toUnderlineCase(FieldNameConstant.FIELD_BRAND_NAME))) {
                 continue;
             }
             // 更新后的所有字段和值
@@ -117,11 +112,11 @@ public class DbSyncEsConsumer {
             try {
                 // 更新条件
                 Map<String, Object> condition = new HashMap<>();
-                condition.put(FIELD_BRAND_ID, newVo.getId());
+                condition.put(FieldNameConstant.FIELD_BRAND_ID, newVo.getId());
                 // 更新值
                 Map<String, Object> updateVle = new HashMap<>();
-                updateVle.put(FIELD_BRAND_NAME, newVo.getBrandName());
-                updateVle.put(FIELD_UPDATE_TIME, this.getStrNow());
+                updateVle.put(FieldNameConstant.FIELD_BRAND_NAME, newVo.getBrandName());
+                updateVle.put(FieldNameConstant.FIELD_UPDATE_TIME, this.getStrNow());
                 goodsInfoService.updateByCondition(condition, updateVle);
             } catch (Exception e) {
                 log.error("es 更新商品分类异常:brandId:{},brandName:{},error:{}",
@@ -146,7 +141,7 @@ public class DbSyncEsConsumer {
         for (int i = 0; i < old.size(); i++) {
             String oldJson = old.get(i);
             log.info("oldJson数据:{}", oldJson);
-            if (!oldJson.contains(StrUtil.toUnderlineCase(FIELD_CATEGORY_NAME))) {
+            if (!oldJson.contains(StrUtil.toUnderlineCase(FieldNameConstant.FIELD_CATEGORY_NAME))) {
                 continue;
             }
             // 更新后的所有字段和值
@@ -154,11 +149,11 @@ public class DbSyncEsConsumer {
             try {
                 // 更新条件
                 Map<String, Object> condition = new HashMap<>();
-                condition.put(FIELD_CATEGORY_ID, goodsCategoryVoNew.getId());
+                condition.put(FieldNameConstant.FIELD_CATEGORY_ID, goodsCategoryVoNew.getId());
                 // 更新值
                 Map<String, Object> updateVle = new HashMap<>();
-                updateVle.put(FIELD_CATEGORY_NAME, goodsCategoryVoNew.getCategoryName());
-                updateVle.put(FIELD_UPDATE_TIME, this.getStrNow());
+                updateVle.put(FieldNameConstant.FIELD_CATEGORY_NAME, goodsCategoryVoNew.getCategoryName());
+                updateVle.put(FieldNameConstant.FIELD_UPDATE_TIME, this.getStrNow());
                 goodsInfoService.updateByCondition(condition, updateVle);
             } catch (Exception e) {
                 log.error("es 更新商品分类异常:categoryId:{},categoryName:{},error:{}",
@@ -195,7 +190,7 @@ public class DbSyncEsConsumer {
                 if (!Objects.equals(goodsInfoPoOld.getBrandId(), goodsInfoVoNew.getBrandId())) {
                     try {
                         // 远程调用查询品牌
-                        BaseResponse<com.billow.product.interfaces.vo.GoodsBrandVo> baseResponse = coreProductFeign.getBrandById(goodsInfoVoNew.getBrandId());
+                        BaseResponse<com.billow.product.interfaces.vo.GoodsBrandVo> baseResponse = coreProductBrandFeign.getBrandById(goodsInfoVoNew.getBrandId());
                         if (Objects.equals(baseResponse.getResCode(), ResCodeEnum.OK) && baseResponse.getResData() != null) {
                             goodsInfoPoOld.setBrandName(baseResponse.getResData().getBrandName());
                         }
@@ -206,7 +201,7 @@ public class DbSyncEsConsumer {
                 if (!Objects.equals(goodsInfoPoOld.getCategoryId(), goodsInfoVoNew.getCategoryId())) {
                     try {
                         //  远程调用查询分类
-                        BaseResponse<com.billow.product.interfaces.vo.GoodsCategoryVo> baseResponse = coreProductFeign.getCategoryById(goodsInfoVoNew.getCategoryId());
+                        BaseResponse<com.billow.product.interfaces.vo.GoodsCategoryVo> baseResponse = coreProductCategoryFeign.getCategoryById(goodsInfoVoNew.getCategoryId());
                         if (Objects.equals(baseResponse.getResCode(), ResCodeEnum.OK) && baseResponse.getResData() != null) {
                             goodsInfoPoOld.setCategoryName(baseResponse.getResData().getCategoryName());
                         }

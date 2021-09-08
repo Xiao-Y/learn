@@ -31,13 +31,10 @@ public class GoodsSkuApp {
 
     @Autowired
     private GoodsSkuService goodsSkuService;
-    @Autowired
-    private RefreshEsProducer refreshEsProducer;
 
     @ApiOperation(value = "根据 spuId 查询 sku 规格表数据")
     @GetMapping(value = "/findSkuSpec/{spuId}")
     public List<Map<String, Object>> findSkuSpec(@PathVariable Long spuId) {
-        refreshEsProducer.sendRefreshEsInfoAll();
         return goodsSkuService.findSpuSpec(spuId);
     }
 
