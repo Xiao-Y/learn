@@ -1,5 +1,8 @@
 <template>
   <div class="category">
+    <!-- 标题 -->
+    <navbar/>
+    <!--  分类树  -->
     <van-tree-select
         :items="items"
         :main-active-index="mainActiveIndex"
@@ -7,16 +10,22 @@
         @click-nav="onClickNav"
         @click-item="onClickItem"
     />
+    <tobbar/>
   </div>
 </template>
 
 <script>
 
+import Tobbar from "../components/Tobbar";
+import Navbar from "../components/Navbar";
+
 import {FindCategoryTree} from '@/api/GoodsCategoryApi';
 import {Search} from '@/api/GoodsInfoApi';
 
 export default {
-
+  components: {
+    Tobbar, Navbar
+  },
   data() {
     return {
       mainActiveIndex: 0,// 左侧选中项的索引
@@ -32,6 +41,14 @@ export default {
 
   },
   methods: {
+    onClickLeft() {
+      const val = this.$route.query.val;
+      if (val === "home") {
+        this.$router.push("/");
+      } else {
+        this.$router.back();
+      }
+    },
     // 点击左侧分类
     onClickNav(index) {
       this.mainActiveIndex = index;
