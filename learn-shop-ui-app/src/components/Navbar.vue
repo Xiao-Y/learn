@@ -34,6 +34,7 @@ export default {
   methods: {
     onSearch() {
       this.$toast("搜索...");
+      this.$router.push("/goodsList");
       Search({"keyWorlds": this.keyWorlds}).then(res => {
         console.info(res.resData);
       });

@@ -155,6 +155,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field(FieldNameConstant.FIELD_SUB_TITLE)
                 .field(FieldNameConstant.FIELD_DETAIL_TITLE)
+                .field(FieldNameConstant.FIELD_GOODS_NAME)
                 .preTags("<font color='red'>")
                 .postTags("</font>");
 
