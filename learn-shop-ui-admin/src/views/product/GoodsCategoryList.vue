@@ -20,7 +20,6 @@
       <el-table :data="tableData" border style="width:100%">
         <el-table-column label="分类名称" prop="categoryName"></el-table-column>
         <el-table-column label="分类排序" prop="categorySort" width="200"></el-table-column>
-        </el-table-column>
         <el-table-column fixed="right" label="操作" width="240">
           <template slot-scope="scope">
             <!--  操作按钮组 -->

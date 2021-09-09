@@ -30,4 +30,14 @@ public interface GoodsCategoryService extends HighLevelService<GoodsCategoryPo, 
      * @date 2019/12/5 10:54
      */
     List<GoodsCategoryPo> findList(GoodsCategoryVo goodsCategoryVo);
+
+    /**
+     * 通过父ID查询分类树
+     *
+     * @param parentId
+     * @return {@link List< GoodsCategoryPo>}
+     * @author liuyongtao
+     * @since 2021-9-9 8:55
+     */
+    List<GoodsCategoryPo> findCategoryTree(Long parentId);
 }

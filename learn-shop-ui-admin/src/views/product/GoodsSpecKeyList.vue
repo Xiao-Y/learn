@@ -13,7 +13,6 @@
             <el-input-number v-model="scope.row.keySort" :min="0" :disabled="readonly" size="mini"></el-input-number>
           </template>
         </el-table-column>
-        </el-table-column>
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <!--  操作按钮组 -->

@@ -31,7 +31,15 @@ public class GoodsCategoryServiceImpl extends HighLevelServiceImpl<GoodsCategory
     @Override
     public List<GoodsCategoryPo> findList(GoodsCategoryVo goodsCategoryVo) {
         LambdaQueryWrapper<GoodsCategoryPo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(GoodsCategoryPo::getParentId, goodsCategoryVo.getParentId());
         return goodsCategoryDao.selectList(wrapper);
+    }
+
+    @Override
+    public List<GoodsCategoryPo> findCategoryTree(Long parentId) {
+        GoodsCategoryVo goodsCategoryVo = new GoodsCategoryVo();
+        goodsCategoryVo.setParentId(parentId);
+        return this.findList(goodsCategoryVo);
     }
 }
 
