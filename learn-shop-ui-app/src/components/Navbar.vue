@@ -9,10 +9,8 @@
         slot="title"
         v-model="keyWorlds"
         placeholder="请输入搜索关键词"
-        show-action
         shape="round"
-        @search="onSearch">
-      <div slot="action" @click="onSearch">搜索</div>
+        @focus="toSearch">
     </van-search>
     <van-icon name="qr-invalid" slot="right" size="1.5em"/>
   </van-nav-bar>
@@ -32,6 +30,9 @@ export default {
   created() {
   },
   methods: {
+    toSearch() {
+      this.$router.push("/search");
+    },
     onSearch() {
       this.$toast("搜索...");
       this.$router.push("/goodsList");
@@ -52,3 +53,14 @@ export default {
   watch: {}
 };
 </script>
+
+<style>
+.van-nav-bar {
+  line-height: 40px;
+}
+
+.van-nav-bar__title {
+  margin-left: 45px;
+  max-width: 77%;
+}
+</style>

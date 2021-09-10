@@ -1,14 +1,12 @@
 <template>
   <div>
     <!-- vant搜索 -->
-    <div class="list-nav">
-      <van-search @click="toSearch" v-model="kw" shape="round" placeholder="请输入搜索关键词" show-action>
-        <template #action>
-          <div @click="backHome">取消</div>
-        </template>
+    <van-nav-bar :left-arrow="false">
+      <van-icon name="arrow-left" slot="left" size="1.5em" @click="$router.back()"/>
+      <van-search slot="title" @search="toSearch" autofocus shape="round" v-model="kw"
+                  placeholder="请输入搜索关键词">
       </van-search>
-    </div>
-
+    </van-nav-bar>
     <!-- 排序 -->
     <div class="list-sort">
       <div @click="onSort" :class="{'active':isActive==0}">综合排序</div>
@@ -83,12 +81,6 @@ export default {
     });
   },
   methods: {
-    backHome() { //返回分类页面
-      console.info("back");
-      this.$router.push({
-        path: '/home'
-      })
-    },
     toSearch() { //跳转到搜索页面
       this.$router.push({
         path: '/search'
@@ -161,19 +153,9 @@ export default {
 </script>
 
 <style scoped>
-.list-title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-
-.list-nav {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 99;
+.van-nav-bar__title {
+  margin-left: 45px;
+  max-width: 80%;
 }
 
 .iconfont {
@@ -198,7 +180,8 @@ export default {
   margin-top: -1px;
   font-weight: 300;
 }
-.van-card__content span{
+
+.van-card__content span {
   padding-top: 4px;
 }
 </style>
