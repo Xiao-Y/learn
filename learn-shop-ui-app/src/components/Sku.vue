@@ -40,8 +40,8 @@
 
 <script>
 
-    import {FindGoodsSku,FindSkuSpec} from '../api/GoodsSkuApi';
-    import {GetById} from '../api/GoodsSpuApi';
+    import {FindGoodsSku,FindSkuSpec} from '@/api/GoodsSkuApi';
+    import {GetById} from '@/api/GoodsSpuApi';
 
     export default {
         model: {

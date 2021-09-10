@@ -1,8 +1,11 @@
 package com.billow.search.service;
 
+import com.billow.aop.commons.CustomPage;
 import com.billow.search.pojo.po.GoodsInfoPo;
-import org.springframework.data.domain.Page;
+import com.billow.search.pojo.search.GoodsInfoSearchParam;
+import org.springframework.data.elasticsearch.core.SearchHits;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -31,16 +34,6 @@ public interface GoodsInfoService {
     void saveOrUpdate(GoodsInfoPo goodsInfoPo);
 
     /**
-     * 分布查询出ID
-     *
-     * @param goodsInfoPo
-     * @return {@link Page< GoodsInfoPo>}
-     * @author liuyongtao
-     * @since 2021-9-2 21:27
-     */
-    Page<GoodsInfoPo> findIdByPage(GoodsInfoPo goodsInfoPo);
-
-    /**
      * 根据主键删除商品信息
      *
      * @param id
@@ -50,12 +43,24 @@ public interface GoodsInfoService {
     void delById(Long id);
 
     /**
-     * 根据条件更新
+     * 条件更新
      *
-     * @param queryCondition 更新条件
-     * @param updateVal      更新值
-     * @author xiaoy
-     * @since 2021/9/4 19:17
+     * @param condition 更新条件
+     * @param updateVle 更新值
+     * @author liuyongtao
+     * @since 2021-9-6 9:29
      */
-    long updateByCondition(Map<String, Object> queryCondition, Map<String, Object> updateVal) throws Exception;
+    void updateByCondition(Map<String, Object> condition, Map<String, Object> updateVle) throws IOException;
+
+    /**
+     * 条件查询
+     *
+     * @param param    查询参数
+     * @param pageSize 页面大小
+     * @param pageNo   当前页
+     * @return {@link SearchHits<GoodsInfoPo>}
+     * @author liuyongtao
+     * @since 2021-9-6 11:37
+     */
+    CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param);
 }

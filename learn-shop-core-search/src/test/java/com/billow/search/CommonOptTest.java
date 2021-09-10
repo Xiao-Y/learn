@@ -1,7 +1,6 @@
 package com.billow.search;
 
 import com.billow.search.common.cons.AnalyzerConstant;
-import com.billow.search.pojo.po.Book;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -52,12 +51,5 @@ public class CommonOptTest extends CoreAppTests {
         CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
         boolean acknowledged = createIndexResponse.isAcknowledged();
         System.out.println("是否创建成功：" + acknowledged);
-    }
-
-    @Test
-    public void createIndex2() throws Exception {
-        IndexOperations indexOps = elasticsearchRestTemplate.indexOps(Book.class);
-        boolean b = indexOps.create();
-        System.out.println("是否创建成功：" + b);
     }
 }

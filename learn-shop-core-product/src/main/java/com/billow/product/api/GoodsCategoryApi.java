@@ -5,9 +5,12 @@ import com.billow.common.ex.SelectEx;
 import com.billow.product.pojo.build.GoodsCategoryBuildParam;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.search.GoodsCategorySearchParam;
+import com.billow.product.pojo.vo.GoodsCategoryTreeVo;
 import com.billow.product.pojo.vo.GoodsCategoryVo;
 import com.billow.product.service.GoodsCategoryService;
+import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
+import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -57,5 +61,14 @@ public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCa
         });
         selectExes.sort(Comparator.comparing(SelectEx::getFieldOrder, Comparator.nullsFirst(Long::compareTo)));
         return selectExes;
+    }
+
+    @ApiOperation(value = "通过父ID查询分类树")
+    @GetMapping(value = "/findCategoryTree/{parentId}")
+    public List<GoodsCategoryTreeVo> findCategoryTree(@PathVariable Long parentId)  {
+        List<GoodsCategoryPo> list = goodsCategoryService.findCategoryTree(parentId);
+        return list.stream()
+                .map(m -> ConvertUtils.convert(m, GoodsCategoryTreeVo.class))
+                .collect(Collectors.toList());
     }
 }

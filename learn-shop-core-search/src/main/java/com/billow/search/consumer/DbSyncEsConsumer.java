@@ -2,19 +2,22 @@ package com.billow.search.consumer;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.billow.search.common.cons.FieldNameConstant;
+import com.billow.search.common.cons.DbTableNameConstant;
 import com.billow.search.common.enums.SpuPublishStatusEnum;
 import com.billow.search.common.enums.SpuVerifyStatusEnum;
-import com.billow.search.feign.CoreProductFeign;
+import com.billow.search.feign.GoodsBrandFeign;
+import com.billow.search.feign.GoodsCategoryFeign;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.vo.CanalDbVo;
 import com.billow.search.pojo.vo.GoodsBrandVo;
 import com.billow.search.pojo.vo.GoodsCategoryVo;
 import com.billow.search.pojo.vo.GoodsSpuVo;
 import com.billow.search.service.GoodsInfoService;
-import com.billow.tools.date.DateUtils;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
@@ -22,11 +25,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TimeZone;
 
 /**
  * 增量数据库同步数据到es（字段变更）
@@ -38,20 +45,12 @@ import java.util.Objects;
 @Component
 public class DbSyncEsConsumer {
 
-    private final static String TABLE_PMS_GOODS_SPU = "pms_goods_spu";
-    private final static String TABLE_PMS_GOODS_CATEGORY = "pms_goods_category";
-    private final static String TABLE_PMS_GOODS_BRAND = "pms_goods_brand";
-
-    private final static String FIELD_BRAND_ID = "brandId";
-    private final static String FIELD_BRAND_NAME = "brandName";
-    private final static String FIELD_CATEGORY_ID = "categoryId";
-    private final static String FIELD_CATEGORY_NAME = "categoryName";
-    private final static String FIELD_UPDATE_TIME = "updateTime";
-
     @Autowired
     private GoodsInfoService goodsInfoService;
     @Autowired
-    private CoreProductFeign coreProductFeign;
+    private GoodsBrandFeign coreProductBrandFeign;
+    @Autowired
+    private GoodsCategoryFeign coreProductCategoryFeign;
 
     /**
      * 同步 mysql 数据到 es
@@ -79,11 +78,11 @@ public class DbSyncEsConsumer {
         List<String> data = canalDbVo.getData();
         log.info("有变化的表:{}", table);
         // 更新商品
-        if (TABLE_PMS_GOODS_SPU.equalsIgnoreCase(table)) {
+        if (DbTableNameConstant.TABLE_PMS_GOODS_SPU.equalsIgnoreCase(table)) {
             this.upateGoodsInfo(data, canalDbVo.getType());
-        } else if (TABLE_PMS_GOODS_CATEGORY.equalsIgnoreCase(table)) {// 更新分类
+        } else if (DbTableNameConstant.TABLE_PMS_GOODS_CATEGORY.equalsIgnoreCase(table)) {// 更新分类
             updateGoodsInfoPartCategoryName(old, data);
-        } else if (TABLE_PMS_GOODS_BRAND.equalsIgnoreCase(table)) {// 更新品牌
+        } else if (DbTableNameConstant.TABLE_PMS_GOODS_BRAND.equalsIgnoreCase(table)) {// 更新品牌
             updateGoodsInfoPartBrandName(old, data);
         }
         log.info("完成刷新...");
@@ -98,24 +97,27 @@ public class DbSyncEsConsumer {
      * @since 2021-9-3 9:16
      */
     private void updateGoodsInfoPartBrandName(List<String> old, List<String> data) {
+        if (CollectionUtils.isEmpty(old)) {
+            log.info("pms_goods_brand 表插入新数据，old 为空，不更新");
+            return;
+        }
         for (int i = 0; i < old.size(); i++) {
             String oldJson = old.get(i);
             log.info("oldJson数据:{}", oldJson);
-            if (!oldJson.contains(StrUtil.toUnderlineCase(FIELD_BRAND_NAME))) {
+            if (!oldJson.contains(StrUtil.toUnderlineCase(FieldNameConstant.FIELD_BRAND_NAME))) {
                 continue;
             }
             // 更新后的所有字段和值
             GoodsBrandVo newVo = JSON.parseObject(data.get(i), GoodsBrandVo.class);
             try {
-                // 构建查询条件
-                Map<String, Object> queryCondition = new HashMap<>();
-                queryCondition.put(FIELD_BRAND_ID, newVo.getId());
-                // 构建更新值
-                Map<String, Object> updateVal = new HashMap<>();
-                updateVal.put(FIELD_BRAND_NAME, newVo.getBrandName());
-                Date date = DateUtils.addHours(new Date(), -8);
-                updateVal.put(FIELD_UPDATE_TIME, DateUtils.getSimpleDateFormat(date));
-                goodsInfoService.updateByCondition(queryCondition, updateVal);
+                // 更新条件
+                Map<String, Object> condition = new HashMap<>();
+                condition.put(FieldNameConstant.FIELD_BRAND_ID, newVo.getId());
+                // 更新值
+                Map<String, Object> updateVle = new HashMap<>();
+                updateVle.put(FieldNameConstant.FIELD_BRAND_NAME, newVo.getBrandName());
+                updateVle.put(FieldNameConstant.FIELD_UPDATE_TIME, this.getStrNow());
+                goodsInfoService.updateByCondition(condition, updateVle);
             } catch (Exception e) {
                 log.error("es 更新商品分类异常:brandId:{},brandName:{},error:{}",
                         newVo.getId(), newVo.getBrandName(), e.getMessage(), e);
@@ -132,24 +134,27 @@ public class DbSyncEsConsumer {
      * @since 2021-9-3 9:16
      */
     private void updateGoodsInfoPartCategoryName(List<String> old, List<String> data) {
+        if (CollectionUtils.isEmpty(old)) {
+            log.info("pms_goods_category 表插入新数据，old 为空，不更新");
+            return;
+        }
         for (int i = 0; i < old.size(); i++) {
             String oldJson = old.get(i);
             log.info("oldJson数据:{}", oldJson);
-            if (!oldJson.contains(StrUtil.toUnderlineCase(FIELD_CATEGORY_NAME))) {
+            if (!oldJson.contains(StrUtil.toUnderlineCase(FieldNameConstant.FIELD_CATEGORY_NAME))) {
                 continue;
             }
             // 更新后的所有字段和值
             GoodsCategoryVo goodsCategoryVoNew = JSON.parseObject(data.get(i), GoodsCategoryVo.class);
             try {
-                // 构建查询条件
-                Map<String, Object> queryCondition = new HashMap<>();
-                queryCondition.put(FIELD_CATEGORY_ID, goodsCategoryVoNew.getId());
-                // 构建更新值
-                Map<String, Object> updateVal = new HashMap<>();
-                updateVal.put(FIELD_CATEGORY_NAME, goodsCategoryVoNew.getCategoryName());
-                Date date = DateUtils.addHours(new Date(), -8);
-                updateVal.put(FIELD_UPDATE_TIME, DateUtils.getSimpleDateFormat(date));
-                goodsInfoService.updateByCondition(queryCondition, updateVal);
+                // 更新条件
+                Map<String, Object> condition = new HashMap<>();
+                condition.put(FieldNameConstant.FIELD_CATEGORY_ID, goodsCategoryVoNew.getId());
+                // 更新值
+                Map<String, Object> updateVle = new HashMap<>();
+                updateVle.put(FieldNameConstant.FIELD_CATEGORY_NAME, goodsCategoryVoNew.getCategoryName());
+                updateVle.put(FieldNameConstant.FIELD_UPDATE_TIME, this.getStrNow());
+                goodsInfoService.updateByCondition(condition, updateVle);
             } catch (Exception e) {
                 log.error("es 更新商品分类异常:categoryId:{},categoryName:{},error:{}",
                         goodsCategoryVoNew.getId(), goodsCategoryVoNew.getCategoryName(), e.getMessage(), e);
@@ -185,7 +190,7 @@ public class DbSyncEsConsumer {
                 if (!Objects.equals(goodsInfoPoOld.getBrandId(), goodsInfoVoNew.getBrandId())) {
                     try {
                         // 远程调用查询品牌
-                        BaseResponse<com.billow.product.interfaces.vo.GoodsBrandVo> baseResponse = coreProductFeign.getBrandById(goodsInfoVoNew.getBrandId());
+                        BaseResponse<com.billow.product.interfaces.vo.GoodsBrandVo> baseResponse = coreProductBrandFeign.getBrandById(goodsInfoVoNew.getBrandId());
                         if (Objects.equals(baseResponse.getResCode(), ResCodeEnum.OK) && baseResponse.getResData() != null) {
                             goodsInfoPoOld.setBrandName(baseResponse.getResData().getBrandName());
                         }
@@ -196,7 +201,7 @@ public class DbSyncEsConsumer {
                 if (!Objects.equals(goodsInfoPoOld.getCategoryId(), goodsInfoVoNew.getCategoryId())) {
                     try {
                         //  远程调用查询分类
-                        BaseResponse<com.billow.product.interfaces.vo.GoodsCategoryVo> baseResponse = coreProductFeign.getCategoryById(goodsInfoVoNew.getCategoryId());
+                        BaseResponse<com.billow.product.interfaces.vo.GoodsCategoryVo> baseResponse = coreProductCategoryFeign.getCategoryById(goodsInfoVoNew.getCategoryId());
                         if (Objects.equals(baseResponse.getResCode(), ResCodeEnum.OK) && baseResponse.getResData() != null) {
                             goodsInfoPoOld.setCategoryName(baseResponse.getResData().getCategoryName());
                         }
@@ -204,8 +209,15 @@ public class DbSyncEsConsumer {
                         log.error("远程调用查询分类异常:categoryId:{},error:{}", goodsInfoVoNew.getCategoryId(), e.getMessage(), e);
                     }
                 }
+                // 用于校验是否有es中的字段更新
+                GoodsInfoPo temp = new GoodsInfoPo();
+                BeanUtils.copyProperties(goodsInfoVoNew, temp);
+                if (temp.equals(goodsInfoPoOld)) {
+                    log.info("pms_goods_spu 没有要同步的字段");
+                    return;
+                }
                 BeanUtils.copyProperties(goodsInfoVoNew, goodsInfoPoOld);
-                goodsInfoPoOld.setUpdateTime(new Date());
+                goodsInfoPoOld.setUpdateTime(this.getLocalNow());
                 goodsInfoService.saveOrUpdate(goodsInfoPoOld);
                 log.info("更新数据 spuId:{}", goodsInfoPoOld.getSpuId());
             } catch (Exception e) {
@@ -214,4 +226,13 @@ public class DbSyncEsConsumer {
         }
     }
 
+    private String getStrNow() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        return df.format(new Date());
+    }
+
+    private LocalDateTime getLocalNow() {
+        return LocalDateTime.now(ZoneOffset.UTC);
+    }
 }

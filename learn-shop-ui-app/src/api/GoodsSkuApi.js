@@ -1,7 +1,7 @@
 
 import http from '../utils/requestUtils'
 
-const baseUrl = '../core-product/goodsSkuApp';
+const baseUrl = '../app/goodsSkuApp';
 
 /**
  * 通过 spuId 获取商品 sku 信息

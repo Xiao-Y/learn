@@ -12,8 +12,6 @@ public class BaseResponse<T> implements Serializable {
     private String resCode;
     private String resMsg;
     private String traceID;
-    private String spanID;
-    private String signature;
     private T resData;
     private Map<String, String> ext;
     private String requestUrl;
@@ -23,24 +21,18 @@ public class BaseResponse<T> implements Serializable {
         this.resMsg = ResCodeEnum.OK_NAME;
     }
 
-    public BaseResponse(String resCode, String resMsg, String traceID, String spanID,
-                        String signature, T resData, Map<String, String> ext) {
+    public BaseResponse(String resCode, String resMsg, String traceID, T resData, Map<String, String> ext) {
         this.resCode = resCode;
         this.resMsg = resMsg;
         this.traceID = traceID;
-        this.spanID = spanID;
-        this.signature = signature;
         this.resData = resData;
         this.ext = ext;
     }
 
-    public BaseResponse(ResCodeEnum resCodeEnum, String traceID, String spanID,
-                        String signature, T resData, Map<String, String> ext) {
+    public BaseResponse(ResCodeEnum resCodeEnum, String traceID, T resData, Map<String, String> ext) {
         this.resCode = resCodeEnum.getStatusCode();
         this.resMsg = resCodeEnum.getStatusName();
         this.traceID = traceID;
-        this.spanID = spanID;
-        this.signature = signature;
         this.resData = resData;
         this.ext = ext;
     }
@@ -66,7 +58,7 @@ public class BaseResponse<T> implements Serializable {
     }
 
     public BaseResponse(String resCode, String resMsg, T resData) {
-        this(resCode, resMsg, null, null, null, resData, null);
+        this(resCode, resMsg, null, resData, null);
     }
 
     public Map<String, String> getExt() {
@@ -115,36 +107,12 @@ public class BaseResponse<T> implements Serializable {
         this.traceID = traceID;
     }
 
-    public String getSpanID() {
-        return this.spanID;
-    }
-
-    public void setSpanID(String spanID) {
-        this.spanID = spanID;
-    }
-
-    public String getSignature() {
-        return this.signature;
-    }
-
-    public void setSignature(String signature) {
-        this.signature = signature;
-    }
-
     public T getResData() {
         return this.resData;
     }
 
     public void setResData(T resData) {
         this.resData = resData;
-    }
-
-    public static BaseResponse success(Object body) {
-        return new BaseResponse(ResCodeEnum.RESCODE_SUCCESS, body);
-    }
-
-    public static BaseResponse fail(Object body) {
-        return new BaseResponse(ResCodeEnum.RESCODE_OTHER_ERROR, body);
     }
 
     public String getRequestUrl() {
@@ -156,6 +124,14 @@ public class BaseResponse<T> implements Serializable {
         return this;
     }
 
+    public static BaseResponse success(Object body) {
+        return new BaseResponse(ResCodeEnum.RESCODE_SUCCESS, body);
+    }
+
+    public static BaseResponse fail(Object body) {
+        return new BaseResponse(ResCodeEnum.RESCODE_OTHER_ERROR, body);
+    }
+
     @Override
     public String toString() {
         return "BaseResponse{" +
@@ -163,8 +139,6 @@ public class BaseResponse<T> implements Serializable {
                 ", resCode='" + resCode + '\'' +
                 ", resMsg='" + resMsg + '\'' +
                 ", traceID='" + traceID + '\'' +
-                ", spanID='" + spanID + '\'' +
-                ", signature='" + signature + '\'' +
                 ", resData=" + resData +
                 ", ext=" + ext +
                 ", requestUrl='" + requestUrl + '\'' +

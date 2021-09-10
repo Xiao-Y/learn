@@ -22,7 +22,7 @@ import java.util.Date;
 public class BasePo extends BasePage implements Serializable {
 
     // 主键id
-    @TableId(type = IdType.ID_WORKER)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     // 创建人
     @TableField(value = "creator_code", fill = FieldFill.INSERT)
