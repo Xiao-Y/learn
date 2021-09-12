@@ -33,7 +33,6 @@
       <van-card
           v-for="(item,index) in list"
           :key="index"
-          :tag="item.newStatus == 1 ? '天猫':'淘宝'"
           :price="item.lowPrice | priceFormat"
           :origin-price="item.price | priceFormat"
           :thumb="item.pic"
@@ -42,13 +41,34 @@
           <span>30天销量：{{ item.sale }}</span>
         </template>
         <template #title>
-          <span v-html="item.goodsName"/>
+          <span class="van-card__goodsname">{{ item.goodsName }}/{{ item.subTitle }}</span>
         </template>
         <template #desc>
-          <span v-html="item.subTitle"/>
+          <span class="van-card__detail">{{ item.detailTitle }}</span>
+        </template>
+        <template #tag>
+          <div v-if="item.recommandStatus == 1" class="van-tag van-tag--mark van-tag--danger">推荐</div>
+          <div v-if="item.recommandStatus == 0 && item.newStatus == 1" class="van-tag van-tag--mark van-tag--green">新品
+          </div>
         </template>
         <template #tags>
-          <span v-html="item.detailTitle"/>
+          <div class="van-tags__div">
+            <!-- 1.无忧退货 -->
+            <span v-if="item.serviceIds && item.serviceIds.includes('1')"
+                  class="van-tag van-tag--plain van-tag--danger">
+              <van-icon name="logistics" size="25px"/>
+            </span>
+            <!-- 2.快速退款 -->
+            <span v-if="item.serviceIds && item.serviceIds.includes('2')"
+                  class="van-tag van-tag--plain van-tag--danger">
+              <van-icon name="cash-back-record" size="27px"/>
+            </span>
+            <!-- 3.免费包邮 -->
+            <span v-if="item.serviceIds && item.serviceIds.includes('3')"
+                  class="van-tag van-tag--plain van-tag--danger">
+              <van-icon name="free-postage" size="25px"/>
+            </span>
+          </div>
         </template>
       </van-card>
     </div>
@@ -143,11 +163,6 @@ export default {
         })
       }
     }
-  },
-  filters: {
-    priceFormat: function (price) {
-      return (price / 100).toFixed(2);
-    }
   }
 }
 </script>
@@ -172,7 +187,7 @@ export default {
   top: 54px;
   left: 0;
   z-index: 99;
-  width: 100%;
+  width: 95%;
   background-color: #FFFFFF;
   display: flex;
   justify-content: space-around;
@@ -183,5 +198,51 @@ export default {
 
 .van-card__content span {
   padding-top: 4px;
+}
+
+/*金额*/
+.van-card__price {
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+/*端口标题*/
+.van-card__goodsname {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+/*商品简介，单选/双行显示多的... 替换*/
+.title-class {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.van-card__detail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.7em;
+}
+
+/*销量*/
+.van-card__num {
+  margin-top: 4px;
+}
+
+/*tag颜色*/
+.van-tag--green {
+  background-color: #22c56f;
+}
+
+/*小标签*/
+.van-tags__div span{
+  margin-right: 5px;
 }
 </style>

@@ -15,27 +15,14 @@
           v-for="(hotData,index) in hotDatas"
           :key="index"
           @click="viewProduct(hotData.id)">
-        <van-image :src="hotData.image" v-lazy="hotData.image" style="width:6em;height: 6em"/>
+        <van-image :src="hotData.pic" v-lazy="hotData.pic" style="width:6em;height: 6em"/>
       </van-grid-item>
     </van-grid>
     <!-- 推荐商品 -->
     <div class="hot-re">推荐商品</div>
-    <van-card
-        v-for="(hotData,index) in hotDatas"
-        :key="index"
-        tag="HOT"
-        price="2.00"
-        :lazy-load="true"
-        @click="viewProduct(hotData.id)"
-        :thumb="hotData.image">
-      <div slot="tags">
-        <van-tag plain type="danger">标签</van-tag>
-        <van-tag plain type="danger">标签</van-tag>
-      </div>
-      <div slot="desc">描述信息</div>
-      <div slot="title">商品标题</div>
-    </van-card>
-
+    <!--  商品列表  -->
+    <GoodsCard @viewProduct="viewProduct" :goods="hotDatas"/>
+    <div class="load-data"></div>
     <tobbar/>
   </div>
 </template>
@@ -43,10 +30,11 @@
 <script>
 import Tobbar from "../components/Tobbar";
 import Navbar from "../components/Navbar";
+import GoodsCard from "../components/GoodsCard";
 
 export default {
   components: {
-    Tobbar, Navbar
+    Tobbar, Navbar, GoodsCard
   },
   data() {
     return {
@@ -63,30 +51,60 @@ export default {
       searchKey: '',
       // 热销商品
       hotDatas: [{
-        id: '1',
-        text: '',
-        image: 'https://img.yzcdn.cn/vant/apple-1.jpg'
+        id: 2,
+        recommandStatus: 1,
+        goodsName: '1231',
+        price: 1231,
+        lowPrice: 1200,
+        subTitle: '1231',
+        serviceIds: '2,3,4',
+        pic: 'https://img.yzcdn.cn/vant/apple-1.jpg'
       }, {
-        id: '2',
-        text: '',
-        image: 'https://img.yzcdn.cn/vant/apple-2.jpg'
+        id: 3,
+        recommandStatus: 1,
+        goodsName: '1231',
+        price: 1231,
+        lowPrice: 1200,
+        subTitle: '1231',
+        serviceIds: '1,3,4',
+        pic: 'https://img.yzcdn.cn/vant/apple-2.jpg'
       }, {
-        id: '3',
-        text: '',
-        image: 'https://img.yzcdn.cn/vant/apple-3.jpg'
+        id: 1,
+        recommandStatus: 1,
+        goodsName: '1231',
+        price: 1231,
+        lowPrice: 1200,
+        subTitle: '1231',
+        serviceIds: '1',
+        pic: 'https://img.yzcdn.cn/vant/apple-3.jpg'
       }, {
-        id: '4',
-        text: '',
-        image: 'https://img.yzcdn.cn/vant/apple-4.jpg'
+        id: 4,
+        recommandStatus: 1,
+        goodsName: '1231',
+        price: 1231,
+        lowPrice: 1200,
+        subTitle: '1231',
+        serviceIds: '1,2',
+        pic: 'https://img.yzcdn.cn/vant/apple-4.jpg'
       }, {
-        id: '5',
-        text: '',
-        image: 'https://img.yzcdn.cn/vant/apple-5.jpg'
+        id: 5,
+        recommandStatus: 0,
+        goodsName: '1231',
+        price: 1231,
+        lowPrice: 1200,
+        subTitle: '1231',
+        serviceIds: '1,2,3',
+        pic: 'https://img.yzcdn.cn/vant/apple-5.jpg'
       }, {
-        id: '6',
-        text: '',
-        image: 'https://img.yzcdn.cn/vant/apple-6.jpg'
-      }]
+        id: 6,
+        recommandStatus: 0,
+        goodsName: '1231',
+        price: 1231,
+        lowPrice: 1200,
+        subTitle: '1231',
+        serviceIds: '1,2,4',
+        pic: 'https://img.yzcdn.cn/vant/apple-6.jpg'
+      },]
     }
   },
   methods: {
@@ -99,14 +117,19 @@ export default {
     onClickRight() {
       this.$toast("二维码...");
     },
-    viewProduct() {
-      this.$router.push({name: 'goods'});
+    /**
+     * 查看商品详细信息
+     * @param spuId 商品id
+     */
+    viewProduct(spuId) {
+      //this.$router.push({name: 'goods'});
+      console.info("spuId:", spuId);
     }
   }
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .hot-re {
   padding-top: 1em;
   margin-left: 0.2em;
@@ -114,8 +137,7 @@ export default {
   font-size: 14px;
 }
 
-.van-tag {
-  margin-top: 2px;
-  margin-right: 5px;
+.load-data {
+  margin-top: 50px;
 }
 </style>
