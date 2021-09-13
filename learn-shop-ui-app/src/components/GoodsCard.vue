@@ -1,7 +1,7 @@
 <template>
   <div class="goods-item" @click="viewProduct(goodsItem.spuId)">
     <div class="pictrue">
-      <img :src="goodsItem.pic" alt="商品"/>
+      <img v-lazy="goodsItem.pic" alt="商品"/>
     </div>
     <div class="info">
       <div class="title-tag">
@@ -11,20 +11,27 @@
       </div>
       <div class="price-info">
         <span v-html="$options.filters.priceFormatStyle(goodsItem.lowPrice)"></span>
-        <span class="old-price">￥{{ goodsItem.price | priceFormat }}</span>
+        <span v-html="$options.filters.priceOldFormatStyle(goodsItem.price)"></span>
       </div>
-      <div class="service" v-if="goodsItem.serviceIds">
-        <span class="item" v-if="goodsItem.serviceIds.includes('3')">包邮</span>
-        <span class="item" v-if="goodsItem.serviceIds.includes('4')">送运费险</span>
-        <span class="item" v-if="goodsItem.serviceIds.includes('1')">无忧退货</span>
-        <span class="item" v-if="goodsItem.serviceIds.includes('2')">急速退款</span>
-      </div>
+      <GoodsService :service-ids="goodsItem.serviceIds" />
+<!--      <div class="service" v-if="goodsItem.serviceIds">-->
+<!--        <span class="item" v-if="goodsItem.serviceIds.includes('3')">包邮</span>-->
+<!--        <span class="item" v-if="goodsItem.serviceIds.includes('4')">送运费险</span>-->
+<!--        <span class="item" v-if="goodsItem.serviceIds.includes('1')">无忧退货</span>-->
+<!--        <span class="item" v-if="goodsItem.serviceIds.includes('2')">急速退款</span>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
+
+import GoodsService from "@/components/GoodsService";
+
 export default {
+  components: {
+    GoodsService
+  },
   props: {
     goodsDate: {
       type: Object,
@@ -107,35 +114,20 @@ export default {
 
     .price-info {
       display: flex;
-      margin-top: 5px;
+      margin-top: 1px;
       flex-wrap: wrap;
       justify-content: space-between;
-
-      .new-price {
-        //font-size: 17px;
-        //color: #fc603a;
-        //font-weight: bold;
-        span{
-          font-size: 12px;
-        }
-      }
-
-      .old-price {
-        font-size: 12px;
-        text-decoration: line-through;
-        margin-left: 8px;
-      }
     }
 
-    .service {
-      .item {
-        font-size: 12px;
-        color: #fc603a;
-        border: 1px solid;
-        margin-right: 7px;
-        padding: 2px;
-      }
-    }
+    //.service {
+    //  .item {
+    //    font-size: 12px;
+    //    color: #fc603a;
+    //    border: 1px solid;
+    //    margin-right: 7px;
+    //    padding: 2px;
+    //  }
+    //}
   }
 }
 </style>

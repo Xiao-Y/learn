@@ -28,60 +28,24 @@
     <!-- vant骨架屏 -->
     <van-skeleton v-for="i in 18" :key="i" title :row="3" :loading="list.length<=0" style="background-color: white;"/>
 
-    <div style="margin-top: 96px;">
+    <div style="margin-top: 65px;">
       <!-- 商品卡片 -->
-      <van-card
-          v-for="(item,index) in list"
-          :key="index"
-          :origin-price="item.price | priceFormat"
-          :thumb="item.pic"
-          @click="toDetails(item.id)">
-        <template #num>
-          <span>30天销量：{{ item.sale }}</span>
-        </template>
-        <template #price>
-          <span v-html="$options.filters.priceFormatStyle(item.lowPrice)"></span>
-        </template>
-        <template #title>
-          <span class="van-card__goodsname">{{ item.goodsName }}/{{ item.subTitle }}</span>
-        </template>
-        <template #desc>
-          <span class="van-card__detail">{{ item.detailTitle }}</span>
-        </template>
-        <template #tag>
-          <div v-if="item.recommandStatus == 1" class="van-tag van-tag--mark van-tag--danger">推荐</div>
-          <div v-if="item.recommandStatus == 0 && item.newStatus == 1" class="van-tag van-tag--mark van-tag--green">新品
-          </div>
-        </template>
-        <template #tags>
-          <div class="van-tags__div">
-            <!-- 1.无忧退货 -->
-            <span v-if="item.serviceIds && item.serviceIds.includes('1')"
-                  class="van-tag van-tag--plain van-tag--danger">
-              <van-icon name="logistics" size="25px"/>
-            </span>
-            <!-- 2.快速退款 -->
-            <span v-if="item.serviceIds && item.serviceIds.includes('2')"
-                  class="van-tag van-tag--plain van-tag--danger">
-              <van-icon name="cash-back-record" size="27px"/>
-            </span>
-            <!-- 3.免费包邮 -->
-            <span v-if="item.serviceIds && item.serviceIds.includes('3')"
-                  class="van-tag van-tag--plain van-tag--danger">
-              <van-icon name="free-postage" size="25px"/>
-            </span>
-          </div>
-        </template>
-      </van-card>
+      <goods-length-card v-for="(item,index) in list" :key="index" :goods-date="item" :toDetails="toDetails"/>
     </div>
 
   </div>
 </template>
 
 <script>
+
+import GoodsLengthCard from "@/components/GoodsLengthCard";
+
 import {Search} from "@/api/GoodsInfoApi";
 
 export default {
+  components: {
+    GoodsLengthCard
+  },
   data() {
     return {
       kw: '',
@@ -196,55 +160,5 @@ export default {
   align-items: center;
   margin-top: -1px;
   font-weight: 300;
-}
-
-.van-card__content span {
-  padding-top: 4px;
-}
-
-/*金额*/
-.van-card__price {
-  font-weight: 500;
-  font-size: 16px;
-  margin-top: 5px;
-}
-
-/*端口标题*/
-.van-card__goodsname {
-  font-weight: 500;
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-/*商品简介，单选/双行显示多的... 替换*/
-.title-class {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-all;
-}
-
-.van-card__detail {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-height: 1.7em;
-}
-
-/*销量*/
-.van-card__num {
-  margin-top: 4px;
-}
-
-/*tag颜色*/
-.van-tag--green {
-  background-color: #22c56f;
-}
-
-/*小标签*/
-.van-tags__div span{
-  margin-right: 5px;
 }
 </style>

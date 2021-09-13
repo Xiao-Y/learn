@@ -28,7 +28,7 @@
         @load="onLoad"
     >
       <div class="goods-list van-clearfix">
-        <GoodsCard v-for="(item,index) in list" :key="index" @viewProduct="viewProduct" :goodsDate="item"/>
+        <goods-card v-for="(item,index) in list" :key="index" @viewProduct="viewProduct" :goods-date="item"/>
       </div>
     </van-list>
     <div class="load-data"></div>

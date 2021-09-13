@@ -3,7 +3,7 @@
     <van-nav-bar :left-arrow="false">
       <van-icon name="arrow-left" slot="left" size="1.5em" @click="$router.back()"/>
       <!-- vant搜索 -->
-      <van-search slot="title" @input="showSearch" @search="onSearch" autofocus shape="round" v-model="kw"
+      <van-search slot="title" @input="showSearch" @search="onSearch" shape="round" v-model="kw"
                   placeholder="请输入搜索关键词">
       </van-search>
       <van-button slot="right" @click="onSearch(kw)" size="small" type="danger"
