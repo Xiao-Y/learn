@@ -2,7 +2,7 @@
   <div class="service" v-if="serviceIds">
     <span class="item" v-if="serviceIds.includes('3')">包邮</span>
     <span class="item" v-if="serviceIds.includes('4')">送运费险</span>
-    <span class="item" v-if="serviceIds.includes('1')">无忧退货</span>
+    <span class="item" v-if="serviceIds.includes('1')">七天包退</span>
     <span class="item" v-if="serviceIds.includes('2')">急速退款</span>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
     font-size: 12px;
     color: #fc603a;
     border: 1px solid;
-    margin-right: 7px;
+    margin-right: 5px;
     padding: 2px;
   }
 }

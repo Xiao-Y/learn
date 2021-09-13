@@ -74,7 +74,7 @@ export default {
     },
     toDetails(id) { //跳转到详情页面
       this.$router.push({
-        path: '/details',
+        name: 'goods',
         query: {
           id
         }

@@ -13,13 +13,7 @@
         <span v-html="$options.filters.priceFormatStyle(goodsItem.lowPrice)"></span>
         <span v-html="$options.filters.priceOldFormatStyle(goodsItem.price)"></span>
       </div>
-      <GoodsService :service-ids="goodsItem.serviceIds" />
-<!--      <div class="service" v-if="goodsItem.serviceIds">-->
-<!--        <span class="item" v-if="goodsItem.serviceIds.includes('3')">包邮</span>-->
-<!--        <span class="item" v-if="goodsItem.serviceIds.includes('4')">送运费险</span>-->
-<!--        <span class="item" v-if="goodsItem.serviceIds.includes('1')">无忧退货</span>-->
-<!--        <span class="item" v-if="goodsItem.serviceIds.includes('2')">急速退款</span>-->
-<!--      </div>-->
+      <goods-service :service-ids="goodsItem.serviceIds"/>
     </div>
   </div>
 </template>
@@ -87,8 +81,8 @@ export default {
 
   .info {
     margin: 5px;
-    font-size: 14px;
-    line-height: 22px;
+    font-size: 12px;
+    line-height: 20px;
 
     .title-tag {
       letter-spacing: 0;
@@ -118,16 +112,6 @@ export default {
       flex-wrap: wrap;
       justify-content: space-between;
     }
-
-    //.service {
-    //  .item {
-    //    font-size: 12px;
-    //    color: #fc603a;
-    //    border: 1px solid;
-    //    margin-right: 7px;
-    //    padding: 2px;
-    //  }
-    //}
   }
 }
 </style>

@@ -147,8 +147,13 @@ export default {
      * @param spuId 商品id
      */
     viewProduct(spuId) {
-      //this.$router.push({name: 'goods'});
       console.info("spuId:", spuId);
+      this.$router.push({
+        name: 'goods',
+        query: {
+          spuId
+        }
+      });
     }
   }
 }
