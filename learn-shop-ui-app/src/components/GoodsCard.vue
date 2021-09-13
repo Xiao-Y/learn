@@ -1,38 +1,35 @@
 <template>
-  <div class="goods-list">
-    <div class="goods-item" v-for="(item,index) in goodsDate" @click="viewProduct(item.id)" :key="index">
-      <div class="pictrue">
-        <img :src="item.pic"/>
+  <div class="goods-item" @click="viewProduct(goodsItem.spuId)">
+    <div class="pictrue">
+      <img :src="goodsItem.pic" alt="商品"/>
+    </div>
+    <div class="info">
+      <div class="title-tag">
+        <span class="tag" v-if="goodsItem.recommandStatus === 1">推荐</span>
+        <span class="goods-name">{{ goodsItem.goodsName }}</span>
+        <span class="goods-details">{{ goodsItem.subTitle }}</span>
       </div>
-      <div class="info">
-        <div class="title-tag">
-          <span class="tag" v-if="item.recommandStatus === 1">推荐</span>
-          <span class="goods-name">{{ item.goodsName }}</span>
-          <span class="goods-details">{{ item.subTitle }}</span>
-        </div>
-        <div class="price-info">
-          <span class="new-price">￥{{ item.lowPrice | priceFormat }}</span>
-          <span class="old-price">￥{{ item.price | priceFormat }}</span>
-        </div>
-        <div class="service" v-if="item.serviceIds">
-          <span class="item" v-if="item.serviceIds.includes('1')">无忧退货</span>
-          <span class="item" v-if="item.serviceIds.includes('2')">快速退款</span>
-          <span class="item" v-if="item.serviceIds.includes('3')">免费包邮</span>
-          <span class="item" v-if="item.serviceIds.includes('4')">送运费险</span>
-        </div>
+      <div class="price-info">
+        <span v-html="$options.filters.priceFormatStyle(goodsItem.lowPrice)"></span>
+        <span class="old-price">￥{{ goodsItem.price | priceFormat }}</span>
+      </div>
+      <div class="service" v-if="goodsItem.serviceIds">
+        <span class="item" v-if="goodsItem.serviceIds.includes('3')">包邮</span>
+        <span class="item" v-if="goodsItem.serviceIds.includes('4')">送运费险</span>
+        <span class="item" v-if="goodsItem.serviceIds.includes('1')">无忧退货</span>
+        <span class="item" v-if="goodsItem.serviceIds.includes('2')">急速退款</span>
       </div>
     </div>
-    <div v-if="!goodsDate || goodsDate.length <= 0">没有啦！！！</div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    goods: {
-      type: Array,
-      default: () => [{
-        id: Number,
+    goodsDate: {
+      type: Object,
+      default: () => ({
+        spuId: String,
         recommandStatus: Number,
         goodsName: String,
         price: Number,
@@ -40,16 +37,20 @@ export default {
         subTitle: String,
         serviceIds: String,
         pic: String
-      }]
+      })
     }
   },
   data() {
     return {
-      goodsDate: []
+      goodsItem: []
     }
   },
   created() {
-    this.goodsDate = this.goods;
+    this.goodsItem = this.goodsDate;
+    // 最多显示两标签
+    if (this.goodsItem.serviceIds) {
+      this.goodsItem.serviceIds = this.goodsItem.serviceIds.substr(0, 3);
+    }
   },
   methods: {
     /**
@@ -65,14 +66,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/*商品列表*/
-.goods-list {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 7px;
-  justify-content: space-between;
-}
-
 .goods-item {
   width: 49%;
   border: 1px solid #CCCCCC;
@@ -119,9 +112,12 @@ export default {
       justify-content: space-between;
 
       .new-price {
-        font-size: 17px;
-        color: #fc603a;
-        font-weight: bold;
+        //font-size: 17px;
+        //color: #fc603a;
+        //font-weight: bold;
+        span{
+          font-size: 12px;
+        }
       }
 
       .old-price {

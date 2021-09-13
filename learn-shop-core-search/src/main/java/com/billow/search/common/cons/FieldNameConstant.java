@@ -20,4 +20,7 @@ public class FieldNameConstant {
     public final static String FIELD_SUB_TITLE = "subTitle";
     public final static String FIELD_DETAIL_TITLE = "detailTitle";
     public final static String FIELD_PRICE_RANGE = "priceRange";
+    public final static String FIELD_NEW_STATUS = "newStatus";
+    public final static String FIELD_RECOMMAND_STATUS = "recommandStatus";
+    public final static String FIELD_PREVIEW_STATUS = "previewStatus";
 }

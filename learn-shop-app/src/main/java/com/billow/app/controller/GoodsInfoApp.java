@@ -2,7 +2,7 @@ package com.billow.app.controller;
 
 import com.billow.app.feign.search.GoodsInfoFeign;
 import com.billow.search.interfaces.commons.CustomPage;
-import com.billow.search.interfaces.search.GoodsInfoSearchParam;
+import com.billow.search.interfaces.pojo.search.GoodsInfoSearchParam;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

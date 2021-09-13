@@ -123,6 +123,15 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
         if (Objects.nonNull(param.getCategoryId())) {
             boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_CATEGORY_ID, param.getCategoryId()));
         }
+        if (Objects.nonNull(param.getNewStatus())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_NEW_STATUS, param.getNewStatus()));
+        }
+        if (Objects.nonNull(param.getRecommandStatus())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_RECOMMAND_STATUS, param.getRecommandStatus()));
+        }
+        if (Objects.nonNull(param.getPreviewStatus())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_PREVIEW_STATUS, param.getPreviewStatus()));
+        }
         // 关键字搜索匹配，分词
         if (StringUtils.isNotBlank(param.getKeyWorlds())) {
             boolQueryBuilder.must(QueryBuilders.multiMatchQuery(param.getKeyWorlds(),

@@ -12,7 +12,7 @@
     <div class="hot-re">热销商品</div>
     <van-grid :column-num="2">
       <van-grid-item
-          v-for="(hotData,index) in hotDatas"
+          v-for="(hotData,index) in goodsDates"
           :key="index"
           @click="viewProduct(hotData.id)">
         <van-image :src="hotData.pic" v-lazy="hotData.pic" style="width:6em;height: 6em"/>
@@ -21,13 +21,24 @@
     <!-- 推荐商品 -->
     <div class="hot-re">推荐商品</div>
     <!--  商品列表  -->
-    <GoodsCard @viewProduct="viewProduct" :goods="hotDatas"/>
+    <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+    >
+      <div class="goods-list van-clearfix">
+        <GoodsCard v-for="(item,index) in list" :key="index" @viewProduct="viewProduct" :goodsDate="item"/>
+      </div>
+    </van-list>
     <div class="load-data"></div>
     <tobbar/>
   </div>
 </template>
 
 <script>
+import {Search} from '@/api/GoodsInfoApi';
+
 import Tobbar from "../components/Tobbar";
 import Navbar from "../components/Navbar";
 import GoodsCard from "../components/GoodsCard";
@@ -38,6 +49,10 @@ export default {
   },
   data() {
     return {
+      page: 1,
+      list: [],//推荐商品数据
+      loading: false,// 当loading为true时，转圈圈
+      finished: false,// 数据是否请求结束，结束会先显示- 没有更多了 -
       // 轮播图
       swipeImages: [
         'https://img.yzcdn.cn/vant/apple-1.jpg',
@@ -50,73 +65,83 @@ export default {
       // 搜索关键字
       searchKey: '',
       // 热销商品
-      hotDatas: [{
+      goodsDates: [{
         id: 2,
         recommandStatus: 1,
-        goodsName: '1231',
+        goodsName: '资讯类的项目',
         price: 1231,
         lowPrice: 1200,
-        subTitle: '1231',
+        subTitle: '数据绑定最常见的形式就是使用“Mustache”语法',
         serviceIds: '2,3,4',
         pic: 'https://img.yzcdn.cn/vant/apple-1.jpg'
       }, {
         id: 3,
         recommandStatus: 1,
-        goodsName: '1231',
+        goodsName: '数据绑定最常见的形式就是使用“Mustache”语法',
         price: 1231,
         lowPrice: 1200,
-        subTitle: '1231',
+        subTitle: '数据绑定最常见的形式就是使用“Mustache”语法',
         serviceIds: '1,3,4',
         pic: 'https://img.yzcdn.cn/vant/apple-2.jpg'
       }, {
         id: 1,
         recommandStatus: 1,
-        goodsName: '1231',
+        goodsName: '资讯类的项目',
         price: 1231,
         lowPrice: 1200,
-        subTitle: '1231',
+        subTitle: '数据绑定最常见的形式就是使用“Mustache”语法',
         serviceIds: '1',
         pic: 'https://img.yzcdn.cn/vant/apple-3.jpg'
       }, {
         id: 4,
         recommandStatus: 1,
-        goodsName: '1231',
+        goodsName: '资讯类的项目',
         price: 1231,
         lowPrice: 1200,
-        subTitle: '1231',
+        subTitle: '数据绑定最常见的形式就是使用“Mustache”语法',
         serviceIds: '1,2',
         pic: 'https://img.yzcdn.cn/vant/apple-4.jpg'
       }, {
         id: 5,
         recommandStatus: 0,
-        goodsName: '1231',
+        goodsName: '资讯类的项目',
         price: 1231,
         lowPrice: 1200,
-        subTitle: '1231',
+        subTitle: '数据绑定最常见的形式就是使用“Mustache”语法',
         serviceIds: '1,2,3',
         pic: 'https://img.yzcdn.cn/vant/apple-5.jpg'
-      }, {
-        id: 6,
-        recommandStatus: 0,
-        goodsName: '1231',
-        price: 1231,
-        lowPrice: 1200,
-        subTitle: '1231',
-        serviceIds: '1,2,4',
-        pic: 'https://img.yzcdn.cn/vant/apple-6.jpg'
-      },]
+      }]
     }
   },
   methods: {
+    onLoad() {
+      Search({}, this.page).then(res => {
+        // 加载状态结束
+        this.loading = false;
+        const tableData = res.resData.tableData;
+        console.info(tableData);
+        if (tableData && tableData.length > 0) {
+          this.list = this.list.concat(tableData);
+          // 页码加1
+          this.page++;
+        } else {
+          // 数据全部加载完成
+          this.finished = true;
+        }
+      })
+    },
     onSearch() {
       this.$toast("搜索...");
-    },
+    }
+    ,
     onClickLeft() {
       this.$toast("登陆...");
-    },
+    }
+    ,
     onClickRight() {
       this.$toast("二维码...");
-    },
+    }
+    ,
     /**
      * 查看商品详细信息
      * @param spuId 商品id
@@ -135,6 +160,14 @@ export default {
   margin-left: 0.2em;
   color: #8c939d;
   font-size: 14px;
+}
+
+/*商品列表*/
+.goods-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 7px;
+  justify-content: space-between;
 }
 
 .load-data {

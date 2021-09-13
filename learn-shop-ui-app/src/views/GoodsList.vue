@@ -33,12 +33,14 @@
       <van-card
           v-for="(item,index) in list"
           :key="index"
-          :price="item.lowPrice | priceFormat"
           :origin-price="item.price | priceFormat"
           :thumb="item.pic"
           @click="toDetails(item.id)">
         <template #num>
           <span>30天销量：{{ item.sale }}</span>
+        </template>
+        <template #price>
+          <span v-html="$options.filters.priceFormatStyle(item.lowPrice)"></span>
         </template>
         <template #title>
           <span class="van-card__goodsname">{{ item.goodsName }}/{{ item.subTitle }}</span>
