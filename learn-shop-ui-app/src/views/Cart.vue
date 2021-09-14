@@ -9,7 +9,6 @@
 <!--        @click-left="onClickLeft"-->
 <!--    />-->
     <!-- 标题 -->
-    <navbar/>
     <div>
       <van-checkbox-group class="card-goods" v-model="checkedGoods" ref="itemCheckGroup">
         <div v-for="item in goods" :key="item.id" :name="item.id" class="card-goods__item">
@@ -45,11 +44,10 @@
 
 <script>
 import Tobbar from "../components/Tobbar";
-import Navbar from "@/components/Navbar";
 
 export default {
   components: {
-    Tobbar, Navbar
+    Tobbar
   },
   data() {
     return {

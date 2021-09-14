@@ -1,16 +1,15 @@
 <template>
   <div>
-    <!-- vant搜索 -->
-    <van-search @input="showSearch" @search="onSearch" autofocus show-action shape="round" v-model="kw"
-                placeholder="请输入搜索关键词">
-      <template #left>
-        <van-icon @click="back" style="margin-right: 5px;" size="22px" name="arrow-left"/>
-      </template>
-      <template #action>
-        <van-button @click="onSearch(kw)" size="small" type="danger" style="border-radius: 5px; font-size: 14px;">搜索
-        </van-button>
-      </template>
-    </van-search>
+    <van-nav-bar :left-arrow="false">
+      <van-icon name="arrow-left" slot="left" size="1.5em" @click="$router.back()"/>
+      <!-- vant搜索 -->
+      <van-search slot="title" @input="showSearch" @search="onSearch" shape="round" v-model="kw"
+                  placeholder="请输入搜索关键词">
+      </van-search>
+      <van-button slot="right" @click="onSearch(kw)" size="small" type="danger"
+                  style="border-radius: 5px; font-size: 14px;">搜索
+      </van-button>
+    </van-nav-bar>
     <!-- 搜索记录 -->
     <div v-show="isShow">
       <div style="display: flex; justify-content: space-between; padding: 5px;">
@@ -102,4 +101,11 @@ export default {
 </script>
 
 <style>
+.van-nav-bar {
+  line-height: 40px;
+}
+.van-nav-bar__title{
+  margin-left: 45px;
+  max-width: 67%;
+}
 </style>

@@ -20,7 +20,6 @@ import Tobbar from "../components/Tobbar";
 import Navbar from "../components/Navbar";
 
 import {FindCategoryTree} from '@/api/GoodsCategoryApi';
-import {Search} from '@/api/GoodsInfoApi';
 
 export default {
   components: {
@@ -58,10 +57,13 @@ export default {
     },
     // 点击右侧分类
     onClickItem({id = 0}) {
-      console.info(id);
-      Search({"categoryId": id}).then(res => {
-        console.info(res.resData);
-      });
+      //点击跳转到列表页，并把输入的值传过去
+      this.$router.push({
+        path: '/goodsList',
+        query: {
+          categoryId: id
+        }
+      })
     },
     // 获取分类树
     getCategoryTree(obj, activityIndex) {

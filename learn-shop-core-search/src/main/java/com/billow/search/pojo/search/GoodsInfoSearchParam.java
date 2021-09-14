@@ -34,6 +34,15 @@ public class GoodsInfoSearchParam implements Serializable {
     @ApiModelProperty(value = "品牌分类id")
     private Long categoryId;
 
+    @ApiModelProperty(value = "新品状态:0->不是新品；1->新品")
+    private Integer newStatus;
+
+    @ApiModelProperty(value = "推荐状态；0->不推荐；1->推荐")
+    private Integer recommandStatus;
+
+    @ApiModelProperty(value = "是否为预告商品：0->不是；1->是")
+    private Integer previewStatus;
+
     @ApiModelProperty(value = "价格范围，格式：12~15（大于等于12，小于等于15），~15（小于15），12~（大于12）")
     private String price;
 }

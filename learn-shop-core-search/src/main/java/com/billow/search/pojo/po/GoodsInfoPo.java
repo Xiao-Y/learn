@@ -81,6 +81,7 @@ public class GoodsInfoPo {
     private String detailTitle;
 
     @ApiModelProperty(value = "图片")
+    @Field(index = false)
     private String pic;
 
     @ApiModelProperty(value = "新品状态:0->不是新品；1->新品")
@@ -126,6 +127,7 @@ public class GoodsInfoPo {
 
     @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
     @JSONField(name = "album_pics")
+    @Field(index = false)
     private String albumPics;
 
     @ApiModelProperty(value = "商品排序")

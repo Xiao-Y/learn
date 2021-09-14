@@ -2,7 +2,7 @@ package com.billow.search.interfaces.api;
 
 import com.billow.search.interfaces.commons.CustomPage;
 import com.billow.search.interfaces.constant.ContextPath;
-import com.billow.search.interfaces.search.GoodsInfoSearchParam;
+import com.billow.search.interfaces.pojo.search.GoodsInfoSearchParam;
 import com.billow.tools.resData.BaseResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -22,14 +22,12 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -125,6 +123,15 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
         if (Objects.nonNull(param.getCategoryId())) {
             boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_CATEGORY_ID, param.getCategoryId()));
         }
+        if (Objects.nonNull(param.getNewStatus())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_NEW_STATUS, param.getNewStatus()));
+        }
+        if (Objects.nonNull(param.getRecommandStatus())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_RECOMMAND_STATUS, param.getRecommandStatus()));
+        }
+        if (Objects.nonNull(param.getPreviewStatus())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_PREVIEW_STATUS, param.getPreviewStatus()));
+        }
         // 关键字搜索匹配，分词
         if (StringUtils.isNotBlank(param.getKeyWorlds())) {
             boolQueryBuilder.must(QueryBuilders.multiMatchQuery(param.getKeyWorlds(),
@@ -163,7 +170,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
                 .withQuery(boolQueryBuilder)
                 .withPageable(pageRequest)
-                .withHighlightBuilder(highlightBuilder)
+//                .withHighlightBuilder(highlightBuilder)
                 .build();
         SearchHits<GoodsInfoPo> searchHits = template.search(nativeSearchQuery, GoodsInfoPo.class);
         return EsPageUtils.page(searchHits, pageSize);
