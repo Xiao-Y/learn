@@ -14,7 +14,7 @@
       <van-grid-item
           v-for="(hotData,index) in goodsDates"
           :key="index"
-          @click="viewProduct(hotData.id)">
+          @click="toDetails(hotData.id)">
         <van-image :src="hotData.pic" v-lazy="hotData.pic" style="width:6em;height: 6em"/>
       </van-grid-item>
     </van-grid>
@@ -28,7 +28,7 @@
         @load="onLoad"
     >
       <div class="goods-list van-clearfix">
-        <goods-card v-for="(item,index) in list" :key="index" @viewProduct="viewProduct" :goods-date="item"/>
+        <goods-card v-for="(item,index) in list" :key="index" @toDetails="toDetails" :goods-date="item"/>
       </div>
     </van-list>
     <div class="load-data"></div>
@@ -62,8 +62,6 @@ export default {
         'https://img.yzcdn.cn/vant/apple-5.jpg',
         'https://img.yzcdn.cn/vant/apple-6.jpg'
       ],
-      // 搜索关键字
-      searchKey: '',
       // 热销商品
       goodsDates: [{
         id: 2,
@@ -146,8 +144,7 @@ export default {
      * 查看商品详细信息
      * @param spuId 商品id
      */
-    viewProduct(spuId) {
-      console.info("spuId:", spuId);
+    toDetails(spuId) {
       this.$router.push({
         name: 'goods',
         query: {

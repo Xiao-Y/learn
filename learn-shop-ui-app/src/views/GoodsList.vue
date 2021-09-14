@@ -3,8 +3,7 @@
     <!-- vant搜索 -->
     <van-nav-bar :left-arrow="false">
       <van-icon name="arrow-left" slot="left" size="1.5em" @click="$router.back()"/>
-      <van-search slot="title" @search="toSearch" autofocus shape="round" v-model="kw"
-                  placeholder="请输入搜索关键词">
+      <van-search slot="title" autofocus shape="round" v-model="kw" placeholder="请输入搜索关键词" @click="toSearch">
       </van-search>
     </van-nav-bar>
     <!-- 排序 -->
@@ -30,7 +29,7 @@
 
     <div style="margin-top: 65px;">
       <!-- 商品卡片 -->
-      <goods-length-card v-for="(item,index) in list" :key="index" :goods-date="item" :toDetails="toDetails"/>
+      <goods-length-card v-for="(item,index) in list" :key="index" :goods-date="item" @toDetails="toDetails"/>
     </div>
 
   </div>
@@ -48,7 +47,8 @@ export default {
   },
   data() {
     return {
-      kw: '',
+      kw: null,
+      categoryId: null,
       list: [],
       value1: -1,
       option1: [
@@ -60,9 +60,10 @@ export default {
     }
   },
   mounted() {
-    this.kw = this.$route.query.kw //把搜索页面搜索的值传过来
+    this.kw = this.$route.query.kw //把搜索页面传过来
+    const categoryId = this.$route.query.categoryId //把分类页面传过来
     // let id = this.$route.query.id
-    Search({"keyWorlds": this.kw}).then(res => {
+    Search({"keyWorlds": this.kw, "categoryId": categoryId}).then(res => {
       this.list = res.resData.tableData;
     });
   },
@@ -76,7 +77,7 @@ export default {
       this.$router.push({
         name: 'goods',
         query: {
-          id
+          spuId: id
         }
       })
     },

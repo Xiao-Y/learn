@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item" @click="viewProduct(goodsItem.spuId)">
+  <div class="goods-item" @click="toDetails(goodsItem.spuId)">
     <div class="pictrue">
       <img v-lazy="goodsItem.pic" alt="商品"/>
     </div>
@@ -58,8 +58,8 @@ export default {
      * 查看商品详细信息
      * @param spuId 商品id
      */
-    viewProduct(spuId) {
-      this.$emit('viewProduct', spuId);
+    toDetails(spuId) {
+      this.$emit('toDetails', spuId);
     }
   }
 }

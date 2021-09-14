@@ -50,16 +50,15 @@
       <van-goods-action-icon icon="cart-o" @click="onClickCart">
         购物车
       </van-goods-action-icon>
-      <van-goods-action-button type="warning" @click="onAddCart">
+      <van-goods-action-button type="warning" @click="onViewSuk">
         加入购物车
       </van-goods-action-button>
-      <van-goods-action-button type="danger" @click="onBuyNow">
+      <van-goods-action-button type="danger" @click="onViewSuk">
         立即购买
       </van-goods-action-button>
     </van-goods-action>
-
     <!-- sku -->
-    <coustomSuk v-model="showSuk" v-if="showSuk"/>
+    <coustomSuk v-model="showSuk" v-if="showSuk" :goods-data="goods" @onAddCart="onAddCart"/>
   </div>
 
 </template>
@@ -79,7 +78,7 @@ export default {
   data() {
     return {
       goods: {
-        spuId: 0,
+        id: 0,
         brandName: null, // 品牌名称
         spuNo: null, // 商品编号
         goodsName: null, // 商品名称
@@ -120,14 +119,12 @@ export default {
     onClickLeft() {
       this.$router.back();
     },
-    onAddCart() {
+    onAddCart({goodsId = null, skuId = null, selectedNum = null}) {
       this.$toast({
         icon: 'cart-circle-o',
         duration: 600
       });
-    },
-    onBuyNow() {
-
+      console.info("goods:", goodsId, skuId, selectedNum);
     },
     onViewSuk() {
       this.showSuk = true;
