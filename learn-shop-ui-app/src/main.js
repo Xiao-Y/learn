@@ -24,7 +24,7 @@ import {
     Button, Dialog, Icon, Tabbar, TabbarItem, Panel, Grid, GridItem, Collapse, CollapseItem, Divider, Image,
     AddressList, AddressEdit, Area, NavBar, Swipe, SwipeItem, Lazyload, Search, Card, Tag, Col, Cell, CellGroup,
     GoodsAction, GoodsActionIcon, GoodsActionButton, Checkbox, SubmitBar, CheckboxGroup, CouponCell, CouponList,
-    Popup, Stepper, Sku, TreeSelect, DropdownMenu, DropdownItem, Skeleton,List
+    Popup, Stepper, Sku, TreeSelect, DropdownMenu, DropdownItem, Skeleton,List,ImagePreview
 } from 'vant';
 
 Vue.use(Button)
@@ -58,6 +58,7 @@ Vue.use(Button)
     .use(TreeSelect)
     .use(Skeleton)
     .use(List)
+    .use(ImagePreview)
     .use(Grid).use(GridItem);
 
 Vue.config.productionTip = false;

@@ -5,16 +5,9 @@
         left-text="返回"
         left-arrow
         @click-left="onClickLeft"/>
-    <van-swipe class="goods-swipe" :autoplay="3000">
-      <van-swipe-item v-for="(thumb,index) in goods.albumPics" :key="index">
-        <img v-lazy="thumb" alt="轮播图" :src="thumb" height="270px"/>
-      </van-swipe-item>
-    </van-swipe>
-    <van-grid square clickable :column-num="8">
-      <van-grid-item v-for="(thumb,index) in goods.albumPics" :key="index" @click="selectGridItem(index)">
-        <van-image :src="thumb" fit="contain" height="100%" width="100%" :class="{active:checkIndex===index}"/>
-      </van-grid-item>
-    </van-grid>
+    <!-- 轮播图片 -->
+    <good-swipe :spu-pics="goods.albumPics" :sku-pics="goods.albumPics"/>
+
     <van-cell-group>
       <van-cell>
         <div class="goods-title">{{ goods.goodsName }} {{ goods.subTitle }} {{ goods.detailTitle }}</div>
@@ -36,28 +29,17 @@
           剩余：{{ goods.sale }}
         </van-col>
       </van-cell>
-    </van-cell-group>
-    <van-cell-group class="goods-cell-group">
       <van-cell title="服务保障" icon="service-o" is-link @click="sorry">
         <goods-service :service-ids="goods.serviceIds"/>
       </van-cell>
-    </van-cell-group>
-
-    <van-cell-group class="goods-cell-group">
       <van-cell value="进入店铺" icon="shop-o" is-link @click="sorry">
         <template slot="title">
           <span class="van-cell-text">有赞的店</span>
           <van-tag class="goods-tag" type="danger">官方</van-tag>
         </template>
       </van-cell>
-    </van-cell-group>
-
-    <van-cell-group class="goods-cell-group">
       <van-cell title="规格选择" icon="discount" is-link @click="onViewSuk"/>
       <van-cell title="商品参数" icon="setting-o" is-link @click="sorry"/>
-    </van-cell-group>
-
-    <van-cell-group class="goods-cell-group">
       <van-cell title="宝贝评价" icon="edit" is-link @click="sorry">暂无评价</van-cell>
     </van-cell-group>
 
@@ -88,10 +70,11 @@ import {GetById} from '@/api/GoodsSpuApi';
 
 import CoustomSuk from '@/components/Sku';
 import GoodsService from "@/components/GoodsService";
+import GoodSwipe from "@/components/GoodSwipe";
 
 export default {
   components: {
-    CoustomSuk, GoodsService
+    CoustomSuk, GoodsService, GoodSwipe
   },
   data() {
     return {
@@ -115,7 +98,6 @@ export default {
         serviceIds: null, // 以逗号分割的产品服务：1->无忧退货；2->快速退款；3->免费包邮
         albumPics: [] // 画册图片，连产品图片限制为5张，以逗号分割
       },
-      checkIndex: 0, // 选中小图标的下标
       showSuk: false,
     };
   },
@@ -125,16 +107,10 @@ export default {
       let data = res.resData;
       Object.assign(this.goods, data);
       this.goods.albumPics = data.albumPics.split("，");
+      this.goods.albumPics = this.goods.albumPics.slice(0, 8);
     });
   },
   methods: {
-    selectGridItem(index) {
-      if (this.checkIndex === index) {
-        this.checkIndex = null;
-      } else {
-        this.checkIndex = index;
-      }
-    },
     onClickCart() {
       this.$router.push('cart');
     },
@@ -162,32 +138,15 @@ export default {
 
 <style lang="less">
 .van-nav-bar {
+  /*头部标签*/
+
   &__title {
     margin: auto;
   }
 }
 
-/*设置小图片大小*/
-.van-grid-item {
-  &__content {
-    padding: 3px 2px;
-  }
-}
-
-/*小图片选中的边框*/
-.active {
-  border: 2px solid #fc603a;
-}
-
 .goods {
   padding-bottom: 50px;
-
-  &-swipe {
-    img {
-      width: 100%;
-      display: block;
-    }
-  }
 
   &-title {
     font-size: 14px;
