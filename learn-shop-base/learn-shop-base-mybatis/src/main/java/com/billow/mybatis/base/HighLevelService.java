@@ -10,7 +10,8 @@ import com.billow.mybatis.pojo.BasePage;
  * @author liuyongtao
  * @since 2021-8-12 14:33
  */
-public interface HighLevelService<E, SP extends BasePage> extends IService<E> {
+public interface HighLevelService<E, SP extends BasePage> extends IService<E>
+{
 
     /**
      * 分页查询

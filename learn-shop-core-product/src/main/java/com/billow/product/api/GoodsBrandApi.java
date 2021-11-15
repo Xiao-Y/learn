@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsBrandBuildParam;
 import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.search.GoodsBrandSearchParam;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"GoodsBrandApi"},value = "品牌表")
 @RestController
 @RequestMapping("/goodsBrandApi")
-public class GoodsBrandApi extends HighLevelApi<GoodsBrandService, GoodsBrandPo, GoodsBrandVo, GoodsBrandBuildParam, GoodsBrandSearchParam> {
+public class GoodsBrandApi extends HighLevelApi<GoodsBrandService, GoodsBrandPo, GoodsBrandVo, GoodsBrandBuildParam, GoodsBrandSearchParam>
+{
 
 }

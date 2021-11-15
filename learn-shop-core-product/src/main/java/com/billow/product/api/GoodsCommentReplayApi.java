@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsCommentReplayBuildParam;
 import com.billow.product.pojo.po.GoodsCommentReplayPo;
 import com.billow.product.pojo.search.GoodsCommentReplaySearchParam;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"GoodsCommentReplayApi"},value = "产品评价回复表")
 @RestController
 @RequestMapping("/goodsCommentReplayApi")
-public class GoodsCommentReplayApi extends HighLevelApi<GoodsCommentReplayService, GoodsCommentReplayPo, GoodsCommentReplayVo, GoodsCommentReplayBuildParam, GoodsCommentReplaySearchParam> {
+public class GoodsCommentReplayApi extends HighLevelApi<GoodsCommentReplayService, GoodsCommentReplayPo, GoodsCommentReplayVo, GoodsCommentReplayBuildParam, GoodsCommentReplaySearchParam>
+{
 
 }

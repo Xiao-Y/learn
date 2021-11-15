@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsSpuSpecBuildParam;
 import com.billow.product.pojo.search.GoodsSpuSpecSearchParam;
 import com.billow.product.pojo.po.GoodsSpuSpecPo;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"GoodsSpuSpecApi"},value = "spu规格表")
 @RestController
 @RequestMapping("/goodsSpuSpecApi")
-public class GoodsSpuSpecApi extends HighLevelApi<GoodsSpuSpecService, GoodsSpuSpecPo, GoodsSpuSpecVo, GoodsSpuSpecBuildParam, GoodsSpuSpecSearchParam> {
+public class GoodsSpuSpecApi extends HighLevelApi<GoodsSpuSpecService, GoodsSpuSpecPo, GoodsSpuSpecVo, GoodsSpuSpecBuildParam, GoodsSpuSpecSearchParam>
+{
 
 }

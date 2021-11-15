@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsSkuSafeguardBuildParam;
 import com.billow.product.pojo.po.GoodsSkuSafeguardPo;
 import com.billow.product.pojo.search.GoodsSkuSafeguardSearchParam;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"GoodsSkuSafeguardApi"},value = "sku增值保障")
 @RestController
 @RequestMapping("/goodsSkuSafeguardApi")
-public class GoodsSkuSafeguardApi extends HighLevelApi<GoodsSkuSafeguardService, GoodsSkuSafeguardPo, GoodsSkuSafeguardVo, GoodsSkuSafeguardBuildParam, GoodsSkuSafeguardSearchParam> {
+public class GoodsSkuSafeguardApi extends HighLevelApi<GoodsSkuSafeguardService, GoodsSkuSafeguardPo, GoodsSkuSafeguardVo, GoodsSkuSafeguardBuildParam, GoodsSkuSafeguardSearchParam>
+{
 
 }

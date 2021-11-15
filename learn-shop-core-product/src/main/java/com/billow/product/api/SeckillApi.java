@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.product.api.HighLevelApi;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.SeckillBuildParam;
 import com.billow.product.pojo.po.SeckillPo;
 import com.billow.product.pojo.search.SeckillSearchParam;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"SeckillApi"},value = "限时购表。用于存储限时购活动的信息，包括开始时间、结束时间以及上下线状态。")
 @RestController
 @RequestMapping("/seckillApi")
-public class SeckillApi extends HighLevelApi<SeckillService, SeckillPo, SeckillVo, SeckillBuildParam, SeckillSearchParam> {
+public class SeckillApi extends HighLevelApi<SeckillService, SeckillPo, SeckillVo, SeckillBuildParam, SeckillSearchParam>
+{
 
 }

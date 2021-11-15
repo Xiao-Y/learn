@@ -1,6 +1,7 @@
 package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsSpecKeyBuildParam;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.search.GoodsSpecKeySearchParam;
@@ -37,7 +38,8 @@ import java.util.List;
 @Api(tags = {"GoodsSpecKeyApi"},value = "规格表")
 @RestController
 @RequestMapping("/goodsSpecKeyApi")
-public class GoodsSpecKeyApi extends HighLevelApi<GoodsSpecKeyService, GoodsSpecKeyPo, GoodsSpecKeyVo, GoodsSpecKeyBuildParam, GoodsSpecKeySearchParam> {
+public class GoodsSpecKeyApi extends HighLevelApi<GoodsSpecKeyService, GoodsSpecKeyPo, GoodsSpecKeyVo, GoodsSpecKeyBuildParam, GoodsSpecKeySearchParam>
+{
 
     @Autowired
     private GoodsSpecKeyService goodsSpecKeyService;

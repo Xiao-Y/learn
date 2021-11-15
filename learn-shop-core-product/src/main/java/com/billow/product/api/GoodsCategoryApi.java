@@ -2,6 +2,7 @@ package com.billow.product.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.ex.SelectEx;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsCategoryBuildParam;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.search.GoodsCategorySearchParam;
@@ -42,7 +43,8 @@ import java.util.stream.Collectors;
 @Api(tags = {"GoodsCategoryApi"}, value = "分类表")
 @RestController
 @RequestMapping("/goodsCategoryApi")
-public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCategoryPo, GoodsCategoryVo, GoodsCategoryBuildParam, GoodsCategorySearchParam> {
+public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCategoryPo, GoodsCategoryVo, GoodsCategoryBuildParam, GoodsCategorySearchParam>
+{
 
     @Autowired
     private GoodsCategoryService goodsCategoryService;

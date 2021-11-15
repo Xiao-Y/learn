@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsSkuBuildParam;
 import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.search.GoodsSkuSearchParam;
@@ -30,7 +31,8 @@ import java.util.Map;
 @Api(tags = {"GoodsSkuApi"}, value = "sku表（stock keeping uint 库存量单位）")
 @RestController
 @RequestMapping("/goodsSkuApi")
-public class GoodsSkuApi extends HighLevelApi<GoodsSkuService, GoodsSkuPo, GoodsSkuVo, GoodsSkuBuildParam, GoodsSkuSearchParam> {
+public class GoodsSkuApi extends HighLevelApi<GoodsSkuService, GoodsSkuPo, GoodsSkuVo, GoodsSkuBuildParam, GoodsSkuSearchParam>
+{
 
     @Autowired
     private GoodsSkuService goodsSkuService;

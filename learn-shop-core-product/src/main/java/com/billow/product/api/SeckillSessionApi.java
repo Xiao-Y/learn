@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.product.api.HighLevelApi;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.SeckillSessionBuildParam;
 import com.billow.product.pojo.po.SeckillSessionPo;
 import com.billow.product.pojo.search.SeckillSessionSearchParam;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"SeckillSessionApi"},value = "限时购场次表。用于存储限时购场次的信息，在一天中，一个限时购活动会有多个不同的活动时间段。")
 @RestController
 @RequestMapping("/seckillSessionApi")
-public class SeckillSessionApi extends HighLevelApi<SeckillSessionService, SeckillSessionPo, SeckillSessionVo, SeckillSessionBuildParam, SeckillSessionSearchParam> {
+public class SeckillSessionApi extends HighLevelApi<SeckillSessionService, SeckillSessionPo, SeckillSessionVo, SeckillSessionBuildParam, SeckillSessionSearchParam>
+{
 
 }

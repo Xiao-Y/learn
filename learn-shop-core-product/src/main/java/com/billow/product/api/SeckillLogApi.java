@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.product.api.HighLevelApi;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.SeckillLogBuildParam;
 import com.billow.product.pojo.po.SeckillLogPo;
 import com.billow.product.pojo.search.SeckillLogSearchParam;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"SeckillLogApi"},value = "限时购通知记录表。用于存储会员的限时购预约记录，当有的限时购场次还未开始时，会员可以进行预约操作，当场次开始时，系统会进行提醒。")
 @RestController
 @RequestMapping("/seckillLogApi")
-public class SeckillLogApi extends HighLevelApi<SeckillLogService, SeckillLogPo, SeckillLogVo, SeckillLogBuildParam, SeckillLogSearchParam> {
+public class SeckillLogApi extends HighLevelApi<SeckillLogService, SeckillLogPo, SeckillLogVo, SeckillLogBuildParam, SeckillLogSearchParam>
+{
 
 }
