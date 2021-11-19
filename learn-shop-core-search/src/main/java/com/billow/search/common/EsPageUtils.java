@@ -6,9 +6,9 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author liuyongtao
@@ -33,20 +33,20 @@ public class EsPageUtils {
         long size = page.getRecordCount() / pageSize;
         size = (page.getRecordCount() % pageSize) == 0 ? size : (size + 1);
         page.setTotalPages(size);
-        List<T> contents = new ArrayList<>();
         // 高亮处理
         List<SearchHit<T>> list = searchHits.getSearchHits();
-        for (SearchHit<T> hit : list) {
+
+        List<T> contents = list.stream().map(m -> {
             // 单个内容
-            T content = hit.getContent();
-            Map<String, List<String>> highlightFields = hit.getHighlightFields();
-            if (MapUtils.isNotEmpty(highlightFields)) {
-                for (Map.Entry<String, List<String>> entry : highlightFields.entrySet()) {
-                    FieldUtils.setStrValue(content, entry.getKey(), entry.getValue().get(0));
-                }
+            T content = m.getContent();
+            // 高亮设置
+            Map<String, List<String>> highlightFields = m.getHighlightFields();
+            if (MapUtils.isNotEmpty(highlightFields))
+            {
+                highlightFields.forEach((k, v) -> FieldUtils.setStrValue(content, k, v.get(0)));
             }
-            contents.add(content);
-        }
+            return content;
+        }).collect(Collectors.toList());
         page.setTableData(contents);
         return page;
     }
