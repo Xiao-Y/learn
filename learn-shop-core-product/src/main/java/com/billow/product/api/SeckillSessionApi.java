@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.product.api.HighLevelApi;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.SeckillSessionBuildParam;
 import com.billow.product.pojo.po.SeckillSessionPo;
 import com.billow.product.pojo.search.SeckillSessionSearchParam;

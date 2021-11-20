@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsOperateLogBuildParam;
 import com.billow.product.pojo.po.GoodsOperateLogPo;
 import com.billow.product.pojo.search.GoodsOperateLogSearchParam;

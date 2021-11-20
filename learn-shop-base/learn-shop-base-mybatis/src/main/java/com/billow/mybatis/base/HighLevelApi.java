@@ -1,13 +1,15 @@
-package com.billow.order.api;
+package com.billow.mybatis.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
-import com.billow.common.base.BaseApi;
-import com.billow.mybatis.base.HighLevelService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.pojo.BasePage;
+import com.billow.mybatis.utils.SqlUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 高级公用方法
  *
@@ -23,7 +27,10 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @since 2021-8-12 14:23
  */
 @Slf4j
-public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> extends BaseApi {
+public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> {
+
+    @Autowired
+    protected HttpServletRequest request;
 
     @Autowired
     private S service;
@@ -36,7 +43,14 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
     @ApiOperation(value = "分页查询表数据")
     @PostMapping(value = "/findListByPage")
     public IPage<E> findListByPage(@RequestBody SP sp) {
-        return service.findListByPage(sp);
+        // 分页
+        Page<E> page = new Page<>(sp.getPageNo(), sp.getPageSize());
+        // 排序
+        if (StringUtils.isNotEmpty(sp.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(sp.getOrderBy());
+            page.addOrder(new OrderItem(orderBy, sp.getIsAsc()));
+        }
+        return service.findListByPage(page, sp);
     }
 
     @ApiOperation(value = "根据id查询表数据")

@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsVertifyRecordBuildParam;
 import com.billow.product.pojo.vo.GoodsVertifyRecordVo;
 import com.billow.product.pojo.search.GoodsVertifyRecordSearchParam;

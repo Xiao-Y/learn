@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsSpuBuildParam;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.search.GoodsSpuSearchParam;

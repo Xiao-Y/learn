@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsCommentReplayBuildParam;
 import com.billow.product.pojo.po.GoodsCommentReplayPo;
 import com.billow.product.pojo.search.GoodsCommentReplaySearchParam;

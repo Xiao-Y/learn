@@ -1,6 +1,5 @@
 package com.billow.mybatis.pojo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
@@ -14,19 +13,51 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public abstract class BasePage implements Serializable {
 
-    private static final Integer PAGE_SIZE = 10; // 每页要显示的记录数
-    private static final Integer PAGE_NO = 1; // 当前页号
-    private static final Integer RECORD_COUNT = 0; // 总记录数
+    /**
+     * 每页要显示的记录数
+     *
+     * @author xiaoy
+     * @since 2021/11/20 9:48
+     */
+    public static final Integer PAGE_SIZE = 10;
+    /**
+     * 当前页号
+     *
+     * @author xiaoy
+     * @since 2021/11/20 9:48
+     */
+    public static final Integer PAGE_NO = 1;
 
-    // 每页要显示的记录数
-    @TableField(exist = false)
+    /**
+     * 每页要显示的记录数
+     *
+     * @author xiaoy
+     * @since 2021/11/20 10:00
+     */
     private Integer pageSize = PAGE_SIZE;
-    // "当前页号"
-    @TableField(exist = false)
+    /**
+     * 当前页号
+     *
+     * @author xiaoy
+     * @since 2021/11/20 10:00
+     */
     private Integer pageNo = PAGE_NO;
-    // "总记录数"
-    @TableField(exist = false)
-    private Integer recordCount = RECORD_COUNT;
+
+    /**
+     * 分页字段（对象名称）
+     *
+     * @author xiaoy
+     * @since 2021/11/20 10:01
+     */
+    private String orderBy;
+
+    /**
+     * 是否正序排序
+     *
+     * @author xiaoy
+     * @since 2021/11/20 10:01
+     */
+    private boolean isAsc = true;
 
     /**
      * 每页要显示的记录数
@@ -51,7 +82,7 @@ public abstract class BasePage implements Serializable {
     }
 
     /**
-     * 当前页号(从1开始的，所以要-1)
+     * 当前页号，从0开始
      *
      * @return
      * @author XiaoY
@@ -77,34 +108,19 @@ public abstract class BasePage implements Serializable {
         }
     }
 
-    /**
-     * 总记录数
-     *
-     * @return
-     * @author XiaoY
-     * @date: 2016年12月3日 下午3:56:56
-     */
-    public Integer getRecordCount() {
-        return recordCount;
+    public String getOrderBy() {
+        return orderBy;
     }
 
-    /**
-     * 总记录数
-     *
-     * @param recordCount
-     * @author XiaoY
-     * @date: 2016年12月3日 下午3:56:59
-     */
-    public void setRecordCount(Integer recordCount) {
-        this.recordCount = recordCount;
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 
-    @Override
-    public String toString() {
-        return "BasePage{" +
-                "pageSize=" + pageSize +
-                ", pageNo=" + pageNo +
-                ", recordCount=" + recordCount +
-                '}';
+    public boolean getIsAsc() {
+        return isAsc;
+    }
+
+    public void setIsAsc(boolean isAsc) {
+        this.isAsc = isAsc;
     }
 }

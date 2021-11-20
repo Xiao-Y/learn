@@ -41,6 +41,10 @@ public class GoodsInfoApp {
                                     @RequestParam(value = "pageSize", defaultValue = "2") Integer pageSize,
                                     @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) {
         log.info("pageSize:{},pageNo:{},param:{}", pageSize, pageNo, param);
+//
+//        String idpSSOCircleMetadataURL = "自己idp地址"; //指向 federationmetadata.xml
+//        HTTPMetadataProvider httpMetadataProvider = new HTTPMetadataProvider(this.backgroundTaskTimer, httpClient(), idpSSOCircleMetadataURL);
+//        extendedMetadataDelegate.setMetadataTrustCheck(false); // 不改成false好像不能过
         return goodsInfoFeign.search(param, pageSize, pageNo);
     }
 

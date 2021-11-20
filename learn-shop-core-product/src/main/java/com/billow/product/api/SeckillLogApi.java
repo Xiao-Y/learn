@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.product.api.HighLevelApi;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.SeckillLogBuildParam;
 import com.billow.product.pojo.po.SeckillLogPo;
 import com.billow.product.pojo.search.SeckillLogSearchParam;

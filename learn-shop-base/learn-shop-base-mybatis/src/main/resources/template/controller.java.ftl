@@ -6,7 +6,7 @@
 <#assign Sp = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
 package ${package.Controller};
 
-import com.billow.${package.ModuleName}.api.HighLevelApi;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.${package.ModuleName}.pojo.build.${BP};
 import com.billow.${package.ModuleName}.pojo.vo.${VO};
 import com.billow.${package.ModuleName}.pojo.search.${SP};

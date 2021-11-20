@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.ShopInfoBuildParam;
 import com.billow.product.pojo.po.ShopInfoPo;
 import com.billow.product.pojo.search.ShopInfoSearchParam;

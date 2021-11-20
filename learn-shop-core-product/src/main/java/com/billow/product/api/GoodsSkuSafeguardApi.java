@@ -1,5 +1,6 @@
 package com.billow.product.api;
 
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsSkuSafeguardBuildParam;
 import com.billow.product.pojo.po.GoodsSkuSafeguardPo;
 import com.billow.product.pojo.search.GoodsSkuSafeguardSearchParam;
