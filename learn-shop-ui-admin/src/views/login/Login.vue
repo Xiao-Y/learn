@@ -17,7 +17,7 @@
           </el-form-item>
           <div class="bm-btn clearfix">
             <el-button class="login-btn fl" @click.native.prevent="handleLogin">登录</el-button>
-            <el-button class="rec-btn fr" @click.native.prevent="dataRecovery" :disabled="true">
+            <el-button class="rec-btn fr" @click.native.prevent="dataRecovery" :disabled="false">
               恢复数据
             </el-button>
           </div>

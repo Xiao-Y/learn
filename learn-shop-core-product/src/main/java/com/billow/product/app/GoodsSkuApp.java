@@ -1,6 +1,5 @@
 package com.billow.product.app;
 
-import com.billow.product.producer.RefreshEsProducer;
 import com.billow.product.service.GoodsSkuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

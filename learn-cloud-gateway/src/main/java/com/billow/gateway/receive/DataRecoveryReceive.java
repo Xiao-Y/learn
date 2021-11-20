@@ -1,4 +1,4 @@
-package com.billow.gateway.producer;
+package com.billow.gateway.receive;
 
 import com.billow.gateway.config.MqExecuteSqlConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class DataRecoveryPro {
+public class DataRecoveryReceive {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
@@ -32,7 +32,7 @@ public class DataRecoveryPro {
         String exchange = mqExecuteSqlConfig.getExchange();
         String routeKey = mqExecuteSqlConfig.getRouteKey();
         String queue = mqExecuteSqlConfig.getQueue();
-        log.info("exchange:{},routeKey:{},queue{}，发送初始化 sql 的 mq", exchange, routeKey, queue);
+        log.info("exchange:{},routeKey:{},queue:{}，发送初始化 sql 的 mq", exchange, routeKey, queue);
         amqpTemplate.convertAndSend(exchange, routeKey, "开始执行sql...");
     }
 }

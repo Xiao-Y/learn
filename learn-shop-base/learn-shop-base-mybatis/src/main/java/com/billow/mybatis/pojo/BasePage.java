@@ -1,5 +1,6 @@
 package com.billow.mybatis.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
@@ -34,6 +35,7 @@ public abstract class BasePage implements Serializable {
      * @author xiaoy
      * @since 2021/11/20 10:00
      */
+    @TableField(exist = false)
     private Integer pageSize = PAGE_SIZE;
     /**
      * 当前页号
@@ -41,6 +43,7 @@ public abstract class BasePage implements Serializable {
      * @author xiaoy
      * @since 2021/11/20 10:00
      */
+    @TableField(exist = false)
     private Integer pageNo = PAGE_NO;
 
     /**
@@ -49,6 +52,7 @@ public abstract class BasePage implements Serializable {
      * @author xiaoy
      * @since 2021/11/20 10:01
      */
+    @TableField(exist = false)
     private String orderBy;
 
     /**
@@ -57,6 +61,7 @@ public abstract class BasePage implements Serializable {
      * @author xiaoy
      * @since 2021/11/20 10:01
      */
+    @TableField(exist = false)
     private boolean isAsc = true;
 
     /**

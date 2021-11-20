@@ -139,3 +139,6 @@ protected RedisTemplate<String, Object> redisCacheTemplate;
 # TODO
 1.缓存的调整
 2.订单释放
+3.权限调整为权限码形式
+4.后台管理首页修改为卡片形式
+

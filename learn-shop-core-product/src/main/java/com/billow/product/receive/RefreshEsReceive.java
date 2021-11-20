@@ -1,4 +1,4 @@
-package com.billow.product.producer;
+package com.billow.product.receive;
 
 import com.alibaba.fastjson.JSON;
 import com.billow.common.amqp.config.BaseMqConfig;
@@ -28,7 +28,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 @Component
-public class RefreshEsProducer {
+public class RefreshEsReceive {
 
     private final BaseMqConfig baseMqConfig;
     private final AmqpTemplate amqpTemplate;

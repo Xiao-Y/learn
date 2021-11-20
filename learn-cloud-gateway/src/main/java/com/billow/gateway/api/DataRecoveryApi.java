@@ -1,6 +1,6 @@
 package com.billow.gateway.api;
 
-import com.billow.gateway.producer.DataRecoveryPro;
+import com.billow.gateway.receive.DataRecoveryReceive;
 import com.billow.gateway.redis.RedisUtils;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ToolsUtils;
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class DataRecoveryApi {
 
     @Autowired
-    private DataRecoveryPro dataRecoveryPro;
+    private DataRecoveryReceive dataRecoveryReceive;
     @Autowired
     private RedisUtils redisUtils;
 
@@ -52,7 +52,7 @@ public class DataRecoveryApi {
         redisUtils.setString(RedisCst.COMM_DATA_RECOVERY, "正在执行数据恢复", 100, TimeUnit.MINUTES);
         map.put("resMsg", "开始数据恢复...");
         try {
-            dataRecoveryPro.dataRecovery();
+            dataRecoveryReceive.dataRecovery();
             map.put("resTimestamp", DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMddHHmmssSSS"));
         } catch (Exception e) {
             map.put("resCode", "0014");

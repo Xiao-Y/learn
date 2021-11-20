@@ -1,4 +1,4 @@
-package com.billow.order.mq.consumer;
+package com.billow.order.consumer;
 
 import com.billow.order.pojo.vo.OrderMqVo;
 import lombok.extern.slf4j.Slf4j;
