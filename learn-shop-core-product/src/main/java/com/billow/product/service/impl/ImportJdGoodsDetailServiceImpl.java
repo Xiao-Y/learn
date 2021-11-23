@@ -2,9 +2,7 @@ package com.billow.product.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.billow.product.pojo.vo.GoodsSpecKeyVo;
-import com.billow.product.pojo.vo.GoodsSpecValueVo;
-import com.billow.product.pojo.vo.ImportJdGoods;
+import com.billow.product.pojo.vo.*;
 import com.billow.product.service.ImportJdGoodsDetailService;
 import com.billow.tools.generator.NumUtil;
 import com.billow.tools.utlis.SnowFlakeUtil;
@@ -24,10 +22,28 @@ public class ImportJdGoodsDetailServiceImpl implements ImportJdGoodsDetailServic
     @Override
     public void importGoodsSku(String spu)
     {
+        AtomicLong sort = new AtomicLong(1);
         String skuScript = "";
         // 解析规定属性，构建 specKey 和 specValue,同时返回所有的skuNo和记录规格/规格值的 id
         ImportJdGoods importJdGoods = this.genSpecKeyAndValue(skuScript);
+        // 记录规格/规格值的 id
+        Map<String, String> specMap = importJdGoods.getSpecMap();
+        // 所有的 skuNo
+        List<String> skus = importJdGoods.getSkus();
+        for (String skuNo : skus)
+        {
+            GoodsSkuVo skuVo = new GoodsSkuVo();
+            skuVo.setId(SnowFlakeUtil.getFlowIdInstance().nextId());
+            skuVo.setSkuNo(skuNo);
 
+
+            GoodsSkuSpecValueVo skuSpecValueVo = new GoodsSkuSpecValueVo();
+//            skuSpecValueVo.setSpuId();
+            skuSpecValueVo.setSkuId(skuVo.getId());
+//            skuSpecValueVo.setSpecKeyId();
+//            skuSpecValueVo.setSpecValueId();
+            skuSpecValueVo.setSkuSpecSort(sort.getAndIncrement());
+        }
 
     }
 
