@@ -35,6 +35,7 @@
             <artifactId>lombok</artifactId>
         </dependency>
         <!--   支付宝生成二维码用于支付     -->
+        <!-- 源码地址：https://github.com/Xiao-Y/simple-pay -->
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>simple-pay-alipay-scan</artifactId>
