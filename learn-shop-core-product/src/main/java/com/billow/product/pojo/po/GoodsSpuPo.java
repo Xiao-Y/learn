@@ -98,7 +98,7 @@ public class GoodsSpuPo extends BasePo {
 
     @ApiModelProperty(value = "销量")
     @TableField("sale")
-    private Integer sale;
+    private Long sale;
 
     @ApiModelProperty(value = "总库存量")
     @TableField("stock")
@@ -106,7 +106,7 @@ public class GoodsSpuPo extends BasePo {
 
     @ApiModelProperty(value = "库存预警值")
     @TableField("low_stock")
-    private Integer lowStock;
+    private Long lowStock;
 
     @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
     @TableField("album_pics")
