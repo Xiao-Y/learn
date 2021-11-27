@@ -31,6 +31,8 @@ public class GoodsSkuVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Long id;
+
     @ApiModelProperty(value = "sku编号,唯一")
     private String skuNo;
 
