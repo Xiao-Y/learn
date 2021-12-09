@@ -1,7 +1,7 @@
 package com.billow.user.service.redis;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.tools.constant.RedisCst;
+import com.bilow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

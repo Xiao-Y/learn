@@ -1,4 +1,4 @@
-package com.billow.common.redis;
+package com.bilow.redis.util;
 
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;

@@ -1,8 +1,7 @@
-package com.billow.common;
+package com.bilow.redis;
 
-import com.billow.common.redis.RedisUtils;
-import com.billow.common.redis.RedissLockUtil;
-import com.billow.common.utils.UserTools;
+import com.bilow.redis.util.RedisUtils;
+import com.bilow.redis.util.RedissLockUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
  * @since 2021-2-3 11:32
  */
 @Configuration
-public class BaseCommonConfig {
+public class BaseCommonConfig
+{
 
     /**
      * redis分布式锁帮助类
@@ -21,7 +21,8 @@ public class BaseCommonConfig {
      * @since 2021-2-3 11:40
      */
     @Bean
-    public RedissLockUtil redissLockUtil() {
+    public RedissLockUtil redissLockUtil()
+    {
         return new RedissLockUtil();
     }
 
@@ -33,12 +34,8 @@ public class BaseCommonConfig {
      * @since 2021-2-3 11:40
      */
     @Bean
-    public RedisUtils redisUtils() {
+    public RedisUtils redisUtils()
+    {
         return new RedisUtils();
-    }
-
-    @Bean
-    public UserTools userTools() {
-        return new UserTools();
     }
 }

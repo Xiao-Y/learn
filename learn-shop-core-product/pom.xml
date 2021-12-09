@@ -36,11 +36,11 @@
         </dependency>
         <!--   支付宝生成二维码用于支付     -->
         <!-- 源码地址：https://github.com/Xiao-Y/simple-pay -->
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>simple-pay-alipay-scan</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.billow</groupId>-->
+<!--            <artifactId>simple-pay-alipay-scan</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>

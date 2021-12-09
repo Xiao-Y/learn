@@ -2,7 +2,6 @@ package com.billow.system.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.base.BaseApi;
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.vo.DataDictionaryVo;
@@ -10,6 +9,7 @@ import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.bilow.redis.util.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

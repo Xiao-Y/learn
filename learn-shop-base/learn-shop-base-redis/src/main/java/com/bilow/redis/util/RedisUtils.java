@@ -1,9 +1,10 @@
-package com.billow.common.redis;
+package com.bilow.redis.util;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
@@ -12,12 +13,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -212,7 +208,7 @@ public class RedisUtils {
     public <T> List<T> getHashAllValue(String H) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         Map<String, T> entries = opsForHash.entries(H);
-        if (MapUtils.isEmpty(entries)) {
+        if (entries != null && entries.size() > 0) {
             return null;
         }
         return new ArrayList<>(entries.values());
@@ -277,6 +273,21 @@ public class RedisUtils {
     }
 
     /**
+     * 通过 key 和 hash key 获取 map
+     *
+     * @param k hash key
+     * @return {@link List< T>}
+     * @author liuyongtao
+     * @since 2021-1-28 8:24
+     */
+    public <T> List<T> getHashList(String k, String HK, Class<T> clazz) {
+        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        JSONArray value = (JSONArray) opsForHash.get(k, HK);
+        List<T> list = this.converJsonArray2List(clazz, value);
+        return list;
+    }
+
+    /**
      * 保存一个 map 到 hash 中
      *
      * @param k   key
@@ -312,5 +323,25 @@ public class RedisUtils {
     public <T> List<String> getHashKeys(String k) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         return new ArrayList<>(opsForHash.keys(k));
+    }
+
+
+    /**
+     * json 反序列化时异常处理
+     *
+     * @param clazz
+     * @param value
+     * @return {@link List<T>}
+     * @author liuyongtao
+     * @since 2021-1-30 16:59
+     */
+    private <T> List<T> converJsonArray2List(Class<T> clazz, JSONArray value) {
+        List<T> list = new ArrayList<>();
+        for (Object o : value) {
+            Map<String, Object> map = BeanUtil.beanToMap(o);
+            map.remove("@type");
+            list.add(BeanUtil.mapToBean(map, clazz, true, CopyOptions.create()));
+        }
+        return list;
     }
 }

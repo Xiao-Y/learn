@@ -1,4 +1,4 @@
-package com.billow.common.redis;
+package com.bilow.redis.config;
 
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.Data;

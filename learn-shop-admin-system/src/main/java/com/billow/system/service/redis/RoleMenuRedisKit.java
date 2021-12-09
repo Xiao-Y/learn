@@ -1,12 +1,12 @@
 package com.billow.system.service.redis;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.bilow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

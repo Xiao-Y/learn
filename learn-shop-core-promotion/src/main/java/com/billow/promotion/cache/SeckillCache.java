@@ -1,8 +1,8 @@
 package com.billow.promotion.cache;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.promotion.pojo.cache.SeckillCacheDto;
 import com.billow.tools.constant.RedisCst;
+import com.bilow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

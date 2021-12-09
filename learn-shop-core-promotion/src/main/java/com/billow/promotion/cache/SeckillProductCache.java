@@ -1,6 +1,5 @@
 package com.billow.promotion.cache;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.promotion.common.cache.LuaUtil;
 import com.billow.promotion.common.enums.LuaScriptEnum;
 import com.billow.promotion.common.enums.SeckillStatEnum;
@@ -9,6 +8,7 @@ import com.billow.promotion.pojo.cache.SeckillProductCacheDto;
 import com.billow.promotion.pojo.cache.SeckillSessionCacheDto;
 import com.billow.promotion.pojo.vo.SeckillInfoVo;
 import com.billow.tools.constant.RedisCst;
+import com.bilow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

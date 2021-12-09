@@ -2,11 +2,11 @@ package com.billow.system.common.init.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.CityDao;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.CityPo;
 import com.billow.tools.constant.RedisCst;
+import com.bilow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
