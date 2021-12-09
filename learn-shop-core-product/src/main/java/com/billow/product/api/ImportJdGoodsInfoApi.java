@@ -22,14 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"ImportJdGoodsInfoApi"}, value = "从京东爬取商品数据")
 @RestController
 @RequestMapping("/importJdGoodsInfoApi")
-public class ImportJdGoodsInfoApi
-{
+public class ImportJdGoodsInfoApi {
     @Autowired
     private ImportJdGoodsInfo importJdGoodsInfo;
 
     @GetMapping("importJdGoods/{keyword}")
-    public boolean importJdGoods(@PathVariable("keyword") String keyword)
-    {
+    public boolean importJdGoods(@PathVariable("keyword") String keyword) throws Exception {
         return importJdGoodsInfo.importJdGoods(keyword);
     }
 

@@ -22,7 +22,7 @@ import java.sql.SQLException;
  */
 @Slf4j
 @Component
-public class ZuulToMeConsumer {
+public class DataRecoveryConsumer {
 
     @Autowired
     private DataSource dataSource;
@@ -33,15 +33,15 @@ public class ZuulToMeConsumer {
     @Async("fxbDrawExecutor")
     @RabbitListener(queues = "${config.mq.queue.executeSql}")
     @RabbitHandler
-    public void executesql(String message) throws Exception {
-        log.info(message);
+    public void executesql() throws Exception {
+//        log.info(message);
         log.info("开始初始化 SQL...");
-        try {
-            Resource resource = new ClassPathResource("sql/learn-shop.sql");
-            ScriptUtils.executeSqlScript(dataSource.getConnection(), resource);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Resource resource = new ClassPathResource("sql/learn-shop.sql");
+//            ScriptUtils.executeSqlScript(dataSource.getConnection(), resource);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         log.info("完成初始化 SQL...");
 
         log.info("开始初始化 Redis ...");
