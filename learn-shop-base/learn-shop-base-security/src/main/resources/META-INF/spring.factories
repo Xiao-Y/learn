@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.billow.security.config.MySecurityConfig
+com.billow.security.config.MySecurityConfig

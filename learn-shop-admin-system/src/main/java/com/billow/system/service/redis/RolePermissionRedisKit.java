@@ -7,7 +7,7 @@ import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
-import com.bilow.redis.util.RedisUtils;
+import com.billow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

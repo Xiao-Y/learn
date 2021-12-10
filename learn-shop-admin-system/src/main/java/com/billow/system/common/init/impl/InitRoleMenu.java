@@ -7,7 +7,7 @@ import com.billow.system.common.properties.CustomProperties;
 import com.billow.system.service.MenuService;
 import com.billow.system.service.RoleService;
 import com.billow.tools.constant.RedisCst;
-import com.bilow.redis.util.RedisUtils;
+import com.billow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

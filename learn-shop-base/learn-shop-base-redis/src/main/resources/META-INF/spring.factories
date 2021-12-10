@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bilow.redis.BaseCommonConfig,\
-com.billow.common.redis.RedisConfig,\
-com.billow.common.redis.RedissonConfig\
+com.billow.redis.BaseCommonConfig,\
+com.billow.redis.config.RedisConfig,\
+com.billow.redis.config.RedissonConfig\

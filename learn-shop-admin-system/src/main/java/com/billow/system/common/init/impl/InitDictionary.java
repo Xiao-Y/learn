@@ -4,7 +4,7 @@ import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
-import com.bilow.redis.util.RedisUtils;
+import com.billow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

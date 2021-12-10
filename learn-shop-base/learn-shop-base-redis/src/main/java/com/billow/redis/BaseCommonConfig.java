@@ -1,7 +1,7 @@
-package com.bilow.redis;
+package com.billow.redis;
 
-import com.bilow.redis.util.RedisUtils;
-import com.bilow.redis.util.RedissLockUtil;
+import com.billow.redis.util.RedisUtils;
+import com.billow.redis.util.RedissLockUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -11,5 +11,6 @@ public class PreAuthorizeException extends RuntimeException
 
     public PreAuthorizeException()
     {
+        super("没有权限，请联系管理员");
     }
 }

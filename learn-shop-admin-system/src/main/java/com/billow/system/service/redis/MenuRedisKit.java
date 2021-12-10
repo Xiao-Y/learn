@@ -3,7 +3,7 @@ package com.billow.system.service.redis;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.tools.constant.RedisCst;
-import com.bilow.redis.util.RedisUtils;
+import com.billow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

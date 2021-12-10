@@ -1,6 +1,6 @@
-package com.bilow.redis.config;
+package com.billow.redis.config;
 
-import com.bilow.redis.FastJsonRedisSerializer;
+import com.billow.redis.FastJsonRedisSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

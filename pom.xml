@@ -162,6 +162,11 @@
                 <artifactId>learn-shop-base-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
