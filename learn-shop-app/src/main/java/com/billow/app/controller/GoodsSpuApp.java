@@ -37,7 +37,6 @@ public class GoodsSpuApp {
     private GoodsSpuFeign goodsSpuFeign;
 
     @OperationLog
-    @PreAuthorize(hasAnyPermi = "aaa")
     @ApiOperation(value = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
     public BaseResponse<GoodsSpuVo> getById(@PathVariable("id") Long id) {

@@ -26,7 +26,7 @@ public class ImportJdGoodsInfoApi {
     @Autowired
     private ImportJdGoodsInfo importJdGoodsInfo;
 
-    @GetMapping("importJdGoods/{keyword}")
+    @GetMapping("/importJdGoods/{keyword}")
     public boolean importJdGoods(@PathVariable("keyword") String keyword) throws Exception {
         return importJdGoodsInfo.importJdGoods(keyword);
     }
