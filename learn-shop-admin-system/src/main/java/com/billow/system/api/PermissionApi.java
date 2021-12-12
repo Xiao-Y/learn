@@ -74,4 +74,11 @@ public class PermissionApi {
         permissionService.updatePermission(permissionVo);
         return permissionVo;
     }
+
+    @ApiOperation("查询我的权限列表")
+    @GetMapping("/findMyPermissionList")
+    public List<String> findMyPermissionList() throws Exception {
+        List<String> permissionList = permissionService.findMyPermissionList();
+        return permissionList;
+    }
 }

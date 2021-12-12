@@ -85,3 +85,4 @@ mybatis-plus:
   configuration:
     cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/**/*Mapper.xml

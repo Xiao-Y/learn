@@ -20,7 +20,10 @@
       </el-collapse>
     </el-row>
     <!-- 查询按钮组 -->
-    <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
+    <button-group-query @onAdd="handleAdd"
+                        @onQuery="loadDataList"
+                        :hasAdd="'RoleApi-saveRole'"
+                        :queryFilter="queryFilter"></button-group-query>
 
     <el-row>
       <template>
@@ -55,7 +58,12 @@
               <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
                                    @onEdit="handleEdit(scope.row,scope.$index)"
                                    @onInd="handleProhibit(scope.row,scope.$index)"
-                                   :disInd="!scope.row.validInd"></button-group-option>
+                                   :hasDel="'RoleApi-deleteRoleById'"
+                                   :hasEdit="'RoleApi-saveRole'"
+                                   :hasInd="'RoleApi-prohibitRoleById'"
+                                   :disInd="!scope.row.validInd">
+
+              </button-group-option>
             </template>
           </el-table-column>
         </el-table>

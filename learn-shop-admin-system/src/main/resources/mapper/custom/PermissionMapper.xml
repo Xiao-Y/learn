@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.system.dao.PermissionDao">
+
+    <!-- 开启二级缓存 -->
+    <!-- 注意：默认为 flushCache="true" useCache="true" -->
+    <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+    <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+    <!-- 3.请务修改 cache-ref 中的配置 -->
+    <cache-ref namespace="com.billow.system.dao.PermissionDao"/>
+
+    <!-- 通用查询结果列 -->
+    <select id="findPermissionByRoleCode" resultMap="BaseResultMap" flushCache="false" useCache="false">
+        SELECT DISTINCT
+        sp.permission_code
+        FROM
+        sys_permission sp
+        LEFT JOIN r_role_permission rrp ON sp.id = rrp.permission_id
+        LEFT JOIN sys_role sr ON sr.id = rrp.role_id
+        WHERE
+        sp.permission_code IS NOT NULL
+        AND sr.role_code IN
+        <foreach collection="roleCodeList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

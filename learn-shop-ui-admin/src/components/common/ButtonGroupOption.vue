@@ -1,16 +1,25 @@
 <template>
   <div style="float:left;">
-    <el-tooltip class="item" effect="dark" content="禁用" placement="top-start" :open-delay="openDelay" v-if="showInd">
+    <el-tooltip class="item" effect="dark" content="禁用" placement="top-start"
+                :open-delay="openDelay"
+                v-has="hasInd"
+                v-if="showInd">
       <el-button @click="onInd" type="warning" size="mini" :disabled="disInd">
         <i class="el-icon-warning"></i>
       </el-button>
     </el-tooltip>
-    <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :open-delay="openDelay" v-if="showDel">
+    <el-tooltip class="item" effect="dark" content="删除" placement="top-start"
+                :open-delay="openDelay"
+                v-has="hasDel"
+                v-if="showDel">
       <el-button @click="onDel" type="danger" size="mini" :disabled="disDel">
         <i class="el-icon-delete"></i>
       </el-button>
     </el-tooltip>
-    <el-tooltip class="item" effect="dark" content="修改" placement="top-start" :open-delay="openDelay" v-if="showEdit">
+    <el-tooltip class="item" effect="dark" content="修改" placement="top-start"
+                :open-delay="openDelay"
+                v-has="hasEdit"
+                v-if="showEdit">
       <el-button @click="onEdit" type="primary" size="mini" :disabled="disEdit">
         <i class="el-icon-edit"></i>
       </el-button>
@@ -55,6 +64,21 @@
       disEdit: {
         type: Boolean,
         default: false
+      },
+      // 删除按钮权限码
+      hasDel: {
+        type: String,
+        default: null
+      },
+      // 修改按钮权限码
+      hasEdit: {
+        type: String,
+        default: null
+      },
+      // 禁用按钮权限码
+      hasInd: {
+        type: String,
+        default: null
       }
     },
     data() {

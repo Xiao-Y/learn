@@ -8,6 +8,11 @@ const baseUrl = '../admin-system/permissionApi';
 export const LoadDataPermissionListAll = () => requestUtils.get(baseUrl + '/findPermissionAll');
 
 /**
+ * 查询我的权限信息
+ */
+export const LoadDataMyPermissionList = () => requestUtils.get(baseUrl + '/findMyPermissionList');
+
+/**
  * 根据条件查询权限信息
  * @param permissionFilter
  * @returns {*|AxiosPromise}

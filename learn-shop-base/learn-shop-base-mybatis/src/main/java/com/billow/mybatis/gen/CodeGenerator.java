@@ -26,7 +26,7 @@ import java.util.List;
 public class CodeGenerator {
 
     String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
-    String template = "/template";
+    String template = "/template2";
 
     /**
      * 自定义配置
@@ -192,12 +192,12 @@ public class CodeGenerator {
         DataSourceConfig dsc = this.getDataSourceConfig();
         // 策略配置
         StrategyConfig strategy = this.getStrategyConfig();
+        // 生成表配置
+        this.setGenTableRule(strategy);
         // 包配置
         PackageConfig pc = this.getPackageConfig(strategy);
         // 自定义配置
         InjectionConfig cfg = this.getInjectionConfig(pc);
-        // 生成表配置
-        this.setGenTableRule(strategy);
 
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
@@ -307,23 +307,23 @@ public class CodeGenerator {
 //        strategy.setInclude("sk_seckill", "sk_success_killed");
 //        strategy.setTablePrefix("sk_");
 
-        strategy.setInclude("pms_goods_brand"
-                , "pms_goods_category"
-                , "pms_goods_comment"
-                , "pms_goods_comment_replay"
-                , "pms_goods_operate_log"
-                , "pms_goods_safeguard"
-                , "pms_goods_sku"
-                , "pms_goods_sku_safeguard"
-                , "pms_goods_sku_spec_value"
-                , "pms_goods_spec_key"
-                , "pms_goods_spec_value"
-                , "pms_goods_spu"
-                , "pms_goods_spu_spec"
-                , "pms_goods_vertify_record"
-                , "pms_shop_info"
-        );
-        strategy.setTablePrefix("pms_");
+//        strategy.setInclude("pms_goods_brand"
+//                , "pms_goods_category"
+//                , "pms_goods_comment"
+//                , "pms_goods_comment_replay"
+//                , "pms_goods_operate_log"
+//                , "pms_goods_safeguard"
+//                , "pms_goods_sku"
+//                , "pms_goods_sku_safeguard"
+//                , "pms_goods_sku_spec_value"
+//                , "pms_goods_spec_key"
+//                , "pms_goods_spec_value"
+//                , "pms_goods_spu"
+//                , "pms_goods_spu_spec"
+//                , "pms_goods_vertify_record"
+//                , "pms_shop_info"
+//        );
+//        strategy.setTablePrefix("pms_");
 
 //        strategy.setInclude("sys_apply_info",
 //                "sys_city",
@@ -333,11 +333,12 @@ public class CodeGenerator {
 //                "sys_role",
 //                "sys_white_list"
 //                );
-//        strategy.setTablePrefix("sys_");
-//        strategy.setInclude("r_role_menu",
-//                "r_role_permission",
-//                "r_user_role"
-//        );
+        strategy.setTablePrefix("sys_");
+        strategy.setInclude("sys_permission",
+                "r_role_menu",
+                "r_role_permission",
+                "r_user_role"
+        );
 //        strategy.setTablePrefix("r_");
 
 //        strategy.setInclude("v_mytasklist");

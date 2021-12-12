@@ -79,4 +79,14 @@ public interface PermissionService extends IService<PermissionPo> {
      * @date 2019/7/11 19:40
      */
     List<PermissionVo> findPermissionAll();
+
+    /**
+     * 查询我的权限列表
+     *
+     * @return {@link List< String>}
+     * @author xiaoy
+     * @since 2021/12/12 17:50
+     */
+    List<String> findMyPermissionList();
+
 }

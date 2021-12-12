@@ -11,6 +11,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueUtils from '@/utils/vueUtils'
 import './static/icon/iconfont.css'
+// 按钮权限
+import './directives/has'
 
 import VueBus from 'vue-bus' // 消息总线
 

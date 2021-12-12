@@ -3,6 +3,7 @@ package com.billow.mybatis.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.billow.mybatis.handler.AuditMetaObjectHandler;
 import com.billow.mybatis.utils.MybatisUserTools;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class MybatisConfig {
 
     @Bean
-    public MybatisUserTools mybatisUserTools(){
+    public MybatisUserTools mybatisUserTools() {
         return new MybatisUserTools();
     }
 
@@ -41,9 +42,10 @@ public class MybatisConfig {
 //        page.setDialectType(DbType.MYSQL.getDb());
 //        return page;
 //    }
-
     @Bean
-    public MybatisPlusInterceptor paginationInterceptor(){
-        return new MybatisPlusInterceptor();
+    public MybatisPlusInterceptor paginationInterceptor() {
+        MybatisPlusInterceptor interceptor  = new MybatisPlusInterceptor();
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        return interceptor;
     }
 }
