@@ -1,6 +1,6 @@
 package com.billow.product.service;
 
-public interface ImportJdGoodsInfo {
+public interface SyncJdGoodsInfo {
     /**
      * 通过关键字查询商品数据
      *
@@ -9,5 +9,5 @@ public interface ImportJdGoodsInfo {
      * @author 千面
      * @date 2021/11/23 11:15
      */
-    boolean importJdGoods(String keyword) throws Exception;
+    boolean syncJdGoods(String keyword) throws Exception;
 }

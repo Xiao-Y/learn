@@ -5,7 +5,7 @@ import com.billow.product.common.enums.SpuVerifyStatusEnum;
 import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.po.ShopInfoPo;
-import com.billow.product.service.ImportJdGoodsListService;
+import com.billow.product.service.SyncJdGoodsListService;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,7 +13,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Service
-public class ImportJdGoodsListServiceImpl implements ImportJdGoodsListService {
+public class SyncJdGoodsListServiceImpl implements SyncJdGoodsListService {
 
     @Override
     public Element startRequest(String keyword, int page) throws Exception {

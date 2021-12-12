@@ -1,7 +1,7 @@
 package com.billow.product.service;
 
 import com.billow.product.pojo.vo.GoodsSkuVo;
-import com.billow.product.pojo.vo.ImportJdGoods;
+import com.billow.product.pojo.vo.SyncJdGoods;
 import org.jsoup.nodes.Element;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author 千面
  * @date 2021/11/23 11:08
  */
-public interface ImportJdGoodsDetailService {
+public interface SyncJdGoodsDetailService {
 
     /**
      * 请求商品详细信息
@@ -32,5 +32,5 @@ public interface ImportJdGoodsDetailService {
      * @author xiaoy
      * @since 2021/11/27 19:41
      */
-    ImportJdGoods parseGoodsSku(Element element) throws Exception;
+    SyncJdGoods parseGoodsSku(Element element) throws Exception;
 }

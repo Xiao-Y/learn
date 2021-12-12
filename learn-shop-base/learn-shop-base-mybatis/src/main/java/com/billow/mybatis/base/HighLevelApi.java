@@ -41,7 +41,7 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
     protected Class<V> vClass = (Class<V>) this.getClass(2);
 
     @ApiOperation(value = "分页查询表数据")
-    @PostMapping(value = "/findListByPage")
+    @PostMapping(value = "/list")
     public IPage<E> findListByPage(@RequestBody SP sp) {
         // 分页
         Page<E> page = new Page<>(sp.getPageNo(), sp.getPageSize());

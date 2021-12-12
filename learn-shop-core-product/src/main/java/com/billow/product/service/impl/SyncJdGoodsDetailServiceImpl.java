@@ -6,8 +6,8 @@ import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.vo.GoodsSkuSpecValueVo;
 import com.billow.product.pojo.vo.GoodsSkuVo;
-import com.billow.product.pojo.vo.ImportJdGoods;
-import com.billow.product.service.ImportJdGoodsDetailService;
+import com.billow.product.pojo.vo.SyncJdGoods;
+import com.billow.product.service.SyncJdGoodsDetailService;
 import com.billow.tools.generator.NumUtil;
 import com.billow.tools.utlis.SnowFlakeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class ImportJdGoodsDetailServiceImpl implements ImportJdGoodsDetailService {
+public class SyncJdGoodsDetailServiceImpl implements SyncJdGoodsDetailService {
 
     private static final String SKU_ID = "skuId";
 
@@ -41,37 +40,37 @@ public class ImportJdGoodsDetailServiceImpl implements ImportJdGoodsDetailServic
     }
 
     @Override
-    public ImportJdGoods parseGoodsSku(Element element) throws Exception {
+    public SyncJdGoods parseGoodsSku(Element element) throws Exception {
         // 获取 sku 的 script
         String skuScript = element.select("script").first().data();
         // 解析规定属性，构建 specKey 和 specValue,同时返回所有的skuNo和记录规格/规格值的 id
-        ImportJdGoods importJdGoods = this.genSpecKeyAndValue(skuScript);
+        SyncJdGoods syncJdGoods = this.genSpecKeyAndValue(skuScript);
         // 记录规格/规格值的 id
-        Map<String, String> specMap = importJdGoods.getSpecMap();
+        Map<String, String> specMap = syncJdGoods.getSpecMap();
         // 所有的 skuNo
-        List<String> skus = importJdGoods.getSkus();
+        List<String> skus = syncJdGoods.getSkus();
         List<GoodsSkuVo> goodsSkuVos = skus.stream().map(skuNo -> {
             try {
-                return parseGoodsBySku(skuNo, importJdGoods);
+                return parseGoodsBySku(skuNo, syncJdGoods);
             } catch (Exception e) {
                 log.error("skuNo:{} 异常", skuNo);
             }
             return null;
         }).collect(Collectors.toList());
-        importJdGoods.setGoodsSkuVos(goodsSkuVos);
-        return importJdGoods;
+        syncJdGoods.setGoodsSkuVos(goodsSkuVos);
+        return syncJdGoods;
     }
 
     /**
      * 通过sku 解析 商品详细.组装 sku 和商品规则信息
      *
      * @param skuNo
-     * @param importJdGoods com.billow.product.service.impl.ImportJdGoodsDetailServiceImpl#genSpecKeyAndValue(java.lang.String) 方法解析后的sku数据
+     * @param syncJdGoods com.billow.product.service.impl.ImportJdGoodsDetailServiceImpl#genSpecKeyAndValue(java.lang.String) 方法解析后的sku数据
      * @return {@link Object}
      * @author xiaoy
      * @since 2021/11/22 21:21
      */
-    private GoodsSkuVo parseGoodsBySku(String skuNo, ImportJdGoods importJdGoods) throws Exception {
+    private GoodsSkuVo parseGoodsBySku(String skuNo, SyncJdGoods syncJdGoods) throws Exception {
 
         AtomicLong sort = new AtomicLong(1);
         // 构建 sku 对象
@@ -82,7 +81,7 @@ public class ImportJdGoodsDetailServiceImpl implements ImportJdGoodsDetailServic
         List<GoodsSkuSpecValueVo> goodsSkuSpecValueVos = new ArrayList<>();
         String skuName = "";
         // 记录规格/规格值的 id
-        Map<String, String> specMap = importJdGoods.getSpecMap();
+        Map<String, String> specMap = syncJdGoods.getSpecMap();
         // 获取 sku 页面
         Element body = this.startRequest(skuNo);
         // 可选择的类型
@@ -129,7 +128,7 @@ public class ImportJdGoodsDetailServiceImpl implements ImportJdGoodsDetailServic
      * @author 千面
      * @date 2021/11/23 16:33
      */
-    private ImportJdGoods genSpecKeyAndValue(String skuScript) {
+    private SyncJdGoods genSpecKeyAndValue(String skuScript) {
         // 所有的 skuNo
         List<String> skus = new ArrayList<>();
         // 记录规格/规格值的 id
@@ -174,7 +173,7 @@ public class ImportJdGoodsDetailServiceImpl implements ImportJdGoodsDetailServic
 
             });
         });
-        return new ImportJdGoods()
+        return new SyncJdGoods()
                 .setSpecValuePos(specValueVos)
                 .setSpecKeyPos(specKeyVos)
                 .setSpecMap(specMap)

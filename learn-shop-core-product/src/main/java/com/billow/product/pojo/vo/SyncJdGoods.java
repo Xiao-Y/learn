@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Accessors(chain = true)
 @Data
-public class ImportJdGoods {
+public class SyncJdGoods {
     // 所有的 skuNo
     List<String> skus = new ArrayList<>();
 

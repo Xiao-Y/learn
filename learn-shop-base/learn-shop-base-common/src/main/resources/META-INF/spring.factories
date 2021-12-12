@@ -8,4 +8,5 @@ com.billow.common.amqp.config.MqSendMailTTLConfig,\
 com.billow.common.amqp.config.BaseMqConfig,\
 com.billow.common.amqp.config.MqLogCollectConfig,\
 com.billow.common.amqp.config.MqRefreshEsConfig,\
-com.billow.common.thread.ThreadExecutorConfig
+com.billow.common.thread.ThreadExecutorConfig,\
+  com.billow.common.utils.UtilsConfig

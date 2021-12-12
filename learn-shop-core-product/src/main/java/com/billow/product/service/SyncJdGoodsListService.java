@@ -13,7 +13,7 @@ import java.util.List;
  * @author 千面
  * @date 2021/11/23 11:08
  */
-public interface ImportJdGoodsListService {
+public interface SyncJdGoodsListService {
 
     /**
      * 请求商品列表

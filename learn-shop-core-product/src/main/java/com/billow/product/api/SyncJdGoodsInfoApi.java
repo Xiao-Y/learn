@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.product.service.ImportJdGoodsInfo;
+import com.billow.product.service.SyncJdGoodsInfo;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-09-02
  */
 @Slf4j
-@Api(tags = {"ImportJdGoodsInfoApi"}, value = "从京东爬取商品数据")
+@Api(tags = {"SyncJdGoodsInfoApi"}, value = "从京东爬取商品数据")
 @RestController
-@RequestMapping("/importJdGoodsInfoApi")
-public class ImportJdGoodsInfoApi {
+@RequestMapping("/syncJdGoodsInfoApi")
+public class SyncJdGoodsInfoApi {
     @Autowired
-    private ImportJdGoodsInfo importJdGoodsInfo;
+    private SyncJdGoodsInfo syncJdGoodsInfo;
 
-    @GetMapping("/importJdGoods/{keyword}")
-    public boolean importJdGoods(@PathVariable("keyword") String keyword) throws Exception {
-        return importJdGoodsInfo.importJdGoods(keyword);
+    @GetMapping("syncJdGoods/{keyword}")
+    public boolean syncJdGoods(@PathVariable("keyword") String keyword) throws Exception {
+        return syncJdGoodsInfo.syncJdGoods(keyword);
     }
 
 }
