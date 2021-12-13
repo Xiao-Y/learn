@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"SeckillSessionApi"},value = "限时购场次表。用于存储限时购场次的信息，在一天中，一个限时购活动会有多个不同的活动时间段。")
+@Api(tags = {"SeckillSessionApi"},value = "限时购场次表")
 @RestController
 @RequestMapping("/seckillSessionApi")
 public class SeckillSessionApi extends HighLevelApi<SeckillSessionService, SeckillSessionPo, SeckillSessionVo, SeckillSessionBuildParam, SeckillSessionSearchParam> {

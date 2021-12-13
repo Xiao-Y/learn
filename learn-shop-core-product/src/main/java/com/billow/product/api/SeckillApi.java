@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"SeckillApi"},value = "限时购表。用于存储限时购活动的信息，包括开始时间、结束时间以及上下线状态。")
+@Api(tags = {"SeckillApi"},value = "限时购表")
 @RestController
 @RequestMapping("/seckillApi")
 public class SeckillApi extends HighLevelApi<SeckillService, SeckillPo, SeckillVo, SeckillBuildParam, SeckillSearchParam> {

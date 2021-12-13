@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-09-02
  */
 @Slf4j
-@Api(tags = {"GoodsSpuApi"}, value = "spu表（Standard Product Unit, 标准产品单元）")
+@Api(tags = {"GoodsSpuApi"}, value = "spu")
 @RestController
 @RequestMapping("/goodsSpuApi")
 public class GoodsSpuApi extends HighLevelApi<GoodsSpuService, GoodsSpuPo, GoodsSpuVo, GoodsSpuBuildParam, GoodsSpuSearchParam> {

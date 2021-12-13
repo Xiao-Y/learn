@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"GoodsVertifyRecordApi"},value = "商品审核记录表，用于记录商品审核记录")
+@Api(tags = {"GoodsVertifyRecordApi"},value = "商品审核记录表")
 @RestController
 @RequestMapping("/goodsVertifyRecordApi")
 public class GoodsVertifyRecordApi extends HighLevelApi<GoodsVertifyRecordService, GoodsVertifyRecordPo, GoodsVertifyRecordVo, GoodsVertifyRecordBuildParam, GoodsVertifyRecordSearchParam> {

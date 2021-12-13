@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-09-02
  */
 @Slf4j
-@Api(tags = {"GoodsOperateLogApi"}, value = "商品操作记录表，用于记录商品操作记录")
+@Api(tags = {"GoodsOperateLogApi"}, value = "商品操作记录表")
 @RestController
 @RequestMapping("/goodsOperateLogApi")
 public class GoodsOperateLogApi extends HighLevelApi<GoodsOperateLogService, GoodsOperateLogPo, GoodsOperateLogVo, GoodsOperateLogBuildParam, GoodsOperateLogSearchParam> {

@@ -57,6 +57,7 @@ public class CovMapping
             System.out.println(s);
         }
 
+        System.out.println(urls.size());
     }
 
 

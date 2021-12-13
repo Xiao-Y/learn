@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"SeckillLogApi"},value = "限时购通知记录表。用于存储会员的限时购预约记录，当有的限时购场次还未开始时，会员可以进行预约操作，当场次开始时，系统会进行提醒。")
+@Api(tags = {"SeckillLogApi"},value = "限时购通知记录表")
 @RestController
 @RequestMapping("/seckillLogApi")
 public class SeckillLogApi extends HighLevelApi<SeckillLogService, SeckillLogPo, SeckillLogVo, SeckillLogBuildParam, SeckillLogSearchParam> {

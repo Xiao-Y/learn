@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-09-02
  */
 @Slf4j
-@Api(tags = {"SyncJdGoodsInfoApi"}, value = "从京东爬取商品数据")
+@Api(tags = {"SyncJdGoodsInfoApi"}, value = "爬取商品数据")
 @RestController
 @RequestMapping("/syncJdGoodsInfoApi")
 public class SyncJdGoodsInfoApi {

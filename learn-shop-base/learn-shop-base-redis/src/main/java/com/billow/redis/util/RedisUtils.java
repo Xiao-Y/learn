@@ -131,13 +131,22 @@ public class RedisUtils
     {
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
-        if (entries != null && entries.size() > 0)
+        if (entries == null && entries.size() == 0)
         {
             return new ArrayList<>();
         }
         return entries.values()
                 .parallelStream()
-                .map(m -> JSON.parseObject(m, tClass))
+                .map(m -> {
+                    if (m.startsWith("{"))
+                    {
+                        return Arrays.asList(JSON.parseObject(m, tClass));
+                    }
+                    else
+                    {
+                        return JSON.parseArray(m, tClass);
+                    }
+                }).flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
@@ -155,7 +164,7 @@ public class RedisUtils
 
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
-        if (entries != null && entries.size() > 0)
+        if (entries == null && entries.size() == 0)
         {
             return map;
         }
@@ -178,7 +187,7 @@ public class RedisUtils
 
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
-        if (entries != null && entries.size() > 0)
+        if (entries == null && entries.size() == 0)
         {
             return map;
         }
