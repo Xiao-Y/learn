@@ -55,7 +55,8 @@ public class DataDictionaryApi extends BaseApi {
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("systemModule") String systemModule, @PathVariable("fieldType") String fieldType) throws Exception {
         // 从 redis 中获取
-        List<DataDictionaryPo> redisData = redisUtils.getHash(FIELD_TYPE_KEY, systemModule);
+        String key = FIELD_TYPE_KEY + RedisCst.delimiter + systemModule;
+        List<DataDictionaryPo> redisData = redisUtils.getList(key);
         if (ToolsUtils.isNotEmpty(redisData)) {
             return redisData.stream().filter(f -> f.getFieldType().equals(fieldType))
                     .map(m -> ConvertUtils.convertIgnoreBase(m, DataDictionaryVo.class))
@@ -67,7 +68,7 @@ public class DataDictionaryApi extends BaseApi {
         dataDictionaryVo.setValidInd(true);
         List<DataDictionaryVo> dataDictionaryVos = dataDictionaryService.findDataDictionaryByCondition(dataDictionaryVo);
         // 保存到 redis 中
-        redisUtils.setHash(FIELD_TYPE_KEY, systemModule, ConvertUtils.convertIgnoreBase(dataDictionaryVos, DataDictionaryPo.class));
+        redisUtils.setObj(key, ConvertUtils.convertIgnoreBase(dataDictionaryVos, DataDictionaryPo.class));
         return dataDictionaryVos;
     }
 
@@ -109,7 +110,7 @@ public class DataDictionaryApi extends BaseApi {
     @ApiOperation("字典下拉系统模块")
     @GetMapping("/findSysModule")
     public List<DataDictionaryPo> findSysModule() {
-        Map<String, String> routeInfoMap = redisUtils.getHashAll(RedisCst.COMM_ROUTE_INFO);
+        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO,String.class);
         List<DataDictionaryPo> dataDictionaryPos = routeInfoMap.entrySet().stream().map(m -> {
             DataDictionaryPo po = new DataDictionaryPo();
             po.setFieldValue(m.getKey());
@@ -148,7 +149,7 @@ public class DataDictionaryApi extends BaseApi {
     public List<DataDictionaryVo> findDataRouteCache() {
         List<DataDictionaryVo> vos = new ArrayList<>();
         long id = 0;
-        Map<String, String> routeInfoMap = redisUtils.getHashAll(RedisCst.COMM_ROUTE_INFO);
+        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO, String.class);
         for (Map.Entry<String, String> entry : routeInfoMap.entrySet()) {
             DataDictionaryVo vo = new DataDictionaryVo();
             vo.setId(id++);

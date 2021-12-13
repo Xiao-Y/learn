@@ -1,5 +1,6 @@
 package com.billow.gateway.init;
 
+import com.billow.redis.util.RedisUtils;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +31,7 @@ public class InitData implements ApplicationRunner {
     private GatewayProperties gatewayProperties;
 
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisUtils redisUtils;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -50,8 +51,7 @@ public class InitData implements ApplicationRunner {
                 .collect(Collectors.toMap(RouteDefinition::getId,
                         routeDefinition -> routeDefinition.getUri().getHost(),
                         (v1, v2) -> v2));
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
-        opsForHash.putAll(RedisCst.COMM_ROUTE_INFO, collect);
+        redisUtils.setHash(RedisCst.COMM_ROUTE_INFO, collect);
         log.info("== end load route info ========\n");
     }
 }

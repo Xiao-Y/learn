@@ -1,6 +1,5 @@
 package com.billow.redis.config;
 
-import com.billow.redis.FastJsonRedisSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +48,8 @@ public class RedisConfig {
 
     @Bean
     @Primary
-    public RedisTemplate<?, ?> redisTemplate(@Qualifier("lettuceConnectionFactory") LettuceConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate(@Qualifier("lettuceConnectionFactory") LettuceConnectionFactory connectionFactory) {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         initDomainRedisTemplate(redisTemplate, connectionFactory);
         return redisTemplate;
     }
@@ -61,10 +60,10 @@ public class RedisConfig {
      * @param template
      * @param factory
      */
-    private void initDomainRedisTemplate(RedisTemplate<String, Object> template, LettuceConnectionFactory factory) {
+    private void initDomainRedisTemplate(RedisTemplate<String, String> template, LettuceConnectionFactory factory) {
         // 定义 key 的序列化方式为 string
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
+        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(String.class);
         //string 的序列化
         template.setKeySerializer(stringRedisSerializer);
 

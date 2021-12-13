@@ -239,7 +239,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
             // 原始的
-            List<MenuEx> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode());
+            List<MenuEx> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode(), MenuEx.class);
             if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
                 sourceMenuPo = menuExs.stream().filter(f -> !delMenuIdsTemp.contains(f))

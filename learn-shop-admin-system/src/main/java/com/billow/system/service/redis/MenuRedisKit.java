@@ -67,7 +67,7 @@ public class MenuRedisKit {
      * @since 2021-1-30 10:53
      */
     public MenuVo getMenuById(Long id) {
-        return redisUtils.getHash(MENU_ID, id.toString());
+        return redisUtils.getHashObj(MENU_ID, id.toString(),MenuVo.class);
     }
 
     /**

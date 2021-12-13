@@ -70,7 +70,7 @@ public class SeckillProductCache {
      */
     public int findSeckillStockCache(Long seckillProductId) {
         String seckillStockKey = this.genSeckillStockKey(seckillProductId);
-        Integer stock = redisUtils.getObj(seckillStockKey);
+        Integer stock = redisUtils.getObj(seckillStockKey, Integer.class);
         return stock == null ? 0 : stock;
     }
 
@@ -119,7 +119,7 @@ public class SeckillProductCache {
      */
     public SeckillInfoVo findSeckillInfoCache(Long seckillProductId) {
         SeckillInfoVo vo = null;
-        SeckillProductCacheDto seckillProductCache = redisUtils.getHash(RedisCst.SECKILL_PRODUCT_INFO, seckillProductId.toString(), SeckillProductCacheDto.class);
+        SeckillProductCacheDto seckillProductCache = redisUtils.getHashObj(RedisCst.SECKILL_PRODUCT_INFO, seckillProductId.toString(), SeckillProductCacheDto.class);
         if (seckillProductCache != null) {
             vo = new SeckillInfoVo();
             // 秒杀商品信息

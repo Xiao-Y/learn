@@ -1,4 +1,4 @@
-package com.billow.gateway.redis;
+package com.billow.redis.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
@@ -22,7 +22,7 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
         if (t == null) {
             return new byte[0];
         }
-        return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
+        return JSON.toJSONString(t).getBytes(DEFAULT_CHARSET);
     }
 
     @Override
@@ -32,6 +32,8 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
         }
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
         String str = new String(bytes, DEFAULT_CHARSET);
-        return (T)JSON.parseObject(str, clazz);
+        return JSON.parseObject(str, clazz);
     }
+
+
 }

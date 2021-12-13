@@ -37,7 +37,7 @@ public class UserTools
         Set<String> roles = this.getRoles();
         return roles.stream()
                 .map(role -> {
-                    List<PermissionVo> permissionVos = redisUtils.getHashList(RedisCst.ROLE_PERMISSION_KEY, role, PermissionVo.class);
+                    List<PermissionVo> permissionVos = redisUtils.getHash(RedisCst.ROLE_PERMISSION_KEY, role, PermissionVo.class);
                     if (Objects.isNull(permissionVos))
                     {
                         return new HashSet<String>();

@@ -1,12 +1,14 @@
 package com.billow.product.cache;
 
-import com.billow.tools.constant.RedisCst;
+import com.billow.product.pojo.cache.SeckillProductCacheDto;
 import com.billow.redis.util.RedisUtils;
+import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +20,8 @@ import java.util.Map;
 @Slf4j
 @Component
 @RefreshScope
-public class SeckillProductCache {
+public class SeckillProductCache
+{
 
     @Autowired
     private RedisUtils redisUtils;

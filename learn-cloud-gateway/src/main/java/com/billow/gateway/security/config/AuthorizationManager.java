@@ -1,8 +1,8 @@
 package com.billow.gateway.security.config;
 
-import com.billow.gateway.redis.RedisUtils;
 import com.billow.gateway.security.constant.AuthConstant;
 import com.billow.gateway.security.vo.PermissionVo;
+import com.billow.redis.util.RedisUtils;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
