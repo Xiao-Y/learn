@@ -105,7 +105,7 @@ public class RolePermissionRedisKit {
      */
     public void updateRolePermissionByRoleCode(List<PermissionPo> permissionPos, String roleCode) {
         List<PermissionPo> pos = ConvertUtils.convertIgnoreBase(permissionPos, PermissionPo.class);
-        redisUtils.setObj(ROLE_PERMISSION_KEY + roleCode, pos);
+        redisUtils.setHash(ROLE_PERMISSION_KEY, roleCode, pos);
     }
 
     /**
@@ -129,7 +129,7 @@ public class RolePermissionRedisKit {
      * @since 2021-1-30 8:22
      */
     public List<PermissionVo> getRolePermissionByRoleCode(String roleCode) {
-        return redisUtils.getHash(ROLE_PERMISSION_KEY, roleCode,PermissionVo.class);
+        return redisUtils.getHash(ROLE_PERMISSION_KEY, roleCode, PermissionVo.class);
     }
 
     /**
@@ -152,6 +152,6 @@ public class RolePermissionRedisKit {
      * @since 2021-1-30 8:30
      */
     public Map<String, List<PermissionVo>> getRolePermissionMap() {
-        return redisUtils.getHashAll(ROLE_PERMISSION_KEY,PermissionVo.class);
+        return redisUtils.getHashAll(ROLE_PERMISSION_KEY, PermissionVo.class);
     }
 }

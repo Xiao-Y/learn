@@ -23,7 +23,7 @@ public class RedisUtils
 {
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate customRedisTemplate;
 
 
     /**
@@ -36,7 +36,7 @@ public class RedisUtils
      */
     public <T> T getObj(String key, Class<T> tClass)
     {
-        Object json = redisTemplate.opsForValue().get(key);
+        Object json = customRedisTemplate.opsForValue().get(key);
         if (Objects.isNull(json))
         {
             return null;
@@ -54,7 +54,7 @@ public class RedisUtils
      */
     public String getObj(String key)
     {
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        ValueOperations<String, Object> ops = customRedisTemplate.opsForValue();
         Object value = ops.get(key);
         if (Objects.isNull(value))
         {
@@ -75,7 +75,7 @@ public class RedisUtils
     public <T> void setObj(String key, T value)
     {
         Assert.notNull(key, "key is not empty");
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        ValueOperations<String, Object> ops = customRedisTemplate.opsForValue();
         ops.set(key, value);
     }
 
@@ -94,7 +94,7 @@ public class RedisUtils
         Assert.notNull(value, "value is not empty");
         Assert.notNull(timeUnit, "timeUnit is not empty");
 
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        ValueOperations<String, Object> ops = customRedisTemplate.opsForValue();
         ops.set(key, value, l, timeUnit);
     }
 
@@ -109,7 +109,7 @@ public class RedisUtils
      */
     public <T> List<T> getList(String key)
     {
-        Object value = redisTemplate.opsForValue().get(key);
+        Object value = customRedisTemplate.opsForValue().get(key);
         if (Objects.isNull(value))
         {
             return new ArrayList<>();
@@ -129,7 +129,7 @@ public class RedisUtils
      */
     public <T> List<T> getHashAllValue(String k, Class<T> tClass)
     {
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
         if (entries == null && entries.size() == 0)
         {
@@ -162,7 +162,7 @@ public class RedisUtils
     {
         Map<String, List<T>> map = new HashMap<>();
 
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
         if (entries == null && entries.size() == 0)
         {
@@ -185,7 +185,7 @@ public class RedisUtils
     {
         Map<String, T> map = new HashMap<>();
 
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
         if (entries == null && entries.size() == 0)
         {
@@ -207,7 +207,7 @@ public class RedisUtils
      */
     public <T> List<T> getHash(String k, String hk, Class<T> clazz)
     {
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         return JSONObject.parseArray(opsForHash.get(k, hk), clazz);
     }
 
@@ -221,7 +221,7 @@ public class RedisUtils
      */
     public <T> T getHashObj(String k, String hk, Class<T> clazz)
     {
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         return JSON.parseObject(opsForHash.get(k, hk), clazz);
     }
 
@@ -235,36 +235,36 @@ public class RedisUtils
      */
     public <T> void setHash(String k, Map<String, T> map)
     {
-        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, T> opsForHash = customRedisTemplate.opsForHash();
         opsForHash.putAll(k, map);
     }
 
 
     public <T> void setHash(String k, String hk, T v)
     {
-        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, T> opsForHash = customRedisTemplate.opsForHash();
         opsForHash.put(k, hk, v);
     }
 
     public <T> void delHash(String k, String... hk)
     {
-        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, T> opsForHash = customRedisTemplate.opsForHash();
         opsForHash.delete(k, hk);
     }
 
     public void del(String key)
     {
-        redisTemplate.delete(key);
+        customRedisTemplate.delete(key);
     }
 
     public void del(Collection<String> keys)
     {
-        redisTemplate.delete(keys);
+        customRedisTemplate.delete(keys);
     }
 
     public List<String> getHashKeys(String k)
     {
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         return new ArrayList<>(opsForHash.keys(k));
     }
 }

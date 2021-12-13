@@ -18,7 +18,10 @@
         LEFT JOIN r_role_permission rrp ON sp.id = rrp.permission_id
         LEFT JOIN sys_role sr ON sr.id = rrp.role_id
         WHERE
-        sp.permission_code IS NOT NULL
+        sp.valid_ind
+        and rrp.valid_ind
+        and sr.valid_ind
+        and sp.permission_code IS NOT NULL
         AND sr.role_code IN
         <foreach collection="roleCodeList" item="item" open="(" close=")" separator=",">
             #{item}

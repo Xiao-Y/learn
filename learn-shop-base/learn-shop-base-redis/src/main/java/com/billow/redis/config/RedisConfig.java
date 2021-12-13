@@ -48,7 +48,7 @@ public class RedisConfig {
 
     @Bean
     @Primary
-    public RedisTemplate<String, String> redisTemplate(@Qualifier("lettuceConnectionFactory") LettuceConnectionFactory connectionFactory) {
+    public RedisTemplate<String, String> customRedisTemplate(@Qualifier("lettuceConnectionFactory") LettuceConnectionFactory connectionFactory) {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         initDomainRedisTemplate(redisTemplate, connectionFactory);
         return redisTemplate;
