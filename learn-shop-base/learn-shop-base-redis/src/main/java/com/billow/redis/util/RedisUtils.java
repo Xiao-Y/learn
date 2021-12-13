@@ -198,16 +198,16 @@ public class RedisUtils {
     }
 
     /**
-     * 通过 hash key 获取 map 中的 value
+     * 通过 key 获取所有 map 中的 value
      *
-     * @param H hash key
+     * @param k  key
      * @return {@link List<T>}
      * @author liuyongtao
      * @since 2021-1-28 8:20
      */
-    public <T> List<T> getHashAllValue(String H) {
+    public <T> List<T> getHashAllValue(String k) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
-        Map<String, T> entries = opsForHash.entries(H);
+        Map<String, T> entries = opsForHash.entries(k);
         if (entries != null && entries.size() > 0) {
             return null;
         }
@@ -217,7 +217,7 @@ public class RedisUtils {
     /**
      * 通过  key 获取 map
      *
-     * @param k key
+     * @param k  key
      * @return {@link Map< String,T>}
      * @author liuyongtao
      * @since 2021-1-28 8:24
@@ -246,7 +246,7 @@ public class RedisUtils {
 
 
     /**
-     * 通过 key 和 hash key 获取 map
+     * 通过 key 和 hash key 获取 value
      *
      * @param k hash key
      * @return {@link Map< String,T>}
