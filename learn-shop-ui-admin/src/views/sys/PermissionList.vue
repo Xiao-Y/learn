@@ -48,7 +48,7 @@
             <template slot-scope="scope">
               <custom-select v-model="scope.row.systemModules" :datasource="systemModuleSelect"
                              :value-key="scope.row.url"
-                             disabled placeholder="请选择系统模块" multiple>
+                             disabled placeholder="请选择系统模块">
               </custom-select>
             </template>
           </el-table-column>

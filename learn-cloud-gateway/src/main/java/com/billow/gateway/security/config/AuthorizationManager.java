@@ -4,8 +4,8 @@ import com.billow.gateway.security.constant.AuthConstant;
 import com.billow.gateway.security.vo.PermissionVo;
 import com.billow.redis.util.RedisUtils;
 import com.billow.tools.constant.RedisCst;
-import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
@@ -51,25 +51,14 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                         return false;
                     }
                     for (PermissionVo permissionVo : permissionVos) {
-                        if (ToolsUtils.isEmpty(permissionVo.getSystemModule())) {
-                            String sourceURI = permissionVo.getUrl();
-                            log.info("===>>> sourceURI:{}", sourceURI);
-                            if (antPathMatcher.match(sourceURI, targetURI)) {
-                                log.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);
-                                return true;
-                            }
-                        } else {
-                            String[] split = permissionVo.getSystemModule().split(",");
-                            for (String s : split) {
-                                String sourceURI = "/" + s + permissionVo.getUrl();
-                                log.info("===>>> sourceURI:{}", sourceURI);
-                                if (antPathMatcher.match(sourceURI, targetURI)) {
-                                    log.info("\n===>>> sourceURI:{},targetURI:{} <<<===\n", sourceURI, targetURI);
-                                    return true;
-                                }
-                            }
+                        String systemModule = StringUtils.isBlank(permissionVo.getSystemModule()) ? "" : "/" + permissionVo.getSystemModule();
+                        String sourceURI = systemModule + permissionVo.getUrl();
+                        log.info("===>>> sourceURI:{}", sourceURI);
+                        if (antPathMatcher.match(sourceURI, targetURI)) {
+                            return true;
                         }
                     }
+                    log.info("===>>> 没有匹配到对应路径，匹配失败 <<<===\n");
                     return false;
                 })
                 .map(AuthorizationDecision::new)
