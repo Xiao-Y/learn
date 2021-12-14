@@ -21,17 +21,18 @@ notice:
     type: rabbit
     # mq服务器地址
     host: 192.168.137.200
+    # mq服务器端口
+    port: 5672
     # mq用户名和密码
     username: admin
     password: admin123
-    # mq服务器端口
-    port: 5672
-    # #虚拟主机
+    # 虚拟主机
     virtual-host: /learn-default
     # mq 的队列、路由、交换机配置
     mq-collect:
       # 日志收集
       - exchange: logCollectExchange
+        exchangeType: direct
         queue: logCollectQueue
         route-key: logCollectRouteKey
 
