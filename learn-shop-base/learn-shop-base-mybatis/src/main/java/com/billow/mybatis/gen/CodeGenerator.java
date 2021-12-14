@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.generator.config.TemplateConfig;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,12 @@ public class CodeGenerator {
      * @date 2019/10/29 9:46
      */
     private InjectionConfig getInjectionConfig(PackageConfig pc) {
-        String srcJava = "/src/test/java/com/billow/";
+        String parent = pc.getParent();
+        String replace = "";
+        if(StringUtils.isNoneBlank(parent)){
+             replace = parent.replace(".", "/");
+        }
+        String srcJava = "/src/test/java/" + replace + "/";
         String srcRes = "/src/test/resources";
 
         // 自定义输出配置
@@ -61,7 +67,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcJava + pc.getModuleName() + "/api/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
+                return projectPath + srcJava + "/api/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
             }
         });
 
@@ -71,7 +77,17 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcJava + pc.getModuleName() + "/dao/" + tableInfo.getMapperName() + StringPool.DOT_JAVA;
+                return projectPath + srcJava + "/dao/" + tableInfo.getMapperName() + StringPool.DOT_JAVA;
+            }
+        });
+
+        // 自定义配置:xxPo.java
+        templatePath = template + "/entity.java.ftl";
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名
+                return projectPath + srcJava + "/pojo/po/" + tableInfo.getEntityName() + StringPool.DOT_JAVA;
             }
         });
 
@@ -81,18 +97,18 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcJava + pc.getModuleName() + "/pojo/vo/" +
+                return projectPath + srcJava + "/pojo/vo/" +
                         tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "Vo" + StringPool.DOT_JAVA;
             }
         });
 
-        // 自定义配置:xxVo.java
+        // 自定义配置:xxBuild.java
         templatePath = template + "/build.java.ftl";
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcJava + pc.getModuleName() + "/pojo/build/" +
+                return projectPath + srcJava + "/pojo/build/" +
                         tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "BuildParam" + StringPool.DOT_JAVA;
             }
         });
@@ -103,7 +119,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcJava + pc.getModuleName() + "/pojo/search/" +
+                return projectPath + srcJava + "/pojo/search/" +
                         tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "SearchParam" + StringPool.DOT_JAVA;
             }
         });
@@ -114,7 +130,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcJava + pc.getModuleName() + "/service/" +
+                return projectPath + srcJava + "/service/" +
                         tableInfo.getServiceName() + StringPool.DOT_JAVA;
             }
         });
@@ -125,7 +141,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + srcJava + pc.getModuleName() + "/service/impl/" +
+                return projectPath + srcJava + "/service/impl/" +
                         tableInfo.getServiceImplName() + StringPool.DOT_JAVA;
             }
         });
@@ -212,6 +228,7 @@ public class CodeGenerator {
                 .setController(null)
                 .setService(null)
                 .setServiceImpl(null)
+                .setEntity(null)
                 .setMapper(null);
         // 设置模板
         mpg.setTemplate(templateConfig)
@@ -268,9 +285,11 @@ public class CodeGenerator {
             parent = "system";
         } else if (strategy.getTablePrefix().contains("oms_")) {
             parent = "order";
+        } else if (strategy.getTablePrefix().contains("u_")) {
+            parent = "user";
         }
 
-        pc.setParent("com.billow");
+        pc.setParent("com.billow.webflux");
         pc.setModuleName(parent);
         pc.setEntity("pojo.po");
         pc.setController("api");
@@ -333,16 +352,20 @@ public class CodeGenerator {
 //                "sys_role",
 //                "sys_white_list"
 //                );
-        strategy.setTablePrefix("sys_");
-        strategy.setInclude("sys_permission",
-                "r_role_menu",
-                "r_role_permission",
-                "r_user_role"
-        );
+//        strategy.setTablePrefix("sys_");
+//        strategy.setInclude("sys_permission",
+//                "r_role_menu",
+//                "r_role_permission",
+//                "r_user_role"
+//        );
 //        strategy.setTablePrefix("r_");
 
 //        strategy.setInclude("v_mytasklist");
 //        strategy.setTablePrefix("v_");
+
+        strategy.setTablePrefix("u_");
+        strategy.setInclude("u_user"
+        );
     }
 
     public static void main(String[] args) {

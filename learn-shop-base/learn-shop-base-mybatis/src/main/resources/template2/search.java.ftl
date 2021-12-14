@@ -1,5 +1,6 @@
 <#assign SC = table.entityName?substring(0,(table.entityName)?length-2) + "SearchParam">
-package com.billow.${package.ModuleName}.pojo.search;
+<#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
+package ${Parent}.pojo.search;
 
 import com.billow.mybatis.pojo.BasePage;
 import lombok.Data;

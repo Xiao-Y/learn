@@ -1,12 +1,13 @@
 <#assign SC = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
 <#assign Sc = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
+<#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 
-package com.billow.${package.ModuleName}.service;
+package ${Parent}.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.billow.${package.ModuleName}.pojo.po.${entity};
+import ${package.Entity}.${entity};
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.${package.ModuleName}.pojo.search.${SC};
+import ${Parent}.pojo.search.${SC};
 
 /**
  * <p>

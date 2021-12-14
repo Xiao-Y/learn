@@ -4,16 +4,17 @@
 <#assign Bd = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "BuildParam">
 <#assign SC = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
 <#assign Sc = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
+<#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 package ${package.Controller};
 
-import com.billow.${package.ModuleName}.pojo.build.${BD};
-import com.billow.${package.ModuleName}.pojo.vo.${VO};
-import com.billow.${package.ModuleName}.pojo.search.${SC};
+import ${Parent}.pojo.build.${BD};
+import ${Parent}.pojo.vo.${VO};
+import ${Parent}.pojo.search.${SC};
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.billow.${package.ModuleName}.service.${table.serviceName};
+import ${Parent}.service.${table.serviceName};
 import com.billow.tools.utlis.ConvertUtils;
-import com.billow.${package.ModuleName}.pojo.po.${entity};
+import ${package.Entity}.${entity};
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

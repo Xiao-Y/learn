@@ -1,5 +1,6 @@
 <#assign VO = table.entityName?substring(0,(table.entityName)?length-2) + "BuildParam">
-package com.billow.${package.ModuleName}.pojo.build;
+<#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
+package ${Parent}.pojo.build;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
