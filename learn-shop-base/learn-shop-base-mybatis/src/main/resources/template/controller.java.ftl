@@ -4,14 +4,15 @@
 <#assign Bp = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "BuildParam">
 <#assign SP = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
 <#assign Sp = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
+<#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 package ${package.Controller};
 
 import com.billow.mybatis.base.HighLevelApi;
-import com.billow.${package.ModuleName}.pojo.build.${BP};
-import com.billow.${package.ModuleName}.pojo.vo.${VO};
-import com.billow.${package.ModuleName}.pojo.search.${SP};
-import com.billow.${package.ModuleName}.pojo.po.${entity};
-import com.billow.${package.ModuleName}.service.${table.serviceName};
+import ${Parent}.pojo.build.${BP};
+import ${Parent}.pojo.vo.${VO};
+import ${Parent}.pojo.search.${SP};
+import ${package.Entity}.${entity};
+import ${Parent}.service.${table.serviceName};
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -12,6 +12,7 @@ import com.billow.mybatis.cache.MybatisRedisCache;
  * </p>
  *
  * @author billow
+ * @version v2.0
  * @since 2021-12-14
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
