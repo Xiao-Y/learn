@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2021/12/14 10:34
  */
 @Data
-@ConfigurationProperties(prefix = "ding.robot")
+@ConfigurationProperties(prefix = "notice.ding.robot")
 public class RobotProperties
 {
     private String webhook;
