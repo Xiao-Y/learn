@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <parent>
         <artifactId>learn</artifactId>
         <groupId>com.billow</groupId>
@@ -30,25 +28,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.billow</groupId>-->
-<!--            <artifactId>learn-shop-base-common</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>poi-ooxml</artifactId>-->
-<!--                    <groupId>org.apache.poi</groupId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>mysql-connector-java</artifactId>-->
-<!--                    <groupId>mysql</groupId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>sharding-jdbc-spring-boot-starter</artifactId>-->
-<!--                    <groupId>org.apache.shardingsphere</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-redis</artifactId>
@@ -60,6 +39,17 @@
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-aop</artifactId>
+        </dependency>
+        <!-- 配置中心获取端 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!--配置命名容错处理-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
         <!-- 注册中心 -->
         <dependency>
