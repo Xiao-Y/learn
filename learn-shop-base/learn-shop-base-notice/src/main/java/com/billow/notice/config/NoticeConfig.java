@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(RobotProperties.class)
-public class NoticeConfig
-{
+public class NoticeConfig {
 
     /**
      * 钉钉机器在人发送消息服务类
@@ -20,8 +19,7 @@ public class NoticeConfig
      * @date 2021/12/14 10:47
      */
     @Bean
-    public SendDingService sendDingService()
-    {
+    public SendDingService sendDingService() {
         return new SendDingService();
     }
 }

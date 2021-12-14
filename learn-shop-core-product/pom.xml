@@ -63,7 +63,10 @@
             <artifactId>reflections</artifactId>
             <version>0.9.11</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-notice</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

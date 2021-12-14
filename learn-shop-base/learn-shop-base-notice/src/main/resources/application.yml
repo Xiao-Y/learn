@@ -5,3 +5,34 @@
 #    webhook: https://oapi.dingtalk.com/robot/send?access_token=d1e4bf1cb3b57616d92c86ef1e9783064cde5e8e6c28944801e719fa3588bf95
 #    # 加签
 #    robot-key: SECb2310283956906fe7acf381ff4fce58efc12f607579160361d274f15bbf8d29f
+
+notice:
+  # 钉钉配置
+  ding:
+    # 钉钉机器人
+    robot:
+      # webhook
+      webhook: https://oapi.dingtalk.com/robot/send?access_token=d1e4bf1cb3b57616d92c86ef1e9783064cde5e8e6c28944801e719fa3588bf95
+      # 加签
+      robot-key: SECb2310283956906fe7acf381ff4fce58efc12f607579160361d274f15bbf8d29f
+  # rabbit mq 配置
+  mq:
+    # 中间件类型
+    type: rabbit
+    # mq服务器地址
+    host: 192.168.137.200
+    # mq用户名和密码
+    username: admin
+    password: admin123
+    # mq服务器端口
+    port: 5672
+    # #虚拟主机
+    virtual-host: /learn-default
+    # mq 的队列、路由、交换机配置
+    mq-collect:
+      # 日志收集
+      - exchange: logCollectExchange
+        queue: logCollectQueue
+        route-key: logCollectRouteKey
+
+

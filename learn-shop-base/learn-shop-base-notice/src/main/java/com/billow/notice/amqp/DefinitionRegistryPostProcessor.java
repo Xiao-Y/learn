@@ -13,9 +13,13 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.BeanNameGenerator;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
 
 /**
  * @Configuration 或
@@ -23,15 +27,14 @@ import org.springframework.util.StringUtils;
  * @Bean定义
  **/
 @Configuration
-public class DefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor
-{
+public class DefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor, ApplicationContextAware {
+
     private static BeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
 
+    private ApplicationContext applicationContext;
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory arg0)
-            throws BeansException
-    {
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
 
     }
 
@@ -40,16 +43,21 @@ public class DefinitionRegistryPostProcessor implements BeanDefinitionRegistryPo
      * 在执行postProcessBeanFactory方法
      */
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)
-            throws BeansException
-    {
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        // 校验 bean 是否存在
+//        applicationContext.containsBean()
+        // https://blog.csdn.net/zxx2096/article/details/116146785 配置文件格式
         // 第一种 ： 手动注入
         // 注册bean
         String queueName = "testQueue";
         String directExchangeName = "testDirectExchange";
+        String routeKey = "testRouteKey";
+        Binding.DestinationType destinationType = Binding.DestinationType.QUEUE;
+
         registerBean(registry, "testQueue", Queue.class, queueName);
         registerBean(registry, "testDirectExchange", DirectExchange.class, directExchangeName);
-        registerBean(registry, "testBinding", Binding.class, queueName, Binding.DestinationType.QUEUE);
+        registerBean(registry, "testBinding", Binding.class, queueName, destinationType,
+                directExchangeName, routeKey, new HashMap<String, Object>());
 
     }
 
@@ -63,28 +71,30 @@ public class DefinitionRegistryPostProcessor implements BeanDefinitionRegistryPo
      * @param <T>
      * @return 返回注册到容器中的bean对象
      */
-    public static <T> T registerBean(BeanDefinitionRegistry registry, String name, Class<T> beanClass, Object... args)
-    {
+    public static <T> T registerBean(BeanDefinitionRegistry registry, String name, Class<T> beanClass, Object... args) {
         // 可以自动生成name
-        if (StringUtils.isEmpty(name))
-        {
+        if (StringUtils.isEmpty(name)) {
             AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
             name = beanNameGenerator.generateBeanName(abd, registry);
         }
 
         // 设置构造参数
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
-        for (Object arg : args)
-        {
+        for (Object arg : args) {
             beanDefinitionBuilder.addConstructorArgValue(arg);
         }
         BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
 
         // 为创建的bean里面的属性赋值
-        MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
-        propertyValues.add("descritpion", "我是填充进来的");
+//        MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
+//        propertyValues.add("descritpion", "我是填充进来的");
 
         registry.registerBeanDefinition(name, beanDefinition);
         return null;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
     }
 }
