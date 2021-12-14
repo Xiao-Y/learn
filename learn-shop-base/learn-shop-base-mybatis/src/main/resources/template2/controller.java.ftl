@@ -1,19 +1,20 @@
 <#assign VO = table.entityName?substring(0,(table.entityName)?length-2) + "Vo">
 <#assign Vo = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "Vo">
-<#assign BD = table.entityName?substring(0,(table.entityName)?length-2) + "BuildParam">
-<#assign Bd = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "BuildParam">
-<#assign SC = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
-<#assign Sc = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
+<#assign BP = table.entityName?substring(0,(table.entityName)?length-2) + "BuildParam">
+<#assign Bp = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "BuildParam">
+<#assign SP = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
+<#assign Sp = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
+<#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 package ${package.Controller};
 
-import com.billow.${package.ModuleName}.pojo.build.${BD};
-import com.billow.${package.ModuleName}.pojo.vo.${VO};
-import com.billow.${package.ModuleName}.pojo.search.${SC};
+import ${Parent}.pojo.build.${BP};
+import ${Parent}.pojo.vo.${VO};
+import ${Parent}.pojo.search.${SP};
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.billow.${package.ModuleName}.service.${table.serviceName};
+import ${Parent}.service.${table.serviceName};
 import com.billow.tools.utlis.ConvertUtils;
-import com.billow.${package.ModuleName}.pojo.po.${entity};
+import ${package.Entity}.${entity};
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +59,8 @@ public class ${table.controllerName} {
 
     @ApiOperation(value = "查询分页${table.comment!}数据")
     @PostMapping(value = "/findListByPage")
-    public IPage<${entity}> findListByPage(@RequestBody ${SC} ${Sc}){
-        return ${table.serviceName?uncap_first}.findListByPage(${Sc});
+    public IPage<${entity}> findListByPage(@RequestBody ${SP} ${Sp}){
+        return ${table.serviceName?uncap_first}.findListByPage(${Sp});
     }
 
     @ApiOperation(value = "根据id查询${table.comment!}数据")
@@ -71,8 +72,8 @@ public class ${table.controllerName} {
 
     @ApiOperation(value = "新增${table.comment!}数据")
     @PostMapping(value = "/add")
-    public ${VO} add(@RequestBody ${BD} ${Bd}){
-        ${entity} po = ConvertUtils.convert(${Bd}, ${entity}.class);
+    public ${VO} add(@RequestBody ${BP} ${Bp}){
+        ${entity} po = ConvertUtils.convert(${Bp}, ${entity}.class);
         ${table.serviceName?uncap_first}.save(po);
         return ConvertUtils.convert(po, ${VO}.class);
     }
@@ -85,8 +86,8 @@ public class ${table.controllerName} {
 
     @ApiOperation(value = "更新${table.comment!}数据")
     @PutMapping(value = "/update")
-    public ${VO} update(@RequestBody ${BD} ${Bd}){
-        ${entity} po = ConvertUtils.convert(${Bd}, ${entity}.class);
+    public ${VO} update(@RequestBody ${BP} ${Bp}){
+        ${entity} po = ConvertUtils.convert(${Bp}, ${entity}.class);
         ${table.serviceName?uncap_first}.updateById(po);
         return ConvertUtils.convert(po, ${VO}.class);
     }

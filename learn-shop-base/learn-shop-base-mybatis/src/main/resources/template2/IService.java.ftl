@@ -1,12 +1,13 @@
-<#assign SC = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
-<#assign Sc = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
+<#assign SP = (table.entityName?substring(0,(table.entityName)?length-2)) + "SearchParam">
+<#assign Sp = (table.entityName?substring(0,(table.entityName)?length-2))?uncap_first + "SearchParam">
+<#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 
-package com.billow.${package.ModuleName}.service;
+package ${Parent}.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.billow.${package.ModuleName}.pojo.po.${entity};
+import ${package.Entity}.${entity};
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.${package.ModuleName}.pojo.search.${SC};
+import ${Parent}.pojo.search.${SP};
 
 /**
  * <p>
@@ -22,12 +23,12 @@ public interface ${table.serviceName} extends IService<${entity}> {
     /**
      * 分页查询
      *
-     * @param ${Sc} 查询条件
+     * @param ${Sp} 查询条件
      * @return com.baomidou.mybatisplus.core.metadata.IPage<com.billow.${package.ModuleName}.pojo.po.${entity}>
      * @author ${author}
      * @since ${date}
      */
-    IPage<${entity}> findListByPage(${SC} ${Sc});
+    IPage<${entity}> findListByPage(${SP} ${Sp});
 
     /**
      * 根据ID禁用数据

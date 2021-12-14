@@ -22,6 +22,17 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
         </dependency>
+        <!-- 配置中心获取端 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!--配置命名容错处理-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>

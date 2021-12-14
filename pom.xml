@@ -76,6 +76,8 @@
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <jsch.version>0.1.54</jsch.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
+        <log4j-api.version>2.15.0</log4j-api.version>
+        <javax.mail.version>1.6.2</javax.mail.version>
     </properties>
 
     <dependencyManagement>
@@ -165,6 +167,11 @@
             <dependency>
                 <groupId>com.billow</groupId>
                 <artifactId>learn-shop-base-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-notice</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- swagger2 -->
@@ -262,26 +269,28 @@
                 <artifactId>spring-security-jwt</artifactId>
                 <version>${spring-security-jwt.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>javax.mail-api</artifactId>
+                <version>${javax.mail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>javax.mail</artifactId>
+                <version>${javax.mail.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- 配置中心获取端 -->
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-        <!--配置命名容错处理-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!-- spring boot 测试用 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
 
