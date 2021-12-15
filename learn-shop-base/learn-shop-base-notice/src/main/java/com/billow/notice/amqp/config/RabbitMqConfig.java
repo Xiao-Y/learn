@@ -31,7 +31,7 @@ public class RabbitMqConfig {
         connectionFactory.setUsername(noticeMqYml.getUsername());
         connectionFactory.setPassword(noticeMqYml.getPassword());
         connectionFactory.setVirtualHost(noticeMqYml.getVirtualHost());
-        connectionFactory.setPublisherConfirms(true);
+        connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         return connectionFactory;
     }
 
