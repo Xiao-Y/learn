@@ -3,8 +3,8 @@ package com.billow.notice.amqp.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * mq 消息通知配置文件
@@ -71,5 +71,5 @@ public class NoticeMqYml
      * @author xiaoy
      * @since 2021/12/14 22:42
      */
-    private List<MqSetting> mqCollect = new ArrayList<>();
+    private Map<String, MqSetting> mqCollect = new HashMap<>();
 }

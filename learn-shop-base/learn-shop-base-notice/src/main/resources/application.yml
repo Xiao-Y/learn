@@ -31,9 +31,10 @@ notice:
     # mq 的队列、路由、交换机配置
     mq-collect:
       # 日志收集
-      - exchange: logCollectExchange
-        exchangeType: direct
+      logCollect:
         queue: logCollectQueue
+        exchange: logCollectExchange
+        exchangeType: direct
         route-key: logCollectRouteKey
 
 
