@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({RobotProperties.class})
-public class DingConfig
-{
+public class DingConfig {
 
     /**
      * 钉钉机器在人发送消息服务类

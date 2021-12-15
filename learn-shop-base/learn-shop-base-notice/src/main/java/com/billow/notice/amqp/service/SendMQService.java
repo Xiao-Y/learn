@@ -1,9 +1,9 @@
-package com.billow.notice.amqp.expand;
+package com.billow.notice.amqp.service;
 
-import com.billow.notice.config.SpringContextUtil;
 import com.billow.notice.amqp.properties.MqSetting;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 发送 mq 消息
@@ -12,19 +12,20 @@ import org.springframework.amqp.core.AmqpTemplate;
  * @since 2021-8-20 16:00
  */
 @Slf4j
-public class SendMessage {
+public class SendMQService {
 
-    private final static AmqpTemplate amqpTemplate = SpringContextUtil.getBean(AmqpTemplate.class);
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     /**
      * 发送消息
      *
      * @param setting mq 配置
-     * @param data   消息体
+     * @param data    消息体
      * @author liuyongtao
      * @since 2021-8-20 16:01
      */
-    public static void send(MqSetting setting, Object data) {
+    public void send(MqSetting setting, Object data) {
         String exchange = setting.getExchange();
         String routeKey = setting.getRouteKey();
         log.info("发送消息：exchange:{},routeKey:{},queue:{},data:{}", exchange, routeKey, setting.getQueue(), data);
@@ -39,7 +40,7 @@ public class SendMessage {
      * @author liuyongtao
      * @since 2021-8-20 16:01
      */
-    public static void send(String exchange, Object data) {
+    public void send(String exchange, Object data) {
         log.info("发送消息：exchange:{},data:{}", exchange, data);
         amqpTemplate.convertAndSend(exchange, null, data);
     }
@@ -47,13 +48,13 @@ public class SendMessage {
     /**
      * 发送延时消息
      *
-     * @param setting     mq 配置
+     * @param setting    mq 配置
      * @param data       消息体
      * @param delayTimes 延时时间（分钟）
      * @author liuyongtao
      * @since 2021-8-25 15:21
      */
-    public static void send(MqSetting setting, Object data, final long delayTimes) {
+    public void send(MqSetting setting, Object data, final long delayTimes) {
         String exchange = setting.getExchange();
         String routeKey = setting.getRouteKey();
         log.info("发送消息：exchange:{},routeKey:{},queue:{},data:{}", exchange, routeKey, setting.getQueue(), data);

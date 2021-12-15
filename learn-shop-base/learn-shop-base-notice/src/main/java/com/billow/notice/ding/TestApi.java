@@ -10,15 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class TestApi
-{
+public class TestApi {
 
     @Autowired
     private SendDingService sendDingService;
 
     @GetMapping("/sendText")
-    public String sendText()
-    {
+    public String sendText() {
         SendRequestParam.Text text = new SendRequestParam.Text();
         text.setContent("我就是我, @XXX 是不一样的烟火");
 
@@ -32,8 +30,7 @@ public class TestApi
     }
 
     @GetMapping("/sendLink")
-    public String sendLink()
-    {
+    public String sendLink() {
         SendRequestParam.Link link = new SendRequestParam.Link();
         link.setText("这个即将发布的新版本，创始人xx称它为红树林。而在此之前，每当面临重大升级，产品经理们都会取一个应景的代号，这一次，为什么是红树林");
         link.setTitle("时代的火车向前开");
@@ -43,8 +40,7 @@ public class TestApi
     }
 
     @GetMapping("/sendMarkdown")
-    public String sendMarkdown()
-    {
+    public String sendMarkdown() {
         SendRequestParam.Markdown markdown = new SendRequestParam.Markdown();
         markdown.setTitle("这个即将发布的新版本，创始人xx称它为红树林。而在此之前，每当面临重大升级，产品经理们都会取一个应景的代号，这一次，为什么是红树林");
         markdown.setText("#### 杭州天气 @150XXXXXXXX \n > 9度，西北风1级，空气良89，相对温度73%\n > ![screenshot](https://img.alicdn.com/tfs/TB1NwmBEL9TBuNjy1zbXXXpepXa-2400-1218.png)\n > ###### 10点20分发布 [天气](https://www.dingtalk.com) \n");
@@ -52,8 +48,7 @@ public class TestApi
     }
 
     @GetMapping("/sendActionCard")
-    public String sendActionCard()
-    {
+    public String sendActionCard() {
         SendRequestParam.Actioncard actioncard = new SendRequestParam.Actioncard();
         actioncard.setTitle("乔布斯 20 年前想打造一间苹果咖啡厅，而它正是 Apple Store 的前身");
         actioncard.setText("![screenshot](https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png) \n" +
@@ -75,12 +70,11 @@ public class TestApi
         btn1.setActionURL("");
 
         actioncard.setBtns(btns);
-        return sendDingService.sendActionCard(actioncard);
+        return sendDingService.sendActionCard(actioncard).send();
     }
 
     @GetMapping("/sendFeedcard")
-    public String sendFeedcard()
-    {
+    public String sendFeedcard() {
         SendRequestParam.Feedcard feedcard = new SendRequestParam.Feedcard();
 
         List<SendRequestParam.Links> links = new ArrayList<>();
@@ -98,6 +92,6 @@ public class TestApi
 
         feedcard.setLinks(links);
 
-        return sendDingService.sendFeedcard(feedcard);
+        return sendDingService.sendFeedcard(feedcard).send();
     }
 }
