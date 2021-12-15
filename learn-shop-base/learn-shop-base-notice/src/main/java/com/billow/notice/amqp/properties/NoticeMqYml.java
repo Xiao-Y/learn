@@ -1,4 +1,4 @@
-package com.billow.notice.amqp.yml;
+package com.billow.notice.amqp.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,7 +14,8 @@ import java.util.List;
  */
 @Data
 @ConfigurationProperties(prefix = "notice.mq")
-public class NoticeMqYml {
+public class NoticeMqYml
+{
 
     /**
      * 中间件类型
@@ -70,5 +71,5 @@ public class NoticeMqYml {
      * @author xiaoy
      * @since 2021/12/14 22:42
      */
-    private List<MqCollectProperties> mqCollect = new ArrayList<>();
+    private List<MqSetting> mqCollect = new ArrayList<>();
 }

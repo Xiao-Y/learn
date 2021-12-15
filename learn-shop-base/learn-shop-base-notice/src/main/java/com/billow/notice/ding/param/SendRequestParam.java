@@ -1,4 +1,4 @@
-package com.billow.notice.ding;
+package com.billow.notice.ding.param;
 
 import lombok.Data;
 

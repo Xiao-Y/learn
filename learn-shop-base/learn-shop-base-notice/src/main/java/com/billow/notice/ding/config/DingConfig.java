@@ -1,15 +1,15 @@
-package com.billow.notice.config;
+package com.billow.notice.ding.config;
 
-import com.billow.notice.amqp.yml.NoticeMqYml;
-import com.billow.notice.ding.RobotProperties;
-import com.billow.notice.ding.SendDingService;
+import com.billow.notice.ding.properties.RobotProperties;
+import com.billow.notice.ding.service.SendDingService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties({RobotProperties.class, NoticeMqYml.class})
-public class NoticeConfig {
+@EnableConfigurationProperties({RobotProperties.class})
+public class DingConfig
+{
 
     /**
      * 钉钉机器在人发送消息服务类

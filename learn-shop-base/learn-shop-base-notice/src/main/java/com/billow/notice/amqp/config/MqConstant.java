@@ -1,4 +1,4 @@
-package com.billow.notice.amqp;
+package com.billow.notice.amqp.config;
 
 /**
  * mq 常量

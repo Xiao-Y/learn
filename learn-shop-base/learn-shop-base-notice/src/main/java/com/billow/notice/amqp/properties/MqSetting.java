@@ -1,4 +1,4 @@
-package com.billow.notice.amqp.yml;
+package com.billow.notice.amqp.properties;
 
 import lombok.Data;
 import org.springframework.amqp.core.ExchangeTypes;
@@ -10,7 +10,8 @@ import org.springframework.amqp.core.ExchangeTypes;
  * @since 2021/12/14 22:40
  */
 @Data
-public class MqCollectProperties {
+public class MqSetting
+{
 
     /**
      * 交换机名称

@@ -1,6 +1,6 @@
 //package com.billow.notice.amqp.config;
 //
-//import com.billow.notice.amqp.MqConstant;
+//import com.billow.notice.amqp.config.MqConstant;
 //import org.springframework.amqp.core.Binding;
 //import org.springframework.amqp.core.BindingBuilder;
 //import org.springframework.amqp.core.DirectExchange;

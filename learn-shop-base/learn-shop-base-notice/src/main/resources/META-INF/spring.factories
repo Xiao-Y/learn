@@ -1,4 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.billow.notice.config.NoticeConfig,\
-com.billow.notice.amqp.DefinitionRegistryPostProcessor,\
+com.billow.notice.config.SpringContextConfig,\
+com.billow.notice.ding.config.DingConfig,\
+com.billow.notice.amqp.config.MqBeanRegistryConfig,\
 com.billow.notice.amqp.config.RabbitMqConfig

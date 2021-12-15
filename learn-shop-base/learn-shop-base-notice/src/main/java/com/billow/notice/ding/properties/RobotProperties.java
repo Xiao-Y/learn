@@ -1,4 +1,4 @@
-package com.billow.notice.ding;
+package com.billow.notice.ding.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
