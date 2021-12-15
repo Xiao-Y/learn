@@ -34,8 +34,7 @@ import java.util.Objects;
  **/
 @Slf4j
 @Configuration
-public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
-{
+public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor {
     /**
      * 获取 ApplicationContext
      *
@@ -63,24 +62,20 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      * @author 千面
      * @date 2021/12/15 8:44
      */
-    private Map<String, MqSetting> getMqSettingList()
-    {
-        if (Objects.isNull(noticeMqYml))
-        {
+    private Map<String, MqSetting> getMqSettingList() {
+        if (Objects.isNull(noticeMqYml)) {
             return new HashMap<>();
         }
 
         Map<String, MqSetting> mqSettings = noticeMqYml.getMqCollect();
-        if (CollectionUtils.isEmpty(mqSettings))
-        {
+        if (CollectionUtils.isEmpty(mqSettings)) {
             return new HashMap<>();
         }
         return mqSettings;
     }
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException
-    {
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
 
     }
 
@@ -90,17 +85,15 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      */
     @SneakyThrows
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException
-    {
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         Map<String, MqSetting> mqSettingMap = this.getMqSettingList();
         log.info("====================== 开始注入 MQ 设置:{} ======================", mqSettingMap.size());
-        for (String key : mqSettingMap.keySet())
-        {
+        for (String key : mqSettingMap.keySet()) {
             MqSetting mqSetting = mqSettingMap.get(key);
             // 配置数据检查
             this.checkMqSetting(key, mqSetting);
             // 注入队列
-            this.registryQueue(registry, mqSetting.getQueue());
+            this.registryQueue(registry, mqSetting);
             // 注入交换机
             this.registryExchange(registry, mqSetting.getExchangeType(), mqSetting.getExchange());
             // 绑定队列和交换机
@@ -119,8 +112,7 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      * @author 千面
      * @date 2021/12/15 9:16
      */
-    private void registryBinding(String mqSettingName, BeanDefinitionRegistry registry, MqSetting mqSetting)
-    {
+    private void registryBinding(String mqSettingName, BeanDefinitionRegistry registry, MqSetting mqSetting) {
         String bindingName = mqSettingName + MqConstant.SUFFIX_BINDING;
         registerBean(registry, bindingName, Binding.class, mqSetting.getQueue(), Binding.DestinationType.QUEUE,
                 mqSetting.getExchange(), mqSetting.getRouteKey(), new HashMap<String, Object>());
@@ -138,15 +130,12 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      * @author 千面
      * @date 2021/12/15 9:16
      */
-    private void registryExchange(BeanDefinitionRegistry registry, String exchangeType, String exchangeName) throws ClassNotFoundException
-    {
+    private void registryExchange(BeanDefinitionRegistry registry, String exchangeType, String exchangeName) throws ClassNotFoundException {
         boolean exchangeFlag = applicationContext.containsBean(exchangeName);
-        if (!exchangeFlag)
-        {
+        if (!exchangeFlag) {
             // 交换机类型
             Class<?> exchangeClass;
-            switch (exchangeType)
-            {
+            switch (exchangeType) {
                 case ExchangeTypes.DIRECT:
                     exchangeClass = DirectExchange.class;
                     break;
@@ -160,9 +149,7 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
                     throw new ClassNotFoundException("交换机：" + exchangeName + "，没有找到对应的交换机类型:" + exchangeType);
             }
             this.registerBean(registry, exchangeClass, exchangeName);
-        }
-        else
-        {
+        } else {
             log.warn("交换机：{} 已经存在", exchangeName);
         }
     }
@@ -171,20 +158,17 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      * 注入队列
      *
      * @param registry
-     * @param queueName 队列名称
+     * @param mqSetting mq配置
      * @return void
      * @author 千面
      * @date 2021/12/15 9:16
      */
-    private void registryQueue(BeanDefinitionRegistry registry, String queueName)
-    {
+    private void registryQueue(BeanDefinitionRegistry registry, MqSetting mqSetting) {
+        String queueName = mqSetting.getQueue();
         boolean queueFlag = applicationContext.containsBean(queueName);
-        if (!queueFlag)
-        {
-            this.registerBean(registry, Queue.class, queueName);
-        }
-        else
-        {
+        if (!queueFlag) {
+            this.registerBean(registry, Queue.class, queueName, mqSetting.getDurable());
+        } else {
             log.warn("队列：{} 已经存在", queueName);
         }
     }
@@ -198,23 +182,19 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      * @author 千面
      * @date 2021/12/15 9:09
      */
-    private void checkMqSetting(String mqSettingName, MqSetting mqSetting)
-    {
+    private void checkMqSetting(String mqSettingName, MqSetting mqSetting) {
         String queueName = mqSetting.getQueue();
-        if (StringUtils.isEmpty(queueName))
-        {
+        if (StringUtils.isEmpty(queueName)) {
             log.warn("MQ 配置===>>>队列名称为空,自动生成");
             mqSetting.setQueue(mqSettingName + MqConstant.SUFFIX_QUEUE);
         }
         String exchangeName = mqSetting.getExchange();
-        if (StringUtils.isEmpty(exchangeName))
-        {
+        if (StringUtils.isEmpty(exchangeName)) {
             log.warn("MQ 配置===>>>交换机名称为空,自动生成");
             mqSetting.setExchange(mqSettingName + MqConstant.SUFFIX_EXCHANGE);
         }
         String routeKey = mqSetting.getRouteKey();
-        if (StringUtils.isEmpty(routeKey))
-        {
+        if (StringUtils.isEmpty(routeKey)) {
             log.error("MQ 配置===>>>路由key名称为空,自动生成");
             mqSetting.setRouteKey(mqSettingName + MqConstant.SUFFIX_ROUTE_KEY);
         }
@@ -228,8 +208,7 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      * @author 千面
      * @date 2021/12/15 8:39
      */
-    private <T> void registerBean(BeanDefinitionRegistry registry, Class<T> beanClass, Object... args)
-    {
+    private <T> void registerBean(BeanDefinitionRegistry registry, Class<T> beanClass, Object... args) {
         this.registerBean(registry, null, beanClass, args);
     }
 
@@ -242,18 +221,15 @@ public class MqBeanRegistryConfig implements BeanDefinitionRegistryPostProcessor
      * @author 千面
      * @date 2021/12/15 8:39
      */
-    private <T> void registerBean(BeanDefinitionRegistry registry, String beanName, Class<T> beanClass, Object... args)
-    {
+    private <T> void registerBean(BeanDefinitionRegistry registry, String beanName, Class<T> beanClass, Object... args) {
         // 如果为空，自动生成 beanName
-        if (StringUtils.isEmpty(beanName))
-        {
+        if (StringUtils.isEmpty(beanName)) {
             AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
             beanName = beanNameGenerator.generateBeanName(abd, registry);
         }
         // 设置构造参数
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
-        for (Object arg : args)
-        {
+        for (Object arg : args) {
             beanDefinitionBuilder.addConstructorArgValue(arg);
         }
         BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
