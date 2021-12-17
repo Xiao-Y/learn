@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 @Data
 @Configuration
@@ -38,6 +39,7 @@ public class RedissonConfig {
     @Bean(destroyMethod = "shutdown")
     public RedissonClient redisson() throws Exception {
         Config config = new Config();
+        String password = redisProperties.getPassword();
         config.useSingleServer().setAddress("redis://" + redisProperties.getHost() + ":" + redisProperties.getPort())
                 .setConnectionMinimumIdleSize(connectionMinimumIdleSize)
                 .setConnectionPoolSize(connectionPoolSize)
@@ -52,7 +54,7 @@ public class RedissonConfig {
                 .setTimeout(timeout)
                 .setConnectTimeout(connectTimeout)
                 .setIdleConnectionTimeout(idleConnectionTimeout)
-                .setPassword(redisProperties.getPassword());
+                .setPassword(StringUtils.isEmpty(password) ? null : password);
         config.setThreads(thread);
         config.setEventLoopGroup(new NioEventLoopGroup());
         return Redisson.create(config);
