@@ -1,11 +1,3 @@
-##集成钉钉服务
-#ding:
-#  robot:
-#    # webhook
-#    webhook: https://oapi.dingtalk.com/robot/send?access_token=d1e4bf1cb3b57616d92c86ef1e9783064cde5e8e6c28944801e719fa3588bf95
-#    # 加签
-#    robot-key: SECb2310283956906fe7acf381ff4fce58efc12f607579160361d274f15bbf8d29f
-
 notice:
   # 钉钉配置
   ding:
@@ -20,7 +12,7 @@ notice:
     # 中间件类型
     type: rabbit
     # mq服务器地址
-    host: 192.168.137.200
+    host: 127.0.0.1
     # mq服务器端口
     port: 5672
     # mq用户名和密码
@@ -36,5 +28,47 @@ notice:
         exchange: logCollectExchange
         exchangeType: direct
         route-key: logCollectRouteKey
+      # 运行自动任务
+      runJobTest:
+        queue: runJobTestQueue
+        exchange: runJobTestExchange
+        exchangeType: direct
+        route-key: runJobTestRouteKey
+      # 执行sql 配置
+      executeSql:
+        queue: executeSqlQueue
+        exchange: executeSqlExchange
+        route-key: executeSqlRouteKey
+      # 刷新 es 缓存 配置
+      refreshEs:
+        queue: refreshEsQueue
+        exchange: productExchange
+        route-key: refreshEsRouteKey
+      #  秒杀订单发送订单系统 配置
+      secKillToCoreOrder:
+        exchange: secKillOrderExchange
+        exchangeType: fanout
+        queue: secKillToCoreOrderQueue
+        dlx-queue: secKillToCoreOrderQueueDlx
+        dlx-exchange: secKillOrderExchangeDlx
+        dlx-exchangeType: fanout
+      #  秒杀订单发送system系统 配置
+      secKillToAdminSystem:
+        exchange: secKillOrderExchange
+        exchangeType: fanout
+        queue: secKillToAdminSystemQueue
+      #  发送邮件 配置
+      sendMail:
+        queue: sendmailQueue
+        exchange: sendMailExchange
+        route-key: sendmailRouteKey
+
+
+
+
+
+
+
+
 
 

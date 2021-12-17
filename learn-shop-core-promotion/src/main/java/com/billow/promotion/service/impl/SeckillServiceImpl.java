@@ -1,7 +1,7 @@
 package com.billow.promotion.service.impl;
 
-import com.billow.common.amqp.config.MqSecKillOrderConfig;
-import com.billow.common.amqp.expand.SendMessage;
+import com.billow.notice.amqp.properties.NoticeMqYml;
+import com.billow.notice.amqp.service.SendMQService;
 import com.billow.promotion.cache.SeckillProductCache;
 import com.billow.promotion.common.enums.OrderTypeEnum;
 import com.billow.promotion.common.enums.SeckillStatEnum;
@@ -57,7 +57,9 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private SeckillProductCache seckillProductCache;
     @Autowired
-    private MqSecKillOrderConfig mqSecKillOrderConfig;
+    private SendMQService sendMQService;
+    @Autowired
+    private NoticeMqYml noticeMqYml;
 
     @Override
     public ExposerVo genSeckillUrl(Long seckillProductId) {
@@ -154,7 +156,8 @@ public class SeckillServiceImpl implements SeckillService {
             killedVo.setUsercode(userCode);
             killedVo.setCount(1);
             FieldUtils.setCommonFieldByInsert(killedVo, userCode);
-            SendMessage.send(mqSecKillOrderConfig.secKillOrderExchange().getName(), killedVo);
+            String exchange = noticeMqYml.getMqCollect().get("secKillToCoreOrder").getExchange();
+            sendMQService.send(exchange, killedVo);
         }
         return new SeckillExecutionVo(seckillProductId, statEnum);
     }
