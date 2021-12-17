@@ -12,7 +12,7 @@ spring:
         shared-configs[1]:
           dataId: sys-config-db.yml
         shared-configs[2]:
-          dataId: sys-config-mq.properties
+          dataId: sys-config-mq.yml
         shared-configs[3]:
           dataId: sys-config-redis.properties
 

@@ -1,7 +1,7 @@
 package com.billow.product.receive;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.common.amqp.config.BaseMqConfig;
+//import com.billow.common.amqp.config.BaseMqConfig;
 import com.billow.product.dao.GoodsBrandDao;
 import com.billow.product.dao.GoodsCategoryDao;
 import com.billow.product.dao.GoodsSpuDao;
@@ -30,7 +30,7 @@ import java.util.List;
 @Component
 public class RefreshEsReceive {
 
-    private final BaseMqConfig baseMqConfig;
+//    private final BaseMqConfig baseMqConfig;
     private final AmqpTemplate amqpTemplate;
     private final GoodsSpuService goodsSpuService;
     private final GoodsBrandDao goodsBrandDao;
@@ -85,8 +85,8 @@ public class RefreshEsReceive {
                 .setStock(goodsSpuPo.getStock())
                 .setSubTitle(goodsSpuPo.getSubTitle());
         String message = JSON.toJSONString(ex);
-        amqpTemplate.convertAndSend(baseMqConfig.getExchange().getProduct(),
-                baseMqConfig.getRouteKey().getRefreshEs(), message);
+//        amqpTemplate.convertAndSend(baseMqConfig.getExchange().getProduct(),
+//                baseMqConfig.getRouteKey().getRefreshEs(), message);
         log.info("【MQ发送内容】" + message);
     }
 
