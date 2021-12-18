@@ -6,11 +6,13 @@ import {getButtonPermission} from '../utils/cookieUtils'
  */
 Vue.directive('has', {
     inserted: function (el, bindings, vnode) {
-        console.info("bindings.value:",bindings.value)
+        // console.info("bindings.value:",bindings.value)
         let buttonPermission = getButtonPermission();
-        if (!buttonPermission) {
+        // console.info("buttonPermission:",buttonPermission)
+        if (buttonPermission === null) {
             el.remove();
-        } else if (bindings.value && buttonPermission.indexOf(bindings.value) == -1) {
+        } else if (bindings.value !== null && !buttonPermission.includes(bindings.value)) {
+          // console.info("remove.value:",bindings.value)
             el.remove();
         }
     }

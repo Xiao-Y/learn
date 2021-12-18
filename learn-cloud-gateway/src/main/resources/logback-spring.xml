@@ -119,6 +119,7 @@
     </appender>
 
     <logger name="com.alibaba.nacos.client.config.impl" level="ERROR"/>
+    <logger name="com.alibaba.nacos.client.naming" level="ERROR"/>
     <logger name="com.alibaba.cloud.sentinel.datasource.converter" level="ERROR"/>
     <logger name="com.billow" level="info"/>
 
