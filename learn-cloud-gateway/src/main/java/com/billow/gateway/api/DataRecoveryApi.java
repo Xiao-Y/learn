@@ -49,7 +49,7 @@ public class DataRecoveryApi {
 
         log.info("开始数据恢复...");
         // 10 分钟内不在执行
-        redisUtils.setObj(RedisCst.COMM_DATA_RECOVERY, "正在执行数据恢复", 100, TimeUnit.MINUTES);
+//        redisUtils.setObj(RedisCst.COMM_DATA_RECOVERY, "正在执行数据恢复", 100, TimeUnit.MINUTES);
         map.put("resMsg", "开始数据恢复...");
         try {
             dataRecoveryReceive.dataRecovery();

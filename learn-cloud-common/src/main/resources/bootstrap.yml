@@ -1,9 +1,11 @@
+service:
+  ipAddress: 127.0.0.1
 spring:
   cloud:
     nacos:
       config:
 #        server-addr: 192.168.137.200:8848
-        server-addr: 127.0.0.1:8848
+        server-addr: ${service.ipAddress}:8848
         file-extension: yml
         refresh-enabled: true
         namespace: dev # pro
@@ -13,9 +15,40 @@ spring:
         shared-configs[1]:
           dataId: sys-config-db.yml
         shared-configs[2]:
-          dataId: sys-config-mq.yml
+          dataId: sys-config-mq.properties
         shared-configs[3]:
           dataId: sys-config-redis.properties
+        # 消息通知、消息中间件
+        shared-configs[4]:
+          dataId: sys-config-notice.yml
+####################################################################################################
+################################################## 日志收集 mq 配置 #################################
+####################################################################################################
+config:
+  mq:
+    host: ${service.ipAddress}
+    #mq用户名和密码
+    username: admin
+    password: admin123
+    #mq服务器端口
+    port: 5672
+    #虚拟主机
+    virtual-host: /learn-default
+    # 日志输入MQ配置
+    logCollect:
+      queue: logCollectQueue
+      exchange: logCollectExchange
+      exchange-type: direct
+      route-key: logCollectRouteKey
+      #      DEBUG：输出调试信息；指出细粒度信息事件对调试应用程序是非常有帮助的。
+      #      INFO： 输出提示信息；消息在粗粒度级别上突出强调应用程序的运行过程。
+      #      WARN： 输出警告信息；表明会出现潜在错误的情形。
+      #      ERROR：输出错误信息；指出虽然发生错误事件，但仍然不影响系统的继续运行。
+      #      FATAL： 输出致命错误；指出每个严重的错误事件将会导致应用程序的退出。
+      #      ALL level：打开所有日志记录开关；是最低等级的，用于打开所有日志记录。
+      #      OFF level：关闭所有日志记录开关；是最高等级的，用于关闭所有日志记录
+      # 控制输入MQ的日志级别
+      log-level: OFF level
 
 swagger: #接口注解文档
   client: # 登陆客户端配置
@@ -23,43 +56,3 @@ swagger: #接口注解文档
     client-secret: swagger
     scope: swagger
     access-token-uri: "http://127.0.0.1:8771/public-auth/oauth/token"
-
-  ####################################################################################################
-  ################################################## 日志收集 mq 配置 ###########################################
-  ####################################################################################################
-mq:
-  service:
-    ipAddress: 192.168.137.200
-#mq服务器地址
-config:
-  mq:
-    host: ${mq.service.ipAddress}
-    username: admin
-    password: admin123
-    port: 5672
-    virtual-host: /learn-default
-    logCollect:
-      exchange: logCollectExchange
-      routeKey: logCollectRouteKey
-#      DEBUG：输出调试信息；指出细粒度信息事件对调试应用程序是非常有帮助的。
-#      INFO： 输出提示信息；消息在粗粒度级别上突出强调应用程序的运行过程。
-#      WARN： 输出警告信息；表明会出现潜在错误的情形。
-#      ERROR：输出错误信息；指出虽然发生错误事件，但仍然不影响系统的继续运行。
-#      FATAL： 输出致命错误；指出每个严重的错误事件将会导致应用程序的退出。
-#      ALL level：打开所有日志记录开关；是最低等级的，用于打开所有日志记录。
-#      OFF level：关闭所有日志记录开关；是最高等级的，用于关闭所有日志记录
-    log-level: OFF level
-
-#日志配置
-#txManager日志
-#logging:
-#  level:
-#    com:
-#      codingapi: debug
-#logging:
-#  level:
-#    root: INFO
-#    org.hibernate: INFO
-#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-#    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
-#    com.itmuch.youran.persistence: ERROR
