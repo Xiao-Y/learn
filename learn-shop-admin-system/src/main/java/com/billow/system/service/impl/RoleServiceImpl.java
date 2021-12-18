@@ -183,7 +183,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         this.saveOrUpdate(rolePo);
         ConvertUtils.convert(rolePo, roleVo);
         // 保存、更新数据库和 redis 中的角色权限信息
-        this.saveOrUpdateRolePerssion(roleVo);
+        this.saveOrUpdateRolePermission(roleVo);
         // 保存、更新数据库和 redis 中的角色菜单信息
         this.saveOrUpdateRoleMenu(roleVo);
     }
@@ -277,7 +277,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
      * @author billow
      * @date 2019/8/31 10:49
      */
-    private void saveOrUpdateRolePerssion(RoleVo roleVo) {
+    private void saveOrUpdateRolePermission(RoleVo roleVo) {
         // 需要删除的
         List<Long> delPermissionIds = new ArrayList<>();
         // 页面传过来选种的权限
