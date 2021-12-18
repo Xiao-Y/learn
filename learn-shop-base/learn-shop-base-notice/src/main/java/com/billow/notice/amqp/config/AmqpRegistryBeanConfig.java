@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * 获取 ApplicationContext
+ * 获取 ApplicationContext，注册配置文件中的队列、交换机、绑定路由
  *
  * @author 千面
  * @date 2021/12/15 8:33

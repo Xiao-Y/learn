@@ -13,7 +13,7 @@
 
     <name>learn-shop-base-notice</name>
 
-    <description>消息通知</description>
+    <description>消息中间件、消息通知</description>
 
     <properties>
         <java.version>1.8</java.version>

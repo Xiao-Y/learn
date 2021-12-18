@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class SuccessKillConsumer {
 
     @RabbitHandler
-    @RabbitListener(queues = {"${config.mq.queue.secKillToCoreOrder}"})
+    @RabbitListener(queues = {"${notice.mq.mq-collect.sec-kill-to-core-order.queue}"})
     public void secKillOrder(OrderMqVo data) {
         log.info("订单数据:{}", data);
         // TODO 查询商品数据，生成订单数据
@@ -27,7 +27,7 @@ public class SuccessKillConsumer {
     }
 
     @RabbitHandler
-    @RabbitListener(queues = {"${config.mq.queue.secKillToCoreOrderDlx}"})
+    @RabbitListener(queues = {"${notice.mq.mq-collect.sec-kill-to-core-order.dlx-queue}"})
     public void secKillOrderDlx(OrderMqVo data, Message message) {
         log.info("DLX-订单数据:{}", data);
         log.info("DLX-订单数据:{}", message);

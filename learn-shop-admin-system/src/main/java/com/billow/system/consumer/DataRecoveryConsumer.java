@@ -31,9 +31,9 @@ public class DataRecoveryConsumer {
     private StartLoading startLoading;
 
     @Async("fxbDrawExecutor")
-    @RabbitListener(queues = "${config.mq.queue.executeSql}")
+    @RabbitListener(queues = "${notice.mq.mq-collect.execute-sql.queue}")
     @RabbitHandler
-    public void executesql() throws Exception {
+    public void executeSql() throws Exception {
 //        log.info(message);
         log.info("开始初始化 SQL...");
 //        try {

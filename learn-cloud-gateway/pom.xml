@@ -27,6 +27,11 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-cloud-common</artifactId>
         </dependency>
+        <!-- 消息中间件、消息通知 -->
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-notice</artifactId>
+        </dependency>
         <!-- base-tools -->
         <dependency>
             <groupId>com.billow</groupId>
@@ -79,10 +84,10 @@
         </dependency>
 
         <!-- rabbit,用于配置中心文件修改通知和发送其它系统间通知 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-bus-amqp</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -90,12 +95,17 @@
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-redis</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-                    <groupId>com.alibaba.cloud</groupId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <!-- 配置中心获取端 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!--配置命名容错处理-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

@@ -165,11 +165,16 @@ public class CodeGenerator {
      */
     private DataSourceConfig getDataSourceConfig() {
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
-        // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("learn_shop");
-        dsc.setPassword("pass123");
+        // dsc.setSchemaName("public");
+//        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
+//        dsc.setUsername("learn_shop");
+//        dsc.setPassword("pass123");
+
+        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false" +
+                "&allowPublicKeyRetrieval=true");
+        dsc.setUsername("root");
+        dsc.setPassword("root");
         return dsc;
     }
 

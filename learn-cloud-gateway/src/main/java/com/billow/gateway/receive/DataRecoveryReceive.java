@@ -1,10 +1,12 @@
 package com.billow.gateway.receive;
 
-import com.billow.gateway.config.MqExecuteSqlConfig;
+import com.billow.cloud.common.amqp.AmqpYml;
+import com.billow.notice.amqp.service.SendMQService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * 发送mq
@@ -14,12 +16,12 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class DataRecoveryReceive {
-
+public class DataRecoveryReceive
+{
+    @Resource
+    private AmqpYml executeSql;
     @Autowired
-    private AmqpTemplate amqpTemplate;
-    @Autowired
-    private MqExecuteSqlConfig mqExecuteSqlConfig;
+    private SendMQService sendMQService;
 
     /**
      * 执行sql 和 加载缓存
@@ -28,11 +30,11 @@ public class DataRecoveryReceive {
      * @author billow
      * @date 2019/8/11 10:33
      */
-    public void dataRecovery() {
-        String exchange = mqExecuteSqlConfig.getExchange();
-        String routeKey = mqExecuteSqlConfig.getRouteKey();
-        String queue = mqExecuteSqlConfig.getQueue();
-        log.info("exchange:{},routeKey:{},queue:{}，发送初始化 sql 的 mq", exchange, routeKey, queue);
-        amqpTemplate.convertAndSend(exchange, routeKey, "开始执行sql...");
+    public void dataRecovery()
+    {
+        String exchange = executeSql.getExchange();
+        String routeKey = executeSql.getRouteKey();
+        log.info("exchange:{},routeKey:{}，发送初始化 sql 的 mq", exchange, routeKey);
+        sendMQService.send(exchange, routeKey, "开始执行sql...");
     }
 }
