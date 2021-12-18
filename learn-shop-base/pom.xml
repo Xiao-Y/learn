@@ -24,5 +24,8 @@
         <module>learn-shop-base-job</module>
         <module>learn-shop-base-jpa</module>
         <module>learn-shop-base-mybatis</module>
+        <module>learn-shop-base-redis</module>
+        <module>learn-shop-base-security</module>
+        <module>learn-shop-base-notice</module>
     </modules>
 </project>

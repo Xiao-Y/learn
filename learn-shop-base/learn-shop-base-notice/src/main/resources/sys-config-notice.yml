@@ -1,0 +1,78 @@
+spring:
+  # mq 配置
+  rabbitmq:
+    # 中间件类型
+    type: rabbit
+    # mq服务器地址
+    host: 127.0.0.1
+    # mq服务器端口
+    port: 5672
+    # mq用户名和密码
+    username: admin
+    password: admin123
+    # 虚拟主机
+    virtual-host: /learn-default
+
+notice:
+  # 钉钉配置
+  ding:
+    # 钉钉机器人
+    robot:
+      # webhook
+      webhook: https://oapi.dingtalk.com/robot/send?access_token=d1e4bf1cb3b57616d92c86ef1e9783064cde5e8e6c28944801e719fa3588bf95
+      # 加签
+      robot-key: SECb2310283956906fe7acf381ff4fce58efc12f607579160361d274f15bbf8d29f
+  # rabbit mq 配置
+  mq:
+    # mq 的队列、路由、交换机配置
+    mq-collect:
+      # 日志收集
+      log-collect:
+        queue: logCollectQueue
+        exchange: logCollectExchange
+        exchange-type: direct
+        route-key: logCollectRouteKey
+      # 运行自动任务
+      run-job-test:
+        queue: runJobTestQueue
+        exchange: runJobTestExchange
+        exchange-type: direct
+        route-key: runJobTestRouteKey
+      # 执行sql 配置
+      execute-sql:
+        queue: executeSqlQueue
+        exchange: executeSqlExchange
+        route-key: executeSqlRouteKey
+      # 刷新 es 缓存 配置
+      refresh-es:
+        queue: refreshEsQueue
+        exchange: productExchange
+        route-key: refreshEsRouteKey
+      #  秒杀订单发送订单系统 配置
+      sec-kill-to-core-order:
+        exchange: secKillOrderExchange
+        exchange-type: fanout
+        queue: secKillToCoreOrderQueue
+        dlx-queue: secKillToCoreOrderQueueDlx
+        dlx-exchange: secKillOrderExchangeDlx
+        dlx-exchange-type: fanout
+      #  秒杀订单发送system系统 配置
+      sec-kill-to-admin-system:
+        exchange: secKillOrderExchange
+        exchange-type: fanout
+        queue: secKillToAdminSystemQueue
+      #  发送邮件 配置
+      send-mail:
+        queue: sendmailQueue
+        exchange: sendMailExchange
+        route-key: sendmailRouteKey
+
+
+
+
+
+
+
+
+
+

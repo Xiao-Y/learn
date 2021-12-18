@@ -3,6 +3,8 @@ import Cookies from 'js-cookie'
 const ACCESS_TOKEN = 'AccessToken';
 const REFRESH_TOKEN = 'RefreshToken';
 const CityData = 'CityData';
+// 权限按钮
+const ButtonPermission = 'buttonPermission';
 
 /**
  * 获取token
@@ -77,4 +79,23 @@ export function getCityData() {
  */
 export function setCityData(cityData) {
   localStorage.setItem(CityData, JSON.stringify(cityData))
+}
+
+/**
+ * 获取 ButtonPermission
+ * @returns {*}
+ * @constructor
+ */
+export function getButtonPermission() {
+  return localStorage.getItem(ButtonPermission);
+}
+
+/**
+ * 设置 ButtonPermission
+ * @returns {*}
+ * @constructor
+ */
+export function setButtonPermission(buttonPermission) {
+  console.log(buttonPermission)
+  localStorage.setItem(ButtonPermission, buttonPermission)
 }

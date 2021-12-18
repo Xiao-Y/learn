@@ -3,11 +3,11 @@ package com.billow.system.service.redis;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
+import com.billow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +45,7 @@ public class RolePermissionRedisKit {
             return;
         }
         // 先取出旧值，再删除
-        String json = redisUtils.getHash(ROLE_PERMISSION_KEY, oldRoleCode);
+        String json = redisUtils.getHashObj(ROLE_PERMISSION_KEY, oldRoleCode, String.class);
         this.deleteRoleByRoleCode(oldRoleCode);
         // 设置角色的权限信息
         redisUtils.setHash(ROLE_PERMISSION_KEY, newRoleCode, json);
@@ -59,9 +59,9 @@ public class RolePermissionRedisKit {
      * @date 2019/7/16 15:02
      */
     public void deleteRolePermissionById(Long id) {
-        Map<String, JSONArray> rolePermissionMap = this.getRolePermissionMap();
+        Map<String, List<PermissionVo>> rolePermissionMap = this.getRolePermissionMap();
         rolePermissionMap.entrySet().stream().forEach(f -> {
-            List<PermissionVo> permissionVos = this.converJson2PermissionVo(f.getValue());
+            List<PermissionVo> permissionVos = f.getValue();
             List<PermissionVo> voList = permissionVos.stream()
                     .filter(fi -> !fi.getId().equals(id))
                     .map(m -> ConvertUtils.convertIgnoreBase(m, PermissionVo.class))
@@ -80,9 +80,9 @@ public class RolePermissionRedisKit {
      */
     public void updatePermissionById(PermissionVo permissionVo) {
         // 取出缓存中数据
-        Map<String, JSONArray> hashAll = this.getRolePermissionMap();
+        Map<String, List<PermissionVo>> hashAll = this.getRolePermissionMap();
         hashAll.entrySet().stream().forEach(f -> {
-            List<PermissionVo> permissionVos = this.converJson2PermissionVo(f.getValue());
+            List<PermissionVo> permissionVos = f.getValue();
             // 移除旧权限信息
             List<PermissionPo> voList = permissionVos.stream()
                     .filter(fi -> !fi.getId().equals(permissionVo.getId()))
@@ -105,7 +105,7 @@ public class RolePermissionRedisKit {
      */
     public void updateRolePermissionByRoleCode(List<PermissionPo> permissionPos, String roleCode) {
         List<PermissionPo> pos = ConvertUtils.convertIgnoreBase(permissionPos, PermissionPo.class);
-        redisUtils.setObj(ROLE_PERMISSION_KEY + roleCode, pos);
+        redisUtils.setHash(ROLE_PERMISSION_KEY, roleCode, pos);
     }
 
     /**
@@ -129,24 +129,7 @@ public class RolePermissionRedisKit {
      * @since 2021-1-30 8:22
      */
     public List<PermissionVo> getRolePermissionByRoleCode(String roleCode) {
-        JSONArray json = redisUtils.getHash(ROLE_PERMISSION_KEY, roleCode);
-        return this.converJson2PermissionVo(json);
-    }
-
-    /**
-     * 权限json 转 List<PermissionVo>
-     *
-     * @param json
-     * @return {@link List< PermissionVo>}
-     * @author liuyongtao
-     * @since 2021-1-30 8:24
-     */
-    public List<PermissionVo> converJson2PermissionVo(JSONArray json) {
-        if(json == null){
-            return new ArrayList<>();
-        }
-        return JSON.parseObject(json.toJSONString(), new TypeReference<List<PermissionVo>>() {
-        });
+        return redisUtils.getHash(ROLE_PERMISSION_KEY, roleCode, PermissionVo.class);
     }
 
     /**
@@ -164,11 +147,11 @@ public class RolePermissionRedisKit {
     /**
      * 查询出角色的信息
      *
-     * @return {@link Map< String, JSONArray>} key-roleCode,value-List<PermissionPo>
+     * @return {@link Map< String, List<PermissionVo>>} key-roleCode,value-List<PermissionPo>
      * @author liuyongtao
      * @since 2021-1-30 8:30
      */
-    public Map<String, JSONArray> getRolePermissionMap() {
-        return redisUtils.getHashAll(ROLE_PERMISSION_KEY);
+    public Map<String, List<PermissionVo>> getRolePermissionMap() {
+        return redisUtils.getHashAll(ROLE_PERMISSION_KEY, PermissionVo.class);
     }
 }

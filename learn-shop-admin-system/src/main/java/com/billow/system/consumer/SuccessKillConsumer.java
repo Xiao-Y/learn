@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class SuccessKillConsumer {
 
     @RabbitHandler
-    @RabbitListener(queues = "${config.mq.queue.secKillToAdminSystem}")
+    @RabbitListener(queues = "${notice.mq.mq-collect.sec-kill-to-admin-system.queue}")
     public void secKillOrder(Object data) throws Exception {
         log.info("====>>>data:{}", data);
     }

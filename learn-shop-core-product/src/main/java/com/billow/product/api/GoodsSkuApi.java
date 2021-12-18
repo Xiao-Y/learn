@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * <p>
- * sku表 前端控制器
+ * sku表（stock keeping uint 库存量单位） 前端控制器
  * </p>
  *
  * @author billow
@@ -28,7 +28,7 @@ import java.util.Map;
  * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsSkuApi"}, value = "sku表（stock keeping uint 库存量单位）")
+@Api(tags = {"GoodsSkuApi"}, value = "sku表")
 @RestController
 @RequestMapping("/goodsSkuApi")
 public class GoodsSkuApi extends HighLevelApi<GoodsSkuService, GoodsSkuPo, GoodsSkuVo, GoodsSkuBuildParam, GoodsSkuSearchParam>

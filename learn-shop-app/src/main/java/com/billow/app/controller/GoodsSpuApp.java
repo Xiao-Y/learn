@@ -1,7 +1,9 @@
 package com.billow.app.controller;
 
+import com.billow.aop.annotation.OperationLog;
 import com.billow.app.feign.product.GoodsSpuFeign;
 import com.billow.product.interfaces.vo.GoodsSpuVo;
+import com.billow.security.annotation.PreAuthorize;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.resData.BaseResponse;
@@ -34,6 +36,7 @@ public class GoodsSpuApp {
     @Autowired
     private GoodsSpuFeign goodsSpuFeign;
 
+    @PreAuthorize(hasPermi = "12313")
     @ApiOperation(value = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
     public BaseResponse<GoodsSpuVo> getById(@PathVariable("id") Long id) {

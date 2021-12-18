@@ -30,15 +30,43 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-mybatis</artifactId>
         </dependency>
+        <!-- 配置中心获取端 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!--配置命名容错处理-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
         <!--   支付宝生成二维码用于支付     -->
+        <!-- 源码地址：https://github.com/Xiao-Y/simple-pay -->
+<!--        <dependency>-->
+<!--            <groupId>com.billow</groupId>-->
+<!--            <artifactId>simple-pay-alipay-scan</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.14.3</version>
+        </dependency>
+        <!-- 反射框架 -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
+        <!-- 消息中间件、消息通知 -->
         <dependency>
             <groupId>com.billow</groupId>
-            <artifactId>simple-pay-alipay-scan</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>learn-shop-base-notice</artifactId>
         </dependency>
     </dependencies>
 

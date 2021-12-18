@@ -26,6 +26,10 @@ public class ShopInfoPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "店铺编号，唯一")
+    @TableField("shop_no")
+    private String shopNo;
+
     @ApiModelProperty(value = "店铺名称")
     @TableField("shop_name")
     private String shopName;

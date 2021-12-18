@@ -1,8 +1,8 @@
 package com.billow.promotion.cache;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.promotion.pojo.cache.SeckillCacheDto;
 import com.billow.tools.constant.RedisCst;
+import com.billow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RefreshScope
-public class SeckillCache {
+public class SeckillCache
+{
 
     @Autowired
     private RedisUtils redisUtils;
@@ -31,6 +32,6 @@ public class SeckillCache {
      * @since 2021-8-30 16:34
      */
     public SeckillCacheDto getSeckillCache(Long seckillId) {
-        return redisUtils.getHash(RedisCst.SECKILL_INFO, seckillId.toString(), SeckillCacheDto.class);
+        return redisUtils.getHashObj(RedisCst.SECKILL_INFO, seckillId.toString(), SeckillCacheDto.class);
     }
 }

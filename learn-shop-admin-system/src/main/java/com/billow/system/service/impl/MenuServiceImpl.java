@@ -58,41 +58,22 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
         if (ToolsUtils.isEmpty(roleVos)) {
             return null;
         }
-        // 转换父级菜单
-        List<MenuEx> pMenuExs = new ArrayList<>();
-
         // 先从 redis 中查询
         if (customProperties.getMenu().isReadCache()) {
-            pMenuExs = roleMenuRedisKit.findMenusByRoles(roleVos);
-            if (ToolsUtils.isNotEmpty(pMenuExs)) {
-                return pMenuExs;
+            List<MenuEx> temp = roleMenuRedisKit.findMenusByRoles(roleVos);
+            if (ToolsUtils.isNotEmpty(temp)) {
+                return temp;
             }
         }
 
         Set<Long> menuIds = new HashSet<>();
         if (ToolsUtils.isNotEmpty(roleVos)) {
-            roleVos.forEach(item -> {
-                LambdaQueryWrapper<RoleMenuPo> wrapper = Wrappers.lambdaQuery();
-                wrapper.eq(RoleMenuPo::getMenuId, item.getId())
-                        .eq(RoleMenuPo::getValidInd, true);
-                List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(wrapper);
-                if (ToolsUtils.isNotEmpty(roleMenuPos)) {
-                    roleMenuPos.stream().forEach(roleMenuPo -> menuIds.add(roleMenuPo.getMenuId()));
-                }
-            });
+            Set<String> roleCodes = roleVos.stream()
+                    .map(RoleVo::getRoleCode)
+                    .collect(Collectors.toSet());
+            // 通过 rolecode 查询出角色的菜单ID
+            menuIds = roleMenuDao.findRoleMenuByRoleCode(roleCodes);
         }
-//        // TODO 测试用
-//        if ("admin".equals(menuVo.getUserCode())) {
-//            List<MenuPo> all = menuDao.findAll();
-//            if (ToolsUtils.isNotEmpty(all)) {
-//                Set<Long> set = all.stream()
-//                        .filter(f -> f.getValidInd())
-//                        .map(m -> m.getId())
-//                        .collect(Collectors.toSet());
-//                menuIds.clear();
-//                menuIds.addAll(set);
-//            }
-//        }
         // 如果没有权限直接返回
         if (ToolsUtils.isEmpty(menuIds)) {
             return null;
@@ -102,7 +83,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
         wrapper.isNull(MenuPo::getPid)
                 .eq(MenuPo::getValidInd, true);
         List<MenuPo> menuPos = menuDao.selectList(wrapper);
-
+        // 转换父级菜单
+        List<MenuEx> pMenuExs = new ArrayList<>();
         if (ToolsUtils.isNotEmpty(menuPos)) {
             this.menuPosCoverMenuExs(menuPos, pMenuExs, menuIds);
             // 递归查询子级菜单

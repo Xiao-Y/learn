@@ -131,34 +131,34 @@
         </filter>
     </appender>
 
-    <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
-        <encoder>
-            <!-- 文件日志格式 -->
-            <pattern>${MQ_LOG_PATTERN}</pattern>
-            <!-- 设置字符集 -->
-            <charset>UTF-8</charset>
-        </encoder>
-        <host>${rabbitmqHost}</host>
-        <port>${rabbitmqPort}</port>
-        <virtualHost>${rabbitmqVirtualHost}</virtualHost>
-        <username>${rabbitmqUsername}</username>
-        <password>${rabbitmqPassword}</password>
-        <exchangeName>${rabbitmqExchange}</exchangeName>
-        <routingKeyPattern>${rabbitmqRouteKey}</routingKeyPattern>
+<!--    <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">-->
+<!--        <encoder>-->
+<!--            &lt;!&ndash; 文件日志格式 &ndash;&gt;-->
+<!--            <pattern>${MQ_LOG_PATTERN}</pattern>-->
+<!--            &lt;!&ndash; 设置字符集 &ndash;&gt;-->
+<!--            <charset>UTF-8</charset>-->
+<!--        </encoder>-->
+<!--        <host>${rabbitmqHost}</host>-->
+<!--        <port>${rabbitmqPort}</port>-->
+<!--        <virtualHost>${rabbitmqVirtualHost}</virtualHost>-->
+<!--        <username>${rabbitmqUsername}</username>-->
+<!--        <password>${rabbitmqPassword}</password>-->
+<!--        <exchangeName>${rabbitmqExchange}</exchangeName>-->
+<!--        <routingKeyPattern>${rabbitmqRouteKey}</routingKeyPattern>-->
 
-        <declareExchange>false</declareExchange>
-        <exchangeType>direct</exchangeType>
-        <generateId>true</generateId>
-        <charset>UTF-8</charset>
-        <durable>false</durable>
-        <deliveryMode>NON_PERSISTENT</deliveryMode>
-        <!-- 日志级别 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>${rabbitmqLogLevel}</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-    </appender>
+<!--        <declareExchange>false</declareExchange>-->
+<!--        <exchangeType>direct</exchangeType>-->
+<!--        <generateId>true</generateId>-->
+<!--        <charset>UTF-8</charset>-->
+<!--        <durable>false</durable>-->
+<!--        <deliveryMode>NON_PERSISTENT</deliveryMode>-->
+<!--        &lt;!&ndash; 日志级别 &ndash;&gt;-->
+<!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+<!--            <level>${rabbitmqLogLevel}</level>-->
+<!--            <onMatch>ACCEPT</onMatch>-->
+<!--            <onMismatch>DENY</onMismatch>-->
+<!--        </filter>-->
+<!--    </appender>-->
 
 
     <logger name="com.alibaba.nacos.client.config.impl" level="ERROR"/>
@@ -172,6 +172,6 @@
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
-        <appender-ref ref="AMQP"/>
+<!--        <appender-ref ref="AMQP"/>-->
     </root>
 </configuration>

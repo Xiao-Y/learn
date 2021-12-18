@@ -4,12 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.mybatis.pojo.BasePage;
-import com.billow.mybatis.utils.SqlUtil;
 
 /**
  * <p>
@@ -23,11 +20,7 @@ import com.billow.mybatis.utils.SqlUtil;
 public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extends BasePage> extends ServiceImpl<M, E> implements HighLevelService<E, SP> {
 
     @Override
-    public IPage<E> findListByPage(SP sp) {
-
-        Page<E> page = new Page<>(sp.getPageNo(), sp.getPageSize());
-        String orderBy = SqlUtil.escapeOrderBySql(sp.getOrderBy());
-        page.addOrder(new OrderItem(orderBy, sp.getIsAsc()));
+    public IPage<E> findListByPage(IPage<E> page, SP sp) {
         LambdaQueryWrapper<E> wrapper = Wrappers.lambdaQuery();
         // 查询条件
         this.genQueryCondition(wrapper, sp);

@@ -1,6 +1,5 @@
 package com.billow.product.api;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.ex.SelectEx;
 import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.build.GoodsCategoryBuildParam;
@@ -9,18 +8,14 @@ import com.billow.product.pojo.search.GoodsCategorySearchParam;
 import com.billow.product.pojo.vo.GoodsCategoryTreeVo;
 import com.billow.product.pojo.vo.GoodsCategoryVo;
 import com.billow.product.service.GoodsCategoryService;
-import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
-import com.billow.tools.utlis.ToolsUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,8 +38,8 @@ import java.util.stream.Collectors;
 @Api(tags = {"GoodsCategoryApi"}, value = "分类表")
 @RestController
 @RequestMapping("/goodsCategoryApi")
-public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCategoryPo, GoodsCategoryVo, GoodsCategoryBuildParam, GoodsCategorySearchParam>
-{
+public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCategoryPo, GoodsCategoryVo,
+        GoodsCategoryBuildParam, GoodsCategorySearchParam> {
 
     @Autowired
     private GoodsCategoryService goodsCategoryService;

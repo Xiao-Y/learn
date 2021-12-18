@@ -23,7 +23,7 @@ public class JobToMeConsumer {
     @Autowired
     private MailService mailService;
 
-    @RabbitListener(queues = "${config.mq.queue.sendMail}")
+    @RabbitListener(queues = "${notice.mq.mq-collect.send-mail.queue}")
     @RabbitHandler
     public void sendMail(MailEx mailEx) throws Exception {
         log.info(JSONObject.toJSONString(mailEx));

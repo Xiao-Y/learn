@@ -15,7 +15,7 @@ import java.util.Date;
 public class TestMqConsume {
 
     @RabbitHandler
-    @RabbitListener(queues = "${config.mq.queue.runJobTest}")
+    @RabbitListener(queues = "${notice.mq.mq-collect.runJobTest.queue}")
     public void runJobTestQueue(String message) throws Exception {
         System.out.println("时间：" + DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss.SSS"));
         System.out.println("开始消费：" + message);

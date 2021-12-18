@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RoleDao;
@@ -32,6 +31,7 @@ import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.MathUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.billow.redis.util.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,7 +239,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
             // 原始的
-            List<MenuEx> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode());
+            List<MenuEx> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode(), MenuEx.class);
             if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
                 sourceMenuPo = menuExs.stream().filter(f -> !delMenuIdsTemp.contains(f))

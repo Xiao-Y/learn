@@ -21,7 +21,7 @@ public interface HighLevelService<E, SP extends BasePage> extends IService<E>
      * @author liuyongtao
      * @since 2021-8-13 10:35
      */
-    IPage<E> findListByPage(SP sp);
+    IPage<E> findListByPage(IPage<E> page, SP sp);
 
     /**
      * 根据ID禁用数据

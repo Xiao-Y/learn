@@ -3,7 +3,6 @@ package com.billow.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.dao.CityDao;
 import com.billow.system.pojo.ex.CityEx;
 import com.billow.system.pojo.po.CityPo;
@@ -12,16 +11,13 @@ import com.billow.system.service.CityService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.billow.redis.util.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +38,7 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityPo> implements Cit
     @Override
     public Set<CityEx> findCity() {
         Set<CityEx> set = new HashSet<>();
-        List<List<CityPo>> cityPoss = redisUtils.getHashAllValue(RedisCst.COMM_CITY_TREE);
+        List<CityPo> cityPoss = redisUtils.getHashAllValue(RedisCst.COMM_CITY_TREE, CityPo.class);
         if (CollectionUtils.isEmpty(cityPoss)) {
             LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
             wrapper.eq(CityPo::getValidInd, true);
@@ -62,17 +58,17 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityPo> implements Cit
             return set;
         }
         cityPoss.stream()
-                .filter(f -> CollectionUtils.isNotEmpty(f))
+                .filter(Objects::nonNull)
                 .forEach(f -> {
-                    List<CityEx> cityExes = ConvertUtils.convertIgnoreBase(f, CityEx.class);
-                    set.addAll(cityExes);
+                    CityEx cityExe = ConvertUtils.convertIgnoreBase(f, CityEx.class);
+                    set.add(cityExe);
                 });
         return set;
     }
 
     @Override
     public CityVo findByCityId(String cityId) {
-        CityPo po = redisUtils.getHash(RedisCst.COMM_CITY_ONE, cityId);
+        CityPo po = redisUtils.getHashObj(RedisCst.COMM_CITY_ONE, cityId, CityPo.class);
         if (po == null) {
             LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
             wrapper.eq(CityPo::getCityId, cityId);
@@ -114,7 +110,7 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityPo> implements Cit
      * @since 2021-1-28 15:54
      */
     private List<CityPo> findCityLowerLevel(String cityId, boolean isCheckDb) {
-        List<CityPo> cityPos = redisUtils.getHash(RedisCst.COMM_CITY_TREE, cityId);
+        List<CityPo> cityPos = redisUtils.getHash(RedisCst.COMM_CITY_TREE, cityId, CityPo.class);
         if (CollectionUtils.isEmpty(cityPos) && isCheckDb) {
             LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
             wrapper.eq(CityPo::getParentCityId, cityId)

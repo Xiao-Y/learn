@@ -2,7 +2,6 @@ package com.billow.system.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.base.BaseApi;
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.vo.DataDictionaryVo;
@@ -10,6 +9,7 @@ import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.billow.redis.util.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class DataDictionaryApi extends BaseApi {
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("systemModule") String systemModule, @PathVariable("fieldType") String fieldType) throws Exception {
         // 从 redis 中获取
-        List<DataDictionaryPo> redisData = redisUtils.getHash(FIELD_TYPE_KEY, systemModule);
+        List<DataDictionaryPo> redisData = redisUtils.getHash(FIELD_TYPE_KEY, systemModule, DataDictionaryPo.class);
         if (ToolsUtils.isNotEmpty(redisData)) {
             return redisData.stream().filter(f -> f.getFieldType().equals(fieldType))
                     .map(m -> ConvertUtils.convertIgnoreBase(m, DataDictionaryVo.class))
@@ -109,7 +109,7 @@ public class DataDictionaryApi extends BaseApi {
     @ApiOperation("字典下拉系统模块")
     @GetMapping("/findSysModule")
     public List<DataDictionaryPo> findSysModule() {
-        Map<String, String> routeInfoMap = redisUtils.getHashAll(RedisCst.COMM_ROUTE_INFO);
+        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO, String.class);
         List<DataDictionaryPo> dataDictionaryPos = routeInfoMap.entrySet().stream().map(m -> {
             DataDictionaryPo po = new DataDictionaryPo();
             po.setFieldValue(m.getKey());
@@ -148,7 +148,7 @@ public class DataDictionaryApi extends BaseApi {
     public List<DataDictionaryVo> findDataRouteCache() {
         List<DataDictionaryVo> vos = new ArrayList<>();
         long id = 0;
-        Map<String, String> routeInfoMap = redisUtils.getHashAll(RedisCst.COMM_ROUTE_INFO);
+        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO, String.class);
         for (Map.Entry<String, String> entry : routeInfoMap.entrySet()) {
             DataDictionaryVo vo = new DataDictionaryVo();
             vo.setId(id++);

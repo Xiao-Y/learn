@@ -3,7 +3,9 @@ import {
   constantRouterMap
 } from '@/router'
 
-import { getHomeMenus } from '../../api/sys/menuMag'
+import {getHomeMenus} from '../../api/sys/menuMag'
+import {LoadDataMyPermissionList} from '../../api/sys/permissionMag'
+
 import VueUtils from '@/utils/vueUtils'
 
 import types from '@/store/mutationsType'
@@ -35,8 +37,8 @@ function setMenuUrl(menus, router, routerPath) {
     // 设置路由的 title 和 icon
     if (menus[j].titleCode === router.name) {
       var meta = router.meta ? router.meta : {};
-      Object.assign(meta, { title: menus[j].title, icon: menus[j].icon });
-      Object.assign(router, { meta: meta });
+      Object.assign(meta, {title: menus[j].title, icon: menus[j].icon});
+      Object.assign(router, {meta: meta});
     }
     // 设置非顶级菜单的
     if (menus[j].titleCode === router.name && menus[j].pid != null) {
@@ -104,7 +106,7 @@ const permission = {
     }
   },
   actions: {
-    GenRoutesActions({ commit, state }) {
+    GenRoutesActions({commit, state}) {
       return new Promise((resolve, reject) => {
         getHomeMenus(state.token).then(res => {
           var menus = VueUtils.deepClone(res.resData.menus);

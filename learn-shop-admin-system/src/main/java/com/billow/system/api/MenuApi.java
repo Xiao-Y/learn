@@ -46,11 +46,14 @@ public class MenuApi extends BaseApi {
     public HomeEx homeMenus() {
         MenuVo ex = new MenuVo();
         // 获取角色信息
-        List<RoleVo> roleVos = userTools.getCurrentRoleCode().stream().map(m -> {
-            RoleVo roleVo = new RoleVo();
-            roleVo.setRoleCode(m);
-            return roleVo;
-        }).collect(Collectors.toList());
+        List<RoleVo> roleVos = userTools.getCurrentRoleCode()
+                .stream()
+                .map(m -> {
+                    RoleVo roleVo = new RoleVo();
+                    roleVo.setRoleCode(m);
+                    return roleVo;
+                })
+                .collect(Collectors.toList());
         ex.setUserCode(userTools.getCurrentUserCode());
         ex.setRoleVos(roleVos);
         ex.setValidInd(true);

@@ -3,7 +3,8 @@ import {
   logout
 } from '@/api/login'
 import {
-  removeToken
+  removeToken,
+  logOut
 } from '../../utils/cookieUtils'
 import types from '@/store/mutationsType'
 import VueUtils from '@/utils/vueUtils'
@@ -61,6 +62,7 @@ const loginHandle = {
         commit(types.SET_TOKEN, '');
         commit(types.SET_ROLES, []);
         removeToken();
+        logOut();
         resolve();
         // logout(state.token).then(() => {
         //   commit(types.SET_TOKEN, '');

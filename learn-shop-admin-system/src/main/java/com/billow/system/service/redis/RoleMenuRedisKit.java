@@ -1,12 +1,12 @@
 package com.billow.system.service.redis;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.billow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class RoleMenuRedisKit {
         if (Objects.equals(newRoleCode, oldRoleCode)) {
             return;
         }
-        List<MenuEx> menuExs = redisUtils.getHash(ROLE_MENU_KEY, oldRoleCode);
+        List<MenuEx> menuExs = redisUtils.getHash(ROLE_MENU_KEY, oldRoleCode, MenuEx.class);
         this.deleteRoleByRoleCode(oldRoleCode);
         redisUtils.setHash(ROLE_MENU_KEY, newRoleCode, menuExs);
     }
@@ -118,7 +118,7 @@ public class RoleMenuRedisKit {
         // 读取缓存中的数据
         List<MenuEx> all = new ArrayList<>();
         roleVos.stream().forEach(f -> {
-            List<MenuEx> menuPos = redisUtils.getHash(ROLE_MENU_KEY, f.getRoleCode());
+            List<MenuEx> menuPos = redisUtils.getHash(ROLE_MENU_KEY, f.getRoleCode(), MenuEx.class);
             if (ToolsUtils.isNotEmpty(menuPos)) {
                 all.addAll(menuPos);
             }

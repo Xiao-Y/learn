@@ -30,7 +30,7 @@ public class RefreshEsConsumer {
     private GoodsInfoService goodsInfoService;
 
     @Async("fxbDrawExecutor")
-    @RabbitListener(queues = "${config.mq.queue.refreshEs}")
+    @RabbitListener(queues = "${notice.mq.mq-collect.refresh-es.queue}")
     @RabbitHandler
     public void refreshEs(String message) {
         log.info("获取的信息：{}", message);

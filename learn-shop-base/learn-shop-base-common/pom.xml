@@ -26,6 +26,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-tools</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-redis</artifactId>
+        </dependency>
         <!-- rabbit,用于配置中心文件修改通知和发送其它系统间通知 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -60,15 +64,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
         </dependency>
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-        </dependency>
         <!-- 分库分表，读写分离-->
         <dependency>
             <groupId>org.apache.shardingsphere</groupId>
@@ -77,11 +72,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
         </dependency>
     </dependencies>
 

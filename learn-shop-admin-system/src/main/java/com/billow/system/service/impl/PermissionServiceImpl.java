@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.common.utils.UserTools;
 import com.billow.mybatis.utils.MybatisKet;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RolePermissionDao;
@@ -18,6 +19,7 @@ import com.billow.system.service.PermissionService;
 import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 查询用户是否有权限
@@ -48,6 +51,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     private RolePermissionDao rolePermissionDao;
     @Autowired
     private RolePermissionRedisKit rolePermissionRedisKit;
+    @Autowired
+    private UserTools userTools;
 
     @Override
     public Set<PermissionPo> findPermissionByRole(RolePo rolePo) {
@@ -138,7 +143,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 
     @Override
     public List<PermissionVo> findPermissionAll() {
-
         LambdaQueryWrapper<PermissionPo> condition = Wrappers.lambdaQuery();
         condition.eq(PermissionPo::getValidInd, true);
         condition.orderByAsc(PermissionPo::getId);
@@ -148,5 +152,22 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
             permissionVos.add(this.convertToPermissionVo(f));
         });
         return permissionVos;
+    }
+
+    @Override
+    public List<String> findMyPermissionList() {
+        List<String> roleCodeList = userTools.getCurrentRoleCode();
+        if (CollectionUtils.isEmpty(roleCodeList)) {
+            return new ArrayList<>();
+        }
+        List<PermissionPo> permissionPos = permissionDao.findPermissionByRoleCode(roleCodeList);
+        if (CollectionUtils.isEmpty(permissionPos)) {
+            return new ArrayList<>();
+        }
+        return permissionPos.stream()
+                .map(PermissionPo::getPermissionCode)
+                .filter(StringUtils::isNoneBlank)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

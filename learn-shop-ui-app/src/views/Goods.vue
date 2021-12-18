@@ -29,9 +29,14 @@
           剩余：{{ goods.sale }}
         </van-col>
       </van-cell>
-      <van-cell title="服务保障" icon="service-o" is-link @click="sorry">
-        <goods-service :service-ids="goods.serviceIds"/>
-      </van-cell>
+      <van-cell title="服务保障" icon="service-o" @click="onService" is-link clickable/>
+      <van-action-sheet v-model="showService" title="服务保障">
+        <div class="goods-cell-service">
+          <goods-service :service-ids="goods.serviceIds"/>
+          <div class="message" v-html="serviceInfo"/>
+        </div>
+      </van-action-sheet>
+
       <van-cell value="进入店铺" icon="shop-o" is-link @click="sorry">
         <template slot="title">
           <span class="van-cell-text">有赞的店</span>
@@ -98,6 +103,8 @@ export default {
         albumPics: [] // 画册图片，连产品图片限制为5张，以逗号分割
       },
       showSuk: false,
+      showService: false, // 是否显示服务
+      serviceInfo: "说明信息说明信息"
     };
   },
   created() {
@@ -110,6 +117,9 @@ export default {
     });
   },
   methods: {
+    onService() {
+      this.showService = !this.showService;
+    },
     onClickCart() {
       this.$router.push('cart');
     },
@@ -124,6 +134,7 @@ export default {
         icon: 'cart-circle-o',
         duration: 600
       });
+      this.showSuk = false;
       console.info("goods:", goodsId, skuId, selectedNum);
     },
     onViewSuk() {
@@ -180,5 +191,20 @@ export default {
 
 .remain {
   text-align: right;
+}
+
+/*服务保障*/
+.goods-cell-service {
+  padding: 16px 16px 120px;
+
+  .service {
+    margin-bottom: 10px;
+  }
+
+  .message {
+    font-size: 12px;
+    line-height: 1.5;
+    height: 120px;
+  }
 }
 </style>

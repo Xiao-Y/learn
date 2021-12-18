@@ -1,7 +1,7 @@
 package com.billow.user.service.redis;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.tools.constant.RedisCst;
+import com.billow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +34,7 @@ public class CommonUserRedis {
      * @date 2019/7/31 15:17
      */
     public void setBlacklistOnEditUser(String oldUsercode, String newUsercode, List<String> roleCodes) {
-//        Map obj = redisUtils.getObj(RedisCst.BLACKLIST_EDITUSER + oldUsercode, Map.class);
-        Map obj = redisUtils.getObj(RedisCst.BLACKLIST_EDITUSER + oldUsercode);
+        Map obj = redisUtils.getObj(RedisCst.BLACKLIST_EDITUSER + oldUsercode, Map.class);
         List<String> oldUser;
         if (obj == null) {
             obj = new HashMap<>();

@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author billow
- * @since 2021-08-23
  * @version v2.0
+ * @since 2021-08-23
  */
 @Slf4j
-@Api(tags = {"OrderReturnApplyApi"},value = "")
+@Api(tags = {"OrderReturnApplyApi"}, value = "")
 @RestController
 @RequestMapping("/orderReturnApplyApi")
 public class OrderReturnApplyApi extends HighLevelApi<OrderReturnApplyService, OrderReturnApplyPo, OrderReturnApplyVo, OrderReturnApplyBuildParam, OrderReturnApplySearchParam>

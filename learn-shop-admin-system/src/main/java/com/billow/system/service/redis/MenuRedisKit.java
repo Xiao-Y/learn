@@ -1,9 +1,9 @@
 package com.billow.system.service.redis;
 
-import com.billow.common.redis.RedisUtils;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.tools.constant.RedisCst;
+import com.billow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +67,7 @@ public class MenuRedisKit {
      * @since 2021-1-30 10:53
      */
     public MenuVo getMenuById(Long id) {
-        return redisUtils.getHash(MENU_ID, id.toString());
+        return redisUtils.getHashObj(MENU_ID, id.toString(),MenuVo.class);
     }
 
     /**
