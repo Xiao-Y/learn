@@ -1,14 +1,13 @@
 import {
   asyncRouterMap,
   constantRouterMap
-} from '@/router'
+} from '../../router'
 
 import {getHomeMenus} from '../../api/sys/menuMag'
-import {LoadDataMyPermissionList} from '../../api/sys/permissionMag'
 
-import VueUtils from '@/utils/vueUtils'
+import VueUtils from '../../utils/vueUtils'
 
-import types from '@/store/mutationsType'
+import types from '../../store/mutationsType'
 
 // 该用户的所有权限
 var menuCodes = [];
@@ -90,7 +89,7 @@ function filterAsyncRouter(accessedRouters, menus) {
   return accessedRouters
 }
 
-const permission = {
+const menuPerm = {
   state: {
     routers: VueUtils.deepClone(constantRouterMap),
     addRouters: [],
@@ -127,4 +126,4 @@ const permission = {
   }
 }
 
-export default permission
+export default menuPerm

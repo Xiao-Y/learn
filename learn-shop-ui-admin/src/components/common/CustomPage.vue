@@ -45,7 +45,6 @@
     },
     filters:{
       string2Number: function(num) {
-        console.info("====>" + num)
         return Number(num);
       }
     }

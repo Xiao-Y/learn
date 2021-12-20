@@ -3,9 +3,9 @@ import store from './store'
 import {Message} from 'element-ui'
 import {getAccessToken} from './utils/cookieUtils' // 验权
 
-import types from '@/store/mutationsType'
+import types from './store/mutationsType'
 
-const whiteList = ['/login', '/authredirect'] // 不重定向白名单
+const whiteList = ['/login', '/authRedirect'] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
   // console.info("to:",to);
@@ -25,7 +25,7 @@ router.beforeEach((to, from, next) => {
         //   var data = res.resData;
         //   console.info("userInf", data);
         // }).catch(() => {
-        //   store.dispatch('FedLogOutActions').then(() => {
+        //   store.dispatch('LogOutActions').then(() => {
         //     Message.error('验证失败,请重新登录')
         //     next({path: '/login1'})
         //   })
@@ -40,12 +40,14 @@ router.beforeEach((to, from, next) => {
           next({...to, replace: true});
         }).catch((error) => {
           console.info(error);
-          store.dispatch('FedLogOutActions').then(() => {
+          store.dispatch('LogOutActions').then(() => {
             Message.error('获取路由失败,请重新登录');
             store.commit(types.SET_ROUTERS);
             next({path: '/login'})
           });
         });
+        // 加载按钮权限
+        store.dispatch('GenButtonPerms');
       } else {
         // 当有用户权限的时候，说明所有可访问路由已生成 如访问没权限的全面会自动进入404页面
         store.commit(types.SET_ROUTERS);

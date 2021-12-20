@@ -7,9 +7,10 @@ const getters = {
   name: state => state.loginHandle.name,
 
   // name: state => state.user.name,
-
-  routers: state => state.permission.routers,
-  addRouters: state => state.permission.addRouters,
-  menus: state => state.permission.menus
+  routers: state => state.menuPerm.routers,
+  addRouters: state => state.menuPerm.addRouters,
+  menus: state => state.menuPerm.menus,
+  // 按钮权限
+  buttonPerm: state => state.buttonPerm.permissionCodes
 }
 export default getters
