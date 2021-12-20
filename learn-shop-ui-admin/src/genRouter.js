@@ -37,17 +37,17 @@ router.beforeEach((to, from, next) => {
           router.addRoutes(store.getters.addRouters);
           // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           // console.info(store.getters.addRouters);
+          // 加载按钮权限
+          store.dispatch('GenButtonPerms');
           next({...to, replace: true});
         }).catch((error) => {
           console.info(error);
           store.dispatch('LogOutActions').then(() => {
-            Message.error('获取路由失败,请重新登录');
+            // Message.error('获取路由失败,请重新登录');
             store.commit(types.SET_ROUTERS);
             next({path: '/login'})
           });
         });
-        // 加载按钮权限
-        store.dispatch('GenButtonPerms');
       } else {
         // 当有用户权限的时候，说明所有可访问路由已生成 如访问没权限的全面会自动进入404页面
         store.commit(types.SET_ROUTERS);

@@ -137,7 +137,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
             one = ConvertUtils.convert(menuVo, MenuPo.class);
         }
         // 保存到数据库
-        menuDao.updateById(one);
+        this.saveOrUpdate(one);
         // 更新缓存
         if (null != id) {
             roleMenuRedisKit.updateMeunById(one);
