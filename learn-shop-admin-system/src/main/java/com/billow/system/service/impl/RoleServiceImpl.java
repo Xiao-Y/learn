@@ -5,20 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.system.dao.MenuDao;
-import com.billow.system.dao.PermissionDao;
-import com.billow.system.dao.RoleDao;
-import com.billow.system.dao.RoleMenuDao;
-import com.billow.system.dao.RolePermissionDao;
-import com.billow.system.dao.UserRoleDao;
+import com.billow.redis.util.RedisUtils;
+import com.billow.system.dao.*;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.ex.MenuEx;
-import com.billow.system.pojo.po.MenuPo;
-import com.billow.system.pojo.po.PermissionPo;
-import com.billow.system.pojo.po.RoleMenuPo;
-import com.billow.system.pojo.po.RolePermissionPo;
-import com.billow.system.pojo.po.RolePo;
-import com.billow.system.pojo.po.UserRolePo;
+import com.billow.system.pojo.po.*;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
@@ -29,9 +20,8 @@ import com.billow.system.service.redis.RoleMenuRedisKit;
 import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
-import com.billow.tools.utlis.MathUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.billow.redis.util.RedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +41,7 @@ import java.util.stream.Collectors;
  * @author liuyongtao
  * @create 2018-11-05 16:16
  */
+@Slf4j
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements RoleService {
 
@@ -120,44 +108,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
 
     @Override
     public List<String> findMenuByRoleId(Long roleId) throws Exception {
-        Set<String> delMenus = new HashSet<>();
-        LambdaQueryWrapper<RoleMenuPo> condition = Wrappers.lambdaQuery();
-        condition.eq(RoleMenuPo::getRoleId, roleId)
-                .eq(RoleMenuPo::getValidInd, true);
-        List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(condition);
-        // 所有选种的菜单
-        List<String> collect = roleMenuPos.stream()
-                .map(m -> m.getMenuId().toString())
-                .collect(Collectors.toList());
-        // 异常：防止勾选父级菜单后，又再其下添加新菜单，这样导致新添加的菜单自动勾选上。
-        // 处理：如果勾选了父级菜单但是该角色又没有其下的子菜单，就移除该所有直接父级菜单
-        Iterator<String> iterator = collect.iterator();
-        while (iterator.hasNext()) {
-            String next = iterator.next();
-            // 查询子级菜单
-            LambdaQueryWrapper<MenuPo> condition1 = Wrappers.lambdaQuery();
-            condition1.eq(MenuPo::getPid, new Long(next));
-            List<MenuPo> chiledMenus = menuDao.selectList(condition1);
-            if (ToolsUtils.isNotEmpty(chiledMenus)) {
-                List<String> childeIds = chiledMenus.stream().map(m -> m.getId().toString()).collect(Collectors.toList());
-                // 比较所有选种的菜单中是否包含子级菜单
-                List<String> intersection = MathUtils.getIntersection(collect, childeIds);
-                // 如果该菜单下有子菜单，但是没有勾选，所有移除该父菜单
-                if (ToolsUtils.isEmpty(intersection)) {
-                    delMenus.add(next);
-                    // 查询出当前菜单的所有父级菜单，准备移除
-                    Set<String> set = menuService.getParentByCurrentId(new Long(next));
-                    if (ToolsUtils.isNotEmpty(set)) {
-                        delMenus.addAll(set);
-                    }
-                }
-            }
-        }
-        // 移除菜单
-        if (ToolsUtils.isNotEmpty(delMenus)) {
-            collect.removeAll(delMenus);
-        }
-        return collect;
+        // 查询出所有子级菜单
+        return roleMenuDao.selectChildrenMenu(roleId);
     }
 
     @Override
@@ -324,7 +276,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         if (roleVo.getValidInd()) {
             List<PermissionPo> sourcePermissionPo = null;
             List<PermissionVo> permissionVos = rolePermissionRedisKit.getRolePermissionByRoleCode(roleVo.getRoleCode());
-//            List<PermissionPo> permissionPos = redisUtils.getList(RedisCst.ROLE_PERMISSION_KEY + roleVo.getRoleCode());
             if (ToolsUtils.isNotEmpty(permissionVos)) {
                 List<Long> delPermissionIdsTemp = delPermissionIds;
                 // 过滤出本来就存在的权限（扫除掉需要删除的）

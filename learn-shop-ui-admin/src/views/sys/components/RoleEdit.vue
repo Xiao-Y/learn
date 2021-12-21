@@ -205,22 +205,9 @@
         }
         // 加载菜单选种状态
         LoadDataMenuIdList(this.roleInfo.id).then(res => {
-          // 需要移除的父级ids,因为菜单树会自己关联
-          let deleteMenuIds = new Set();
           // 该角色所拥有的菜单
           var checkedMenu = res.resData;
           this.oldMenuChecked = [...new Set(res.resData)];
-          // 构建出所有需要移除的父级ids
-          for (let i = 0; i < checkedMenu.length; i++) {
-            var menuParentIds = this.VueUtils.getParentByCurrentNodeId(this.menus, checkedMenu[i]).map(m => m.id);
-            // 返回的父级id
-            menuParentIds.forEach(f => deleteMenuIds.add(f));
-          }
-          // 移除父级所有id
-          deleteMenuIds.forEach(id => {
-            checkedMenu.splice(checkedMenu.indexOf(id), 1);
-          });
-          // 设置菜单树选种
           this.$refs.menuTree.setCheckedKeys(checkedMenu);
         });
       }

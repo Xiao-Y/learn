@@ -63,18 +63,21 @@ public class RedisConfig {
     private void initDomainRedisTemplate(RedisTemplate<String, String> template, LettuceConnectionFactory factory) {
         // 定义 key 的序列化方式为 string
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(String.class);
         //string 的序列化
         template.setKeySerializer(stringRedisSerializer);
-
         //hash 的序列化
         template.setHashKeySerializer(stringRedisSerializer);
+
+        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(String.class);
+        // value 的序列化
         template.setValueSerializer(fastJsonRedisSerializer);
+        // hash value 的序列化
         template.setHashValueSerializer(fastJsonRedisSerializer);
+        template.setDefaultSerializer(stringRedisSerializer);
         // 开启事务
-        template.setEnableTransactionSupport(true);
+//        template.setEnableTransactionSupport(true);
+//        template.afterPropertiesSet();
         template.setConnectionFactory(factory);
-        template.afterPropertiesSet();
 
     }
 }

@@ -11,14 +11,15 @@ import java.util.Set;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author billow
  * @since 2021-04-01
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface RoleMenuDao extends BaseMapper<RoleMenuPo> {
+public interface RoleMenuDao extends BaseMapper<RoleMenuPo>
+{
 
     /**
      * 通过 rolecode 查询出角色的菜单ID
@@ -29,4 +30,14 @@ public interface RoleMenuDao extends BaseMapper<RoleMenuPo> {
      * @since 2021/12/13 21:59
      */
     Set<Long> findRoleMenuByRoleCode(Set<String> roleCodes);
+
+    /**
+     * 查询出所有子级菜单
+     *
+     * @param roleId
+     * @return List<String>
+     * @author 千面
+     * @date 2021/12/21 14:37
+     */
+    List<String> selectChildrenMenu(Long roleId);
 }
