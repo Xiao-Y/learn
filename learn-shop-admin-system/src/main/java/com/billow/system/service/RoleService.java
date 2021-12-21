@@ -8,7 +8,8 @@ import com.billow.system.pojo.vo.RoleVo;
 
 import java.util.List;
 
-public interface RoleService extends IService<RolePo> {
+public interface RoleService extends IService<RolePo>
+{
 
     /**
      * 通过用户id 查询用户角色信息
@@ -37,16 +38,6 @@ public interface RoleService extends IService<RolePo> {
      * @date 2019/7/12 11:37
      */
     List<Long> findPermissionByRoleId(Long roleId) throws Exception;
-
-    /**
-     * 根据角色ID查询菜单ID
-     *
-     * @param roleId
-     * @return java.util.List<java.lang.String>
-     * @author LiuYongTao
-     * @date 2019/7/12 15:17
-     */
-    List<String> findMenuByRoleId(Long roleId) throws Exception;
 
     /**
      * 保存角色信息、角色菜单和角色权限
@@ -106,4 +97,14 @@ public interface RoleService extends IService<RolePo> {
      * @date 2019/8/7 10:27
      */
     Integer countRoleCodeByRoleCode(String roleCode);
+
+    /**
+     * 根据角色ID查询所有子菜单ID
+     *
+     * @param roleId
+     * @return List<String>
+     * @author 千面
+     * @date 2021/12/21 15:10
+     */
+    List<String> findChildrenMenuByRoleId(Long roleId);
 }

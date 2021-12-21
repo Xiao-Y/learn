@@ -107,12 +107,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
     }
 
     @Override
-    public List<String> findMenuByRoleId(Long roleId) throws Exception {
-        // 查询出所有子级菜单
-        return roleMenuDao.selectChildrenMenu(roleId);
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void saveRole(RoleVo roleVo) {
         // 保存/修改角色信息
@@ -403,6 +397,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         LambdaQueryWrapper<RolePo> condition2 = Wrappers.lambdaQuery();
         condition2.eq(RolePo::getRoleCode, roleCode);
         return roleDao.selectCount(condition2);
+    }
+
+    @Override
+    public List<String> findChildrenMenuByRoleId(Long roleId) {
+        return roleMenuDao.findChildrenMenuByRoleId(roleId);
     }
 
 }

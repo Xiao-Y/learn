@@ -39,5 +39,5 @@ public interface RoleMenuDao extends BaseMapper<RoleMenuPo>
      * @author 千面
      * @date 2021/12/21 14:37
      */
-    List<String> selectChildrenMenu(Long roleId);
+    List<String> findChildrenMenuByRoleId(Long roleId);
 }

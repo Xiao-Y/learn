@@ -63,7 +63,7 @@ function filterAsyncRouter(accessedRouters, menus) {
   //递归出所有的Code
   genMenuCodes(menus);
   // 反向移除，用户没有的权限从路由移除，定制新路由
-  for (var i = accessedRouters.length - 1; i >= 0; i--) {
+  for (var i = accessedRouters.length - 1; i > 0; i--) {
     // var basePath = accessedRouters[i].path;
     var baseRouterName = accessedRouters[i].name;
     if (accessedRouters[i].children && accessedRouters[i].children.length > 0) {

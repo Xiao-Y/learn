@@ -23,7 +23,7 @@
         </foreach>
     </select>
 
-    <select id="selectChildrenMenu" resultType="String" flushCache="false" useCache="false">
+    <select id="findChildrenMenuByRoleId" resultType="String" flushCache="false" useCache="false">
         SELECT DISTINCT
             sm.id
         FROM

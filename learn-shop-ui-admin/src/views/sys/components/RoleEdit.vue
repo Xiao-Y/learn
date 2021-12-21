@@ -60,7 +60,7 @@
 <script>
   import {findMenus} from "../../../api/sys/menuMag";
   import {
-    LoadDataMenuIdList,
+    LoadDataChildrenMenuIdList,
     SaveRole,
     CheckRoleCode
   } from "../../../api/sys/roleMag";
@@ -204,7 +204,7 @@
           return;
         }
         // 加载菜单选种状态
-        LoadDataMenuIdList(this.roleInfo.id).then(res => {
+        LoadDataChildrenMenuIdList(this.roleInfo.id).then(res => {
           // 该角色所拥有的菜单
           var checkedMenu = res.resData;
           this.oldMenuChecked = [...new Set(res.resData)];
