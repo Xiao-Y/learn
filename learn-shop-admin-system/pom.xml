@@ -37,6 +37,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-mybatis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-redis</artifactId>
+        </dependency>
         <!-- 消息中间件、消息通知 -->
         <dependency>
             <groupId>com.billow</groupId>

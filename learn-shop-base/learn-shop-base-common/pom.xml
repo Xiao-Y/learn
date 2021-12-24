@@ -26,15 +26,15 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-tools</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-redis</artifactId>
-        </dependency>
-        <!-- rabbit,用于配置中心文件修改通知和发送其它系统间通知 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.billow</groupId>-->
+<!--            <artifactId>learn-shop-base-redis</artifactId>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; rabbit,用于配置中心文件修改通知和发送其它系统间通知 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-bus-amqp</artifactId>-->
+<!--        </dependency>-->
         <!-- 注册中心 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

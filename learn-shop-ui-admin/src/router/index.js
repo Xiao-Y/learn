@@ -4,7 +4,10 @@ import Home from '../views/home/Home.vue'
 
 Vue.use(Router)
 
-// 静态路由
+/**
+ * 静态路由
+ * @type {any}
+ */
 export const constantRouterMap = [{
   path: '/',
   redirect: '/login',
@@ -25,8 +28,11 @@ export const constantRouterMap = [{
   }]
 }];
 
-// 异步挂载的路由（动态需要根据权限加载的路由表,
-// 子路由的 name = parentPath + childrenPath。必须要唯一，要与 sys_menu 中的 menu_code 一致，不然路由加载不出来）
+/**
+ * 异步挂载的路由（动态需要根据权限加载的路由表, 子路由的 name = parentPath + childrenPath。
+ * 必须要唯一，要与 sys_menu 中的 menu_code 一致，不然路由加载不出来）
+ * @type {any}
+ */
 
 export const asyncRouterMap = [{
   path: '/home',
@@ -193,7 +199,7 @@ export const asyncRouterMap = [{
     name: 'workbenchApplyInfo',
     path: 'workbenchApplyInfo/index',
     component: resolve => require(['../views/process/apply/applyInfo/applyInfo.vue'], resolve)
-  },{
+  }, {
     name: 'workbenchMyTaskListIndex',
     path: 'workbenchMyTaskList/index',
     meta: {

@@ -30,6 +30,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-mybatis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-redis</artifactId>
+        </dependency>
         <!-- 配置中心获取端 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
