@@ -13,7 +13,7 @@ router.beforeEach((to, from, next) => {
   // console.info("next:",next);
   if (getAccessToken()) { // 判断是否有token
     if (to.path === '/login') {
-      store.commit(types.SET_ROUTERS);
+      store.commit(types.SET_ADD_ROUTERS);
       next();
     } else {
       if (!store.getters.menus) {
@@ -36,7 +36,6 @@ router.beforeEach((to, from, next) => {
           // 动态添加可访问路由表
           router.addRoutes(store.getters.addRouters);
           // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-          // console.info(store.getters.addRouters);
           // 加载按钮权限
           store.dispatch('GenButtonPerms');
           next({...to, replace: true});
@@ -44,22 +43,22 @@ router.beforeEach((to, from, next) => {
           console.info(error);
           store.dispatch('LogOutActions').then(() => {
             // Message.error('获取路由失败,请重新登录');
-            store.commit(types.SET_ROUTERS);
+            store.commit(types.SET_ADD_ROUTERS);
             next({path: '/login'})
           });
         });
       } else {
         // 当有用户权限的时候，说明所有可访问路由已生成 如访问没权限的全面会自动进入404页面
-        store.commit(types.SET_ROUTERS);
+        store.commit(types.SET_ADD_ROUTERS);
         next();
       }
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
-      store.commit(types.SET_ROUTERS);
+      store.commit(types.SET_ADD_ROUTERS);
       next();
     } else {
-      store.commit(types.SET_ROUTERS);
+      store.commit(types.SET_ADD_ROUTERS);
       next('/login');
     }
   }

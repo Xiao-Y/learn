@@ -29,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -188,20 +185,25 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
             List<MenuEx> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode(), MenuEx.class);
             if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
-                sourceMenuPo = menuExs.stream().filter(f -> !delMenuIdsTemp.contains(f))
+                sourceMenuPo = menuExs.stream()
+                        .filter(f -> !delMenuIdsTemp.contains(new Long(f.getId())))
                         .map(m -> {
                             MenuPo po = ConvertUtils.convert(m, MenuPo.class);
                             po.setMenuCode(m.getTitleCode());
                             po.setMenuName(m.getTitle());
                             po.setId(new Long(m.getId()));
                             return po;
-                        }).collect(Collectors.toList());
+                        })
+                        .collect(Collectors.toList());
             }
 
             if (ToolsUtils.isNotEmpty(sourceMenuPo)) {
                 newMenuPos.addAll(sourceMenuPo);
                 Map<Long, MenuPo> temp = new HashMap<>();
                 for (MenuPo newMenuPo : newMenuPos) {
+                    if(Objects.isNull(newMenuPo)){
+                        continue;
+                    }
                     temp.put(newMenuPo.getId(), newMenuPo);
                 }
                 newMenuPos.clear();

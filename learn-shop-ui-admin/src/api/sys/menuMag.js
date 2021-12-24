@@ -48,10 +48,9 @@ export const delMenuByIds = ids => requestUtils.del(baseUrl + '/delMenuByIds', {
 
 /**
  * 通过token 获取菜单信息
- * @param token
  * @constructor
  */
-export const getHomeMenus = () => requestUtils.get(baseUrl + '/homeMenus');
+export const LoadHomeMenus = () => requestUtils.get(baseUrl + '/homeMenus');
 
 /**
  * 查询 menuCode 是否重复

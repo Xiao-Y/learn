@@ -6,8 +6,7 @@ const getters = {
   roles: state => state.loginHandle.roles,
   name: state => state.loginHandle.name,
 
-  // name: state => state.user.name,
-  routers: state => state.menuPerm.routers,
+  // 追加新路由
   addRouters: state => state.menuPerm.addRouters,
   menus: state => state.menuPerm.menus,
   // 按钮权限

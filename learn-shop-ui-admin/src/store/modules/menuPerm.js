@@ -1,9 +1,6 @@
-import {
-  asyncRouterMap,
-  constantRouterMap
-} from '../../router'
+import {asyncRouterMap} from '../../router'
 
-import {getHomeMenus} from '../../api/sys/menuMag'
+import {LoadHomeMenus} from '../../api/sys/menuMag'
 
 import VueUtils from '../../utils/vueUtils'
 
@@ -85,29 +82,27 @@ function filterAsyncRouter(accessedRouters, menus) {
       }
     }
   }
-  console.info(accessedRouters);
+  console.info( accessedRouters);
   return accessedRouters
 }
 
 const menuPerm = {
   state: {
-    routers: VueUtils.deepClone(constantRouterMap),
     addRouters: [],
     menus: []
   },
   mutations: {
-    [types.SET_ROUTERS]: (state, routers) => {
+    [types.SET_ADD_ROUTERS]: (state, routers) => {
       state.addRouters = routers
-      state.routers = VueUtils.deepClone(constantRouterMap.concat(routers))
     },
     [types.SET_MENUS]: (state, menus) => {
       state.menus = menus
     }
   },
   actions: {
-    GenRoutesActions({commit, state}) {
+    GenRoutesActions({commit}) {
       return new Promise((resolve, reject) => {
-        getHomeMenus(state.token).then(res => {
+        LoadHomeMenus().then(res => {
           var menus = VueUtils.deepClone(res.resData.menus);
           const accessedRouters = filterAsyncRouter(asyncRouterMap, menus);
           // 最后添加404页面
@@ -115,7 +110,7 @@ const menuPerm = {
             path: '*',
             redirect: '/error/404'
           });
-          commit(types.SET_ROUTERS, VueUtils.deepClone3(accessedRouters));
+          commit(types.SET_ADD_ROUTERS, accessedRouters);
           commit(types.SET_MENUS, menus);
           resolve(res);
         }).catch(error => {

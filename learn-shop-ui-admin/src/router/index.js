@@ -5,10 +5,10 @@ import Home from '../views/home/Home.vue'
 Vue.use(Router)
 
 /**
- * 静态路由
+ * 默认路由
  * @type {any}
  */
-export const constantRouterMap = [{
+export const defaultRouterMap = [{
   path: '/',
   redirect: '/login',
   hidden: true
@@ -17,6 +17,16 @@ export const constantRouterMap = [{
   name: '登录页面',
   hidden: true,
   component: resolve => require(['../views/login/Login.vue'], resolve)
+}, {
+  path: '/home',
+  index: 'home',
+  name: 'home',
+  component: Home,
+  children: [{
+    path: 'index',
+    name: 'homeIndex',
+    component: resolve => require(['../views/home/HomeIndex.vue'], resolve)
+  }]
 }, {
   path: '/error',
   name: 'error',
@@ -33,18 +43,7 @@ export const constantRouterMap = [{
  * 必须要唯一，要与 sys_menu 中的 menu_code 一致，不然路由加载不出来）
  * @type {any}
  */
-
 export const asyncRouterMap = [{
-  path: '/home',
-  index: 'home',
-  name: 'home',
-  component: Home,
-  children: [{
-    path: 'index',
-    name: 'homeIndex',
-    component: resolve => require(['../views/home/HomeIndex.vue'], resolve)
-  }]
-}, {
   path: '/sys',
   name: 'sys',
   component: Home,
@@ -213,6 +212,7 @@ export const asyncRouterMap = [{
   component: resolve => require(['../views/process/ViewProcessImg.vue'], resolve)
 }]
 
+// 暴露默认路由
 export default new Router({
-  routes: constantRouterMap
+  routes: defaultRouterMap
 })
