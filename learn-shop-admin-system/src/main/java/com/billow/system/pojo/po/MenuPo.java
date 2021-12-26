@@ -35,14 +35,6 @@ public class MenuPo extends BasePo {
     @TableField("pid")
     private Long pid;
 
-    @TableField("path")
-    @ApiModelProperty("菜单路径")
-    private String path;
-
-    @TableField("component")
-    @ApiModelProperty("组件路由位置")
-    private String component;
-
     @TableField("display")
     private Boolean display;
 

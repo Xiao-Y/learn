@@ -7,13 +7,11 @@ import com.billow.system.pojo.vo.RoleVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.sun.org.apache.regexp.internal.RE;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -194,15 +192,9 @@ public class RoleMenuRedisKit {
         return roleVos.stream()
                 .map(RoleVo::getRoleCode)
                 .distinct()
-                .flatMap(m -> {
-                    List<MenuEx> menuPos = redisUtils.getHash(ROLE_MENU_KEY, m, MenuEx.class);
-                    if (CollectionUtils.isEmpty(menuPos)) {
-                        return null;
-                    }
-                    return menuPos.stream()
-                            .filter(ff -> StringUtils.isNotBlank(ff.getPath()));
-                })
+                .map(m -> redisUtils.getHash(ROLE_MENU_KEY, m, MenuEx.class))
                 .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
@@ -217,8 +209,6 @@ public class RoleMenuRedisKit {
     public MenuEx menuPoCoverMenuex(MenuPo item) {
         MenuEx ex = new MenuEx();
         ex.setId(item.getId().toString());
-        ex.setPath(item.getPath());
-        ex.setComponent(item.getComponent());
         ex.setValidInd(item.getValidInd());
         ex.setIcon(item.getIcon());
         ex.setPid(item.getPid());

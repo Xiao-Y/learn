@@ -14,7 +14,7 @@ export function asyncRouterMap() {
  * 异步挂载的路由（动态需要根据权限加载的路由表, 路由的 name  必须要唯一，要与 sys_menu 中的 menu_code 一致，不然路由加载不出来）
  * @type {any}
  */
-export const asyncRouterList = [
+const asyncRouterList = [
   // ===================================== 系统管理 ================================
   {
     // 白名单

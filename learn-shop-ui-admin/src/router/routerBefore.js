@@ -101,6 +101,7 @@ function filterAsyncRouter(menus) {
     path: '*',
     redirect: '/error/404'
   });
+  console.info("accessedRouters:{}",accessedRouters);
   return accessedRouters
 }
 
