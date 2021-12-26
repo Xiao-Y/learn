@@ -5,7 +5,7 @@
     <div class="head-top">
       <head-top></head-top>
     </div>
-
+    <!--  右侧内容显示区  -->
     <div class="content">
       <transition mode="out-in" name="move">
         <keep-alive>
@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import vHead from '../../components/header/Header.vue'
-import vSidebar from '../../components/navmenu/Sidebar.vue'
-import HeadTop from '../../components/header/HeadTop.vue';
-import {defaultRouterMap} from '../../router'
+import vHead from './header/Header.vue'
+import vSidebar from './navmenu/Sidebar.vue'
+import HeadTop from './header/HeadTop.vue';
+import {defaultRouterMap} from '../router'
 
 export default {
   components: {

@@ -16,7 +16,7 @@ import './directives/has'
 
 import VueBus from 'vue-bus' // 消息总线
 
-import '@/genRouter' // menuPerm control
+import './router/routerBefore' // premission control
 
 Vue.use(Vuex);
 Vue.use(ElementUI, {

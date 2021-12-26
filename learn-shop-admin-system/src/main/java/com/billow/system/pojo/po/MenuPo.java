@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -33,6 +34,14 @@ public class MenuPo extends BasePo {
 
     @TableField("pid")
     private Long pid;
+
+    @TableField("path")
+    @ApiModelProperty("菜单路径")
+    private String path;
+
+    @TableField("component")
+    @ApiModelProperty("组件路由位置")
+    private String component;
 
     @TableField("display")
     private Boolean display;

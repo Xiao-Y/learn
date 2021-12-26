@@ -5,6 +5,7 @@ import com.billow.common.base.BaseApi;
 import com.billow.common.utils.UserTools;
 import com.billow.system.pojo.ex.HomeEx;
 import com.billow.system.pojo.ex.MenuEx;
+import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
@@ -54,6 +55,9 @@ public class MenuApi extends BaseApi {
                     return roleVo;
                 })
                 .collect(Collectors.toList());
+        RoleVo admin = new RoleVo();
+        admin.setRoleCode("ADMIN");
+        roleVos.add(admin);
         ex.setUserCode(userTools.getCurrentUserCode());
         ex.setRoleVos(roleVos);
         ex.setValidInd(true);
@@ -62,10 +66,6 @@ public class MenuApi extends BaseApi {
 
         HomeEx homeEx = new HomeEx();
         homeEx.setMenus(menuExes);
-
-        String user = request.getHeader("user");
-        System.out.println("=========>>>>" + user);
-
         return homeEx;
     }
 

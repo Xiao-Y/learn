@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.RoleMenuDao;
+import com.billow.system.pojo.ex.HomeEx;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RoleMenuPo;
@@ -201,6 +202,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
             this.getMenuPidById(set, one.getPid());
         }
         return set;
+    }
+
+    @Override
+    public List<MenuEx> findRouterList(List<RoleVo> roleVos) {
+        return roleMenuRedisKit.findMenuListByRoles(roleVos);
     }
 
     /**

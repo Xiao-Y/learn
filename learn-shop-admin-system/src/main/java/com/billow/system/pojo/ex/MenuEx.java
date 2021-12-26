@@ -30,6 +30,9 @@ public class MenuEx implements Serializable {
     @ApiModelProperty("菜单路径")
     private String path;
 
+    @ApiModelProperty("组件路由位置")
+    private String component;
+
     @ApiModelProperty("菜单图标")
     private String icon;
 
