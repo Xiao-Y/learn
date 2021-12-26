@@ -1,5 +1,6 @@
 package com.billow.gateway.init;
 
+import com.alibaba.fastjson.JSON;
 import com.billow.redis.util.RedisUtils;
 import com.billow.tools.constant.RedisCst;
 import lombok.extern.slf4j.Slf4j;
@@ -43,13 +44,14 @@ public class InitData implements ApplicationRunner {
      * @since 2021/1/27 22:02
      */
     private void initRouteInfo() {
-        log.info("== start load route info ========");
+        log.info("== 初始化路由信息-start ========");
         Map<String, String> collect = gatewayProperties.getRoutes().stream()
                 .filter(f -> f.getUri() != null && StringUtils.isNotEmpty(f.getUri().getHost()))
                 .collect(Collectors.toMap(RouteDefinition::getId,
                         routeDefinition -> routeDefinition.getUri().getHost(),
                         (v1, v2) -> v2));
+        log.info("路由信息:{}", JSON.toJSONString(collect));
         redisUtils.setHash(RedisCst.COMM_ROUTE_INFO, collect);
-        log.info("== end load route info ========\n");
+        log.info("== 初始化路由信息-end ========\n");
     }
 }

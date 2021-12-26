@@ -27,7 +27,7 @@ import java.util.List;
 public class CodeGenerator {
 
     String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
-    String template = "/template2";
+    String template = "/template";
 
     /**
      * 自定义配置
@@ -167,14 +167,14 @@ public class CodeGenerator {
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         // dsc.setSchemaName("public");
-//        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
-//        dsc.setUsername("learn_shop");
-//        dsc.setPassword("pass123");
+        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
+        dsc.setUsername("learn_shop");
+        dsc.setPassword("pass123");
 
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false" +
-                "&allowPublicKeyRetrieval=true");
-        dsc.setUsername("root");
-        dsc.setPassword("root");
+//        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false" +
+//                "&allowPublicKeyRetrieval=true");
+//        dsc.setUsername("root");
+//        dsc.setPassword("root");
         return dsc;
     }
 
@@ -294,7 +294,7 @@ public class CodeGenerator {
             parent = "user";
         }
 
-        pc.setParent("com.billow.webflux");
+        pc.setParent("com.billow");
         pc.setModuleName(parent);
         pc.setEntity("pojo.po");
         pc.setController("api");
@@ -357,8 +357,10 @@ public class CodeGenerator {
 //                "sys_role",
 //                "sys_white_list"
 //                );
-//        strategy.setTablePrefix("sys_");
-//        strategy.setInclude("sys_permission",
+        strategy.setTablePrefix("sys_");
+        strategy.setInclude(
+//                "sys_permission",
+                "sys_menu_permission"
 //                "r_role_menu",
 //                "r_role_permission",
 //                "r_user_role"
@@ -368,8 +370,8 @@ public class CodeGenerator {
 //        strategy.setInclude("v_mytasklist");
 //        strategy.setTablePrefix("v_");
 
-        strategy.setTablePrefix("u_");
-        strategy.setInclude("u_user"
+//        strategy.setTablePrefix("u_");
+//        strategy.setInclude("u_user"
         );
     }
 

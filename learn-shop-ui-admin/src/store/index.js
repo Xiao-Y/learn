@@ -4,7 +4,8 @@ import Vuex from 'vuex'
 // import app from './modules/app'
 import user from './modules/user'
 import loginHandle from './modules/login'
-import permission from './modules/permission'
+import menuPerm from './modules/menuPerm'
+import buttonPerm from './modules/buttonPerm'
 
 import getters from './getters'
 
@@ -18,7 +19,8 @@ const store = new Vuex.Store({
   modules: {
     // app,
     user,
-    permission,
+    menuPerm,
+    buttonPerm,
     loginHandle
   },
   getters,

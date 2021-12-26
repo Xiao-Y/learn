@@ -36,9 +36,9 @@ public enum ResCodeEnum {
      */
     RESCODE_SIGNATURE_ERROR("0005", "签名校验错误"),
     /**
-     * "0006", "权限校验未通过"
+     * "0006", "未认证"
      */
-    RESCODE_UNAUTHORIZED("0006", "权限校验未通过"),
+    RESCODE_UNAUTHORIZED("0006", "未认证"),
     /**
      * "0007", "无法查询到相关信息或查询结果为空"
      */

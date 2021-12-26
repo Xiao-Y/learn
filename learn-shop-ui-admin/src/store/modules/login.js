@@ -34,9 +34,7 @@ const loginHandle = {
 
   actions: {
     // 登录
-    LoginActions({
-      commit
-    }, userInfo) {
+    LoginActions({commit}, userInfo) {
       const username = userInfo.username.trim();
       const password = userInfo.password;
       //   const rawPassword = VueUtils.md5(password);
@@ -54,34 +52,12 @@ const loginHandle = {
       })
     },
     // 登出
-    LogOutActions({
-      commit,
-      state
-    }) {
-      return new Promise((resolve, reject) => {
+    LogOutActions({commit}) {
+      return new Promise(resolve => {
         commit(types.SET_TOKEN, '');
         commit(types.SET_ROLES, []);
         removeToken();
         logOut();
-        resolve();
-        // logout(state.token).then(() => {
-        //   commit(types.SET_TOKEN, '');
-        //   commit(types.SET_ROLES, []);
-        //   removeToken();
-        //   resolve();
-        // }).catch(error => {
-        //   reject(error);
-        // })
-      })
-    },
-
-    // 前端 登出
-    FedLogOutActions({
-      commit
-    }) {
-      return new Promise(resolve => {
-        commit(types.SET_TOKEN, '');
-        removeToken();
         resolve();
       })
     }

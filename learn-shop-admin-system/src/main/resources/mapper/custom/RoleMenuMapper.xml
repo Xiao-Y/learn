@@ -23,4 +23,16 @@
         </foreach>
     </select>
 
+    <select id="findChildrenMenuByRoleId" resultType="String" flushCache="false" useCache="false">
+        SELECT DISTINCT
+            sm.id
+        FROM
+            sys_menu sm,
+            r_role_menu rm
+        WHERE
+            rm.role_id = #{roleId}
+          AND rm.menu_id = sm.id
+          AND NOT EXISTS ( SELECT 1 FROM sys_menu r WHERE r.pid = sm.id )
+    </select>
+
 </mapper>

@@ -18,11 +18,11 @@ export const LoadDataRoleList = roleFilter => requestUtils.post(baseUrl + '/find
 export const LoadDataPermissionIdList = roleId => requestUtils.get(baseUrl + '/findPermissionByRoleId/' + roleId);
 
 /**
- * 根据角色ID查询菜单ID
+ * 根据角色ID查询所有子菜单ID
  * @param roleFilter
  * @constructor
  */
-export const LoadDataMenuIdList = roleId => requestUtils.get(baseUrl + '/findMenuByRoleId/' + roleId);
+export const LoadDataChildrenMenuIdList = roleId => requestUtils.get(baseUrl + '/findMenuByRoleId/' + roleId);
 
 /**
  * 保存角色信息

@@ -1,12 +1,14 @@
 package com.billow.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.system.pojo.ex.HomeEx;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.MenuVo;
+import com.billow.system.pojo.vo.RoleVo;
 
 import java.util.List;
 import java.util.Set;
@@ -82,4 +84,14 @@ public interface MenuService extends IService<MenuPo> {
      * @date 2019/8/2 10:52
      */
     Set<String> getParentByCurrentId(Long id);
+
+    /**
+     * 查询角色的的路由列表
+     *
+     * @param roleVos
+     * @return {@link List< MenuEx>}
+     * @author xiaoy
+     * @since 2021/12/25 21:37
+     */
+    List<MenuEx> findRouterList(List<RoleVo> roleVos);
 }

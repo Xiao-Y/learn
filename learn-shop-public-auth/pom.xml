@@ -32,6 +32,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-notice</artifactId>
+        </dependency>
         <!-- 配置中心获取端 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

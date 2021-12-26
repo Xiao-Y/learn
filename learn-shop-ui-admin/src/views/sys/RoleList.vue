@@ -58,9 +58,9 @@
               <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
                                    @onEdit="handleEdit(scope.row,scope.$index)"
                                    @onInd="handleProhibit(scope.row,scope.$index)"
-                                   :hasDel="'RoleApi-deleteRoleById'"
-                                   :hasEdit="'RoleApi-saveRole'"
-                                   :hasInd="'RoleApi-prohibitRoleById'"
+                                   :hasDel="'sys:role:deleteRoleById'"
+                                   :hasEdit="'sys:role:saveRole'"
+                                   :hasInd="'sys:role:prohibitRoleById'"
                                    :disInd="!scope.row.validInd">
 
               </button-group-option>

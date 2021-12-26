@@ -56,6 +56,7 @@ export function removeToken() {
  * 退出时，清理数据
  */
 export function logOut() {
+  // console.info("logOut.....")
   localStorage.clear();
 }
 
@@ -80,22 +81,22 @@ export function getCityData() {
 export function setCityData(cityData) {
   localStorage.setItem(CityData, JSON.stringify(cityData))
 }
-
-/**
- * 获取 ButtonPermission
- * @returns {*}
- * @constructor
- */
-export function getButtonPermission() {
-  return localStorage.getItem(ButtonPermission);
-}
-
-/**
- * 设置 ButtonPermission
- * @returns {*}
- * @constructor
- */
-export function setButtonPermission(buttonPermission) {
-  console.log(buttonPermission)
-  localStorage.setItem(ButtonPermission, buttonPermission)
-}
+//
+// /**
+//  * 获取 ButtonPermission
+//  * @returns {*}
+//  * @constructor
+//  */
+// export function getButtonPermission() {
+//   return localStorage.getItem(ButtonPermission);
+// }
+//
+// /**
+//  * 设置 ButtonPermission
+//  * @returns {*}
+//  * @constructor
+//  */
+// export function setButtonPermission(buttonPermission) {
+//   console.log(buttonPermission)
+//   localStorage.setItem(ButtonPermission, buttonPermission)
+// }

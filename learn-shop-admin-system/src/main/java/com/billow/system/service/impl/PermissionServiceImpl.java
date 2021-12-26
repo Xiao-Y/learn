@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +38,8 @@ import java.util.stream.Collectors;
  * @create 2019-04-29 18:11
  */
 @Service
-public class PermissionServiceImpl extends ServiceImpl<PermissionDao, PermissionPo> implements PermissionService {
+public class PermissionServiceImpl extends ServiceImpl<PermissionDao, PermissionPo> implements PermissionService
+{
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -55,7 +53,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     private UserTools userTools;
 
     @Override
-    public Set<PermissionPo> findPermissionByRole(RolePo rolePo) {
+    public Set<PermissionPo> findPermissionByRole(RolePo rolePo)
+    {
 
         Set<PermissionPo> permissionPos = new HashSet<>();
 
@@ -64,17 +63,20 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
         wrapper.eq(RolePermissionPo::getRoleId, rolePo.getId())
                 .eq(RolePermissionPo::getValidInd, true);
         List<RolePermissionPo> rolePermissionPos = rolePermissionDao.selectList(wrapper);
-        if (CollectionUtils.isEmpty(rolePermissionPos)) {
+        if (CollectionUtils.isEmpty(rolePermissionPos))
+        {
             logger.warn("角色：{}，未分配权限！", rolePo.getRoleName());
             return permissionPos;
         }
 
         rolePermissionPos.stream().forEach(rp -> {
             PermissionPo permissionPo = permissionDao.selectById(rp.getPermissionId());
-            if (permissionPo.getValidInd() == null || !permissionPo.getValidInd()) {
+            if (permissionPo.getValidInd() == null || !permissionPo.getValidInd())
+            {
                 permissionPo = null;
             }
-            if (permissionPo == null) {
+            if (permissionPo == null)
+            {
                 logger.warn("角色：{}，permissionId:{},未查询到信息！", rolePo.getRoleName(), rp.getId());
                 return;
             }
@@ -86,7 +88,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     }
 
     @Override
-    public IPage<PermissionVo> findPermissionList(PermissionVo permissionVo) {
+    public IPage<PermissionVo> findPermissionList(PermissionVo permissionVo)
+    {
         IPage<PermissionPo> page = new Page<>(permissionVo.getPageNo(), permissionVo.getPageSize());
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
         QueryWrapper<PermissionPo> conditionLike = MybatisKet.getConditionLike(convert);
@@ -94,10 +97,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
         return this.page(page, conditionLike).convert(this::convertToPermissionVo);
     }
 
-    private PermissionVo convertToPermissionVo(PermissionPo permissionPo) {
+    private PermissionVo convertToPermissionVo(PermissionPo permissionPo)
+    {
         PermissionVo convert = ConvertUtils.convert(permissionPo, PermissionVo.class);
         String systemModule = convert.getSystemModule();
-        if (ToolsUtils.isNotEmpty(systemModule)) {
+        if (ToolsUtils.isNotEmpty(systemModule))
+        {
             ArrayList<String> list = CollectionUtil.newArrayList(systemModule.split(","));
             convert.setSystemModules(list);
         }
@@ -106,7 +111,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public PermissionVo deletePermissionById(Long id) {
+    public PermissionVo deletePermissionById(Long id)
+    {
         PermissionPo permissionPo = permissionDao.selectById(id);
         permissionDao.deleteById(id);
         // redis：删除所有角色所持有的该权限
@@ -116,7 +122,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void savePermission(PermissionVo permissionVo) {
+    public void savePermission(PermissionVo permissionVo)
+    {
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
         permissionDao.insert(convert);
         ConvertUtils.convert(convert, permissionVo);
@@ -124,7 +131,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updatePermission(PermissionVo permissionVo) {
+    public void updatePermission(PermissionVo permissionVo)
+    {
         this.updateById(permissionVo);
         // redis：通过权限 id 更新权限信息
         rolePermissionRedisKit.updatePermissionById(permissionVo);
@@ -132,7 +140,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public PermissionVo prohibitPermissionById(Long id) {
+    public PermissionVo prohibitPermissionById(Long id)
+    {
         PermissionPo permissionPo = permissionDao.selectById(id);
         permissionPo.setValidInd(false);
         permissionDao.updateById(permissionPo);
@@ -142,7 +151,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     }
 
     @Override
-    public List<PermissionVo> findPermissionAll() {
+    public List<PermissionVo> findPermissionAll()
+    {
         LambdaQueryWrapper<PermissionPo> condition = Wrappers.lambdaQuery();
         condition.eq(PermissionPo::getValidInd, true);
         condition.orderByAsc(PermissionPo::getId);
@@ -155,19 +165,44 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     }
 
     @Override
-    public List<String> findMyPermissionList() {
+    public List<String> findMyPermissionList()
+    {
         List<String> roleCodeList = userTools.getCurrentRoleCode();
-        if (CollectionUtils.isEmpty(roleCodeList)) {
+        if (CollectionUtils.isEmpty(roleCodeList))
+        {
             return new ArrayList<>();
         }
-        List<PermissionPo> permissionPos = permissionDao.findPermissionByRoleCode(roleCodeList);
-        if (CollectionUtils.isEmpty(permissionPos)) {
-            return new ArrayList<>();
-        }
-        return permissionPos.stream()
+
+        return roleCodeList.stream()
+                .map(m -> getRolePermissionByRoleCode(m))
+                .flatMap(Collection::stream)
                 .map(PermissionPo::getPermissionCode)
                 .filter(StringUtils::isNoneBlank)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 通过 roleCode 获取权限信息
+     *
+     * @param m
+     * @return List<PermissionVo>
+     * @author 千面
+     * @date 2021/12/18 16:30
+     */
+    private List<PermissionVo> getRolePermissionByRoleCode(String m)
+    {
+        List<PermissionVo> temp = rolePermissionRedisKit.getRolePermissionByRoleCode(m);
+        if (CollectionUtils.isEmpty(temp))
+        {
+            List<PermissionPo> permissionPos = permissionDao.findPermissionByRoleCode(Arrays.asList(m));
+            if (CollectionUtils.isEmpty(permissionPos))
+            {
+                return new ArrayList<>();
+            }
+            rolePermissionRedisKit.setRolePermission(permissionPos, m);
+            temp = ConvertUtils.convert(permissionPos, PermissionVo.class);
+        }
+        return temp;
     }
 }

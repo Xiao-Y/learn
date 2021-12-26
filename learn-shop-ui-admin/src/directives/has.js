@@ -1,16 +1,19 @@
 import Vue from 'vue'
-import {getButtonPermission} from '../utils/cookieUtils'
+import store from "../store";
 
 /**
  * 权限指令
  */
 Vue.directive('has', {
     inserted: function (el, bindings, vnode) {
-        console.info("bindings.value:",bindings.value)
-        let buttonPermission = getButtonPermission();
-        if (!buttonPermission) {
+        // console.info("bindings.value:",bindings.value)
+      // 获取按钮权限信息
+      let buttonPermission = store.getters.buttonPerm;
+      // console.info("buttonPermission:",buttonPermission)
+        if (buttonPermission === null) {
             el.remove();
-        } else if (bindings.value && buttonPermission.indexOf(bindings.value) == -1) {
+        } else if (bindings.value !== null && !buttonPermission.includes(bindings.value)) {
+          // console.info("remove.value:",bindings.value)
             el.remove();
         }
     }

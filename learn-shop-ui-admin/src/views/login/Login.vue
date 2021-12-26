@@ -35,8 +35,7 @@ import {
 } from "../../api/login";
 
 import {
-  removeToken,
-  setButtonPermission
+  removeToken
 } from '../../utils/cookieUtils';
 import {LoadDataMyPermissionList} from "../../api/sys/permissionMag";
 
@@ -85,13 +84,8 @@ export default {
           removeToken();
           this.$store.dispatch('LoginActions', this.loginForm).then(() => {
             this.loading = false
-//               alert('登录成功')
             localStorage.setItem('ms_username', this.loginForm.username)
             this.$router.push({name: 'homeIndex'})
-            // 加载按钮权限
-            LoadDataMyPermissionList().then(res => {
-              setButtonPermission(res.resData);
-            });
           }).catch(() => {
             this.loading = false
           })

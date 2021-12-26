@@ -1,16 +1,22 @@
 package com.billow.system.service.redis;
 
+import com.billow.redis.util.RedisUtils;
 import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.billow.redis.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -114,15 +120,26 @@ public class RoleMenuRedisKit {
         redisUtils.setHash(ROLE_MENU_KEY, roleCode, exs);
     }
 
+    /**
+     * 带层级关系的菜单树
+     *
+     * @param roleVos
+     * @return {@link List< MenuEx>}
+     * @author xiaoy
+     * @since 2021/12/25 21:29
+     */
     public List<MenuEx> findMenusByRoles(List<RoleVo> roleVos) {
         // 读取缓存中的数据
         List<MenuEx> all = new ArrayList<>();
-        roleVos.stream().forEach(f -> {
-            List<MenuEx> menuPos = redisUtils.getHash(ROLE_MENU_KEY, f.getRoleCode(), MenuEx.class);
-            if (ToolsUtils.isNotEmpty(menuPos)) {
-                all.addAll(menuPos);
-            }
-        });
+        roleVos.stream()
+                .map(RoleVo::getRoleCode)
+                .distinct()
+                .forEach(f -> {
+                    List<MenuEx> menuPos = redisUtils.getHash(ROLE_MENU_KEY, f, MenuEx.class);
+                    if (ToolsUtils.isNotEmpty(menuPos)) {
+                        all.addAll(menuPos);
+                    }
+                });
         // 没有数据直接返回
         if (ToolsUtils.isEmpty(all)) {
             return null;
@@ -163,6 +180,25 @@ public class RoleMenuRedisKit {
     }
 
     /**
+     * 不带层级关系的菜单树
+     *
+     * @param roleVos
+     * @return {@link List< MenuEx>}
+     * @author xiaoy
+     * @since 2021/12/25 21:29
+     */
+    public List<MenuEx> findMenuListByRoles(List<RoleVo> roleVos) {
+        // 读取缓存中的数据
+        return roleVos.stream()
+                .map(RoleVo::getRoleCode)
+                .distinct()
+                .map(m -> redisUtils.getHash(ROLE_MENU_KEY, m, MenuEx.class))
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * MenuPo 转换成 MenuEx
      *
      * @param item
@@ -173,7 +209,6 @@ public class RoleMenuRedisKit {
     public MenuEx menuPoCoverMenuex(MenuPo item) {
         MenuEx ex = new MenuEx();
         ex.setId(item.getId().toString());
-        ex.setPath("");
         ex.setValidInd(item.getValidInd());
         ex.setIcon(item.getIcon());
         ex.setPid(item.getPid());

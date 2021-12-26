@@ -1,5 +1,5 @@
 service:
-  ipAddress: 127.0.0.1
+  ipAddress: 192.168.137.200
 spring:
   cloud:
     nacos:
@@ -8,7 +8,7 @@ spring:
         server-addr: ${service.ipAddress}:8848
         file-extension: yml
         refresh-enabled: true
-        namespace: dev # pro
+        namespace: pro # pro
         # 配置公用文件
         shared-configs[0]:
           dataId: cloud-config.properties

@@ -70,8 +70,8 @@ public class RedisCacheConfig {
     private void initDomainRedisTemplate(RedisTemplate<String, Object> template, LettuceConnectionFactory factory) {
         // 定义 key 的序列化方式为 string
         // 需要注意这里Key使用了 StringRedisSerializer，那么Key只能是String类型的，不能为Long，Integer，否则会报错抛异常。
-        StringRedisSerializer redisSerializer = new StringRedisSerializer();
-        template.setKeySerializer(redisSerializer);
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        template.setKeySerializer(stringRedisSerializer);
         // 定义 value 的序列化方式为 json
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper om = new ObjectMapper();

@@ -26,7 +26,7 @@ public class MybatisRedisCache implements Cache {
         this.id = id;
     }
 
-    private RedisTemplate<Object, Object> getRedisTemplate() {
+    private RedisTemplate<String, Object> getRedisTemplate() {
         if (redisTemplate == null) {
             try {
                 redisTemplate = SpringContextUtil.getBean("redisCacheTemplate");
