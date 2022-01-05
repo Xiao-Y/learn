@@ -11,7 +11,7 @@ import java.io.Serializable;
  * user与role关联关系，多对多
  */
 @Entity
-@Table(name = "r_user_role")
+@Table(name = "sys_user_role")
 public class UserRolePo extends BasePo implements Serializable {
     // 用户id
     private Long userId;

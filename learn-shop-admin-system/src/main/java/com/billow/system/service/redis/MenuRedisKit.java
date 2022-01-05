@@ -1,6 +1,6 @@
 package com.billow.system.service.redis;
 
-import com.billow.system.pojo.ex.MenuEx;
+import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.redis.util.RedisUtils;
@@ -28,11 +28,11 @@ public class MenuRedisKit {
     /**
      * 获取菜单树
      *
-     * @return {@link List< MenuEx>}
+     * @return {@link List< MenuPo>}
      * @author liuyongtao
      * @since 2021-1-30 10:28
      */
-    public List<MenuEx> getMenusTree() {
+    public List<MenuPo> getMenusTree() {
         return redisUtils.getList(MENU_TREE);
     }
 
@@ -43,7 +43,7 @@ public class MenuRedisKit {
      * @author liuyongtao
      * @since 2021-1-30 10:33
      */
-    public List<MenuEx> setMenusTree(List<MenuEx> pMenuExs) {
+    public List<MenuPo> setMenusTree(List<MenuPo> pMenuExs) {
         redisUtils.setObj(MENU_TREE, pMenuExs);
         return pMenuExs;
     }

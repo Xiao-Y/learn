@@ -1,4 +1,4 @@
-import {LoadHomeMenus} from '../../api/sys/menuMag'
+import {LoadHomeMenus} from '../../api/login'
 import types from '../../store/mutationsType'
 import {asyncRouterMap} from "../../router/asyncRouter";
 
@@ -15,7 +15,7 @@ const menuPerm = {
     GenMenusActions({commit}) {
       return new Promise((resolve, reject) => {
         LoadHomeMenus().then(res => {
-          let menus = res.resData.menus;
+          let menus = res.resData;
           // asyncRouterList 转化为 map 方便取值
           let routerMap = asyncRouterMap();
           // 从路由中获取 path 填充到菜单对象中
@@ -38,7 +38,7 @@ const menuPerm = {
 function setMenuPath(routerMap, menus) {
   menus.forEach((menu) => {
     let path = "";
-    let router = routerMap.get(menu.titleCode);
+    let router = routerMap.get(menu.menuCode);
     if (router) {
       path = router.path;
     }

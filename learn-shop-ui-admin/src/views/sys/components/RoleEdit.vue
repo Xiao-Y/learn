@@ -34,8 +34,8 @@
               <el-form-item label="角色CODE" prop="roleCode">
                 <el-input v-model="roleInfo.roleCode"></el-input>
               </el-form-item>
-              <el-form-item label="角色描述" prop="descritpion">
-                <el-input v-model="roleInfo.descritpion"></el-input>
+              <el-form-item label="角色描述" prop="description">
+                <el-input v-model="roleInfo.description"></el-input>
               </el-form-item>
               <el-form-item label="是否有效" prop="validInd">
                 <el-switch v-model="roleInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
@@ -85,7 +85,7 @@
           id: null,
           roleName: "",
           roleCode: "",
-          descritpion: "",
+          description: "",
           validInd: true
         },
         permissionChecked: [], // 被选种的权限ID

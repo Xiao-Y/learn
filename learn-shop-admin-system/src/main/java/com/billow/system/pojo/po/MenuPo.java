@@ -41,8 +41,8 @@ public class MenuPo extends BasePo {
     @TableField("icon")
     private String icon;
 
-    @TableField("descritpion")
-    private String descritpion;
+    @TableField("description")
+    private String description;
 
     @TableField("sort_field")
     private Double sortField;

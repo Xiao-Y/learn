@@ -28,8 +28,8 @@ public class RolePo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("descritpion")
-    private String descritpion;
+    @TableField("description")
+    private String description;
 
     @TableField("role_code")
     private String roleCode;

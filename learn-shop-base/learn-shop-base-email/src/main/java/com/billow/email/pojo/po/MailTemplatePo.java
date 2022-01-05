@@ -20,11 +20,11 @@ public class MailTemplatePo extends BasePage implements Serializable {
     public MailTemplatePo() {
     }
 
-    public MailTemplatePo(String mailCode, String mailType, String dataSources, String descritpion) {
+    public MailTemplatePo(String mailCode, String mailType, String dataSources, String description) {
         this.mailCode = mailCode;
         this.mailType = mailType;
         this.dataSources = dataSources;
-        this.descritpion = descritpion;
+        this.description = description;
     }
 
     // 主键id
@@ -49,7 +49,7 @@ public class MailTemplatePo extends BasePage implements Serializable {
     private String mailMarkdown;
 
     // 邮件模板描述
-    private String descritpion;
+    private String description;
 
     // 收件人邮箱，多个邮箱以“;”分隔
     private String toEmails;

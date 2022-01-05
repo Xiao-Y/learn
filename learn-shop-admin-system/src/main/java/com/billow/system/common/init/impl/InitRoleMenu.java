@@ -1,7 +1,7 @@
 package com.billow.system.common.init.impl;
 
 import com.billow.system.common.init.IStartLoading;
-import com.billow.system.pojo.ex.MenuEx;
+import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.common.properties.CustomProperties;
 import com.billow.system.service.MenuService;
@@ -47,11 +47,11 @@ public class InitRoleMenu implements IStartLoading {
                 log.info("======== end not init Role Menu....");
                 return;
             }
-            Map<String, List<MenuEx>> map = new HashMap<>();
+            Map<String, List<MenuPo>> map = new HashMap<>();
             List<RolePo> rolePos = roleService.list();
             for (RolePo rolePo : rolePos) {
-                List<MenuEx> menuExs = menuService.findMenuByRole(rolePo);
-                map.put(rolePo.getRoleCode(), menuExs);
+                List<MenuPo> menuPos = menuService.findMenuByRole(rolePo);
+                map.put(rolePo.getRoleCode(), menuPos);
             }
             redisUtils.setHash(RedisCst.ROLE_MENU_KEY, map);
             log.info("======== end init Role Menu....");

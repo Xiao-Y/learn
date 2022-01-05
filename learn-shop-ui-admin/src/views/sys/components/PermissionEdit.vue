@@ -22,8 +22,8 @@
               </custom-select>
             </template>
           </el-form-item>
-          <el-form-item label="权限描述" prop="descritpion">
-            <el-input type="textarea" v-model="permissionInfo.descritpion"></el-input>
+          <el-form-item label="权限描述" prop="description">
+            <el-input type="textarea" v-model="permissionInfo.description"></el-input>
           </el-form-item>
           <el-form-item label="有效标志" prop="validInd">
             <el-switch v-model="permissionInfo.validInd" active-text="有效" inactive-text="无效"></el-switch>
@@ -56,7 +56,7 @@
           permissionCode: '',
           url: '',
           systemModule: '',
-          descritpion: null,
+          description: null,
           systemModules: [],
           validInd: true
         },
@@ -105,7 +105,7 @@
     },
     watch: {
       'permissionInfo.permissionName'() {
-        this.permissionInfo.descritpion = this.permissionInfo.permissionName;
+        this.permissionInfo.description = this.permissionInfo.permissionName;
       },
       'permissionInfo.url'() {
         var splitAt = this.permissionInfo.url.split("/");

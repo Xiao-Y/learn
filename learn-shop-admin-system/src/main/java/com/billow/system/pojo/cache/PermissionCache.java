@@ -20,7 +20,7 @@ public class PermissionCache {
     private String permissionCode;
 
     @ApiModelProperty("权限描述")
-    private String descritpion;
+    private String description;
 
     @ApiModelProperty("授权链接")
     private String url;

@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("r_user_role")
+@TableName("sys_user_role")
 @ApiModel(value="UserRolePo对象", description="")
 public class UserRolePo extends BasePo {
 

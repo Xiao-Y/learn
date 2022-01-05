@@ -23,8 +23,8 @@
           <el-form-item label="字段显示" prop="fieldDisplay">
             <el-input v-model="dataDictionaryInfo.fieldDisplay" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="字段说明" prop="descritpion">
-            <el-input v-model="dataDictionaryInfo.descritpion" placeholder="请输入内容"></el-input>
+          <el-form-item label="字段说明" prop="description">
+            <el-input v-model="dataDictionaryInfo.description" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="字段排序" prop="fieldOrder">
             <el-input-number v-model="dataDictionaryInfo.fieldOrder" :min="0"></el-input-number>
@@ -60,7 +60,7 @@
           fieldType: '',
           fieldValue: '',
           fieldDisplay: '',
-          descritpion: '',
+          description: '',
           fieldOrder: 0,
           validInd: true
         },

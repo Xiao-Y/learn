@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-04-01
  */
 @Service
-public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuDao, RoleMenuPo> implements RoleMenuService {
-
+public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuDao, RoleMenuPo> implements RoleMenuService
+{
 }
 

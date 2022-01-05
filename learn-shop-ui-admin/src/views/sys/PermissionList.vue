@@ -43,7 +43,7 @@
                            v-if="roleEditHide"></el-table-column>
           <el-table-column label="权限名称" prop="permissionName" width="210"></el-table-column>
           <el-table-column label="授权链接" prop="url"></el-table-column>
-          <el-table-column label="权限描述" prop="descritpion"></el-table-column>
+          <el-table-column label="权限描述" prop="description"></el-table-column>
           <el-table-column label="系统模块" prop="systemModule">
             <template slot-scope="scope">
               <custom-select v-model="scope.row.systemModules" :datasource="systemModuleSelect"

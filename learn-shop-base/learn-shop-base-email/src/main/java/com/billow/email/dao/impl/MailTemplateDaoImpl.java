@@ -31,7 +31,7 @@ import java.util.Map;
 public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
 
     private static String select_sql = "select id, mail_code as mailCode, mail_type as mailType, data_sources as dataSources, " +
-            "run_sql as runSql, mail_temp as mailTemp, mail_markdown as mailMarkdown, descritpion as descritpion, " +
+            "run_sql as runSql, mail_temp as mailTemp, mail_markdown as mailMarkdown, description as description, " +
             "to_emails as toEmails,subject as subject, template_name as templateName,single_result as singleResult," +
             "valid_ind as validInd, creator_code as creatorCode," +
             "updater_code as updaterCode, create_time as createTime, update_time as updateTime from sys_mail_template where 1=1 ";
@@ -89,7 +89,7 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
     @Override
     public MailTemplatePo save(MailTemplatePo mailTemplatePo) {
         String sql = "insert into sys_mail_template(mail_code, mail_type, data_sources, run_sql, mail_temp, mail_markdown, " +
-                "descritpion, to_emails, subject, template_name, single_result, valid_ind, creator_code, " +
+                "description, to_emails, subject, template_name, single_result, valid_ind, creator_code, " +
                 "updater_code, create_time, update_time) value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         log.debug("sql:{}", sql);
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -103,7 +103,7 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
                 ps.setString(4, mailTemplatePo.getRunSql());
                 ps.setString(5, mailTemplatePo.getMailTemp());
                 ps.setString(6, mailTemplatePo.getMailMarkdown());
-                ps.setString(7, mailTemplatePo.getDescritpion());
+                ps.setString(7, mailTemplatePo.getDescription());
                 ps.setString(8, mailTemplatePo.getToEmails());
                 ps.setString(9, mailTemplatePo.getSubject());
                 ps.setString(10, mailTemplatePo.getTemplateName());
@@ -124,7 +124,7 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
     @Override
     public void updateById(MailTemplatePo mailTemplatePo) {
         String sql = "update sys_mail_template set mail_code = ?, mail_type = ?, data_sources = ?, run_sql = ?, " +
-                "mail_temp = ?, mail_markdown = ?, descritpion = ?, to_emails = ?, subject = ?, template_name = ?, " +
+                "mail_temp = ?, mail_markdown = ?, description = ?, to_emails = ?, subject = ?, template_name = ?, " +
                 "single_result = ?, valid_ind = ?,updater_code = ?, update_time = ? where id = ?";
         log.debug("sql:{}", sql);
         jdbcTemplate.update(sql, mailTemplatePo.getMailCode(),
@@ -133,7 +133,7 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
                 mailTemplatePo.getRunSql(),
                 mailTemplatePo.getMailTemp(),
                 mailTemplatePo.getMailMarkdown(),
-                mailTemplatePo.getDescritpion(),
+                mailTemplatePo.getDescription(),
                 mailTemplatePo.getToEmails(),
                 mailTemplatePo.getSubject(),
                 mailTemplatePo.getTemplateName(),

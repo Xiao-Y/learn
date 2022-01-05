@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.redis.util.RedisUtils;
 import com.billow.system.dao.*;
 import com.billow.system.pojo.ex.DataDictionaryEx;
-import com.billow.system.pojo.ex.MenuEx;
 import com.billow.system.pojo.po.*;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.pojo.vo.RoleVo;
@@ -182,18 +181,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         if (roleVo.getValidInd()) {
             List<MenuPo> sourceMenuPo = null;
             // 原始的
-            List<MenuEx> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode(), MenuEx.class);
+            List<MenuPo> menuExs = redisUtils.getHash(RedisCst.ROLE_MENU_KEY, roleVo.getRoleCode(), MenuPo.class);
             if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
                 sourceMenuPo = menuExs.stream()
                         .filter(f -> !delMenuIdsTemp.contains(new Long(f.getId())))
-                        .map(m -> {
-                            MenuPo po = ConvertUtils.convert(m, MenuPo.class);
-                            po.setMenuCode(m.getTitleCode());
-                            po.setMenuName(m.getTitle());
-                            po.setId(new Long(m.getId()));
-                            return po;
-                        })
                         .collect(Collectors.toList());
             }
 

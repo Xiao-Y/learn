@@ -19,7 +19,7 @@ public class PermissionVo implements Serializable {
     // 权限CODE
     private String permissionCode;
     //权限描述
-    private String descritpion;
+    private String description;
     //授权链接
     private String url;
     // 系统模块

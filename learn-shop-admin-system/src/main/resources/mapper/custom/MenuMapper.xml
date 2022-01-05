@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.system.dao.MenuDao">
+
+    <!-- 开启二级缓存 -->
+    <!-- 注意：默认为 flushCache="true" useCache="true" -->
+    <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+    <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+    <!-- 3.请务修改 cache-ref 中的配置 -->
+    <cache-ref namespace="com.billow.system.dao.MenuDao"/>
+
+    <select id="findMenuByRoleCode" resultMap="BaseResultMap" flushCache="false" useCache="false">
+        SELECT DISTINCT sm.*
+        FROM sys_role_menu srm
+        LEFT JOIN sys_menu sm ON srm.menu_id = sm.id
+        LEFT JOIN sys_role sr ON srm.role_id = sr.id
+        WHERE srm.valid_ind
+        AND sm.valid_ind
+        AND sr.valid_ind
+        <if test="isDisplay">
+            AND sm.display = #{isDisplay}
+        </if>
+        <if test="roleCodes != null and roleCodes.size() > 0">
+            AND sr.role_code IN
+            <foreach collection="roleCodes" open="(" close=")" item="item" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>
