@@ -133,6 +133,11 @@
         type: String,
         default: null
       },
+      // 权限列表
+      permissionList: {
+        type: Array,
+        default: null
+      }
     },
     mixins: [pageMixins],
     data() {

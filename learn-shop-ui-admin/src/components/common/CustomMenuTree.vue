@@ -64,23 +64,18 @@ export default {
       activeNames: ["0"],
       // 点击后被选种的菜单ID
       menuChecked: [],
-      // 原始被选种的菜单ID
-      oldMenuChecked: [],
-      // 是否初始化加载被选种的菜单
-      loadMenuCheckedFlag: false,
       filterMenu: "", // 菜单树过滤
       // 完整菜单
       menus: []
     }
   },
-  created() {
+  mounted() {
     // 获取所有菜单
     findMenus().then(res => {
       this.menus = res.resData;
       // 初始化被选种的
       if (this.defaultCheckedMenu) {
         this.$refs.menuTree.setCheckedKeys(this.defaultCheckedMenu);
-        this.menuChecked = this.defaultCheckedMenu;
       }
     });
   },
@@ -97,15 +92,19 @@ export default {
     // 收集选种和半选种的所有菜单id
     changeCheck() {
       // 选种的菜单
-      this.menuChecked = this.$refs.menuTree.getCheckedNodes().map(m => m.id);
+      this.menuChecked = this.getCheckAll();
+      this.$emit('changeCheck', this.menuChecked);
+    },
+    // 获取选种和半选种的
+    getCheckAll(){
+      // 选种的菜单
+      let menuChecked = this.$refs.menuTree.getCheckedNodes().map(m => m.id);
       // 半先种的父级菜单
-      this.menuChecked = this.menuChecked.concat(
+      menuChecked = menuChecked.concat(
         this.$refs.menuTree.getHalfCheckedNodes().map(m => m.id)
       );
-      this.$emit('changeCheck', this.oldMenuChecked, this.menuChecked);
-      console.info("oldMenuChecked", this.oldMenuChecked);
-      console.info("menuChecked", this.menuChecked);
-    },
+      return menuChecked;
+    }
   },
   watch: {
     //通过 :filter-node-method,找到过滤方法

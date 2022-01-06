@@ -9,7 +9,8 @@ import com.billow.system.pojo.vo.PermissionVo;
 import java.util.List;
 import java.util.Set;
 
-public interface PermissionService extends IService<PermissionPo> {
+public interface PermissionService extends IService<PermissionPo>
+{
 
     /**
      * 通过角色令牌,查询角色的权限集合
@@ -89,4 +90,13 @@ public interface PermissionService extends IService<PermissionPo> {
      */
     List<String> findMyPermissionList();
 
+    /**
+     * 查询菜单关联的权限列表
+     *
+     * @param menuId 菜单ID
+     * @return List<PermissionVo>
+     * @author 千面
+     * @date 2022/1/6 10:45
+     */
+    List<PermissionVo> findPermissionByMenuId(Long menuId);
 }

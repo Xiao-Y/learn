@@ -144,7 +144,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         // 页面传过来选种的菜单
         List<String> menuChecked = roleVo.getMenuChecked();
         // 原始选种的菜单
-        List<String> oldMenuChecked = roleVo.getOldMenuChecked();
+        List<String> oldMenuChecked = roleMenuService.lambdaQuery()
+                .eq(RoleMenuPo::getRoleId, roleVo.getId())
+                .list()
+                .stream()
+                .map(m -> String.valueOf(m.getMenuId()))
+                .collect(Collectors.toList());
         // 不是新添加的用户
         if (!roleVo.getIsNewRole()) {
             // 分析需要删除
@@ -160,7 +165,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
                 roleMenuDao.delete(condition);
             }
             // 分析需要插入新的
-            menuChecked = menuChecked.stream().filter(f -> !oldMenuChecked.contains(f)).collect(Collectors.toList());
+            menuChecked = menuChecked.stream()
+                    .filter(f -> !oldMenuChecked.contains(f))
+                    .collect(Collectors.toList());
         }
 
         // 用于更新 redis 中的角色对应的菜单信息

@@ -1,5 +1,6 @@
 package com.billow.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -180,6 +181,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
                 .filter(StringUtils::isNoneBlank)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PermissionVo> findPermissionByMenuId(Long menuId)
+    {
+        List<PermissionPo> permissionPos = permissionDao.findPermissionByMenuId(menuId);
+        return BeanUtil.copyToList(permissionPos, PermissionVo.class);
     }
 
     /**
