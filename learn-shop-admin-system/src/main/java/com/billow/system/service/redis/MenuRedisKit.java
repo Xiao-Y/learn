@@ -4,11 +4,15 @@ import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.redis.util.RedisUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 菜单查询缓存帮助类
@@ -19,43 +23,39 @@ import java.util.List;
 @Service
 public class MenuRedisKit {
 
-    private final static String MENU_TREE = RedisCst.MENU_MENU_TREE;
     private final static String MENU_ID = RedisCst.MENU_MENU_ID;
 
     @Autowired
     private RedisUtils redisUtils;
 
     /**
-     * 获取菜单树
+     * 获取全部菜单
      *
      * @return {@link List< MenuPo>}
      * @author liuyongtao
      * @since 2021-1-30 10:28
      */
-    public List<MenuPo> getMenusTree() {
-        return redisUtils.getList(MENU_TREE);
+    public List<MenuPo> getMenusList() {
+        return redisUtils.getHashAllValue(MENU_ID, MenuPo.class);
     }
 
     /**
-     * 保存菜单树到缓存
+     * 保存全部菜单
      *
-     * @param pMenuExs
+     * @return {@link List< MenuPo>}
      * @author liuyongtao
-     * @since 2021-1-30 10:33
+     * @since 2021-1-30 10:28
      */
-    public List<MenuPo> setMenusTree(List<MenuPo> pMenuExs) {
-        redisUtils.setObj(MENU_TREE, pMenuExs);
-        return pMenuExs;
-    }
-
-    /**
-     * 删除菜单树到缓存
-     *
-     * @author liuyongtao
-     * @since 2021-1-30 10:33
-     */
-    public void delMenusTree() {
-        redisUtils.del(MENU_TREE);
+    public boolean setMenusList(List<MenuPo> menuPos)
+    {
+        if (CollectionUtils.isEmpty(menuPos))
+        {
+            return false;
+        }
+        Map<String, MenuPo> menuPoMap = menuPos.stream()
+                .collect(Collectors.toMap(item -> String.valueOf(item.getId()), Function.identity()));
+        redisUtils.setHash(MENU_ID, menuPoMap);
+        return true;
     }
 
     /**

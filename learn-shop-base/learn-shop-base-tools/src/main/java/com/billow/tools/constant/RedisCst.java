@@ -88,11 +88,6 @@ public class RedisCst {
     //==============================================================================================
 
     /**
-     * 菜单管理里面的菜单树，MENU:MENU_TREE
-     */
-    public final static String MENU_MENU_TREE = "MENU:MENU_TREE";
-
-    /**
      * 根据id查询菜单信息，MENU:MENU_ID
      */
     public final static String MENU_MENU_ID = "MENU:MENU_ID";

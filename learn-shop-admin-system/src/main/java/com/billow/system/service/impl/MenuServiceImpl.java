@@ -6,7 +6,6 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.system.common.properties.CustomProperties;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.RoleMenuDao;
 import com.billow.system.pojo.po.MenuPo;
@@ -45,76 +44,21 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     @Autowired
     private RoleMenuRedisKit roleMenuRedisKit;
     @Autowired
-    private CustomProperties customProperties;
-    @Autowired
     private MenuRedisKit menuRedisKit;
-
-//    @Override
-//    public List<MenuEx> homeMenus(MenuVo menuVo) {
-//        // 查询出该用户所有角色的所有的菜单
-//        List<RoleVo> roleVos = menuVo.getRoleVos();
-//        if (ToolsUtils.isEmpty(roleVos)) {
-//            return null;
-//        }
-//        // 先从 redis 中查询
-//        if (customProperties.getMenu().isReadCache()) {
-//            List<MenuEx> temp = roleMenuRedisKit.findMenusByRoles(roleVos);
-//            if (ToolsUtils.isNotEmpty(temp)) {
-//                return temp;
-//            }
-//        }
-//
-//        Set<Long> menuIds = new HashSet<>();
-//        if (ToolsUtils.isNotEmpty(roleVos)) {
-//            Set<String> roleCodes = roleVos.stream()
-//                    .map(RoleVo::getRoleCode)
-//                    .collect(Collectors.toSet());
-//            // 通过 rolecode 查询出角色的菜单ID
-//            menuIds = roleMenuDao.findRoleMenuByRoleCode(roleCodes);
-//        }
-//        // 如果没有权限直接返回
-//        if (ToolsUtils.isEmpty(menuIds)) {
-//            return null;
-//        }
-//        // 查询父级菜单
-//        LambdaQueryWrapper<MenuPo> wrapper = Wrappers.lambdaQuery();
-//        wrapper.isNull(MenuPo::getPid)
-//                .eq(MenuPo::getValidInd, true);
-//        List<MenuPo> menuPos = menuDao.selectList(wrapper);
-//        // 转换父级菜单
-//        List<MenuEx> pMenuExs = new ArrayList<>();
-//        if (ToolsUtils.isNotEmpty(menuPos)) {
-//            this.menuPosCoverMenuExs(menuPos, pMenuExs, menuIds);
-//            // 递归查询子级菜单
-//            this.childenMenus(pMenuExs, menuIds);
-//        }
-//        return pMenuExs;
-//    }
 
     @Override
     public List<Tree<Long>> findMenus()
     {
-
-        List<MenuPo> menuPos = this.list();
+        // 查询缓存，如果不存在，查询DB
+        List<MenuPo> menuPos = menuRedisKit.getMenusList();
+        if (CollectionUtils.isEmpty(menuPos))
+        {
+            menuPos = this.list();
+            menuRedisKit.setMenusList(menuPos);
+        }
+        // 构建菜单树
         List<Tree<Long>> treeNodes = this.genMenuTrees(menuPos);
         return treeNodes;
-
-//        List<MenuEx> menusTree = menuRedisKit.getMenusTree();
-//        if (CollectionUtils.isNotEmpty(menusTree)) {
-//            return menusTree;
-//        }
-//        // 查询父级菜单
-//        LambdaQueryWrapper<MenuPo> wrapper = Wrappers.lambdaQuery();
-//        wrapper.isNull(MenuPo::getPid);
-//        List<MenuPo> menuPos = menuDao.selectList(wrapper);
-//        // 转换父级菜单
-//        List<MenuEx> pMenuExs = new ArrayList<>();
-//        if (ToolsUtils.isNotEmpty(menuPos)) {
-//            this.menuPosCoverMenuExs(menuPos, pMenuExs, null);
-//            // 递归查询子级菜单
-//            this.childenMenus(pMenuExs, null);
-//        }
-//        return menuRedisKit.setMenusTree(pMenuExs);
     }
 
     @Override
@@ -157,7 +101,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
         {
             menuVo = menuRedisKit.setMenuById(ConvertUtils.convert(one, MenuVo.class));
         }
-        menuRedisKit.delMenusTree();
         return menuVo;
     }
 
@@ -184,7 +127,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
         });
         roleMenuRedisKit.deleteRoleMenuByIds(ids);
         menuRedisKit.delMenuByIds(ids);
-        menuRedisKit.delMenusTree();
     }
 
     @Override

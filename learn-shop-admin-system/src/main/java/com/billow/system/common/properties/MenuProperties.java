@@ -10,9 +10,6 @@ import lombok.Data;
  */
 @Data
 public class MenuProperties {
-
-    // 菜单优先从缓存中读出
-    private boolean readCache = false;
-    // 菜单写入缓存中
+    // 启动时是否将角色菜单写入缓存中
     private boolean writeCache = false;
 }

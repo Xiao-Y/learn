@@ -60,7 +60,6 @@ spring:
 
 custom:
   menu:
-    read-cache: true #菜单优先从缓存中读出
     write-cache: true #菜单写入缓存中
   common:
     linux:
