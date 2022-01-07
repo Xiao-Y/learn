@@ -32,19 +32,19 @@ public class PermissionVo extends PermissionPo implements Serializable {
     @ApiModelProperty("当前用户名")
     private String userCode;
 
-    @ApiModelProperty("拆分下拉多选")
-    private List<String> systemModules = new ArrayList<>();
+//    @ApiModelProperty("拆分下拉多选")
+//    private List<String> systemModules = new ArrayList<>();
 
-    @ApiModelProperty("是否选种")
-    private boolean checked;
+    @ApiModelProperty("权限绑定的菜单id")
+    private List<Long> menuIds;
 
-    // 合并下拉多选
-    public PermissionVo setSystemModules(List<String> systemModules) {
-        this.systemModules = systemModules;
-        // 转换数据结构,用于保存
-        if (ToolsUtils.isNotEmpty(systemModules)) {
-            this.setSystemModule(StringUtils.join(systemModules, ","));
-        }
-        return this;
-    }
+//    // 合并下拉多选
+//    public PermissionVo setSystemModules(List<String> systemModules) {
+//        this.systemModules = systemModules;
+//        // 转换数据结构,用于保存
+//        if (ToolsUtils.isNotEmpty(systemModules)) {
+//            this.setSystemModule(StringUtils.join(systemModules, ","));
+//        }
+//        return this;
+//    }
 }

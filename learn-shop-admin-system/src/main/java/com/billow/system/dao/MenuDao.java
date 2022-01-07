@@ -31,4 +31,14 @@ public interface MenuDao extends BaseMapper<MenuPo>
      */
     List<MenuPo> findMenuByRoleCode(@Param("roleCodes") List<String> roleCodes,
                                     @Param("isDisplay") boolean isDisplay);
+
+    /**
+     * 根据权限ID查询出绑定的菜单信息
+     *
+     * @param permissionId 权限ID
+     * @return java.util.Set<com.billow.system.pojo.MenuPo>
+     * @author LiuYongTao
+     * @date 2019/7/22 17:55
+     */
+    List<MenuPo> findMenuByPermissionId(Long permissionId);
 }

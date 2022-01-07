@@ -1,8 +1,14 @@
 <template>
   <div>
     <el-row :gutter="10">
-      <!--   菜单树   -->
-      <custom-menu-tree ref="menuTree" :checkStrictly="false" :defaultCheckedMenu="defaultCheckedMenu" @changeCheck="changeMenuTree"/>
+      <el-col :span="10">
+        <el-collapse v-model="activeNames">
+          <el-collapse-item name="0" title="菜单树">
+            <!--   菜单树   -->
+            <custom-menu-tree ref="menuTree" :checkStrictly="false" :defaultCheckedMenu="defaultCheckedMenu" @nodeCheck="checkMenu"/>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
       <!-- 角色信息 -->
       <el-col :span="14">
         <el-collapse v-model="activeNames">
@@ -25,7 +31,7 @@
 
           <el-collapse-item name="2" title="权限信息">
             <!-- 权限列表 -->
-            <permission-list :role-edit-hide="true" :role-id="roleInfo.id"
+            <permission-list :menu-id="menuId" :role-edit-hide="true" :role-id="roleInfo.id"
                              @checkedArray="handleSelectionChange"/>
           </el-collapse-item>
         </el-collapse>
@@ -56,7 +62,7 @@ export default {
   },
   data() {
     return {
-      activeNames: ["1", "2"],
+      activeNames: ["0", "1", "2"],
       roleInfo: {
         id: null,
         roleName: "",
@@ -74,6 +80,7 @@ export default {
       },
       oldRoleCode: '',// 旧roleCode，用于校验
       defaultCheckedMenu: [],// 初始化选种的
+      menuId: null,// 点击的菜单ID
     };
   },
   created() {
@@ -88,11 +95,10 @@ export default {
     this.loadCheckMenu();
   },
   methods: {
-    // 收集选种和半选种的所有菜单id
-    changeMenuTree(menuChecked) {
-      // 选种的菜单
-      // this.menuChecked = menuChecked;
-      // console.info("menuChecked",this.menuChecked);
+    // 点击菜单
+    checkMenu(data) {
+      // console.info("menuData", data);
+      this.menuId = data.id;
     },
     // 加载菜单选种状态
     loadCheckMenu() {

@@ -1,5 +1,6 @@
 package com.billow.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
@@ -182,6 +183,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
         List<MenuPo> menuPos = menuDao.findMenuByRoleCode(roleCodes, isDisplay);
         List<Tree<Long>> treeNodes = this.genMenuTrees(menuPos);
         return treeNodes;
+    }
+
+    @Override
+    public List<MenuVo> findMenuByPermissionId(Long permissionId)
+    {
+        List<MenuPo> menuPos = this.baseMapper.findMenuByPermissionId(permissionId);
+        return BeanUtil.copyToList(menuPos, MenuVo.class);
     }
 
     /**

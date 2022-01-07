@@ -65,4 +65,10 @@ public class MenuApi extends BaseApi {
     public Integer checkMenuCode(@PathVariable("menuCode") String menuCode) {
         return menuService.countMenuCodeByMenuCode(menuCode);
     }
+
+    @ApiOperation(value = "根据权限ID查询出绑定的菜单信息")
+    @GetMapping("/findMenuByPermissionId/{permissionId}")
+    public List<MenuVo> findMenuByPermissionId(@PathVariable("permissionId") Long permissionId){
+       return menuService.findMenuByPermissionId(permissionId);
+    }
 }

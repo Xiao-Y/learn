@@ -30,14 +30,14 @@ export const findMenus = () => requestUtils.get(baseUrl + '/findMenus');
  * @constructor
  */
 export const saveOrUpdateMenu = editMenus => requestUtils.put(baseUrl + '/saveOrUpdateMenu', {
-    id: editMenus.id,
-    pid: editMenus.pid,
-    menuName: editMenus.title,
-    menuCode: editMenus.titleCode,
-    sortField: editMenus.sortField,
-    icon: editMenus.icon,
-    validInd: editMenus.validInd,
-    display: editMenus.display
+  id: editMenus.id,
+  pid: editMenus.pid,
+  menuName: editMenus.title,
+  menuCode: editMenus.titleCode,
+  sortField: editMenus.sortField,
+  icon: editMenus.icon,
+  validInd: editMenus.validInd,
+  display: editMenus.display
 });
 
 /**
@@ -53,3 +53,10 @@ export const delMenuByIds = ids => requestUtils.del(baseUrl + '/delMenuByIds', {
  * @constructor
  */
 export const CheckMenuCode = menuCode => requestUtils.get(baseUrl + '/checkMenuCode/' + menuCode);
+
+/**
+ * 根据权限ID查询出绑定的菜单信息
+ * @param permissionId 权限ID
+ * @constructor
+ */
+export const FindMenuByPermissionId = permissionId => requestUtils.get(baseUrl + '/findMenuByPermissionId/' + permissionId);

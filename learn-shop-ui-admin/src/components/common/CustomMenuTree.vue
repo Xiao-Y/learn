@@ -1,31 +1,28 @@
 <template>
-  <el-col :span="10">
-    <el-collapse v-model="activeNames">
-      <el-collapse-item name="0" title="菜单树">
-        <el-input v-model="filterMenu" placeholder="输入关键字进行过滤" size="mini"></el-input>
-        <div class="sidebar">
-          <el-tree
-            ref="menuTree"
-            :check-strictly="checkStrictly"
-            :data="menus"
-            :default-expand-all="expandAll"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            :highlight-current="true"
-            :props="defaultProps"
-            :show-checkbox="showCheckbox"
-            node-key="id"
-            @check="nodeCheck"
-            @node-click="nodeCheck"
-            @check-change="changeCheck">
+  <div>
+    <el-input v-model="filterMenu" placeholder="输入关键字进行过滤" size="mini"></el-input>
+    <div class="sidebar">
+      <el-tree
+        ref="menuTree"
+        :check-strictly="checkStrictly"
+        :data="menus"
+        :default-expand-all="expandAll"
+        :expand-on-click-node="false"
+        :filter-node-method="filterNode"
+        :highlight-current="true"
+        :default-expanded-keys="defaultCheckedMenu"
+        :props="defaultProps"
+        :show-checkbox="showCheckbox"
+        node-key="id"
+        @check="nodeCheck"
+        @node-click="nodeCheck"
+        @check-change="changeCheck">
             <span slot-scope="{ node, data }">
               <i :class="['icon-' + data.icon]" class="iconfont"/><span>{{ node.label }}</span>
             </span>
-          </el-tree>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
-  </el-col>
+      </el-tree>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -96,12 +93,22 @@ export default {
       this.$emit('changeCheck', this.menuChecked);
     },
     // 获取选种和半选种的
-    getCheckAll(){
+    getCheckAll() {
       // 选种的菜单
       let menuChecked = this.$refs.menuTree.getCheckedNodes().map(m => m.id);
       // 半先种的父级菜单
       menuChecked = menuChecked.concat(
         this.$refs.menuTree.getHalfCheckedNodes().map(m => m.id)
+      );
+      return menuChecked;
+    },
+    // 获取选种和半选种的
+    getCheckDataAll() {
+      // 选种的菜单
+      let menuChecked = this.$refs.menuTree.getCheckedNodes();
+      // 半先种的父级菜单
+      menuChecked = menuChecked.concat(
+        this.$refs.menuTree.getHalfCheckedNodes()
       );
       return menuChecked;
     }
@@ -118,13 +125,13 @@ export default {
 
 <style scoped>
 .sidebar {
-  position: relative;
-  left: 0;
-  bottom: 0;
+  /*  position: relative;*/
+  /*  left: 0;*/
+  /*  bottom: 0;*/
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 650px;
-  /*background: #2E363F;*/
+  height: 550px;
+  /*  !*background: #2E363F;*!*/
 }
 
 .sidebar > ul {

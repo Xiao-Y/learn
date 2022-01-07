@@ -10,7 +10,8 @@ import com.billow.system.pojo.vo.RoleVo;
 import java.util.List;
 import java.util.Set;
 
-public interface MenuService extends IService<MenuPo> {
+public interface MenuService extends IService<MenuPo>
+{
 //
 //    /**
 //     * 查询菜单
@@ -95,11 +96,21 @@ public interface MenuService extends IService<MenuPo> {
     /**
      * 查询出指定角色下的菜单树信息
      *
-     * @param roleCodes     可以为空
+     * @param roleCodes 可以为空
      * @param isDisplay 是否只查询显示的菜单
      * @return List<Tree < Long>>
      * @author 千面
      * @date 2022/1/4 9:47
      */
     List<Tree<Long>> findMenuByRoleCode(List<String> roleCodes, boolean isDisplay);
+
+    /**
+     * 根据权限ID查询出绑定的菜单信息
+     *
+     * @param permissionId 权限ID
+     * @return java.util.Set<com.billow.system.pojo.MenuVo>
+     * @author LiuYongTao
+     * @date 2019/7/22 17:55
+     */
+    List<MenuVo> findMenuByPermissionId(Long permissionId);
 }

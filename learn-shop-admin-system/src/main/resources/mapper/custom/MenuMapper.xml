@@ -27,4 +27,13 @@
             </foreach>
         </if>
     </select>
+
+    <select id="findMenuByPermissionId" resultMap="BaseResultMap" flushCache="false" useCache="false">
+        SELECT DISTINCT sm.*
+        FROM sys_menu_permission smp
+                 LEFT JOIN sys_menu sm ON smp.menu_id = sm.id
+        WHERE smp.valid_ind
+          AND sm.valid_ind
+          AND smp.permission_id = #{permissionId}
+    </select>
 </mapper>
