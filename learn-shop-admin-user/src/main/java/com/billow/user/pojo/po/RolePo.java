@@ -66,7 +66,7 @@ public class RolePo extends BasePo implements Serializable {
      *
      * @return
      */
-    public String getDescritpion() {
+    public String getDescription() {
         return description;
     }
 
@@ -75,7 +75,7 @@ public class RolePo extends BasePo implements Serializable {
      *
      * @param description
      */
-    public RolePo setDescritpion(String description) {
+    public RolePo setDescription(String description) {
         this.description = description;
         return this;
     }

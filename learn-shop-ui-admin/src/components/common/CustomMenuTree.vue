@@ -84,7 +84,7 @@ export default {
     // 过滤搜索
     filterNode(value, data) {
       if (!value) return true;
-      return data.title.indexOf(value) !== -1;
+      return data.menuName.indexOf(value) !== -1;
     },
     // 收集选种和半选种的所有菜单id
     changeCheck() {

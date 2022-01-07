@@ -196,6 +196,28 @@ public class RedisUtils
                 .collect(Collectors.toMap(m -> m.getKey(), v -> JSON.parseObject(v.getValue(), clazz)));
     }
 
+    /**
+     * 通过  key 获取 map
+     *
+     * @param k key
+     * @return {@link Map< String,String>}
+     * @author liuyongtao
+     * @since 2021-1-28 8:24
+     */
+    public Map<String, String> getHashAllObj(String k)
+    {
+        Map<String, String> map = new HashMap<>();
+
+        HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
+        Map<String, String> entries = opsForHash.entries(k);
+        if (entries == null && entries.size() == 0)
+        {
+            return map;
+        }
+        return entries.entrySet()
+                .parallelStream()
+                .collect(Collectors.toMap(m -> m.getKey(), v -> v.getValue()));
+    }
 
     /**
      * 通过 key 和 hash key 获取 value

@@ -56,11 +56,11 @@ public class MailTemplatePo extends BasePo implements Serializable {
     public MailTemplatePo() {
     }
 
-    public MailTemplatePo(String mailCode, String mailType, String dataSources, String descritpion) {
+    public MailTemplatePo(String mailCode, String mailType, String dataSources, String description) {
         this.mailCode = mailCode;
         this.mailType = mailType;
         this.dataSources = dataSources;
-        this.descritpion = descritpion;
+        this.description = description;
     }
 
     // 邮件标识，唯一
@@ -82,7 +82,7 @@ public class MailTemplatePo extends BasePo implements Serializable {
     private String mailMarkdown;
 
     // 邮件模板描述
-    private String descritpion;
+    private String description;
 
     // 收件人邮箱，多个邮箱以“;”分隔
     private String toEmails;
@@ -112,7 +112,7 @@ CREATE TABLE `sys_mail_template`  (
   `run_sql` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `single_result` bit(1) NULL DEFAULT NULL,
   `template_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `descritpion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `valid_ind` bit(1) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
   `creator_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
