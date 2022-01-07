@@ -97,7 +97,6 @@ export default {
   methods: {
     // 点击菜单
     checkMenu(data) {
-      // console.info("menuData", data);
       this.menuId = data.id;
     },
     // 加载菜单选种状态

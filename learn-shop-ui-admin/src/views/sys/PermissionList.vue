@@ -184,10 +184,39 @@ export default {
   //   }.bind(this));
   // },
   methods: {
+    // 设置列表选种状态
+    settSelection() {
+      // 第一次加载时
+      if (this.permissionChecked == null) {
+        // 加载权限选种状态
+        LoadDataPermissionIdList(this.roleId).then(res => {
+          // 设置选种状态
+          this.tableData.forEach(item => {
+            this.$refs.permissionListRef.toggleRowSelection(
+              item,
+              res.resData.includes(item.id)
+            );
+          });
+          this.permissionChecked = [...new Set(res.resData)];
+          this.oldPermissionChecked = [...new Set(res.resData)];
+          this.$emit("checkedArray", this.permissionChecked, this.oldPermissionChecked, "watch1");
+        });
+      } else {
+        // 设置选种状态
+        this.tableData.forEach(item => {
+          this.$refs.permissionListRef.toggleRowSelection(
+            item,
+            this.permissionChecked.includes(item.id)
+          );
+        });
+      }
+    },
     findPermissionByMenuId() {
       if (this.menuId) {
         FindPermissionByMenuId(this.menuId).then(res => {
           this.tableData = res.resData;
+          // 设置列表选种状态
+          this.settSelection();
         });
       }
     },
@@ -198,10 +227,6 @@ export default {
         this.tableData = data.tableData;
         this.queryFilter.recordCount = data.recordCount;
         this.queryFilter.totalPages = data.totalPages;
-        // if (this.roleId) {
-        //   // 加载权限选种状态
-        //   this.loadPermissionCheckedFlag++;
-        // }
       });
     },
     // 添加权限
@@ -284,36 +309,13 @@ export default {
   },
   watch: {
     menuId(val) {
-      console.info("menuId", val);
       if (val === 0 || this.roleId == null) {
         return;
       }
+      // console.info("val",val);
+      // console.info("roleId",this.roleId);
       // 加载菜单权限
       this.findPermissionByMenuId();
-      // 第一次加载时
-      if (this.permissionChecked == null) {
-        // 加载权限选种状态
-        LoadDataPermissionIdList(this.roleId).then(res => {
-          // 设置选种状态
-          this.tableData.forEach(item => {
-            this.$refs.permissionListRef.toggleRowSelection(
-              item,
-              res.resData.includes(item.id)
-            );
-          });
-          this.permissionChecked = [...new Set(res.resData)];
-          this.oldPermissionChecked = [...new Set(res.resData)];
-          this.$emit("checkedArray", this.permissionChecked, this.oldPermissionChecked, "watch1");
-        });
-      } else {
-        // 设置选种状态
-        this.tableData.forEach(item => {
-          this.$refs.permissionListRef.toggleRowSelection(
-            item,
-            this.permissionChecked.includes(item.id)
-          );
-        });
-      }
     }
   }
 }
