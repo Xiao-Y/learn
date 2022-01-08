@@ -28,4 +28,13 @@
         </foreach>
     </select>
 
+    <!-- 根据菜单ID，查询出资源信息 -->
+    <select id="findPermissionByMenuId" resultMap="BaseResultMap" flushCache="false" useCache="false">
+        SELECT DISTINCT sp.*
+        FROM sys_menu_permission smp
+                 LEFT JOIN sys_permission sp ON smp.permission_id = sp.id
+        WHERE smp.valid_ind
+          AND sp.valid_ind
+          AND smp.menu_id = #{menuId}
+    </select>
 </mapper>

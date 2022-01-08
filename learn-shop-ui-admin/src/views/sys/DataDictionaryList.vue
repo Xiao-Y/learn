@@ -40,7 +40,7 @@
           <el-table-column label="字段VALUE" prop="fieldValue"></el-table-column>
           <el-table-column label="字段显示" prop="fieldDisplay"></el-table-column>
           <el-table-column label="字段排序" prop="fieldOrder"></el-table-column>
-          <el-table-column label="字段说明" prop="descritpion"></el-table-column>
+          <el-table-column label="字段说明" prop="description"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand" label-width="120px">

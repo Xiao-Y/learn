@@ -3,7 +3,7 @@ import store from '../store'
 import {Message} from 'element-ui'
 import {getAccessToken} from '../utils/cookieUtils' // 验权
 import LayoutBase from "../components/LayoutBase";
-import {LoadRouterList} from "../api/sys/menuMag";
+import {LoadRouterList} from "../api/login";
 import {asyncRouterMap} from "./asyncRouter";
 
 const whiteList = ['/login', '/authRedirect'] // 不重定向白名单
@@ -113,14 +113,14 @@ function filterAsyncRouter(menus) {
  */
 function genRouter(routerMap, menu) {
   // 通过 code 获取原始路由信息
-  let router = routerMap.get(menu.titleCode);
+  let router = routerMap.get(menu.menuCode);
   if (!router) {
     return null;
   }
   // 添加元数据
   let meta = {};
   Object.assign(meta, {
-    "title": menu.title,
+    "title": menu.menuName,
     "icon": menu.icon
   });
   Object.assign(router, {"meta": meta})

@@ -55,9 +55,9 @@
               </el-popover>
             </el-col>
           </el-form-item>
-          <el-form-item label="描述" prop="descritpion">
+          <el-form-item label="描述" prop="description">
             <el-col :span="18">
-              <el-input type="textarea" v-model="userInfo.descritpion"></el-input>
+              <el-input type="textarea" v-model="userInfo.description"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="有效标志" prop="validInd" v-if="!fromUserInfo">
@@ -108,7 +108,7 @@
         userInfo: {
           username: '',
           usercode: '',
-          descritpion: '',
+          description: '',
           roleIds: [],
           validInd: true
         },

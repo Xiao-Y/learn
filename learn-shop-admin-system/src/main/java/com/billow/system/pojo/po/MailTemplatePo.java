@@ -26,11 +26,11 @@
 //    public MailTemplatePo() {
 //    }
 //
-//    public MailTemplatePo(String mailCode, String mailType, String dataSources, String descritpion) {
+//    public MailTemplatePo(String mailCode, String mailType, String dataSources, String description) {
 //        this.mailCode = mailCode;
 //        this.mailType = mailType;
 //        this.dataSources = dataSources;
-//        this.descritpion = descritpion;
+//        this.description = description;
 //    }
 //
 //    @ApiModelProperty("邮件标识，唯一")
@@ -58,7 +58,7 @@
 //    private String mailMarkdown;
 //
 //    @ApiModelProperty("邮件模板描述")
-//    private String descritpion;
+//    private String description;
 //
 //    @ApiModelProperty("收件人邮箱，多个邮箱以“;”分隔")
 //    private String toEmails;

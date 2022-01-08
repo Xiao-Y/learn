@@ -60,6 +60,7 @@ public class RoleApi extends BaseApi {
     @ApiOperation("根据角色ID查询菜单ID")
     @GetMapping("/findMenuByRoleId/{roleId}")
     public List<String> findMenuByRoleId(@PathVariable("roleId") Long roleId) throws Exception {
+        // 只查询出子级，防止页面数据级联勾选
         return roleService.findChildrenMenuByRoleId(roleId);
     }
 

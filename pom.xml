@@ -57,7 +57,7 @@
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <fastjson.version>1.2.78</fastjson.version>
-        <hutool.version>5.5.2</hutool.version>
+        <hutool.version>5.7.15</hutool.version>
         <lcn.last.version>4.1.0</lcn.last.version>
         <spring.boot.redis.version>2.2.7.RELEASE</spring.boot.redis.version>
         <redisson.version>3.11.0</redisson.version>

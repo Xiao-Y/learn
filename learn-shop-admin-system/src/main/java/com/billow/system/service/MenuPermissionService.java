@@ -14,6 +14,6 @@ import com.billow.system.pojo.search.MenuPermissionSearchParam;
  * @version v2.0
  * @since 2021-12-26
  */
-public interface MenuPermissionService extends HighLevelService<MenuPermissionPo,MenuPermissionSearchParam> {
-
+public interface MenuPermissionService extends HighLevelService<MenuPermissionPo, MenuPermissionSearchParam>
+{
 }

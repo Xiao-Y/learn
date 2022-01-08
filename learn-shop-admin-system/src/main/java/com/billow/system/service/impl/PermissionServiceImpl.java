@@ -1,6 +1,6 @@
 package com.billow.system.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -11,14 +11,16 @@ import com.billow.common.utils.UserTools;
 import com.billow.mybatis.utils.MybatisKet;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RolePermissionDao;
+import com.billow.system.pojo.po.MenuPermissionPo;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.PermissionVo;
+import com.billow.system.service.MenuPermissionService;
 import com.billow.system.service.PermissionService;
 import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
-import com.billow.tools.utlis.ToolsUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,6 +48,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     private PermissionDao permissionDao;
     @Autowired
     private RolePermissionDao rolePermissionDao;
+    @Autowired
+    private MenuPermissionService menuPermissionService;
     @Autowired
     private RolePermissionRedisKit rolePermissionRedisKit;
     @Autowired
@@ -100,12 +103,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     private PermissionVo convertToPermissionVo(PermissionPo permissionPo)
     {
         PermissionVo convert = ConvertUtils.convert(permissionPo, PermissionVo.class);
-        String systemModule = convert.getSystemModule();
-        if (ToolsUtils.isNotEmpty(systemModule))
-        {
-            ArrayList<String> list = CollectionUtil.newArrayList(systemModule.split(","));
-            convert.setSystemModules(list);
-        }
+//        String systemModule = convert.getSystemModule();
+//        if (ToolsUtils.isNotEmpty(systemModule))
+//        {
+//            ArrayList<String> list = CollectionUtil.newArrayList(systemModule.split(","));
+//            convert.setSystemModules(list);
+//        }
         return convert;
     }
 
@@ -126,7 +129,33 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     {
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
         permissionDao.insert(convert);
+        this.saveMenuPermission(convert.getId(), permissionVo.getMenuIds());
         ConvertUtils.convert(convert, permissionVo);
+    }
+
+    /**
+     * 保存菜单与权限关系
+     *
+     * @param permissionId 权限ID
+     * @param menuIds      菜单IDs
+     * @return void
+     * @author 千面
+     * @date 2022/1/7 14:15
+     */
+    private void saveMenuPermission(Long permissionId, List<Long> menuIds)
+    {
+        if (CollectionUtils.isNotEmpty(menuIds))
+        {
+            Set<MenuPermissionPo> menuPermissionPos = menuIds.stream()
+                    .map(m -> {
+                        MenuPermissionPo mp = new MenuPermissionPo();
+                        mp.setPermissionId(permissionId);
+                        mp.setMenuId(m);
+                        return mp;
+                    })
+                    .collect(Collectors.toSet());
+            menuPermissionService.saveBatch(menuPermissionPos);
+        }
     }
 
     @Override
@@ -134,6 +163,11 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
     public void updatePermission(PermissionVo permissionVo)
     {
         this.updateById(permissionVo);
+        // 先删除菜单与权限关系，再重新绑定
+        LambdaQueryWrapper<MenuPermissionPo> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(MenuPermissionPo::getPermissionId, permissionVo.getId());
+        menuPermissionService.remove(wrapper);
+        this.saveMenuPermission(permissionVo.getId(), permissionVo.getMenuIds());
         // redis：通过权限 id 更新权限信息
         rolePermissionRedisKit.updatePermissionById(permissionVo);
     }
@@ -180,6 +214,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
                 .filter(StringUtils::isNoneBlank)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PermissionVo> findPermissionByMenuId(Long menuId)
+    {
+        List<PermissionPo> permissionPos = permissionDao.findPermissionByMenuId(menuId);
+        return BeanUtil.copyToList(permissionPos, PermissionVo.class);
     }
 
     /**

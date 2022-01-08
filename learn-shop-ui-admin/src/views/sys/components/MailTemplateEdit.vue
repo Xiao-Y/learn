@@ -34,9 +34,9 @@
               </el-col>
             </template>
           </el-form-item>
-          <el-form-item label="模板描述" prop="descritpion">
+          <el-form-item label="模板描述" prop="description">
             <el-col :span="18">
-              <el-input v-model="mailTemplateInfo.descritpion"></el-input>
+              <el-input v-model="mailTemplateInfo.description"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="有效标志" prop="validInd">
@@ -123,7 +123,7 @@
           templateName: '',
           mailTemp: '',
           mailMarkdown: '',
-          descritpion: '',
+          description: '',
           toEmails: '',
           attachment: false,
           validInd: true
@@ -145,7 +145,7 @@
           mailTemp: [{required: true, message: '请输入邮件模板内容', trigger: 'blur'}],
           runSql: [{validator: this.validateRunSql, trigger: 'blur'}],
           templateName: [{validator: this.validatetemplateName, trigger: 'blur'}],
-          descritpion: [{required: true, message: '请输入邮件模板描述', trigger: 'blur'}],
+          description: [{required: true, message: '请输入邮件模板描述', trigger: 'blur'}],
           toEmails: [{validator: this.validateToEmails, trigger: 'blur'}],
           templateName: [{required: true, message: '请输入模板名称', trigger: 'blur'}],
         }

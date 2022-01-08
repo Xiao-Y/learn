@@ -24,7 +24,6 @@ public class CoreProductApp {
         SpringContextUtil.setApplicationContext(SpringApplication.run(CoreProductApp.class, args));
     }
 
-
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

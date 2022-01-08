@@ -2,7 +2,6 @@ import requestUtils from '../../utils/requestUtils'
 
 const baseUrl = '../admin-system/menuApi';
 
-const baseUrlApp = '../admin-system/menuApp';
 
 /**
  * 获取父菜单信息
@@ -31,14 +30,14 @@ export const findMenus = () => requestUtils.get(baseUrl + '/findMenus');
  * @constructor
  */
 export const saveOrUpdateMenu = editMenus => requestUtils.put(baseUrl + '/saveOrUpdateMenu', {
-    id: editMenus.id,
-    pid: editMenus.pid,
-    menuName: editMenus.title,
-    menuCode: editMenus.titleCode,
-    sortField: editMenus.sortField,
-    icon: editMenus.icon,
-    validInd: editMenus.validInd,
-    display: editMenus.display
+  id: editMenus.id,
+  pid: editMenus.pid,
+  menuName: editMenus.title,
+  menuCode: editMenus.titleCode,
+  sortField: editMenus.sortField,
+  icon: editMenus.icon,
+  validInd: editMenus.validInd,
+  display: editMenus.display
 });
 
 /**
@@ -48,27 +47,16 @@ export const saveOrUpdateMenu = editMenus => requestUtils.put(baseUrl + '/saveOr
  */
 export const delMenuByIds = ids => requestUtils.del(baseUrl + '/delMenuByIds', {ids});
 
-// /**
-//  * 通过token 获取菜单信息
-//  * @constructor
-//  */
-// export const LoadHomeMenus = () => requestUtils.get(baseUrl + '/homeMenus');
-
-/**
- * 通过token 获取菜单信息
- * @constructor
- */
-export const LoadHomeMenus = () => requestUtils.get(baseUrlApp + '/homeMenus');
-
-/**
- * 通过token 获取角色的路由信息
- * @constructor
- */
-export const LoadRouterList = () => requestUtils.get(baseUrlApp + '/findRouterList');
-
 /**
  * 查询 menuCode 是否重复
  * @param menuCode
  * @constructor
  */
 export const CheckMenuCode = menuCode => requestUtils.get(baseUrl + '/checkMenuCode/' + menuCode);
+
+/**
+ * 根据权限ID查询出绑定的菜单信息
+ * @param permissionId 权限ID
+ * @constructor
+ */
+export const FindMenuByPermissionId = permissionId => requestUtils.get(baseUrl + '/findMenuByPermissionId/' + permissionId);

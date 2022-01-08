@@ -81,4 +81,11 @@ public class PermissionApi {
         List<String> permissionList = permissionService.findMyPermissionList();
         return permissionList;
     }
+
+    @ApiOperation(value = "查询菜单关联的权限列表", notes = "查询菜单关联的权限列表")
+    @GetMapping("/findPermissionByMenuId/{menuId}")
+    public List<PermissionVo> findPermissionByMenuId(@PathVariable("menuId") Long menuId)
+    {
+        return permissionService.findPermissionByMenuId(menuId);
+    }
 }

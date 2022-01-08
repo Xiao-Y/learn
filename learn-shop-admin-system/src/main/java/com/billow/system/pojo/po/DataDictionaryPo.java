@@ -40,8 +40,8 @@ public class DataDictionaryPo extends BasePo {
     @TableField("field_order")
     private Integer fieldOrder;
 
-    @TableField("descritpion")
-    private String descritpion;
+    @TableField("description")
+    private String description;
 
 
 }

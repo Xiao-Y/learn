@@ -40,8 +40,8 @@ public class PermissionPo extends BasePo {
     @TableField("system_module")
     private String systemModule;
 
-    @TableField("descritpion")
-    private String descritpion;
+    @TableField("description")
+    private String description;
 
     @TableField("display")
     private Boolean display;

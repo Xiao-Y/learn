@@ -13,6 +13,7 @@ import com.billow.system.pojo.po.RoleMenuPo;
  * @version v1.0
  * @since 2021-04-01
  */
-public interface RoleMenuService extends IService<RoleMenuPo> {
+public interface RoleMenuService extends IService<RoleMenuPo>
+{
 
 }

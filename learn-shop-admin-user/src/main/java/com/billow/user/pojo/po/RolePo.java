@@ -21,7 +21,7 @@ public class RolePo extends BasePo implements Serializable {
     /**
      * 角色描述
      */
-    private String descritpion;
+    private String description;
 
     /**
      * 角色名称
@@ -66,17 +66,17 @@ public class RolePo extends BasePo implements Serializable {
      *
      * @return
      */
-    public String getDescritpion() {
-        return descritpion;
+    public String getDescription() {
+        return description;
     }
 
     /**
      * 角色描述
      *
-     * @param descritpion
+     * @param description
      */
-    public RolePo setDescritpion(String descritpion) {
-        this.descritpion = descritpion;
+    public RolePo setDescription(String description) {
+        this.description = description;
         return this;
     }
 
@@ -85,7 +85,7 @@ public class RolePo extends BasePo implements Serializable {
         return "RolePo{" +
                 "roleName='" + roleName + '\'' +
                 ", roleCode='" + roleCode + '\'' +
-                ", descritpion='" + descritpion + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

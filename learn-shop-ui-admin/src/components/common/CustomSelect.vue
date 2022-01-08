@@ -158,8 +158,8 @@ export default {
       if(!this.currentTooltipDisabled){
         var obj = this.currentSource.find(f=>f.fieldValue === this.currentValue);
         if(obj){
-          this.currentTooltipDisabled = !obj.descritpion;
-          this.tooltipContent = obj.descritpion;
+          this.currentTooltipDisabled = !obj.description;
+          this.tooltipContent = obj.description;
         }else{
           this.currentTooltipDisabled = true;
         }

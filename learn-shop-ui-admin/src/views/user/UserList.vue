@@ -74,8 +74,8 @@
                     </el-cascader>
                   </el-popover>
                 </el-form-item>
-                <el-form-item label="描述" prop="descritpion">
-                  <span>{{ scope.row.descritpion }}</span>
+                <el-form-item label="描述" prop="description">
+                  <span>{{ scope.row.description }}</span>
                 </el-form-item>
               </el-form>
             </template>

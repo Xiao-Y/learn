@@ -18,5 +18,5 @@ public class RoleEx implements Serializable {
     /**
      * 角色描述
      */
-    private String descritpion;
+    private String description;
 }

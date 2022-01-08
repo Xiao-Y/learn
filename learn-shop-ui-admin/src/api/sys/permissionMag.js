@@ -51,3 +51,11 @@ export const DeletePermissionById = id => requestUtils.del(baseUrl + '/deletePer
  * @constructor
  */
 export const ProhibitPermissionById = id => requestUtils.put(baseUrl + '/prohibitPermissionById/' + id);
+
+/**
+ * 查询菜单关联的权限列表
+ * @param id
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const FindPermissionByMenuId = menuId => requestUtils.get(baseUrl + '/findPermissionByMenuId/' + menuId);

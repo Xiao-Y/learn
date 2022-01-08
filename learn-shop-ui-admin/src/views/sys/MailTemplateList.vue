@@ -48,7 +48,7 @@
               </custom-select>
             </template>
           </el-table-column>
-          <el-table-column label="模板描述" prop="descritpion"></el-table-column>
+          <el-table-column label="模板描述" prop="description"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand" label-width="120px">

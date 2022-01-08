@@ -109,7 +109,7 @@ public class DataDictionaryApi extends BaseApi {
     @ApiOperation("字典下拉系统模块")
     @GetMapping("/findSysModule")
     public List<DataDictionaryPo> findSysModule() {
-        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO, String.class);
+        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO);
         List<DataDictionaryPo> dataDictionaryPos = routeInfoMap.entrySet().stream().map(m -> {
             DataDictionaryPo po = new DataDictionaryPo();
             po.setFieldValue(m.getKey());
@@ -148,7 +148,7 @@ public class DataDictionaryApi extends BaseApi {
     public List<DataDictionaryVo> findDataRouteCache() {
         List<DataDictionaryVo> vos = new ArrayList<>();
         long id = 0;
-        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO, String.class);
+        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO);
         for (Map.Entry<String, String> entry : routeInfoMap.entrySet()) {
             DataDictionaryVo vo = new DataDictionaryVo();
             vo.setId(id++);

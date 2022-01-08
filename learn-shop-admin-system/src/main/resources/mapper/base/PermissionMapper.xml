@@ -20,7 +20,7 @@
                     <result column="permission_code" property="permissionCode"/>
                     <result column="url" property="url"/>
                     <result column="system_module" property="systemModule"/>
-                    <result column="descritpion" property="descritpion"/>
+                    <result column="description" property="description"/>
                     <result column="display" property="display"/>
                     <result column="icon" property="icon"/>
                     <result column="pid" property="pid"/>
@@ -34,7 +34,7 @@
                 creator_code,
                 update_time,
                 updater_code,
-            permission_name, permission_code, url, system_module, descritpion, display, icon, pid
+            permission_name, permission_code, url, system_module, description, display, icon, pid
         </sql>
 
 </mapper>

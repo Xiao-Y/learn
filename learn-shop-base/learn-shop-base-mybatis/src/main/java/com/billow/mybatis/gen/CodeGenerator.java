@@ -24,7 +24,8 @@ import java.util.List;
  * @author LiuYongTao
  * @date 2019/10/29 9:30
  */
-public class CodeGenerator {
+public class CodeGenerator
+{
 
     String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
     String template = "/template";
@@ -36,11 +37,13 @@ public class CodeGenerator {
      * @author LiuYongTao
      * @date 2019/10/29 9:46
      */
-    private InjectionConfig getInjectionConfig(PackageConfig pc) {
+    private InjectionConfig getInjectionConfig(PackageConfig pc)
+    {
         String parent = pc.getParent();
         String replace = "";
-        if(StringUtils.isNoneBlank(parent)){
-             replace = parent.replace(".", "/");
+        if (StringUtils.isNoneBlank(parent))
+        {
+            replace = parent.replace(".", "/");
         }
         String srcJava = "/src/test/java/" + replace + "/";
         String srcRes = "/src/test/resources";
@@ -53,9 +56,11 @@ public class CodeGenerator {
         // 如果模板引擎是 velocity
 //        String templatePath = "/templates/mapper.xml.vm";
         // 自定义配置:mapper.xml
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcRes + "/mapper/base/" + tableInfo.getXmlName() + StringPool.DOT_XML;
             }
@@ -63,9 +68,11 @@ public class CodeGenerator {
 
         // 自定义配置:controller.java
         templatePath = template + "/controller.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/api/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
             }
@@ -73,9 +80,11 @@ public class CodeGenerator {
 
         // 自定义配置:dao.java
         templatePath = template + "/mapper.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/dao/" + tableInfo.getMapperName() + StringPool.DOT_JAVA;
             }
@@ -83,9 +92,11 @@ public class CodeGenerator {
 
         // 自定义配置:xxPo.java
         templatePath = template + "/entity.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/pojo/po/" + tableInfo.getEntityName() + StringPool.DOT_JAVA;
             }
@@ -93,9 +104,11 @@ public class CodeGenerator {
 
         // 自定义配置:xxVo.java
         templatePath = template + "/vo.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/pojo/vo/" +
                         tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "Vo" + StringPool.DOT_JAVA;
@@ -104,9 +117,11 @@ public class CodeGenerator {
 
         // 自定义配置:xxBuild.java
         templatePath = template + "/build.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/pojo/build/" +
                         tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "BuildParam" + StringPool.DOT_JAVA;
@@ -115,9 +130,11 @@ public class CodeGenerator {
 
         // 自定义配置:xxSearch.java
         templatePath = template + "/search.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/pojo/search/" +
                         tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "SearchParam" + StringPool.DOT_JAVA;
@@ -126,9 +143,11 @@ public class CodeGenerator {
 
         // 自定义配置:xxService.java
         templatePath = template + "/IService.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/service/" +
                         tableInfo.getServiceName() + StringPool.DOT_JAVA;
@@ -137,9 +156,11 @@ public class CodeGenerator {
 
         // 自定义配置:xxServiceImpl.java
         templatePath = template + "/ServiceImpl.java.ftl";
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig(templatePath)
+        {
             @Override
-            public String outputFile(TableInfo tableInfo) {
+            public String outputFile(TableInfo tableInfo)
+            {
                 // 自定义输出文件名
                 return projectPath + srcJava + "/service/impl/" +
                         tableInfo.getServiceImplName() + StringPool.DOT_JAVA;
@@ -147,9 +168,11 @@ public class CodeGenerator {
         });
 
         // 自定义配置
-        InjectionConfig cfg = new InjectionConfig() {
+        InjectionConfig cfg = new InjectionConfig()
+        {
             @Override
-            public void initMap() {
+            public void initMap()
+            {
             }
         };
         cfg.setFileOutConfigList(focList);
@@ -163,18 +186,19 @@ public class CodeGenerator {
      * @author LiuYongTao
      * @date 2019/10/29 9:10
      */
-    private DataSourceConfig getDataSourceConfig() {
+    private DataSourceConfig getDataSourceConfig()
+    {
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         // dsc.setSchemaName("public");
-        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
-        dsc.setUsername("learn_shop");
-        dsc.setPassword("pass123");
+//        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
+//        dsc.setUsername("learn_shop");
+//        dsc.setPassword("pass123");
 
-//        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false" +
-//                "&allowPublicKeyRetrieval=true");
-//        dsc.setUsername("root");
-//        dsc.setPassword("root");
+        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false" +
+                "&allowPublicKeyRetrieval=true");
+        dsc.setUsername("root");
+        dsc.setPassword("root");
         return dsc;
     }
 
@@ -185,7 +209,8 @@ public class CodeGenerator {
      * @author LiuYongTao
      * @date 2019/10/29 9:07
      */
-    private GlobalConfig getGlobalConfig() {
+    private GlobalConfig getGlobalConfig()
+    {
         GlobalConfig gc = new GlobalConfig();
         gc.setOutputDir(projectPath + "/src/test/java");
         gc.setAuthor("billow");
@@ -206,7 +231,8 @@ public class CodeGenerator {
         return gc;
     }
 
-    public void gen() {
+    public void gen()
+    {
         // 全局配置
         GlobalConfig gc = this.getGlobalConfig();
         // 数据源配置
@@ -249,7 +275,8 @@ public class CodeGenerator {
      * @author LiuYongTao
      * @date 2019/10/29 9:20
      */
-    private StrategyConfig getStrategyConfig() {
+    private StrategyConfig getStrategyConfig()
+    {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
@@ -279,18 +306,28 @@ public class CodeGenerator {
      * @author LiuYongTao
      * @date 2019/10/29 9:11
      */
-    private PackageConfig getPackageConfig(StrategyConfig strategy) {
+    private PackageConfig getPackageConfig(StrategyConfig strategy)
+    {
         PackageConfig pc = new PackageConfig();
         String parent = "";
-        if (strategy.getTablePrefix().contains("pms_") || strategy.getTablePrefix().contains("sms_")) {
+        if (strategy.getTablePrefix().contains("pms_") || strategy.getTablePrefix().contains("sms_"))
+        {
             parent = "product";
-        } else if (strategy.getTablePrefix().contains("sk_")) {
+        }
+        else if (strategy.getTablePrefix().contains("sk_"))
+        {
             parent = "seckill";
-        } else if (strategy.getTablePrefix().contains("sys_") || strategy.getTablePrefix().contains("v_")) {
+        }
+        else if (strategy.getTablePrefix().contains("sys_") || strategy.getTablePrefix().contains("v_"))
+        {
             parent = "system";
-        } else if (strategy.getTablePrefix().contains("oms_")) {
+        }
+        else if (strategy.getTablePrefix().contains("oms_"))
+        {
             parent = "order";
-        } else if (strategy.getTablePrefix().contains("u_")) {
+        }
+        else if (strategy.getTablePrefix().contains("u_"))
+        {
             parent = "user";
         }
 
@@ -309,7 +346,8 @@ public class CodeGenerator {
      * @author liuyongtao
      * @since 2021-9-8 8:26
      */
-    private void setGenTableRule(StrategyConfig strategy) {
+    private void setGenTableRule(StrategyConfig strategy)
+    {
         //        strategy.setInclude("oms_cart_item"
 //                , "oms_company_address"
 //                , "oms_order"
@@ -349,33 +387,32 @@ public class CodeGenerator {
 //        );
 //        strategy.setTablePrefix("pms_");
 
-//        strategy.setInclude("sys_apply_info",
+        strategy.setInclude(
+//                "sys_apply_info",
 //                "sys_city",
 //                "sys_data_dictionary",
-//                "sys_menu",
+                "sys_menu",
 //                "sys_permission",
 //                "sys_role",
-//                "sys_white_list"
-//                );
+                "sys_user_role",
+                "sys_role_menu",
+                "sys_role_permission",
+                "sys_permission",
+                "sys_menu_permission",
+                "sys_white_list"
+        );
         strategy.setTablePrefix("sys_");
-        strategy.setInclude(
-//                "sys_permission",
-                "sys_menu_permission"
-//                "r_role_menu",
-//                "r_role_permission",
-//                "r_user_role"
-//        );
-//        strategy.setTablePrefix("r_");
 
 //        strategy.setInclude("v_mytasklist");
 //        strategy.setTablePrefix("v_");
 
 //        strategy.setTablePrefix("u_");
 //        strategy.setInclude("u_user"
-        );
+//        );
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         CodeGenerator cg = new CodeGenerator();
         cg.gen();
     }

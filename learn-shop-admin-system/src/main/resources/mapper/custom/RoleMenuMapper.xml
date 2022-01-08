@@ -12,7 +12,7 @@
     <select id="findRoleMenuByRoleCode" resultType="Long" flushCache="false" useCache="false">
         SELECT distinct rrm.menu_id
         FROM sys_role sr
-        LEFT JOIN r_role_menu rrm ON sr.id = rrm.role_id
+        LEFT JOIN sys_role_menu rrm ON sr.id = rrm.role_id
         LEFT JOIN sys_menu sm ON rrm.menu_id = sm.id
         WHERE sr.valid_ind
         AND rrm.valid_ind
@@ -28,7 +28,7 @@
             sm.id
         FROM
             sys_menu sm,
-            r_role_menu rm
+            sys_role_menu rm
         WHERE
             rm.role_id = #{roleId}
           AND rm.menu_id = sm.id

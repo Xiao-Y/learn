@@ -38,7 +38,7 @@ public class UserPo extends BasePo implements Serializable {
     private String address;
 
     @ApiModelProperty("用户描述")
-    private String descritpion;
+    private String description;
 
     @ApiModelProperty("用户头像")
     private String iconUrl;
