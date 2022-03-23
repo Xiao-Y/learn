@@ -64,7 +64,7 @@ public class RedisCst {
     public final static String BLACKLIST_EDITUSER_ROLECODES = "ROLE_CODES";
     //==============================================================================================
     /**
-     * 秒杀用户锁定前缀。SECKILL:LOCK:{seckillId}:{userCode}
+     * 秒杀用户锁定前缀。SECKILL:LOCK:{seckillProductId}:{userCode}
      */
     public final static String SECKILL_LOCK = "SECKILL:LOCK";
     /**
@@ -77,7 +77,7 @@ public class RedisCst {
     public final static String SECKILL_PRODUCT_INFO = "SECKILL:PRODUCT:INFO";
 
     /**
-     * 秒杀商品信息前缀，SECKILL:INFO:{seckillId}
+     * 秒杀信息前缀，SECKILL:INFO:{seckillId}
      */
     public final static String SECKILL_INFO = "SECKILL:INFO";
 
@@ -85,6 +85,12 @@ public class RedisCst {
      * 秒杀场次信息前缀，SECKILL:SESSION:{seckillSessionId}
      */
     public final static String SECKILL_SESSION = "SECKILL:SESSION";
+    //==============================================================================================
+    /**
+     * 订单信息前缀。ORDER:INFO:{orderSn}
+     */
+    public final static String ORDER_INFO = "ORDER:INFO";
+
     //==============================================================================================
 
     /**
