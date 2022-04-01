@@ -78,6 +78,7 @@
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
         <log4j-api.version>2.15.0</log4j-api.version>
         <javax.mail.version>1.6.2</javax.mail.version>
+        <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
     </properties>
 
     <dependencyManagement>
@@ -284,6 +285,12 @@
                 <artifactId>javax.mail</artifactId>
                 <version>${javax.mail.version}</version>
             </dependency>
+            <!-- elk json日志格式化  -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -291,6 +298,11 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <!-- elk json日志格式化  -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
     </dependencies>
 
