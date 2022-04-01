@@ -55,8 +55,7 @@
 
 **订单搜索或查看订单详情服务调用关系：**
 
-<img src="doc\image\05.png" style="zoom:150%;" />
-
+![](doc\image\05.png)
 
 
 1. 订单列表或者搜索订单可以调 order-search（订单搜索服务）来完成

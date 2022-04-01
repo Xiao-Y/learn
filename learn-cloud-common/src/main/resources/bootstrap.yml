@@ -8,7 +8,9 @@ spring:
         server-addr: ${service.ipAddress}:8848
         file-extension: yml
         refresh-enabled: true
-        namespace: pro # pro
+        namespace: dev # pro
+        username: nacos
+        password: nacos
         # 配置公用文件
         shared-configs[0]:
           dataId: cloud-config.properties
