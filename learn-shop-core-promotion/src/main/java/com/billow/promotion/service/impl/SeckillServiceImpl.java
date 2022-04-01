@@ -1,6 +1,6 @@
 package com.billow.promotion.service.impl;
 
-import com.billow.notice.amqp.properties.NoticeMqYml;
+import com.billow.cloud.common.amqp.AmqpYml;
 import com.billow.notice.amqp.service.SendMQService;
 import com.billow.promotion.cache.SeckillProductCache;
 import com.billow.promotion.common.enums.OrderTypeEnum;
@@ -24,6 +24,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -58,8 +59,8 @@ public class SeckillServiceImpl implements SeckillService {
     private SeckillProductCache seckillProductCache;
     @Autowired
     private SendMQService sendMQService;
-    @Autowired
-    private NoticeMqYml noticeMqYml;
+    @Resource
+    private AmqpYml secKillToCoreOrder;
 
     @Override
     public ExposerVo genSeckillUrl(Long seckillProductId) {
@@ -156,7 +157,7 @@ public class SeckillServiceImpl implements SeckillService {
             killedVo.setUsercode(userCode);
             killedVo.setCount(1);
             FieldUtils.setCommonFieldByInsert(killedVo, userCode);
-            String exchange = noticeMqYml.getMqCollect().get("secKillToCoreOrder").getExchange();
+            String exchange = secKillToCoreOrder.getExchange();
             sendMQService.send(exchange, killedVo);
         }
         return new SeckillExecutionVo(seckillProductId, statEnum);
