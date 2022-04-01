@@ -1,6 +1,5 @@
 service:
-#  ipAddress: 192.168.137.200
-  ipAddress: 127.0.0.1
+  ipAddress: 192.168.137.200
 spring:
   cloud:
     nacos:
@@ -39,19 +38,19 @@ config:
     virtual-host: /learn-default
     # 日志输入MQ配置
     logCollect:
-#      queue: logCollectQueue
-#      exchangeType: topic
+      queue: logCollectQueue
       exchange: logCollectExchange
-      routeKey: logCollectRouteKey
-    #      DEBUG：输出调试信息；指出细粒度信息事件对调试应用程序是非常有帮助的。
-    #      INFO： 输出提示信息；消息在粗粒度级别上突出强调应用程序的运行过程。
-    #      WARN： 输出警告信息；表明会出现潜在错误的情形。
-    #      ERROR：输出错误信息；指出虽然发生错误事件，但仍然不影响系统的继续运行。
-    #      FATAL： 输出致命错误；指出每个严重的错误事件将会导致应用程序的退出。
-    #      ALL level：打开所有日志记录开关；是最低等级的，用于打开所有日志记录。
-    #      OFF level：关闭所有日志记录开关；是最高等级的，用于关闭所有日志记录
-    # 控制输入MQ的日志级别
-    log-level: INFO
+      exchange-type: direct
+      route-key: logCollectRouteKey
+      #      DEBUG：输出调试信息；指出细粒度信息事件对调试应用程序是非常有帮助的。
+      #      INFO： 输出提示信息；消息在粗粒度级别上突出强调应用程序的运行过程。
+      #      WARN： 输出警告信息；表明会出现潜在错误的情形。
+      #      ERROR：输出错误信息；指出虽然发生错误事件，但仍然不影响系统的继续运行。
+      #      FATAL： 输出致命错误；指出每个严重的错误事件将会导致应用程序的退出。
+      #      ALL level：打开所有日志记录开关；是最低等级的，用于打开所有日志记录。
+      #      OFF level：关闭所有日志记录开关；是最高等级的，用于关闭所有日志记录
+      # 控制输入MQ的日志级别
+      log-level: OFF level
 
 swagger: #接口注解文档
   client: # 登陆客户端配置
