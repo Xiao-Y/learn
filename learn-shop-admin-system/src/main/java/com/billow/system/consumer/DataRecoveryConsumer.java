@@ -36,7 +36,8 @@ public class DataRecoveryConsumer {
     public void executeSql() throws Exception {
 //        log.info(message);
         log.info("开始初始化 SQL...");
-//        try {
+//        try
+//            // 加载 learn-shop-admin-system -->> resources 下 sql/learn-shop.sql
 //            Resource resource = new ClassPathResource("sql/learn-shop.sql");
 //            ScriptUtils.executeSqlScript(dataSource.getConnection(), resource);
 //        } catch (SQLException e) {
