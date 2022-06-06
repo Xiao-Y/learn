@@ -1,6 +1,7 @@
 package com.billow.promotion.cache;
 
 import com.billow.promotion.common.cache.LuaUtil;
+import com.billow.promotion.common.cache.StockRedisKit;
 import com.billow.promotion.common.enums.LuaScriptEnum;
 import com.billow.promotion.common.enums.SeckillStatEnum;
 import com.billow.promotion.pojo.cache.SeckillCacheDto;
@@ -132,5 +133,38 @@ public class SeckillProductCache {
             vo.setSeckillSessionCacheDto(seckillSessionCache);
         }
         return vo;
+    }
+
+
+    /**
+     * 增加库存数据
+     *
+     * @param seckillProductId 秒杀商品关联id
+     * @return {@link long} 增加后的库存
+     * @author liuyongtao
+     * @since 2021-6-11 10:34
+     */
+    public Long incrSeckillStockCache(Long seckillProductId, long num) {
+        if(num <= 0){
+            throw new RuntimeException("增加的库存数量要大于零");
+        }
+        String seckillStockKey = this.genSeckillStockKey(seckillProductId);
+        return StockRedisKit.incrStock(seckillStockKey, num);
+    }
+
+    /**
+     * 减少库存数据
+     *
+     * @param seckillProductId 秒杀商品关联id
+     * @return {@link long} 减少的库存
+     * @author liuyongtao
+     * @since 2021-6-11 10:34
+     */
+    public Long decrSeckillStockCache(Long seckillProductId, long num) {
+        if(num <= 0){
+            throw new RuntimeException("减少的库存数量要大于零");
+        }
+        String seckillStockKey = this.genSeckillStockKey(seckillProductId);
+        return StockRedisKit.decrStock(seckillStockKey, num);
     }
 }

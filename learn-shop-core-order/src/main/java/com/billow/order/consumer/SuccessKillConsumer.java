@@ -37,5 +37,6 @@ public class SuccessKillConsumer {
         String receivedRoutingKey = messageProperties.getReceivedRoutingKey();
         log.info("consumerQueue:{},receivedExchange:{},receivedRoutingKey:{}",
                 consumerQueue, receivedExchange, receivedRoutingKey);
+        // TODO 修改订单为失败状态，退回秒杀商品数据
     }
 }
