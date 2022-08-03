@@ -58,6 +58,14 @@ public class TableKit
     public static String getCreateTableDate(JdbcTemplate jdbcTemplate, String tableName)
     {
         ST st = StConstants.COMMON_ST_GROUP.getInstanceOf(StConstants.commonStGroupTemplate.GET_TABLE_CREATE_DATE);
+        // 1.判断是否有表
+        boolean tableExist = judgeTableExist(jdbcTemplate, tableName);
+        // 表不存在时
+        if (!tableExist)
+        {
+            return "";
+        }
+
         st.remove(StConstants.tableNameParam.TABLE_NAME);
         st.add(StConstants.tableNameParam.TABLE_NAME, tableName);
         log.info("获取 {} 表创建时间SQL：\n{}", tableName, st.render());
@@ -76,9 +84,23 @@ public class TableKit
      * @author 千面
      * @date 2022/8/3 10:16
      */
-    public static void editTableName(JdbcTemplate jdbcTemplate, String oldTableName, String newTableName)
+    public static boolean editTableName(JdbcTemplate jdbcTemplate, String oldTableName, String newTableName)
     {
         ST st = StConstants.COMMON_ST_GROUP.getInstanceOf(StConstants.commonStGroupTemplate.ALTER_TABLE_NAME);
+
+        // 1.判断是否有表
+        boolean tableExist = judgeTableExist(jdbcTemplate, oldTableName);
+        // 表不存在时
+        if (!tableExist)
+        {
+            return false;
+        }
+        boolean newTableExist = judgeTableExist(jdbcTemplate, newTableName);
+        // 表存在时
+        if (newTableExist)
+        {
+            return false;
+        }
         // 3.修改表名
         st.remove(StConstants.alterTableNameParam.OLD_TABLE_NAME);
         st.remove(StConstants.alterTableNameParam.NEW_TABLE_NAME);
@@ -86,28 +108,35 @@ public class TableKit
         st.add(StConstants.alterTableNameParam.NEW_TABLE_NAME, newTableName);
         log.info("修改 {} 表名为 {} SQL：\n{}", oldTableName, newTableName, st.render());
         jdbcTemplate.execute(st.render());
+        return true;
     }
 
     /**
      * 清空表数据
      *
      * @param jdbcTemplate
-     * @param oldTableName
-     * @param newTableName
+     * @param tableName
      * @return void
      * @author 千面
      * @date 2022/8/3 10:16
      */
-    public static void truncateTableName(JdbcTemplate jdbcTemplate, String oldTableName, String newTableName)
+    public static boolean truncateTableName(JdbcTemplate jdbcTemplate, String tableName)
     {
         ST st = StConstants.COMMON_ST_GROUP.getInstanceOf(StConstants.commonStGroupTemplate.TRUNCATE_TABLE_NAME);
+        // 1.判断是否有表
+        boolean tableExist = judgeTableExist(jdbcTemplate, tableName);
+        // 表不存在时
+        if (tableExist)
+        {
+            return false;
+        }
+
         // 3.修改表名
-        st.remove(StConstants.alterTableNameParam.OLD_TABLE_NAME);
-        st.remove(StConstants.alterTableNameParam.NEW_TABLE_NAME);
-        st.add(StConstants.alterTableNameParam.OLD_TABLE_NAME, oldTableName);
-        st.add(StConstants.alterTableNameParam.NEW_TABLE_NAME, newTableName);
-        log.info("修改 {} 表名为 {} SQL：\n{}", oldTableName, newTableName, st.render());
+        st.remove(StConstants.tableNameParam.TABLE_NAME);
+        st.add(StConstants.tableNameParam.TABLE_NAME, tableName);
+        log.info("清空表 {}，SQL：\n{}", tableName, st.render());
         jdbcTemplate.execute(st.render());
+        return true;
     }
 
     /**
@@ -116,38 +145,48 @@ public class TableKit
      * @param stGroup             st 的分组
      * @param createTableTemplate 建表SQL模板
      * @param jdbcTemplate        jdbc操作
-     * @return void
+     * @return boolean 是否创建成功
      * @author 千面
      * @date 2022/7/15 11:05
      */
-    public static void createNewTable(STGroup stGroup, String createTableTemplate, JdbcTemplate jdbcTemplate)
+    public static boolean createNewTable(STGroup stGroup, String createTableTemplate, JdbcTemplate jdbcTemplate)
     {
         ST st = stGroup.getInstanceOf(createTableTemplate);
         log.info("新建表SQL：\n{}", st.render());
-        jdbcTemplate.execute(st.render());
-    }
-
-    /**
-     * 备份老表，建新表
-     *
-     * @param tableName           操作的表
-     * @param stGroup             st 的分组
-     * @param createTableTemplate 建表SQL模板
-     * @param jdbcTemplate        jdbc操作
-     * @param intervalTime        两表间隔时间（大于等于间隔时间时才会创建新表）
-     * @return void
-     * @author 千面
-     * @date 2022/7/15 11:05
-     */
-    public static void createTable(String tableName, STGroup stGroup, String createTableTemplate, JdbcTemplate jdbcTemplate, int intervalTime)
-    {
+        String tableName = getTableName(st.render());
         // 1.判断是否有表
         boolean tableExist = judgeTableExist(jdbcTemplate, tableName);
         // 表不存在时
         if (!tableExist)
         {
-            createNewTable(stGroup, createTableTemplate, jdbcTemplate);
-            return;
+            jdbcTemplate.execute(st.render());
+        }
+        return !tableExist;
+    }
+
+    /**
+     * 备份老表，建新表
+     *
+     * @param stGroup             st 的分组
+     * @param createTableTemplate 建表SQL模板
+     * @param jdbcTemplate        jdbc操作
+     * @param intervalTime        两表间隔时间（大于等于间隔时间时才会创建新表）
+     * @return int 0-未改变，1-新建表，2-备份表，新建表
+     * @author 千面
+     * @date 2022/7/15 11:05
+     */
+    public static int createTable(STGroup stGroup, String createTableTemplate, JdbcTemplate jdbcTemplate, int intervalTime)
+    {
+        // 获取建表时的 表名
+        ST st = stGroup.getInstanceOf(createTableTemplate);
+        String tableName = getTableName(st.render());
+
+        // 1.判断是否有表，如果不存在新建一个
+        boolean success = createNewTable(stGroup, createTableTemplate, jdbcTemplate);
+        // 表不存在时
+        if (success)
+        {
+            return 1;
         }
 
         // 表存在时
@@ -168,6 +207,25 @@ public class TableKit
             editTableName(jdbcTemplate, tableName, tableName + "_" + tableCreateDateStr);
             // 建新表
             createNewTable(stGroup, createTableTemplate, jdbcTemplate);
+            return 2;
         }
+        return 0;
+    }
+
+    /**
+     * 获取表名
+     *
+     * @param createTableSql
+     * @return String
+     * @author 千面
+     * @date 2022/8/3 18:36
+     */
+    private static String getTableName(String createTableSql)
+    {
+        return createTableSql.substring(0, createTableSql.indexOf("("))
+                .toLowerCase()
+                .replace("create table", "")
+                .replaceAll("`", "")
+                .trim();
     }
 }

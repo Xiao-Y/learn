@@ -1,6 +1,7 @@
 package com.billow.sql.comon;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -27,7 +28,7 @@ public class RunSqlUtils
      */
     public static <T> List<T> findList(DataSource dataSource, String sql, Class<T> tClass)
     {
-        return DataSourceUtils.getJdbcTemplate(dataSource).queryForList(sql, tClass);
+        return DataSourceUtils.getJdbcTemplate(dataSource).query(sql, new BeanPropertyRowMapper<>(tClass));
     }
 
     /**
@@ -42,7 +43,7 @@ public class RunSqlUtils
      */
     public static <T> T findOne(DataSource dataSource, String sql, Class<T> tClass)
     {
-        return DataSourceUtils.getJdbcTemplate(dataSource).queryForObject(sql, tClass);
+        return DataSourceUtils.getJdbcTemplate(dataSource).queryForObject(sql, new BeanPropertyRowMapper<>(tClass));
     }
 
     /**

@@ -52,7 +52,7 @@ public class BuildSqlUtils
         }
         catch (Exception e)
         {
-            log.error("ModelQueryServiceImpl", e);
+            log.error("genDelSql", e);
             throw e;
         }
     }
@@ -164,7 +164,7 @@ public class BuildSqlUtils
         // 构建查询sql
         SelectQuery selectQuery = new SelectQuery();
         // 添加查询的字段
-        if (selectColumn != null)
+        if (selectColumn != null && selectColumn.length > 0)
         {
             for (TableFieldVo tableField : selectColumn)
             {
