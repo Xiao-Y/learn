@@ -36,5 +36,4 @@ public enum FieldTypeEnum
      */
     private String desc;
 
-
 }

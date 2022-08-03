@@ -44,17 +44,17 @@ public class BuildSqlUtils
             DbColumn queryColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
             deleteQuery.addCondition(BinaryCondition.equalTo(queryColumn, tableField.getObjValue()));
         }
-        String s = "";
         try
         {
-            s = deleteQuery.validate().toString();
+            String s = deleteQuery.validate().toString();
+            log.info("生成SQL:{}", s);
+            return s;
         }
         catch (Exception e)
         {
             log.error("ModelQueryServiceImpl", e);
+            throw e;
         }
-        log.info("数据模型SQL:{}", s);
-        return s;
     }
 
     /**
@@ -89,17 +89,17 @@ public class BuildSqlUtils
             DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
             updateQuery.addSetClause(dbColumn, tableField.getObjValue());
         }
-        String s = "";
         try
         {
-            s = updateQuery.validate().toString();
+            String s = updateQuery.validate().toString();
+            log.info("生成SQL:{}", s);
+            return s;
         }
         catch (Exception e)
         {
-            log.error("ModelQueryServiceImpl", e);
+            log.error("genUpdateSql", e);
+            throw e;
         }
-        log.info("数据模型SQL:{}", s);
-        return s;
     }
 
     /**
@@ -131,17 +131,17 @@ public class BuildSqlUtils
                 insertQuery.addColumn(dbColumn, tableField.getObjValue());
             }
         }
-        String s = "";
         try
         {
-            s = insertQuery.validate().toString();
+            String s = insertQuery.validate().toString();
+            log.info("生成SQL:{}", s);
+            return s;
         }
         catch (Exception e)
         {
-            log.error("ModelQueryServiceImpl", e);
+            log.error("genSaveSql", e);
+            throw e;
         }
-        log.info("数据模型SQL:{}", s);
-        return s;
     }
 
     /**
@@ -186,8 +186,16 @@ public class BuildSqlUtils
                 selectQuery.addCondition(BinaryCondition.equalTo(dbColumn, tableField.getObjValue()));
             }
         }
-        String sql = selectQuery.validate().toString();
-        log.info("生成通过唯一键查询数据sql:{}", sql);
-        return sql;
+        try
+        {
+            String s = selectQuery.validate().toString();
+            log.info("生成SQL:{}", s);
+            return s;
+        }
+        catch (Exception e)
+        {
+            log.error("genSelectSql", e);
+            throw e;
+        }
     }
 }

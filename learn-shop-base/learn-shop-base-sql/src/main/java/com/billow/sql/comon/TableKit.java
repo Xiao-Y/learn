@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
-import javax.sql.DataSource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -112,24 +111,6 @@ public class TableKit
      * @param tableName           操作的表
      * @param stGroup             st 的分组
      * @param createTableTemplate 建表SQL模板
-     * @param dataSource          数据源
-     * @param intervalTime        两表间隔时间（大于等于间隔时间时才会创建新表）
-     * @return void
-     * @author 千面
-     * @date 2022/7/15 11:05
-     */
-    public static void createTable(String tableName, STGroup stGroup, String createTableTemplate,
-                                   DataSource dataSource, int intervalTime)
-    {
-        createTable(tableName, stGroup, createTableTemplate, DataSourceUtils.getJdbcTemplate(dataSource), intervalTime);
-    }
-
-    /**
-     * 备份老表，建新表
-     *
-     * @param tableName           操作的表
-     * @param stGroup             st 的分组
-     * @param createTableTemplate 建表SQL模板
      * @param jdbcTemplate        jdbc操作
      * @param intervalTime        两表间隔时间（大于等于间隔时间时才会创建新表）
      * @return void
@@ -140,32 +121,30 @@ public class TableKit
     {
         // 1.判断是否有表
         boolean tableExist = judgeTableExist(jdbcTemplate, tableName);
-        // 表存在时
-        if (tableExist)
+        // 表不存在时
+        if (!tableExist)
         {
-            // 2.日期比对
-            // 获取当天的日期，格式：yyyyMMdd
-            DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-            LocalDate lastDayDate = LocalDate.parse(dateFormat.format(Calendar.getInstance().getTime()), DateTimeFormatter.ofPattern("yyyyMMdd"));
-            // 获取表创建日期，格式：yyyyMMdd (因为定时任务是隔天凌晨运行的，所以表的创建日期实际比录入数据日期要多一天)
-            String tableCreateDateStr = getCreateTableDate(jdbcTemplate, tableName);
-
-            // 计算日期差
-            LocalDate tableCreateDate = LocalDate.parse(tableCreateDateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
-            // lastDayDate - tableCreateDate
-            long days = ChronoUnit.DAYS.between(tableCreateDate, lastDayDate);
-
-            // intervalTime 转存
-            if (days >= intervalTime)
-            {
-                String newTableName = tableName + "_" + tableCreateDateStr;
-                editTableName(jdbcTemplate, tableName, newTableName);
-                // 4.建表
-                createNewTable(stGroup, createTableTemplate, jdbcTemplate);
-            }
+            createNewTable(stGroup, createTableTemplate, jdbcTemplate);
+            return;
         }
-        else
+
+        // 表存在时
+        // 日期比对。获取当天的日期，格式：yyyyMMdd
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        LocalDate lastDayDate = LocalDate.parse(dateFormat.format(Calendar.getInstance().getTime()), DateTimeFormatter.ofPattern("yyyyMMdd"));
+        // 获取表创建日期，格式：yyyyMMdd (因为定时任务是隔天凌晨运行的，所以表的创建日期实际比录入数据日期要多一天)
+        String tableCreateDateStr = getCreateTableDate(jdbcTemplate, tableName);
+
+        // 计算日期差
+        LocalDate tableCreateDate = LocalDate.parse(tableCreateDateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        // lastDayDate - tableCreateDate
+        long days = ChronoUnit.DAYS.between(tableCreateDate, lastDayDate);
+        // intervalTime 转存
+        if (days >= intervalTime)
         {
+            // 修改表名
+            editTableName(jdbcTemplate, tableName, tableName + "_" + tableCreateDateStr);
+            // 建新表
             createNewTable(stGroup, createTableTemplate, jdbcTemplate);
         }
     }

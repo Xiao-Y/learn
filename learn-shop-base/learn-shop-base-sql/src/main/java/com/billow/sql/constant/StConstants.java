@@ -65,15 +65,4 @@ public interface StConstants
 
         String NEW_TABLE_NAME = "newTableName";
     }
-
-    /**
-     * st模板参数：数据时间
-     */
-    interface dataTimeParam
-    {
-
-        String DATA_TIME_BEGIN = "dataTimeBegin";
-
-        String DATA_TIME_END = "dataTimeEnd";
-    }
 }
