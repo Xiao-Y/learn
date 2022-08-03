@@ -15,19 +15,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 /**
- * 公用模板操作
+ * 表相关操作
  *
  * @author 千面
  * @date 2022/8/3 10:19
  */
 @Slf4j
-public class CommonUtils
+public class TableKit
 {
-
-    public static JdbcTemplate getJdbcTemplate(DataSource dataSource)
-    {
-        return new JdbcTemplate(dataSource);
-    }
 
     /**
      * 判断表是否存在
@@ -126,7 +121,7 @@ public class CommonUtils
     public static void createTable(String tableName, STGroup stGroup, String createTableTemplate,
                                    DataSource dataSource, int intervalTime)
     {
-        createTable(tableName, stGroup, createTableTemplate, getJdbcTemplate(dataSource), intervalTime);
+        createTable(tableName, stGroup, createTableTemplate, DataSourceUtils.getJdbcTemplate(dataSource), intervalTime);
     }
 
     /**

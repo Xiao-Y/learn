@@ -7,15 +7,15 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
+/**
+ * 构建SQL 语句
+ *
+ * @author 千面
+ * @date 2022/8/3 17:07
+ */
 @Slf4j
 public class BuildSqlUtils
 {
@@ -23,18 +23,14 @@ public class BuildSqlUtils
     /**
      * 构建 删除 sql
      *
-     * @param tableName
-     * @param fieldList
-     * @param paramMap
+     * @param tableName     表名
+     * @param conditionList 删除条件
      * @return String
      * @author 千面
      * @date 2022/6/15 15:09
      */
-    private String genDelSql(String tableName, List<TableFieldVo> fieldList, Map<String, Object> paramMap)
+    public static String genDelSql(String tableName, List<TableFieldVo> conditionList)
     {
-        // 表的列名与类型
-        Map<String, String> fieldNameAndTypeMap = fieldList.stream().collect(Collectors.toMap(TableFieldVo::getDbFieldName,
-                TableFieldVo::getDbType));
         // 构建sql
         DbSpec spec = new DbSpec();
         DbSchema schema = spec.addDefaultSchema();
@@ -43,14 +39,10 @@ public class BuildSqlUtils
         // 构建插入对象
         DeleteQuery deleteQuery = new DeleteQuery(dbTable);
         // 根据主键更新
-        for (TableFieldVo tableField : fieldList)
+        for (TableFieldVo tableField : conditionList)
         {
-            if (tableField.getDbIsKey())
-            {
-                String pk = tableField.getDbFieldName();
-                DbColumn queryColumn = dbTable.addColumn(pk, fieldNameAndTypeMap.get(pk), null);
-                deleteQuery.addCondition(BinaryCondition.equalTo(queryColumn, paramMap.get(pk)));
-            }
+            DbColumn queryColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+            deleteQuery.addCondition(BinaryCondition.equalTo(queryColumn, tableField.getObjValue()));
         }
         String s = "";
         try
@@ -68,14 +60,14 @@ public class BuildSqlUtils
     /**
      * 构建 更新 sql
      *
-     * @param tableName
-     * @param fieldList
-     * @param paramMap
+     * @param tableName     表名
+     * @param conditionList 更新条件
+     * @param valueList     更新的字段
      * @return String
      * @author 千面
      * @date 2022/6/15 15:01
      */
-    private String genUpdateSql(String tableName, Map<String, TableFieldVo> paramMap)
+    public static String genUpdateSql(String tableName, List<TableFieldVo> conditionList, List<TableFieldVo> valueList)
     {
 
         // 构建sql
@@ -85,22 +77,17 @@ public class BuildSqlUtils
         DbTable dbTable = schema.addTable(tableName);
         // 构建插入对象
         UpdateQuery updateQuery = new UpdateQuery(dbTable);
-        // 根据主键更新
-        for (TableFieldVo tableField : fieldList)
+        // 更新条件
+        for (TableFieldVo tableField : conditionList)
         {
-            if (tableField.getDbIsKey())
-            {
-                String pk = tableField.getDbFieldName();
-                DbColumn queryColumn = dbTable.addColumn(pk, TableFieldVoMap.get(pk).getDbType(), null);
-                updateQuery.addCondition(BinaryCondition.equalTo(queryColumn, paramMap.get(pk)));
-            }
+            DbColumn queryColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+            updateQuery.addCondition(BinaryCondition.equalTo(queryColumn, tableField.getObjValue()));
         }
         // 设置需要更新的字段
-        for (Map.Entry<String, TableFieldVo> entry : paramMap.entrySet())
+        for (TableFieldVo tableField : valueList)
         {
-            String dbFieldName = entry.getKey();
-            DbColumn dbColumn = dbTable.addColumn(dbFieldName, TableFieldVoMap.get(dbFieldName).getDbType(), null);
-            updateQuery.addSetClause(dbColumn, entry.getValue());
+            DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+            updateQuery.addSetClause(dbColumn, tableField.getObjValue());
         }
         String s = "";
         try
@@ -118,13 +105,13 @@ public class BuildSqlUtils
     /**
      * 构建 保存 sql
      *
-     * @param tableName
-     * @param paramMap
+     * @param tableName 表名
+     * @param valueList 保存值
      * @return String
      * @author 千面
      * @date 2022/6/15 11:05
      */
-    private String genSaveSql(String tableName, Map<String, TableFieldVo> paramMap)
+    public static String genSaveSql(String tableName, List<TableFieldVo> valueList)
     {
         // 构建sql
         DbSpec spec = new DbSpec();
@@ -134,15 +121,14 @@ public class BuildSqlUtils
         // 构建插入对象
         InsertQuery insertQuery = new InsertQuery(dbTable);
         // 设置参数
-        for (Map.Entry<String, TableFieldVo> entry : paramMap.entrySet())
+        for (TableFieldVo tableField : valueList)
         {
             // 页面取值
-            TableFieldVo fieldVo = entry.getValue();
-            if (fieldVo.getObjValue() != null)
+            if (tableField.getObjValue() != null)
             {
                 // 构建列表
-                DbColumn dbColumn = dbTable.addColumn(entry.getKey(), fieldVo.getDbType(), null);
-                insertQuery.addColumn(dbColumn, fieldVo.getObjValue());
+                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+                insertQuery.addColumn(dbColumn, tableField.getObjValue());
             }
         }
         String s = "";
@@ -159,15 +145,16 @@ public class BuildSqlUtils
     }
 
     /**
-     * 生成校验唯一键是否冲突
+     * 生成查询sql
      *
-     * @param tableName
-     * @param paramMap
+     * @param tableName     表名
+     * @param conditionList 查询条件
+     * @param selectColumn  查询的字段
      * @return void
      * @author 千面
      * @date 2022/6/17 11:02
      */
-    private String genCheckUniqueIndex(String tableName, Map<String, TableFieldVo> paramMap)
+    public static String genSelectSql(String tableName, List<TableFieldVo> conditionList, TableFieldVo... selectColumn)
     {
         // 构建sql
         DbSpec spec = new DbSpec();
@@ -175,18 +162,28 @@ public class BuildSqlUtils
         // 设置表名
         DbTable dbTable = schema.addTable(tableName);
         // 构建查询sql
-        SelectQuery selectQuery = new SelectQuery()
-                .addAllTableColumns(dbTable);
-
-        for (Map.Entry<String, TableFieldVo> entry : paramMap.entrySet())
+        SelectQuery selectQuery = new SelectQuery();
+        // 添加查询的字段
+        if (selectColumn != null)
         {
+            for (TableFieldVo tableField : selectColumn)
+            {
+                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+                selectQuery.addColumns(dbColumn);
+            }
+        }
+        else
+        {
+            selectQuery.addAllTableColumns(dbTable);
+        }
 
-            TableFieldVo fieldVo = entry.getValue();
-            if (fieldVo.getObjValue() != null)
+        for (TableFieldVo tableField : conditionList)
+        {
+            if (tableField.getObjValue() != null)
             {
                 // 构建列表
-                DbColumn dbColumn = dbTable.addColumn(entry.getKey(), fieldVo.getDbType(), null);
-                selectQuery.addCondition(BinaryCondition.equalTo(dbColumn, fieldVo.getObjValue()));
+                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+                selectQuery.addCondition(BinaryCondition.equalTo(dbColumn, tableField.getObjValue()));
             }
         }
         String sql = selectQuery.validate().toString();
