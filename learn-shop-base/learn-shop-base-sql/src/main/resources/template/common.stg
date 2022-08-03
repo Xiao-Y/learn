@@ -17,37 +17,3 @@ alterTableNameTemplate(oldTableName, newTableName) ::= <<
 truncateTableTemplate(tableName) ::= <<
     truncate <tableName>
 >>
-
-/* 创建表结构 */
-createTableTemplate(tableName,tableFieldVo) ::= <<
-CREATE TABLE <tableName> (
-    <tableFieldVo.tableFieldList : {column | `<column.dbFieldName>` <column.dbType><if(column.dbLength)>(<column.dbLength><if(column.dbPointLength)>,<column.dbPointLength><endif>)<endif><if(!column.dbIsNull)> NOT<endif> NULL<if(column.dbIsKey)> AUTO_INCREMENT<endif><if(column.haveDefaultValue)> DEFAULT <if(column.typeIsVar)>'<endif><column.dbDefaultVal><if(column.typeIsVar)>'<endif><endif> COMMENT '<column.dbFieldRemark>'};separator=",\n">
-    <if(tableFieldVo.hasIndex)>,<tableFieldVo.tableIndexList : {index | <if(index.uniqueIndex)><index.indexType><endif> KEY `<index.indexName>` (<index.indexFieldList : {fieldName | `<fieldName>`};separator=",">)};separator=",\n"><endif>
-    <if(tableFieldVo.primaryKeyField)>,PRIMARY KEY (<tableFieldVo.primaryKeyField>)<endif>
-) ENGINE=InnoDB AUTO_INCREMENT=0 COMMENT='<tableFieldVo.tableDesc>';
->>
-
-/* 新增字段 */
-addColumnTemplate(tableName, columns) ::= <<
-    <columns : {column |  ALTER TABLE <tableName> ADD COLUMN `<column.dbFieldName>` <column.dbType><if(column.dbLength)>(<column.dbLength><if(column.dbPointLength)>,<column.dbPointLength><endif>)<endif><if(!column.dbIsNull)> NOT<endif> NULL<if(column.haveDefaultValue)> DEFAULT <if(column.typeIsVar)>'<endif><column.dbDefaultVal><if(column.typeIsVar)>'<endif><endif> COMMENT '<column.dbFieldRemark>';}>
->>
-
-/* 变更字段名 */
-updateColumnNameTemplate(tableName, columns) ::= <<
-    <columns : {column |  ALTER TABLE <tableName> CHANGE `<column.dbFieldNameOld>` `<column.dbFieldName>` <column.dbType><if(column.dbLength)>(<column.dbLength><if(column.dbPointLength)>,<column.dbPointLength><endif>)<endif><if(!column.dbIsNull)> NOT<endif> NULL<if(column.haveDefaultValue)> DEFAULT <if(column.typeIsVar)>'<endif><column.dbDefaultVal><if(column.typeIsVar)>'<endif><endif> COMMENT '<column.dbFieldRemark>';}>
->>
-
-/* 变更字段其他 */
-updateColumnOtherTemplate(tableName, columns) ::= <<
-    <columns : {column |  ALTER TABLE <tableName> MODIFY COLUMN `<column.dbFieldName>` <column.dbType><if(column.dbLength)>(<column.dbLength><if(column.dbPointLength)>,<column.dbPointLength><endif>)<endif><if(!column.dbIsNull)> NOT<endif> NULL<if(column.haveDefaultValue)> DEFAULT <if(column.typeIsVar)>'<endif><column.dbDefaultVal><if(column.typeIsVar)>'<endif><endif> COMMENT '<column.dbFieldRemark>';}>
->>
-
-/* 新增索引 */
-addIndexTemplate(tableName, indexs) ::= <<
-    <indexs : {index |  ALTER TABLE <tableName> ADD <if(index.uniqueIndex)><index.indexType><else>INDEX<endif> <index.indexName> (<index.indexFieldList : {fieldName | `<fieldName>`};separator=",">);}>
->>
-
-/* 删除索引 */
-deleteIndexTemplate(tableName, indexs) ::= <<
-    <indexs : {index | ALTER TABLE <tableName> DROP INDEX <if(index.indexNameOld)>`<index.indexNameOld>`<else>`<index.indexName>`<endif>;}>
->>
