@@ -1,10 +1,11 @@
 package com.billow.sql.vo;
 
-import com.billow.sql.enums.FieldTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.sql.Types;
 
 /**
  * 字段信息对象
@@ -28,9 +29,9 @@ public class TableFieldVo
 
 
     /**
-     * 字段类型, varchar、bigint、double、decimal、datetime、text、blob
+     * 字段类型, {@link Types}
      */
-    private FieldTypeEnum dbType;
+    private int dbType;
 
 
     /**

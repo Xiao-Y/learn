@@ -41,7 +41,7 @@ public class BuildSqlUtils
         // 根据主键更新
         for (TableFieldVo tableField : conditionList)
         {
-            DbColumn queryColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+            DbColumn queryColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType(), null);
             deleteQuery.addCondition(BinaryCondition.equalTo(queryColumn, tableField.getObjValue()));
         }
         try
@@ -80,13 +80,13 @@ public class BuildSqlUtils
         // 更新条件
         for (TableFieldVo tableField : conditionList)
         {
-            DbColumn queryColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+            DbColumn queryColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType(), null);
             updateQuery.addCondition(BinaryCondition.equalTo(queryColumn, tableField.getObjValue()));
         }
         // 设置需要更新的字段
         for (TableFieldVo tableField : valueList)
         {
-            DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+            DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType(), null);
             updateQuery.addSetClause(dbColumn, tableField.getObjValue());
         }
         try
@@ -127,7 +127,7 @@ public class BuildSqlUtils
             if (tableField.getObjValue() != null)
             {
                 // 构建列表
-                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType(), null);
                 insertQuery.addColumn(dbColumn, tableField.getObjValue());
             }
         }
@@ -163,12 +163,12 @@ public class BuildSqlUtils
         DbTable dbTable = schema.addTable(tableName);
         // 构建查询sql
         SelectQuery selectQuery = new SelectQuery();
-        // 添加查询的字段
+        // 添加指定查询的字段
         if (selectColumn != null && selectColumn.length > 0)
         {
             for (TableFieldVo tableField : selectColumn)
             {
-                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType(), null);
                 selectQuery.addColumns(dbColumn);
             }
         }
@@ -182,7 +182,7 @@ public class BuildSqlUtils
             if (tableField.getObjValue() != null)
             {
                 // 构建列表
-                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType().getCode(), null);
+                DbColumn dbColumn = dbTable.addColumn(tableField.getDbFieldName(), tableField.getDbType(), null);
                 selectQuery.addCondition(BinaryCondition.equalTo(dbColumn, tableField.getObjValue()));
             }
         }
