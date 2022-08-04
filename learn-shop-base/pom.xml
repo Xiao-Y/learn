@@ -27,5 +27,6 @@
         <module>learn-shop-base-redis</module>
         <module>learn-shop-base-security</module>
         <module>learn-shop-base-notice</module>
+        <module>learn-shop-base-sql</module>
     </modules>
 </project>

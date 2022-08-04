@@ -1,0 +1,19 @@
+/** 判断指定表是否存在 **/
+judgeTableExistsTemplate(tableName) ::= <<
+    select count(*) from information_schema.tables where table_name ='<tableName>';
+>>
+
+/** 查询表的创建时间（yyyyMMdd） **/
+getTableCreateDateTemplate(tableName) ::= <<
+    select DATE_FORMAT(create_time,'%Y%m%d') from information_schema.tables where table_name ='<tableName>';
+>>
+
+/** 修改表名 **/
+alterTableNameTemplate(oldTableName, newTableName) ::= <<
+    alter table <oldTableName> rename to <newTableName>;
+>>
+
+/** 清空表数据 **/
+truncateTableTemplate(tableName) ::= <<
+    truncate <tableName>
+>>
