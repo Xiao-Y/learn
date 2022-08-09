@@ -43,7 +43,7 @@ public class RefreshEsConsumer {
         ConvertUtils.copyNonNullProperties(refreshEsDataVo, goodsInfoPoUpdate);
         if (!Objects.equals(SpuVerifyStatusEnum.APPROVED.getStatus(), refreshEsDataVo.getVerifyStatus())
                 || !Objects.equals(SpuPublishStatusEnum.UP.getStatus(), refreshEsDataVo.getPublishStatus())) {
-            log.info("状态不对，没有要刷新的数据...");
+            log.info("spuId:{} 状态不对，没有要刷新的数据...", refreshEsDataVo.getSpuId());
             return;
         }
         goodsInfoService.saveOrUpdate(goodsInfoPoUpdate);
