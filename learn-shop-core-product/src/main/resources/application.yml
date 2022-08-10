@@ -16,35 +16,3 @@ server:
 spring:
   application:
     name: learn-shop-core-product #客户端名称
-feign:
-  hystrix:
-    enabled: true
-  client:
-    config:
-      default:
-        read-timeout: 30000
-        connect-timeout: 5000
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000
-
-###### 支付宝配置 #####
-alipay:
-  scan:
-    appId: 2016082500310007
-    privateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDNNgoEcF2hTNWhaeOIMgSNf2OAyrOzmZo+/gKZelXaHsVkHgHg2PwJXXNlOkp5blERVxyxiwdzsRvdnC3Ul6UVbZHm+o2EPowYwZQ5CMiKnPBZ1n0fBi9v/XFmDXurz8OE+63rtfpl4ibKlTaJPh7gMX/krJ8JnSRzHxtVxhl6PI2S5wshWilWykOVmWKkayyu+0ulsOXw4GQHxxGiH0Q5k3g6m4MsDLRS+Pj7o9k0c0dCAr+riJcgxpBKZozAsezY6yhX8/eT0Q6oSFXblMuHg/GNwPAshR7RSWYp4XJWQSfN7Qvbz2d5giqpO/FXRiGz2yKPFIEaf01eGzzGXbxrAgMBAAECggEAXHsREqUNHSdCU4cj+noIITiawC0ZxUPhBqh0xXQjgrRBYvg/AnTnSNUrryAQ9h6oPDdVABJW3mWf2ESNRvS8eiayDTU3V7TUcEe1I+r4bbeCfgoywyuHb2H5m/NRm8F7LNA7tjGB0i6UKtIKDNnJEmJcb9L3rV57UcJgEEzBqJsYVqJGAH+51tELa+Nvoc/hjdAmdc/JQBPjKRSUMRbre7Hi2upA6eQf40JqZ7MewKumwAowkUPJAt1IXT9lZfinbOE6nGQLS4rfSQDtLpv34Ogkh1Q3p65wtIp8fNtj0BGWqKtS6ioK94HlAfapFmVIePpPzWxA3u3nNzU+7e7HkQKBgQD2TeBnYtvBA/3PJsJVKJRKd77ArSpBpIdvMmt5uNCdglVtxzBpXCQCTVbHhwD1k5geHqXxv941+JgZowALG+Ght/41ISNfBR23Wp5jQsF9rh/O3Zf6TP5YuCZkaaagKTDBvE25sQMvacfU2t4pwYFVFDgCl0QTxrzNAnXnn92IOQKBgQDVSgxCaqvFb4Y8YTCPL07XWWGNLm/RugtjIUWII5ivhE7O2oT+IFYIDdkQAYrQqk8dAYznncZSXUBMsp5UUTsRNN93sbv1/W3CJG4LLrtOxxfvIygGQ73K/KcwUcLfLqfKcnDFPC966062eCbaIiW2vES35/ga7ASrUp5n7EzBwwKBgFC+9RtPqHVdhp6buUfLttm26f0mh9zfQFsu71cHRLTuXm1PyMoxn8h1bEabNrBLg6oUKBjZ6tJMvihhbIk3yb+HnznxtDPZbIWImrY101MNe3YI5WL0TMnvDP8MN8j31/kbb2u54S5xAkcAvaZ4vpqSt036IyJMm+alsNuPaEPZAoGBAJPpwzC4GyFToyryV6Oksi9j2+P1xTQTqlv3semkjfmCbsjDACHgOOli+RpBh4wH38+EyLvDTcrGwpWt9WER6D2ZhjPSvT/tnZVagDofEWSja3S608Hsbo17w1IeEV+HUnNyA8S0ZVUAJFkkYAU8Ux0z2RAUvZml/eL168a0N9LTAoGBANpzvszR7wmQlDSDJaQgIU3jtSyxekf36uLpObdILnoDIQa9S17obIKFULqF/e16h/VmEZPJEBlWVGXzeTyXGOgF4VvqUJhKvGk3nPald48HK/OyKaH1VTdwKpk9VpNE3tHvnKAQVyOCEs5wvTYGZV8t98aS5pAk+0oPjLugCzJn
-    aliPayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7zmfFuPvlQm5+/xv0uNi46yAk3V/lwABSunI0NB5GFukfVIe1OoQw4Puv4NRfHO3gqCKcN0g+gt2vTaAm8JJN9dy4HKNlB6SuOGGPtblQdsmvrY64moOwY2tZL7LAm4eiRfo4eWSczA41pjS7iCtzxyUkJ9H/1/5mmvsrCQ9jhYnQ/Si7iuTniLzIejFUnM1vWQXHtT4qmQjjotXF+OSvoohBxW2s0DY6rWl62qoEB0xJkg4KGofjuNhEuAlFDgWDOfYKNXCXKeXVuEvzamKGsQmFFxSNQvu6AGn3qvPogsPdWxesLmh48Ayei9BRL8d4RNcjOzXOMLv59YKX1LErQIDAQAB
-    notifyUrl: http://1p7v403130.iask.in/notify
-    returnUrl: http://1p7v403130.iask.in/return
-    gatewayUrl: https://openapi.alipaydev.com/gateway.do # 沙箱
-#    gatewayUrl: https://openapi.alipay.com/gateway.do # 生产
-#    charset: UTF-8 #编码格式,默认：UTF-8
-#    signType: RSA2 #商户生成签名字符串所使用的签名算法类型,默认：RSA2
-mybatis-plus:
-  configuration:
-    cache-enabled: false
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

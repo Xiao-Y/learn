@@ -10,6 +10,7 @@ import com.billow.search.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @date 2022/8/9 9:30
  */
 @Slf4j
+@Component
 public class UpdateGoodsInfoPartBrandNameImpl implements UpdateTableData {
 
     @Autowired

@@ -22,17 +22,7 @@ spring:
     name: learn-cloud-gateway
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: ${config.gateway.static.locations}
-  rabbitmq:
-    host: ${config.mq.host} #rabbitMQ服务器地址
-    port: ${config.mq.port}  #rabbitMQ服务器端口
-    username: ${config.mq.username}
-    password: ${config.mq.password}
-    virtual-host: ${config.mq.virtual-host}
   cloud:
-    nacos:
-      discovery:
-        namespace: ${config.register.namespace} # 命名空间
-        server-addr: ${config.register.serverAddr} # 配置注册中心
     gateway:
       discovery:
         locator:

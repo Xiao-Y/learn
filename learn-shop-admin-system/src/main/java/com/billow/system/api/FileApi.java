@@ -139,15 +139,8 @@ public class FileApi extends BaseApi {
      */
     private Map<String, String> getFileBasePath(String uploadType) {
         CommonProperties common = customProperties.getCommon();
-        String baseFilePath = "";
+        String baseFilePath = common.getBaseFilePath();
         String filePath = "";
-
-        // D:/uploadfile
-        if (System.getProperty("os.name").toLowerCase().startsWith("win")) {  //如果是Windows系统
-            baseFilePath = common.getWin().getBaseFilePath();
-        } else {
-            baseFilePath = common.getLinux().getBaseFilePath();
-        }
 
         // markdown 的图片上传 /markdown
         if (CommonCst.UPLOAD_TYPE_MARKDOWN.equals(uploadType)) {

@@ -17,6 +17,7 @@ import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +29,7 @@ import java.util.Objects;
  * @date 2022/8/9 9:48
  */
 @Slf4j
+@Component
 public class UpdateGoodsInfoImpl implements UpdateTableData {
 
     @Autowired

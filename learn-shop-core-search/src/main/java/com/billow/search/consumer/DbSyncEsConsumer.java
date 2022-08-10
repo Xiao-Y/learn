@@ -35,7 +35,7 @@ public class DbSyncEsConsumer {
      * @since 2021-9-1 15:34
      */
     @Async("fxbDrawExecutor")
-    @RabbitListener(queues = "canal_queue")
+    @RabbitListener(queues = "${config.mq.queue.syncEs}")
     @RabbitHandler
     public void syncEs(String message) {
         log.info("mysql：{}", message);

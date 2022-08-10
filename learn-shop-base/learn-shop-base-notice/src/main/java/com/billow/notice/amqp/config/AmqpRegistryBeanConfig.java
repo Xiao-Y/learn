@@ -233,6 +233,7 @@ public class AmqpRegistryBeanConfig implements ApplicationContextAware
             mqSetting.setDurable(true);
         }
         // 注册 bean
+        // Queue(String name, boolean durable, boolean exclusive, boolean autoDelete, @Nullable Map<String, Object> arguments)
         return this.registerBean(queueName, Queue.class, queueName, mqSetting.getDurable(),
                 false, false, arguments);
     }

@@ -9,9 +9,13 @@ import lombok.Data;
 @Data
 public class CommonProperties {
 
-    LinuxProperties linux = new LinuxProperties();
-
-    WinProperties win = new WinProperties();
+    /**
+     * 文档中图片保存的 Base 路径
+     *
+     * @author LiuYongTao
+     * @date 2019/7/26 17:16
+     */
+    private String baseFilePath;
 
     /**
      * 映射处理的路径，当 url 中有 /displayImag 时，资源映射到 D:/temp-rainy/

@@ -14,26 +14,3 @@ server:
 spring:
   application:
       name: learn-shop-public-auth
-  jpa: #JPA配置
-    generate-ddl: false
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-auth:
-  token:
-    alias: jwt
-    jwtFileName: jwt.jks
-    jwtPassword: 123456789
-  white-list:
-    - "/rsa/publicKey" # 获取公钥
-# 日志
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
