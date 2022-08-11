@@ -11,9 +11,9 @@
     <template #origin-price>
       <span v-html="$options.filters.priceOldFormatStyle(goodsItem.lowPrice)"></span>
     </template>
-    <template #title>
-      <span class="van-card__goodsname">{{ goodsItem.goodsName }}/{{ goodsItem.subTitle }}</span>
-    </template>
+<!--    <template #title>-->
+<!--      <span class="van-card__goodsname">{{ goodsItem.goodsName }}/{{ goodsItem.subTitle }}</span>-->
+<!--    </template>-->
     <template #desc>
       <span class="van-card__detail">{{ goodsItem.detailTitle }}</span>
     </template>
@@ -105,7 +105,7 @@ export default {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   line-height: 1.7em;
 }
 
