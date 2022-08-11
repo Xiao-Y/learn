@@ -14,8 +14,8 @@
     <springProperty name="rabbitmqVirtualHost" source="config.mq.virtual-host"/>
     <springProperty name="rabbitmqUsername" source="config.mq.username"/>
     <springProperty name="rabbitmqPassword" source="config.mq.password"/>
-    <springProperty name="rabbitmqExchange" source="config.mq.logCollect.exchange"/>
-    <springProperty name="rabbitmqRouteKey" source="config.mq.logCollect.routeKey"/>
+    <springProperty name="rabbitmqExchange" source="notice.mq.mq-collect.log-collect.exchange"/>
+    <springProperty name="rabbitmqRouteKey" source="notice.mq.mq-collect.log-collect.route-key"/>
     <springProperty name="rabbitmqLogLevel" source="config.mq.log-level"/>
 
     <!-- 彩色日志 -->
@@ -176,7 +176,7 @@
         <declareExchange>false</declareExchange>
         <generateId>true</generateId>
         <charset>UTF-8</charset>
-        <durable>false</durable>
+        <durable>true</durable>
         <deliveryMode>NON_PERSISTENT</deliveryMode>
         <!-- 日志级别 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">

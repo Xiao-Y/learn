@@ -28,22 +28,11 @@ public class CustomWebAppConfigurer extends WebMvcConfigurerAdapter {
         String markdownImgPath = common.getMarkdownImgPath();
         // user icon /usericon
         String userIconImgPath = common.getUserIconImgPath();
-        // 获取系统类型
-        String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {  //如果是Windows系统
-            // markdown
-            registry.addResourceHandler(imageMapping + markdownImgPath + "/**")
-                    .addResourceLocations("file:" + common.getWin().getBaseFilePath() + markdownImgPath + "/");
-            // user icon
-            registry.addResourceHandler(imageMapping + userIconImgPath + "/**")
-                    .addResourceLocations("file:" + common.getWin().getBaseFilePath() + userIconImgPath + "/");
-        } else {//linux 和mac
-            // markdown
-            registry.addResourceHandler(imageMapping + markdownImgPath + "/**")
-                    .addResourceLocations("file:" + common.getLinux().getBaseFilePath() + markdownImgPath + "/");
-            // user icon
-            registry.addResourceHandler(imageMapping + userIconImgPath + "/**")
-                    .addResourceLocations("file:" + common.getLinux().getBaseFilePath() + userIconImgPath + "/");
-        }
+        // markdown
+        registry.addResourceHandler(imageMapping + markdownImgPath + "/**")
+                .addResourceLocations("file:" + common.getBaseFilePath() + markdownImgPath + "/");
+        // user icon
+        registry.addResourceHandler(imageMapping + userIconImgPath + "/**")
+                .addResourceLocations("file:" + common.getBaseFilePath() + userIconImgPath + "/");
     }
 }

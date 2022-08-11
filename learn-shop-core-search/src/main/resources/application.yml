@@ -16,23 +16,3 @@ server:
 spring:
   application:
     name: learn-shop-core-search
-  elasticsearch:
-    rest:
-      connection-timeout: 10s
-      uris:
-        - http://192.168.137.200:9200
-feign:
-  hystrix:
-    enabled: true
-  client:
-    config:
-      default:
-        read-timeout: 30000
-        connect-timeout: 5000
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000

@@ -16,7 +16,3 @@ server:
 spring:
   application:
     name: learn-shop-core-order #客户端名称
-mybatis-plus:
-  configuration:
-    cache-enabled: false
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

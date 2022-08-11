@@ -16,28 +16,8 @@ server:
 spring:
   application:
     name: learn-shop-admin-user #客户端名称
-#  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-#    static-locations: file:///D:/project/IDEAProjects/learn/learn-shop-ui-admin
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: update
-  cloud:
-    bus:
-      trace:
-        enabled: true #开启消息跟踪
-# 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
-ribbon:
-  ReadTimeout: 15000
-  ConnectTimeout: 10000
-
-# 显示 sql 的查询参数
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE

@@ -8,6 +8,7 @@ import com.billow.search.pojo.vo.RefreshEsDataVo;
 import com.billow.search.service.GoodsInfoService;
 import com.billow.tools.utlis.ConvertUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ public class RefreshEsConsumer {
     @Async("fxbDrawExecutor")
     @RabbitListener(queues = "${notice.mq.mq-collect.refresh-es.queue}")
     @RabbitHandler
-    public void refreshEs(String message) {
-        log.info("获取的信息：{}", message);
-        RefreshEsDataVo refreshEsDataVo = JSON.parseObject(message, RefreshEsDataVo.class);
+    public void refreshEs(Message message) {
+        RefreshEsDataVo refreshEsDataVo = JSON.parseObject(message.getBody(), RefreshEsDataVo.class);
+        log.info("获取的信息：{}", refreshEsDataVo);
         if (Objects.isNull(refreshEsDataVo) || Objects.isNull(refreshEsDataVo.getSpuId())) {
             log.info("SpuId 为空，没有要刷新的数据...");
             return;
@@ -43,7 +44,7 @@ public class RefreshEsConsumer {
         ConvertUtils.copyNonNullProperties(refreshEsDataVo, goodsInfoPoUpdate);
         if (!Objects.equals(SpuVerifyStatusEnum.APPROVED.getStatus(), refreshEsDataVo.getVerifyStatus())
                 || !Objects.equals(SpuPublishStatusEnum.UP.getStatus(), refreshEsDataVo.getPublishStatus())) {
-            log.info("状态不对，没有要刷新的数据...");
+            log.info("spuId:{} 状态不对，没有要刷新的数据...", refreshEsDataVo.getSpuId());
             return;
         }
         goodsInfoService.saveOrUpdate(goodsInfoPoUpdate);

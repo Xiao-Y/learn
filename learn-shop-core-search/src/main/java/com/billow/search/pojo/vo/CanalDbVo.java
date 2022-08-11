@@ -2,6 +2,7 @@ package com.billow.search.pojo.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  * @since 2021-9-2 8:20
  */
 @Data
-public class CanalDbVo {
+public class CanalDbVo implements Serializable {
 
     /**
      * 消息id

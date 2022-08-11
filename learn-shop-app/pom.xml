@@ -17,6 +17,14 @@
     <dependencies>
         <dependency>
             <groupId>com.billow</groupId>
+            <artifactId>learn-cloud-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-notice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
             <artifactId>core-product-interface</artifactId>
         </dependency>
         <dependency>
