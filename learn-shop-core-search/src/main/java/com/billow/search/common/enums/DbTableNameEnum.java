@@ -15,9 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 @AllArgsConstructor
 public enum DbTableNameEnum {
 
-    TABLE_PMS_GOODS_SPU(DbTableNameConstant.TABLE_PMS_GOODS_SPU, StrUtil.lowerFirst(UpdateGoodsInfoImpl.class.getSimpleName())),
-    TABLE_PMS_GOODS_CATEGORY(DbTableNameConstant.TABLE_PMS_GOODS_CATEGORY, StrUtil.lowerFirst(UpdateGoodsInfoPartBrandNameImpl.class.getSimpleName())),
-    TABLE_PMS_GOODS_BRAND(DbTableNameConstant.TABLE_PMS_GOODS_BRAND, StrUtil.lowerFirst(UpdateGoodsInfoPartCategoryNameImpl.class.getSimpleName())),
+    PMS_GOODS_SPU(DbTableNameConstant.TABLE_PMS_GOODS_SPU, StrUtil.lowerFirst(UpdateGoodsInfoImpl.class.getSimpleName())),
+    PMS_GOODS_CATEGORY(DbTableNameConstant.TABLE_PMS_GOODS_CATEGORY, StrUtil.lowerFirst(UpdateGoodsInfoPartBrandNameImpl.class.getSimpleName())),
+    PMS_GOODS_BRAND(DbTableNameConstant.TABLE_PMS_GOODS_BRAND, StrUtil.lowerFirst(UpdateGoodsInfoPartCategoryNameImpl.class.getSimpleName())),
     ;
 
     private String tableName;

@@ -6,10 +6,10 @@ import com.billow.search.common.enums.DbTableNameEnum;
 import com.billow.search.consumer.handle.UpdateTableData;
 import com.billow.search.pojo.vo.CanalDbVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -34,12 +34,11 @@ public class DbSyncEsConsumer {
      * @author liuyongtao
      * @since 2021-9-1 15:34
      */
-    @Async("fxbDrawExecutor")
     @RabbitListener(queues = "${config.mq.queue.syncEs}")
     @RabbitHandler
-    public void syncEs(String message) {
-        log.info("mysql：{}", message);
-        CanalDbVo canalDbVo = JSON.parseObject(message, CanalDbVo.class);
+    public void syncEs(Message message) {
+        CanalDbVo canalDbVo = JSON.parseObject(message.getBody(), CanalDbVo.class);
+        log.info("mysql：{}", canalDbVo);
         if (!CrudConstant.UPDATE.equalsIgnoreCase(canalDbVo.getType())
                 && !CrudConstant.INSERT.equalsIgnoreCase(canalDbVo.getType())
                 && !CrudConstant.DELETE.equalsIgnoreCase(canalDbVo.getType())) {
