@@ -53,6 +53,19 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
         </dependency>
+        <!-- skywalking链路追踪 -->
+        <!-- 如果想在项目代码中获取链路TraceId，则需要引入此依赖 -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+            <version>9.2.0</version>
+        </dependency>
+        <!-- skywalking logback日志插件 -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-logback-1.x</artifactId>
+            <version>9.2.0</version>
+        </dependency>
     </dependencies>
 
     <build>

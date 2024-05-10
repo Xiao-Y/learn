@@ -6,6 +6,7 @@ import com.billow.tools.constant.CommonCst;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
 import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
@@ -108,7 +109,8 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 //        if (body instanceof String) {
 //            return JSONObject.toJSONString(BaseResponse.success(body));
 //        }
-        baseResponse.setTraceID(MDC.get(CommonCst.LOG_TRACE_ID));
+//        baseResponse.setTraceID(MDC.get(CommonCst.LOG_TRACE_ID));
+        baseResponse.setTraceID(TraceContext.traceId());
         return baseResponse;
     }
 }
