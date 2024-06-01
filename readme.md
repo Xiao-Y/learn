@@ -86,6 +86,10 @@
 
 - 添加新服务时，要在 `learn-cloud-gateway` 中添加路由表
 
+- 首次启动修改 `learn-shop-admin-system.yml` 中的 `database-schema-update` 为 true，自动建表
+
+- 首次启动修改 `learn-shop-admin-system.yml` 中的 `start-init-data` 为 true，加载缓存
+
 ```yaml
 core-order:
   path: /core-order/**

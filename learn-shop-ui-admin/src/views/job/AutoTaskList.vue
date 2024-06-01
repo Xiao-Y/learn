@@ -142,7 +142,7 @@
             <div style="float:left;margin-left:10px;">
               <el-tooltip class="item" effect="dark" content="立即执行" placement="top-start" :open-delay="1500">
                 <el-button type="success" size="mini" @click="handleImmediate(scope.row,scope.$index)"
-                           :disabled="!scope.row.validInd || scope.row.jobStatus == '0'">
+                           :disabled="!scope.row.validInd">
                   <i class="el-icon-success"></i>
                 </el-button>
               </el-tooltip>

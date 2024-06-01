@@ -1,10 +1,10 @@
 package com.billow.system.common.init.impl;
 
+import com.billow.redis.util.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
-import com.billow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,13 +40,16 @@ public class InitDictionary implements IStartLoading {
             List<DataDictionaryPo> dataDictionaryPos = dataDictionaryService.list();
             // 以 getFieldType 分组
             Map<String, List<DataDictionaryPo>> collect = dataDictionaryPos.stream()
-                    .collect(Collectors.groupingBy(DataDictionaryPo::getFieldType));
+                    .collect(Collectors.groupingBy(DataDictionaryPo::getSystemModule));
             // 排序
             for (Map.Entry<String, List<DataDictionaryPo>> entry : collect.entrySet()) {
-                List<DataDictionaryPo> pos = entry.getValue();
-                pos.sort(Comparator.nullsLast(Comparator.comparing(DataDictionaryPo::getFieldOrder)));
+                Map<String, List<DataDictionaryPo>> fieldTypeList = entry.getValue().stream()
+                        .collect(Collectors.groupingBy(DataDictionaryPo::getFieldType));
+                for (Map.Entry<String, List<DataDictionaryPo>> entry2 : fieldTypeList.entrySet()) {
+                    entry2.getValue().sort(Comparator.nullsLast(Comparator.comparing(DataDictionaryPo::getFieldOrder)));
+                }
+                redisUtils.setHash(RedisCst.COMM_DICTIONARY_FIELD_TYPE + ":" + entry.getKey(), fieldTypeList);
             }
-            redisUtils.setHash(RedisCst.COMM_DICTIONARY_FIELD_TYPE, collect);
             log.info("======== end init Dictionary....");
         });
         return true;

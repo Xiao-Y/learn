@@ -1,13 +1,12 @@
 package com.billow.system.common.init.impl;
 
+import com.billow.redis.util.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RolePo;
-import com.billow.system.common.properties.CustomProperties;
 import com.billow.system.service.MenuService;
 import com.billow.system.service.RoleService;
 import com.billow.tools.constant.RedisCst;
-import com.billow.redis.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,8 +33,6 @@ public class InitRoleMenu implements IStartLoading {
     private RoleService roleService;
     @Autowired
     private MenuService menuService;
-    @Autowired
-    private CustomProperties customProperties;
     @Resource(name = "fxbDrawExecutor")
     private ExecutorService executorService;
 
@@ -43,10 +40,6 @@ public class InitRoleMenu implements IStartLoading {
     public boolean init() {
         log.info("======== start init Role Menu....");
         executorService.execute(() -> {
-            if (!customProperties.getMenu().isWriteCache()) {
-                log.info("======== end not init Role Menu....");
-                return;
-            }
             Map<String, List<MenuPo>> map = new HashMap<>();
             List<RolePo> rolePos = roleService.list();
             for (RolePo rolePo : rolePos) {

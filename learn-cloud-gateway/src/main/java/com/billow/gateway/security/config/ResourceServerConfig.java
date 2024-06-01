@@ -1,17 +1,24 @@
 package com.billow.gateway.security.config;
 
 import cn.hutool.core.util.ArrayUtil;
+import com.alibaba.fastjson.JSON;
 import com.billow.gateway.security.component.RestAuthenticationEntryPoint;
 import com.billow.gateway.security.component.RestfulAccessDeniedHandler;
 import com.billow.gateway.security.constant.AuthConstant;
 import com.billow.gateway.security.properties.SecurityProperties;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
@@ -20,11 +27,13 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * 资源服务器配置
  */
+@Slf4j
 @AllArgsConstructor
 @Configuration
 @EnableWebFluxSecurity
@@ -51,6 +60,20 @@ public class ResourceServerConfig {
             //白名单配置
             http.authorizeExchange().pathMatchers(ArrayUtil.toArray(whiteList, String.class)).permitAll();
         }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication instanceof UsernamePasswordAuthenticationToken) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+            log.info("当前登陆用户的角色：", JSON.toJSONString(authorities));
+            // 如果是 admin 直接放行
+            if (authorities != null && authorities.contains("ADMIN")) {
+                http.authorizeExchange()
+                        .pathMatchers("/**")
+                        .permitAll();
+            }
+        }
+
         // 要权限的
         List<String> needCheck = securityProperties.getNeedCheck();
         http.authorizeExchange()

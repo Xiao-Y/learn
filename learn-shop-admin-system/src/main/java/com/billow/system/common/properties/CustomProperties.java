@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "custom")
 public class CustomProperties {
 
-    private SecurityProperties security = new SecurityProperties();
+//    private SecurityProperties security = new SecurityProperties();
 
-    private MenuProperties menu = new MenuProperties();
+//    private MenuProperties menu = new MenuProperties();
 
     private CommonProperties common = new CommonProperties();
 

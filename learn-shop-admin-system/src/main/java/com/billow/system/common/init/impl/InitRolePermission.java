@@ -41,11 +41,9 @@ public class InitRolePermission implements IStartLoading {
     public boolean init() {
         log.info("======== start init Role Permission....");
         executorService.execute(() -> {
-            Map<String, List<PermissionPo>> map = new HashMap<>();
             List<RolePo> rolePos = roleService.list();
             for (RolePo rolePo : rolePos) {
                 Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
-//                map.put(rolePo.getRoleCode(), new ArrayList<>(permissionPos));
                 rolePermissionRedisKit.setRolePermission(new ArrayList<>(permissionPos), rolePo.getRoleCode());
             }
             log.info("======== end init Role Permission....");
