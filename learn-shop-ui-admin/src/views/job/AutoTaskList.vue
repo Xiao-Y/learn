@@ -97,8 +97,8 @@
                 <el-switch v-model="props.row.isConcurrent" active-text="串行" active-value="0" inactive-text="并行"
                            inactive-value="1" disabled></el-switch>
               </el-form-item>
-              <el-form-item label="有效状态">
-                <el-switch v-model="props.row.validInd" active-text="有效" inactive-text="无效" disabled></el-switch>
+              <el-form-item label="启用/停止">
+                <el-switch v-model="props.row.validInd" active-text="启用" inactive-text="停止" disabled></el-switch>
               </el-form-item>
               <el-form-item label="异常停止">
                 <el-switch v-model="props.row.isExceptionStop" active-text="是" inactive-text="否" disabled></el-switch>
@@ -106,14 +106,14 @@
               <el-form-item label="是否记录日志">
                 <el-switch v-model="props.row.isSaveLog" active-text="是" inactive-text="否" disabled></el-switch>
               </el-form-item>
-              <el-form-item label="是否发送邮件">
-                <custom-select v-model="props.row.isSendMail"
-                               :datasource="sendMailSelect"
+              <el-form-item label="是否发送消息">
+                <custom-select v-model="props.row.isSendInfo"
+                               :datasource="isSendInfo"
                                placeholder="请选择是否发送邮件"
                                disabled>
                 </custom-select>
               </el-form-item>
-              <template v-if="props.row.isSendMail != '0'">
+              <template v-if="props.row.isSendInfo != '0'">
                 <el-form-item label="邮件模板">
                   <custom-sel-mail-template v-model="props.row.templateId" :input-read-only="true"
                                             :button-disabled="true"></custom-sel-mail-template>
@@ -218,7 +218,7 @@
         tableData: [],
         activeNames: ['1'],
         systemModuleSelect: [],// 系统模块的下拉数据源
-        sendMailSelect: [],// 是否发送邮件下拉数据源
+        isSendInfo: [],// 是否发送消息下拉数据源
         classTypeSelect: [],// 运行类型下拉数据源
         dialogTableVisible: false,// 打开日志窗口
         tableTitle: '',// 执行日志
@@ -242,8 +242,8 @@
       LoadSysDataDictionary('systemModule').then(res => {
         this.systemModuleSelect = res.resData;
       });
-      LoadJobDataDictionary('sendMailType').then(res => {
-        this.sendMailSelect = res.resData;
+      LoadJobDataDictionary('isSendInfo').then(res => {
+        this.isSendInfo = res.resData;
       });
       LoadJobDataDictionary('classType').then(res => {
         this.classTypeSelect = res.resData;
@@ -293,7 +293,7 @@
           query: {
             optionType: 'add',
             systemModuleSelect: JSON.stringify(this.systemModuleSelect),
-            sendMailSelect: JSON.stringify(this.sendMailSelect),
+            isSendInfo: JSON.stringify(this.isSendInfo),
             classTypeSelect: JSON.stringify(this.classTypeSelect)
           }
         });
@@ -311,7 +311,7 @@
             optionType: 'edit',
             autoTaskEdit: JSON.stringify(row),
             systemModuleSelect: JSON.stringify(this.systemModuleSelect),
-            sendMailSelect: JSON.stringify(this.sendMailSelect),
+            isSendInfo: JSON.stringify(this.isSendInfo),
             classTypeSelect: JSON.stringify(this.classTypeSelect)
           }
         });

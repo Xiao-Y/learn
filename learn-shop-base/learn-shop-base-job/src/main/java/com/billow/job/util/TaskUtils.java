@@ -187,7 +187,7 @@ public class TaskUtils {
             }
         }
 
-        if (!JobCst.JOB_FC_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendMail())) {
+        if (!JobCst.JOB_FC_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendInfo())) {
             try {
                 MailEx mailEx = new MailEx();
                 mailEx.setJobId(scheduleJob.getId());

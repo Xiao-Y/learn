@@ -87,14 +87,14 @@
             <el-switch v-model="autoTaskInfo.isSaveLog" active-text="是"
                        inactive-text="否"></el-switch>
           </el-form-item>
-          <el-form-item label="是否发送邮件" prop="isSendMail">
-            <custom-select v-model="autoTaskInfo.isSendMail"
-                           :datasource="sendMailSelect"
+          <el-form-item label="是否发送消息" prop="isSendInfo">
+            <custom-select v-model="autoTaskInfo.isSendInfo"
+                           :datasource="isSendInfo"
                            @change="checkSendMail"
-                           placeholder="请选择是否发送邮件">
+                           placeholder="请选择是否发送消息">
             </custom-select>
           </el-form-item>
-          <template v-if="autoTaskInfo.isSendMail != '0'">
+          <template v-if="autoTaskInfo.isSendInfo != '0'">
             <el-form-item label="邮件接收人" prop="mailReceive">
               <el-col :span="18">
                 <el-input type="textarea" v-model="autoTaskInfo.mailReceive" placeholder="优先使用指定的收件人,多个接收人用英文封号分割开"></el-input>
@@ -152,7 +152,7 @@
           jobGroup: "admin-system",
           jobStatus: "1",
           isConcurrent: "1",
-          isSendMail: "0",
+          isSendInfo: "0",
           mailReceive: '',
           cronExpression: "",
           classType: "1",
@@ -164,7 +164,7 @@
           isExceptionStop:true,
         },
         systemModuleSelect: [],
-        sendMailSelect: [],
+        isSendInfo: [],
         classTypeSelect: [],
         routeInfoSelect: [],
         rulesForm: {
@@ -184,7 +184,7 @@
     created() {
       this.optionType = this.$route.query.optionType;
       this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
-      this.sendMailSelect = JSON.parse(this.$route.query.sendMailSelect);
+      this.isSendInfo = JSON.parse(this.$route.query.isSendInfo);
       this.classTypeSelect = JSON.parse(this.$route.query.classTypeSelect);
       if (this.optionType === 'edit') {
         this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
@@ -250,7 +250,7 @@
       },
       checkSendMail() {
         // 不发送邮件时
-        if (this.autoTaskInfo.isSendMail === '0') {
+        if (this.autoTaskInfo.isSendInfo === '0') {
           this.autoTaskInfo.mailReceive = null;
           this.autoTaskInfo.templateId = null;
         }

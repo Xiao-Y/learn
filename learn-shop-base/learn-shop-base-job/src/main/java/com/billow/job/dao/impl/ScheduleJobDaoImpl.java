@@ -27,18 +27,18 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
 
     private static String columnSql = " creator_code,updater_code,create_time,update_time,valid_ind,job_name,job_group," +
             "job_status,cron_expression,description,class_type,run_class,http_url,routing_key,is_concurrent,method_name," +
-            "is_exception_stop,is_save_log,is_send_mail,template_id,mail_receive ";
+            "is_exception_stop,is_save_log,is_send_info,template_id,mail_receive ";
 
     private static String columnSql2 = " id,creator_code as creatorCode,updater_code as updaterCode,create_time as createTime," +
             "update_time as updateTime,valid_ind as validInd,job_name as jobName,job_group as jobGroup," +
             "job_status as jobStatus,cron_expression as cronExpression,description,class_type as classType," +
             "run_class as runClass,http_url as httpUrl,routing_key as routingKey,is_concurrent as isConcurrent," +
             "method_name as methodName, is_exception_stop as isExceptionStop,is_save_log as isSaveLog," +
-            "is_send_mail as isSendMail,template_id as templateId,mail_receive as mailReceive ";
+            "is_send_info as isSendInfo,template_id as templateId,mail_receive as mailReceive ";
 
     private static String updateSql = " updater_code = ?,update_time = ?,valid_ind = ?,job_name = ?,job_group = ?," +
             "job_status = ?,cron_expression = ?,description = ?,class_type = ?,run_class = ?,http_url = ?,routing_key = ?,is_concurrent = ?,method_name = ?," +
-            "is_exception_stop = ?,is_save_log = ?,is_send_mail = ?,template_id = ?,mail_receive = ? ";
+            "is_exception_stop = ?,is_save_log = ?,is_send_info = ?,template_id = ?,mail_receive = ? ";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -100,7 +100,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
             ps.setString(16, scheduleJobPo.getMethodName());
             ps.setBoolean(17, scheduleJobPo.getIsExceptionStop());
             ps.setBoolean(18, scheduleJobPo.getIsSaveLog());
-            ps.setString(19, scheduleJobPo.getIsSendMail());
+            ps.setString(19, scheduleJobPo.getIsSendInfo());
             ps.setObject(20, scheduleJobPo.getTemplateId());
             ps.setString(21, scheduleJobPo.getMailReceive());
             return ps;
@@ -130,7 +130,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
 
                 scheduleJobPo.getIsExceptionStop(),
                 scheduleJobPo.getIsSaveLog(),
-                scheduleJobPo.getIsSendMail(),
+                scheduleJobPo.getIsSendInfo(),
                 scheduleJobPo.getTemplateId(),
                 scheduleJobPo.getMailReceive(),
                 scheduleJobPo.getId());
@@ -192,9 +192,9 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
             sql += " and class_type = ? ";
             queryParam.add(scheduleJobPo.getClassType());
         }
-        if (ToolsUtils.isNotEmpty(scheduleJobPo.getIsSendMail())) {
-            sql += " and is_send_mail = ? ";
-            queryParam.add(scheduleJobPo.getIsSendMail());
+        if (ToolsUtils.isNotEmpty(scheduleJobPo.getIsSendInfo())) {
+            sql += " and is_send_info = ? ";
+            queryParam.add(scheduleJobPo.getIsSendInfo());
         }
         if (scheduleJobPo.getIsExceptionStop() != null) {
             sql += " and is_exception_stop = ? ";
