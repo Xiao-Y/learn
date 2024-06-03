@@ -77,3 +77,12 @@ export const CheckAutoTask = data => requestUtils.post(baseUrl + '/checkAutoTask
  * @constructor
  */
 export const LoadDataJobLogList = data => requestUtils.post(baseUrl + '/findAutoTaskLog', Object.assign(data));
+
+/**
+ * 根据任务id,查询自动任务
+ * @param jobId id
+ * @param validInd
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const findAutoTaskById = jobId => requestUtils.get(baseUrl + '/findAutoTaskById/' + jobId);

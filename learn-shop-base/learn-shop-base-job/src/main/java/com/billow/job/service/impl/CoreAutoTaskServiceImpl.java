@@ -32,7 +32,7 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
             scheduleJobVo.setValidInd(dto.getValidInd());
             if (scheduleJobVo.getValidInd()) {
                 // 有效状态时，job 的状态保持不变
-                dto.setJobStatus(scheduleJobVo.getJobStatus());
+                dto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_RESUME.getStatus());
             } else {
                 // 无效时，暂停job
                 dto.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_PAUSE.getStatus());
@@ -163,6 +163,11 @@ public class CoreAutoTaskServiceImpl implements CoreAutoTaskService {
     @Override
     public void immediateExecutionTask(ScheduleJobVo scheduleJobVo) throws Exception {
         quartzManager.runAJobNow(scheduleJobVo);
+    }
+
+    @Override
+    public ScheduleJobVo findAutoTaskById(String jobId) {
+        return scheduleJobService.findById(jobId);
     }
 
 //    @Override

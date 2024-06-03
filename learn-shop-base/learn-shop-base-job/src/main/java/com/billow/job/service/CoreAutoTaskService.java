@@ -61,6 +61,16 @@ public interface CoreAutoTaskService {
      */
     void immediateExecutionTask(ScheduleJobVo scheduleJobVo) throws Exception;
 
+    /**
+     * 根据任务id,查询自动任务
+     *
+     * @param jobId
+     * @return ScheduleJobVo
+     * @author 千面
+     * @date 2024/6/3 11:43
+     */
+    ScheduleJobVo findAutoTaskById(String jobId);
+
 //    /**
 //     * 插入自动任务中异常信息并且信息自动任务标识为异常
 //     *

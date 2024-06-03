@@ -178,6 +178,7 @@ public class TaskUtils {
                 ScheduleJobVo scheduleJobVo = scheduleJobService.findByIdAndValidIndIsTrueAndIsStopIsTrue(scheduleJob.getId());
                 if (scheduleJobVo != null) {
                     scheduleJobVo.setJobStatus(AutoTaskJobStatusEnum.JOB_STATUS_EXCEPTION.getStatus());
+                    scheduleJobVo.setValidInd(false);
                     scheduleJobVo.setUpdaterCode(USER_CODE);
                     scheduleJobService.updateById(scheduleJobVo);
                 }

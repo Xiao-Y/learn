@@ -13,10 +13,10 @@ public enum AutoTaskJobStatusEnum {
      * 任务状态,1-启用
      */
     JOB_STATUS_RESUME("1", "启用"),
-    /**
-     * 任务状态,2-删除
-     */
-    JOB_STATUS_DELETE("2", "删除"),
+//    /**
+//     * 任务状态,2-删除
+//     */
+//    JOB_STATUS_DELETE("2", "删除"),
     /**
      * 任务状态,3-异常
      */

@@ -22,7 +22,6 @@ import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -141,11 +140,11 @@ public class QuartzManager {
      * @date 2019/8/16 11:11
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void resumeJob(ScheduleJobVo scheduleJob) throws SchedulerException {
+    public void resumeJob(ScheduleJobVo scheduleJob) throws Exception {
         String jobGroup = scheduleJob.getJobGroup();
         String jobName = scheduleJob.getJobName();
         if (!this.checkJob(jobName, jobGroup)) {
-            return;
+            this.addJob(scheduleJob);
         }
 
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
@@ -247,7 +246,7 @@ public class QuartzManager {
             return;
         }
         // 检查cron表达式是否为空
-        if(ToolsUtils.isEmpty(job.getCronExpression())){
+        if (ToolsUtils.isEmpty(job.getCronExpression())) {
             log.warn("CronExpression 为空，不通创建触发器，添加 Job");
             return;
         }

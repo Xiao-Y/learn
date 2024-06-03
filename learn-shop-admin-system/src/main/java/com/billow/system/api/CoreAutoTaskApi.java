@@ -1,6 +1,7 @@
 package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
+import com.billow.common.utils.UserTools;
 import com.billow.job.common.CustomPage;
 import com.billow.job.pojo.ex.TestRunCronEx;
 import com.billow.job.pojo.po.ScheduleJobLogPo;
@@ -12,7 +13,6 @@ import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.TaskUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.billow.common.utils.UserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -121,4 +122,10 @@ public class CoreAutoTaskApi extends BaseApi {
     }
 
 
+    @ApiOperation("根据任务id,查询自动任务")
+    @ApiParam(name = "jobId", value = "自动任务id")
+    @GetMapping("/findAutoTaskById/{jobId}")
+    public ScheduleJobVo findAutoTaskById(@PathVariable("jobId") String jobId) {
+       return coreAutoTaskService.findAutoTaskById(jobId);
+    }
 }

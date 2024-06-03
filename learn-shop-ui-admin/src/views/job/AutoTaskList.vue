@@ -137,13 +137,11 @@
             <!--  操作按钮组 -->
             <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
                                  @onEdit="handleEdit(scope.row,scope.$index)"
-                                 @onInd="handleProhibit(scope.row,scope.$index)"
                                  :show-ind="false"></button-group-option>
             <div style="float:left;margin-left:10px;">
-              <el-tooltip class="item" effect="dark" :content="scope.row.validInd ? '禁用' : '启用'" placement="top-start" :open-delay="700">
-                <el-button type="success" size="mini" @click="handleCust(scope.row,scope.$index)">
-                  <i class="el-icon-success" v-show="!scope.row.validInd"></i>
-                  <i class="el-icon-warning" v-show="scope.row.validInd"></i>
+              <el-tooltip class="item" effect="dark" :content="scope.row.validInd ? '停止' : '启用'" placement="top-start" :open-delay="700">
+                <el-button :type="scope.row.validInd? 'warning' : 'success'" size="mini" @click="handleCust(scope.row,scope.$index)">
+                  <i :class="scope.row.validInd ? 'el-icon-warning' :'el-icon-success'"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="立即执行" placement="top-start" :open-delay="700">
@@ -276,17 +274,15 @@
           });
         });
       },
-      // 禁用自动任务
+      // 停止自动任务
       handleProhibit(row, index) {
         var _this = this;
-        VueUtils.confirmInd(row.jobName, () => {
-          UpdateJobInd(row.id, false).then(res => {
-            row.validInd = false;
-            row.jobStatus = "0";
-            _this.$message({
-              type: 'success',
-              message: '禁用成功!'
-            });
+        UpdateJobInd(row.id, false).then(res => {
+          row.validInd = false;
+          row.jobStatus = "0";
+          _this.$message({
+            type: 'success',
+            message: '停止成功!'
           });
         });
       },
@@ -311,6 +307,7 @@
         this.$router.push({
           name: 'jobAutoTaskEdit',
           query: {
+            optionId: row.id,
             optionType: 'edit',
             autoTaskEdit: JSON.stringify(row),
             systemModuleSelect: JSON.stringify(this.systemModuleSelect),
@@ -349,7 +346,7 @@
           row.jobStatus = row.jobStatus === "0" ? "1" : "0";
         });
       },
-      // 启用/禁用
+      // 启用/停止
       handleCust(row, index){
         console.log(row.validInd)
         if(row.validInd){

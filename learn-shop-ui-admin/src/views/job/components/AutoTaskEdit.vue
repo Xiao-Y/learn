@@ -18,7 +18,7 @@
               <el-input v-model="autoTaskInfo.jobName" placeholder="请输入内容"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="Cron表达式" prop="cronExpression" :required="autoTaskInfo.jobStatus == '1'">
+          <el-form-item label="Cron表达式" prop="cronExpression" required>
             <el-col :span="18">
               <custom-cron-input v-model="autoTaskInfo.cronExpression" :isTestRun="true"></custom-cron-input>
             </el-col>
@@ -66,19 +66,19 @@
             </el-col>
           </el-form-item>
 
-          <el-form-item label="任务状态" prop="jobStatus">
-            <el-switch v-model="autoTaskInfo.jobStatus" @change="validIndChange" active-text="启用" active-value="1"
-                       inactive-text="停止"
-                       :validate-event="true"
-                       inactive-value="0"></el-switch>
-          </el-form-item>
+<!--          <el-form-item label="任务状态" prop="jobStatus">-->
+<!--            <el-switch v-model="autoTaskInfo.jobStatus" @change="validIndChange" active-text="启用" active-value="1"-->
+<!--                       inactive-text="停止"-->
+<!--                       :validate-event="true"-->
+<!--                       inactive-value="0"></el-switch>-->
+<!--          </el-form-item>-->
           <el-form-item label="串行/并行" prop="isConcurrent">
             <el-switch v-model="autoTaskInfo.isConcurrent" active-text="串行" active-value="0" inactive-text="并行"
                        inactive-value="1"></el-switch>
           </el-form-item>
-          <el-form-item label="有效标志" prop="validInd">
-            <el-switch v-model="autoTaskInfo.validInd" @change="validIndChange" active-text="有效"
-                       inactive-text="无效"></el-switch>
+          <el-form-item label="启用/停止" prop="validInd">
+            <el-switch v-model="autoTaskInfo.validInd" @change="validIndChange" active-text="启用"
+                       inactive-text="停止"></el-switch>
           </el-form-item>
           <el-form-item label="异常停止">
             <el-switch v-model="autoTaskInfo.isExceptionStop" active-text="是" inactive-text="否"></el-switch>
@@ -123,7 +123,11 @@
 </template>
 
 <script>
-  import {SaveAutoTask, CheckAutoTask} from "../../../api/job/jobMag";
+  import {
+    SaveAutoTask,
+    CheckAutoTask,
+    findAutoTaskById
+  } from "../../../api/job/jobMag";
   import {
       LoadRouteCacheData
   } from "../../../api/sys/DataDictionaryMag";
@@ -165,7 +169,8 @@
         routeInfoSelect: [],
         rulesForm: {
           methodName: [{required: true, message: '请输入执行方法', trigger: 'blur'}],
-          cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
+          cronExpression: [{required: true, message: 'Cron表达式不能为空', trigger: 'blur'}],
+          // cronExpression: [{validator: this.validateCronExp, trigger: 'blur'}],
           jobName: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
           mailReceive: [{validator: this.validateMailReceive, trigger: 'blur'}],
           templateId: [{required: true, message: '请选择邮件模板', trigger: 'blur'}],
@@ -183,6 +188,9 @@
       this.classTypeSelect = JSON.parse(this.$route.query.classTypeSelect);
       if (this.optionType === 'edit') {
         this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
+        if(this.autoTaskInfo.templateId){
+          this.autoTaskInfo.templateId = parseInt(this.autoTaskInfo.templateId);
+        }
       }
       LoadRouteCacheData().then().then(res => {
           this.routeInfoSelect = res.resData;
@@ -251,13 +259,13 @@
           this.autoTaskInfo.httpUrl = routeUrl;
       },
       // 规则校验：cronExp
-      validateCronExp(rule, value, callback) {
-        if ((value == '' || value === null) && this.autoTaskInfo.jobStatus === '1') {
-          callback(new Error('启动状态，Cron表达式不能为空'));
-        } else {
-          callback();
-        }
-      },
+      // validateCronExp(rule, value, callback) {
+      //   if ((value == '' || value === null) && this.autoTaskInfo.jobStatus === '1') {
+      //     callback(new Error('启动状态，Cron表达式不能为空'));
+      //   } else {
+      //     callback();
+      //   }
+      // },
       validateMailReceive(rule, value, callback) {
         if (value === '' || value === null) {
           callback();
@@ -281,9 +289,10 @@
       },
       // // 规则校验：validInd/jobStatus
       validIndChange() {
-        if (!this.autoTaskInfo.validInd) {
+        if (this.autoTaskInfo.validInd) {
+          this.autoTaskInfo.jobStatus = "1";
+        }else {
           this.autoTaskInfo.jobStatus = "0";
-          this.$message.info('有效标志为无效时，自动任务状态只能是停止');
         }
       },
     }
