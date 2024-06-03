@@ -85,12 +85,13 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
-            <!-- docker -->
+            <!-- docker 上传jar到 docker-->
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.2.2</version>
                 <configuration>
+                    <imageName>${project.build.finalName}</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
@@ -101,6 +102,7 @@
                     </resources>
                 </configuration>
             </plugin>
+            <!-- 复制 jar 到指定目录，spring-boot3以上版本更换 tasks 为 target -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <!--绑定mvn package命令，当执行package这个maven命令打包项目的同时

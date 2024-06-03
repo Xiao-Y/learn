@@ -226,6 +226,7 @@
                 <artifactId>redisson</artifactId>
                 <version>${redisson.version}</version>
             </dependency>
+            <!-- 分库分表 -->
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
@@ -242,6 +243,7 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <!-- 工作流 -->
             <dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-spring-boot-starter-basic</artifactId>
@@ -253,11 +255,6 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>${apache.poi.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.nimbusds</groupId>
-                <artifactId>nimbus-jose-jwt</artifactId>
-                <version>${nimbus-jose-jwt.version}</version>
-            </dependency>
             <!-- ftp -->
             <dependency>
                 <groupId>com.jcraft</groupId>
@@ -265,6 +262,11 @@
                 <version>${jsch.version}</version>
             </dependency>
             <!-- jwt -->
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-jwt</artifactId>
@@ -275,6 +277,7 @@
                 <artifactId>log4j-api</artifactId>
                 <version>${log4j-api.version}</version>
             </dependency>
+            <!-- 邮件 -->
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>javax.mail-api</artifactId>

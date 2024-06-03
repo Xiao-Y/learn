@@ -7,15 +7,14 @@ import com.billow.job.dao.ScheduleJobLogDao;
 import com.billow.job.dao.impl.ScheduleJobDaoImpl;
 import com.billow.job.dao.impl.ScheduleJobLogDaoImpl;
 import com.billow.job.service.CoreAutoTaskService;
-import com.billow.job.service.JobService;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.service.impl.CoreAutoTaskServiceImpl;
-import com.billow.job.service.impl.JobServiceImpl;
 import com.billow.job.service.impl.ScheduleJobLogServiceImpl;
 import com.billow.job.service.impl.ScheduleJobServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -58,5 +57,10 @@ public class JobBeanConfig {
     @Bean
     public InitJob initJob() {
         return new InitJob();
+    }
+
+    @Bean
+    public ApplicationContextAware applicationContextAware(){
+        return new JobApplicationContextAware();
     }
 }

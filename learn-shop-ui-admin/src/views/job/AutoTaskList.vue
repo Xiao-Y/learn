@@ -138,15 +138,21 @@
             <button-group-option @onDel="handleDelete(scope.row,scope.$index)"
                                  @onEdit="handleEdit(scope.row,scope.$index)"
                                  @onInd="handleProhibit(scope.row,scope.$index)"
-                                 :disInd="!scope.row.validInd"></button-group-option>
+                                 :show-ind="false"></button-group-option>
             <div style="float:left;margin-left:10px;">
-              <el-tooltip class="item" effect="dark" content="立即执行" placement="top-start" :open-delay="1500">
+              <el-tooltip class="item" effect="dark" :content="scope.row.validInd ? '禁用' : '启用'" placement="top-start" :open-delay="700">
+                <el-button type="success" size="mini" @click="handleCust(scope.row,scope.$index)">
+                  <i class="el-icon-success" v-show="!scope.row.validInd"></i>
+                  <i class="el-icon-warning" v-show="scope.row.validInd"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="立即执行" placement="top-start" :open-delay="700">
                 <el-button type="success" size="mini" @click="handleImmediate(scope.row,scope.$index)"
-                           :disabled="!scope.row.validInd || scope.row.jobStatus == '0'">
+                           :disabled="!scope.row.validInd">
                   <i class="el-icon-success"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="执行日志" placement="top-start" :open-delay="1500">
+              <el-tooltip class="item" effect="dark" content="执行日志" placement="top-start" :open-delay="700">
                 <el-button type="success" size="mini" @click="handleRunLog(scope.row,scope.$index)">
                   <i class="el-icon-document"></i>
                 </el-button>
@@ -258,6 +264,18 @@
           this.queryFilter.totalPages = data.totalPages;
         });
       },
+      // 启用自动任务
+      handleStart(row, index) {
+        var _this = this;
+        UpdateJobInd(row.id, true).then(res => {
+          row.validInd = true;
+          row.jobStatus = "1";
+          _this.$message({
+            type: 'success',
+            message: '启用成功!'
+          });
+        });
+      },
       // 禁用自动任务
       handleProhibit(row, index) {
         var _this = this;
@@ -330,6 +348,15 @@
         }).catch(err => {
           row.jobStatus = row.jobStatus === "0" ? "1" : "0";
         });
+      },
+      // 启用/禁用
+      handleCust(row, index){
+        console.log(row.validInd)
+        if(row.validInd){
+          this.handleProhibit(row, index);
+        }else {
+          this.handleStart(row, index);
+        }
       },
       // 立即执行
       handleImmediate(row, index) {

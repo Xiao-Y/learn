@@ -33,7 +33,7 @@
       // 提示信息延时
       openDelay: {
         type: Number,
-        default: 1500
+        default: 70
       },
       // 是否显示禁用按钮
       showInd: {

@@ -1,7 +1,9 @@
 package com.billow.system.api;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.base.BaseApi;
+import com.billow.redis.util.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.vo.DataDictionaryVo;
@@ -9,7 +11,6 @@ import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.billow.redis.util.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -55,11 +56,10 @@ public class DataDictionaryApi extends BaseApi {
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("systemModule") String systemModule, @PathVariable("fieldType") String fieldType) throws Exception {
         // 从 redis 中获取
-        List<DataDictionaryPo> redisData = redisUtils.getHash(FIELD_TYPE_KEY, systemModule, DataDictionaryPo.class);
+        String key = RedisCst.COMM_DICTIONARY_FIELD_TYPE + ":" + StrUtil.replace(StrUtil.toUnderlineCase(systemModule), "_", "-");
+        List<DataDictionaryPo> redisData = redisUtils.getHash(key, fieldType, DataDictionaryPo.class);
         if (ToolsUtils.isNotEmpty(redisData)) {
-            return redisData.stream().filter(f -> f.getFieldType().equals(fieldType))
-                    .map(m -> ConvertUtils.convertIgnoreBase(m, DataDictionaryVo.class))
-                    .collect(Collectors.toList());
+            return ConvertUtils.convertIgnoreBase(redisData, DataDictionaryVo.class);
         }
         DataDictionaryVo dataDictionaryVo = new DataDictionaryVo();
         dataDictionaryVo.setSystemModule(systemModule);
@@ -67,7 +67,7 @@ public class DataDictionaryApi extends BaseApi {
         dataDictionaryVo.setValidInd(true);
         List<DataDictionaryVo> dataDictionaryVos = dataDictionaryService.findDataDictionaryByCondition(dataDictionaryVo);
         // 保存到 redis 中
-        redisUtils.setHash(FIELD_TYPE_KEY, systemModule, ConvertUtils.convertIgnoreBase(dataDictionaryVos, DataDictionaryPo.class));
+        redisUtils.setHash(key, fieldType, ConvertUtils.convertIgnoreBase(dataDictionaryVos, DataDictionaryPo.class));
         return dataDictionaryVos;
     }
 
@@ -90,19 +90,21 @@ public class DataDictionaryApi extends BaseApi {
     @ApiOperation("字典下拉字段分类")
     @GetMapping("/findFieldType")
     public List<DataDictionaryPo> findFieldType() {
-        List<String> fieldTypes = redisUtils.getHashKeys(RedisCst.COMM_ROUTE_INFO);
-        if (ToolsUtils.isEmpty(fieldTypes)) {
-            fieldTypes = dataDictionaryService.findFieldType();
-        }
-
         List<DataDictionaryPo> dataDictionaryPos = new ArrayList<>();
-        fieldTypes.stream().forEach(fieldType -> {
-            DataDictionaryPo po = new DataDictionaryPo();
-            po.setFieldValue(fieldType);
-            po.setFieldDisplay(fieldType);
-            dataDictionaryPos.add(po);
-        });
-
+        Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO);
+        for (Map.Entry<String, String> entry : routeInfoMap.entrySet()) {
+            List<String> fieldTypes = redisUtils.getHashKeys(RedisCst.COMM_DICTIONARY_FIELD_TYPE + ":" + entry.getKey());
+            if (ToolsUtils.isEmpty(fieldTypes)) {
+                //fieldTypes = dataDictionaryService.findFieldType();
+                continue;
+            }
+            fieldTypes.stream().forEach(fieldType -> {
+                DataDictionaryPo po = new DataDictionaryPo();
+                po.setFieldValue(fieldType);
+                po.setFieldDisplay(fieldType);
+                dataDictionaryPos.add(po);
+            });
+        }
         return dataDictionaryPos;
     }
 
