@@ -4,15 +4,11 @@ import com.billow.notice.ding.param.SendRequestParam;
 import com.billow.notice.ding.properties.RobotProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 public class SendDingService {
     @Autowired
     private RobotProperties robotProperties;
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     private final static String MSG_TYPE_TEXT = "text";
     private final static String MSG_TYPE_LINK = "link";
@@ -32,7 +28,7 @@ public class SendDingService {
         SendRequestParam request = new SendRequestParam();
         request.setText(text);
         request.setMsgtype(MSG_TYPE_TEXT);
-        return new SendDingSend(robotProperties, restTemplate, request);
+        return new SendDingSend(robotProperties, request);
     }
 
     /**
@@ -47,7 +43,7 @@ public class SendDingService {
         SendRequestParam request = new SendRequestParam();
         request.setMsgtype(MSG_TYPE_LINK);
         request.setLink(link);
-        return new SendDingSend(robotProperties, restTemplate, request);
+        return new SendDingSend(robotProperties, request);
     }
 
     /**
@@ -62,14 +58,14 @@ public class SendDingService {
         SendRequestParam request = new SendRequestParam();
         request.setMsgtype(MSG_TYPE_MARKDOWN);
         request.setMarkdown(markdown);
-        return new SendDingSend(robotProperties, restTemplate, request);
+        return new SendDingSend(robotProperties, request);
     }
 
     public SendDingSendBase sendActionCard(SendRequestParam.Actioncard actioncard) {
         SendRequestParam request = new SendRequestParam();
         request.setMsgtype(MSG_ACTION_CARD);
         request.setActionCard(actioncard);
-        return new SendDingSendBase(robotProperties, restTemplate, request);
+        return new SendDingSendBase(robotProperties, request);
     }
 
 
@@ -77,6 +73,6 @@ public class SendDingService {
         SendRequestParam request = new SendRequestParam();
         request.setMsgtype(MSG_FEED_CARD);
         request.setFeedCard(feedcard);
-        return new SendDingSendBase(robotProperties, restTemplate, request);
+        return new SendDingSendBase(robotProperties, request);
     }
 }

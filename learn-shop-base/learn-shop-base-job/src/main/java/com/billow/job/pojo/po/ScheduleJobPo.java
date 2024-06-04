@@ -70,9 +70,16 @@ public class ScheduleJobPo extends BasePo implements Serializable {
      */
     private Boolean isSaveLog;
     /**
-     * 是否发送消息,0-不发送,1-发送,2-异常时发送,3-成功时发送
+     * 是否发送消息,0-不发送,1-全发送,2-异常时发送,3-成功时发送
      */
     private String isSendInfo;
+
+    /**
+     * 发送消息的方式，email-邮件，dingding-钉钉
+     *
+     * @date 2024/6/3 20:57
+     */
+    private String sendType;
     /**
      * 邮件模板ID
      */
@@ -81,5 +88,13 @@ public class ScheduleJobPo extends BasePo implements Serializable {
      * 邮件接收人,多个时,用;分开
      */
     private String mailReceive;
+    /**
+     * 钉钉机器人Webhook
+     */
+    private String dingWebhook;
+    /**
+     * 钉钉机器人RobotKey
+     */
+    private String dingRobotKey;
 
 }

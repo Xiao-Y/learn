@@ -14,7 +14,6 @@ import com.billow.job.service.impl.ScheduleJobLogServiceImpl;
 import com.billow.job.service.impl.ScheduleJobServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,12 +39,12 @@ public class JobBeanConfig {
     }
 
     @Bean
-    public ScheduleJobLogService scheduleJobLogService() {
+    public ScheduleJobLogService scheduleJobLogServiceImpl() {
         return new ScheduleJobLogServiceImpl();
     }
 
     @Bean
-    public ScheduleJobService scheduleJobService() {
+    public ScheduleJobService scheduleJobServiceImpl() {
         return new ScheduleJobServiceImpl();
     }
 
@@ -57,10 +56,5 @@ public class JobBeanConfig {
     @Bean
     public InitJob initJob() {
         return new InitJob();
-    }
-
-    @Bean
-    public ApplicationContextAware applicationContextAware(){
-        return new JobApplicationContextAware();
     }
 }

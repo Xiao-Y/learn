@@ -113,7 +113,15 @@
                                disabled>
                 </custom-select>
               </el-form-item>
-              <template v-if="props.row.isSendInfo != '0'">
+              <el-form-item label="发送方式">
+                <custom-select v-model="props.row.sendType"
+                               :datasource="sendType"
+                               placeholder="请选择消息发送方式"
+                               disabled>
+                </custom-select>
+              </el-form-item>
+
+              <template v-if="props.row.sendType == 'email'">
                 <el-form-item label="邮件模板">
                   <custom-sel-mail-template v-model="props.row.templateId" :input-read-only="true"
                                             :button-disabled="true"></custom-sel-mail-template>
@@ -123,6 +131,17 @@
                             readonly></el-input>
                 </el-form-item>
               </template>
+              <template v-if="props.row.sendType == 'dingding'">
+                <el-form-item label="钉钉模板">
+                  <custom-sel-mail-template v-model="props.row.templateId" :input-read-only="true"
+                                            :button-disabled="true"></custom-sel-mail-template>
+                </el-form-item>
+                <el-form-item label="钉钉群">
+                  <el-input type="textarea" v-model="props.row.mailReceive" placeholder="多个钉钉群用英文封号分割开"
+                            readonly></el-input>
+                </el-form-item>
+              </template>
+
               <el-form-item label="任务状态">
                 <el-switch v-model="props.row.jobStatus" active-text="启用" active-value="1" inactive-text="停止"
                            inactive-value="0"
@@ -145,8 +164,7 @@
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="立即执行" placement="top-start" :open-delay="700">
-                <el-button type="success" size="mini" @click="handleImmediate(scope.row,scope.$index)"
-                           :disabled="!scope.row.validInd">
+                <el-button type="success" size="mini" @click="handleImmediate(scope.row,scope.$index)" >
                   <i class="el-icon-success"></i>
                 </el-button>
               </el-tooltip>
@@ -219,6 +237,7 @@
         activeNames: ['1'],
         systemModuleSelect: [],// 系统模块的下拉数据源
         isSendInfo: [],// 是否发送消息下拉数据源
+        sendType: [],// 消息发送方式下拉数据源
         classTypeSelect: [],// 运行类型下拉数据源
         dialogTableVisible: false,// 打开日志窗口
         tableTitle: '',// 执行日志
@@ -247,6 +266,9 @@
       });
       LoadJobDataDictionary('classType').then(res => {
         this.classTypeSelect = res.resData;
+      });
+      LoadJobDataDictionary('sendType').then(res => {
+        this.sendType = res.resData;
       });
       // 请数据殂
       this.loadDataList();
@@ -294,7 +316,8 @@
             optionType: 'add',
             systemModuleSelect: JSON.stringify(this.systemModuleSelect),
             isSendInfo: JSON.stringify(this.isSendInfo),
-            classTypeSelect: JSON.stringify(this.classTypeSelect)
+            classTypeSelect: JSON.stringify(this.classTypeSelect),
+            sendType: JSON.stringify(this.sendType)
           }
         });
       },
@@ -312,7 +335,8 @@
             autoTaskEdit: JSON.stringify(row),
             systemModuleSelect: JSON.stringify(this.systemModuleSelect),
             isSendInfo: JSON.stringify(this.isSendInfo),
-            classTypeSelect: JSON.stringify(this.classTypeSelect)
+            classTypeSelect: JSON.stringify(this.classTypeSelect),
+            sendType: JSON.stringify(this.sendType)
           }
         });
       },

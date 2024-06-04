@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.billow.job.config.JobBeanConfig
+com.billow.job.config.JobBeanConfig,\
+com.billow.job.core.config.QuartzSchedulerConfig

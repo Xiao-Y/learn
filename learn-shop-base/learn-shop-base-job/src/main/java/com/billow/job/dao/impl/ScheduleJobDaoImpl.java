@@ -25,20 +25,41 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
 
     private static final String table = "sys_schedule_job";
 
+    /**
+     * 保存的字段
+     *
+     * @author 千面
+     * @date 2024/6/4 9:05
+     */
     private static String columnSql = " creator_code,updater_code,create_time,update_time,valid_ind,job_name,job_group," +
             "job_status,cron_expression,description,class_type,run_class,http_url,routing_key,is_concurrent,method_name," +
-            "is_exception_stop,is_save_log,is_send_info,template_id,mail_receive ";
+            "is_exception_stop,is_save_log,is_send_info,template_id,mail_receive,ding_webhook,ding_robot_key,send_type ";
 
+    /**
+     * 查询的字段
+     *
+     * @author 千面
+     * @date 2024/6/4 9:06
+     */
     private static String columnSql2 = " id,creator_code as creatorCode,updater_code as updaterCode,create_time as createTime," +
             "update_time as updateTime,valid_ind as validInd,job_name as jobName,job_group as jobGroup," +
             "job_status as jobStatus,cron_expression as cronExpression,description,class_type as classType," +
             "run_class as runClass,http_url as httpUrl,routing_key as routingKey,is_concurrent as isConcurrent," +
             "method_name as methodName, is_exception_stop as isExceptionStop,is_save_log as isSaveLog," +
-            "is_send_info as isSendInfo,template_id as templateId,mail_receive as mailReceive ";
+            "is_send_info as isSendInfo,template_id as templateId,mail_receive as mailReceive," +
+            "ding_webhook as dingWebhook,ding_robot_key as dingRobotKey,send_type as sendType ";
 
+    /**
+     * 更新字段
+     *
+     * @author 千面
+     * @date 2024/6/4 9:07
+     */
     private static String updateSql = " updater_code = ?,update_time = ?,valid_ind = ?,job_name = ?,job_group = ?," +
-            "job_status = ?,cron_expression = ?,description = ?,class_type = ?,run_class = ?,http_url = ?,routing_key = ?,is_concurrent = ?,method_name = ?," +
-            "is_exception_stop = ?,is_save_log = ?,is_send_info = ?,template_id = ?,mail_receive = ? ";
+            "job_status = ?,cron_expression = ?,description = ?,class_type = ?,run_class = ?,http_url = ?," +
+            "routing_key = ?,is_concurrent = ?,method_name = ?," +
+            "is_exception_stop = ?,is_save_log = ?,is_send_info = ?,template_id = ?,mail_receive = ?,ding_webhook = ?,ding_robot_key = ?," +
+            "send_type = ? ";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -78,7 +99,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
 
     @Override
     public ScheduleJobPo save(ScheduleJobPo scheduleJobPo) {
-        String sql = "insert into " + table + "(" + columnSql + ") value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into " + table + "(" + columnSql + ") value(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update((con) -> {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -103,6 +124,9 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
             ps.setString(19, scheduleJobPo.getIsSendInfo());
             ps.setObject(20, scheduleJobPo.getTemplateId());
             ps.setString(21, scheduleJobPo.getMailReceive());
+            ps.setString(22, scheduleJobPo.getDingWebhook());
+            ps.setString(23, scheduleJobPo.getDingRobotKey());
+            ps.setString(24, scheduleJobPo.getSendType());
             return ps;
         }, keyHolder);
         scheduleJobPo.setId(keyHolder.getKey().toString());
@@ -133,7 +157,12 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
                 scheduleJobPo.getIsSendInfo(),
                 scheduleJobPo.getTemplateId(),
                 scheduleJobPo.getMailReceive(),
-                scheduleJobPo.getId());
+                scheduleJobPo.getDingWebhook(),
+                scheduleJobPo.getDingRobotKey(),
+                scheduleJobPo.getSendType(),
+
+                scheduleJobPo.getId()
+        );
 
     }
 
@@ -207,6 +236,10 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
         if (scheduleJobPo.getJobStatus() != null) {
             sql += " and job_status = ? ";
             queryParam.add(scheduleJobPo.getJobStatus());
+        }
+        if (ToolsUtils.isNotEmpty(scheduleJobPo.getSendType())) {
+            sql += " and send_type = ? ";
+            queryParam.add(scheduleJobPo.getSendType());
         }
         return sql;
     }

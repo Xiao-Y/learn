@@ -35,7 +35,8 @@ public class DataDictionaryServiceImpl extends ServiceImpl<DataDictionaryDao, Da
     public IPage<DataDictionaryPo> listByPage(DataDictionaryVo dataDictionaryVo) {
         DataDictionaryPo convert = ConvertUtils.convert(dataDictionaryVo, DataDictionaryPo.class);
         QueryWrapper<DataDictionaryPo> condition = MybatisKet.getCondition(convert);
-        condition.orderByAsc("field_type", "field_order");
+        condition.orderByDesc("id");
+//        condition.orderByAsc("field_type", "field_order");
         IPage<DataDictionaryPo> page = new Page<>(dataDictionaryVo.getPageNo(), dataDictionaryVo.getPageSize());
         IPage<DataDictionaryPo> pages = this.page(page, condition);
         return pages;

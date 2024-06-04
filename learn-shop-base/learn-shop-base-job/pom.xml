@@ -52,6 +52,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
+        <!-- 消息中间件、消息通知 -->
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-notice</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

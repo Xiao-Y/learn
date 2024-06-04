@@ -40,10 +40,8 @@ public class QuartzSchedulerConfig {
     }
 
     @Bean
-    public JobFactory jobFactory(ApplicationContext applicationContext) {
-        AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
-        jobFactory.setApplicationContext(applicationContext);
-        return jobFactory;
+    public JobFactory jobFactory() {
+        return new AutowiringSpringBeanJobFactory();
     }
 
     @Bean

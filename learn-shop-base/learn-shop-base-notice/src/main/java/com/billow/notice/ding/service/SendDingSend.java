@@ -11,8 +11,8 @@ public class SendDingSend extends SendDingSendBase {
 
     private SendRequestParam param;
 
-    public SendDingSend(RobotProperties robotProperties, RestTemplate restTemplate, SendRequestParam param) {
-        super(robotProperties, restTemplate, param);
+    public SendDingSend(RobotProperties robotProperties, SendRequestParam param) {
+        super(robotProperties, param);
         this.param = param;
     }
 

@@ -1,5 +1,6 @@
 package com.billow.job.util;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.billow.job.constant.JobCst;
 import com.billow.job.core.enumType.AutoTaskJobStatusEnum;
@@ -9,6 +10,8 @@ import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.JobService;
 import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
+import com.billow.notice.ding.param.SendRequestParam;
+import com.billow.notice.ding.service.SendDingService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronExpression;
 
@@ -166,7 +169,6 @@ public class TaskUtils {
                 ScheduleJobLogService scheduleJobLogService = JobContextUtil.getBean(JobCst.SCHEDULE_JOB_LOG_SERVICE_IMPL);
                 scheduleJobLogService.insert(logDto);
             } catch (Exception e) {
-                e.printStackTrace();
                 log.error("自动任务日志插入失败：{}", e.getMessage());
             }
         }
@@ -188,21 +190,54 @@ public class TaskUtils {
         }
 
         if (!JobCst.JOB_FC_SEND_MAIL_NO_SEND.equals(scheduleJob.getIsSendInfo())) {
-            try {
-                MailEx mailEx = new MailEx();
-                mailEx.setJobId(scheduleJob.getId());
-                mailEx.setJobName(scheduleJob.getJobName());
-                mailEx.setToEmails(scheduleJob.getMailReceive());
-                mailEx.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
-                mailEx.setMailTemplateId(scheduleJob.getTemplateId());
-                if (logDto != null) {
-                    mailEx.setLogId(logDto.getId());
+            // 异常时发送
+            if (JobCst.JOB_FC_SEND_MAIL_EX_SEND.equals(scheduleJob.getIsSendInfo()) && isSuccess) {
+                return;
+            }
+            // 成功时发送
+            if (JobCst.JOB_FC_SEND_MAIL_SU_SEND.equals(scheduleJob.getIsSendInfo()) && !isSuccess) {
+                return;
+            }
+
+            // 发送消息的方式，email-邮件
+            if (JobCst.JOB_SEND_TYPE_EMAIL.equals(scheduleJob.getSendType())) {
+                try {
+                    MailEx mailEx = new MailEx();
+                    mailEx.setJobId(scheduleJob.getId());
+                    mailEx.setJobName(scheduleJob.getJobName());
+                    mailEx.setToEmails(scheduleJob.getMailReceive());
+                    mailEx.setSubject(scheduleJob.getJobName() + " 自动任务执行情况");
+                    mailEx.setMailTemplateId(scheduleJob.getTemplateId());
+                    if (logDto != null) {
+                        mailEx.setLogId(logDto.getId());
+                    }
+                    // 发送邮件接口
+                    JobService jobService = JobContextUtil.getBean(JobCst.JOB_SERVICE_IMPL);
+                    jobService.sendMail(mailEx);
+                } catch (Exception e) {
+                    log.error("发送邮件发送消息失败：{}", e.getMessage());
                 }
-                // 发送邮件接口
-                JobService jobService = JobContextUtil.getBean(JobCst.JOB_SERVICE_IMPL);
-                jobService.sendMail(mailEx);
-            } catch (Exception e) {
-                log.error("发送邮件发送消息失败：{}", e.getMessage());
+            }
+
+            // 发送消息的方式，dingding-钉钉
+            if (JobCst.JOB_SEND_TYPE_DINGDING.equals(scheduleJob.getSendType())) {
+                try {
+                    SendDingService sendDingService = JobContextUtil.getBean(JobCst.JOB_SEND_DING_SERVICE);
+                    SendRequestParam.Markdown markdown = new SendRequestParam.Markdown();
+                    markdown.setTitle("定时任务");
+                    String text =
+                            "## 定时任务 " + DateUtil.now() + "\n" +
+                            "- 日志ID: " + logDto.getLogId() + "\n" +
+                            "- 任务分组：" + logDto.getJobGroup() + "\n" +
+                            "- 任务名称：" + logDto.getJobName() + "\n" +
+                            "- 运行时间：" + logDto.getRunTime() + "\n" +
+                            "- 是否成功：" + logDto.getIsSuccess() + "\n" +
+                            "- 任务描述：" + scheduleJob.getDescription();
+                    markdown.setText(text);
+                    sendDingService.sendMarkdown(markdown).send();
+                } catch (Exception e) {
+                    log.error("发送钉钉发送消息失败：{}", e.getMessage());
+                }
             }
         }
     }

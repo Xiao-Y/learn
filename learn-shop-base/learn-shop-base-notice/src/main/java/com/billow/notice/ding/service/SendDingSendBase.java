@@ -1,15 +1,11 @@
 package com.billow.notice.ding.service;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.billow.notice.ding.param.SendRequestParam;
 import com.billow.notice.ding.properties.RobotProperties;
 import com.billow.notice.ding.util.HmacSha256Util;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 public class SendDingSendBase {
@@ -18,11 +14,8 @@ public class SendDingSendBase {
 
     private RobotProperties robotProperties;
 
-    private RestTemplate restTemplate;
-
-    public SendDingSendBase(RobotProperties robotProperties, RestTemplate restTemplate, SendRequestParam param) {
+    public SendDingSendBase(RobotProperties robotProperties, SendRequestParam param) {
         this.robotProperties = robotProperties;
-        this.restTemplate = restTemplate;
         this.param = param;
     }
 
@@ -38,13 +31,9 @@ public class SendDingSendBase {
     }
 
     protected String sendRequest(String url, String params) {
-        log.info("sendRequest()>>>[{}]", params);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> httpEntity = new HttpEntity<>(params, headers);
-        ResponseEntity<String> entity = restTemplate.postForEntity(url, httpEntity, String.class);
-        String body = entity.getBody();
-        log.info("sendResponse()>>>[{}]", body);
+        log.info("发送消息入参：>>>{}", params);
+        String body = HttpUtil.post(url, params);
+        log.info("消息发送完成：<<<{}", body);
         return body;
     }
 
