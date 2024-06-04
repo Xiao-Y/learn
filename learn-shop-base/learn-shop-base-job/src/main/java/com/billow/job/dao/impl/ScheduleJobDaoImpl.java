@@ -175,7 +175,7 @@ public class ScheduleJobDaoImpl implements ScheduleJobDao {
         String sql = this.genQuery(scheduleJobPo, param);
         Object[] objects = param.toArray(new Object[param.size()]);
 
-        String sqlPage = select_sql + sql + " limit " + pageSize + " offset " + pageSize * pageNo;
+        String sqlPage = select_sql + sql + " order by create_time desc limit " + pageSize + " offset " + pageSize * pageNo;
         log.debug("sql:{}", sqlPage);
         List<ScheduleJobPo> scheduleJobPos = jdbcTemplate.query(sqlPage, objects, new BeanPropertyRowMapper<>(ScheduleJobPo.class));
 

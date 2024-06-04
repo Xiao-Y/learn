@@ -160,12 +160,12 @@
             <div style="float:left;margin-left:10px;">
               <el-tooltip class="item" effect="dark" :content="scope.row.validInd ? '停止' : '启用'" placement="top-start" :open-delay="700">
                 <el-button :type="scope.row.validInd? 'warning' : 'success'" size="mini" @click="handleCust(scope.row,scope.$index)">
-                  <i :class="scope.row.validInd ? 'el-icon-warning' :'el-icon-success'"></i>
+                  <i :class="scope.row.validInd ? 'el-icon-video-pause' :'el-icon-video-play'"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="立即执行" placement="top-start" :open-delay="700">
-                <el-button type="success" size="mini" @click="handleImmediate(scope.row,scope.$index)" >
-                  <i class="el-icon-success"></i>
+                <el-button type="info" size="mini" @click="handleImmediate(scope.row,scope.$index)" >
+                  <i class="el-icon-refresh"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="执行日志" placement="top-start" :open-delay="700">
