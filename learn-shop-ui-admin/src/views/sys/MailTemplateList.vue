@@ -113,6 +113,7 @@
   import pageMixins from "../../utils/pageMixins";
 
   export default {
+    name: "sysMailTemplateListIndex",
     components: {
       CustomSelect,
       ButtonGroupOption,

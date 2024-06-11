@@ -163,6 +163,7 @@ import CustomIcon from '../../components/common/CustomIcon'
 import CustomMenuTree from '../../components/common/CustomMenuTree'
 
 export default {
+  name: 'sysMenuListIndex',
   components: {
     CustomIcon,
     CustomMenuTree

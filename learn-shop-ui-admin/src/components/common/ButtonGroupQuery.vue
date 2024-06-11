@@ -1,5 +1,5 @@
 <template>
-  <div style="display: inline-block;">
+  <div style="display: inline-block;" class="button-group-query">
     <el-button type="success" size="mini"
                @click="onAdd"
                icon="el-icon-plus"
@@ -116,5 +116,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .button-group-query{
+    margin-top: 3px;
+    margin-bottom: 10px;
+  }
 </style>

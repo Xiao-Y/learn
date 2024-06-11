@@ -115,6 +115,7 @@
   import CustomPage from '../../components/common/CustomPage.vue'
 
   export default {
+    name: "proGoodsSpuListIndex",
     components: {
       CustomSelect,
       GoodSkuList,

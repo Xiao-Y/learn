@@ -1,5 +1,5 @@
 <template>
-  <div>-
+  <div>
     <template v-for="menu in navMenus" v-if="menu.menuName && menu.display === true">
 
       <template v-if="menu.children">
@@ -7,7 +7,7 @@
           <template slot="title">
             <i class="iconfont" :class="['icon-' + menu.icon]"></i>{{ generateTitle(menu.menuName) }}
           </template>
-          <el-menu-item :key="menu.id" :index="menu.path" v-if="menu.path && menu.display === true">
+          <el-menu-item :key="menu.id" :index="menu.path" v-if="menu.path && menu.display === true" @click="selectMenu(menu)">
             <i class="iconfont" :class="['icon-' + menu.icon]"></i>{{ generateTitle(menu.menuName) }}
           </el-menu-item>
           <nav-menu :navMenus="menu.children"></nav-menu>
@@ -15,7 +15,7 @@
       </template>
 
       <template v-else-if="menu.display === true">
-        <el-menu-item :key="menu.id" :index="menu.path">
+        <el-menu-item :key="menu.id" :index="menu.path" @click="selectMenu(menu)">
           <i class="iconfont" :class="['icon-' + menu.icon]"></i>{{ generateTitle(menu.menuName) }}
         </el-menu-item>
       </template>
@@ -37,7 +37,20 @@
 //    console.info("navMenus", this.navMenus);
     },
     methods: {
-      generateTitle
+      generateTitle,
+      // 点击菜单 - 传入name，添加到keepalive缓存页面
+      selectMenu(item) {
+        // 加入keepalive缓存
+        this.$store.commit('addKeepAliveCache', item.menuCode)
+        //添加tags标签
+        var submenu = {
+          path: item.path,
+          name: item.menuCode,
+          label: item.menuName
+        }
+        //修改选中菜单
+        this.$store.commit('selectMenu', submenu)
+      },
     }
   };
 </script>

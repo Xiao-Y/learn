@@ -78,6 +78,7 @@
 
 
   export default {
+    name: "proGoodsSpuEdit",
     components: {
       CustomSelect,
       GoodSkuList

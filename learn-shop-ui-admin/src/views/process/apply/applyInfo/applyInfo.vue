@@ -20,18 +20,17 @@
 </template>
 
 <script>
-  // 申请页面---start 
+  // 申请页面---start
   import leave from '../leave';
   // 申请页面---end
   import CommentList from './commentList'; // 批注信息
   import ViewProcessImg from '../../ViewProcessImg'; // 流程图
 
   export default {
-    name: "apply",
+    name: "workbenchApplyInfo",
     components: {
       CommentList,
       ViewProcessImg,
-      CommentList,
       leave
     },
     data() {

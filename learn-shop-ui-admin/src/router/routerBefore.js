@@ -5,6 +5,7 @@ import {getAccessToken} from '../utils/cookieUtils' // 验权
 import LayoutBase from "../components/LayoutBase";
 import {LoadRouterList} from "../api/login";
 import {asyncRouterMap} from "./asyncRouter";
+import {defaultRouterMap} from '../router'
 
 const whiteList = ['/login', '/authRedirect'] // 不重定向白名单
 
@@ -83,21 +84,30 @@ function filterAsyncRouter(menus) {
   // asyncRouterList 转化为 map 方便取值
   let routerMap = asyncRouterMap();
   // 构建路由
-  let accessedRouters = [{
+  // 添加默认路由
+  let accessedRouters = [];
+  let defaultLength = accessedRouters.length;
+  accessedRouters.push({
     "path": "/main",
     "name": "main",
     "component": LayoutBase,
     "children": []
-  }]
+  });
+  // let accessedRouters = [{
+  //   "path": "/main",
+  //   "name": "main",
+  //   "component": LayoutBase,
+  //   "children": []
+  // }]
   for (let i = 0; i < menus.length; i++) {
     let menu = menus[i];
     let accessedRouter = genRouter(routerMap, menu);
     if (accessedRouter) {
-      accessedRouters[0].children.push(accessedRouter);
+      accessedRouters[defaultLength].children.push(accessedRouter);
     }
   }
   // 最后添加404页面
-  accessedRouters[0].children.push({
+  accessedRouters[defaultLength].children.push({
     path: '*',
     redirect: '/error/404'
   });
@@ -119,9 +129,14 @@ function genRouter(routerMap, menu) {
   }
   // 添加元数据
   let meta = {};
+  let keepAlive = true;
+  if (router.meta && router.meta.keepAlive != undefined) {
+    keepAlive = router.meta.keepAlive;
+  }
   Object.assign(meta, {
     "title": menu.menuName,
-    "icon": menu.icon
+    "icon": menu.icon,
+    "keepAlive": keepAlive
   });
   Object.assign(router, {"meta": meta})
   return router;

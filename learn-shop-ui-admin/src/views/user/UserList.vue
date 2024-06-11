@@ -125,6 +125,7 @@
   import pageMixins from "../../utils/pageMixins";
 
   export default {
+    name: "userUserListIndex",
     components: {
       CustomSelect,
       ButtonGroupOption,

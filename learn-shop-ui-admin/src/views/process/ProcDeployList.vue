@@ -128,6 +128,7 @@
   } from '../../utils/cookieUtils';
 
   export default {
+    name: "procProcDeployListIndex",
     components: {
       ButtonGroupOption,
       ButtonGroupQuery,

@@ -91,6 +91,8 @@
   import pageMixins from "../../utils/pageMixins";
 
   export default {
+    name: "sysRoleListIndex",
+    // 引入组件
     components: {
       ButtonGroupOption,
       ButtonGroupQuery,

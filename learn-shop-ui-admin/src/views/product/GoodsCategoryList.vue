@@ -82,6 +82,7 @@
   import CustomPage from '../../components/common/CustomPage.vue'
 
   export default {
+    name: "proGoodsCategoryListIndex",
     components: {
       GoodsSpecKeyList,
       ButtonGroupOption,

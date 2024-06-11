@@ -19,6 +19,8 @@
   import RequestUtils from '../../utils/requestUtils'
 
   export default {
+    name: 'editMarkdown',
+    // 引入组件
     // 注册
     components: {
       mavonEditor,

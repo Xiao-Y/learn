@@ -15,6 +15,12 @@ export function asyncRouterMap() {
  * @type {any}
  */
 const asyncRouterList = [
+  {
+    // 控制台
+    name: 'homeIndex',
+    path: '/home/index',
+    component: resolve => require(['../views/home/HomeIndex.vue'], resolve)
+  },
   // ===================================== 系统管理 ================================
   {
     // 白名单
@@ -186,7 +192,7 @@ const asyncRouterList = [
     name: 'workbenchMyTaskListIndex',
     path: '/workbench/workbenchMyTaskList/index',
     meta: {
-      keepAlive: true
+      keepAlive: false
     },
     component: resolve => require(['../views/process/MyTaskList.vue'], resolve)
   }

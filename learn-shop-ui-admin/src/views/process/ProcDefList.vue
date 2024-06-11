@@ -141,6 +141,8 @@
   import pageMixins from "../../utils/pageMixins";
 
   export default {
+    name: "procProcDefListIndex",
+    // 引入组件
     components: {
       ButtonGroupQuery,
       CustomPage

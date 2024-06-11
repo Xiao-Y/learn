@@ -29,6 +29,7 @@
   } from "../../api/login";
 
   export default {
+    name: "sysCacheMagIndex",
     data() {
       return {
         cacheNamespace: null//Mybatis CacheNamespace

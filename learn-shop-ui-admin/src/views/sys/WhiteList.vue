@@ -70,6 +70,7 @@
 
 
   export default {
+    name: 'sysWhiteListIndex',
     components: {
       ButtonGroupOption,
       ButtonGroupQuery,

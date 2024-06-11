@@ -27,7 +27,7 @@
   } from '../../../api/proc/procDefMag'
 
   export default {
-    name: "apply",
+    name: "workbenchApplyList",
     components: {},
     data() {
       return {};

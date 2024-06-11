@@ -99,6 +99,8 @@
   import pageMixins from "../../utils/pageMixins";
 
   export default {
+    name: "sysDataDictionaryList",
+    // 引入组件
     components: {
       CustomSelect,
       ButtonGroupOption,

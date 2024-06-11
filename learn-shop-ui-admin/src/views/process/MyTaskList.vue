@@ -160,6 +160,7 @@
   import pageMixins from "../../utils/pageMixins";
 
   export default {
+    name: "workbenchMyTaskListIndex",
     components: {
       CustomSelect,
       ButtonGroupQuery,

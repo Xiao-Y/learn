@@ -116,6 +116,7 @@ import VueUtils from "../../utils/vueUtils";
 import pageMixins from "../../utils/pageMixins";
 
 export default {
+  name: "sysPermissionListIndex",
   components: {
     CustomSelect,
     ButtonGroupOption,
