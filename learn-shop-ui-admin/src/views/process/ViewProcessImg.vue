@@ -30,7 +30,6 @@
         if (this.$route.query.proceType === 'execution') {
           this.imgSrc = ViewExecutionImgById(id);
         } else {
-          console.info(decodeURI(id));
           this.imgSrc = ViewDeployImgById(decodeURI(id));
         }
       }

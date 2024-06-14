@@ -91,6 +91,7 @@ secure:
     - "/userApi/*"                # 获取用户信息
     - "/public-auth/oauth/token"  # 获取token或者刷新token
     - "/public-auth/rsa/publicKey"  # 获取公钥
+    - "/admin-system/deployImageAction/**" # 获取部署图片
     - /dataRecovery/initData     # 数据还原
     # swagger 配置
     - /v3/**

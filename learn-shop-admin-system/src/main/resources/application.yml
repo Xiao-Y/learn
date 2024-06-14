@@ -16,3 +16,8 @@ server:
 spring:
   application:
     name: learn-shop-admin-system #客户端名称
+
+# 开启hystrix熔断机制
+feign:
+  hystrix:
+    enabled: true

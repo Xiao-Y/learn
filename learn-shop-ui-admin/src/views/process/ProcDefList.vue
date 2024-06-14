@@ -65,7 +65,7 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="250">
+          <el-table-column fixed="right" label="操作" width="260">
             <template slot-scope="scope">
               <!--  操作按钮组 -->
               <div style="float:left;margin-left:10px;">

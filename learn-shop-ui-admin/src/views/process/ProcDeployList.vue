@@ -95,17 +95,6 @@
         <div slot="tip">只能上传xml/zip文件，且不超过500kb</div>
       </el-upload>
     </el-dialog>
-
-    <!-- 流程图片显示 -->
-    <el-dialog title="选取部署文件" :visible.sync="imageDialogVisible" v-if="imageDialogVisible">
-      <div class="block">
-        <el-image :src="deployImgSrc">
-          <div slot="placeholder" class="image-slot">
-            加载中<span class="dot">...</span>
-          </div>
-        </el-image>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -147,7 +136,6 @@
         openDelay:1500,
         tableData: [], // 列表数据源
         dialogVisible: false,
-        imageDialogVisible: false,
         fileList: [], // 上传文件列表
         deployAction: '',
         deployImgSrc: '',

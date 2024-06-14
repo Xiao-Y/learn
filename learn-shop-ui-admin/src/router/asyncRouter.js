@@ -170,11 +170,6 @@ const asyncRouterList = [
     name: 'procProcDefListIndex',
     path: '/proc/procDefList/index',
     component: resolve => require(['../views/process/ProcDefList.vue'], resolve)
-  }, {
-    // 流程跟踪查询(单独页面打开)
-    name: 'procViewProcessImg',
-    path: '/procViewProcessImg',
-    component: resolve => require(['../views/process/ViewProcessImg.vue'], resolve)
   },
   // ================================ 我的工作台 ====================================
   {

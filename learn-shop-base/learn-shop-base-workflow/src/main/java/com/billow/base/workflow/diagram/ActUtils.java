@@ -51,13 +51,16 @@ public class ActUtils {
             return imageStream;
         }
         try {
+
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).singleResult();
             if (processDefinition == null) {
                 logger.error("deploymentId:{},没有查询到流程定义", deploymentId);
                 return imageStream;
             }
-            BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
-            imageStream = new CustomProcessDiagramGenerator().generatePngDiagram(bpmnModel);
+             imageStream = repositoryService.getProcessDiagram(processDefinition.getId());
+
+//            BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+//            imageStream = new CustomProcessDiagramGenerator().generatePngDiagram(bpmnModel);
         } catch (Exception e) {
             logger.error("deploymentId：" + deploymentId + "生成流程图失败，原因：" + e.getMessage(), e);
         }

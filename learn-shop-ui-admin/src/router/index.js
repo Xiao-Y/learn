@@ -36,6 +36,14 @@ export const defaultRouterMap = [{
     path: '404',
     component: resolve => require(['../views/error/404.vue'], resolve)
   }]
+}, {
+  // 流程跟踪查询(单独页面打开)
+  name: 'procViewProcessImg',
+  path: '/procViewProcessImg',
+  meta: {
+    keepAlive: false
+  },
+  component: resolve => require(['../views/process/ViewProcessImg.vue'], resolve)
 }];
 
 // 暴露默认路由
