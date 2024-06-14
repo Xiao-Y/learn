@@ -1,6 +1,6 @@
 import requestUtils from '../../../utils/requestUtils'
 
-const baseUrl = '../admin-system/applyApi';
+const baseUrl = '../admin-system/leaveApi';
 
 /**
  * 提交请假申请

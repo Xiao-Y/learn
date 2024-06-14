@@ -8,6 +8,16 @@
           </template>
           <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
+              <el-form-item label="待办项目">
+                <el-select v-model="toDo" @change="changToDo">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="任务ID" prop="taskId">
                 <el-input v-model="queryFilter.taskId" placeholder="任务ID"></el-input>
               </el-form-item>
@@ -25,16 +35,6 @@
                 <el-select v-model="queryFilter.isEndStatus" clearable placeholder="请选择申请类型">
                   <el-option key="1" label="审批结束" value="1"></el-option>
                   <el-option key="0" label="进行中" value="0"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="待办项目">
-                <el-select v-model="toDo" @change="changToDo">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
                 </el-select>
               </el-form-item>
             </el-row>

@@ -136,7 +136,7 @@ public class ApplyInfoServiceImpl extends ServiceImpl<ApplyInfoDao, ApplyInfoPo>
         ApplyInfoPo applyInfoPo = ConvertUtils.convert(applyInfoVo, ApplyInfoPo.class);
         IPage<ApplyInfoPo> page = new Page<>(applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
         QueryWrapper<ApplyInfoPo> condition = MybatisKet.getCondition(applyInfoPo);
-        condition.orderByDesc("createTime");
+        condition.orderByDesc("create_time");
         IPage<ApplyInfoPo> applyInfoPoIPage = this.page(page, condition);
         return applyInfoPoIPage;
     }
