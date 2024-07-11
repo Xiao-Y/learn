@@ -22,6 +22,17 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 高级公用方法
+ * <p>
+ * 例如：
+ * S-OrderItemService 继承 HighLevelService
+ * <p>
+ * E-OrderItemPo 实体类
+ * <p>
+ * V-OrderItemVo 返回对象
+ * <p>
+ * BP-OrderItemBuildParam 新增对象
+ * <p>
+ * SP-OrderItemSearchParam 查询对象 继承 BasePage
  *
  * @author liuyongtao
  * @since 2021-8-12 14:23

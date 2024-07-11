@@ -145,7 +145,7 @@ public class FieldUtils {
         }
     }
 
-    public static Class<?> getSuperclassBytrgClassName(Class<?> clazz, String trgClassName) {
+    public static Class<?> getSuperclassByTrgClassName(Class<?> clazz, String trgClassName) {
         Class<?> basePo;
         String simpleName = clazz.getSimpleName();
         if (simpleName.equals(Object.class.getSimpleName())) {
@@ -154,7 +154,7 @@ public class FieldUtils {
         if (trgClassName.equals(simpleName)) {
             return clazz;
         } else {
-            basePo = getSuperclassBytrgClassName(clazz.getSuperclass(), trgClassName);
+            basePo = getSuperclassByTrgClassName(clazz.getSuperclass(), trgClassName);
         }
         return basePo;
     }

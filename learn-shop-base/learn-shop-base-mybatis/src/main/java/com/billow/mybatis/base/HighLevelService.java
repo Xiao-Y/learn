@@ -6,12 +6,15 @@ import com.billow.mybatis.pojo.BasePage;
 
 /**
  * 高级公用服务
+ * <p>
+ * E-OrderItemPo 实体类
+ * <p>
+ * SP-OrderItemSearchParam 查询对象 继承 BasePage
  *
  * @author liuyongtao
  * @since 2021-8-12 14:33
  */
-public interface HighLevelService<E, SP extends BasePage> extends IService<E>
-{
+public interface HighLevelService<E, SP extends BasePage> extends IService<E> {
 
     /**
      * 分页查询

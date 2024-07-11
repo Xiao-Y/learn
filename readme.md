@@ -129,6 +129,11 @@ private RedisTemplate<String, Object> redisTemplate;
 protected RedisTemplate<String, Object> redisCacheTemplate;
 ```
 
+```shell
+// 链路跟踪
+-javaagent:D:\docker\SkyWalkIng\skywalking-agent\skywalking-agent.jar -Dskywalking.agent.service_name=learn-shop-core-product -Dskywalking.collector.backend_service=127.0.0.1:11800
+```
+
 # 其它
 > HTTP Method 与 CURD 数据处理操作对应<br/>
 

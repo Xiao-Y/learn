@@ -15,7 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * @author liuyongtao
@@ -63,11 +65,15 @@ public class AopConfig {
             builder.serializerByType(Long.TYPE, ToStringSerializer.instance);
             builder.serializerByType(Long.class, ToStringSerializer.instance);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("GMT+8"));
             //返回时间数据序列化
             builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(formatter));
             //接收时间数据反序列化
             builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(formatter));
+
+            // 返回时间数据序列化
+            builder.serializerByType(Date.class, new CustomDateSerializer(pattern));
+            builder.deserializerByType(Date.class, new CustomDateDeserializer(pattern));
         };
     }
 }

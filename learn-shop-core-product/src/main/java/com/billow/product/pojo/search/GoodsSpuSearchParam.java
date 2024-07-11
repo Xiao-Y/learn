@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -33,4 +35,12 @@ public class GoodsSpuSearchParam extends BasePage implements Serializable {
 
     @ApiModelProperty(value = "品牌分类id")
     private Long categoryId;
+
+    // 查询测试
+    // 指定时间查询
+    private Date createTime;
+    // 时间范围查询（dateRange开头）
+    private String dateRangeCreateTime;
+    // 多数值查询（List结尾）
+    private List<String> spuNoList;
 }

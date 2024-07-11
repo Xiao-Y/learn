@@ -1,10 +1,7 @@
 package com.billow.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSkuDao;
 import com.billow.product.dao.GoodsSkuSpecValueDao;
@@ -49,15 +46,6 @@ public class GoodsSpuServiceImpl extends HighLevelServiceImpl<GoodsSpuDao, Goods
     private GoodsSkuSpecValueService goodsSkuSpecValueService;
 
     @Override
-    public void genQueryCondition(LambdaQueryWrapper<GoodsSpuPo> wrapper, GoodsSpuSearchParam goodsSpuSearchParam) {
-        // 查询条件
-        wrapper.eq(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getSpuNo()), GoodsSpuPo::getSpuNo, goodsSpuSearchParam.getSpuNo())
-                .like(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getGoodsName()), GoodsSpuPo::getGoodsName, goodsSpuSearchParam.getGoodsName())
-                .eq(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getBrandId()), GoodsSpuPo::getBrandId, goodsSpuSearchParam.getBrandId())
-                .eq(ToolsUtils.isNotEmpty(goodsSpuSearchParam.getCategoryId()), GoodsSpuPo::getCategoryId, goodsSpuSearchParam.getCategoryId());
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public void addOrUpdate(GoodsSpuVo goodsSpuVo) {
         // 保存更新商品信息
@@ -89,7 +77,7 @@ public class GoodsSpuServiceImpl extends HighLevelServiceImpl<GoodsSpuDao, Goods
                 goodsSkuSpecValueDao.update(skuSpecValuePo, wrapper);
                 // 设置对应的 sku 为无效
                 Set<Long> skuIds = skuSpecValuePos.stream().map(m -> m.getSkuId()).collect(Collectors.toSet());
-                if(ToolsUtils.isNotEmpty(skuIds)){
+                if (ToolsUtils.isNotEmpty(skuIds)) {
                     LambdaQueryWrapper<GoodsSkuPo> wupdate = Wrappers.lambdaQuery();
                     wupdate.in(GoodsSkuPo::getId, skuIds);
                     GoodsSkuPo skuPo = new GoodsSkuPo();
