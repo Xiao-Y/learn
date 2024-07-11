@@ -1,7 +1,8 @@
 package com.billow.tools.excel;
 
-import com.billow.tools.utlis.FieldUtils;
-import com.billow.tools.utlis.ToolsUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -136,12 +137,12 @@ public class ExcelUtils {
     public static void exportExcel(HSSFWorkbook wb, HSSFSheet sheet, ExcelData data) throws NoSuchFieldException, IllegalAccessException {
         //获取标题
         LinkedHashMap<String, String> titles = data.getTitles();
-        if (ToolsUtils.isEmpty(titles)) {
+        if (MapUtils.isEmpty(titles)) {
             titles = getExcelTitle(data);
         }
         //获取数据集
         ArrayList<HashMap<String, Object>> rows = data.getRows();
-        if (ToolsUtils.isEmpty(rows)) {
+        if (CollectionUtils.isEmpty(rows)) {
             rows = getExcelRows(data, titles.keySet());
         }
         //写入标题
@@ -163,7 +164,7 @@ public class ExcelUtils {
         List<T> objData = data.getObjData();
         ArrayList<HashMap<String, Object>> rows = new ArrayList<>();
         for (T obj : objData) {
-            HashMap<String, Object> map = FieldUtils.entityToMap(obj, titles);
+            HashMap<String, Object> map = entityToMap(obj, titles);
             rows.add(map);
         }
         return rows;
@@ -199,7 +200,7 @@ public class ExcelUtils {
             Field field = clazz.getDeclaredField(key);
             Title title = field.getAnnotation(Title.class);
             if (title != null) {
-                if (ToolsUtils.isNotEmpty(title.name())) {
+                if (StringUtils.isNotEmpty(title.name())) {
                     titles.put(key, title.name());
                 } else if (title.isField()) {
                     titles.put(key, key);
@@ -229,9 +230,10 @@ public class ExcelUtils {
 
         HSSFCellStyle titleStyle = wb.createCellStyle();
         HSSFRow titleRow = sheet.createRow(endDataIndex);
+        HSSFCell cell;
 
         for (Map.Entry<String, String> entry : titles.entrySet()) {
-            HSSFCell cell = titleRow.createCell(colIndex);
+            cell = titleRow.createCell(colIndex);
             cell.setCellValue(entry.getValue());
             HSSFCellStyle hssfCellStyle = titlesHSSFCellStyle.get(entry.getKey());
             if (hssfCellStyle == null) {
@@ -259,17 +261,19 @@ public class ExcelUtils {
     private static void writeRowsToExcel(HSSFWorkbook wb, HSSFSheet sheet, LinkedHashMap<String, String> titles,
                                          ArrayList<HashMap<String, Object>> rows, int endDataIndex,
                                          Map<String, HSSFCellStyle> rowsHSSFCellStyle) {
+        // 公共row、cell、style对象（方便内存回收）
         HSSFCellStyle dataStyle = wb.createCellStyle();
-
+        HSSFRow dataRow;
+        HSSFCell cell;
         //标题的行数
         int rowStartIndex = endDataIndex + 1;
         // 遍历数据源(每个HashMap中key 与titles中的key 相同)
         for (HashMap<String, Object> rowData : rows) {
-            HSSFRow dataRow = sheet.createRow(rowStartIndex);
+            dataRow = sheet.createRow(rowStartIndex);
             // 遍历标题(通过标题key,找到rowData中的value)
             int colIndex = 0;
             for (Map.Entry<String, String> entry : titles.entrySet()) {
-                HSSFCell cell = dataRow.createCell(colIndex);
+                cell = dataRow.createCell(colIndex);
                 String key = entry.getKey();
                 String value = converValue(rowData.get(key));
                 cell.setCellType(CellType.STRING);
@@ -323,5 +327,31 @@ public class ExcelUtils {
         Stream<Map.Entry<K, V>> st = map.entrySet().stream();
         st.sorted(Comparator.comparing(e -> e.getValue())).forEach(e -> result.put(e.getKey(), e.getValue()));
         return result;
+    }
+
+    /**
+     * 获取指定属性的值
+     *
+     * @return java.util.HashMap<java.lang.String, java.lang.Object>
+     * @author LiuYongTao
+     * @date 2018/7/10 9:08
+     */
+    public static <T> HashMap<String, Object> entityToMap(T t, Set<String> setTitles) throws NoSuchFieldException, IllegalAccessException {
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        Class<?> clazz = t.getClass();
+
+        for (String titleCode : setTitles) {
+            if (StringUtils.isNotEmpty(titleCode)) {
+                Field field = clazz.getDeclaredField(titleCode);
+                field.setAccessible(true);
+                String name = field.getName();
+                Object value = field.get(t);
+                map.put(name, value);
+            }
+
+        }
+        return map;
     }
 }

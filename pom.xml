@@ -72,7 +72,7 @@
         <nimbus-jose-jwt.version>8.16</nimbus-jose-jwt.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
-        <spring-cloud-sleuth.version>2.2.8.RELEASE</spring-cloud-sleuth.version>
+        <spring-cloud-starter.version>2.2.8.RELEASE</spring-cloud-starter.version>
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <jsch.version>0.1.54</jsch.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
@@ -102,7 +102,12 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-sleuth</artifactId>
-                <version>${spring-cloud-sleuth.version}</version>
+                <version>${spring-cloud-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+                <version>${spring-cloud-starter.version}</version>
             </dependency>
 
             <dependency>
