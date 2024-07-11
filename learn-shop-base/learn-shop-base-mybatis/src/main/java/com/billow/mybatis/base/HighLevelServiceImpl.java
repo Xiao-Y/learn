@@ -80,45 +80,47 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extend
         Field[] fields = ReflectUtil.getFields(sPClass, filter);
         for (Field field : fields) {
             Object fieldValue = ReflectUtil.getFieldValue(sp, field);
-            if (Objects.nonNull(fieldValue)) {
-                String column = StrUtil.toUnderlineCase(field.getName());
-                // 使用 apply 方法动态添加条件
-                bufferSql.append(" and ");
-                if (fieldValue instanceof List && column.endsWith("list")) {
-                    column = column.replaceFirst("_list", "");
-                    // 多个值查询
-                    bufferSql.append(column + " in ( ");
-                    List fieldValueList = (List) fieldValue;
-                    for (int j = 0; j < fieldValueList.size(); j++) {
-                        if (j != 0) {
-                            bufferSql.append(",");
-                        }
-                        bufferSql.append("{" + i + "}");
-                        i++;
+            if (Objects.isNull(fieldValue)) {
+                continue;
+            }
+            String column = StrUtil.toUnderlineCase(field.getName());
+            // 使用 apply 方法动态添加条件
+            bufferSql.append(" and ");
+            if (fieldValue instanceof List && column.endsWith("list")) {
+                column = column.replaceFirst("_list", "");
+                // 多个值查询
+                bufferSql.append(column + " in ( ");
+                List fieldValueList = (List) fieldValue;
+                for (int j = 0; j < fieldValueList.size(); j++) {
+                    if (j != 0) {
+                        bufferSql.append(",");
                     }
-                    bufferSql.append(" )");
-                    values.addAll(fieldValueList);
-                } else if (column.startsWith("date_range_") && fieldValue instanceof String && fieldValue.toString().contains("~")) {
-                    // 时间范围查询
-                    column = column.replaceFirst("date_range_", "");
-                    String[] split = ((String) fieldValue).split("~");
-                    if (StringUtils.isNotEmpty(split[0])) {
-                        bufferSql.append(column + " >= {" + i + "}");
-                        values.add(split[0]);
-                        i++;
-                    }
-                    if (StringUtils.isNotEmpty(split[1])) {
-                        if (StringUtils.isNotEmpty(split[0])) {
-                            bufferSql.append(" and ");
-                        }
-                        bufferSql.append(column + " <= {" + i + "}");
-                        values.add(split[1]);
-                    }
-
-                } else {
-                    bufferSql.append(column + " = {" + i + "}");
-                    values.add(fieldValue);
+                    bufferSql.append("{" + i + "}");
+                    i++;
                 }
+                bufferSql.append(" )");
+                values.addAll(fieldValueList);
+            } else if (column.startsWith("date_range_") && fieldValue instanceof String && fieldValue.toString().contains("~")) {
+                // 时间范围查询
+                column = column.replaceFirst("date_range_", "");
+                String[] split = ((String) fieldValue).split("~");
+                if (StringUtils.isNotEmpty(split[0])) {
+                    bufferSql.append(column + " >= {" + i + "}");
+                    values.add(split[0]);
+                    i++;
+                }
+                if (StringUtils.isNotEmpty(split[1])) {
+                    if (StringUtils.isNotEmpty(split[0])) {
+                        bufferSql.append(" and ");
+                    }
+                    bufferSql.append(column + " <= {" + i + "}");
+                    values.add(split[1]);
+                    i++;
+                }
+
+            } else {
+                bufferSql.append(column + " = {" + i + "}");
+                values.add(fieldValue);
                 i++;
             }
         }
