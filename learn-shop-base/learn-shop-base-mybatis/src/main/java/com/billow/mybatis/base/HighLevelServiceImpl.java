@@ -108,7 +108,9 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extend
                         i++;
                     }
                     if (StringUtils.isNotEmpty(split[1])) {
-                        bufferSql.append(" and ");
+                        if (StringUtils.isNotEmpty(split[0])) {
+                            bufferSql.append(" and ");
+                        }
                         bufferSql.append(column + " <= {" + i + "}");
                         values.add(split[1]);
                     }
