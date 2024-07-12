@@ -57,6 +57,17 @@ rabbitmq.password = admin123
 ```
 
 
+## ES索引的keyword类型和text类型以及termQuery,match,match_phrase区别
 
 
 
+| 关键词       | keyword类型 | text类型                                                     | 是否支持分词 | 对应的方法  |
+| ------------ | ----------- | ------------------------------------------------------------ | ------------ | ----------- |
+| term         | 完全匹配    | 查询条件必须都是text分词中的，且不能多余，多个分词时必须连续，顺序不能颠倒 | 否           | eq          |
+| match        | 完全匹配    | mahch分词结果和text的分词结果有相同的就行，不考虑顺序        | 是           | match       |
+| match_phrase | 完全匹配    | match_phrase的分词结果必须在text字段分词中都包含，而且顺序必须相同，而且必须都是连续的 | 是           | matchPhrase |
+| query_string | 完全匹配    | query_string中的分词结果至少有一个在text字段的分词结果中，不考虑顺序 | 是           |             |
+|              |             |                                                              |              |             |
+
+easy-es
+https://www.easy-es.cn/pages/7ead0d/#%E7%AE%80%E4%BB%8B

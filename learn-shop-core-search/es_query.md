@@ -1,6 +1,9 @@
 ## 查询语句拼接实战termQuery ,matchQuery, boolQuery, rangeQuery, wildcardQuery
 
-1，启动es的服务。在进行索引查询之前，首先建立索引库， 并向索引库中添加测试的索引信息。执行以下的命令后:(1)创建了INDEX = store,TYPE = books的索引库 (2) 向索引库中添加了id=1，以及id=2 的两条索引记录。
+1，启动es的服务。在进行索引查询之前，首先建立索引库， 并向索引库中添加测试的索引信息。
+执行以下的命令后:
+(1)创建了INDEX = store,TYPE = books的索引库 
+(2) 向索引库中添加了id=1，以及id=2 的两条索引记录。
 
 ```bash
 curl -XPUT 'http://192.168.25.101:9200/store/books/1' -d '{
@@ -40,7 +43,12 @@ curl -XPUT 'http://192.168.25.101:9200/store/books/1' -d '{
 
 2，构造termQuery对象进行字符的精确匹配查询
 
-(1) 下面是用es的termQuery对象构造查询语句，精确查询price = “35.99”的书籍信息。以下es查询语句相当于 sql语句：select * from books where price = 35.99。下面的代码中首先是获取transportClient对象，之后构造searchRequestBuilder的对象， 然后通过searchRequestBuilder对象发送http请求进行查询。下面代码运行后打印出来的searchRequesrBuilder 的内容如下：
+(1) 下面是用es的termQuery对象构造查询语句，精确查询price = “35.99”的书籍信息。
+以下es查询语句相当于 sql语句：
+select * from books where price = 35.99。
+下面的代码中首先是获取transportClient对象，之后构造searchRequestBuilder的对象， 
+然后通过searchRequestBuilder对象发送http请求进行查询。
+下面代码运行后打印出来的searchRequesrBuilder 的内容如下：
 
 ```bash
 @Test
@@ -86,7 +94,11 @@ curl -XGET 'http://192.168.25.101:9200/store/books/_search' -d '{
 
 3，通过termsQuery实现指定多个值进行精确匹配查询
 
-下面的代码与上述termQuery代码很相似，只有构造query对象时有不同的地方。我这边这展示不同地方:，QueryBuilder.termsQuery()方法有好几个重载的方法，第二参数可以传入一个可变参数类型，也可以传入一个集合类型。以下的es语句相当于sql 语句：select * from book where price in in ("35.99","49.99")
+下面的代码与上述termQuery代码很相似，只有构造query对象时有不同的地方。
+我这边这展示不同地方:
+QueryBuilder.termsQuery()方法有好几个重载的方法，第二参数可以传入一个可变参数类型， 也可以传入一个集合类型。
+以下的es语句相当于sql 语句：
+select * from book where price in in ("35.99","49.99")
 
 ```bash
   SearchRequestBuilder searchRequestBuilder = client.prepareSearch("store")

@@ -155,7 +155,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
             boolQueryBuilder.filter(rangePrice);
         }
 
-        // 分布条件
+        // 分页条件
         PageRequest pageRequest = PageRequest.of(pageNo - 1, pageSize);
 
         // 结果高亮显示
