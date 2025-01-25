@@ -28,7 +28,7 @@ public class StartLoading implements InitializingBean {
         if (customProperties.getCommon().getStartInitData()) {
             this.init(null);
         }else {
-            log.warn("未开启缓存加载，首次启动时需要设置为true");
+            log.warn("========>>>>>> 未开启缓存加载，首次启动时需要设置为true <<<<<<<<=========");
         }
     }
 

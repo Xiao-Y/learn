@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RestController
 @RequestMapping("/actProcDefApi")
-@Api(value = "工作流部署API")
+@Api(value = "流程定义API")
 public class ActProcDefApi {
 
     @Autowired

@@ -24,7 +24,10 @@
 > `learn-shop-base-tools` 公用工具类方法
 >
 > `learn-shop-base-workflow` 工作流式相关。system 依赖
-
+>
+> `learn-shop-base-notice` 消息通知相关。job 依赖
+> 
+> 
 ## **2.核心服务，端口：87****
 
 > `nacos` 注册中心，分布式配置中心 端口：8761
@@ -82,13 +85,13 @@
 
 # **注意**：
 
-- 特别提醒：如果使用本地配置文件需要修改 `learn-cloud-config` 下的 `resources` 里面的 `application.yml` 的 `search-locations` 修改为本地路径
+- 特别提醒：如果使用本地配置文件需要修改 `learn-cloud-common` 下的 `resources` 里面的 `bootstrap.yml` 的 `search-locations` 修改为本地路径
 
 - 添加新服务时，要在 `learn-cloud-gateway` 中添加路由表
 
-- 首次启动修改 `learn-shop-admin-system.yml` 中的 `database-schema-update` 为 true，自动建表
+- 首次启动修改 `learn-shop-admin-system.yml` 中的 `database-schema-update` 为 true，自动建工作流的表
 
-- 首次启动修改 `learn-shop-admin-system.yml` 中的 `start-init-data` 为 true，加载缓存
+- 首次启动修改 `learn-shop-admin-system.yml` 中的 `start-init-data` 为 true，加载菜单和权限缓存
 
 ```yaml
 core-order:
