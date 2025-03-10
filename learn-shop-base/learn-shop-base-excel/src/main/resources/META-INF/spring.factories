@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.billow.excel.spring.boot.autoconfigure.ExcelAutoConfiguration 

@@ -255,6 +255,11 @@
                 <version>${activiti.version}</version>
             </dependency>
             <!-- poi -->
+<!--            <dependency>-->
+<!--                <groupId>org.apache.poi</groupId>-->
+<!--                <artifactId>poi</artifactId>-->
+<!--                <version>${apache.poi.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>

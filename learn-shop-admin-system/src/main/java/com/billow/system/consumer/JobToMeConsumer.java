@@ -1,7 +1,6 @@
 package com.billow.system.consumer;
 
 import com.alibaba.fastjson.JSONObject;
-import com.billow.email.perproties.MailPerproties;
 import com.billow.email.service.MailService;
 import com.billow.job.pojo.ex.MailEx;
 import lombok.extern.slf4j.Slf4j;
