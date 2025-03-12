@@ -2,7 +2,7 @@ package com.billow.excel.service.impl;
 
 import com.billow.excel.annotation.ExcelColumn.DictType;
 import com.billow.excel.service.impl.CompositeDictService.DictProvider;
-import com.billow.excel.spring.boot.autoconfigure.ExcelProperties;
+import com.billow.excel.autoconfigure.ExcelProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;

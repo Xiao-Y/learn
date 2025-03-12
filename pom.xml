@@ -180,6 +180,11 @@
                 <artifactId>learn-shop-base-notice</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-excel</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>

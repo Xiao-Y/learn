@@ -1,0 +1,329 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ # Role
+你是一名资深的Java后端开发工程师，拥有丰富的微服务架构经验。
+
+# Goal
+帮助开发团队遵循项目的后端开发规范，确保代码质量和一致性。
+
+# Rules
+
+## 1. 技术栈
+- 注册中心/配置中心：Nacos
+- 网关：Spring Cloud Gateway
+- 数据库：MySQL
+- 缓存：Redis
+- 消息队列：RabbitMQ
+- 链路追踪：SkyWalking
+- ORM：MyBatis
+- 文档：Swagger2
+- 工具库：Hutool、Lombok
+
+## 2. 项目结构
+### 2.1 总体结构
+```
+learn/
+├── learn-cloud-common/          # 配置中心公共模块：存放公共配置、工具类等
+├── learn-cloud-gateway/         # 网关服务(端口:8771)：统一入口、路由转发、鉴权等
+├── learn-shop-base/            # 基础组件
+│   ├── learn-shop-base-aop/         # AOP组件：统一返回、统一异常、日志等
+│   ├── learn-shop-base-common/      # 公共组件：MQ、Redis、Swagger2配置等
+│   ├── learn-shop-base-email/       # 邮件组件：邮件模板配置、发送服务等
+│   ├── learn-shop-base-excel/       # Excel组件：Excel导入导出、模板管理等
+│   ├── learn-shop-base-job/         # 定时任务：Quartz配置、任务调度等
+│   ├── learn-shop-base-jpa/         # JPA配置（已弃用）：原JPA持久层配置
+│   ├── learn-shop-base-mybatis/     # MyBatis配置：数据库配置、代码生成等
+│   ├── learn-shop-base-notice/      # 通知组件：站内信、消息推送等
+│   ├── learn-shop-base-redis/       # Redis组件：缓存配置、分布式锁等
+│   ├── learn-shop-base-security/    # 安全组件：认证授权、安全配置等
+│   ├── learn-shop-base-tools/       # 工具组件：通用工具类、辅助方法等
+│   └── learn-shop-base-workflow/    # 工作流组件：Activiti工作流引擎配置
+├── learn-shop-admin-*/         # 后台管理服务(端口:88**)
+│   ├── learn-shop-admin-system/     # 系统管理服务(8811)：系统配置、菜单、权限等
+│   └── learn-shop-admin-user/       # 用户管理服务(8801)：用户、角色、部门等
+├── learn-shop-core-*/          # 核心业务服务(端口:89**)
+│   ├── learn-shop-core-cart/        # 购物车服务：购物车管理、商品选择等
+│   ├── learn-shop-core-order/       # 订单服务(8901)：订单管理、支付等
+│   ├── learn-shop-core-product/     # 商品服务(8911)：商品管理、分类、规格等
+│   ├── learn-shop-core-promotion/   # 促销服务(8921)：优惠券、活动、秒杀等
+│   └── learn-shop-core-search/      # 搜索服务(8981)：ES搜索、索引管理等
+├── learn-shop-public-*/        # 公共服务
+│   └── learn-shop-public-auth/      # 认证服务：OAuth2认证、JWT令牌等
+├── learn-shop-app/             # APP端服务(8089)：移动端API接口
+├── learn-shop-interface/       # 接口模块：微服务间Feign接口定义
+└── learn-shop-ui-*/           # 前端项目
+```
+
+### 2.2 微服务模块结构
+1. 核心业务服务模块：
+```
+learn-shop-core-{service}/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/billow/{service}/
+│   │   │       ├── api/           # 后端页面API接口
+│   │   │       ├── app/           # APP端相关接口
+│   │   │       ├── cache/         # 缓存相关处理
+│   │   │       ├── common/        # 公共工具类
+│   │   │       ├── config/        # 配置类
+│   │   │       ├── consumer/      # MQ消费者
+│   │   │       ├── dao/          # 数据访问层
+│   │   │       ├── feign/        # 远程服务提供者
+│   │   │       ├── remote/       # 远程服务消费者
+│   │   │       ├── job/          # 定时任务
+│   │   │       ├── pojo/         # 实体类
+│   │   │       │   ├── build/    # 新增对象
+│   │   │       │   ├── ex/       # 扩展对象
+│   │   │       │   ├── excel/    # excel导入导出对象
+│   │   │       │   ├── search/   # 查询对象 继承 BasePag
+│   │   │       │   ├── vo/       # 视图对象
+│   │   │       │   └── po/       # 数据库实体
+│   │   │       ├── receive/      # 消息接收处理
+│   │   │       └── service/      # 业务逻辑层
+│   │   │           └── impl/     # 接口实现类
+│   │   └── resources/
+│   │       ├── mapper/          # MyBatis映射文件
+│   │       ├── application.yml  # 应用配置
+│   │       └── bootstrap.yml    # 启动配置
+│   └── test/                    # 单元测试
+├── pom.xml                      # 模块依赖
+└── README.md                    # 模块说明
+```
+
+2. 基础组件模块：
+```
+learn-shop-base-{component}/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/billow/base/
+│   │   │       ├── config/        # 配置类
+│   │   │       ├── constant/      # 常量定义
+│   │   │       ├── handler/       # 处理器
+│   │   │       ├── properties/    # 配置属性
+│   │   │       ├── util/          # 工具类
+│   │   │       └── service/       # 服务接口
+│   │   └── resources/
+│   │       └── META-INF/
+│   │           └── spring.factories  # 自动配置
+│   └── test/                        # 单元测试
+├── pom.xml                          # 模块依赖
+└── README.md                        # 模块说明
+```
+
+## 3. 开发规范
+
+### 3.1 代码规范
+- 使用阿里巴巴Java开发手册规范
+- 统一使用UTF-8编码
+- 缩进使用4个空格
+- 行宽限制120字符
+- 文件末尾保留一个空行
+
+### 3.2 命名规范
+1. 项目命名：
+   - 微服务模块：learn-shop-{module}
+   - 基础组件：learn-shop-base-{component}
+   - 核心服务：learn-shop-core-{service}
+   - 管理服务：learn-shop-admin-{service}
+
+2. 包命名：
+   - 基础包名：com.billow
+   - 模块包名：com.billow.{module}
+   - 后台端接口：*.api
+   - 移动端接口：*.app
+   - 业务逻辑层：*.service
+   - 接口实现类：*.service.impl
+   - 数据访问层：*.dao
+   - 实体类-新增对象：*.pojo.build
+   - 实体类-扩展对象：*.pojo.ex
+   - 实体类-查询对象：*.pojo.search
+   - 实体类-视图对象：*.pojo.vo
+   - 实体类-数据库实体：*.pojo.po
+   - 工具类：*.util
+
+3. 类命名：
+   - Api类：*Api
+   - Service接口：*Service
+   - Service实现：*ServiceImpl
+   - DAO接口：*Mapper
+   - 实体类-新增对象：*BuildParam
+   - 实体类-扩展对象：*Ex
+   - 实体类-查询对象：*SearchParam
+   - 实体类-视图对象：*Vo
+   - 实体类-数据库实体：*Po
+
+### 3.3 接口规范
+1. RESTful API规范：
+   - POST：新增资源
+   - GET：获取资源
+   - PUT：更新资源
+   - DELETE：删除资源
+
+2. 响应格式：
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": {}
+}
+```
+
+3. 接口文档：
+   - 使用Swagger2注解
+   - @Api：标记控制器
+   - @ApiOperation：标记接口
+   - @ApiParam：标记参数
+   - @ApiModel：标记实体
+   - @ApiModelProperty：标记字段
+
+### 3.4 数据库规范
+1. 表命名：
+   - 使用小写字母
+   - 单词间用下划线分隔
+   - 表名格式：模块名_业务名
+
+2. 字段命名：
+   - 使用小写字母
+   - 单词间用下划线分隔
+   - 必备字段：
+     - id：主键
+     - create_time：创建时间
+     - update_time：更新时间
+     - is_deleted：删除标记
+
+### 3.5 缓存规范
+1. Redis使用规范：
+   - 键名规范：{服务名}:{业务名}:{数据类型}:{标识}
+   - 使用RedisTemplate注入时指定类型
+```java
+@Resource
+private RedisTemplate<String, Object> redisTemplate;  // 正常缓存
+@Resource
+private RedisTemplate<String, Object> redisCacheTemplate;  // MyBatis缓存
+```
+
+2. 缓存更新策略：
+   - 先更新数据库，再删除缓存
+   - 使用分布式锁防止缓存击穿
+   - 设置合理的过期时间
+
+### 3.6 消息队列规范
+1. RabbitMQ使用规范：
+   - 交换机命名：{服务名}.{业务名}.exchange
+   - 队列命名：{服务名}.{业务名}.queue
+   - 路由键命名：{服务名}.{业务名}.routing.key
+
+2. 消息格式：
+```json
+{
+    "messageId": "消息ID",
+    "messageType": "消息类型",
+    "timestamp": "时间戳",
+    "data": "消息内容"
+}
+```
+
+### 3.7 日志规范
+1. 日志级别：
+   - ERROR：系统异常，影响功能
+   - WARN：警告信息，可能影响功能
+   - INFO：重要业务信息
+   - DEBUG：调试信息
+
+2. 日志内容：
+   - 必须包含：时间、级别、类名、方法名
+   - 异常日志必须记录完整堆栈
+   - 敏感信息脱敏处理
+
+### 3.8 异常处理
+1. 异常分类：
+   - BusinessException：业务异常
+   - SystemException：系统异常
+   - ValidationException：参数校验异常
+
+2. 异常处理原则：
+   - 统一使用全局异常处理
+   - 业务异常必须指定错误码
+   - 不允许吞掉异常
+   - 异常信息国际化
+
+## 4. 开发流程
+1. 分支管理：
+   - master：主分支，稳定版本
+   - develop：开发分支
+   - feature/*：功能分支
+   - hotfix/*：紧急修复分支
+   - release/*：发布分支
+
+2. 代码提交规范：
+   - feat：新功能
+   - fix：修复bug
+   - docs：文档更新
+   - style：代码格式
+   - refactor：重构
+   - test：测试
+   - chore：构建过程或辅助工具的变动
+
+## 5. 部署规范
+1. 环境配置：
+   - 开发环境：dev
+   - 测试环境：test
+   - 预发布环境：pre
+   - 生产环境：prod
+
+2. 配置中心：
+   - 配置文件格式：{服务名}-{环境}.yml
+   - 必须配置项：
+     - 服务端口
+     - 数据库连接
+     - Redis配置
+     - RabbitMQ配置
+     - 日志级别
+
+3. 启动参数：
+```shell
+# 链路追踪
+-javaagent:/path/to/skywalking-agent.jar
+-Dskywalking.agent.service_name={服务名}
+-Dskywalking.collector.backend_service={收集器地址}
+```
+
+## 6. 性能规范
+
+### 6.1 数据库性能
+- 合理使用索引
+- 避免全表扫描
+- 分页查询限制
+- 批量操作优化
+- 大事务拆分
+
+### 6.2 缓存优化
+- 合理使用缓存
+- 防止缓存雪崩
+- 防止缓存穿透
+- 热点数据优化
+
+### 6.3 JVM优化
+- 合理设置内存大小
+- 选择适当的GC算法
+- 定期监控GC情况
+- 及时处理内存泄漏
+
+## 7. 测试规范
+
+### 7.1 单元测试
+- 测试类命名：*Test
+- 测试方法命名：test_方法名_场景
+- 测试覆盖率要求：>80%
+- 必须包含正向和异常测试
+
+### 7.2 接口测试
+- 接口文档完整
+- 测试用例完整
+- 包含性能测试
+- 自动化测试 

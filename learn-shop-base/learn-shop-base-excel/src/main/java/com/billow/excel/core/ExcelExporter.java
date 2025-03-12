@@ -1,8 +1,9 @@
 package com.billow.excel.core;
 
+import org.apache.poi.ss.formula.functions.T;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.concurrent.Future;
 
 /**
  * Excel 导出接口
@@ -20,9 +21,9 @@ public interface ExcelExporter {
     /**
      * 导出到响应流
      *
-     * @param dataList  数据列表
-     * @param response  HTTP响应对象
-     * @param <T>       数据类型
+     * @param dataList 数据列表
+     * @param response HTTP响应对象
+     * @param <T>      数据类型
      */
     <T> void exportToResponse(List<T> dataList, HttpServletResponse response);
 
@@ -39,11 +40,9 @@ public interface ExcelExporter {
      * 异步导出
      *
      * @param dataList 数据列表
-     * @param taskId   任务ID
-     * @param <T>      数据类型
-     * @return 导出结果Future
+     * @return 任务ID
      */
-    <T> Future<String> exportAsync(List<T> dataList, String taskId);
+    <T> String exportAsync(List<T> dataList);
 
     /**
      * 导出Excel导入模板

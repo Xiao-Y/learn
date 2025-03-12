@@ -2,6 +2,7 @@ package com.billow.excel.core;
 
 import com.billow.excel.annotation.ExcelColumn;
 import com.billow.excel.annotation.ExcelSheet;
+import com.billow.excel.generator.NumUtil;
 import com.billow.excel.model.ExcelTask;
 import com.billow.excel.service.DictService;
 import com.billow.excel.service.ExcelTaskService;
@@ -26,7 +27,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 /**
@@ -97,11 +96,11 @@ public class DefaultExcelExporter implements ExcelExporter {
     }
 
     @Override
-    @Async
-    public <T> Future<String> exportAsync(List<T> dataList, String taskId) {
+    public <T> String exportAsync(List<T> dataList) {
         // 创建任务记录
+        String taskId = NumUtil.makeNum("TA");
         ExcelTask task = new ExcelTask()
-                .setTaskId(taskId)
+                .setTaskId(NumUtil.makeNum("TA"))
                 .setType(ExcelTask.TaskType.EXPORT)
                 .setFileName(getFileName(dataList))
                 .setStatus(ExcelTask.TaskStatus.PROCESSING)
@@ -110,14 +109,14 @@ public class DefaultExcelExporter implements ExcelExporter {
                 .setErrorCount(0);
         taskService.createTask(task);
 
-        return CompletableFuture.supplyAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
             try {
 //                String filePath = System.getProperty("java.io.tmpdir") + "/" + taskId + ".xlsx";
                 String filePath = "D:/" + taskId + ".xlsx";
                 exportToFile(dataList, filePath);
 
                 // 更新任务状态为成功
-                task.setStatus(ExcelTask.TaskStatus.SUCCESS)
+                task.setStatus(ExcelTask.TaskStatus.COMPLETED)
                         .setSuccessCount(dataList.size())
                         .setFilePath(filePath);
                 taskService.updateTask(task);
@@ -135,6 +134,8 @@ public class DefaultExcelExporter implements ExcelExporter {
                 throw new RuntimeException("异步导出Excel失败", e);
             }
         });
+
+        return taskId;
     }
 
     @Override
@@ -330,7 +331,7 @@ public class DefaultExcelExporter implements ExcelExporter {
                         // 1. 首先检查是否需要字典转换
                         if (!column.dictCode().isEmpty()) {
                             String dictValue = value.toString();
-                            String label = dictService.getLabelByValue(column.dictCode(), dictValue);
+                            String label = dictService.getLabelByValue(column.dictCode(), dictValue, column.dictType());
                             cell.setCellValue(label);
                             continue;
                         }

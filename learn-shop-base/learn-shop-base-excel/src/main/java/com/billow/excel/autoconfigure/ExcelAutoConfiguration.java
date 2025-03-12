@@ -1,4 +1,4 @@
-package com.billow.excel.spring.boot.autoconfigure;
+package com.billow.excel.autoconfigure;
 
 import com.billow.excel.core.DefaultExcelExporter;
 import com.billow.excel.core.DefaultExcelImporter;
@@ -79,7 +79,7 @@ public class ExcelAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public ExcelExporter excelExporter(ExcelTaskService taskService, DictService dictService, ExcelProperties properties) {
+    public ExcelExporter excelExporter(ExcelTaskService taskService, DictService dictService) {
         return new DefaultExcelExporter(dictService, taskService);
     }
 
@@ -88,7 +88,7 @@ public class ExcelAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public ExcelImporter excelImporter(ExcelTaskService taskService, DictService dictService, ExcelProperties properties) {
-        return new DefaultExcelImporter(dictService, taskService);
+    public ExcelImporter excelImporter(DictService dictService) {
+        return new DefaultExcelImporter(dictService);
     }
 } 

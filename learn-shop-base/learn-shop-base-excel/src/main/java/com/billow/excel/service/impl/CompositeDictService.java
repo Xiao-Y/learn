@@ -7,7 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Primary
 @Service
 public class CompositeDictService implements DictService {
-    
+
     /**
      * 字典提供者接口
      */
@@ -27,23 +32,23 @@ public class CompositeDictService implements DictService {
          * 是否支持该字典类型
          */
         boolean support(String dictCode);
-        
+
         /**
          * 获取字典数据
          */
         Map<String, String> getDictData(String dictCode);
-        
+
         /**
          * 获取提供者类型
          */
         DictType getType();
     }
-    
+
     /**
      * 字典提供者列表
      */
     private List<DictProvider> providers;
-    
+
     /**
      * 字典缓存
      * key: dictCode
@@ -55,11 +60,11 @@ public class CompositeDictService implements DictService {
     public void setProviders(List<DictProvider> providers) {
         // 按照 @Order 注解排序
         this.providers = new ArrayList<>(providers);
-        this.providers.sort(Comparator.comparingInt(provider -> 
-            Optional.ofNullable(provider.getClass().getAnnotation(org.springframework.core.annotation.Order.class))
-                .map(org.springframework.core.annotation.Order::value)
-                .orElse(Integer.MAX_VALUE)));
-        
+        this.providers.sort(Comparator.comparingInt(provider ->
+                Optional.ofNullable(provider.getClass().getAnnotation(org.springframework.core.annotation.Order.class))
+                        .map(org.springframework.core.annotation.Order::value)
+                        .orElse(Integer.MAX_VALUE)));
+
         // 打印提供者加载顺序
         log.info("字典提供者加载顺序：");
         for (DictProvider provider : this.providers) {
@@ -72,21 +77,6 @@ public class CompositeDictService implements DictService {
         return getDictLabels(dictCode, DictType.AUTO);
     }
 
-    @Override
-    public String getLabelByValue(String dictCode, String value) {
-        return getLabelByValue(dictCode, value, DictType.AUTO);
-    }
-
-    @Override
-    public String getValueByLabel(String dictCode, String label) {
-        return getValueByLabel(dictCode, label, DictType.AUTO);
-    }
-
-    @Override
-    public Map<String, String> getDictMap(String dictCode) {
-        return getDictMap(dictCode, DictType.AUTO);
-    }
-
     /**
      * 获取字典标签列表
      */
@@ -97,6 +87,7 @@ public class CompositeDictService implements DictService {
     /**
      * 获取字典值对应的标签
      */
+    @Override
     public String getLabelByValue(String dictCode, String value, DictType dictType) {
         return getDictMap(dictCode, dictType).get(value);
     }
@@ -104,6 +95,7 @@ public class CompositeDictService implements DictService {
     /**
      * 获取字典标签对应的值
      */
+    @Override
     public String getValueByLabel(String dictCode, String label, DictType dictType) {
         Map<String, String> dictMap = getDictMap(dictCode, dictType);
         return dictMap.entrySet().stream()

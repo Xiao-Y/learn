@@ -2,7 +2,7 @@ package com.billow.excel.service.impl;
 
 import com.billow.excel.annotation.ExcelColumn.DictType;
 import com.billow.excel.service.impl.CompositeDictService.DictProvider;
-import com.billow.excel.spring.boot.autoconfigure.ExcelProperties;
+import com.billow.excel.autoconfigure.ExcelProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.Order;
@@ -85,10 +85,11 @@ public class EnumDictProvider implements DictProvider, InitializingBean {
     }
     
     private String getDictCode(Class<? extends DictEnum> enumClass) {
-        // 默认使用枚举类名转换为下划线格式作为dictCode
-        return StringUtils.capitalize(enumClass.getSimpleName())
-                .replaceAll("([a-z])([A-Z])", "$1_$2")
-                .toUpperCase();
+//        // 默认使用枚举类名转换为下划线格式作为dictCode
+//        return StringUtils.capitalize(enumClass.getSimpleName())
+//                .replaceAll("([a-z])([A-Z])", "$1_$2")
+//                .toUpperCase();
+        return enumClass.getSimpleName();
     }
     
     @Override

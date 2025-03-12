@@ -1,4 +1,4 @@
-package com.billow.product.consume;
+package com.billow.product.consumer;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;

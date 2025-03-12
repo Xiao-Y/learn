@@ -1,10 +1,8 @@
 package com.billow.excel.core;
 
 import com.billow.excel.annotation.ExcelColumn;
-import com.billow.excel.model.ExcelTask;
 import com.billow.excel.model.ImportResult;
 import com.billow.excel.service.DictService;
-import com.billow.excel.service.ExcelTaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -39,7 +36,6 @@ import java.util.concurrent.Future;
 public class DefaultExcelImporter implements ExcelImporter {
 
     private final DictService dictService;
-    private final ExcelTaskService taskService;
 
     @Override
     public <T> List<T> importFromFile(String filePath, Class<T> clazz) {
@@ -72,19 +68,7 @@ public class DefaultExcelImporter implements ExcelImporter {
     }
 
     @Override
-    @Async
     public <T> Future<ImportResult<T>> importAsync(MultipartFile file, Class<T> clazz) {
-        // 创建任务记录
-        String taskId = UUID.randomUUID().toString();
-        ExcelTask task = new ExcelTask()
-                .setTaskId(taskId)
-                .setType(ExcelTask.TaskType.IMPORT)
-                .setFileName(file.getOriginalFilename())
-                .setStatus(ExcelTask.TaskStatus.PROCESSING)
-                .setTotal(0)
-                .setSuccessCount(0)
-                .setErrorCount(0);
-        taskService.createTask(task);
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -94,22 +78,9 @@ public class DefaultExcelImporter implements ExcelImporter {
                 result.setTotal(dataList.size());
                 result.setSuccessCount(dataList.size());
                 result.setErrorCount(0);
-
-                // 更新任务状态为成功
-                task.setStatus(ExcelTask.TaskStatus.SUCCESS)
-                        .setTotal(dataList.size())
-                        .setSuccessCount(dataList.size());
-                taskService.updateTask(task);
-
                 return result;
             } catch (Exception e) {
                 log.error("异步导入Excel失败", e);
-
-                // 更新任务状态为失败
-                task.setStatus(ExcelTask.TaskStatus.FAILED)
-                        .setErrorMessage(e.getMessage());
-                taskService.updateTask(task);
-
                 throw new RuntimeException("异步导入Excel失败", e);
             }
         });
@@ -170,8 +141,7 @@ public class DefaultExcelImporter implements ExcelImporter {
 
                         // 处理字典值转换
                         if (!column.dictCode().isEmpty()) {
-                            String dictValue = dictService.getValueByLabel(
-                                    column.dictCode(), value.toString());
+                            String dictValue = dictService.getValueByLabel(column.dictCode(), value.toString(), column.dictType());
                             field.set(instance, convertValue(dictValue, field.getType()));
                         } else {
                             field.set(instance, convertValue(value, field.getType()));

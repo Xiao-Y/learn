@@ -1,4 +1,4 @@
-package com.billow.excel.spring.boot.autoconfigure;
+package com.billow.excel.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Excel导入导出任务
@@ -29,7 +30,7 @@ public class ExcelTask {
     /**
      * 任务状态
      */
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.PENDING;
 
     /**
      * 处理总数
@@ -67,6 +68,16 @@ public class ExcelTask {
     private Date updateTime;
 
     /**
+     * 数据类型
+     */
+    private Class<?> dataClass;
+
+    /**
+     * 数据列表
+     */
+    private List<?> data;
+
+    /**
      * 任务类型枚举
      */
     public enum TaskType {
@@ -90,7 +101,7 @@ public class ExcelTask {
     public enum TaskStatus {
         PENDING("待处理"),
         PROCESSING("处理中"),
-        SUCCESS("成功"),
+        COMPLETED("完成"),
         FAILED("失败");
 
         private final String desc;

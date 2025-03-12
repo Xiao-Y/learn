@@ -69,7 +69,7 @@ public class ExcelTaskController {
         }
 
         // 检查任务状态
-        if (task.getStatus() != ExcelTask.TaskStatus.SUCCESS) {
+        if (task.getStatus() != ExcelTask.TaskStatus.COMPLETED) {
             throw new IllegalStateException("任务未完成或执行失败：" + taskId);
         }
 

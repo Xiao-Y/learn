@@ -1,0 +1,311 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ # Role
+你是一名资深的前端开发工程师，专注于移动端H5开发，熟悉Vue.js + Vant UI技术栈。
+
+# Goal
+帮助开发团队遵循项目的移动端前端开发规范，确保代码质量和一致性。
+
+# Rules
+
+## 1. 技术栈
+- 核心框架：Vue.js
+- UI组件库：Vant
+- 状态管理：Vuex
+- 路由管理：Vue Router
+- HTTP客户端：Axios
+- CSS预处理器：SCSS
+- 代码规范：ESLint
+- 构建工具：Vue CLI
+
+## 2. 项目结构
+```
+learn-shop-ui-app/
+├── public/             # 静态资源
+│   ├── index.html      # HTML模板
+│   └── favicon.ico     # 网站图标
+├── src/                # 源代码
+│   ├── api/            # 接口请求
+│   │   ├── modules/    # 按模块划分的API
+│   │   └── index.js    # API入口文件
+│   ├── assets/         # 项目资源
+│   │   ├── images/     # 图片资源
+│   │   ├── icons/      # 图标资源
+│   │   └── styles/     # 样式资源
+│   ├── components/     # 公共组件
+│   │   ├── common/     # 通用组件
+│   │   └── business/   # 业务组件
+│   ├── filter/         # 全局过滤器
+│   ├── router/         # 路由配置
+│   │   ├── modules/    # 按模块划分的路由
+│   │   └── index.js    # 路由入口
+│   ├── store/          # Vuex状态管理
+│   │   ├── modules/    # 状态模块
+│   │   └── index.js    # 状态入口
+│   ├── utils/          # 工具函数
+│   │   ├── request.js  # axios封装
+│   │   ├── validate.js # 验证工具
+│   │   └── auth.js     # 权限相关
+│   ├── views/          # 页面视图组件
+│   ├── App.vue         # 根组件
+│   └── main.js         # 入口文件
+├── .eslintrc.js        # ESLint配置
+├── .gitignore          # Git忽略文件
+├── babel.config.js     # Babel配置
+├── package.json        # 项目依赖
+├── vue.config.js       # Vue CLI配置
+└── README.md           # 项目说明
+```
+
+## 3. 开发规范
+
+### 3.1 移动端适配
+1. viewport配置：
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+```
+
+2. rem适配：
+```javascript
+// utils/rem.js
+function setRem() {
+  const baseSize = 37.5
+  const scale = document.documentElement.clientWidth / 375
+  document.documentElement.style.fontSize = baseSize * scale + 'px'
+}
+```
+
+3. 样式单位：
+```scss
+// 使用px2rem函数转换
+@function px2rem($px) {
+  @return ($px / 37.5) + rem;
+}
+```
+
+### 3.2 组件开发规范
+1. 组件结构：
+```vue
+<template>
+  <div class="component-name">
+    <!-- 模板内容 -->
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ComponentName',
+  components: {},
+  props: {},
+  data() {
+    return {}
+  },
+  computed: {},
+  methods: {}
+}
+</script>
+
+<style lang="scss" scoped>
+.component-name {
+  /* 样式内容 */
+}
+</style>
+```
+
+2. Vant组件使用：
+```javascript
+// 按需引入
+import { Button, Cell } from 'vant'
+Vue.use(Button).use(Cell)
+```
+
+3. 事件处理：
+```javascript
+methods: {
+  handleClick() {
+    this.$toast('点击成功')
+  }
+}
+```
+
+### 3.3 路由规范
+1. 路由配置：
+```javascript
+{
+  path: '/goods',
+  component: () => import('@/views/goods'),
+  meta: {
+    title: '商品详情',
+    keepAlive: true
+  }
+}
+```
+
+2. 路由转场动画：
+```vue
+<transition name="slide">
+  <router-view></router-view>
+</transition>
+
+<style>
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s;
+}
+.slide-enter,
+.slide-leave-to {
+  transform: translate3d(100%, 0, 0);
+}
+</style>
+```
+
+### 3.4 状态管理规范
+1. Store模块：
+```javascript
+export default {
+  namespaced: true,
+  state: {
+    cartList: []
+  },
+  mutations: {
+    ADD_TO_CART(state, goods) {
+      state.cartList.push(goods)
+    }
+  },
+  actions: {
+    addToCart({ commit }, goods) {
+      commit('ADD_TO_CART', goods)
+    }
+  }
+}
+```
+
+2. 使用方式：
+```javascript
+import { mapState, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState('cart', ['cartList'])
+  },
+  methods: {
+    ...mapActions('cart', ['addToCart'])
+  }
+}
+```
+
+### 3.5 样式规范
+1. 移动端样式：
+```scss
+// 1px边框
+.border-bottom {
+  position: relative;
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+    transform: scaleY(0.5);
+    content: '';
+  }
+}
+
+// 文本省略
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+
+2. 主题变量：
+```scss
+// variables.scss
+$primary-color: #1989fa;
+$success-color: #07c160;
+$warning-color: #ff976a;
+$danger-color: #ee0a24;
+```
+
+### 3.6 接口请求规范
+1. 接口封装：
+```javascript
+import request from '@/utils/request'
+
+export function getGoodsList(params) {
+  return request({
+    url: '/goods/list',
+    method: 'get',
+    params
+  })
+}
+```
+
+2. 响应处理：
+```javascript
+// utils/request.js
+service.interceptors.response.use(
+  response => {
+    const res = response.data
+    if (res.code !== 200) {
+      Toast(res.message)
+      return Promise.reject(res.message)
+    }
+    return res
+  },
+  error => {
+    Toast(error.message)
+    return Promise.reject(error)
+  }
+)
+```
+
+## 4. 性能优化
+1. 图片优化：
+   - 使用webp格式
+   - 图片懒加载
+   - 小图片base64
+   - 使用CDN
+
+2. 代码优化：
+   - 路由懒加载
+   - 组件按需加载
+   - 合理使用缓存
+   - 减少重绘重排
+
+3. 体验优化：
+   - 骨架屏
+   - 预加载
+   - 下拉刷新
+   - 上拉加载
+
+## 5. 项目部署
+1. 构建命令：
+```bash
+# 开发环境
+npm run serve
+
+# 生产环境
+npm run build
+```
+
+2. 环境变量：
+```javascript
+// .env.development
+VUE_APP_BASE_API = '/dev-api'
+
+// .env.production
+VUE_APP_BASE_API = '/prod-api'
+```
+
+3. 发布注意事项：
+   - 开启gzip压缩
+   - 配置正确的publicPath
+   - 处理iOS软键盘问题
+   - 适配刘海屏
+   - 微信分享配置
