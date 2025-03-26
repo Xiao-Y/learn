@@ -27,7 +27,7 @@ public class SeckillProductCacheDto implements Serializable {
     @ApiModelProperty(value = "编号")
     private Long seckillSessionId;
 
-    @ApiModelProperty(value = "商品价格")
+    @ApiModelProperty(value = "商品id")
     private Long productId;
 
     @ApiModelProperty(value = "skuid")

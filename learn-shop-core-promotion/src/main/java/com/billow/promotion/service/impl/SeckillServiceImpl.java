@@ -52,7 +52,7 @@ public class SeckillServiceImpl implements SeckillService {
     @Value("${seckill.gen-salt:wq<<.((0kkoe$$%}")
     private String salt;
     // url 失效时间（单位：秒）
-    @Value("${seckill.url-invalid:20}")
+    @Value("${seckill.url-invalid:20000000}")
     private long urlInvalid;
 
     @Autowired
@@ -79,7 +79,7 @@ public class SeckillServiceImpl implements SeckillService {
         // 秒杀链接过期时间
         Long expire = now.plusSeconds(urlInvalid).toEpochSecond(ZoneOffset.UTC);
         // 生成 md5 链接
-        String md5 = this.getMD5(seckillProductId, null);
+        String md5 = this.getMD5(seckillProductId, expire);
         return new ExposerVo(true, md5, seckillProductId, expire);
     }
 
