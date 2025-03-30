@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum SeckillStatusEnum {
+public enum SeckillStatusEnum{
     UP(0, "上架"),
     DOWN(1, "下架");
 

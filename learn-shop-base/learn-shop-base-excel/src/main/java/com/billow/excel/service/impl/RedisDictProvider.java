@@ -24,14 +24,14 @@ public class RedisDictProvider implements DictProvider {
 
     @Override
     public boolean support(String dictCode) {
-        String key = excelProperties.getDictConfig().getRedisKeyPrefix() + dictCode;
+        String key = excelProperties.getDict().getRedisKeyPrefix() + dictCode;
         Boolean hasKey = redisTemplate.hasKey(key);
         return Boolean.TRUE.equals(hasKey);
     }
 
     @Override
     public Map<String, String> getDictData(String dictCode) {
-        String key = excelProperties.getDictConfig().getRedisKeyPrefix() + dictCode;
+        String key = excelProperties.getDict().getRedisKeyPrefix() + dictCode;
         Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
 
         Map<String, String> dictMap = new HashMap<>();

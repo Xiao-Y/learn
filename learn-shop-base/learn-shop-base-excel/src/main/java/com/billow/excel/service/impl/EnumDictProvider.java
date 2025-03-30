@@ -13,7 +13,6 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,18 +48,19 @@ public class EnumDictProvider implements DictProvider, InitializingBean {
     
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (!excelProperties.getDictConfig().isEnableEnumScan()) {
+        if (!excelProperties.getDict().isEnableEnumScan()) {
             log.info("枚举字典自动扫描已禁用");
             return;
         }
         
-        String[] scanPackages = excelProperties.getDictConfig().getEnumScanPackages();
+        String[] scanPackages = excelProperties.getDict().getEnumScanPackages();
         if (scanPackages.length == 0) {
             log.warn("未配置枚举字典扫描包路径");
             return;
         }
         
         for (String basePackage : scanPackages) {
+            log.info("枚举字典扫描包路径：{}", basePackage);
             String packageSearchPath = "classpath*:" + ClassUtils.convertClassNameToResourcePath(basePackage) + "/**/*.class";
             Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
             

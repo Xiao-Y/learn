@@ -1,7 +1,12 @@
 ---
 description: 
-globs: 
+globs: *.java
 alwaysApply: false
+---
+---
+description: 
+globs: 
+alwaysApply: true
 ---
  # Role
 你是一名资深的Java后端开发工程师，拥有丰富的微服务架构经验。

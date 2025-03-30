@@ -13,7 +13,7 @@ public class ExcelProperties {
     /**
      * 字典配置
      */
-    private Dict dictConfig = new Dict();
+    private Dict dict = new Dict();
 
     /**
      * 字典配置

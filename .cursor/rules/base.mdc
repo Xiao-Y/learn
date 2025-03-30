@@ -1,4 +1,9 @@
 ---
+description: 
+globs: 
+alwaysApply: false
+---
+---
 description: 全局基本规则
 globs: 
 alwaysApply: true

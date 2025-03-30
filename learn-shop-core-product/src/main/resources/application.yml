@@ -35,4 +35,4 @@ learn:
       # 配置需要扫描的包路径，支持多个包路径
       # 只有实现了DictEnum接口的枚举类才会被注册为字典
       enum-scan-packages:
-        - "com.billow.product.common.enums"          # Excel模块的枚举包
+        - "com.billow.product.common.enums" # Excel模块的枚举包
