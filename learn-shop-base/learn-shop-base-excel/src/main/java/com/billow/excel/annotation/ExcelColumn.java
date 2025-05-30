@@ -22,7 +22,7 @@ public @interface ExcelColumn {
     /**
      * 列宽（字符数）
      */
-    int width() default 0;
+    int width() default 20;
 
     /**
      * 日期/数字格式化
@@ -40,7 +40,7 @@ public @interface ExcelColumn {
      * DATABASE: 数据库字典
      * REDIS: Redis字典
      */
-    DictType dictType() default DictType.AUTO;
+    DictType dictType() default DictType.NULL;
 
     /**
      * 是否必填
@@ -62,20 +62,20 @@ public @interface ExcelColumn {
      */
     enum DictType {
         /**
-         * 自动选择
+         * 空
          */
-        AUTO,
-        
+        NULL,
+
         /**
          * 枚举字典
          */
         ENUM,
-        
+
         /**
          * 数据库字典
          */
         DATABASE,
-        
+
         /**
          * Redis字典
          */
