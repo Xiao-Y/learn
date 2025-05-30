@@ -1,6 +1,6 @@
 package com.billow.product.common.enums;
 
-import com.billow.excel.service.impl.EnumDictProvider;
+import com.billow.excel.provider.impl.EnumDictProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
