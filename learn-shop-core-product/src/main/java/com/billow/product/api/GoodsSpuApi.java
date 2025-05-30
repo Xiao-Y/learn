@@ -37,16 +37,16 @@ public class GoodsSpuApi extends HighLevelApi<GoodsSpuService, GoodsSpuPo, Goods
 
     @Autowired
     private GoodsSpuService goodsSpuService;
-
-    @ApiOperation("异步导出商品SPU数据")
-    @GetMapping("/export")
-    public String asyncExport(HttpServletResponse response) {
-        return goodsSpuService.asyncExport(response);
-    }
-
-    @ApiOperation("异步导入商品SPU数据")
-    @PostMapping("/import")
-    public String asyncImport(@RequestParam("file") MultipartFile file) throws ExecutionException, InterruptedException {
-        return goodsSpuService.asyncImport(file);
-    }
+//
+//    @ApiOperation("异步导出商品SPU数据")
+//    @GetMapping("/export")
+//    public String asyncExport(HttpServletResponse response) {
+//        return goodsSpuService.asyncExport(response);
+//    }
+//
+//    @ApiOperation("异步导入商品SPU数据")
+//    @PostMapping("/import")
+//    public String asyncImport(@RequestParam("file") MultipartFile file) throws ExecutionException, InterruptedException {
+//        return goodsSpuService.asyncImport(file);
+//    }
 }
