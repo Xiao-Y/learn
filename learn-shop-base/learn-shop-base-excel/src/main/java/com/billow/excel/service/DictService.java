@@ -14,7 +14,7 @@ public interface DictService {
      * @param dictCode 字典编码
      * @return 标签列表
      */
-    List<String> getDictLabels(String dictCode);
+    List<String> getDictLabels(String dictCode, ExcelColumn.DictType dictType);
 
     /**
      * 获取字典值对应的标签
@@ -35,5 +35,13 @@ public interface DictService {
      * @return 字典值
      */
     String getValueByLabel(String dictCode, String label, ExcelColumn.DictType dictType);
+
+
+    /**
+     * 清除字典缓存
+     *
+     * @return 字典值
+     */
+    void clearCache();
 
 }
