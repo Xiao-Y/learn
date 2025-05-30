@@ -1,48 +1,22 @@
 package com.billow.excel.service.impl;
 
 import com.billow.excel.annotation.ExcelColumn.DictType;
+import com.billow.excel.provider.DictProvider;
 import com.billow.excel.service.DictService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 复合字典服务实现
  * 支持多种数据源：枚举、数据库、缓存等
  */
 @Slf4j
-@Primary
-@Service
 public class CompositeDictService implements DictService {
 
-    /**
-     * 字典提供者接口
-     */
-    public interface DictProvider {
-        /**
-         * 是否支持该字典类型
-         */
-        boolean support(String dictCode);
-
-        /**
-         * 获取字典数据
-         */
-        Map<String, String> getDictData(String dictCode);
-
-        /**
-         * 获取提供者类型
-         */
-        DictType getType();
-    }
 
     /**
      * 字典提供者列表
@@ -55,6 +29,13 @@ public class CompositeDictService implements DictService {
      * value: {dictValue: dictLabel}
      */
     private final Map<String, Map<String, String>> dictCache = new ConcurrentHashMap<>();
+
+    /**
+     * 缓存是空的
+     *
+     * @author 千面
+     */
+    private final List<String> dictCacheEmpty = new CopyOnWriteArrayList<>();
 
     @Autowired
     public void setProviders(List<DictProvider> providers) {
@@ -72,14 +53,10 @@ public class CompositeDictService implements DictService {
         }
     }
 
-    @Override
-    public List<String> getDictLabels(String dictCode) {
-        return getDictLabels(dictCode, DictType.AUTO);
-    }
-
     /**
      * 获取字典标签列表
      */
+    @Override
     public List<String> getDictLabels(String dictCode, DictType dictType) {
         return new ArrayList<>(getDictMap(dictCode, dictType).values());
     }
@@ -110,8 +87,8 @@ public class CompositeDictService implements DictService {
      */
     public Map<String, String> getDictMap(String dictCode, DictType dictType) {
         // 如果是自动模式，使用原有逻辑
-        if (dictType == DictType.AUTO) {
-            return getAutoDict(dictCode);
+        if (dictType == DictType.NULL) {
+            return Collections.emptyMap();
         }
 
         // 获取指定类型的提供者
@@ -126,6 +103,10 @@ public class CompositeDictService implements DictService {
         if (dictMap != null) {
             return dictMap;
         }
+        // 说明已经查询过，但是没有数据
+        if (dictCacheEmpty.contains(cacheKey)) {
+            return Collections.emptyMap();
+        }
 
         // 从提供者获取数据
         if (provider.support(dictCode)) {
@@ -135,40 +116,18 @@ public class CompositeDictService implements DictService {
                 return dictMap;
             }
         }
-
-        return Collections.emptyMap();
-    }
-
-    /**
-     * 自动模式获取字典数据
-     */
-    private Map<String, String> getAutoDict(String dictCode) {
-        // 先从缓存获取
-        Map<String, String> dictMap = dictCache.get(dictCode);
-        if (dictMap != null) {
-            return dictMap;
-        }
-
-        // 遍历所有提供者，找到支持的提供者
-        for (DictProvider provider : providers) {
-            if (provider.support(dictCode)) {
-                dictMap = provider.getDictData(dictCode);
-                if (dictMap != null && !dictMap.isEmpty()) {
-                    // 放入缓存
-                    dictCache.put(dictCode, dictMap);
-                    return dictMap;
-                }
-            }
-        }
-
+        // 记录缓存为空的
+        dictCacheEmpty.add(cacheKey);
         return Collections.emptyMap();
     }
 
     /**
      * 清除字典缓存
      */
+    @Override
     public void clearCache() {
         dictCache.clear();
+        dictCacheEmpty.clear();
     }
 
     /**
@@ -177,9 +136,6 @@ public class CompositeDictService implements DictService {
     public void clearCache(String dictCode) {
         // 清除自动模式的缓存
         dictCache.remove(dictCode);
-        // 清除指定类型的缓存
-        for (DictType type : DictType.values()) {
-            dictCache.remove(dictCode + ":" + type);
-        }
+        dictCacheEmpty.remove(dictCode);
     }
 } 
