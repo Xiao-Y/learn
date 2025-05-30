@@ -60,7 +60,7 @@ public class ExcelTaskController {
      * @param taskId 任务ID
      * @return 文件资源
      */
-    @GetMapping("/{taskId}/download")
+    @GetMapping("/download/{taskId}")
     public ResponseEntity<Resource> downloadTaskFile(@PathVariable String taskId) {
         // 获取任务信息
         ExcelTask task = taskService.getTask(taskId);
