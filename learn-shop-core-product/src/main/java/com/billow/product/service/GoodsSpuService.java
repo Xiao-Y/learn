@@ -5,10 +5,6 @@ import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.search.GoodsSpuSearchParam;
 import com.billow.product.pojo.vo.GoodsSpuVo;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.ExecutionException;
 
 /**
  * <p>
@@ -31,21 +27,21 @@ public interface GoodsSpuService extends HighLevelService<GoodsSpuPo, GoodsSpuSe
      */
     void addOrUpdate(GoodsSpuVo goodsSpuVo);
 
-    /**
-     * 异步导出商品SPU数据
-     *
-     * @param response
-     * @return String 任务ID
-     * @author 千面
-     * @date 2025/3/12 20:03
-     */
-    String asyncExport(HttpServletResponse response);
-
-    /**
-     * 异步导入商品SPU数据
-     *
-     * @param file Excel文件
-     * @return 导入任务ID
-     */
-    String asyncImport(MultipartFile file) throws ExecutionException, InterruptedException;
+//    /**
+//     * 异步导出商品SPU数据
+//     *
+//     * @param response
+//     * @return String 任务ID
+//     * @author 千面
+//     * @date 2025/3/12 20:03
+//     */
+//    String asyncExport(HttpServletResponse response);
+//
+//    /**
+//     * 异步导入商品SPU数据
+//     *
+//     * @param file Excel文件
+//     * @return 导入任务ID
+//     */
+//    String asyncImport(MultipartFile file) throws ExecutionException, InterruptedException;
 }
