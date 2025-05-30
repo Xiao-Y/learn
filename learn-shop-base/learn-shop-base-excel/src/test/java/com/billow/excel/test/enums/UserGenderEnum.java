@@ -1,6 +1,6 @@
 //package com.billow.excel.test.enums;
 //
-//import com.billow.excel.service.impl.EnumDictProvider.DictEnum;
+//import com.billow.excel.dictProvider.impl.EnumDictProvider.DictEnum;
 //
 ///**
 // * 用户性别枚举
