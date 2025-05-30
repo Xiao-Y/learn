@@ -7,8 +7,11 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.excel.excelKet.ExcelExporterKit;
+import com.billow.excel.provider.DictProvider;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.RoleMenuDao;
+import com.billow.system.pojo.excel.MenuExcel;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RoleMenuPo;
 import com.billow.system.pojo.po.RolePo;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -35,8 +39,7 @@ import java.util.*;
  */
 @Service
 @Transactional(readOnly = true)
-public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements MenuService
-{
+public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements MenuService {
 
     @Autowired
     private MenuDao menuDao;
@@ -48,12 +51,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     private MenuRedisKit menuRedisKit;
 
     @Override
-    public List<Tree<Long>> findMenus()
-    {
+    public List<Tree<Long>> findMenus() {
         // 查询缓存，如果不存在，查询DB
         List<MenuPo> menuPos = menuRedisKit.getMenusList();
-        if (CollectionUtils.isEmpty(menuPos))
-        {
+        if (CollectionUtils.isEmpty(menuPos)) {
             menuPos = this.list();
             menuRedisKit.setMenusList(menuPos);
         }
@@ -63,11 +64,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     }
 
     @Override
-    public MenuVo findMenuById(Long id)
-    {
+    public MenuVo findMenuById(Long id) {
         MenuVo menuById = menuRedisKit.getMenuById(id);
-        if (menuById != null)
-        {
+        if (menuById != null) {
             return menuById;
         }
         MenuPo menuPo = menuDao.selectById(id);
@@ -76,30 +75,23 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public MenuVo saveOrUpdateMenu(MenuVo menuVo) throws Exception
-    {
+    public MenuVo saveOrUpdateMenu(MenuVo menuVo) throws Exception {
         Long id = menuVo.getId();
         MenuPo one;
-        if (null != id)
-        {
+        if (null != id) {
             one = menuDao.selectById(id);
             ConvertUtils.copyNonNullProperties(menuVo, one);
-        }
-        else
-        {
+        } else {
             menuVo.setValidInd(true);
             one = ConvertUtils.convert(menuVo, MenuPo.class);
         }
         // 保存到数据库
         this.saveOrUpdate(one);
         // 更新缓存
-        if (null != id)
-        {
+        if (null != id) {
             roleMenuRedisKit.updateMenuById(one);
             menuVo = menuRedisKit.updateMenuById(ConvertUtils.convert(one, MenuVo.class));
-        }
-        else
-        {
+        } else {
             menuVo = menuRedisKit.setMenuById(ConvertUtils.convert(one, MenuVo.class));
         }
         return menuVo;
@@ -107,22 +99,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void delMenuByIds(Set<String> ids)
-    {
+    public void delMenuByIds(Set<String> ids) {
         ids.forEach(id -> {
             LambdaQueryWrapper<RoleMenuPo> wrapper = Wrappers.lambdaQuery();
             wrapper.eq(RoleMenuPo::getMenuId, new Long(id));
             List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(wrapper);
-            if (ToolsUtils.isNotEmpty(roleMenuPos))
-            {
+            if (ToolsUtils.isNotEmpty(roleMenuPos)) {
                 wrapper = Wrappers.lambdaQuery();
                 wrapper.eq(RoleMenuPo::getMenuId, new Long(id));
                 roleMenuDao.delete(wrapper);
             }
 
             MenuPo menuPo = menuDao.selectById(new Long(id));
-            if (menuPo != null)
-            {
+            if (menuPo != null) {
                 menuDao.deleteById(new Long(id));
             }
         });
@@ -131,8 +120,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     }
 
     @Override
-    public List<MenuPo> findMenuByRole(RolePo rolePo)
-    {
+    public List<MenuPo> findMenuByRole(RolePo rolePo) {
         return menuDao.findMenuByRoleCode(Arrays.asList(rolePo.getRoleCode()), false);
 //        this.findMenuByRoleCode(Arrays.asList(rolePo.getRoleCode()), false);
 //        LambdaQueryWrapper<RoleMenuPo> wrapper = Wrappers.lambdaQuery();
@@ -147,8 +135,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     }
 
     @Override
-    public Integer countMenuCodeByMenuCode(String menuCode)
-    {
+    public Integer countMenuCodeByMenuCode(String menuCode) {
         LambdaQueryWrapper<MenuPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(MenuPo::getMenuCode, menuCode)
                 .eq(MenuPo::getValidInd, true);
@@ -156,38 +143,32 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     }
 
     @Override
-    public Set<String> getParentByCurrentId(Long id)
-    {
+    public Set<String> getParentByCurrentId(Long id) {
         Set<String> set = new HashSet<>();
         MenuPo one = menuDao.selectById(id);
-        if (one.getPid() != null)
-        {
+        if (one.getPid() != null) {
             this.getMenuPidById(set, one.getPid());
         }
         return set;
     }
 
     @Override
-    public List<MenuPo> findRouterList(List<RoleVo> roleVos)
-    {
-        if (CollectionUtils.isEmpty(roleVos))
-        {
+    public List<MenuPo> findRouterList(List<RoleVo> roleVos) {
+        if (CollectionUtils.isEmpty(roleVos)) {
             return new ArrayList<>();
         }
         return roleMenuRedisKit.findMenuListByRoles(roleVos);
     }
 
     @Override
-    public List<Tree<Long>> findMenuByRoleCode(List<String> roleCodes, boolean isDisplay)
-    {
+    public List<Tree<Long>> findMenuByRoleCode(List<String> roleCodes, boolean isDisplay) {
         List<MenuPo> menuPos = menuDao.findMenuByRoleCode(roleCodes, isDisplay);
         List<Tree<Long>> treeNodes = this.genMenuTrees(menuPos);
         return treeNodes;
     }
 
     @Override
-    public List<MenuVo> findMenuByPermissionId(Long permissionId)
-    {
+    public List<MenuVo> findMenuByPermissionId(Long permissionId) {
         List<MenuPo> menuPos = this.baseMapper.findMenuByPermissionId(permissionId);
         return BeanUtil.copyToList(menuPos, MenuVo.class);
     }
@@ -200,8 +181,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
      * @author 千面
      * @date 2022/1/5 10:18
      */
-    private List<Tree<Long>> genMenuTrees(List<MenuPo> menuPos)
-    {
+    private List<Tree<Long>> genMenuTrees(List<MenuPo> menuPos) {
         //配置
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         // 自定义返回属性名
@@ -237,17 +217,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
      * @author LiuYongTao
      * @date 2019/8/2 10:57
      */
-    private void getMenuPidById(Set<String> set, Long id)
-    {
+    private void getMenuPidById(Set<String> set, Long id) {
         MenuPo one = menuDao.selectById(id);
-        if (one.getPid() != null)
-        {
+        if (one.getPid() != null) {
             this.getMenuPidById(set, one.getPid());
         }
         set.add(one.getId().toString());
     }
 
-//    /**
+    //    /**
 //     * 递归查询子级菜单
 //     *
 //     * @param pMenuExs
@@ -307,4 +285,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
 //        });
 //        pMenuExs.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));
 //    }
+    @Autowired(required = false)
+    private Map<String,DictProvider> providers;
+
+    @Override
+    public String asyncExport(HttpServletResponse response) {
+        for (DictProvider value : providers.values()) {
+            System.out.println(value.getClass().getSimpleName());
+        }
+        List<MenuPo> list = this.list();
+        ExcelExporterKit.getInstance().exportAsync(BeanUtil.copyToList(list, MenuExcel.class));
+        return null;
+    }
 }
