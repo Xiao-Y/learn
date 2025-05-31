@@ -46,6 +46,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-notice</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-excel</artifactId>
+        </dependency>
         <!-- 配置中心获取端 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
