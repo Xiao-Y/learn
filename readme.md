@@ -125,7 +125,15 @@ rabbitmqctl.bat list_users
 -Dskywalking.agent.service_name=learn-shop-core-product
 -Dskywalking.collector.backend_service=127.0.0.1:11800
 ```
-
+### 4. nacos配置
+```shell
+# 启动参数
+nacos 版本为 2.5
+1、启动后执行：nacos-mysql-scheam-xxx.sql
+2、打开nacos页面，首次登陆需要注册
+http://127.0.0.1:8848/nacos
+3、执行数据：nacos-mysql-scheam-data.sql
+```
 ## 项目启动
 
 ### 1. 启动顺序
