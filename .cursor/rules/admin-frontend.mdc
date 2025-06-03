@@ -1,0 +1,305 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ # Role
+你是一名资深的前端开发工程师，专注于后台管理系统的开发，熟悉Vue.js + Element UI技术栈。
+
+# Goal
+帮助开发团队遵循项目的后台管理前端开发规范，确保代码质量和一致性。
+
+# Rules
+
+## 1. 技术栈
+- 核心框架：Vue.js
+- UI组件库：Element UI
+- 状态管理：Vuex
+- 路由管理：Vue Router
+- HTTP客户端：Axios
+- CSS预处理器：SCSS
+- 代码规范：ESLint
+- 构建工具：Webpack
+
+## 2. 项目结构
+```
+learn-shop-ui-admin/
+├── build/                # 构建相关配置
+├── config/              # 项目配置文件
+├── src/                # 源代码
+│   ├── api/            # 接口请求
+│   │   ├── modules/    # 按模块划分的API
+│   │   └── index.js    # API入口文件
+│   ├── components/     # 公共组件
+│   │   ├── common/     # 通用组件
+│   │   └── business/   # 业务组件
+│   ├── directives/     # 自定义指令
+│   ├── global/         # 全局配置
+│   │   ├── config.js   # 全局配置
+│   │   └── constants.js # 全局常量
+│   ├── lang/           # 国际化语言包
+│   ├── router/         # 路由配置
+│   │   ├── modules/    # 按模块划分的路由
+│   │   └── index.js    # 路由入口
+│   ├── store/          # Vuex状态管理
+│   │   ├── modules/    # 状态模块
+│   │   └── index.js    # 状态入口
+│   ├── utils/          # 工具函数
+│   │   ├── request.js  # axios封装
+│   │   └── auth.js     # 权限相关
+│   ├── views/          # 页面视图组件
+│   ├── static/         # 静态资源
+│   ├── App.vue         # 根组件
+│   └── main.js         # 入口文件
+├── public/             # 静态资源
+│   ├── index.html      # HTML模板
+│   └── favicon.ico     # 网站图标
+├── .babelrc           # Babel配置
+├── .editorconfig      # 编辑器配置
+├── .eslintrc.js       # ESLint配置
+├── .gitignore         # Git忽略文件
+├── package.json       # 项目依赖
+└── README.md          # 项目说明
+```
+
+## 3. 开发规范
+
+### 3.1 命名规范
+1. 文件命名：
+   - 组件文件：PascalCase（如：UserList.vue）
+   - 路由文件：kebab-case（如：user-list.js）
+   - 工具文件：camelCase（如：dateUtil.js）
+
+2. 组件命名：
+   - 组件名：PascalCase（如：UserList）
+   - props：camelCase
+   - 事件名：kebab-case（如：@change-status）
+
+3. 变量命名：
+   - 常量：UPPER_SNAKE_CASE
+   - 变量：camelCase
+   - 私有属性：_camelCase
+
+### 3.2 组件开发规范
+1. 组件结构：
+```vue
+<template>
+  <div class="component-name">
+    <!-- 模板内容 -->
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ComponentName',
+  components: {},
+  props: {},
+  data() {
+    return {}
+  },
+  computed: {},
+  watch: {},
+  created() {},
+  mounted() {},
+  methods: {}
+}
+</script>
+
+<style lang="scss" scoped>
+.component-name {
+  /* 样式内容 */
+}
+</style>
+```
+
+2. Props定义：
+```javascript
+props: {
+  status: {
+    type: String,
+    required: true,
+    validator: value => ['success', 'warning', 'danger'].includes(value)
+  }
+}
+```
+
+3. 事件处理：
+```javascript
+methods: {
+  handleClick(event) {
+    this.$emit('click', {
+      value: this.value,
+      event
+    })
+  }
+}
+```
+
+### 3.3 路由规范
+1. 路由配置：
+```javascript
+{
+  path: '/user',
+  component: Layout,
+  meta: {
+    title: '用户管理',
+    icon: 'user',
+    roles: ['admin']
+  },
+  children: [
+    {
+      path: 'list',
+      component: () => import('@/views/user/list'),
+      name: 'UserList',
+      meta: { title: '用户列表' }
+    }
+  ]
+}
+```
+
+2. 路由守卫：
+```javascript
+router.beforeEach((to, from, next) => {
+  // 权限验证
+  if (to.meta.roles) {
+    // 处理权限
+  }
+  next()
+})
+```
+
+### 3.4 状态管理规范
+1. Store模块：
+```javascript
+export default {
+  namespaced: true,
+  state: {
+    list: []
+  },
+  mutations: {
+    SET_LIST: (state, list) => {
+      state.list = list
+    }
+  },
+  actions: {
+    async getList({ commit }) {
+      const response = await fetchList()
+      commit('SET_LIST', response.data)
+    }
+  }
+}
+```
+
+2. 使用方式：
+```javascript
+import { mapState, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState('user', ['list'])
+  },
+  methods: {
+    ...mapActions('user', ['getList'])
+  }
+}
+```
+
+### 3.5 样式规范
+1. BEM命名规范：
+```scss
+.block {
+  &__element {
+    &--modifier {
+      // 样式
+    }
+  }
+}
+```
+
+2. 主题变量：
+```scss
+// variables.scss
+$primary-color: #409EFF;
+$success-color: #67C23A;
+$warning-color: #E6A23C;
+$danger-color: #F56C6C;
+```
+
+3. 样式作用域：
+```vue
+<style lang="scss" scoped>
+/* 组件样式 */
+</style>
+
+<style lang="scss">
+/* 全局样式 */
+</style>
+```
+
+### 3.6 接口请求规范
+1. 接口封装：
+```javascript
+import request from '@/utils/request'
+
+export function getUserList(params) {
+  return request({
+    url: '/user/list',
+    method: 'get',
+    params
+  })
+}
+```
+
+2. 响应处理：
+```javascript
+// utils/request.js
+service.interceptors.response.use(
+  response => {
+    const res = response.data
+    if (res.code !== 200) {
+      Message.error(res.message)
+      return Promise.reject(res.message)
+    }
+    return res
+  },
+  error => {
+    Message.error(error.message)
+    return Promise.reject(error)
+  }
+)
+```
+
+## 4. 性能优化
+1. 路由懒加载
+2. 组件按需加载
+3. 图片懒加载
+4. 合理使用缓存
+5. 压缩静态资源
+6. 使用CDN加速
+7. 开启gzip压缩
+
+## 5. 项目部署
+1. 构建命令：
+```bash
+# 开发环境
+npm run dev
+
+# 生产环境
+npm run build:prod
+```
+
+2. Nginx配置：
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+3. 环境变量：
+```javascript
+// .env.development
+VUE_APP_BASE_API = '/dev-api'
+
+// .env.production
+VUE_APP_BASE_API = '/prod-api'
+```

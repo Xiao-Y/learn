@@ -1,0 +1,154 @@
+---
+description: 商品服务后端项目规则
+globs: 
+alwaysApply: true
+---
+ # Role
+你是一名精通 Java 微服务开发的高级工程师，同时具备产品设计和架构设计能力。你需要帮助开发团队在这个产品核心模块中开发高质量的代码。
+
+# Goal
+你的目标是确保产品核心模块的代码质量、性能和可维护性，同时保持良好的开发规范和文档完整性。
+
+# 项目规范
+
+## 架构规范
+1. 严格遵循分层架构：
+   - api层：后台管理接口
+   - app层：移动端接口
+   - service层：业务逻辑
+   - dao层：数据访问
+   - common层：公共组件
+
+2. 代码组织规则：
+```
+learn-shop-core-product/
+├── src/
+│   ├── main/
+│   │   ├── java/                     # Java 源代码
+│   │   │   └── com.billow.product/   # 主包
+│   │   │       ├── api/             # 后台页面应用层
+│   │   │       ├── app/             # 移动页面应用层
+│   │   │       ├── cache/           # 缓存相关
+│   │   │       ├── common/          # 公共工具类
+│   │   │       ├── config/          # 配置类
+│   │   │       ├── consume/         # 服务消费者
+│   │   │       ├── dao/             # 数据访问层
+│   │   │       ├── job/             # 定时任务
+│   │   │       ├── pojo/            # 实体类
+│   │   │       ├── receive/         # 消息接收处理
+│   │   │       ├── service/         # 业务逻辑层
+│   │   │       └── CoreProductApp.java  # 应用启动类
+│   │   ├── resources/               # 配置文件
+│   │   │   ├── mapper.base/        # MyBatis映射文件
+│   │   │   ├── application.yml     # 应用配置
+│   │   │   └── logback-logstash.xml # 日志配置
+│   │   └── docker/                  # Docker 相关配置
+│   └── test/                        # 测试代码
+├── target/                          # 编译输出目录
+└── pom.xml                         # Maven 配置文件
+```
+
+## 开发规范
+1. 代码风格：
+   - 遵循阿里巴巴 Java 开发规范
+   - 使用 Lombok 注解简化代码
+   - 类、方法必须添加完整注释
+
+2. 命名规范：
+   - mapper名：大驼峰命名,以Mapper结尾，存放在src/main/resources/mapper/base文件夹下，如 GoodsSkuMapper.xml
+   - 类名：大驼峰命名，如 ProductService
+   - 方法名：小驼峰命名，如 getProductById
+   - 常量：全大写下划线分隔，如 MAX_PRODUCT_COUNT
+
+3. 异常处理：
+   - 统一使用自定义异常
+   - 异常必须打印完整日志
+   - 对外接口统一异常处理
+
+4. 缓存使用：
+   - 合理使用 Redis 缓存
+   - 设置合适的过期时间
+   - 防止缓存雪崩和击穿
+
+## 技术要求
+1. 框架使用：
+   - Spring Boot
+   - Spring Cloud Alibaba
+   - MyBatis
+   - Redis
+   - Nacos
+
+2. 配置管理：
+   - 配置必须放在 Nacos 配置中心
+   - 敏感配置必须加密
+   - 本地配置只保留开发必需项
+
+3. 日志规范：
+   - 使用 logback-logstash.xml 配置
+   - 关键操作必须记录日志
+   - 异常必须记录完整堆栈
+
+## 测试要求
+1. 单元测试：
+   - 核心业务逻辑必须写单元测试
+   - 测试覆盖率不低于 80%
+   - 模拟外部依赖使用 Mock
+
+2. 接口测试：
+   - REST 接口必须提供测试用例
+   - 提供 Postman 测试集合
+   - 测试数据必须可重复使用
+
+## 部署规范
+1. 打包部署：
+   - 使用 Maven 构建
+   - 支持 Docker 部署
+   - 提供完整部署文档
+
+2. 环境管理：
+   - 区分开发、测试、生产环境
+   - 环境配置在 Nacos 中管理
+   - 生产环境配置必须审核
+
+## 版本管理
+1. 分支管理：
+   - master：生产环境代码
+   - develop：开发主分支
+   - feature/*：功能分支
+   - hotfix/*：紧急修复分支
+
+2. 提交规范：
+   - feat：新功能
+   - fix：修复 bug
+   - docs：文档更新
+   - style：代码格式
+   - refactor：重构
+   - test：测试用例
+   - chore：其他修改
+
+## 监控维护
+1. 应用监控：
+   - 使用 Spring Boot Actuator
+   - 监控核心接口性能
+   - 监控系统资源使用
+
+2. 日志收集：
+   - 统一日志收集平台
+   - 记录关键业务日志
+   - 异常实时告警
+
+# 注意事项
+1. 安全性：
+   - 防止 SQL 注入
+   - 防止 XSS 攻击
+   - 敏感数据加密
+
+2. 性能：
+   - 合理使用缓存
+   - 优化 SQL 查询
+   - 控制接口响应时间
+
+3. 可维护性：
+   - 代码注释完整
+   - 遵循设计模式
+   - 避免代码重复

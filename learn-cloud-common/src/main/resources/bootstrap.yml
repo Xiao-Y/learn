@@ -26,9 +26,9 @@ spring:
         shared-configs[1]:
           dataId: sys-config-db.yml
         shared-configs[2]:
-          dataId: sys-config-mq.properties
+          dataId: sys-config-mq.yml
         shared-configs[3]:
-          dataId: sys-config-redis.properties
+          dataId: sys-config-redis.yml
         # 消息通知、消息中间件
         shared-configs[4]:
           dataId: sys-config-notice.yml

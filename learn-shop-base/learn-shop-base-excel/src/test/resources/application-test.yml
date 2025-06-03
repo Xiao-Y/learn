@@ -1,0 +1,30 @@
+## 测试环境配置
+#spring:
+#  # 数据源配置
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    username: sa
+#    password:
+#
+#  # Redis配置
+#  redis:
+#    database: 0
+#    host: localhost
+#    port: 6379
+#    password:
+#
+#  # H2控制台配置
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#
+## Excel配置
+#learn:
+#  excel:
+#    dict:
+#      redis-key-prefix: "DICT:"
+#      enable-enum-scan: true
+#      enum-scan-packages:
+#        - "com.billow.excel.test.enums"

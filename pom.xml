@@ -180,6 +180,11 @@
                 <artifactId>learn-shop-base-notice</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.billow</groupId>
+                <artifactId>learn-shop-base-excel</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -255,6 +260,11 @@
                 <version>${activiti.version}</version>
             </dependency>
             <!-- poi -->
+<!--            <dependency>-->
+<!--                <groupId>org.apache.poi</groupId>-->
+<!--                <artifactId>poi</artifactId>-->
+<!--                <version>${apache.poi.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
