@@ -15,11 +15,6 @@ public @interface ExcelSheet {
     String name() default "";
 
     /**
-     * 工作表描述
-     */
-    String description() default "";
-
-    /**
      * 冻结行数，设置为0 表示不冻结
      *
      * @author 千面

@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.billow.excel.annotation.ExcelSheet;
 import com.billow.excel.generator.NumUtil;
 import com.billow.excel.model.ExcelTask;
+import com.billow.excel.model.ExportErrorResult;
 import com.billow.excel.service.ExcelTaskService;
 import com.billow.tools.utlis.SpringContextUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -31,6 +33,10 @@ public class ExcelKit {
 
     public static ExcelKit getInstance() {
         return SpringContextUtil.getBean(ExcelKit.class);
+    }
+
+    private ExcelCore getExcelCore() {
+        return excelCore;
     }
 
     /**
@@ -100,9 +106,19 @@ public class ExcelKit {
         excelCore.exportTemplate(response, clazz, this.getTemplateFileName(clazz));
     }
 
+    /**
+     * 异常错误信息导出
+     *
+     * @param errorList 错误信息
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public String exportErrorResult(List<ExportErrorResult> errorList) throws Exception {
+        return this.exportAsync(errorList);
+    }
 
     /**
-     * 从MultipartFile导入
+     * 从MultipartFile导入（不可异步，会有异常）
      *
      * @param file  上传的文件
      * @param clazz 目标类型
@@ -123,6 +139,18 @@ public class ExcelKit {
      */
     public <T> List<T> importFromFile(String filePath, Class<T> clazz) {
         return excelCore.importFromFile(filePath, clazz);
+    }
+
+    /**
+     * 从输入流导入（可异步）
+     *
+     * @param inputStream 输入流
+     * @param clazz       目标类型
+     * @param <T>         数据类型
+     * @return 导入的数据列表
+     */
+    public <T> List<T> importFromStream(InputStream inputStream, Class<T> clazz) {
+        return excelCore.importFromStream(inputStream, clazz);
     }
 
     private <T> String getTemplateFileName(Class<T> clazz) {
