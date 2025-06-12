@@ -2,7 +2,7 @@ package com.billow.excel.provider.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.billow.excel.annotation.ExcelColumn.DictType;
+import com.billow.excel.annotation.ExcelDict;
 import com.billow.excel.config.ExcelProperties;
 import com.billow.excel.provider.DictProvider;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class RedisDictProvider implements DictProvider {
     }
 
     @Override
-    public DictType getType() {
-        return DictType.REDIS;
+    public ExcelDict.DictType getType() {
+        return ExcelDict.DictType.REDIS;
     }
 }

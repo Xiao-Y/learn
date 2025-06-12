@@ -4,6 +4,7 @@ import cn.hutool.core.lang.tree.Tree;
 import com.billow.aop.annotation.OperationLog;
 import com.billow.common.base.BaseApi;
 import com.billow.common.utils.UserTools;
+import com.billow.system.pojo.excel.MenuExcel;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.service.MenuService;
 import io.swagger.annotations.Api;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -69,8 +71,8 @@ public class MenuApi extends BaseApi {
 
     @ApiOperation(value = "根据权限ID查询出绑定的菜单信息")
     @GetMapping("/findMenuByPermissionId/{permissionId}")
-    public List<MenuVo> findMenuByPermissionId(@PathVariable("permissionId") Long permissionId){
-       return menuService.findMenuByPermissionId(permissionId);
+    public List<MenuVo> findMenuByPermissionId(@PathVariable("permissionId") Long permissionId) {
+        return menuService.findMenuByPermissionId(permissionId);
     }
 
 
@@ -78,5 +80,12 @@ public class MenuApi extends BaseApi {
     @GetMapping("/export")
     public String asyncExport(HttpServletResponse response) {
         return menuService.asyncExport(response);
+    }
+
+    @ApiOperation("导入")
+    @PostMapping("/import")
+    public List<MenuExcel> importFile(HttpServletResponse response,
+                                      @RequestParam(value = "file") MultipartFile file) {
+        return menuService.importFile(response, file);
     }
 }

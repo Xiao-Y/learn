@@ -1,10 +1,12 @@
 package com.billow.system.pojo.excel;
 
 import com.billow.excel.annotation.ExcelColumn;
+import com.billow.excel.annotation.ExcelDict;
 import com.billow.excel.annotation.ExcelSheet;
-import com.billow.mybatis.pojo.BasePo;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -15,32 +17,36 @@ import lombok.EqualsAndHashCode;
  * @since 2021-04-01
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ExcelSheet(name = "菜单信息")
-public class MenuExcel extends BasePo {
+public class MenuExcel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ExcelColumn(name = "菜单编号", required = true)
+    @ExcelColumn(title = "菜单编号", required = true)
     private String menuCode;
 
-    @ExcelColumn(name = "菜单名称", required = true)
+    @ExcelColumn(title = "菜单名称", required = true)
     private String menuName;
 
-    @ExcelColumn(name = "父ID", required = true)
+    @ExcelColumn(title = "父ID", required = true)
     private Long pid;
 
-    @ExcelColumn(name = "是否显示", required = true, dictCode = "display", dictType = ExcelColumn.DictType.REDIS)
-    private Boolean display;
-
-    @ExcelColumn(name = "ICON", required = true)
+    @ExcelColumn(title = "ICON", required = true)
     private String icon;
 
-    @ExcelColumn(name = "描述", required = true)
+    @ExcelColumn(title = "描述", required = true)
     private String description;
 
-    @ExcelColumn(name = "排序", required = true)
+    @ExcelColumn(title = "排序", required = true)
     private Double sortField;
 
+    @ExcelColumn(title = "创建时间", format = "yyyy-MM-dd hh:mm:ss")
+    private Date createTime;
 
+    @ExcelColumn(title = "更新时间", format = "yyyy-MM-dd")
+    private Date updateTime;
+
+    @ExcelColumn(title = "是否显示", required = true, dict = @ExcelDict(dictCode = "display", tranName = "displayName", dictType = ExcelDict.DictType.REDIS))
+    private Boolean display;
+    private String displayName;
 }

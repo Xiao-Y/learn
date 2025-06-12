@@ -1,6 +1,6 @@
 package com.billow.excel.provider.impl;
 
-import com.billow.excel.annotation.ExcelColumn.DictType;
+import com.billow.excel.annotation.ExcelDict;
 import com.billow.excel.provider.DictProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
@@ -55,7 +55,7 @@ public class DatabaseDictProvider implements DictProvider {
     }
 
     @Override
-    public DictType getType() {
-        return DictType.DATABASE;
+    public ExcelDict.DictType getType() {
+        return ExcelDict.DictType.DATABASE;
     }
 } 

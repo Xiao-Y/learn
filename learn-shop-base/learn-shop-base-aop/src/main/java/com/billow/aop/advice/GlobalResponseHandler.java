@@ -1,5 +1,6 @@
 package com.billow.aop.advice;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.aop.commons.CustomPage;
 import com.billow.tools.constant.CommonCst;
@@ -106,9 +107,9 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 //        log.info("\n响应参数：{} ", JSONObject.toJSONString(baseResponse));
 
         // 处理返回值是String的情况
-//        if (body instanceof String) {
-//            return JSONObject.toJSONString(BaseResponse.success(body));
-//        }
+        if (body instanceof String) {
+            return JSONObject.toJSONString(BaseResponse.success(body));
+        }
 //        baseResponse.setTraceID(MDC.get(CommonCst.LOG_TRACE_ID));
         baseResponse.setTraceID(TraceContext.traceId());
         return baseResponse;

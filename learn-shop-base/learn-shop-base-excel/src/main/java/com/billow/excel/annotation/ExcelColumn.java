@@ -12,17 +12,12 @@ public @interface ExcelColumn {
     /**
      * 列名
      */
-    String name();
-
-    /**
-     * 列顺序
-     */
-    int order() default 0;
+    String title();
 
     /**
      * 列宽（字符数）
      */
-    int width() default 20;
+    int width() default 0;
 
     /**
      * 日期/数字格式化
@@ -30,55 +25,17 @@ public @interface ExcelColumn {
     String format() default "";
 
     /**
-     * 数据字典编码
-     */
-    String dictCode() default "";
-
-    /**
-     * 字典提供者类型
-     * ENUM: 枚举字典
-     * DATABASE: 数据库字典
-     * REDIS: Redis字典
-     */
-    DictType dictType() default DictType.NULL;
-
-    /**
      * 是否必填
      */
     boolean required() default false;
 
     /**
-     * 自定义校验器类
+     * 数据字典
+     *
+     * @param
+     * @return Class<Annotation>
+     * @author 千面
+     * @date 2023/11/24 10:32
      */
-    Class<?> validator() default Void.class;
-
-    /**
-     * 自定义转换器类
-     */
-    Class<?> converter() default Void.class;
-
-    /**
-     * 字典提供者类型枚举
-     */
-    enum DictType {
-        /**
-         * 空
-         */
-        NULL,
-
-        /**
-         * 枚举字典
-         */
-        ENUM,
-
-        /**
-         * 数据库字典
-         */
-        DATABASE,
-
-        /**
-         * Redis字典
-         */
-        REDIS
-    }
-} 
+    ExcelDict dict() default @ExcelDict();
+}

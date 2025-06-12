@@ -1,6 +1,6 @@
 package com.billow.excel.provider;
 
-import com.billow.excel.annotation.ExcelColumn;
+import com.billow.excel.annotation.ExcelDict;
 
 import java.util.Map;
 
@@ -21,5 +21,5 @@ public interface DictProvider {
     /**
      * 获取提供者类型
      */
-    ExcelColumn.DictType getType();
+    ExcelDict.DictType getType();
 }

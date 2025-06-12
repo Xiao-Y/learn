@@ -1,6 +1,6 @@
 package com.billow.excel.provider.impl;
 
-import com.billow.excel.annotation.ExcelColumn.DictType;
+import com.billow.excel.annotation.ExcelDict;
 import com.billow.excel.config.ExcelProperties;
 import com.billow.excel.provider.DictProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +77,7 @@ public class EnumDictProvider implements DictProvider, InitializingBean {
                     if (enumClass.isEnum() && DictEnum.class.isAssignableFrom(enumClass)) {
                         @SuppressWarnings("unchecked")
                         Class<? extends DictEnum> dictEnumClass = (Class<? extends DictEnum>) enumClass;
-                        String dictCode = getDictCode(dictEnumClass);
+                        String dictCode = dictEnumClass.getSimpleName();
                         enumRegistry.put(dictCode, dictEnumClass);
                         log.info("注册枚举字典：{} -> {}", dictCode, className);
                     }
@@ -85,14 +85,6 @@ public class EnumDictProvider implements DictProvider, InitializingBean {
             }
         }
         log.info("==========枚举字典-加载结束==========");
-    }
-
-    private String getDictCode(Class<? extends DictEnum> enumClass) {
-//        // 默认使用枚举类名转换为下划线格式作为dictCode
-//        return StringUtils.capitalize(enumClass.getSimpleName())
-//                .replaceAll("([a-z])([A-Z])", "$1_$2")
-//                .toUpperCase();
-        return enumClass.getSimpleName();
     }
 
     @Override
@@ -115,7 +107,7 @@ public class EnumDictProvider implements DictProvider, InitializingBean {
     }
 
     @Override
-    public DictType getType() {
-        return DictType.ENUM;
+    public ExcelDict.DictType getType() {
+        return ExcelDict.DictType.ENUM;
     }
 } 

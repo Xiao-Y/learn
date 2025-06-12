@@ -58,6 +58,11 @@ public class ExcelTask {
     private String filePath;
 
     /**
+     * 耗时
+     */
+    private String timeDifference;
+
+    /**
      * 创建时间
      */
     private Date createTime;

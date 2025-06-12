@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS t_excel_task (
     error_count INT DEFAULT 0 COMMENT '失败数量',
     error_message TEXT COMMENT '错误信息',
     file_path VARCHAR(500) COMMENT '文件路径',
+    time_difference varchar(255) COMMENT '耗时',
     create_time TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '创建时间',
     update_time TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '更新时间',
     PRIMARY KEY (task_id)

@@ -44,21 +44,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-        <!-- 消息中间件、消息通知 -->
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-notice</artifactId>
-        </dependency>
-        <!-- 消息中间件、消息通知 -->
+        <!-- redis缓存 -->
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-redis</artifactId>
         </dependency>
-        <!-- Apache POI -->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.poi</groupId>-->
-<!--            <artifactId>poi</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
@@ -66,7 +56,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <!--            <scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
