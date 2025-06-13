@@ -2,6 +2,7 @@ package com.billow.excel.excelKet;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.billow.excel.annotation.ExcelColumn;
 import com.billow.excel.annotation.ExcelDict;
@@ -479,15 +480,10 @@ public class ExcelCore {
                                          CellStyle cellstyle, int col, ExcelColumnModel excelTitleModel) {
         // 1.5 * 265 = 384
         String title = excelTitleModel.getTitle();
-        int width = excelTitleModel.getWidth();
-
-        // 如果指定了列宽，使用指定的宽度
-        if (width > 0) {
-            sheet.setColumnWidth(col, width * 256);
-        } else {
-            // 否则设置一个默认宽度
-            sheet.setColumnWidth(col, title.getBytes().length * 256);
-        }
+        int width = Optional.of(excelTitleModel.getWidth()).filter(w -> w > 0)
+                .orElse(ReUtil.findAll("[\\u4e00-\\u9fa5]", title, 0).size());
+        // 设置列宽
+        sheet.setColumnWidth(col, (int) ((width * 2.2) + 2) * 256);
         cell = row.createCell(col);
         cell.setCellStyle(cellstyle);
 //        cell.setCellType(CellType.STRING);
@@ -502,6 +498,8 @@ public class ExcelCore {
         style.setBorderLeft(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderTop(BorderStyle.THIN);
+        style.setAlignment(HorizontalAlignment.CENTER); // 设置水平居中
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
 
         Font font = workbook.createFont();
         font.setBold(true);
