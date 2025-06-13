@@ -481,7 +481,6 @@ public class ExcelCore {
         String title = excelTitleModel.getTitle();
         int width = excelTitleModel.getWidth();
 
-        sheet.setColumnWidth(col, title.getBytes().length * 265);
         // 如果指定了列宽，使用指定的宽度
         if (width > 0) {
             sheet.setColumnWidth(col, width * 256);
