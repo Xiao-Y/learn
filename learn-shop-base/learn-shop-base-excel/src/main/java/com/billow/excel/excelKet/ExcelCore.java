@@ -632,6 +632,7 @@ public class ExcelCore {
             }
             field.setAccessible(true);
             model.setField(field);
+            model.setWidth(excel.width());
             if (StringUtils.equals(ExcelDict.IMPORT, type)) {
                 ExcelColumnModel excelColumnModel = excelTitleModelMap.putIfAbsent(title, model);
                 if (excelColumnModel != null) {
