@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 
 /**
  * 默认Excel导出实现
@@ -77,7 +79,6 @@ public class ExcelKit {
                 task.setStatus(ExcelTask.TaskStatus.COMPLETED)
                         .setSuccessCount(dataList.size())
                         .setFilePath(filePath);
-                Thread.sleep(10500);
             } catch (Exception e) {
                 log.error("异步导出Excel失败", e);
                 // 更新任务状态为失败
@@ -94,6 +95,78 @@ public class ExcelKit {
         return taskId;
     }
 
+
+    /**
+     * 异步分页导出
+     * <p>
+     * //假设已经有 ExcelCore 实例
+     * <p>
+     * ExcelCore excelCore = new ExcelCore(dictService);
+     * <p>
+     * String filePath = "/path/to/";
+     * <p>
+     * String fileName = "exported_file.xlsx";
+     * <p>
+     * int pageSize = 100;
+     * <p>
+     * int totalCount = yourService.getTotalCount(); // 从数据库获取数据总数量
+     * <p>
+     * BiFunction<Integer, Integer, List<YourDataClass>> dataFetcher = (page, size) -> {
+     * <p>
+     * return yourService.getPageData(page, size); // 调用数据库查询方法获取分页数据
+     * <p>
+     * };
+     * <p>
+     * excelCore.exportToFileWithPage(filePath, fileName, pageSize, totalCount, dataFetcher);
+     *
+     * @param filePath    文件路径
+     * @param fileName    文件名称
+     * @param pageSize    每页大小
+     * @param totalCount  总条数
+     * @param dataFetcher 数据获取器
+     * @param //
+     * @return 任务ID
+     */
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public <T> String exportToFileWithPage(String filePath, String fileName, int pageSize, int totalCount,
+                                           BiFunction<Integer, Integer, List<T>> dataFetcher) {
+        // 创建任务记录
+        String taskId = NumUtil.makeNum("EX");
+        // 创建任务记录
+        ExcelTask task = new ExcelTask()
+                .setTaskId(taskId)
+                .setType(ExcelTask.TaskType.EXPORT)
+                .setFileName(fileName)
+                .setStatus(ExcelTask.TaskStatus.PROCESSING)
+                .setTotal(totalCount)
+                .setCreateTime(new Date())
+                .setSuccessCount(0)
+                .setErrorCount(0);
+        excelTaskService.createTask(task);
+
+        // 异步执行导出
+        CompletableFuture.runAsync(() -> {
+            try {
+                int count = excelCore.exportToFileWithPage(filePath, pageSize, totalCount, dataFetcher);
+                // 更新任务状态为成功
+                task.setStatus(ExcelTask.TaskStatus.COMPLETED)
+                        .setSuccessCount(count)
+                        .setFilePath(filePath);
+            } catch (Exception e) {
+                log.error("异步导出Excel失败", e);
+                // 更新任务状态为失败
+                task.setStatus(ExcelTask.TaskStatus.FAILED)
+                        .setErrorCount(totalCount)
+                        .setErrorMessage(e.getMessage());
+            } finally {
+                task.setUpdateTime(new Date());
+                String formatDuration = DateUtil.formatBetween(task.getUpdateTime(), task.getCreateTime());
+                task.setTimeDifference(formatDuration);
+                excelTaskService.updateTask(task);
+            }
+        });
+        return taskId;
+    }
 
     /**
      * 导出Excel导入模板

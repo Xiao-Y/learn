@@ -59,6 +59,11 @@ public class ExcelColumnModel {
     private String format;
 
     /**
+     * 提示信息
+     **/
+    private String message;
+
+    /**
      * 数据字典
      */
     private ExcelDict dict;

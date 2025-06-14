@@ -1,0 +1,10 @@
+version: "3"
+services:
+  learn-shop-admin-system:
+    build: .
+    ports:
+      - 8811:8811
+networks:
+  default:
+    external:
+      name: learn_shop

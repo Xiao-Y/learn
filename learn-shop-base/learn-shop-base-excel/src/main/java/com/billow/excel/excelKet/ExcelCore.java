@@ -37,9 +37,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.BiFunction;
 
 /**
- * ExcelCore
+ * ExcelCore 类提供了 Excel 文件的导入导出核心功能，支持从文件、输入流、MultipartFile 导入数据，
+ * 也支持将数据导出到文件、响应流以及导出 Excel 导入模板。通过反射和注解处理，结合 Apache POI 库操作 Excel 文件。
  *
  * @author 千面
  * @date 2025/6/11 18:24
@@ -54,12 +56,13 @@ public class ExcelCore {
     private final DictService dictService;
 
     /**
-     * 从文件导入
+     * 从文件导入 Excel 数据。
      *
-     * @param filePath 文件路径
-     * @param clazz    目标类型
-     * @param <T>      数据类型
-     * @return 导入的数据列表
+     * @param filePath 文件路径，指定要导入的 Excel 文件的位置。
+     * @param clazz    目标类型，指定导入数据要转换的对象类型。
+     * @param <T>      数据类型，泛型参数，代表导入数据的类型。
+     * @return 导入的数据列表，包含转换后的对象。
+     * @throws RuntimeException 若文件读取失败或导入过程中出现异常。
      */
     public <T> List<T> importFromFile(String filePath, Class<T> clazz) {
         try (InputStream is = Files.newInputStream(new File(filePath).toPath())) {
@@ -71,12 +74,13 @@ public class ExcelCore {
     }
 
     /**
-     * 从输入流导入
+     * 从输入流导入 Excel 数据。
      *
-     * @param inputStream 输入流
-     * @param clazz       目标类型
-     * @param <T>         数据类型
-     * @return 导入的数据列表
+     * @param inputStream 输入流，包含 Excel 文件数据的输入流。
+     * @param clazz       目标类型，指定导入数据要转换的对象类型。
+     * @param <T>         数据类型，泛型参数，代表导入数据的类型。
+     * @return 导入的数据列表，包含转换后的对象。
+     * @throws RuntimeException 若输入流读取失败或导入过程中出现异常。
      */
     public <T> List<T> importFromStream(InputStream inputStream, Class<T> clazz) {
         try (Workbook workbook = new XSSFWorkbook(inputStream)) {
@@ -90,12 +94,13 @@ public class ExcelCore {
     }
 
     /**
-     * 从MultipartFile导入
+     * 从 MultipartFile 导入 Excel 数据。
      *
-     * @param file  上传的文件
-     * @param clazz 目标类型
-     * @param <T>   数据类型
-     * @return 导入的数据列表
+     * @param file  上传的文件，Spring 框架中的 MultipartFile 对象。
+     * @param clazz 目标类型，指定导入数据要转换的对象类型。
+     * @param <T>   数据类型，泛型参数，代表导入数据的类型。
+     * @return 导入的数据列表，包含转换后的对象。
+     * @throws RuntimeException 若文件读取失败或导入过程中出现异常。
      */
     public <T> List<T> importFromMultipartFile(MultipartFile file, Class<T> clazz) {
         try (InputStream is = file.getInputStream()) {
@@ -107,15 +112,15 @@ public class ExcelCore {
     }
 
     /**
-     * 导出到文件
+     * 导出数据到指定文件。
      *
-     * @param dataList 数据列表
-     * @param filePath 文件路径
-     * @param <T>      数据类型
+     * @param dataList 数据列表，要导出的数据集合。
+     * @param filePath 文件路径，指定导出 Excel 文件的保存位置。
+     * @param <T>      数据类型，泛型参数，代表要导出的数据类型。
+     * @throws RuntimeException 若导出过程中出现异常。
      */
     public <T> void exportToFile(List<T> dataList, String filePath) {
-        try (Workbook workbook = createWorkbook(dataList, ExcelDict.EXPORT);
-             FileOutputStream fos = new FileOutputStream(filePath)) {
+        try (Workbook workbook = createWorkbook(dataList, ExcelDict.EXPORT); FileOutputStream fos = new FileOutputStream(filePath)) {
             workbook.write(fos);
         } catch (Exception e) {
             log.error("导出Excel到文件失败", e);
@@ -124,11 +129,13 @@ public class ExcelCore {
     }
 
     /**
-     * 导出到响应流
+     * 导出数据到 HTTP 响应流，供客户端下载。
      *
-     * @param dataList 数据列表
-     * @param response HTTP响应对象
-     * @param <T>      数据类型
+     * @param response HTTP响应对象，用于设置响应头和输出流。
+     * @param fileName 文件名，指定客户端下载的 Excel 文件名称。
+     * @param dataList 数据列表，要导出的数据集合。
+     * @param <T>      数据类型，泛型参数，代表要导出的数据类型。
+     * @throws RuntimeException 若导出过程中出现异常。
      */
     public <T> void exportToResponse(HttpServletResponse response, String fileName, List<T> dataList) {
         try (Workbook workbook = createWorkbook(dataList, ExcelDict.EXPORT)) {
@@ -143,11 +150,13 @@ public class ExcelCore {
     }
 
     /**
-     * 导出Excel导入模板
+     * 导出 Excel 导入模板。
      *
-     * @param clazz    目标类型
-     * @param response HTTP响应对象
-     * @param <T>      数据类型
+     * @param response HTTP响应对象，用于设置响应头和输出流。
+     * @param clazz    目标类型，指定模板对应的对象类型。
+     * @param fileName 文件名，指定客户端下载的模板文件名称。
+     * @param <T>      数据类型，泛型参数，代表模板对应的数据类型。
+     * @throws RuntimeException 若导出过程中出现异常或缺少 @ExcelSheet 注解。
      */
     public <T> void exportTemplate(HttpServletResponse response, Class<T> clazz, String fileName) {
         // 通过反射获取类注释上的数据
@@ -170,7 +179,139 @@ public class ExcelCore {
         }
     }
 
-    public <T> Workbook createWorkbook(List<T> dataList, String type) {
+    /**
+     * 分页导出数据到 filePath流，数据分页查询，避免一次性加载到内存。
+     *
+     * @param filePath    文件保存路径。
+     * @param pageSize    每页数据数量。
+     * @param totalCount  数据总数量。
+     * @param dataFetcher 分页数据获取函数，接收页码和每页数量，返回对应页的数据列表。
+     * @param <T>         数据类型，泛型参数，代表要导出的数据类型。
+     * @return 返回导出数据的总条数。
+     */
+    public <T> int exportToFileWithPage(String filePath, int pageSize, int totalCount,
+                                        BiFunction<Integer, Integer, List<T>> dataFetcher) {
+        int count = 0;
+        try (SXSSFWorkbook workbook = new SXSSFWorkbook(500); FileOutputStream fos = new FileOutputStream(filePath)) {
+            boolean isFirstPage = true;
+            Sheet sheet = null;
+            List<ExcelColumnModel> columnModels = null;
+            Class<?> clazz = null;
+
+            int pageCount = (int) Math.ceil((double) totalCount / pageSize);
+            for (int page = 1; page <= pageCount; page++) {
+                List<T> pageData = dataFetcher.apply(page, pageSize);
+                if (CollectionUtils.isEmpty(pageData)) {
+                    continue;
+                }
+
+                count += pageData.size();
+
+                if (isFirstPage) {
+                    clazz = pageData.get(0).getClass();
+                    ExcelSheet excelSheet = clazz.getAnnotation(ExcelSheet.class);
+                    if (excelSheet == null) {
+                        throw new RuntimeException("@ExcelSheet 注解不能为空");
+                    }
+
+                    columnModels = new ArrayList<>(genExcelColumnModel(clazz, ExcelDict.EXPORT).values());
+                    sheet = createHeaderForPagedExport(workbook, excelSheet, columnModels);
+                    isFirstPage = false;
+                }
+
+                createExportDataForPage(workbook, sheet, pageData, columnModels);
+            }
+            workbook.write(fos);
+        } catch (Exception e) {
+            log.error("分页导出 Excel 到响应流失败", e);
+            throw new RuntimeException("分页导出 Excel 失败", e);
+        }
+        return count;
+    }
+
+    /**
+     * 为分页导出创建表头。
+     *
+     * @param workbook     工作簿对象。
+     * @param excelSheet   工作表注解对象。
+     * @param columnModels 表头列模型列表。
+     * @return 创建好表头的工作表对象。
+     */
+    private Sheet createHeaderForPagedExport(Workbook workbook, ExcelSheet excelSheet, List<ExcelColumnModel> columnModels) {
+        SXSSFWorkbook sxssfWorkbook = (SXSSFWorkbook) workbook;
+        Sheet sheet = sxssfWorkbook.createSheet(excelSheet.name());
+
+        // 标题样式 - 必传字段为红色
+        CellStyle cellStyleRed = createHeaderStyle(workbook, true);
+        // 标题样式 - 非必传字段为黑色
+        CellStyle cellStyleBlue = createHeaderStyle(workbook, false);
+
+        Row headerRow = sheet.createRow(0);
+        Cell cell = null;
+        for (int col = 0; col < columnModels.size(); col++) {
+            ExcelColumnModel model = columnModels.get(col);
+            CellStyle cellStyle = model.isRequired() ? cellStyleRed : cellStyleBlue;
+            createCellHeader(sheet, headerRow, cell, cellStyle, col, model);
+        }
+        return sheet;
+    }
+
+    /**
+     * 为分页导出写入单页数据。
+     *
+     * @param workbook     工作簿对象。
+     * @param sheet        工作表对象。
+     * @param pageData     单页数据列表。
+     * @param columnModels 表头列模型列表。
+     * @param <T>          数据类型，泛型参数。
+     */
+    private <T> void createExportDataForPage(Workbook workbook, Sheet sheet, List<T> pageData, List<ExcelColumnModel> columnModels) throws Exception {
+        CellStyle cellStyle = workbook.createCellStyle();
+        int startRow = sheet.getLastRowNum() + 1;
+
+        Row row = null;
+        Cell cell = null;
+        for (int i = 0; i < pageData.size(); i++) {
+            row = sheet.createRow(startRow + i);
+            T item = pageData.get(i);
+
+            for (int col = 0; col < columnModels.size(); col++) {
+                ExcelColumnModel model = columnModels.get(col);
+                String fieldName = model.getField().getName();
+                Field field = item.getClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+                Object value = field.get(item);
+
+                // 字典翻译
+                Map<String, String> dictMap = model.getDictMap();
+                if (MapUtils.isNotEmpty(dictMap) && value != null) {
+                    value = dictMap.get(value.toString());
+                }
+
+                // 日期格式处理
+                String dateFormat = model.getFormat();
+                if (StringUtils.isNotBlank(dateFormat)) {
+                    if (value instanceof Date) {
+                        value = DateUtil.format((Date) value, dateFormat);
+                    } else if (value instanceof LocalDateTime) {
+                        value = DateUtil.format((LocalDateTime) value, dateFormat);
+                    }
+                }
+
+                createCell(row, cell, cellStyle, col, value);
+            }
+        }
+    }
+
+    /**
+     * 创建 Excel 工作簿，包含表头和导出数据。
+     *
+     * @param dataList 数据列表，要导出的数据集合。
+     * @param type     导出类型，如 ExcelDict.EXPORT 或 ExcelDict.TEMPLATE。
+     * @param <T>      数据类型，泛型参数，代表要导出的数据类型。
+     * @return 包含导出数据的工作簿对象，若缺少 @ExcelSheet 注解则返回 null。
+     */
+    private <T> Workbook createWorkbook(List<T> dataList, String type) {
         if (CollectionUtils.isEmpty(dataList)) {
             throw new RuntimeException("数据列表不能为空");
         }
@@ -198,22 +339,29 @@ public class ExcelCore {
     }
 
     /**
-     * 写入导出的数据
+     * 写入导出的数据到指定的工作簿中。
      *
-     * @author 千面
+     * @param wb         工作簿对象，用于写入数据。
+     * @param excelSheet 工作表注解对象，包含工作表的配置信息。
+     * @param dataList   数据列表，要写入的数据集合。
+     * @param values     表头列模型列表，包含表头信息。
+     * @param <T>        数据类型，泛型参数，代表要写入的数据类型。
+     * @throws Exception 若反射操作或数据处理过程中出现异常。
      */
-    private <T> void createExportData(SXSSFWorkbook wb, ExcelSheet excelSheet, List<T> dataList, List<ExcelColumnModel> values) throws Exception {
+    private <T> void createExportData(Workbook wb, ExcelSheet excelSheet, List<T> dataList, List<ExcelColumnModel> values) throws Exception {
         // 数据样式
         CellStyle cellStyle = wb.createCellStyle();
         Row row = null;
         Cell cell = null;
         Sheet sheet = wb.getSheet(excelSheet.name());
+        int startRowNum = sheet.getLastRowNum();
+        int endRowNum = startRowNum + dataList.size();
         // 写入数据
-        for (int i = 0; i < dataList.size(); i++) {
+        for (int i = startRowNum; i < endRowNum; i++) {
             // 空出标题行
-            row = sheet.createRow(i + 1);
+            row = sheet.createRow(i + excelSheet.headerIndex());
             // 取一行数据
-            T t = dataList.get(i);
+            T t = dataList.get(i - startRowNum);
             for (int col = 0; col < values.size(); col++) {
                 ExcelColumnModel excelTitleModel = values.get(col);
                 String fieldName = excelTitleModel.getField().getName();
@@ -241,9 +389,11 @@ public class ExcelCore {
     }
 
     /**
-     * 创建表头
+     * 创建 Excel 表头，设置列宽、样式和下拉列表。
      *
-     * @author 千面
+     * @param excelSheet 工作表注解对象，包含工作表的配置信息。
+     * @param values     表头列模型列表，包含表头信息。
+     * @return 包含表头的工作簿对象。
      */
     private SXSSFWorkbook createHeader(ExcelSheet excelSheet, List<ExcelColumnModel> values) {
         // 使用SXSSF处理大数据量
@@ -279,7 +429,6 @@ public class ExcelCore {
             }
             // 设置下拉列表
             Map<String, String> dictMapValue = excelTitleModel.getDictMap();
-
             if (MapUtils.isNotEmpty(dictMapValue)) {
                 List<String> options = new ArrayList<>(dictMapValue.values());
                 if (options.size() <= MAX_DROPDOWN_LENGTH) {
@@ -287,14 +436,36 @@ public class ExcelCore {
                     this.addSimpleDropDownList(sheet, options, col, 1, 65535);
                 } else {
                     // 如果选项数量较多，使用隐藏sheet存储数据
-                    this.addDropDownListWithHiddenSheet(wb, sheet, dictSheets,
-                            excelTitleModel.getField().getName(), options, col, 1, 65535);
+                    this.addDropDownListWithHiddenSheet(wb, sheet, dictSheets, excelTitleModel.getField().getName(), options, col, 1, 65535);
                 }
+            }
+
+            // 添加提示信息，范围从第 1 行到第 65535 行
+            String message = excelTitleModel.getMessage();
+            if (StringUtils.isNotBlank(message)) {
+                DataValidationHelper validationHelper = sheet.getDataValidationHelper();
+                // 第 1 行索引为 0，这里设置提示信息从第 1 行（索引 0）到第 65535 行（索引 65534）
+                CellRangeAddressList addressList = new CellRangeAddressList(0, 65534, col, col);
+                DataValidationConstraint constraint = validationHelper.createCustomConstraint("TRUE");
+                DataValidation validation = validationHelper.createValidation(constraint, addressList);
+                // 设置提示标题和内容
+                validation.setShowPromptBox(true);
+                validation.createPromptBox("提示", message);
+                sheet.addValidationData(validation);
             }
         }
         return wb;
     }
 
+    /**
+     * 处理 Excel 工作簿，读取数据并转换为指定类型的对象列表。
+     *
+     * @param workbook 工作簿对象，包含要处理的 Excel 数据。
+     * @param clazz    目标类型，指定读取数据要转换的对象类型。
+     * @param <T>      数据类型，泛型参数，代表读取数据的类型。
+     * @return 处理后的数据列表，包含转换后的对象。
+     * @throws Exception 若反射操作或数据处理过程中出现异常。
+     */
     private <T> List<T> processWorkbook(Workbook workbook, Class<T> clazz) throws Exception {
         List<T> dataList = new ArrayList<>();
 
@@ -377,16 +548,13 @@ public class ExcelCore {
     }
 
     /**
-     * 构建一个方格
+     * 构建一个单元格，设置单元格的值和样式。
      *
-     * @param row
-     * @param cell
-     * @param cellstyle
-     * @param col
-     * @param val
-     * @return void
-     * @author 千面
-     * @date 2023/11/27 11:03
+     * @param row       行对象，用于创建单元格。
+     * @param cell      单元格对象，用于设置值和样式。
+     * @param cellstyle 单元格样式，包含字体、颜色、边框等样式信息。
+     * @param col       列索引，指定单元格所在的列位置。
+     * @param val       单元格的值，可以是不同的数据类型。
      */
     private static void createCell(Row row, Cell cell, CellStyle cellstyle, int col, Object val) {
         cell = row.createCell(col);
@@ -406,13 +574,20 @@ public class ExcelCore {
         cell.setCellStyle(cellstyle);
     }
 
-    private void addSimpleDropDownList(Sheet sheet, List<String> options,
-                                       int columnIndex, int firstRow, int lastRow) {
+    /**
+     * 添加简单的下拉列表到指定工作表的列。
+     *
+     * @param sheet       工作表对象，用于添加数据验证。
+     * @param options     下拉列表选项列表，包含可选择的值。
+     * @param columnIndex 列索引，指定下拉列表所在的列位置。
+     * @param firstRow    起始行索引，指定下拉列表生效的起始行。
+     * @param lastRow     结束行索引，指定下拉列表生效的结束行。
+     */
+    private void addSimpleDropDownList(Sheet sheet, List<String> options, int columnIndex, int firstRow, int lastRow) {
         DataValidationHelper validationHelper = sheet.getDataValidationHelper();
         CellRangeAddressList addressList = new CellRangeAddressList(firstRow, lastRow, columnIndex, columnIndex);
 
-        DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(
-                options.toArray(new String[0]));
+        DataValidationConstraint constraint = validationHelper.createExplicitListConstraint(options.toArray(new String[0]));
 
         DataValidation validation = validationHelper.createValidation(constraint, addressList);
         validation.setShowErrorBox(true);
@@ -424,9 +599,19 @@ public class ExcelCore {
         sheet.addValidationData(validation);
     }
 
-    private void addDropDownListWithHiddenSheet(Workbook workbook, Sheet mainSheet,
-                                                Map<String, Sheet> dictSheets, String dictCode, List<String> options,
-                                                int columnIndex, int firstRow, int lastRow) {
+    /**
+     * 使用隐藏工作表添加下拉列表到指定工作表的列。
+     *
+     * @param workbook    工作簿对象，用于创建隐藏工作表和名称管理器。
+     * @param mainSheet   主工作表对象，用于添加数据验证。
+     * @param dictSheets  字典工作表映射，存储已创建的隐藏工作表。
+     * @param dictCode    字典代码，用于标识隐藏工作表的名称。
+     * @param options     下拉列表选项列表，包含可选择的值。
+     * @param columnIndex 列索引，指定下拉列表所在的列位置。
+     * @param firstRow    起始行索引，指定下拉列表生效的起始行。
+     * @param lastRow     结束行索引，指定下拉列表生效的结束行。
+     */
+    private void addDropDownListWithHiddenSheet(Workbook workbook, Sheet mainSheet, Map<String, Sheet> dictSheets, String dictCode, List<String> options, int columnIndex, int firstRow, int lastRow) {
         // 获取或创建隐藏的数据sheet
         Sheet hiddenSheet = dictSheets.computeIfAbsent(dictCode, k -> {
             Sheet sheet = workbook.createSheet(HIDDEN_SHEET_PREFIX + k);
@@ -466,22 +651,22 @@ public class ExcelCore {
     }
 
     /**
-     * 创建表头
+     * 创建表头单元格，设置单元格样式、列宽并填充表头标题。
      *
-     * @param sheet
-     * @param row
-     * @param col
-     * @param val
+     * @param sheet           工作表对象，用于设置列宽等操作。
+     * @param row             表头所在行对象，用于创建单元格。
+     * @param cell            单元格对象，用于设置样式和填充值。
+     * @param cellstyle       表头单元格样式，包含字体、颜色、边框等样式信息。
+     * @param col             列索引，指定表头单元格所在的列位置。
+     * @param excelTitleModel 表头列模型，包含表头标题、列宽、是否必填等信息。
      * @return void
      * @author 千面
      * @date 2023/11/24 17:48
      */
-    private static void createCellHeader(Sheet sheet, Row row, Cell cell,
-                                         CellStyle cellstyle, int col, ExcelColumnModel excelTitleModel) {
+    private static void createCellHeader(Sheet sheet, Row row, Cell cell, CellStyle cellstyle, int col, ExcelColumnModel excelTitleModel) {
         // 1.5 * 265 = 384
         String title = excelTitleModel.getTitle();
-        int width = Optional.of(excelTitleModel.getWidth()).filter(w -> w > 0)
-                .orElse(ReUtil.findAll("[\\u4e00-\\u9fa5]", title, 0).size());
+        int width = Optional.of(excelTitleModel.getWidth()).filter(w -> w > 0).orElse(ReUtil.findAll("[\\u4e00-\\u9fa5]", title, 0).size());
         // 设置列宽
         sheet.setColumnWidth(col, (int) ((width * 2.2) + 2) * 256);
         cell = row.createCell(col);
@@ -490,6 +675,13 @@ public class ExcelCore {
         cell.setCellValue(title);
     }
 
+    /**
+     * 创建表头单元格样式，根据是否必填设置不同的字体颜色。
+     *
+     * @param workbook 工作簿对象，用于创建样式和字体。
+     * @param required 是否必填，若为 true 则字体颜色为红色，否则为黑色。
+     * @return 表头单元格样式对象。
+     */
     private CellStyle createHeaderStyle(Workbook workbook, boolean required) {
         CellStyle style = workbook.createCellStyle();
         style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -511,6 +703,12 @@ public class ExcelCore {
         return style;
     }
 
+    /**
+     * 获取单元格的值，根据单元格类型进行不同的处理。
+     *
+     * @param cell 单元格对象，要获取值的单元格。
+     * @return 单元格的值，处理后的字符串形式。
+     */
     private String getCellValue(Cell cell) {
         switch (cell.getCellType()) {
             case STRING:
@@ -534,13 +732,14 @@ public class ExcelCore {
     }
 
     /**
-     * 注释: 获取数据原始类型
+     * 处理字段值，将字符串值转换为指定字段的类型并设置到对象中。
      *
-     * @param t
-     * @param value
-     * @param field
-     * @return void
-     * @author yangyongzhuo 2022/11/25 13:25
+     * @param t          目标对象，要设置字段值的对象。
+     * @param value      字符串值，要转换并设置的字段值。
+     * @param field      字段对象，指定要设置值的字段。
+     * @param dateFormat 日期格式，若字段为日期类型，用于日期转换。
+     * @param <T>        目标对象类型，泛型参数。
+     * @throws Exception 若反射操作或类型转换过程中出现异常。
      */
     private static <T> void handleField(T t, String value, Field field, String dateFormat) throws Exception {
         Class<?> type = field.getType();
@@ -594,12 +793,12 @@ public class ExcelCore {
     }
 
     /**
-     * 读取字段上的注释，查询字典
+     * 读取类字段上的注解信息，生成 Excel 列模型映射。
      *
-     * @param clsss
-     * @return Map<String, ExcelColumnModel>
-     * @author 千面
-     * @date 2023/11/24 13:57
+     * @param clsss 目标类型，要读取注解信息的类。
+     * @param type  操作类型，如 ExcelDict.IMPORT、ExcelDict.EXPORT 或 ExcelDict.TEMPLATE。
+     * @param <T>   目标类型，泛型参数。
+     * @return Excel 列模型映射，键为字段名或表头标题，值为 ExcelColumnModel 对象。
      */
     public <T> Map<String, ExcelColumnModel> genExcelColumnModel(Class<T> clsss, String type) {
         Map<String, ExcelColumnModel> excelTitleModelMap = new LinkedHashMap<>();
@@ -631,6 +830,7 @@ public class ExcelCore {
             field.setAccessible(true);
             model.setField(field);
             model.setWidth(excel.width());
+            model.setMessage(excel.message());
             if (StringUtils.equals(ExcelDict.IMPORT, type)) {
                 ExcelColumnModel excelColumnModel = excelTitleModelMap.putIfAbsent(title, model);
                 if (excelColumnModel != null) {
@@ -644,15 +844,15 @@ public class ExcelCore {
     }
 
     /**
-     * 收集字典数据
+     * 收集字典数据，根据操作类型获取字典映射并设置到 Excel 列模型中。
      *
-     * @param excel
-     * @return void
-     * @author 千面
-     * @date 2023/11/24 11:19
+     * @param currentField   当前字段对象，要处理的字段。
+     * @param fieldByNameMap 字段名到字段对象的映射，用于查找转换字段。
+     * @param excel          字段注解对象，包含字典信息。
+     * @param model          Excel 列模型对象，用于存储字典映射。
+     * @param type           操作类型，如 ExcelDict.IMPORT 或 ExcelDict.EXPORT。
      */
-    private void findImportDictionary(Field currentField, Map<String, Field> fieldByNameMap, ExcelColumn
-            excel, ExcelColumnModel model, String type) {
+    private void findImportDictionary(Field currentField, Map<String, Field> fieldByNameMap, ExcelColumn excel, ExcelColumnModel model, String type) {
         String title = excel.title();
         ExcelDict excelDict = excel.dict();
         model.setTitle(title);

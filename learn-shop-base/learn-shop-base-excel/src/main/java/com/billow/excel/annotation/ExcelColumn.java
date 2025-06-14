@@ -30,6 +30,11 @@ public @interface ExcelColumn {
     boolean required() default false;
 
     /**
+     * 提示信息
+     */
+    String message() default "";
+
+    /**
      * 数据字典
      *
      * @param
