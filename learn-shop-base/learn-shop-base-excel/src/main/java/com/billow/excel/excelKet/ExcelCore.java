@@ -352,7 +352,7 @@ public class ExcelCore {
         // 写入数据
         for (int i = startRowNum; i < endRowNum; i++) {
             // 空出标题行
-            row = sheet.createRow(i + excelSheet.headerIndex());
+            row = sheet.createRow(i + 1);
             // 取一行数据
             T t = dataList.get(i - startRowNum);
             for (int col = 0; col < values.size(); col++) {
