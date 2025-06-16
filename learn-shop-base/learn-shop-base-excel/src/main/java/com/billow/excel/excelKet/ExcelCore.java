@@ -219,7 +219,7 @@ public class ExcelCore {
                     isFirstPage = false;
                 }
 
-                createExportDataForPage(workbook, sheet, pageData, columnModels);
+                createExportDataForPage(sheet, pageData, columnModels);
             }
             workbook.write(fos);
         } catch (Exception e) {
@@ -238,9 +238,7 @@ public class ExcelCore {
      * @return 创建好表头的工作表对象。
      */
     private Sheet createHeaderForPagedExport(Workbook workbook, ExcelSheet excelSheet, List<ExcelColumnModel> columnModels) {
-        SXSSFWorkbook sxssfWorkbook = (SXSSFWorkbook) workbook;
-        Sheet sheet = sxssfWorkbook.createSheet(excelSheet.name());
-
+        Sheet sheet = workbook.createSheet(excelSheet.name());
         // 标题样式 - 必传字段为红色
         CellStyle cellStyleRed = createHeaderStyle(workbook, true);
         // 标题样式 - 非必传字段为黑色
@@ -259,16 +257,13 @@ public class ExcelCore {
     /**
      * 为分页导出写入单页数据。
      *
-     * @param workbook     工作簿对象。
      * @param sheet        工作表对象。
      * @param pageData     单页数据列表。
      * @param columnModels 表头列模型列表。
      * @param <T>          数据类型，泛型参数。
      */
-    private <T> void createExportDataForPage(Workbook workbook, Sheet sheet, List<T> pageData, List<ExcelColumnModel> columnModels) throws Exception {
-        CellStyle cellStyle = workbook.createCellStyle();
+    private <T> void createExportDataForPage(Sheet sheet, List<T> pageData, List<ExcelColumnModel> columnModels) throws Exception {
         int startRow = sheet.getLastRowNum() + 1;
-
         Row row = null;
         Cell cell = null;
         for (int i = 0; i < pageData.size(); i++) {
@@ -298,7 +293,7 @@ public class ExcelCore {
                     }
                 }
 
-                createCell(row, cell, cellStyle, col, value);
+                createCell(row, cell, col, value);
             }
         }
     }
@@ -349,8 +344,6 @@ public class ExcelCore {
      * @throws Exception 若反射操作或数据处理过程中出现异常。
      */
     private <T> void createExportData(Workbook wb, ExcelSheet excelSheet, List<T> dataList, List<ExcelColumnModel> values) throws Exception {
-        // 数据样式
-        CellStyle cellStyle = wb.createCellStyle();
         Row row = null;
         Cell cell = null;
         Sheet sheet = wb.getSheet(excelSheet.name());
@@ -383,7 +376,7 @@ public class ExcelCore {
                     }
                 }
                 // 填充值
-                createCell(row, cell, cellStyle, col, value);
+                createCell(row, cell, col, value);
             }
         }
     }
@@ -550,13 +543,12 @@ public class ExcelCore {
     /**
      * 构建一个单元格，设置单元格的值和样式。
      *
-     * @param row       行对象，用于创建单元格。
-     * @param cell      单元格对象，用于设置值和样式。
-     * @param cellstyle 单元格样式，包含字体、颜色、边框等样式信息。
-     * @param col       列索引，指定单元格所在的列位置。
-     * @param val       单元格的值，可以是不同的数据类型。
+     * @param row  行对象，用于创建单元格。
+     * @param cell 单元格对象，用于设置值和样式。
+     * @param col  列索引，指定单元格所在的列位置。
+     * @param val  单元格的值，可以是不同的数据类型。
      */
-    private static void createCell(Row row, Cell cell, CellStyle cellstyle, int col, Object val) {
+    private static void createCell(Row row, Cell cell, int col, Object val) {
         cell = row.createCell(col);
         if (val instanceof String) {
             cell.setCellValue((String) val);
@@ -571,7 +563,6 @@ public class ExcelCore {
         } else if (val instanceof BigDecimal) {
             cell.setCellValue(((BigDecimal) val).stripTrailingZeros().toPlainString());
         }
-        cell.setCellStyle(cellstyle);
     }
 
     /**
@@ -800,7 +791,7 @@ public class ExcelCore {
      * @param <T>   目标类型，泛型参数。
      * @return Excel 列模型映射，键为字段名或表头标题，值为 ExcelColumnModel 对象。
      */
-    public <T> Map<String, ExcelColumnModel> genExcelColumnModel(Class<T> clsss, String type) {
+    private <T> Map<String, ExcelColumnModel> genExcelColumnModel(Class<T> clsss, String type) {
         Map<String, ExcelColumnModel> excelTitleModelMap = new LinkedHashMap<>();
 
         Map<String, Field> fieldByNameMap = new LinkedHashMap<>();
