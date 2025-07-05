@@ -5,6 +5,7 @@ import com.billow.excel.annotation.ExcelSheet;
 import com.billow.excel.generator.NumUtil;
 import com.billow.excel.model.ExcelTask;
 import com.billow.excel.model.ExportErrorResult;
+import com.billow.excel.model.ExportPageResult;
 import com.billow.excel.service.ExcelTaskService;
 import com.billow.tools.utlis.SpringContextUtil;
 import lombok.RequiredArgsConstructor;
@@ -150,13 +151,91 @@ public class ExcelKit {
                 int count = excelCore.exportToFileWithPage(filePath, pageSize, totalCount, dataFetcher);
                 // 更新任务状态为成功
                 task.setStatus(ExcelTask.TaskStatus.COMPLETED)
-                        .setSuccessCount(count)
+                        .setSuccessCount(Optional.ofNullable(task.getSuccessCount()).map(c -> c + count).orElse(count))
                         .setFilePath(filePath);
             } catch (Exception e) {
                 log.error("异步导出Excel失败", e);
                 // 更新任务状态为失败
                 task.setStatus(ExcelTask.TaskStatus.FAILED)
                         .setErrorCount(totalCount)
+                        .setErrorMessage(e.getMessage());
+            } finally {
+                task.setUpdateTime(new Date());
+                String formatDuration = DateUtil.formatBetween(task.getUpdateTime(), task.getCreateTime());
+                task.setTimeDifference(formatDuration);
+                excelTaskService.updateTask(task);
+            }
+        });
+        return taskId;
+    }
+
+    /**
+     * 异步分页导出
+     * <p>
+     * //假设已经有 ExcelCore 实例
+     * <p>
+     * ExcelCore excelCore = new ExcelCore(dictService);
+     * <p>
+     * String filePath = "/path/to/";
+     * <p>
+     * String fileName = "exported_file.xlsx";
+     * <p>
+     * int pageSize = 100;
+     * <p>
+     * int initialQueryParam = 0; // 从id为0的数据开始查询
+     * <p>
+     * BiFunction<Integer, Integer, ExportPageResult<YourDataClass>> dataFetcher = (lastQueryParam, size) -> {
+     * <p>
+     * 类似这种查询：select * from your_table where id > ? limit ?;
+     * <p>
+     * List<YourDataClass> dataList = yourService.getPageData(lastQueryParam, size);
+     * <p>
+     * ExportPageResult<YourDataClass> result = new ExportPageResult<>();
+     * <p>
+     * result.setDataList(dataList);
+     * <p>
+     * result.setLastQueryParam(dataList.get(dataList.size() - 1).getId());
+     * <p>
+     * return result; // 调用数据库查询方法获取分页数据
+     * <p>
+     * excelCore.exportToFileWithPage(filePath, fileName, pageSize, initialQueryParam, dataFetcher);
+     *
+     * @param filePath          文件路径
+     * @param fileName          文件名称
+     * @param pageSize          每页大小
+     * @param initialQueryParam 初始查询条件，用于第一页查询的起始点。
+     * @param dataFetcher       数据获取器
+     * @param //
+     * @return 任务ID
+     */
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public <T> String exportToFileWithRange(String filePath, String fileName, int pageSize,
+                                            Object initialQueryParam, BiFunction<Object, Integer, ExportPageResult<T>> dataFetcher) {
+        // 创建任务记录
+        String taskId = NumUtil.makeNum("EX");
+        // 创建任务记录
+        ExcelTask task = new ExcelTask()
+                .setTaskId(taskId)
+                .setType(ExcelTask.TaskType.EXPORT)
+                .setFileName(fileName)
+                .setStatus(ExcelTask.TaskStatus.PROCESSING)
+                .setCreateTime(new Date())
+                .setSuccessCount(0)
+                .setErrorCount(0);
+        excelTaskService.createTask(task);
+
+        // 异步执行导出
+        CompletableFuture.runAsync(() -> {
+            try {
+                int count = excelCore.exportToFileWithRange(filePath, pageSize, initialQueryParam, dataFetcher);
+                // 更新任务状态为成功
+                task.setStatus(ExcelTask.TaskStatus.COMPLETED)
+                        .setSuccessCount(Optional.ofNullable(task.getSuccessCount()).map(c -> c + count).orElse(count))
+                        .setFilePath(filePath);
+            } catch (Exception e) {
+                log.error("异步导出Excel失败", e);
+                // 更新任务状态为失败
+                task.setStatus(ExcelTask.TaskStatus.FAILED)
                         .setErrorMessage(e.getMessage());
             } finally {
                 task.setUpdateTime(new Date());

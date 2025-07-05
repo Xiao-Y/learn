@@ -9,6 +9,7 @@ import com.billow.excel.annotation.ExcelDict;
 import com.billow.excel.annotation.ExcelSheet;
 import com.billow.excel.converter.ExcelCover;
 import com.billow.excel.model.ExcelColumnModel;
+import com.billow.excel.model.ExportPageResult;
 import com.billow.excel.service.DictService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -189,8 +190,7 @@ public class ExcelCore {
      * @param <T>         数据类型，泛型参数，代表要导出的数据类型。
      * @return 返回导出数据的总条数。
      */
-    public <T> int exportToFileWithPage(String filePath, int pageSize, int totalCount,
-                                        BiFunction<Integer, Integer, List<T>> dataFetcher) {
+    public <T> int exportToFileWithPage(String filePath, int pageSize, int totalCount, BiFunction<Integer, Integer, List<T>> dataFetcher) {
         int count = 0;
         try (SXSSFWorkbook workbook = new SXSSFWorkbook(500); FileOutputStream fos = new FileOutputStream(filePath)) {
             boolean isFirstPage = true;
@@ -215,16 +215,76 @@ public class ExcelCore {
                     }
 
                     columnModels = new ArrayList<>(genExcelColumnModel(clazz, ExcelDict.EXPORT).values());
+                    // 为分页导出创建表头
                     sheet = createHeaderForPagedExport(workbook, excelSheet, columnModels);
                     isFirstPage = false;
                 }
-
+                // 为分页导出写入单页数据
                 createExportDataForPage(sheet, pageData, columnModels);
             }
             workbook.write(fos);
         } catch (Exception e) {
             log.error("分页导出 Excel 到响应流失败", e);
             throw new RuntimeException("分页导出 Excel 失败", e);
+        }
+        return count;
+    }
+
+    /**
+     * 基于游标分页导出数据到文件流，避免传统分页的性能问题。
+     * 适用于大数据量导出，通过查询条件进行分页查询，每次查询r.条件 > initialQueryParam 的记录。
+     *
+     * @param filePath          文件保存路径。
+     * @param pageSize          每页数据数量。
+     * @param initialQueryParam 初始查询条件，用于第一页查询的起始点。
+     * @param dataFetcher       分页数据获取函数，接收上一页的最后 queryParam 和每页数量，返回对应页的数据列表和下一页的起始queryParam。
+     * @param <T>               数据类型，泛型参数，代表要导出的数据类型。
+     * @return 返回导出数据的总条数。
+     */
+    public <T> int exportToFileWithRange(String filePath, int pageSize, Object initialQueryParam, BiFunction<Object, Integer, ExportPageResult<T>> dataFetcher) {
+        int count = 0;
+        try (SXSSFWorkbook workbook = new SXSSFWorkbook(500); FileOutputStream fos = new FileOutputStream(filePath)) {
+            boolean isFirstPage = true;
+            Sheet sheet = null;
+            List<ExcelColumnModel> columnModels = null;
+            Class<?> clazz = null;
+            Object lastQueryParam = initialQueryParam;
+
+            while (true) {
+                // 获取当前页数据
+                ExportPageResult<T> pageResult = dataFetcher.apply(lastQueryParam, pageSize);
+                List<T> pageData = pageResult.getDataList();
+                if (CollectionUtils.isEmpty(pageData)) {
+                    break;
+                }
+
+                count += pageData.size();
+
+                if (isFirstPage) {
+                    clazz = pageData.get(0).getClass();
+                    ExcelSheet excelSheet = clazz.getAnnotation(ExcelSheet.class);
+                    if (excelSheet == null) {
+                        throw new RuntimeException("@ExcelSheet 注解不能为空");
+                    }
+
+                    columnModels = new ArrayList<>(genExcelColumnModel(clazz, ExcelDict.EXPORT).values());
+                    // 为分页导出创建表头
+                    sheet = createHeaderForPagedExport(workbook, excelSheet, columnModels);
+                    isFirstPage = false;
+                }
+                // 为分页导出写入单页数据
+                createExportDataForPage(sheet, pageData, columnModels);
+                // 获取下一页的起始ID
+                lastQueryParam = pageResult.getLastQueryParam();
+                if (lastQueryParam == null) {
+                    // 没有更多数据
+                    break;
+                }
+            }
+            workbook.write(fos);
+        } catch (Exception e) {
+            log.error("基于ID范围分页导出 Excel 到响应流失败", e);
+            throw new RuntimeException("基于ID范围分页导出 Excel 失败", e);
         }
         return count;
     }
