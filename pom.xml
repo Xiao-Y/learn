@@ -69,7 +69,7 @@
         <activiti.version>6.0.0</activiti.version>
         <swagger-bootstrap.version>1.9.5</swagger-bootstrap.version>
         <apache.poi.version>4.1.1</apache.poi.version>
-        <nimbus-jose-jwt.version>8.16</nimbus-jose-jwt.version>
+        <nimbus-jose-jwt.version>10.0.2</nimbus-jose-jwt.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
         <spring-cloud-starter.version>2.2.8.RELEASE</spring-cloud-starter.version>
