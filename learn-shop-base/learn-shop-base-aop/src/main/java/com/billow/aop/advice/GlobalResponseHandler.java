@@ -1,13 +1,12 @@
 package com.billow.aop.advice;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.aop.commons.CustomPage;
-import com.billow.tools.constant.CommonCst;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
-import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -105,12 +104,12 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 //        baseResponse.setRequestUrl()
 //        log.info("\n响应参数：{} ", JSONObject.toJSONString(baseResponse));
 
-        // 处理返回值是String的情况
-//        if (body instanceof String) {
-//            return JSONObject.toJSONString(BaseResponse.success(body));
-//        }
 //        baseResponse.setTraceID(MDC.get(CommonCst.LOG_TRACE_ID));
         baseResponse.setTraceID(TraceContext.traceId());
+        // 处理返回值是String的情况
+        if (body instanceof String) {
+            return JSONObject.toJSONString(baseResponse);
+        }
         return baseResponse;
     }
 }

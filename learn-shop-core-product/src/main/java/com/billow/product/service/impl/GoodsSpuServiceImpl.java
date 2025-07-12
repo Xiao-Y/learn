@@ -16,6 +16,7 @@ import com.billow.product.service.GoodsSpuService;
 import com.billow.tools.generator.NumUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
  * @version v1.0
  * @since 2019-11-27
  */
+@Slf4j
 @Service
 public class GoodsSpuServiceImpl extends HighLevelServiceImpl<GoodsSpuDao, GoodsSpuPo, GoodsSpuSearchParam> implements GoodsSpuService {
 
@@ -44,6 +46,10 @@ public class GoodsSpuServiceImpl extends HighLevelServiceImpl<GoodsSpuDao, Goods
     private GoodsSkuDao goodsSkuDao;
     @Autowired
     private GoodsSkuSpecValueService goodsSkuSpecValueService;
+//    @Autowired
+//    private ExcelExporter excelExporter;
+//    @Autowired
+//    private ExcelImporter excelImporter;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -100,5 +106,48 @@ public class GoodsSpuServiceImpl extends HighLevelServiceImpl<GoodsSpuDao, Goods
         ConvertUtils.convert(po, goodsSpuVo);
     }
 
+//    @Override
+//    public String asyncExport(HttpServletResponse response) {
+//        // 1. 查询所有商品SPU数据
+//        List<GoodsSpuPo> spuList = this.list();
+//
+//        // 2. 转换为Excel对象
+//        List<GoodsSpuExcel> excelList = spuList.stream().map(spu -> {
+//            GoodsSpuExcel excel = new GoodsSpuExcel();
+//            // 复制基本属性
+//            BeanUtils.copyProperties(spu, excel);
+//            return excel;
+//        }).collect(Collectors.toList());
+//
+//        // 3. 使用DefaultExcelExporter的exportAsync方法进行异步导出
+//        String taskId = excelExporter.exportAsync(excelList);
+//
+//        // 可以在这里处理导出完成后的逻辑，例如记录日志或通知用户
+//        log.info("导出任务已提交，任务ID: {}", taskId);
+//        return taskId;
+//    }
+//
+//    @Override
+//    public String asyncImport(MultipartFile file) throws ExecutionException, InterruptedException {
+//        Future<ImportResult<GoodsSpuExcel>> futureResult = excelImporter.importAsync(file, GoodsSpuExcel.class);
+//        // TODO 获取其它业务数据
+//
+//        // 等待导入完成并获取结果
+//        ImportResult<GoodsSpuExcel> importResult = futureResult.get();
+//
+//        // 获取成功导入的数据列表
+//        List<GoodsSpuExcel> dataList = importResult.getSuccessList();
+//
+//        // 转换为PO对象并批量保存
+//        List<GoodsSpuPo> spuList = dataList.stream().map(excel -> {
+//            GoodsSpuPo spu = new GoodsSpuPo();
+//            // 复制基本属性
+//            BeanUtils.copyProperties(excel, spu);
+//            return spu;
+//        }).collect(Collectors.toList());
+//
+//        this.saveBatch(spuList);
+//        return "导入成功";
+//    }
 }
 

@@ -16,3 +16,23 @@ server:
 spring:
   application:
     name: learn-shop-core-product #客户端名称
+
+# Excel 模块配置
+learn:
+  excel:
+    # 字典配置
+    dict:
+      # Redis字典前缀，用于在Redis中存储字典数据时的键前缀
+      # 例如：如果前缀为"DICT:"，字典编码为"USER_STATUS"，则最终的Redis键为"DICT:USER_STATUS"
+      redis-key-prefix: "DICT:"
+
+      # 是否启用枚举字典自动扫描
+      # true: 启用自动扫描，会扫描指定包路径下的枚举类
+      # false: 禁用自动扫描，需要手动注册枚举字典
+      enable-enum-scan: true
+
+      # 枚举字典扫描包路径
+      # 配置需要扫描的包路径，支持多个包路径
+      # 只有实现了DictEnum接口的枚举类才会被注册为字典
+      enum-scan-packages:
+        - "com.billow.product.common.enums" # Excel模块的枚举包

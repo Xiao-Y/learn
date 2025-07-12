@@ -28,5 +28,6 @@
         <module>learn-shop-base-security</module>
         <module>learn-shop-base-notice</module>
         <module>learn-shop-base-sql</module>
+        <module>learn-shop-base-excel</module>
     </modules>
 </project>

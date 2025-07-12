@@ -72,6 +72,11 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-notice</artifactId>
         </dependency>
+        <!-- Excel组件依赖 -->
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-excel</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -26,7 +26,7 @@ public class TokenProperties {
     private String jwtPassword;
 
     public String getJwtFileName() {
-        Assert.notNull(jwtFileName, "jwtFileName 不能为空，请配置 auth.security.token.jwtFileName");
+        Assert.notNull(jwtFileName, "jwtFileName 不能为空，请配置 auth.token.jwtFileName");
         return jwtFileName;
     }
 
@@ -35,7 +35,7 @@ public class TokenProperties {
     }
 
     public String getJwtPassword() {
-        Assert.notNull(jwtPassword, "jwtPassword 不能为空，请配置 auth.security.token.jwtPassword");
+        Assert.notNull(jwtPassword, "jwtPassword 不能为空，请配置 auth.token.jwtPassword");
         return jwtPassword;
     }
 }

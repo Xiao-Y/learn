@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 
 /**
@@ -42,5 +44,10 @@ public class AppBeanConfig {
         factory.setBufferRequestBody(true);
         restTemplate.setRequestFactory(factory);
         return new RestTemplate();
+    }
+
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 }

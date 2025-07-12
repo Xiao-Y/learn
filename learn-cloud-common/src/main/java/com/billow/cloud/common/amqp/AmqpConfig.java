@@ -5,8 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AmqpConfig
-{
+public class AmqpConfig {
     /**
      * 日志收集
      *
@@ -17,8 +16,7 @@ public class AmqpConfig
      */
     @Bean
     @ConfigurationProperties(prefix = "notice.mq.mq-collect.log-collect")
-    public AmqpYml logCollect()
-    {
+    public AmqpYml logCollect() {
         return new AmqpYml();
     }
 
@@ -32,8 +30,7 @@ public class AmqpConfig
      */
     @Bean
     @ConfigurationProperties(prefix = "notice.mq.mq-collect.run-job-test")
-    public AmqpYml runJobTest()
-    {
+    public AmqpYml runJobTest() {
         return new AmqpYml();
     }
 
@@ -47,8 +44,7 @@ public class AmqpConfig
      */
     @Bean
     @ConfigurationProperties(prefix = "notice.mq.mq-collect.execute-sql")
-    public AmqpYml executeSql()
-    {
+    public AmqpYml executeSql() {
         return new AmqpYml();
     }
 
@@ -62,8 +58,7 @@ public class AmqpConfig
      */
     @Bean
     @ConfigurationProperties(prefix = "notice.mq.mq-collect.refresh-es")
-    public AmqpYml refreshEs()
-    {
+    public AmqpYml refreshEs() {
         return new AmqpYml();
     }
 
@@ -77,8 +72,7 @@ public class AmqpConfig
      */
     @Bean
     @ConfigurationProperties(prefix = "notice.mq.mq-collect.sec-kill-to-core-order")
-    public AmqpYml secKillToCoreOrder()
-    {
+    public AmqpYml secKillToCoreOrder() {
         return new AmqpYml();
     }
 
@@ -92,8 +86,7 @@ public class AmqpConfig
      */
     @Bean
     @ConfigurationProperties(prefix = "notice.mq.mq-collect.sec-kill-to-admin-system")
-    public AmqpYml secKillToAdminSystem()
-    {
+    public AmqpYml secKillToAdminSystem() {
         return new AmqpYml();
     }
 
@@ -107,8 +100,7 @@ public class AmqpConfig
      */
     @Bean
     @ConfigurationProperties(prefix = "notice.mq.mq-collect.send-mail")
-    public AmqpYml sendMail()
-    {
+    public AmqpYml sendMail() {
         return new AmqpYml();
     }
 }

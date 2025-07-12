@@ -1,0 +1,121 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /cart
+
+spring:
+  application:
+    name: learn-shop-core-cart
+  
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/learn_shop?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      auto-commit: true
+      pool-name: CartHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  # Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    password: 
+    database: 0
+    timeout: 10s
+    lettuce:
+      pool:
+        min-idle: 0
+        max-idle: 8
+        max-active: 8
+        max-wait: -1ms
+
+  # RabbitMQ配置
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1
+
+# MyBatis Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.billow.cart.pojo.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type: assign_id
+      logic-delete-field: validInd
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+
+# 购物车配置
+cart:
+  # Redis配置
+  redis:
+    database: 0
+    expire: 7  # 购物车数据过期天数
+    prefix: "cart"  # 键前缀
+  
+  # 限制配置
+  limit:
+    maxItems: 99  # 最大商品种类数
+    maxQuantity: 999  # 单个商品最大数量
+    maxTotal: 999  # 购物车最大总数量
+    
+  # 异步任务配置
+  async:
+    corePoolSize: 5
+    maxPoolSize: 10
+    queueCapacity: 100
+    
+  # 分布式锁配置
+  lock:
+    timeout: 3  # 锁超时时间（秒）
+    retry: 3  # 重试次数
+    
+  # 数据同步配置
+  sync:
+    interval: 300  # 同步间隔（秒）
+    batchSize: 100  # 批量同步大小
+    
+  # 监控配置
+  monitor:
+    responseTime: 500  # 响应时间阈值（毫秒）
+    errorRate: 0.01  # 错误率阈值
+    hitRate: 0.9  # 缓存命中率阈值
+
+# Swagger配置
+swagger:
+  enabled: true
+  title: 购物车服务接口文档
+  description: 提供购物车相关接口
+  version: 1.0.0
+  contact:
+    name: liuyongtao
+    email: xxx@xxx.com
+
+# 日志配置
+logging:
+  level:
+    com.billow.cart: debug
+    org.springframework: warn 
