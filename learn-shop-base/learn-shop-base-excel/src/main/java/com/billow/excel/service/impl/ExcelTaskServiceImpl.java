@@ -22,10 +22,10 @@ public class ExcelTaskServiceImpl implements ExcelTaskService {
 
     private static final String TABLE_NAME = "t_excel_task";
     private static final String INSERT_SQL = "INSERT INTO " + TABLE_NAME +
-            " (task_id, type, file_name, status, total, success_count, error_count, error_message, file_path, create_time, update_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " (task_id, type, file_name, status, total, success_count, error_count, error_message, file_path, time_difference, create_time, update_time) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE " + TABLE_NAME +
-            " SET status = ?, total = ?, success_count = ?, error_count = ?, error_message = ?, file_path = ?, update_time = ? " +
+            " SET status = ?, total = ?, success_count = ?, error_count = ?, error_message = ?, file_path = ?, time_difference = ? , update_time = ?" +
             "WHERE task_id = ?";
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM " + TABLE_NAME + " WHERE task_id = ?";
     private static final String SELECT_BY_TYPE_STATUS_SQL = "SELECT * FROM " + TABLE_NAME +
@@ -48,6 +48,7 @@ public class ExcelTaskServiceImpl implements ExcelTaskService {
                 task.getErrorCount(),
                 task.getErrorMessage(),
                 task.getFilePath(),
+                task.getTimeDifference(),
                 task.getCreateTime(),
                 task.getUpdateTime()
         );
@@ -65,6 +66,7 @@ public class ExcelTaskServiceImpl implements ExcelTaskService {
                 task.getErrorCount(),
                 task.getErrorMessage(),
                 task.getFilePath(),
+                task.getTimeDifference(),
                 task.getUpdateTime(),
                 task.getTaskId()
         );
@@ -106,6 +108,7 @@ public class ExcelTaskServiceImpl implements ExcelTaskService {
                     .setErrorCount(rs.getInt("error_count"))
                     .setErrorMessage(rs.getString("error_message"))
                     .setFilePath(rs.getString("file_path"))
+                    .setTimeDifference(rs.getString("time_difference"))
                     .setCreateTime(rs.getTimestamp("create_time"))
                     .setUpdateTime(rs.getTimestamp("update_time"));
         }

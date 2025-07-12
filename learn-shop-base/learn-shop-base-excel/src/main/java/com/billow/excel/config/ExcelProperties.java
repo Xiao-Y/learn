@@ -11,6 +11,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ExcelProperties {
 
     /**
+     * 文件路径
+     */
+    private String fileBasePath = "D:/excel/";
+
+    /**
      * 字典配置
      */
     private Dict dict = new Dict();

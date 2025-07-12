@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 
@@ -69,14 +68,7 @@ public class MenuApi extends BaseApi {
 
     @ApiOperation(value = "根据权限ID查询出绑定的菜单信息")
     @GetMapping("/findMenuByPermissionId/{permissionId}")
-    public List<MenuVo> findMenuByPermissionId(@PathVariable("permissionId") Long permissionId){
-       return menuService.findMenuByPermissionId(permissionId);
-    }
-
-
-    @ApiOperation("异步导出")
-    @GetMapping("/export")
-    public String asyncExport(HttpServletResponse response) {
-        return menuService.asyncExport(response);
+    public List<MenuVo> findMenuByPermissionId(@PathVariable("permissionId") Long permissionId) {
+        return menuService.findMenuByPermissionId(permissionId);
     }
 }

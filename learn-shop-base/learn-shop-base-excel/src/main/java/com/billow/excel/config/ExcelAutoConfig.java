@@ -1,7 +1,7 @@
 package com.billow.excel.config;
 
-import com.billow.excel.excelKet.ExcelExporterKit;
-import com.billow.excel.excelKet.ExcelImporterKit;
+import com.billow.excel.excelKet.ExcelCore;
+import com.billow.excel.excelKet.ExcelKit;
 import com.billow.excel.provider.impl.DatabaseDictProvider;
 import com.billow.excel.provider.impl.EnumDictProvider;
 import com.billow.excel.provider.impl.RedisDictProvider;
@@ -63,18 +63,18 @@ public class ExcelAutoConfig {
     }
 
     /**
-     * 配置Excel导出器
+     * 配置任务服务
      */
     @Bean
-    public ExcelExporterKit excelExporterKit(ExcelTaskService taskService, DictService dictService) {
-        return new ExcelExporterKit(dictService, taskService);
+    public ExcelCore excelCore(DictService dictService) {
+        return new ExcelCore(dictService);
     }
 
     /**
-     * 配置Excel导入器
+     * 配置Excel导出器
      */
     @Bean
-    public ExcelImporterKit excelImporterKit(DictService dictService) {
-        return new ExcelImporterKit(dictService);
+    public ExcelKit excelKit(ExcelProperties properties, ExcelTaskService taskService, ExcelCore excelCore) {
+        return new ExcelKit(properties, excelCore, taskService);
     }
-} 
+}

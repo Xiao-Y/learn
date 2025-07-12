@@ -15,22 +15,24 @@ public @interface ExcelSheet {
     String name() default "";
 
     /**
-     * 工作表描述
+     * 冻结行数，设置为0 表示不冻结
+     *
+     * @author 千面
      */
-    String description() default "";
-
-    /**
-     * 表头颜色（十六进制）
-     */
-    String headColor() default "#FFFFFF";
-
-    /**
-     * 是否冻结首行
-     */
-    boolean frozen() default true;
+    int freezeRow() default 1;
 
     /**
      * 数据开始行号（从0开始）
      */
-    int index() default 1;
+    int headerIndex() default 1;
+
+    /**
+     * 起始sheet页的下标
+     *
+     * @param
+     * @return int
+     * @author 千面
+     * @date 2023/11/24 10:03
+     */
+    int startSheetIndex() default 1;
 } 
