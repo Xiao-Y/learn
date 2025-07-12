@@ -7,10 +7,8 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.excel.excelKet.ExcelKit;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.RoleMenuDao;
-import com.billow.system.pojo.excel.MenuExcel;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RoleMenuPo;
 import com.billow.system.pojo.po.RolePo;
@@ -26,9 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -286,16 +282,4 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
 //        pMenuExs.sort(Comparator.comparing(MenuEx::getSortField, Comparator.nullsLast(Double::compareTo)));
 //    }
 
-    @Override
-    public String asyncExport(HttpServletResponse response) {
-        List<MenuPo> list = this.list();
-        String taskId = ExcelKit.getInstance().exportAsync(BeanUtil.copyToList(list, MenuExcel.class));
-        System.out.println(taskId);
-        return taskId;
-    }
-
-    @Override
-    public List<MenuExcel> importFile(HttpServletResponse response, MultipartFile file) {
-        return ExcelKit.getInstance().importFromMultipartFile(file, MenuExcel.class);
-    }
 }

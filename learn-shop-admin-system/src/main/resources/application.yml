@@ -25,6 +25,8 @@ feign:
 # Excel 模块配置
 learn:
   excel:
+    # 文件上传路径
+    fileBasePath: D:/workspace/idea/billow-excel/
     # 字典配置
     dict:
       # Redis字典前缀，用于在Redis中存储字典数据时的键前缀

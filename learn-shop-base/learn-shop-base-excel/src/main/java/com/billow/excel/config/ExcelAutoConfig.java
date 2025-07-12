@@ -74,7 +74,7 @@ public class ExcelAutoConfig {
      * 配置Excel导出器
      */
     @Bean
-    public ExcelKit excelKit(ExcelTaskService taskService, ExcelCore excelCore) {
-        return new ExcelKit(excelCore, taskService);
+    public ExcelKit excelKit(ExcelProperties properties, ExcelTaskService taskService, ExcelCore excelCore) {
+        return new ExcelKit(properties, excelCore, taskService);
     }
 }

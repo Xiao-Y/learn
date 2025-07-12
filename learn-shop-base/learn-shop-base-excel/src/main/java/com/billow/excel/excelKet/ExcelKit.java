@@ -1,7 +1,9 @@
 package com.billow.excel.excelKet;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import com.billow.excel.annotation.ExcelSheet;
+import com.billow.excel.config.ExcelProperties;
 import com.billow.excel.generator.NumUtil;
 import com.billow.excel.model.ExcelTask;
 import com.billow.excel.model.ExportErrorResult;
@@ -30,6 +32,7 @@ import java.util.function.BiFunction;
 @RequiredArgsConstructor
 public class ExcelKit {
 
+    private final ExcelProperties excelProperties;
     private final ExcelCore excelCore;
     private final ExcelTaskService excelTaskService;
 
@@ -49,37 +52,22 @@ public class ExcelKit {
      * @return 任务ID
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public <T> String exportAsync(List<T> dataList) {
+    public <T> String exportAsync(Class<T> clazz, List<T> dataList) {
         if (CollectionUtils.isEmpty(dataList)) {
             throw new RuntimeException("导出数据为空");
         }
-        // 创建任务记录
-        String taskId = NumUtil.makeNum("EX");
-        // String filePath = System.getProperty("java.io.tmpdir") + "/" + taskId + ".xlsx";
-        String fileName = this.getFileName(dataList);
-        String filePath = "D:/" + fileName;
 
         // 创建任务记录
-        ExcelTask task = new ExcelTask()
-                .setTaskId(taskId)
-                .setType(ExcelTask.TaskType.EXPORT)
-                .setFileName(fileName)
-                .setStatus(ExcelTask.TaskStatus.PROCESSING)
-                .setTotal(dataList.size())
-                .setCreateTime(new Date())
-                .setSuccessCount(0)
-                .setErrorCount(0);
-        excelTaskService.createTask(task);
+        ExcelTask task = this.createTask(clazz, dataList.size());
 
         // 异步执行导出
         CompletableFuture.runAsync(() -> {
             try {
-                excelCore.exportToFile(dataList, filePath);
+                excelCore.exportToFile(dataList, task.getFilePath() + task.getFileName());
 
                 // 更新任务状态为成功
                 task.setStatus(ExcelTask.TaskStatus.COMPLETED)
-                        .setSuccessCount(dataList.size())
-                        .setFilePath(filePath);
+                        .setSuccessCount(dataList.size());
             } catch (Exception e) {
                 log.error("异步导出Excel失败", e);
                 // 更新任务状态为失败
@@ -93,12 +81,12 @@ public class ExcelKit {
                 excelTaskService.updateTask(task);
             }
         });
-        return taskId;
+        return task.getTaskId();
     }
 
 
     /**
-     * 异步分页导出
+     * 异步基于 count 分页导出
      * <p>
      * //假设已经有 ExcelCore 实例
      * <p>
@@ -118,10 +106,8 @@ public class ExcelKit {
      * <p>
      * };
      * <p>
-     * excelCore.exportToFileWithPage(filePath, fileName, pageSize, totalCount, dataFetcher);
+     * excelCore.exportToFileWithPage(YourDataClass, pageSize, totalCount, dataFetcher);
      *
-     * @param filePath    文件路径
-     * @param fileName    文件名称
      * @param pageSize    每页大小
      * @param totalCount  总条数
      * @param dataFetcher 数据获取器
@@ -129,32 +115,20 @@ public class ExcelKit {
      * @return 任务ID
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public <T> String exportToFileWithPage(String filePath, String fileName, int pageSize, int totalCount,
+    public <T> String exportToFileWithPage(Class<T> clazz, int pageSize, int totalCount,
                                            BiFunction<Integer, Integer, List<T>> dataFetcher) {
         // 创建任务记录
-        String taskId = NumUtil.makeNum("EX");
-        // 创建任务记录
-        ExcelTask task = new ExcelTask()
-                .setTaskId(taskId)
-                .setType(ExcelTask.TaskType.EXPORT)
-                .setFileName(fileName)
-                .setStatus(ExcelTask.TaskStatus.PROCESSING)
-                .setTotal(totalCount)
-                .setCreateTime(new Date())
-                .setSuccessCount(0)
-                .setErrorCount(0);
-        excelTaskService.createTask(task);
+        ExcelTask task = this.createTask(clazz, totalCount);
 
         // 异步执行导出
         CompletableFuture.runAsync(() -> {
             try {
-                int count = excelCore.exportToFileWithPage(filePath, pageSize, totalCount, dataFetcher);
+                int count = excelCore.exportToFileWithPage(task.getFilePath() + task.getFileName(), pageSize, totalCount, dataFetcher);
                 // 更新任务状态为成功
                 task.setStatus(ExcelTask.TaskStatus.COMPLETED)
-                        .setSuccessCount(Optional.ofNullable(task.getSuccessCount()).map(c -> c + count).orElse(count))
-                        .setFilePath(filePath);
+                        .setSuccessCount(count);
             } catch (Exception e) {
-                log.error("异步导出Excel失败", e);
+                log.error("异步基于 count 分页导出Excel失败", e);
                 // 更新任务状态为失败
                 task.setStatus(ExcelTask.TaskStatus.FAILED)
                         .setErrorCount(totalCount)
@@ -166,42 +140,36 @@ public class ExcelKit {
                 excelTaskService.updateTask(task);
             }
         });
-        return taskId;
+        return task.getTaskId();
     }
 
     /**
-     * 异步分页导出
+     * 异步基于游标分页导出
      * <p>
      * //假设已经有 ExcelCore 实例
      * <p>
      * ExcelCore excelCore = new ExcelCore(dictService);
      * <p>
-     * String filePath = "/path/to/";
-     * <p>
-     * String fileName = "exported_file.xlsx";
-     * <p>
      * int pageSize = 100;
      * <p>
-     * int initialQueryParam = 0; // 从id为0的数据开始查询
+     * Q泛型 initialQueryParam = 0; // 从id为0的数据开始查询
      * <p>
-     * BiFunction<Integer, Integer, ExportPageResult<YourDataClass>> dataFetcher = (lastQueryParam, size) -> {
+     * BiFunction<Q泛型, Integer, ExportPageResult<Q泛型, YourDataClass>> dataFetcher = (lastQueryParam, size) -> {
      * <p>
-     * 类似这种查询：select * from your_table where id > ? limit ?;
+     * // 类似这种查询：select * from your_table where id > ? limit ?;
      * <p>
      * List<YourDataClass> dataList = yourService.getPageData(lastQueryParam, size);
      * <p>
-     * ExportPageResult<YourDataClass> result = new ExportPageResult<>();
+     * ExportPageResult<Q泛型, YourDataClass> result = new ExportPageResult<>();
      * <p>
-     * result.setDataList(dataList);
+     * setDataList(dataList);
      * <p>
-     * result.setLastQueryParam(dataList.get(dataList.size() - 1).getId());
+     * setLastQueryParam(dataList.get(dataList.size() - 1).getId());
      * <p>
      * return result; // 调用数据库查询方法获取分页数据
      * <p>
-     * excelCore.exportToFileWithPage(filePath, fileName, pageSize, initialQueryParam, dataFetcher);
+     * excelCore.exportToFileWithPage(YourDataClass, pageSize, initialQueryParam, dataFetcher);
      *
-     * @param filePath          文件路径
-     * @param fileName          文件名称
      * @param pageSize          每页大小
      * @param initialQueryParam 初始查询条件，用于第一页查询的起始点。
      * @param dataFetcher       数据获取器
@@ -209,31 +177,20 @@ public class ExcelKit {
      * @return 任务ID
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public <T> String exportToFileWithRange(String filePath, String fileName, int pageSize,
-                                            Object initialQueryParam, BiFunction<Object, Integer, ExportPageResult<T>> dataFetcher) {
+    public <Q, T> String exportToFileWithRange(Class<T> clazz, int pageSize, Q initialQueryParam,
+                                               BiFunction<Q, Integer, ExportPageResult<Q, T>> dataFetcher) {
         // 创建任务记录
-        String taskId = NumUtil.makeNum("EX");
-        // 创建任务记录
-        ExcelTask task = new ExcelTask()
-                .setTaskId(taskId)
-                .setType(ExcelTask.TaskType.EXPORT)
-                .setFileName(fileName)
-                .setStatus(ExcelTask.TaskStatus.PROCESSING)
-                .setCreateTime(new Date())
-                .setSuccessCount(0)
-                .setErrorCount(0);
-        excelTaskService.createTask(task);
+        ExcelTask task = this.createTask(clazz, 0);
 
         // 异步执行导出
         CompletableFuture.runAsync(() -> {
             try {
-                int count = excelCore.exportToFileWithRange(filePath, pageSize, initialQueryParam, dataFetcher);
+                int count = excelCore.exportToFileWithRange(task.getFilePath() + task.getFileName(), pageSize, initialQueryParam, dataFetcher);
                 // 更新任务状态为成功
                 task.setStatus(ExcelTask.TaskStatus.COMPLETED)
-                        .setSuccessCount(Optional.ofNullable(task.getSuccessCount()).map(c -> c + count).orElse(count))
-                        .setFilePath(filePath);
+                        .setSuccessCount(count);
             } catch (Exception e) {
-                log.error("异步导出Excel失败", e);
+                log.error("异步基于游标分页导出Excel失败", e);
                 // 更新任务状态为失败
                 task.setStatus(ExcelTask.TaskStatus.FAILED)
                         .setErrorMessage(e.getMessage());
@@ -244,7 +201,7 @@ public class ExcelKit {
                 excelTaskService.updateTask(task);
             }
         });
-        return taskId;
+        return task.getTaskId();
     }
 
     /**
@@ -255,7 +212,7 @@ public class ExcelKit {
      * @param <T>      数据类型
      */
     public <T> void exportTemplate(Class<T> clazz, HttpServletResponse response) {
-        excelCore.exportTemplate(response, clazz, this.getTemplateFileName(clazz));
+        excelCore.exportTemplate(response, clazz, this.getFileName(clazz));
     }
 
     /**
@@ -266,7 +223,7 @@ public class ExcelKit {
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public String exportErrorResult(List<ExportErrorResult> errorList) throws Exception {
-        return this.exportAsync(errorList);
+        return this.exportAsync(ExportErrorResult.class, errorList);
     }
 
     /**
@@ -305,20 +262,50 @@ public class ExcelKit {
         return excelCore.importFromStream(inputStream, clazz);
     }
 
-    private <T> String getTemplateFileName(Class<T> clazz) {
-        ExcelSheet sheetAnno = clazz.getAnnotation(ExcelSheet.class);
-        String fileName = sheetAnno != null ? sheetAnno.name() : clazz.getSimpleName();
-        return fileName + "_导入模板_" + System.currentTimeMillis() + ".xlsx";
+    /**
+     * 创建任务记录
+     *
+     * @param clazz
+     * @param total
+     * @param <T>
+     * @return
+     */
+    private <T> ExcelTask createTask(Class<T> clazz, Integer total) {
+        // 创建任务记录
+        String taskId = NumUtil.makeNum("EX");
+
+        // 创建任务记录
+        ExcelTask task = new ExcelTask()
+                .setTaskId(taskId)
+                .setType(ExcelTask.TaskType.EXPORT)
+                .setFilePath(this.getFileBasePath())
+                .setFileName(this.getFileName(clazz))
+                .setStatus(ExcelTask.TaskStatus.PROCESSING)
+                .setTotal(total)
+                .setCreateTime(new Date())
+                .setSuccessCount(0)
+                .setErrorCount(0);
+        excelTaskService.createTask(task);
+        return task;
     }
 
-    private <T> String getFileName(List<T> dataList) {
-        if (CollectionUtils.isEmpty(dataList)) {
-            return "export_" + System.currentTimeMillis() + ".xlsx";
-        }
-        Class<?> clazz = dataList.get(0).getClass();
+    private <T> String getFileName(Class<?> clazz) {
         ExcelSheet sheetAnno = clazz.getAnnotation(ExcelSheet.class);
         String fileName = sheetAnno != null ? sheetAnno.name() : clazz.getSimpleName();
         return fileName + "_" + System.currentTimeMillis() + ".xlsx";
     }
 
+    private String getFileBasePath() {
+        String fiilePath = Optional.ofNullable(excelProperties.getFileBasePath())
+                .orElse(System.getProperty("java.io.tmpdir"));
+        // 是否以/ 结尾，如果不是则 + "/"
+        if (!fiilePath.endsWith("/")) {
+            fiilePath = fiilePath + "/";
+        }
+        // 判断文件夹是否存在，如果不存在则创建
+        if (!FileUtil.exist(fiilePath)) {
+            FileUtil.mkdir(fiilePath);
+        }
+        return fiilePath;
+    }
 }

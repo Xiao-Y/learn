@@ -51,7 +51,17 @@ import java.util.function.BiFunction;
 @RequiredArgsConstructor
 public class ExcelCore {
 
-    private static final int MAX_DROPDOWN_LENGTH = 50;
+    /**
+     * 最多显示多少个下拉列表项
+     */
+    private static final int MAX_DROPDOWN_LENGTH = 10;
+    /**
+     * 每个页面最多显示多少行数据
+     */
+    private static final int MAX_SHEET_DATA = 100000;
+    /**
+     * 隐藏的 sheet 名称前缀
+     */
     private static final String HIDDEN_SHEET_PREFIX = "dict_";
 
     private final DictService dictService;
@@ -190,7 +200,8 @@ public class ExcelCore {
      * @param <T>         数据类型，泛型参数，代表要导出的数据类型。
      * @return 返回导出数据的总条数。
      */
-    public <T> int exportToFileWithPage(String filePath, int pageSize, int totalCount, BiFunction<Integer, Integer, List<T>> dataFetcher) {
+    public <T> int exportToFileWithPage(String filePath, int pageSize, int totalCount,
+                                        BiFunction<Integer, Integer, List<T>> dataFetcher) {
         int count = 0;
         try (SXSSFWorkbook workbook = new SXSSFWorkbook(500); FileOutputStream fos = new FileOutputStream(filePath)) {
             boolean isFirstPage = true;
@@ -204,9 +215,10 @@ public class ExcelCore {
                 if (CollectionUtils.isEmpty(pageData)) {
                     continue;
                 }
-
-                count += pageData.size();
-
+                // 计算是否超最大限制，是否需要重新创建表头
+                if (sheet != null) {
+                    isFirstPage = sheet.getLastRowNum() + pageData.size() > MAX_SHEET_DATA;
+                }
                 if (isFirstPage) {
                     clazz = pageData.get(0).getClass();
                     ExcelSheet excelSheet = clazz.getAnnotation(ExcelSheet.class);
@@ -221,6 +233,8 @@ public class ExcelCore {
                 }
                 // 为分页导出写入单页数据
                 createExportDataForPage(sheet, pageData, columnModels);
+                // 统计导出数据行数
+                count += pageData.size();
             }
             workbook.write(fos);
         } catch (Exception e) {
@@ -241,25 +255,27 @@ public class ExcelCore {
      * @param <T>               数据类型，泛型参数，代表要导出的数据类型。
      * @return 返回导出数据的总条数。
      */
-    public <T> int exportToFileWithRange(String filePath, int pageSize, Object initialQueryParam, BiFunction<Object, Integer, ExportPageResult<T>> dataFetcher) {
+    public <Q, T> int exportToFileWithRange(String filePath, int pageSize, Q initialQueryParam,
+                                            BiFunction<Q, Integer, ExportPageResult<Q, T>> dataFetcher) {
         int count = 0;
         try (SXSSFWorkbook workbook = new SXSSFWorkbook(500); FileOutputStream fos = new FileOutputStream(filePath)) {
             boolean isFirstPage = true;
             Sheet sheet = null;
             List<ExcelColumnModel> columnModels = null;
             Class<?> clazz = null;
-            Object lastQueryParam = initialQueryParam;
+            Q lastQueryParam = initialQueryParam;
 
             while (true) {
                 // 获取当前页数据
-                ExportPageResult<T> pageResult = dataFetcher.apply(lastQueryParam, pageSize);
+                ExportPageResult<Q, T> pageResult = dataFetcher.apply(lastQueryParam, pageSize);
                 List<T> pageData = pageResult.getDataList();
                 if (CollectionUtils.isEmpty(pageData)) {
                     break;
                 }
-
-                count += pageData.size();
-
+                // 计算是否超最大限制，是否需要重新创建表头
+                if (sheet != null) {
+                    isFirstPage = sheet.getLastRowNum() + pageData.size() > MAX_SHEET_DATA;
+                }
                 if (isFirstPage) {
                     clazz = pageData.get(0).getClass();
                     ExcelSheet excelSheet = clazz.getAnnotation(ExcelSheet.class);
@@ -274,6 +290,8 @@ public class ExcelCore {
                 }
                 // 为分页导出写入单页数据
                 createExportDataForPage(sheet, pageData, columnModels);
+                // 统计导出数据行数
+                count += pageData.size();
                 // 获取下一页的起始ID
                 lastQueryParam = pageResult.getLastQueryParam();
                 if (lastQueryParam == null) {
@@ -298,7 +316,16 @@ public class ExcelCore {
      * @return 创建好表头的工作表对象。
      */
     private Sheet createHeaderForPagedExport(Workbook workbook, ExcelSheet excelSheet, List<ExcelColumnModel> columnModels) {
-        Sheet sheet = workbook.createSheet(excelSheet.name());
+        String sheetBaseName = excelSheet.name();
+        String sheetName = sheetBaseName;
+        int index = 1;
+        // 检查工作表名称是否已存在
+        while (workbook.getSheet(sheetName) != null) {
+            sheetName = sheetBaseName + " (" + index + ")";
+            index++;
+        }
+        // 创建工作表
+        Sheet sheet = workbook.createSheet(sheetName);
         // 标题样式 - 必传字段为红色
         CellStyle cellStyleRed = createHeaderStyle(workbook, true);
         // 标题样式 - 非必传字段为黑色

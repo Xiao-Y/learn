@@ -2,14 +2,11 @@ package com.billow.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.system.pojo.excel.MenuExcel;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Set;
 
@@ -115,13 +112,4 @@ public interface MenuService extends IService<MenuPo> {
      * @date 2019/7/22 17:55
      */
     List<MenuVo> findMenuByPermissionId(Long permissionId);
-
-    /**
-     * 异步导出
-     *
-     * @author 千面
-     */
-    String asyncExport(HttpServletResponse response);
-
-    List<MenuExcel> importFile(HttpServletResponse response, MultipartFile file);
 }
