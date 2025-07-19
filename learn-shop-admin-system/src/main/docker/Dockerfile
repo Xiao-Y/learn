@@ -2,7 +2,7 @@
 # VERSION 0.0.1
 # Author: eangulee
 # 基础镜像使用java
-FROM openjdk:8-jdk-slim
+FROM adoptopenjdk/openjdk8:latest
 # 作者
 MAINTAINER xiao-y <lyongtao123@126.com>
 # VOLUME 指定了临时文件目录为/tmp。

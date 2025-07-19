@@ -31,6 +31,7 @@ public class ExcelApi {
     @ApiOperation("异步分页导出（游标）")
     @GetMapping("/exportToFileWithRange")
     public String exportToFileWithRange(HttpServletResponse response) {
+        log.info("开始异步分页导出");
         return excelService.exportToFileWithRange(response);
     }
 

@@ -1,10 +1,10 @@
-version: "3"
 services:
-  learn-shop-admin-system:
+  admin-system:
+    container_name: admin-system
     build: .
     ports:
-      - 8811:8811
+      - "8811:8811"
 networks:
   default:
-    external:
-      name: learn_shop
+    external: true
+    name: learn_shop

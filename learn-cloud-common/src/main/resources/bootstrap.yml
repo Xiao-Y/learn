@@ -1,8 +1,10 @@
 # nocos 配置
 nacos:
-  ipAddress: 127.0.0.1
   port: 8848
-  namespace: dev # pro
+#  ipAddress: 127.0.0.1
+#  namespace: dev # pro
+  ipAddress: nacos-standalone-mysql
+  namespace: prod # pro
   username: nacos
   password: nacos
 spring:
