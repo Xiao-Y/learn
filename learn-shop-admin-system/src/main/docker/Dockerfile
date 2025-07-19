@@ -1,16 +1,21 @@
-# Docker image for springboot file run
-# VERSION 0.0.1
-# Author: eangulee
-# 基础镜像使用java
+# 使用更稳定的 JDK 镜像（避免 Alpine 中的字体问题）
 FROM adoptopenjdk/openjdk8:latest
 # 作者
 MAINTAINER xiao-y <lyongtao123@126.com>
-# VOLUME 指定了临时文件目录为/tmp。
-# 其效果是在主机 /var/lib/docker 目录下创建了一个临时文件，并链接到容器的/tmp
-VOLUME /tmp
-# 将jar包添加到容器中并更名为app.jar
-ADD *.jar app.jar
+
+# 设置工作目录
+WORKDIR /app
+
+# 将构建好的 jar 包复制到容器中
+COPY *.jar app.jar
+
+# 暴露服务端口
 EXPOSE 8811
+
+## 启动命令，加入 headless 模式支持
+#ENTRYPOINT ["java", \
+#    "-jar", \
+#    "app.jar"]
 # 运行jar包
-RUN bash -c 'touch /app.jar'
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+RUN bash -c 'touch app.jar'
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
