@@ -19,8 +19,10 @@ import com.billow.system.service.redis.MenuRedisKit;
 import com.billow.system.service.redis.RoleMenuRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,9 @@ import java.util.*;
  * @author liuyongtao
  * @create 2018-05-26 9:54
  */
+@Slf4j
 @Service
+@RefreshScope
 @Transactional(readOnly = true)
 public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements MenuService {
 

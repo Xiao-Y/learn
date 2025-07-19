@@ -1,0 +1,10 @@
+services:
+  cloud-gateway:
+    container_name: cloud-gateway
+    build: .
+    ports:
+      - "8771:8771"
+networks:
+  default:
+    external: true
+    name: learn_shop

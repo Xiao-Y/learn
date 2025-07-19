@@ -1,0 +1,10 @@
+services:
+  public-auth:
+    container_name: public-auth
+    build: .
+    ports:
+      - "8999:8999"
+networks:
+  default:
+    external: true
+    name: learn_shop

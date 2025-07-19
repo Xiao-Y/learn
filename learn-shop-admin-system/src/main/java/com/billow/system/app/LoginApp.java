@@ -27,8 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/loginApp")
 @Api(value = "登陆时，获取角色菜单和菜单路由,不受权限控制")
-public class LoginApp extends BaseApi
-{
+public class LoginApp extends BaseApi {
 
     @Autowired
     private MenuService menuService;
@@ -45,8 +44,7 @@ public class LoginApp extends BaseApi
      */
     @GetMapping("/findRouterList")
     @ApiOperation(value = "查询角色的的路由列表", notes = "查询角色的的路由列表")
-    public List<MenuPo> findRouterList()
-    {
+    public List<MenuPo> findRouterList() {
         // 获取角色信息
         List<RoleVo> roleVos = this.getCurrentRoleVos();
         // 查询角色的的路由列表
@@ -55,8 +53,7 @@ public class LoginApp extends BaseApi
 
     @GetMapping("/findHomeMenu")
     @ApiOperation(value = "查询登陆时菜单信息", notes = "查询登陆时菜单信息")
-    public List<Tree<Long>> findHomeMenu()
-    {
+    public List<Tree<Long>> findHomeMenu() {
         List<String> currentRoleCode = userTools.getCurrentRoleCode();
 //        return roleMenuService.findMenuByRoleCode(Arrays.asList("custom"), true);
         return menuService.findMenuByRoleCode(currentRoleCode, true);
@@ -70,8 +67,7 @@ public class LoginApp extends BaseApi
      * @author 千面
      * @date 2021/12/30 13:41
      */
-    private List<RoleVo> getCurrentRoleVos()
-    {
+    private List<RoleVo> getCurrentRoleVos() {
         return userTools.getCurrentRoleCode()
                 .stream()
                 .map(m -> {
