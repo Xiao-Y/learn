@@ -18,21 +18,21 @@ export const FindGoodsSku = spuId => requestUtils.get(baseUrl + '/findGoodsSku/'
  */
 export const GetById = skuId => requestUtils.get(baseUrl + '/getById/' + skuId);
 
-/**
- * 保存商品信息
- * @param data
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const Add = data => requestUtils.post(baseUrl + '/add', Object.assign(data));
-
-/**
- * 更新商品信息
- * @param data
- * @returns {*|AxiosPromise}
- * @constructor
- */
-export const Update = data => requestUtils.put(baseUrl + '/update', Object.assign(data));
+// /**
+//  * 保存商品信息
+//  * @param data
+//  * @returns {*|AxiosPromise}
+//  * @constructor
+//  */
+// export const Add = data => requestUtils.post(baseUrl + '/add', Object.assign(data));
+//
+// /**
+//  * 更新商品信息
+//  * @param data
+//  * @returns {*|AxiosPromise}
+//  * @constructor
+//  */
+// export const Update = data => requestUtils.put(baseUrl + '/update', Object.assign(data));
 
 /**
  * 根据id删除商品信息
@@ -49,3 +49,19 @@ export const DelById = id => requestUtils.del(baseUrl + '/delById/' + id);
  * @constructor
  */
 export const ProhibitById = id => requestUtils.put(baseUrl + '/prohibitById/' + id);
+
+/**
+ * 更新商品信息
+ * @param data
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const UpdateSku = data => requestUtils.put(baseUrl + '/updateSku', Object.assign(data));
+
+/**
+ * 保存商品信息
+ * @param data
+ * @returns {*|AxiosPromise}
+ * @constructor
+ */
+export const AddSku = data => requestUtils.post(baseUrl + '/addSku', Object.assign(data));

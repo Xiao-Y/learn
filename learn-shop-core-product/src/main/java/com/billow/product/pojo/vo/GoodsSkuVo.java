@@ -27,41 +27,9 @@ import java.util.Map;
  */
 @Data
 @Accessors(chain = true)
-public class GoodsSkuVo implements Serializable {
+public class GoodsSkuVo extends GoodsSkuPo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private Long id;
-
-    @ApiModelProperty(value = "sku编号,唯一")
-    private String skuNo;
-
-    @ApiModelProperty(value = "sku名称(冗余spu_name)")
-    private String skuName;
-
-    @ApiModelProperty(value = "售价")
-    private Integer price;
-
-    @ApiModelProperty(value = "库存")
-    private Integer stock;
-
-    @ApiModelProperty(value = "锁定库存")
-    private Integer lockStock;
-
-    @ApiModelProperty(value = "预警库存")
-    private Integer lowStock;
-
-    @ApiModelProperty(value = "展示图片")
-    private String pic;
-
-    @ApiModelProperty(value = "销量")
-    private Integer sale;
-
-    @ApiModelProperty(value = "商铺id,为0表示自营")
-    private Long shopId;
-
-    @ApiModelProperty(value = "spu_id")
-    private Long spuId;
 
     // 规格key 和 规格值，页面显示
     private String specKeyValueName;
