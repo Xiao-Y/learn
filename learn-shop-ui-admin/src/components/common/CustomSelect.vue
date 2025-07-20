@@ -2,6 +2,7 @@
 <template>
 <el-tooltip class="item" effect="dark" :disabled="currentTooltipDisabled" :content="tooltipContent" placement="right" :open-delay="0">
   <el-select
+    class="full-width"
     @change="changeEvent"
     v-model="currentValue"
     :value-key="valueKey"
@@ -168,3 +169,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.full-width {
+  width: 100%;
+}
+</style>

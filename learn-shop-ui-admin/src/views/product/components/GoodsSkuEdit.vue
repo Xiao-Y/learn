@@ -209,7 +209,9 @@
     width: 70%;
     margin: 0 auto;
   }
-
+  .full-width {
+    width: 100%;
+  }
   .ms-doc h3 {
     padding: 9px 10px 10px;
     margin: 0;

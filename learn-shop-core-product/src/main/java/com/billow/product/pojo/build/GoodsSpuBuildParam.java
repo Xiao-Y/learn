@@ -1,5 +1,6 @@
 package com.billow.product.pojo.build;
 
+import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,7 +19,7 @@ import java.math.BigDecimal;
  */
 @Data
 @Accessors(chain = true)
-public class GoodsSpuBuildParam implements Serializable {
+public class GoodsSpuBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "商品编号，唯一")

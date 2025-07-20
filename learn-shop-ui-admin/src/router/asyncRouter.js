@@ -136,6 +136,16 @@ const asyncRouterList = [
     name: 'proGoodsCategoryEdit',
     path: '/pro/goodsCategoryList/goodsCategoryEdit',
     component: resolve => require(['../views/product/components/GoodsCategoryEdit.vue'], resolve)
+  },{
+    // 品牌管理
+    name: 'proGoodsBrandListIndex',
+    path: '/pro/brandList/index',
+    component: resolve => require(['../views/product/GoodsBrandList.vue'], resolve)
+  },{
+    // 修改产品品牌
+    name: 'proGoodsBrandEdit',
+    path: '/pro/goodsCategoryList/goodsBrandEdit',
+    component: resolve => require(['../views/product/components/GoodsBrandEdit.vue'], resolve)
   },
   // ================================= 用户管理 ==============================================
   {

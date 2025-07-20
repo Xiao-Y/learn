@@ -86,7 +86,7 @@ export default {
       dialogFormVisible: false,
     };
   },
-  created() {
+  activated() {
     this.optionType = this.$route.query.optionType;
     this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
     if (this.optionType === 'edit') {

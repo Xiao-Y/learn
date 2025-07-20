@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -31,7 +32,7 @@ public class GoodsCategoryServiceImpl extends HighLevelServiceImpl<GoodsCategory
     @Override
     public List<GoodsCategoryPo> findList(GoodsCategoryVo goodsCategoryVo) {
         LambdaQueryWrapper<GoodsCategoryPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsCategoryPo::getParentId, goodsCategoryVo.getParentId());
+        wrapper.eq(Objects.nonNull(goodsCategoryVo.getParentId()), GoodsCategoryPo::getParentId, goodsCategoryVo.getParentId());
         return goodsCategoryDao.selectList(wrapper);
     }
 

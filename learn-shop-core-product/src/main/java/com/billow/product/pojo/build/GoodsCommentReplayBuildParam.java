@@ -1,5 +1,6 @@
 package com.billow.product.pojo.build;
 
+import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -17,7 +18,7 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class GoodsCommentReplayBuildParam implements Serializable {
+public class GoodsCommentReplayBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "评论id")

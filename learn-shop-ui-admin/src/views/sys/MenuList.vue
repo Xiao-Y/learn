@@ -111,9 +111,9 @@
             <el-input v-model="editMenu.parentTitle" readonly></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="菜单标题" prop="title">
+        <el-form-item label="菜单标题" prop="menuName">
           <el-col :span="18">
-            <el-input v-model="editMenu.title"></el-input>
+            <el-input v-model="editMenu.menuName"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="菜单CODE" prop="menuCode">
@@ -180,7 +180,7 @@ export default {
       node: [], //正在操作的节点
       optionType: '', // 操作类型
       rules22: { // 校验
-        title: [{
+        menuName: [{
           required: true,
           message: '请输入菜单名称',
           trigger: 'blur'
@@ -279,6 +279,7 @@ export default {
     },
     // 添加菜单
     addMenuEvent() {
+      this.initEditMenu();
       this.optionType = "add";
       let nodes = this.$refs.tree2.$refs.menuTree.getCheckedNodes();
       if (nodes.length > 1) {
@@ -286,9 +287,12 @@ export default {
         return;
       } else if (nodes.length == 1) {
         this.editMenu.pid = nodes[0].id;
-        this.editMenu.parentTitle = nodes[0].title;
+        let parentNode = this.$refs.tree2.$refs.menuTree.getNode(nodes[0].id);
+        // console.info("parentNode",parentNode);
+        this.editMenu.parentTitle = parentNode.data.menuName;
         // 当前操作的节点(用于后面提交)
         this.node = nodes[0];
+        console.info("nodes[0]",nodes[0]);
       } else { //添加根节点
         this.editMenu.parentTitle = '根节点';
         this.node = null;
@@ -305,11 +309,11 @@ export default {
         return;
       }
       this.editMenu = this.VueUtils.deepClone(nodes[0]);
-      //        console.info("nodes[0].pid",nodes[0].pid);
+             // console.info("nodes[0].pid",nodes[0]);
       if (nodes[0].pid != null) {
         let parentNode = this.$refs.tree2.$refs.menuTree.getNode(nodes[0].pid);
-        //          console.info("parentNode",parentNode);
-        this.editMenu.parentTitle = parentNode.data.title;
+                 // console.info("parentNode",parentNode);
+        this.editMenu.parentTitle = parentNode.data.menuName;
       } else {
         this.editMenu.parentTitle = '根节点';
       }
@@ -368,7 +372,7 @@ export default {
     // 提交
     submitMenu(formRule) {
       let editMenus = this.editMenu;
-      //        console.info("editMenus", editMenus)
+             // console.info("editMenus", editMenus)
       saveOrUpdateMenu(editMenus).then(res => {
         let resData = res.resData;
 
@@ -376,7 +380,7 @@ export default {
         let data = this.node;
         let copuEidtMenus = this.VueUtils.deepClone(editMenus);
         if (this.optionType == "edit") { // 修改
-          data.title = copuEidtMenus.title;
+          data.title = copuEidtMenus.menuName;
           data.menuCode = copuEidtMenus.menuCode;
           data.sortField = copuEidtMenus.sortField;
           data.icon = copuEidtMenus.icon;

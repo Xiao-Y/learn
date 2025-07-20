@@ -3,6 +3,7 @@
 <template>
   <div class="spec_select">
     <el-select
+      class="full-width"
       @change="changeEvent(true)"
       @clear="clearEvent(null,null)"
       v-model="specKeyTemp"
@@ -20,6 +21,7 @@
       </el-option>
     </el-select>
     <el-select
+      class="full-width"
       @change="changeEvent(false)"
       @clear="clearEvent(specKeyTemp,null)"
       v-model="specValueTemp"
@@ -168,5 +170,8 @@
 <style scoped>
   .spec_select {
     margin-bottom: 5px;
+  }
+  .full-width {
+    width: 100%;
   }
 </style>

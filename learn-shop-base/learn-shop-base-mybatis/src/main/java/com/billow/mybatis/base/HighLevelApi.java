@@ -8,6 +8,7 @@ import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.utils.SqlUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
     @Autowired
     protected HttpServletRequest request;
 
+    @Getter
     @Autowired
     private S service;
 
@@ -87,8 +89,8 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
 
     @ApiOperation(value = "更新表数据")
     @PutMapping(value = "/update")
-    public V update(@RequestBody SP sp) {
-        E po = ConvertUtils.convert(sp, eClass);
+    public V update(@RequestBody BP bp) {
+        E po = ConvertUtils.convert(bp, eClass);
         service.updateById(po);
         return ConvertUtils.convert(po, vClass);
     }

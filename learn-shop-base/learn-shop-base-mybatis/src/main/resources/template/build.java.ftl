@@ -1,7 +1,8 @@
-<#assign VO = table.entityName?substring(0,(table.entityName)?length-2) + "BuildParam">
+<#assign BP = table.entityName?substring(0,(table.entityName)?length-2) + "BuildParam">
 <#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 package ${Parent}.pojo.build;
 
+import com.billow.mybatis.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,7 +20,7 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class ${VO} implements Serializable {
+public class ${BP} extends BasePo implements Serializable {
 <#if entitySerialVersionUID>
     private static final long serialVersionUID = 1L;
 </#if>

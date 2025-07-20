@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-09-02
  */
 @Service
-public class GoodsBrandServiceImpl extends HighLevelServiceImpl<GoodsBrandDao, GoodsBrandPo,GoodsBrandSearchParam> implements GoodsBrandService {
+public class GoodsBrandServiceImpl extends HighLevelServiceImpl<GoodsBrandDao, GoodsBrandPo, GoodsBrandSearchParam> implements GoodsBrandService {
 
 }
 
