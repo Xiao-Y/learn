@@ -1,0 +1,10 @@
+services:
+  admin-system:
+    container_name: admin-user
+    build: .
+    ports:
+      - "8801:8801"
+networks:
+  default:
+    external: true
+    name: learn_shop
