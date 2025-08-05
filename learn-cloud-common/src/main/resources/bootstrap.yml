@@ -3,11 +3,14 @@ nacos:
   port: 8848
   ipAddress: 127.0.0.1
   namespace: dev # pro
-#  ipAddress: nacos-standalone-mysql
-#  namespace: prod # pro
+  #  ipAddress: nacos-standalone-mysql
+  #  namespace: prod # pro
   username: nacos
   password: nacos
+
 spring:
+  config:
+    import: optional:nacos:${spring.application.name}.yml?serverAddr=${nacos.ipAddress}:${nacos.port}&namespace=${nacos.namespace}
   cloud:
     nacos:
       discovery:
@@ -22,16 +25,16 @@ spring:
         server-addr: ${nacos.ipAddress}:${nacos.port}
         file-extension: yml
         refresh-enabled: true
-        # 配置公用文件
-        shared-configs[0]:
-          dataId: cloud-config.yml
-        shared-configs[1]:
-          dataId: sys-config-db.yml
-        shared-configs[2]:
-          dataId: sys-config-mq.yml
-        shared-configs[3]:
-          dataId: sys-config-redis.yml
-        # 消息通知、消息中间件
-        shared-configs[4]:
-          dataId: sys-config-notice.yml
-
+        # 配置公用文件（新版本使用列表格式）
+        shared-configs:
+          - data-id: cloud-config.yml
+            refresh: true
+          - data-id: sys-config-db.yml
+            refresh: true
+          - data-id: sys-config-mq.yml
+            refresh: true
+          - data-id: sys-config-redis.yml
+            refresh: true
+          # 消息通知、消息中间件
+          - data-id: sys-config-notice.yml
+            refresh: true

@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> {
 
-    @Autowired
+//    @Autowired
     protected HttpServletRequest request;
 
     @Getter

@@ -3,6 +3,7 @@ package com.billow.gateway.init;
 import com.alibaba.fastjson.JSON;
 import com.billow.redis.util.RedisUtils;
 import com.billow.tools.constant.RedisCst;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.cloud.gateway.config.GatewayProperties;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.stream.Collectors;
 

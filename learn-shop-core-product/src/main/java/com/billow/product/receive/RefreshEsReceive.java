@@ -13,7 +13,7 @@ import com.billow.product.service.GoodsSpuService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpTemplate;
+//import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,8 +30,8 @@ import java.util.List;
 @Component
 public class RefreshEsReceive {
 
-//    private final BaseMqConfig baseMqConfig;
-    private final AmqpTemplate amqpTemplate;
+////    private final BaseMqConfig baseMqConfig;
+//    private final AmqpTemplate amqpTemplate;
     private final GoodsSpuService goodsSpuService;
     private final GoodsBrandDao goodsBrandDao;
     private final GoodsCategoryDao goodsCategoryDao;

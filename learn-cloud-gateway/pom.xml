@@ -13,6 +13,7 @@
     <url>http://maven.apache.org</url>
 
     <properties>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -21,6 +22,11 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- 配置中心获取端 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
         <!-- 配置中心获取文件配置 -->
         <dependency>
@@ -31,28 +37,49 @@
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-notice</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-cloud-stream</artifactId>
+                    <groupId>org.springframework.cloud</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- base-tools -->
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-tools</artifactId>
         </dependency>
-        <!-- 路由中心 -->
+        <!-- API网关 gateway-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- 安全漏洞-->
-                    <artifactId>log4j-api</artifactId>
-                    <groupId>org.apache.logging.log4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        <!-- Spring Boot Actuator -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- 负载均衡 loadbalancer -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+<!--        &lt;!&ndash; 路由中心 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-gateway</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    &lt;!&ndash; 安全漏洞&ndash;&gt;-->
+<!--                    <artifactId>log4j-api</artifactId>-->
+<!--                    <groupId>org.apache.logging.log4j</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-api</artifactId>-->
+<!--        </dependency>-->
         <!-- json工具 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -96,11 +123,7 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-redis</artifactId>
         </dependency>
-        <!-- 配置中心获取端 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
+
         <!--配置命名容错处理-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -112,9 +135,27 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <!-- Spring Boot 打包插件 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!-- 编译插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
             </plugin>
             <!-- docker -->
             <plugin>
@@ -134,16 +175,19 @@
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <!--绑定mvn package命令，当执行package这个maven命令打包项目的同时
-                    会把target目录下的jar包给copy到docker目录去-->
+                <!-- 建议添加groupId和明确版本号 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.1.0</version>
+                <!-- 绑定mvn package命令，执行package时将target目录下的jar包复制到docker目录 -->
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <configuration>
-                            <tasks>
+                            <!-- 将tasks改为target -->
+                            <target>
                                 <copy todir="src/main/docker"
                                       file="target/${project.artifactId}.${project.packaging}"></copy>
-                            </tasks>
+                            </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>

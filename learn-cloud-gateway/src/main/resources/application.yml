@@ -17,12 +17,50 @@ ribbon:
   ReadTimeout: 15000
   ConnectTimeout: 10000
 
+# nocos 配置
+nacos:
+  port: 8848
+  ipAddress: 127.0.0.1
+  namespace: dev # pro
+  #  ipAddress: nacos-standalone-mysql
+  #  namespace: prod # pro
+  username: nacos
+  password: nacos
+
 spring:
+  config:
+    import: optional:nacos:learn-cloud-gateway.yml  # 必须添加的Spring Boot 3.x配置
   application:
     name: learn-cloud-gateway
   resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
     static-locations: ${config.gateway.static.locations}
   cloud:
+    nacos:
+      discovery:
+        username: ${nacos.username}
+        password: ${nacos.password}
+        namespace: ${nacos.namespace} # 命名空间
+        server-addr: ${nacos.ipAddress}:${nacos.port} # 配置注册中心
+      config:
+        username: ${nacos.username}
+        password: ${nacos.password}
+        namespace: ${nacos.namespace} # pro
+        server-addr: ${nacos.ipAddress}:${nacos.port}
+        file-extension: yml
+        refresh-enabled: true
+        # 配置公用文件（新版本使用列表格式）
+        shared-configs:
+          - data-id: cloud-config.yml
+            refresh: true
+          - data-id: sys-config-db.yml
+            refresh: true
+          - data-id: sys-config-mq.yml
+            refresh: true
+          - data-id: sys-config-redis.yml
+            refresh: true
+          # 消息通知、消息中间件
+          - data-id: sys-config-notice.yml
+            refresh: true
     gateway:
       discovery:
         locator:

@@ -15,7 +15,6 @@
     <description>商品搜索中心</description>
 
     <properties>
-        <java.version>1.8</java.version>
         <!-- 修改对应的 elasticsearch 版本 -->
         <elasticsearch.version>7.5.0</elasticsearch.version>
     </properties>
@@ -124,10 +123,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <!--fork :  如果没有该项配置，肯呢个devtools不会起作用，即应用不会restart -->
-                    <fork>true</fork>
-                </configuration>
             </plugin>
             <!-- docker -->
             <plugin>

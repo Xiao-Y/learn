@@ -29,7 +29,7 @@ public class SeckillCache
     /**
      * 保存秒杀信息
      *
-     * @param convert 秒杀信息
+     * @param map 秒杀信息
      * @return {@link SeckillCacheDto}
      * @author liuyongtao
      * @since 2021-8-30 16:34
