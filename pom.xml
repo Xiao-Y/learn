@@ -72,9 +72,9 @@
         <swagger-bootstrap.version>1.9.5</swagger-bootstrap.version>
         <apache.poi.version>4.1.1</apache.poi.version>
         <nimbus-jose-jwt.version>8.16</nimbus-jose-jwt.version>
-        <spring-cloud.version>2023.0.1</spring-cloud.version>
-        <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
-        <spring-cloud-starter.version>3.2.4</spring-cloud-starter.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
+<!--        <spring-cloud-starter.version>3.2.4</spring-cloud-starter.version>-->
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <jsch.version>0.1.54</jsch.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>

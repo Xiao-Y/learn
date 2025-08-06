@@ -1,25 +1,20 @@
 package com.billow.mybatis.base;
 
+import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.utils.SqlUtil;
 import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.annotations.ApiOperation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 高级公用方法
@@ -41,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> {
 
-//    @Autowired
+    @Autowired
     protected HttpServletRequest request;
 
     @Getter
@@ -102,17 +97,6 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
     }
 
     /**
-     * 返回当前service
-     *
-     * @return {@link S}
-     * @author liuyongtao
-     * @since 2021-8-13 9:35
-     */
-    public S getService() {
-        return service;
-    }
-
-    /**
      * 获取泛型类型
      *
      * @return {@link Class<?>}
@@ -120,6 +104,6 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
      * @since 2021-8-12 15:00
      */
     protected Class<?> getClass(int index) {
-        return ReflectionKit.getSuperClassGenericType(this.getClass(), index);
+        return TypeUtil.getTypeArgument(this.getClass(), index).getClass();
     }
 }

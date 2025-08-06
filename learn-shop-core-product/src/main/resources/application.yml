@@ -14,11 +14,16 @@ server:
   servlet:
     context-path: /core-product
 spring:
+  profiles:
+    active: dev
   application:
     name: learn-shop-core-product #客户端名称
-  # 无需重复配置import，继承common模块即可
-  config:
-    import: optional:nacos:${spring.application.name}.yml
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
+      username: root
+      password: root
 # Excel 模块配置
 learn:
   excel:

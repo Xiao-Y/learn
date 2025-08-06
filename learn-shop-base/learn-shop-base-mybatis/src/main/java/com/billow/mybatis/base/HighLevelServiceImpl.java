@@ -3,6 +3,7 @@ package com.billow.mybatis.base;
 import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -137,7 +138,7 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extend
      * @since 2021-8-12 15:00
      */
     protected Class<?> getClass(int index) {
-        return ReflectionKit.getSuperClassGenericType(this.getClass(), index);
+        return TypeUtil.getTypeArgument(this.getClass(), index).getClass();
     }
 }
 
