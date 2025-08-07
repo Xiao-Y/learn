@@ -42,13 +42,13 @@ public class SwaggerConfig {
     @Value("${swagger.service.contact.email}")
     private String email;
 
-    @Value("${swagger.client.access-token-uri}")
+    @Value("${secure.client.access-token-uri}")
     private String tokenUrl;
-    @Value("${swagger.client.client-id}")
+    @Value("${secure.client.client-id}")
     private String clientId;
-    @Value("${swagger.client.client-secret}")
+    @Value("${secure.client.client-secret}")
     private String clientSecret;
-    @Value("${swagger.client.scope}")
+    @Value("${secure.client.scope}")
     private String scope;
 
     public static final String SCHEME_NAME_OAUTH2 = "OAuth 2.0 Authentication";

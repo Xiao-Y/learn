@@ -32,8 +32,10 @@ spring:
     active: dev
   application:
     name: learn-cloud-gateway
-  resources: #指定静态资源路径，多个使用英文逗号隔开。如：html,js.jsp
-    static-locations: ${config.gateway.static.locations}
+  config:
+    # 配置公用文件（新版本使用列表格式）
+    import:
+      - optional:nacos:${spring.application.name}.yml
     gateway:
       discovery:
         locator:
@@ -106,13 +108,13 @@ secure:
     - /dataRecovery/initData     # 数据还原
     # swagger 配置
     - /v3/**
-    - /**/v3/**
+#    - /**/v3/**
     - /swagger-resources/**
     - /swagger-resources
     - /course/coursebase/**
     - /swagger-ui/**
     - /favicon.ico
-    - /**/*App/**
+#    - /**/*App/**
   need-check:
-    - "/**/*Api/**"
-    - "/*Api/**"
+#    - /**/*Api/**
+    - /*Api/**

@@ -45,7 +45,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.4</version>
+        <version>3.3.1</version>
+        <relativePath/>
     </parent>
 
     <properties>
@@ -61,8 +62,8 @@
         <fastjson.version>2.0.48</fastjson.version>
         <hutool.version>5.8.28</hutool.version>
         <lcn.last.version>4.1.0</lcn.last.version>
-        <spring.boot.redis.version>2.2.7.RELEASE</spring.boot.redis.version>
-        <redisson.version>3.11.0</redisson.version>
+        <spring.boot.redis.version>3.5.0</spring.boot.redis.version>
+        <redisson.version>3.45.1</redisson.version>
         <guava.version>27.1-jre</guava.version>
         <netty.all.version>4.1.42.Final</netty.all.version>
         <jjwt.version>0.7.0</jjwt.version>
@@ -71,7 +72,7 @@
         <activiti.version>6.0.0</activiti.version>
         <swagger-bootstrap.version>1.9.5</swagger-bootstrap.version>
         <apache.poi.version>4.1.1</apache.poi.version>
-        <nimbus-jose-jwt.version>8.16</nimbus-jose-jwt.version>
+        <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
 <!--        <spring-cloud-starter.version>3.2.4</spring-cloud-starter.version>-->
@@ -236,7 +237,7 @@
             </dependency>
             <dependency>
                 <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson.version}</version>
             </dependency>
             <!-- 分库分表 -->
@@ -318,10 +319,16 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
             </dependency>
+<!--            <dependency>-->
+<!--                <groupId>javax.servlet</groupId>-->
+<!--                <artifactId>javax.servlet-api</artifactId>-->
+<!--                <version>4.0.1</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>4.0.1</version>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>10.1.43</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
