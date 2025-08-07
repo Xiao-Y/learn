@@ -56,7 +56,7 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
         // 排序
         if (StringUtils.isNotEmpty(sp.getOrderBy())) {
             String orderBy = SqlUtil.escapeOrderBySql(sp.getOrderBy());
-            page.addOrder(new OrderItem(orderBy, sp.getIsAsc()));
+            page.addOrder(OrderItem.asc(orderBy).setAsc(sp.getIsAsc()));
         }
         return service.findListByPage(page, sp);
     }

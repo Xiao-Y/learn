@@ -5,6 +5,8 @@ import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.component.impl.WorkFlowExecuteImpl;
 import com.billow.base.workflow.component.impl.WorkFlowQueryImpl;
 import com.billow.base.workflow.diagram.ActUtils;
+import org.activiti.engine.*;
+import org.activiti.engine.impl.*;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -46,5 +48,39 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
     @Bean
     public WorkFlowQuery workFlowQuery() {
         return new WorkFlowQueryImpl();
+    }
+
+    @Bean
+    public TaskService taskService() {
+        return new TaskServiceImpl();
+    }
+
+    @Bean
+    public RuntimeService runtimeService() {
+        return new RuntimeServiceImpl();
+    }
+
+    @Bean
+    public RepositoryService repositoryService() {
+        return new RepositoryServiceImpl();
+    }
+
+    @Bean
+    public HistoryService historyService() {
+        return new HistoryServiceImpl();
+    }
+
+    @Bean
+    public IdentityService identityService() {
+        return new IdentityServiceImpl();
+    }
+
+    @Bean
+    public FormService formService() {
+        return new FormServiceImpl();
+    }
+    @Bean
+    public ManagementService managementService() {
+        return new ManagementServiceImpl();
     }
 }

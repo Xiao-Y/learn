@@ -29,9 +29,9 @@
         <module>learn-shop-core-cart</module>
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
-        <module>learn-shop-core-search</module>
+<!--        <module>learn-shop-core-search</module>-->
 
-<!--        <module>learn-shop-public-auth</module>-->
+        <!--        <module>learn-shop-public-auth</module>-->
         <module>learn-shop-core-promotion</module>
         <module>learn-shop-interface</module>
         <module>learn-shop-app</module>
@@ -75,7 +75,7 @@
         <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
-<!--        <spring-cloud-starter.version>3.2.4</spring-cloud-starter.version>-->
+        <!--        <spring-cloud-starter.version>3.2.4</spring-cloud-starter.version>-->
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <jsch.version>0.1.54</jsch.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
@@ -83,6 +83,7 @@
         <javax.mail.version>1.6.2</javax.mail.version>
         <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
         <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
     </properties>
 
     <dependencyManagement>
@@ -102,17 +103,23 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.cloud</groupId>-->
-<!--                <artifactId>spring-cloud-starter-sleuth</artifactId>-->
-<!--                <version>${spring-cloud-starter.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.cloud</groupId>-->
-<!--                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>-->
-<!--                <version>${spring-cloud-starter.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>${mybatis-plus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>org.springframework.cloud</groupId>-->
+            <!--                <artifactId>spring-cloud-starter-sleuth</artifactId>-->
+            <!--                <version>${spring-cloud-starter.version}</version>-->
+            <!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.springframework.cloud</groupId>-->
+            <!--                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>-->
+            <!--                <version>${spring-cloud-starter.version}</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>com.billow</groupId>
@@ -240,12 +247,12 @@
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson.version}</version>
             </dependency>
-            <!-- 分库分表 -->
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-                <version>${sharding-jdbc.version}</version>
-            </dependency>
+            <!--            &lt;!&ndash; 分库分表 &ndash;&gt;-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.apache.shardingsphere</groupId>-->
+            <!--                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>-->
+            <!--                <version>${sharding-jdbc.version}</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-io</artifactId>
@@ -264,11 +271,11 @@
                 <version>${activiti.version}</version>
             </dependency>
             <!-- poi -->
-<!--            <dependency>-->
-<!--                <groupId>org.apache.poi</groupId>-->
-<!--                <artifactId>poi</artifactId>-->
-<!--                <version>${apache.poi.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.apache.poi</groupId>-->
+            <!--                <artifactId>poi</artifactId>-->
+            <!--                <version>${apache.poi.version}</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
@@ -319,11 +326,11 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>javax.servlet</groupId>-->
-<!--                <artifactId>javax.servlet-api</artifactId>-->
-<!--                <version>4.0.1</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>javax.servlet</groupId>-->
+            <!--                <artifactId>javax.servlet-api</artifactId>-->
+            <!--                <version>4.0.1</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-core</artifactId>
@@ -333,7 +340,12 @@
             <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.13.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>5.3</version> <!-- 可以使用最新的稳定版本 -->
             </dependency>
         </dependencies>
     </dependencyManagement>

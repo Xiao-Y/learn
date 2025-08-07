@@ -7,11 +7,11 @@ import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.MenuService;
 import com.billow.system.service.RoleService;
 import com.billow.tools.constant.RedisCst;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

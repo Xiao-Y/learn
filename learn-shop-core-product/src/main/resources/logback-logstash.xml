@@ -213,7 +213,7 @@
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
-        <appender-ref ref="AMQP"/>
+<!--        <appender-ref ref="AMQP"/>-->
         <appender-ref ref="grpc"/>
     </root>
 </configuration>

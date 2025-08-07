@@ -96,7 +96,7 @@ public interface RoleService extends IService<RolePo>
      * @author LiuYongTao
      * @date 2019/8/7 10:27
      */
-    Integer countRoleCodeByRoleCode(String roleCode);
+    Long countRoleCodeByRoleCode(String roleCode);
 
     /**
      * 根据角色ID查询所有子菜单ID

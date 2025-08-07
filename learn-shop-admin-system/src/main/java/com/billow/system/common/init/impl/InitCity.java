@@ -7,13 +7,13 @@ import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.CityPo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.redis.util.RedisUtils;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

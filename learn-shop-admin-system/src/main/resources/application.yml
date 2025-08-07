@@ -14,6 +14,8 @@ server:
   servlet:
     context-path: /admin-system
 spring:
+  profiles:
+    active: dev
   application:
     name: learn-shop-admin-system #客户端名称
 

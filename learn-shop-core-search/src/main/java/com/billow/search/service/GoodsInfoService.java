@@ -62,5 +62,5 @@ public interface GoodsInfoService {
      * @author liuyongtao
      * @since 2021-9-6 11:37
      */
-    CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param);
+    CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) throws IOException;
 }

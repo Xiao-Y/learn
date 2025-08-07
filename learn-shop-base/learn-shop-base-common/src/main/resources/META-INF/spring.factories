@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.billow.common.swagger2.SwaggerConfig,\
-com.billow.common.thread.ThreadExecutorConfig,\
-com.billow.common.utils.UtilsConfig

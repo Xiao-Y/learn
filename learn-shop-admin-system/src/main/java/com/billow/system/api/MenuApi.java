@@ -62,7 +62,7 @@ public class MenuApi extends BaseApi {
 
     @ApiOperation(value = "查询 menuCode 的个数")
     @GetMapping("/checkMenuCode/{menuCode}")
-    public Integer checkMenuCode(@PathVariable("menuCode") String menuCode) {
+    public Long checkMenuCode(@PathVariable("menuCode") String menuCode) {
         return menuService.countMenuCodeByMenuCode(menuCode);
     }
 

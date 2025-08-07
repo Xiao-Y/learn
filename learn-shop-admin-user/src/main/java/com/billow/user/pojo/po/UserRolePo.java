@@ -2,9 +2,9 @@ package com.billow.user.pojo.po;
 
 
 import com.billow.jpa.base.pojo.BasePo;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**

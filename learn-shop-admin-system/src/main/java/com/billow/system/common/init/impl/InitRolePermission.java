@@ -6,15 +6,13 @@ import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.PermissionService;
 import com.billow.system.service.RoleService;
 import com.billow.system.service.redis.RolePermissionRedisKit;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 

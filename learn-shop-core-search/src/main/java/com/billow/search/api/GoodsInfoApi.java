@@ -7,21 +7,14 @@ import com.billow.search.pojo.search.GoodsInfoSearchParam;
 import com.billow.search.service.GoodsInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateResponse;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 商品搜索相关操作
@@ -35,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GoodsInfoApi {
 
     @Autowired
-    private ElasticsearchRestTemplate restTemplate;
+    private ElasticsearchOperations restTemplate;
     @Autowired
     private GoodsInfoService goodsInfoService;
 
@@ -52,7 +45,7 @@ public class GoodsInfoApi {
     @PostMapping("/search")
     public CustomPage search(@RequestBody GoodsInfoSearchParam param,
                              @RequestParam(value = "pageSize", defaultValue = "2") Integer pageSize,
-                             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) {
+                             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) throws Exception {
         log.info("pageSize:{},pageNo:{},param:{}", pageSize, pageNo, param);
         return goodsInfoService.search(pageNo, pageSize, param);
     }

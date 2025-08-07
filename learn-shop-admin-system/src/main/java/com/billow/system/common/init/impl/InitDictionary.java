@@ -5,11 +5,11 @@ import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;

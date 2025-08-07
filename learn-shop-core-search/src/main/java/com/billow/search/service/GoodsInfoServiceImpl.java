@@ -21,10 +21,8 @@ import org.elasticsearch.script.Script;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -45,7 +43,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
     @Autowired
     private GoodsInfoDao goodsInfoDao;
     @Autowired
-    private ElasticsearchRestTemplate template;
+    private ElasticsearchOperations template;
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
@@ -111,7 +109,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
     }
 
     @Override
-    public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) {
+    public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) throws IOException {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         // 构建查询条件
         if (StringUtils.isNotBlank(param.getSpuNo())) {

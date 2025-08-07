@@ -38,6 +38,16 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
         <!--配置命名容错处理-->
         <dependency>
@@ -82,21 +92,34 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <!-- Spring Boot 打包插件 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!--fork :  如果没有该项配置，肯呢个devtools不会起作用，即应用不会restart -->
-                    <fork>true</fork>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
-            <!-- docker 上传jar到 docker-->
+            <!-- 编译插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <!-- docker -->
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.2.2</version>
                 <configuration>
-                    <imageName>${project.build.finalName}</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
@@ -107,19 +130,21 @@
                     </resources>
                 </configuration>
             </plugin>
-            <!-- 复制 jar 到指定目录，spring-boot3以上版本更换 tasks 为 target -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <!--绑定mvn package命令，当执行package这个maven命令打包项目的同时
-                    会把target目录下的jar包给copy到docker目录去-->
+                <!-- 建议添加groupId和明确版本号 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.1.0</version>
+                <!-- 绑定mvn package命令，执行package时将target目录下的jar包复制到docker目录 -->
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <configuration>
-                            <tasks>
+                            <!-- 将tasks改为target -->
+                            <target>
                                 <copy todir="src/main/docker"
                                       file="target/${project.artifactId}.${project.packaging}"></copy>
-                            </tasks>
+                            </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>

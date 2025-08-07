@@ -135,7 +135,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     }
 
     @Override
-    public Integer countMenuCodeByMenuCode(String menuCode) {
+    public Long countMenuCodeByMenuCode(String menuCode) {
         LambdaQueryWrapper<MenuPo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(MenuPo::getMenuCode, menuCode)
                 .eq(MenuPo::getValidInd, true);

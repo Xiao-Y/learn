@@ -6,11 +6,11 @@ import org.quartz.JobListener;
 import org.quartz.spi.JobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
@@ -25,8 +25,9 @@ import java.util.Properties;
 @Configuration
 public class QuartzSchedulerConfig {
 
-    @Autowired
-    private DataSource dataSource;
+//    @Lazy
+//    @Resource
+//    private DataSource dataSource;
 
     private static final Logger logger = LoggerFactory.getLogger(QuartzSchedulerConfig.class);
 
@@ -44,7 +45,8 @@ public class QuartzSchedulerConfig {
     }
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory) {
+    @DependsOn("dataSource")
+    public SchedulerFactoryBean schedulerFactoryBean(@Lazy DataSource dataSource, JobFactory jobFactory) {
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
         try {
             factoryBean.setQuartzProperties(quartzProperties());

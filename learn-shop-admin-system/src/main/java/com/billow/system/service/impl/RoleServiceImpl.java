@@ -394,7 +394,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
     }
 
     @Override
-    public Integer countRoleCodeByRoleCode(String roleCode) {
+    public Long countRoleCodeByRoleCode(String roleCode) {
         LambdaQueryWrapper<RolePo> condition2 = Wrappers.lambdaQuery();
         condition2.eq(RolePo::getRoleCode, roleCode);
         return roleDao.selectCount(condition2);

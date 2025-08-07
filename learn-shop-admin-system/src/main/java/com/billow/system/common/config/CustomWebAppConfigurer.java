@@ -5,7 +5,7 @@ import com.billow.system.common.properties.CustomProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
  * 资源映射路径
@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @date 2019/7/26 16:30
  */
 @Configuration
-public class CustomWebAppConfigurer extends WebMvcConfigurerAdapter {
+public class CustomWebAppConfigurer extends WebMvcConfigurationSupport {
 
     @Autowired
     private CustomProperties customProperties;

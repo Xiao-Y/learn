@@ -97,7 +97,7 @@ public class RoleApi extends BaseApi {
 
     @ApiOperation(value = "查询 roleCode 的个数")
     @GetMapping("/checkRoleCode/{roleCode}")
-    public Integer checkRoleCode(@PathVariable("roleCode") String roleCode) {
+    public Long checkRoleCode(@PathVariable("roleCode") String roleCode) {
         return roleService.countRoleCodeByRoleCode(roleCode);
     }
 }

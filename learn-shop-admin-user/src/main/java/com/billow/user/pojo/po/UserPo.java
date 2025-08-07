@@ -3,11 +3,11 @@ package com.billow.user.pojo.po;
 
 import com.billow.jpa.base.pojo.BasePo;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 

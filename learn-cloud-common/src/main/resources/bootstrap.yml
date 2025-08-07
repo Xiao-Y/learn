@@ -12,7 +12,7 @@ spring:
   config:
     import:
       # 配置公用文件（新版本使用列表格式）
-      - nacos:sys-config.yml
+      - nacos:cloud-config.yml
       - nacos:sys-config-db.yml
       - nacos:sys-config-mq.yml
       - nacos:sys-config-redis.yml
