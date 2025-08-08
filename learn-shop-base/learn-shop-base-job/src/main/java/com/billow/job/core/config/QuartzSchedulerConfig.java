@@ -6,16 +6,16 @@ import org.quartz.JobListener;
 import org.quartz.spi.JobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -24,10 +24,6 @@ import java.util.Properties;
  */
 @Configuration
 public class QuartzSchedulerConfig {
-
-//    @Lazy
-//    @Resource
-//    private DataSource dataSource;
 
     private static final Logger logger = LoggerFactory.getLogger(QuartzSchedulerConfig.class);
 
@@ -45,14 +41,12 @@ public class QuartzSchedulerConfig {
     }
 
     @Bean
-    @DependsOn("dataSource")
-    public SchedulerFactoryBean schedulerFactoryBean(@Lazy DataSource dataSource, JobFactory jobFactory) {
+    public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory, Properties quartzProperties) {
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
         try {
-            factoryBean.setQuartzProperties(quartzProperties());
-            factoryBean.setDataSource(dataSource);
+            factoryBean.setQuartzProperties(quartzProperties);
             factoryBean.setJobFactory(jobFactory);
-            //用于quartz集群,QuartzScheduler 启动时更新己存在的Job，这样就不用每次修改targetObject后删除qrtz_job_details表对应记录了
+            //用于quartz集群,QuartzScheduler 启动时更新己存在的Job，这样就不用每次修改targetObject后删除 qrtz_job_details表对应记录了
             factoryBean.setOverwriteExistingJobs(true);
             // 延时启动,应用启动完10秒后 QuartzScheduler 再启动
             factoryBean.setStartupDelay(10);
@@ -60,18 +54,34 @@ public class QuartzSchedulerConfig {
             JobListener monitorJobListener = new MonitorJobListener();
             factoryBean.setGlobalJobListeners(monitorJobListener);
         } catch (Exception e) {
-            logger.error("加载 {} 配置文件失败.", QUARTZ_PROPERTIES_NAME, e);
-            throw new RuntimeException("加载配置文件失败", e);
+            throw new RuntimeException("生成 SchedulerFactoryBean 异常：", e);
         }
 
         return factoryBean;
     }
 
     @Bean
-    public Properties quartzProperties() throws IOException {
+    @DependsOn("jobDataSourceProperties")
+    public Properties quartzProperties(JobDataSourceProperties jobDataSourceProperties) throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
         propertiesFactoryBean.setLocation(new ClassPathResource(QUARTZ_PROPERTIES_NAME));
         propertiesFactoryBean.afterPropertiesSet();
-        return propertiesFactoryBean.getObject();
+        Properties quartzProperties = propertiesFactoryBean.getObject();
+
+        String dataSourceName = Optional.ofNullable(jobDataSourceProperties.getDataSourceName())
+                .orElse(quartzProperties.getProperty("org.quartz.jobStore.dataSource", "jobDataSource"));
+
+        String maxConnections = Optional.ofNullable(jobDataSourceProperties.getMaxConnections())
+                .orElse(10)
+                .toString();
+
+        quartzProperties.setProperty("org.quartz.jobStore.dataSource", dataSourceName);
+        quartzProperties.setProperty("org.quartz.dataSource." + dataSourceName + ".driver", jobDataSourceProperties.getDriver());
+        quartzProperties.setProperty("org.quartz.dataSource." + dataSourceName + ".URL", jobDataSourceProperties.getUrl());
+        quartzProperties.setProperty("org.quartz.dataSource." + dataSourceName + ".user", jobDataSourceProperties.getUsername());
+        quartzProperties.setProperty("org.quartz.dataSource." + dataSourceName + ".password", jobDataSourceProperties.getPassword());
+        quartzProperties.setProperty("org.quartz.dataSource." + dataSourceName + ".maxConnections", maxConnections);
+
+        return quartzProperties;
     }
 }

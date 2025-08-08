@@ -18,6 +18,8 @@ spring:
     active: dev
   application:
     name: learn-shop-admin-system #客户端名称
+  config:
+    import: optional:nacos:${spring.application.name}.yml
 
 # 开启hystrix熔断机制
 feign:

@@ -6,67 +6,8 @@ server:
 spring:
   application:
     name: learn-shop-core-cart
-  
-  # 数据源配置
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/learn_shop?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-    username: root
-    password: 123456
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 20
-      idle-timeout: 30000
-      auto-commit: true
-      pool-name: CartHikariCP
-      max-lifetime: 1800000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
-
-  # Redis配置
-  redis:
-    host: localhost
-    port: 6379
-    password: 
-    database: 0
-    timeout: 10s
-    lettuce:
-      pool:
-        min-idle: 0
-        max-idle: 8
-        max-active: 8
-        max-wait: -1ms
-
-  # RabbitMQ配置
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: /
-    publisher-confirm-type: correlated
-    publisher-returns: true
-    template:
-      mandatory: true
-    listener:
-      simple:
-        acknowledge-mode: manual
-        prefetch: 1
-
-# MyBatis Plus配置
-mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
-  type-aliases-package: com.billow.cart.pojo.entity
-  configuration:
-    map-underscore-to-camel-case: true
-    cache-enabled: false
-  global-config:
-    db-config:
-      id-type: assign_id
-      logic-delete-field: validInd
-      logic-delete-value: 0
-      logic-not-delete-value: 1
+  config:
+    import: optional:nacos:${spring.application.name}.yml
 
 # 购物车配置
 cart:

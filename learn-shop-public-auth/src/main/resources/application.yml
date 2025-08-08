@@ -14,3 +14,5 @@ server:
 spring:
   application:
       name: learn-shop-public-auth
+  config:
+    import: optional:nacos:${spring.application.name}.yml

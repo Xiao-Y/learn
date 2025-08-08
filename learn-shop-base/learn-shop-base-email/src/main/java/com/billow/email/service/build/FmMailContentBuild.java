@@ -3,7 +3,6 @@ package com.billow.email.service.build;
 import com.billow.email.constant.MailCst;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import com.billow.email.service.MailContentBuild;
-import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ToolsUtils;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import java.util.Map;
 public class FmMailContentBuild implements MailContentBuild {
 
     @Autowired
-    private MailTemplateService mailTemplateService;
+    private BaseContentBuild baseContentBuild;
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
@@ -53,10 +52,10 @@ public class FmMailContentBuild implements MailContentBuild {
                 break;
             case MailCst.SYS_FC_DATA_SS_SQL: // 2-SQL查询
                 if (!singleResult) {
-                    resultList = mailTemplateService.runSQLResultList(parameter, mailTemplateVo.getRunSql());
+                    resultList = baseContentBuild.runSQLResultList(parameter, mailTemplateVo.getRunSql());
                     result.put("root", resultList);
                 } else {
-                    result = mailTemplateService.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                    result = baseContentBuild.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
                 }
                 break;
             case MailCst.SYS_FC_DATA_SS_PRO: // 3-参数设置
@@ -64,9 +63,9 @@ public class FmMailContentBuild implements MailContentBuild {
                 break;
             case MailCst.SYS_FC_DATA_SS_MIX: // 4-混合（2、3都有）
                 if (!singleResult) {
-                    resultList = mailTemplateService.runSQLResultList(parameter, mailTemplateVo.getRunSql());
+                    resultList = baseContentBuild.runSQLResultList(parameter, mailTemplateVo.getRunSql());
                 } else {
-                    result = mailTemplateService.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                    result = baseContentBuild.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
                 }
                 // 合并参数，指定参数优先
                 result.putAll(parameter);

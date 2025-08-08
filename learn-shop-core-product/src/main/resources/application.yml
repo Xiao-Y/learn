@@ -18,6 +18,8 @@ spring:
     active: dev
   application:
     name: learn-shop-core-product #客户端名称
+  config:
+    import: optional:nacos:${spring.application.name}.yml
 # Excel 模块配置
 learn:
   excel:

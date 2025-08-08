@@ -7,6 +7,7 @@ import com.billow.email.service.EmailSender;
 import com.billow.email.service.MailContentBuild;
 import com.billow.email.service.MailService;
 import com.billow.email.service.MailTemplateService;
+import com.billow.email.service.build.BaseContentBuild;
 import com.billow.email.service.build.FmMailContentBuild;
 import com.billow.email.service.build.HtmlMailContentBuild;
 import com.billow.email.service.build.ThfMailContentBuild;
@@ -99,9 +100,21 @@ public class EmailBeanConfig {
     }
 
     /**
+     * 基类模板邮件构建器
+     *
+     * @return {@link BaseContentBuild}
+     * @author liuyongtao
+     * @since 2021-2-3 11:45
+     */
+    @Bean
+    public BaseContentBuild baseContentBuild() {
+        return new BaseContentBuild();
+    }
+
+    /**
      * FreeMarker模板邮件构建器
      *
-     * @return {@link MailService}
+     * @return {@link FmMailContentBuild}
      * @author liuyongtao
      * @since 2021-2-3 11:45
      */
@@ -113,7 +126,7 @@ public class EmailBeanConfig {
     /**
      * 1-普通邮件,2-html邮件 内容构建
      *
-     * @return {@link MailService}
+     * @return {@link HtmlMailContentBuild}
      * @author liuyongtao
      * @since 2021-2-3 11:45
      */
@@ -125,7 +138,7 @@ public class EmailBeanConfig {
     /**
      * Thymeleaf邮件模板构建器
      *
-     * @return {@link MailService}
+     * @return {@link ThfMailContentBuild}
      * @author liuyongtao
      * @since 2021-2-3 11:45
      */
@@ -137,7 +150,7 @@ public class EmailBeanConfig {
     /**
      * 邮件服务器类
      *
-     * @return {@link MailService}
+     * @return {@link MailTemplateServiceImpl}
      * @author liuyongtao
      * @since 2021-2-3 11:45
      */

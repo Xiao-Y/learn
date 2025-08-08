@@ -42,7 +42,7 @@ public class SpringContextUtil {
      */
     private static void checkApplicationContext() {
         if (applicationContext == null) {
-            throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义ContextUtils");
+            throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义 SpringContextUtil");
         }
     }
 

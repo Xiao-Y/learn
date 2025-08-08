@@ -3,7 +3,6 @@ package com.billow.email.service.build;
 import com.billow.email.constant.MailCst;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import com.billow.email.service.MailContentBuild;
-import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.thymeleaf.TemplateEngine;
@@ -23,7 +22,7 @@ import java.util.Map;
 public class ThfMailContentBuild implements MailContentBuild {
 
     @Autowired
-    private MailTemplateService mailTemplateService;
+    private BaseContentBuild baseContentBuild;
     @Autowired
     private TemplateEngine templateEngine;
 
@@ -56,10 +55,10 @@ public class ThfMailContentBuild implements MailContentBuild {
                 break;
             case MailCst.SYS_FC_DATA_SS_SQL: // 2-SQL查询
                 if (!singleResult) {
-                    resultList = mailTemplateService.runSQLResultList(parameter, mailTemplateVo.getRunSql());
+                    resultList = baseContentBuild.runSQLResultList(parameter, mailTemplateVo.getRunSql());
                     context.setVariable("root", resultList);
                 } else {
-                    result = mailTemplateService.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                    result = baseContentBuild.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
                     context.setVariables(result);
                 }
                 break;
@@ -68,10 +67,10 @@ public class ThfMailContentBuild implements MailContentBuild {
                 break;
             case MailCst.SYS_FC_DATA_SS_MIX: // 4-混合（2、3都有）
                 if (!singleResult) {
-                    resultList = mailTemplateService.runSQLResultList(parameter, mailTemplateVo.getRunSql());
+                    resultList = baseContentBuild.runSQLResultList(parameter, mailTemplateVo.getRunSql());
                     context.setVariable("root", resultList);
                 } else {
-                    result = mailTemplateService.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                    result = baseContentBuild.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
                 }
                 // 合并参数，指定参数优先
                 result.putAll(parameter);

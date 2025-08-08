@@ -16,6 +16,8 @@ server:
 spring:
   application:
     name: learn-shop-admin-user #客户端名称
+  config:
+    import: optional:nacos:${spring.application.name}.yml
   jpa: #JPA配置
     generate-ddl: false
     show-sql: true

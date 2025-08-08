@@ -48,10 +48,4 @@ public class StartLoading implements InitializingBean {
         }
         return true;
     }
-
-    @Value(value = "${custom.common.start-init-data:true}")
-    public void setStartInitData(boolean startInitData) {
-        log.warn("配置 custom.common.start-init-data 改变为：{}", startInitData);
-        this.init(null);
-    }
 }
