@@ -41,8 +41,7 @@ public class EsPageUtils {
             T content = m.getContent();
             // 高亮设置
             Map<String, List<String>> highlightFields = m.getHighlightFields();
-            if (MapUtils.isNotEmpty(highlightFields))
-            {
+            if (MapUtils.isNotEmpty(highlightFields)) {
                 highlightFields.forEach((k, v) -> FieldUtils.setStrValue(content, k, v.get(0)));
             }
             return content;

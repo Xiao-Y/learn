@@ -138,7 +138,7 @@ public class GoodsInfoPo {
     // 创建时间
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 //    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd HH:mm:ss")
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second, pattern = "uuuu-MM-dd HH:mm:ss")
 //    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second)
     @JSONField(name = "create_time")
     private LocalDateTime createTime;
@@ -146,7 +146,7 @@ public class GoodsInfoPo {
     // 更新时间
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 //    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd HH:mm:ss")
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second, pattern = "uuuu-MM-dd HH:mm:ss")
 //    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second)
     @JSONField(name = "update_time")
     private LocalDateTime updateTime;

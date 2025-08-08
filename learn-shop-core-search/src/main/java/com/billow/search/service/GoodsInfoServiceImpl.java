@@ -14,21 +14,24 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.script.Script;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.data.elasticsearch.core.query.HighlightQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 商品服务类
@@ -110,67 +113,84 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 
     @Override
     public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) throws IOException {
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        Criteria criteria = new Criteria();
         // 构建查询条件
+        // 添加精确匹配条件
         if (StringUtils.isNotBlank(param.getSpuNo())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_SPU_NO, param.getSpuNo()));
+            criteria.and(new Criteria(FieldNameConstant.FIELD_SPU_NO).is(param.getSpuNo()));
         }
         if (Objects.nonNull(param.getBrandId())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_BRAND_ID, param.getBrandId()));
+            criteria.and(new Criteria(FieldNameConstant.FIELD_BRAND_ID).is(param.getBrandId()));
         }
         if (Objects.nonNull(param.getCategoryId())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_CATEGORY_ID, param.getCategoryId()));
+            criteria.and(new Criteria(FieldNameConstant.FIELD_CATEGORY_ID).is(param.getCategoryId()));
         }
         if (Objects.nonNull(param.getNewStatus())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_NEW_STATUS, param.getNewStatus()));
+            criteria.and(new Criteria(FieldNameConstant.FIELD_NEW_STATUS).is(param.getNewStatus()));
         }
         if (Objects.nonNull(param.getRecommandStatus())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_RECOMMAND_STATUS, param.getRecommandStatus()));
+            criteria.and(new Criteria(FieldNameConstant.FIELD_RECOMMAND_STATUS).is(param.getRecommandStatus()));
         }
         if (Objects.nonNull(param.getPreviewStatus())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_PREVIEW_STATUS, param.getPreviewStatus()));
-        }
-        // 关键字搜索匹配，分词
-        if (StringUtils.isNotBlank(param.getKeyWorlds())) {
-            boolQueryBuilder.must(QueryBuilders.multiMatchQuery(param.getKeyWorlds(),
-                    FieldNameConstant.FIELD_KEYWORDS, FieldNameConstant.FIELD_GOODS_NAME,
-                    FieldNameConstant.FIELD_BRAND_NAME, FieldNameConstant.FIELD_CATEGORY_NAME,
-                    FieldNameConstant.FIELD_SUB_TITLE, FieldNameConstant.FIELD_DETAIL_TITLE));
+            criteria.and(new Criteria(FieldNameConstant.FIELD_PREVIEW_STATUS).is(param.getPreviewStatus()));
         }
 
-        // 价格范围查询
+        // 添加多字段模糊匹配
+        if (StringUtils.isNotBlank(param.getKeyWorlds())) {
+            Criteria keywordCriteria = new Criteria();
+            String keyword = param.getKeyWorlds();
+
+            keywordCriteria.or(FieldNameConstant.FIELD_KEYWORDS).matches(keyword)
+                    .or(FieldNameConstant.FIELD_GOODS_NAME).matches(keyword)
+                    .or(FieldNameConstant.FIELD_BRAND_NAME).matches(keyword)
+                    .or(FieldNameConstant.FIELD_CATEGORY_NAME).matches(keyword)
+                    .or(FieldNameConstant.FIELD_SUB_TITLE).matches(keyword)
+                    .or(FieldNameConstant.FIELD_DETAIL_TITLE).matches(keyword);
+
+            criteria.and(keywordCriteria);
+        }
+
+        // 添加价格范围过滤
         if (StringUtils.isNotBlank(param.getPrice())) {
-            RangeQueryBuilder rangePrice = QueryBuilders.rangeQuery(FieldNameConstant.FIELD_PRICE_RANGE);
             String[] split = param.getPrice().split(FieldNameConstant.FIELD_LINK_CHAR);
+            Criteria priceCriteria = new Criteria(FieldNameConstant.FIELD_PRICE_RANGE);
+
             Long low = StringUtils.isBlank(split[0]) ? 0L : Long.parseLong(split[0]);
-            rangePrice.gte(low);
-            if (split.length > 1) {
-                Long hig = StringUtils.isBlank(split[1]) ? null : Long.parseLong(split[1]);
-                if (hig != null) {
-                    rangePrice.lte(hig);
-                }
+            priceCriteria.greaterThanEqual(low);
+
+            if (split.length > 1 && StringUtils.isNotBlank(split[1])) {
+                Long high = Long.parseLong(split[1]);
+                priceCriteria.lessThanEqual(high);
             }
-            boolQueryBuilder.filter(rangePrice);
+            criteria.and(priceCriteria);
         }
 
         // 分页条件
         PageRequest pageRequest = PageRequest.of(pageNo - 1, pageSize);
 
         // 结果高亮显示
-        HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.field(FieldNameConstant.FIELD_SUB_TITLE)
-                .field(FieldNameConstant.FIELD_DETAIL_TITLE)
-                .field(FieldNameConstant.FIELD_GOODS_NAME)
-                .preTags("<font color='red'>")
-                .postTags("</font>");
+        HighlightParameters parameters = HighlightParameters.builder()
+                .withPreTags("<font color='red'>")
+                .withPostTags("</font>")
+                .build();
+        List<HighlightField> highlightFields = Arrays.asList(
+                new HighlightField(FieldNameConstant.FIELD_SUB_TITLE),
+                new HighlightField(FieldNameConstant.FIELD_DETAIL_TITLE),
+                new HighlightField(FieldNameConstant.FIELD_GOODS_NAME),
+                new HighlightField(FieldNameConstant.FIELD_BRAND_NAME),
+                new HighlightField(FieldNameConstant.FIELD_CATEGORY_NAME),
+                new HighlightField(FieldNameConstant.FIELD_KEYWORDS)
+        );
+
+        Highlight highlight = new Highlight(parameters, highlightFields);
+        HighlightQuery highlightQuery = new HighlightQuery(highlight, GoodsInfoPo.class);
 
         // 组装查询
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
-                .withQuery(boolQueryBuilder)
-                .withPageable(pageRequest)
-//                .withHighlightBuilder(highlightBuilder)
-                .build();
-        SearchHits<GoodsInfoPo> searchHits = template.search(nativeSearchQuery, GoodsInfoPo.class);
+        Query query = new CriteriaQuery(criteria)
+                .setPageable(pageRequest);
+        query.setHighlightQuery(highlightQuery);
+
+        SearchHits<GoodsInfoPo> searchHits = template.search(query, GoodsInfoPo.class);
         return EsPageUtils.page(searchHits, pageSize);
     }
 }
