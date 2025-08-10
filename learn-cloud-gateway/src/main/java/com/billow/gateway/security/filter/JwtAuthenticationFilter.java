@@ -29,6 +29,7 @@ public class JwtAuthenticationFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        log.info("JwtAuthenticationFilter执行，请求路径: {}", exchange.getRequest().getPath());
         ServerHttpRequest request = exchange.getRequest();
 
         // 从 header 或其他位置提取认证信息
@@ -36,6 +37,7 @@ public class JwtAuthenticationFilter implements WebFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+
             Authentication authentication = this.authenticateToken(token);
             // 验证 token 并设置认证信息
             return Optional.ofNullable(authentication)

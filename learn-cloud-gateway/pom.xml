@@ -44,6 +44,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-jpa</artifactId>
+        </dependency>
+        <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <!-- base-tools -->
         <dependency>
             <groupId>com.billow</groupId>

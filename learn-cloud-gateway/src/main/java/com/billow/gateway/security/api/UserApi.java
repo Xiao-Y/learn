@@ -1,6 +1,9 @@
 package com.billow.gateway.security.api;
 
 import cn.hutool.core.util.StrUtil;
+import com.billow.gateway.pojo.search.UserSearchParam;
+import com.billow.gateway.pojo.vo.UserRelationVo;
+import com.billow.gateway.security.component.CustomUserDetailsService;
 import com.billow.gateway.security.util.JwtTokenUtil;
 import com.billow.gateway.security.vo.TokenVo;
 import com.billow.gateway.security.vo.UserVo;
@@ -34,7 +37,7 @@ public class UserApi {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService customUserDetailsService;
 
     @GetMapping("/currentUser")
     public UserVo getCurrentUser(ServerHttpRequest request) {
@@ -64,20 +67,22 @@ public class UserApi {
      */
     @ResponseBody
     @PostMapping("/login")
-    public BaseResponse login(@RequestBody UserVo userVo) {
+    public BaseResponse login(@RequestBody UserSearchParam userVo) {
 
         BaseResponse baseResponse = new BaseResponse();
 
         try {
-            String username = userVo.getUsername();
+            String usercode = userVo.getUsername();
             String password = userVo.getPassword();
-            log.info("Username:{},Password:{}", username, password);
-            Assert.notNull(username, "用户名不能为空!");
+            log.info("Username:{},Password:{}", usercode, password);
+            Assert.notNull(usercode, "用户名不能为空!");
             Assert.notNull(password, "密码不能为空!");
-            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            String accessToken = jwtTokenUtil.generateToken(userDetails);
+            // 鉴权
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usercode, password));
+            // 查询用户信息
+            UserRelationVo userRelationVo = customUserDetailsService.queryUserRelationByUsercode(usercode);
+            // 生成token
+            String accessToken = jwtTokenUtil.generateToken(userRelationVo);
             log.info("accessToken:{}", accessToken);
             log.info("refreshToken:{}", accessToken);
             TokenVo tokenVo = new TokenVo();

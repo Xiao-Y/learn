@@ -1,8 +1,11 @@
 package com.billow.gateway.security.util;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.billow.gateway.pojo.po.RolePo;
+import com.billow.gateway.pojo.vo.UserRelationVo;
 import com.billow.gateway.security.vo.UserVo;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -12,8 +15,6 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
@@ -30,21 +31,21 @@ public class JwtTokenUtil {
     @Autowired
     private KeyPair keyPair;
 
-    public String generateToken(UserDetails userDetails) {
-        List<String> roles = userDetails.getAuthorities()
+    public String generateToken(UserRelationVo userRelationVo) {
+        List<String> roleCodeList = userRelationVo.getRolePoList()
                 .stream()
-                .map(GrantedAuthority::getAuthority)
+                .map(RolePo::getRoleCode)
                 .collect(Collectors.toList());
 
         try {
             // 创建JWT声明集
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(userDetails.getUsername())
+                    .subject(userRelationVo.getUserPo().getUsercode())
                     .issuer("Xiao-Y")
                     .issueTime(new Date())
                     .expirationTime(DateUtil.offsetDay(new Date(), 7)) // 7天过期
-                    .claim("authorities", roles)
-                    .claim("user_name", userDetails.getUsername())
+                    .claim("authorities", roleCodeList)
+                    .claim("user_info", BeanUtil.copyProperties(userRelationVo.getUserPo(), UserVo.class))
                     .build();
 
             // 创建带有RS256算法的头部
@@ -105,13 +106,8 @@ public class JwtTokenUtil {
      */
     public UserVo getUserVoFromToken(String token) throws ParseException {
         JWTClaimsSet claims = getAllClaimsFromToken(token);
-        String userInfo = claims.getStringClaim("user_info");
-        UserVo userVo = new UserVo();
-        JSONObject userJsonObject = JSONObject.parseObject(userInfo);
-        userVo.setId(Convert.toLong(userJsonObject.get("id")));
-        userVo.setUsername(userJsonObject.getString("user_name"));
-        userVo.setUsercode(userJsonObject.getString("usercode"));
-        userVo.setRoles(Convert.toList(String.class, userJsonObject.get("authorities")));
+        UserVo userVo = JSON.parseObject(JSON.toJSONString(claims.getClaim("user_info")), UserVo.class);
+        userVo.setRoles(Convert.toList(String.class, claims.getListClaim("authorities")));
         return userVo;
     }
 

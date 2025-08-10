@@ -48,17 +48,23 @@ public class SecurityConfig {
         // 要权限的路径配置
         List<String> needCheck = securityProperties.getNeedCheck();
         http.authorizeExchange(exchange -> exchange
+                        // 指定请求需要鉴权
                         .pathMatchers(ArrayUtil.toArray(needCheck, String.class))
+                        // 自定义鉴权管理器
                         .access(customReactiveAuthorizationManager)
+                        // 其它请求需要认证
                         .anyExchange()
                         .authenticated()
                 )
+                // 添加jwt过滤器
                 .addFilterAt(jwtFilter, SecurityWebFiltersOrder.HTTP_BASIC)
+                // 自定义认证管理器
                 .authenticationManager(customReactiveAuthenticationManager)
+                // 异常处理
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(restfulAccessDeniedHandler)
                         .authenticationEntryPoint(restAuthenticationEntryPoint))
-
+                // 禁用csrf
                 .csrf(ServerHttpSecurity.CsrfSpec::disable);
 
         return http.build();
