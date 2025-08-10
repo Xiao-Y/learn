@@ -3,7 +3,7 @@
     <parent>
         <artifactId>learn</artifactId>
         <groupId>com.billow</groupId>
-        <version>3.0-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>learn-cloud-gateway</artifactId>
@@ -64,26 +64,11 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- 负载均衡 loadbalancer -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-        </dependency>
-<!--        &lt;!&ndash; 路由中心 &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-gateway</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    &lt;!&ndash; 安全漏洞&ndash;&gt;-->
-<!--                    <artifactId>log4j-api</artifactId>-->
-<!--                    <groupId>org.apache.logging.log4j</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
+<!--            <artifactId>spring-cloud-starter-loadbalancer</artifactId>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.logging.log4j</groupId>-->
-<!--            <artifactId>log4j-api</artifactId>-->
-<!--        </dependency>-->
+
         <!-- json工具 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -94,20 +79,8 @@
             <artifactId>springfox-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-resource-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-jose</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>
@@ -165,7 +138,6 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.2</version>
                 <configuration>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
@@ -181,7 +153,6 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <!-- 建议添加groupId和明确版本号 -->
                 <groupId>org.apache.maven.plugins</groupId>
-                <version>3.1.0</version>
                 <!-- 绑定mvn package命令，执行package时将target目录下的jar包复制到docker目录 -->
                 <executions>
                     <execution>

@@ -32,6 +32,12 @@ spring:
     active: dev
   application:
     name: learn-cloud-gateway
+#  cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: false
+#      ribbon:
+#        enabled: false
   config:
     # 配置公用文件（新版本使用列表格式）
     import:

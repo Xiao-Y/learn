@@ -1,10 +1,10 @@
 package com.billow.auth.pojo.po;
 
 import com.billow.jpa.base.pojo.BasePo;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**

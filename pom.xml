@@ -4,7 +4,7 @@
 
     <groupId>com.billow</groupId>
     <artifactId>learn</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>4.0-SNAPSHOT</version>
 
     <developers>
         <developer>
@@ -31,7 +31,7 @@
         <module>learn-shop-core-product</module>
         <module>learn-shop-core-search</module>
 
-        <!--        <module>learn-shop-public-auth</module>-->
+<!--        <module>learn-shop-public-auth</module>-->
         <module>learn-shop-core-promotion</module>
         <module>learn-shop-interface</module>
         <module>learn-shop-app</module>
@@ -110,6 +110,29 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.2</version>
+            </dependency>
+            <dependency>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <!-- 建议添加groupId和明确版本号 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.1.0</version>
+            </dependency>
+
+
             <!--            <dependency>-->
             <!--                <groupId>org.springframework.cloud</groupId>-->
             <!--                <artifactId>spring-cloud-starter-sleuth</artifactId>-->
@@ -247,12 +270,12 @@
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson.version}</version>
             </dependency>
-            <!--            &lt;!&ndash; 分库分表 &ndash;&gt;-->
-            <!--            <dependency>-->
-            <!--                <groupId>org.apache.shardingsphere</groupId>-->
-            <!--                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>-->
-            <!--                <version>${sharding-jdbc.version}</version>-->
-            <!--            </dependency>-->
+            <!-- 分库分表 -->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${sharding-jdbc.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-io</artifactId>
@@ -336,11 +359,6 @@
                 <artifactId>tomcat-embed-core</artifactId>
                 <version>10.1.43</version>
                 <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>

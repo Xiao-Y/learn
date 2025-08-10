@@ -1,15 +1,25 @@
 package com.billow.gateway.security.api;
 
-import com.billow.gateway.security.util.Oauth2Holder;
+import cn.hutool.core.util.StrUtil;
+import com.billow.gateway.security.util.JwtTokenUtil;
 import com.billow.gateway.security.vo.TokenVo;
 import com.billow.gateway.security.vo.UserVo;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
+import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author liuyongtao
@@ -20,11 +30,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/userApi")
 public class UserApi {
     @Autowired
-    private Oauth2Holder oauth2Holder;
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @GetMapping("/currentUser")
-    public UserVo currentUser(ServerHttpRequest request) {
-        return oauth2Holder.getCurrentUser(request);
+    public UserVo getCurrentUser(ServerHttpRequest request) {
+        UserVo userVo = new UserVo();
+        //从Header中获取用户token
+        HttpHeaders headers = request.getHeaders();
+        String token = headers.getFirst("Authorization");
+        log.info("获取到的Authorization:{}", token);
+        if (StrUtil.isEmpty(token)) {
+            return userVo;
+        }
+        try {
+            //从token中解析用户信息并设置到Header中去
+            String realToken = token.replace("Bearer ", "");
+            return jwtTokenUtil.getUserVoFromToken(realToken);
+        } catch (Exception e) {
+            log.error("获取用户异常:{}", e);
+        }
+        return userVo;
     }
 
     /**
@@ -45,9 +74,15 @@ public class UserApi {
             log.info("Username:{},Password:{}", username, password);
             Assert.notNull(username, "用户名不能为空!");
             Assert.notNull(password, "密码不能为空!");
-            TokenVo tokenVo = oauth2Holder.getTokenByUsernameAndPassword(username, password);
-            log.info("accessToken:{}", tokenVo.getAccessToken());
-            log.info("refreshToken:{}", tokenVo.getRefreshToken());
+            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            String accessToken = jwtTokenUtil.generateToken(userDetails);
+            log.info("accessToken:{}", accessToken);
+            log.info("refreshToken:{}", accessToken);
+            TokenVo tokenVo = new TokenVo();
+            tokenVo.setAccessToken(accessToken);
+            tokenVo.setRefreshToken(accessToken);
             baseResponse.setResData(tokenVo);
             baseResponse.setResCode(ResCodeEnum.RESCODE_ASSESS_TOKEN);
         } catch (Exception e) {
@@ -64,11 +99,11 @@ public class UserApi {
         BaseResponse baseResponse = new BaseResponse();
 
         try {
-            TokenVo tokenVo = oauth2Holder.getTokenByRefreshToken(refreshToken);
-            log.info("accessToken:{}", tokenVo.getAccessToken());
-            log.info("refreshToken:{}", tokenVo.getRefreshToken());
-            baseResponse.setResData(tokenVo);
-            baseResponse.setResCode(ResCodeEnum.RESCODE_ASSESS_TOKEN);
+//            TokenVo tokenVo = oauth2Holder.getTokenByRefreshToken(refreshToken);
+//            log.info("accessToken:{}", tokenVo.getAccessToken());
+//            log.info("refreshToken:{}", tokenVo.getRefreshToken());
+//            baseResponse.setResData(tokenVo);
+//            baseResponse.setResCode(ResCodeEnum.RESCODE_ASSESS_TOKEN);
         } catch (Exception e) {
             log.error("登陆异常：{}", e);
             baseResponse.setResCode(ResCodeEnum.RESCODE_NOT_FOUND_USER);
