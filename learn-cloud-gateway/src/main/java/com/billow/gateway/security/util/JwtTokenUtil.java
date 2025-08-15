@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.billow.gateway.pojo.po.RolePo;
 import com.billow.gateway.pojo.vo.UserRelationVo;
+import com.billow.gateway.security.constant.AuthConstant;
 import com.billow.gateway.security.vo.UserVo;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -44,8 +45,8 @@ public class JwtTokenUtil {
                     .issuer("Xiao-Y")
                     .issueTime(new Date())
                     .expirationTime(DateUtil.offsetDay(new Date(), 7)) // 7天过期
-                    .claim("authorities", roleCodeList)
-                    .claim("user_info", BeanUtil.copyProperties(userRelationVo.getUserPo(), UserVo.class))
+                    .claim(AuthConstant.AUTHORITY_CLAIM_NAME, roleCodeList)
+                    .claim(AuthConstant.USER_INFO_CLAIM_NAME, BeanUtil.copyProperties(userRelationVo.getUserPo(), UserVo.class))
                     .build();
 
             // 创建带有RS256算法的头部
@@ -106,8 +107,8 @@ public class JwtTokenUtil {
      */
     public UserVo getUserVoFromToken(String token) throws ParseException {
         JWTClaimsSet claims = getAllClaimsFromToken(token);
-        UserVo userVo = JSON.parseObject(JSON.toJSONString(claims.getClaim("user_info")), UserVo.class);
-        userVo.setRoles(Convert.toList(String.class, claims.getListClaim("authorities")));
+        UserVo userVo = JSON.parseObject(JSON.toJSONString(claims.getClaim(AuthConstant.USER_INFO_CLAIM_NAME)), UserVo.class);
+        userVo.setRoles(Convert.toList(String.class, claims.getListClaim(AuthConstant.AUTHORITY_CLAIM_NAME)));
         return userVo;
     }
 
@@ -120,7 +121,7 @@ public class JwtTokenUtil {
     public List<String> getAuthoritiesFromToken(String token) {
         try {
             JWTClaimsSet claims = getAllClaimsFromToken(token);
-            List<String> authorities = claims.getStringListClaim("authorities");
+            List<String> authorities = claims.getStringListClaim(AuthConstant.AUTHORITY_CLAIM_NAME);
             return authorities;
         } catch (Exception e) {
             return new ArrayList<>();
