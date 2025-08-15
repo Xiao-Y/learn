@@ -6,9 +6,6 @@ import com.billow.product.interfaces.vo.GoodsCategoryVo;
 import com.billow.tools.resData.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,8 +18,6 @@ import java.util.List;
  * @version v1.0
  * @since 2019-11-27
  */
-@RestController
-@RequestMapping(ContextPath.CORE_PRODUCT + "/goodsCategoryApi")
 public interface GoodsCategoryApi {
 
     /**
@@ -33,7 +28,7 @@ public interface GoodsCategoryApi {
      * @author xiaoy
      * @since 2021/2/4 16:20
      */
-    @GetMapping(value = "/getById/{id}")
+    @GetMapping(value = ContextPath.CORE_PRODUCT + "/goodsCategoryApi/getById/{id}")
     BaseResponse<GoodsCategoryVo> getCategoryById(@PathVariable("id") Long id);
 
     /**
@@ -44,6 +39,6 @@ public interface GoodsCategoryApi {
      * @author liuyongtao
      * @since 2021-9-9 8:59
      */
-    @GetMapping(value = "/findCategoryTree/{parentId}")
+    @GetMapping(value = ContextPath.CORE_PRODUCT + "/goodsCategoryApi/findCategoryTree/{parentId}")
     BaseResponse<List<GoodsCategoryTreeVo>> findCategoryTree(@PathVariable Long parentId);
 }

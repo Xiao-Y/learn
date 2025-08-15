@@ -5,8 +5,6 @@ import com.billow.product.interfaces.vo.GoodsSpuVo;
 import com.billow.tools.resData.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v1.0
  * @since 2019-11-27
  */
-@RestController
-@RequestMapping(ContextPath.CORE_PRODUCT +"/goodsSpuApi")
 public interface GoodsSpuApi {
 
     /**
@@ -29,6 +25,6 @@ public interface GoodsSpuApi {
      * @author liuyongtao
      * @since 2021-9-7 14:22
      */
-    @GetMapping(value = "/getById/{id}")
+    @GetMapping(value = ContextPath.CORE_PRODUCT + "/goodsSpuApi/getById/{id}")
     BaseResponse<GoodsSpuVo> getById(@PathVariable("id") Long id);
 }

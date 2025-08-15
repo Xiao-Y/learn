@@ -38,25 +38,41 @@
                 </exclusion>
             </exclusions>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.elasticsearch</groupId>-->
+<!--                    <artifactId>elasticsearch</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.elasticsearch.client</groupId>-->
+<!--                    <artifactId>elasticsearch-rest-client</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.elasticsearch.client</groupId>-->
+<!--                    <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>elasticsearch-java</artifactId>-->
+<!--                    <groupId>co.elastic.clients</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+        <!-- 引入easy-es最新版本的依赖-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <groupId>org.dromara.easy-es</groupId>
+            <artifactId>easy-es-boot-starter</artifactId>
+            <version>2.0.0</version>
             <exclusions>
-                <exclusion>
-                    <groupId>org.elasticsearch</groupId>
-                    <artifactId>elasticsearch</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.elasticsearch.client</groupId>
-                    <artifactId>elasticsearch-rest-client</artifactId>
-                </exclusion>
                 <exclusion>
                     <groupId>org.elasticsearch.client</groupId>
                     <artifactId>elasticsearch-rest-high-level-client</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>elasticsearch-java</artifactId>
-                    <groupId>co.elastic.clients</groupId>
+                    <groupId>org.elasticsearch</groupId>
+                    <artifactId>elasticsearch</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -81,23 +97,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- 引入easy-es最新版本的依赖-->
-        <dependency>
-            <groupId>org.dromara.easy-es</groupId>
-            <artifactId>easy-es-boot-starter</artifactId>
-            <version>2.0.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                    <groupId>org.elasticsearch.client</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>elasticsearch</artifactId>
-                    <groupId>org.elasticsearch</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
 <!--            <artifactId>spring-boot-starter-webflux</artifactId>-->
@@ -115,6 +114,14 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
         <!--配置命名容错处理-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -124,11 +131,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

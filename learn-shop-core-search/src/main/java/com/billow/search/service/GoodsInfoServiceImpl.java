@@ -1,14 +1,15 @@
 package com.billow.search.service;
 
 import com.billow.aop.commons.CustomPage;
-import com.billow.search.common.EsPageUtils;
 import com.billow.search.common.cons.EsIndexConstant;
 import com.billow.search.common.cons.FieldNameConstant;
-import com.billow.search.dao.GoodsInfoDao;
+import com.billow.search.dao.GoodsInfoEsDao;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.search.GoodsInfoSearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.dromara.easyes.core.biz.EsPageInfo;
+import org.dromara.easyes.core.conditions.select.LambdaEsQueryWrapper;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -18,20 +19,12 @@ import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.script.Script;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.Criteria;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-import org.springframework.data.elasticsearch.core.query.HighlightQuery;
-import org.springframework.data.elasticsearch.core.query.Query;
-import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
-import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * 商品服务类
@@ -44,25 +37,23 @@ import java.util.*;
 public class GoodsInfoServiceImpl implements GoodsInfoService {
 
     @Autowired
-    private GoodsInfoDao goodsInfoDao;
-    @Autowired
-    private ElasticsearchOperations template;
-    @Autowired
     private RestHighLevelClient restHighLevelClient;
+    @Autowired
+    private GoodsInfoEsDao goodsInfoEsDao;
 
     @Override
     public GoodsInfoPo getById(Long id) {
-        return goodsInfoDao.findById(id).orElse(new GoodsInfoPo());
+        return goodsInfoEsDao.selectById(id);
     }
 
     @Override
     public void saveOrUpdate(GoodsInfoPo goodsInfoPo) {
-        goodsInfoDao.save(goodsInfoPo);
+        goodsInfoEsDao.insert(goodsInfoPo);
     }
 
     @Override
     public void delById(Long id) {
-        goodsInfoDao.deleteById(id);
+        goodsInfoEsDao.deleteById(id);
     }
 
     @Override
@@ -113,84 +104,35 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 
     @Override
     public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) throws IOException {
-        Criteria criteria = new Criteria();
-        // 构建查询条件
-        // 添加精确匹配条件
-        if (StringUtils.isNotBlank(param.getSpuNo())) {
-            criteria.and(new Criteria(FieldNameConstant.FIELD_SPU_NO).is(param.getSpuNo()));
-        }
-        if (Objects.nonNull(param.getBrandId())) {
-            criteria.and(new Criteria(FieldNameConstant.FIELD_BRAND_ID).is(param.getBrandId()));
-        }
-        if (Objects.nonNull(param.getCategoryId())) {
-            criteria.and(new Criteria(FieldNameConstant.FIELD_CATEGORY_ID).is(param.getCategoryId()));
-        }
-        if (Objects.nonNull(param.getNewStatus())) {
-            criteria.and(new Criteria(FieldNameConstant.FIELD_NEW_STATUS).is(param.getNewStatus()));
-        }
-        if (Objects.nonNull(param.getRecommandStatus())) {
-            criteria.and(new Criteria(FieldNameConstant.FIELD_RECOMMAND_STATUS).is(param.getRecommandStatus()));
-        }
-        if (Objects.nonNull(param.getPreviewStatus())) {
-            criteria.and(new Criteria(FieldNameConstant.FIELD_PREVIEW_STATUS).is(param.getPreviewStatus()));
-        }
-
-        // 添加多字段模糊匹配
-        if (StringUtils.isNotBlank(param.getKeyWorlds())) {
-            Criteria keywordCriteria = new Criteria();
-            String keyword = param.getKeyWorlds();
-
-            keywordCriteria.or(FieldNameConstant.FIELD_KEYWORDS).matches(keyword)
-                    .or(FieldNameConstant.FIELD_GOODS_NAME).matches(keyword)
-                    .or(FieldNameConstant.FIELD_BRAND_NAME).matches(keyword)
-                    .or(FieldNameConstant.FIELD_CATEGORY_NAME).matches(keyword)
-                    .or(FieldNameConstant.FIELD_SUB_TITLE).matches(keyword)
-                    .or(FieldNameConstant.FIELD_DETAIL_TITLE).matches(keyword);
-
-            criteria.and(keywordCriteria);
-        }
-
+        LambdaEsQueryWrapper<GoodsInfoPo> wrapper = new LambdaEsQueryWrapper<>();
+        wrapper.eq(StringUtils.isNotBlank(param.getSpuNo()), GoodsInfoPo::getSpuNo, param.getSpuNo())
+                .eq(Objects.nonNull(param.getBrandId()), GoodsInfoPo::getBrandId, param.getBrandId())
+                .eq(Objects.nonNull(param.getCategoryId()), GoodsInfoPo::getCategoryId, param.getCategoryId())
+                .eq(Objects.nonNull(param.getNewStatus()), GoodsInfoPo::getNewStatus, param.getNewStatus())
+                .eq(Objects.nonNull(param.getRecommandStatus()), GoodsInfoPo::getRecommandStatus, param.getRecommandStatus())
+                .eq(Objects.nonNull(param.getPreviewStatus()), GoodsInfoPo::getPreviewStatus, param.getPreviewStatus());
+        // 关键字查询
+        wrapper.multiMatchQuery(StringUtils.isNotBlank(param.getKeyWorlds()),
+                param.getKeyWorlds(),
+                GoodsInfoPo::getKeywords,
+                GoodsInfoPo::getGoodsName,
+                GoodsInfoPo::getBrandName,
+                GoodsInfoPo::getCategoryName,
+                GoodsInfoPo::getSubTitle,
+                GoodsInfoPo::getDetailTitle);
         // 添加价格范围过滤
         if (StringUtils.isNotBlank(param.getPrice())) {
             String[] split = param.getPrice().split(FieldNameConstant.FIELD_LINK_CHAR);
-            Criteria priceCriteria = new Criteria(FieldNameConstant.FIELD_PRICE_RANGE);
-
             Long low = StringUtils.isBlank(split[0]) ? 0L : Long.parseLong(split[0]);
-            priceCriteria.greaterThanEqual(low);
-
+            wrapper.ge(GoodsInfoPo::getPrice, low);
             if (split.length > 1 && StringUtils.isNotBlank(split[1])) {
-                Long high = Long.parseLong(split[1]);
-                priceCriteria.lessThanEqual(high);
+                wrapper.le(GoodsInfoPo::getPrice, Long.parseLong(split[1]));
             }
-            criteria.and(priceCriteria);
         }
-
-        // 分页条件
-        PageRequest pageRequest = PageRequest.of(pageNo - 1, pageSize);
-
-        // 结果高亮显示
-        HighlightParameters parameters = HighlightParameters.builder()
-                .withPreTags("<font color='red'>")
-                .withPostTags("</font>")
-                .build();
-        List<HighlightField> highlightFields = Arrays.asList(
-                new HighlightField(FieldNameConstant.FIELD_SUB_TITLE),
-                new HighlightField(FieldNameConstant.FIELD_DETAIL_TITLE),
-                new HighlightField(FieldNameConstant.FIELD_GOODS_NAME),
-                new HighlightField(FieldNameConstant.FIELD_BRAND_NAME),
-                new HighlightField(FieldNameConstant.FIELD_CATEGORY_NAME),
-                new HighlightField(FieldNameConstant.FIELD_KEYWORDS)
-        );
-
-        Highlight highlight = new Highlight(parameters, highlightFields);
-        HighlightQuery highlightQuery = new HighlightQuery(highlight, GoodsInfoPo.class);
-
-        // 组装查询
-        Query query = new CriteriaQuery(criteria)
-                .setPageable(pageRequest);
-        query.setHighlightQuery(highlightQuery);
-
-        SearchHits<GoodsInfoPo> searchHits = template.search(query, GoodsInfoPo.class);
-        return EsPageUtils.page(searchHits, pageSize);
+        EsPageInfo<GoodsInfoPo> pageInfo = goodsInfoEsDao.pageQuery(wrapper, pageNo, pageSize);
+        return CustomPage.build()
+                .setTableData(pageInfo.getList())
+                .setRecordCount(pageInfo.getTotal())
+                .setTotalPages(pageInfo.getPages());
     }
 }
