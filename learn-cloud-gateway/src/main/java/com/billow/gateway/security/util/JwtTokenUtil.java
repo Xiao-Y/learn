@@ -1,10 +1,11 @@
 package com.billow.gateway.security.util;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.billow.gateway.pojo.po.RolePo;
+import com.billow.gateway.pojo.po.UserPo;
 import com.billow.gateway.pojo.vo.UserRelationVo;
 import com.billow.gateway.security.constant.AuthConstant;
 import com.billow.gateway.security.vo.UserVo;
@@ -15,7 +16,9 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
@@ -39,14 +42,19 @@ public class JwtTokenUtil {
                 .collect(Collectors.toList());
 
         try {
+            UserPo userPo = userRelationVo.getUserPo();
+            JSONObject claims = new JSONObject();
+            claims.put("id", userPo.getId());
+            claims.put("username", userPo.getUsername());
+            claims.put("usercode", userPo.getUsercode());
             // 创建JWT声明集
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(userRelationVo.getUserPo().getUsercode())
+                    .subject(userPo.getUsercode())
                     .issuer("Xiao-Y")
                     .issueTime(new Date())
                     .expirationTime(DateUtil.offsetDay(new Date(), 7)) // 7天过期
                     .claim(AuthConstant.AUTHORITY_CLAIM_NAME, roleCodeList)
-                    .claim(AuthConstant.USER_INFO_CLAIM_NAME, BeanUtil.copyProperties(userRelationVo.getUserPo(), UserVo.class))
+                    .claim(AuthConstant.USER_INFO_CLAIM_NAME, claims)
                     .build();
 
             // 创建带有RS256算法的头部
@@ -69,6 +77,9 @@ public class JwtTokenUtil {
     }
 
     public Boolean validateToken(String tokenString) {
+        if (StringUtils.isEmpty(tokenString)) {
+            return false;
+        }
 
         try {
             // 解析JWT字符串
@@ -95,7 +106,7 @@ public class JwtTokenUtil {
      * @param token JWT字符串
      * @return 用户名
      */
-    public String getUsernameFromToken(String token) {
+    public String getUsercodeFromToken(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
 
@@ -143,4 +154,19 @@ public class JwtTokenUtil {
         }
     }
 
+    /**
+     * 获取当前请求的tocken
+     *
+     * @return
+     */
+    public String getCurrrentToken(ServerHttpRequest request) {
+        // 从 header 或其他位置提取认证信息
+        String authHeader = request.getHeaders().getFirst(AuthConstant.AUTHORIZATION_TOKEN);
+
+        if (authHeader != null && authHeader.startsWith(AuthConstant.BEARER_BLANK)) {
+            String token = authHeader.substring(AuthConstant.BEARER_BLANK.length());
+            return token;
+        }
+        return null;
+    }
 }

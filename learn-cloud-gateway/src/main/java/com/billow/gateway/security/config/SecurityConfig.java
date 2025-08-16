@@ -3,7 +3,7 @@ package com.billow.gateway.security.config;
 import cn.hutool.core.util.ArrayUtil;
 import com.billow.gateway.security.component.RestAuthenticationEntryPoint;
 import com.billow.gateway.security.component.RestfulAccessDeniedHandler;
-import com.billow.gateway.security.filter.JwtAuthenticationFilter;
+import com.billow.gateway.security.filter.AuthGlobalFilter;
 import com.billow.gateway.security.properties.SecurityProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ public class SecurityConfig {
     private final SecurityProperties securityProperties;
     private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    private final JwtAuthenticationFilter jwtFilter;
+    private final AuthGlobalFilter authGlobalFilter;
     private final ReactiveAuthenticationManager customReactiveAuthenticationManager;
     private final ReactiveAuthorizationManager customReactiveAuthorizationManager;
 
@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .authenticated()
                 )
                 // 添加jwt过滤器
-                .addFilterAt(jwtFilter, SecurityWebFiltersOrder.HTTP_BASIC)
+                .addFilterAt(authGlobalFilter, SecurityWebFiltersOrder.HTTP_BASIC)
                 // 自定义认证管理器
                 .authenticationManager(customReactiveAuthenticationManager)
                 // 异常处理

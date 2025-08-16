@@ -114,7 +114,7 @@ public class PreAuthorizeAspect
      */
     public boolean hasPermi(String permission)
     {
-        return hasPermissions(userTools.getPermissions(), permission);
+        return hasPermissions(userTools.getCurrentPermissions(), permission);
     }
 
     /**
@@ -136,7 +136,7 @@ public class PreAuthorizeAspect
      */
     public boolean hasAnyPermi(String[] permissions)
     {
-        Collection<String> authorities = userTools.getPermissions();
+        Collection<String> authorities = userTools.getCurrentPermissions();
         for (String permission : permissions)
         {
             if (permission != null && hasPermissions(authorities, permission))
@@ -155,7 +155,7 @@ public class PreAuthorizeAspect
      */
     public boolean hasRole(String role)
     {
-        for (String roleKey : userTools.getRoles())
+        for (String roleKey : userTools.getCurrentRoleCode())
         {
             if (SUPER_ADMIN.equals(roleKey) || roleKey.equals(role))
             {
@@ -184,7 +184,7 @@ public class PreAuthorizeAspect
      */
     public boolean hasAnyRoles(String[] roles)
     {
-        if (CollectionUtils.isEmpty(userTools.getRoles()))
+        if (CollectionUtils.isEmpty(userTools.getCurrentRoleCode()))
         {
             return false;
         }

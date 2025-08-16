@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class JwtUtils {
 
-    private final static String USER_NAME = "user_name";
+    private final static String USER_CODE = "usercode";
     private final static String AUTHORITIES = "authorities";
 
     /**
@@ -30,7 +30,7 @@ public class JwtUtils {
      */
     public static String getUserCodeByJwt(String token) {
         Jwt jwt = JwtHelper.decode(token);
-        Object userCode = JSONObject.parseObject(jwt.getClaims(), Map.class).get(USER_NAME);
+        Object userCode = JSONObject.parseObject(jwt.getClaims(), Map.class).get("sub");
         if (ToolsUtils.isNotEmpty(userCode)) {
             return userCode.toString();
         }

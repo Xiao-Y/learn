@@ -31,7 +31,7 @@ public class CustomReactiveAuthenticationManager implements ReactiveAuthenticati
         }
 
         // 从token中获取用户名
-        String username = jwtTokenUtil.getUsernameFromToken(token);
+        String username = jwtTokenUtil.getUsercodeFromToken(token);
 
         // 加载用户详细信息
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);

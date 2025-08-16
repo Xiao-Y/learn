@@ -58,6 +58,10 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-tools</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-security</artifactId>
+        </dependency>
         <!-- API网关 gateway-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
