@@ -12,10 +12,6 @@ swagger: #接口注解文档
 server:
   port: 8771
 
-# 如果路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
-ribbon:
-  ReadTimeout: 15000
-  ConnectTimeout: 10000
 
 auth:
   token:
@@ -29,30 +25,24 @@ spring:
     active: dev
   application:
     name: learn-cloud-gateway
-#  cloud:
-#    loadbalancer:
-#      retry:
-#        enabled: false
-#      ribbon:
-#        enabled: false
   config:
     # 配置公用文件（新版本使用列表格式）
     import:
       - optional:nacos:${spring.application.name}.yml
+  cloud:
+    loadbalancer:
+      client:
+        # 连接超时（默认10s）
+        connect-timeout: 10000
+        # 读取超时（默认15s）
+        read-timeout: 15000
+      # 重试配置（如需开启）
+      retry:
+        enabled: true
+        max-retries-on-next-service: 1  # 切换服务实例的重试次数
+        max-retries-on-same-service: 1  # 同一服务实例的重试次数
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
       routes:
-        - id: public-auth
-          # lb代表从注册中心获取服务，且已负载均衡方式转发
-          uri: lb://learn-shop-public-auth
-          predicates:
-            - Path=/public-auth/**
-          # 加上StripPrefix=1，否则转发到后端服务时会带上consumer前缀
-          filters:
-            - StripPrefix=1
         - id: admin-system
           # lb代表从注册中心获取服务，且已负载均衡方式转发
           uri: lb://learn-shop-admin-system
@@ -88,11 +78,6 @@ spring:
           uri: lb://learn-shop-public-job
           predicates:
             - Path=/public-job/**
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: 'http://localhost:8999/rsa/publicKey' # 获取公钥
 
 # 自己定义安全配置
 secure:
@@ -111,13 +96,13 @@ secure:
     - /dataRecovery/initData     # 数据还原
     # swagger 配置
     - /v3/**
-#    - /**/v3/**
+    #    - /**/v3/**
     - /swagger-resources/**
     - /swagger-resources
     - /course/coursebase/**
     - /swagger-ui/**
     - /favicon.ico
-#    - /**/*App/**
+  #    - /**/*App/**
   need-check:
-#    - /**/*Api/**
+    #    - /**/*Api/**
     - /*Api/**
