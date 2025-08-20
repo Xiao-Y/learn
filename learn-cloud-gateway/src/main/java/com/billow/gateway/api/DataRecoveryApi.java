@@ -4,8 +4,8 @@ import com.billow.gateway.receive.DataRecoveryReceive;
 import com.billow.redis.util.RedisUtils;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ToolsUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 数据恢复
@@ -25,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @RestController
-@Api("数据恢复,不经过 jwt 验证")
+@Tag(name = "数据恢复,不经过 jwt 验证")
 @RequestMapping("/dataRecovery")
 public class DataRecoveryApi {
 
@@ -34,7 +33,7 @@ public class DataRecoveryApi {
     @Autowired
     private RedisUtils redisUtils;
 
-    @ApiOperation(value = "数据恢复")
+    @Operation(summary = "数据恢复")
     @GetMapping("/initData")
     public Map<String, String> initData() {
         Map<String, String> map = new HashMap<>();

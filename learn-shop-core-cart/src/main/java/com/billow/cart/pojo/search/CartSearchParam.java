@@ -1,7 +1,7 @@
 package com.billow.cart.pojo.search;
 
 import com.billow.mybatis.pojo.BasePage;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,15 +21,15 @@ import java.util.List;
 public class CartSearchParam extends BasePage implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户ID")
+    @Schema(title = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(value = "SKU ID")
+    @Schema(title = "SKU ID")
     private Long skuId;
 
-    @ApiModelProperty(value = "SKU ID列表")
+    @Schema(title = "SKU ID列表")
     private List<Long> skuIds;
 
-    @ApiModelProperty(value = "是否选中")
+    @Schema(title = "是否选中")
     private Boolean selected;
 } 

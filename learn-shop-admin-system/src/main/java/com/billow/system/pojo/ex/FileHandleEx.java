@@ -1,6 +1,6 @@
 package com.billow.system.pojo.ex;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,15 +12,15 @@ import java.io.Serializable;
 @Data
 public class FileHandleEx implements Serializable {
 
-    @ApiModelProperty("文件的位置")
+    @Schema(title = "文件的位置")
     private int pos;
 
-    @ApiModelProperty("文件路径")
+    @Schema(title = "文件路径")
     private String fileUrl;
 
-    @ApiModelProperty("文件名（不带后缀）")
+    @Schema(title = "文件名（不带后缀）")
     private String newFileName;
 
-    @ApiModelProperty("文件保存的完整路径")
+    @Schema(title = "文件保存的完整路径")
     private String filePath;
 }

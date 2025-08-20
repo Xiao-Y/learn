@@ -1,7 +1,7 @@
 package com.billow.product.pojo.build;
 
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,34 +21,34 @@ import java.io.Serializable;
 public class GoodsSkuBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "sku编号,唯一")
+    @Schema(title = "sku编号,唯一")
     private String skuNo;
 
-    @ApiModelProperty(value = "sku名称(冗余spu_name)")
+    @Schema(title = "sku名称(冗余spu_name)")
     private String skuName;
 
-    @ApiModelProperty(value = "售价")
+    @Schema(title = "售价")
     private Integer price;
 
-    @ApiModelProperty(value = "库存")
+    @Schema(title = "库存")
     private Integer stock;
 
-    @ApiModelProperty(value = "锁定库存")
+    @Schema(title = "锁定库存")
     private Integer lockStock;
 
-    @ApiModelProperty(value = "预警库存")
+    @Schema(title = "预警库存")
     private Integer lowStock;
 
-    @ApiModelProperty(value = "展示图片")
+    @Schema(title = "展示图片")
     private String pic;
 
-    @ApiModelProperty(value = "销量")
+    @Schema(title = "销量")
     private Integer sale;
 
-    @ApiModelProperty(value = "商铺id,为0表示自营")
+    @Schema(title = "商铺id,为0表示自营")
     private Long shopId;
 
-    @ApiModelProperty(value = "spu_id")
+    @Schema(title = "spu_id")
     private Long spuId;
 
 

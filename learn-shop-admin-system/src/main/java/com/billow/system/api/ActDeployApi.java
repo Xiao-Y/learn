@@ -8,8 +8,8 @@ import com.billow.base.workflow.vo.ProcessDefinitionVo;
 import com.billow.common.base.BaseApi;
 import com.billow.tools.utlis.StringUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/actDeployApi")
-@Api(value = "工作流部署API")
+@Tag(name = "ActDeployApi", description = "工作流部署API")
 public class ActDeployApi extends BaseApi {
 
     @Autowired
@@ -35,7 +35,7 @@ public class ActDeployApi extends BaseApi {
     @Autowired
     private WorkFlowQuery workFlowQuery;
 
-    @ApiOperation(value = "部署流程（文件）")
+    @Operation(summary = "部署流程（文件）")
     @PostMapping("/deploy/file")
     public boolean deploy(@RequestParam("file") MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
@@ -58,14 +58,14 @@ public class ActDeployApi extends BaseApi {
         }
     }
 
-    @ApiOperation(value = "查询流程部署列表")
+    @Operation(summary = "查询流程部署列表")
     @PostMapping("/findProcDeployList")
     public CustomPage<DeploymentVo> findProcDeployList(@RequestBody DeploymentVo vo) {
         CustomPage<DeploymentVo> deploymentPage = workFlowQuery.queryDeployment(vo, vo.getOffset(), vo.getPageSize());
         return deploymentPage;
     }
 
-    @ApiOperation(value = "根据id删除流程部署,(cascade：是否级联删除)")
+    @Operation(summary = "根据id删除流程部署,(cascade：是否级联删除)")
     @DeleteMapping("/delProceDeployById/{deploymentId}/{cascade}")
     public void delProceDeployById(@PathVariable String deploymentId, @PathVariable boolean cascade) {
         workFlowExecute.deleteDeployment(deploymentId, cascade);

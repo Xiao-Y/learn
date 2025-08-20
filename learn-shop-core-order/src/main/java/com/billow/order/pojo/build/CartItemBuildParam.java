@@ -1,6 +1,6 @@
 package com.billow.order.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,58 +21,58 @@ import java.math.BigDecimal;
 public class CartItemBuildParam implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "商品的id")
+    @Schema(title = "商品的id")
     private Long productId;
 
-    @ApiModelProperty(value = "商品sku的id")
+    @Schema(title = "商品sku的id")
     private Long productSkuId;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(title = "会员id")
     private Long memberId;
 
-    @ApiModelProperty(value = "购买数量")
+    @Schema(title = "购买数量")
     private Integer quantity;
 
-    @ApiModelProperty(value = "添加到购物车的价格")
+    @Schema(title = "添加到购物车的价格")
     private BigDecimal price;
 
-    @ApiModelProperty(value = "销售属性1")
+    @Schema(title = "销售属性1")
     private String sp1;
 
-    @ApiModelProperty(value = "销售属性2")
+    @Schema(title = "销售属性2")
     private String sp2;
 
-    @ApiModelProperty(value = "销售属性3")
+    @Schema(title = "销售属性3")
     private String sp3;
 
-    @ApiModelProperty(value = "商品主图")
+    @Schema(title = "商品主图")
     private String productPic;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(title = "商品名称")
     private String productName;
 
-    @ApiModelProperty(value = "商品品牌")
+    @Schema(title = "商品品牌")
     private String productBrand;
 
-    @ApiModelProperty(value = "商品的条码")
+    @Schema(title = "商品的条码")
     private String productSn;
 
-    @ApiModelProperty(value = "商品副标题（卖点）")
+    @Schema(title = "商品副标题（卖点）")
     private String productSubTitle;
 
-    @ApiModelProperty(value = "商品sku条码")
+    @Schema(title = "商品sku条码")
     private String productSkuCode;
 
-    @ApiModelProperty(value = "会员昵称")
+    @Schema(title = "会员昵称")
     private String memberNickname;
 
-    @ApiModelProperty(value = "是否删除")
+    @Schema(title = "是否删除")
     private Integer deleteStatus;
 
-    @ApiModelProperty(value = "商品的分类")
+    @Schema(title = "商品的分类")
     private Long productCategoryId;
 
-    @ApiModelProperty(value = "商品销售属性:[{\"key\":\"颜色\",\"value\":\"银色\"},{\"key\":\"容量\",\"value\":\"4G\"}]")
+    @Schema(title = "商品销售属性:[{\"key\":\"颜色\",\"value\":\"银色\"},{\"key\":\"容量\",\"value\":\"4G\"}]")
     private String productAttr;
 
 

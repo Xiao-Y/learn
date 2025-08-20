@@ -2,7 +2,7 @@ package com.billow.user.pojo.po;
 
 
 import com.billow.jpa.base.pojo.BasePo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -17,33 +17,33 @@ import java.util.Date;
 @Table(name = "u_user")
 public class UserPo extends BasePo implements Serializable {
 
-    @ApiModelProperty("用户名")
+    @Schema(title = "用户名")
     private String username;
 
-    @ApiModelProperty("用户code")
+    @Schema(title = "用户code")
     private String usercode;
 
-    @ApiModelProperty("密码")
+    @Schema(title = "密码")
     private String password;
 
-    @ApiModelProperty("性别")
+    @Schema(title = "性别")
     private String sex;
 
-    @ApiModelProperty("出生日期")
+    @Schema(title = "出生日期")
     private Date birthDate;
 
-    @ApiModelProperty("手机号")
+    @Schema(title = "手机号")
     private String phone;
 
-    @ApiModelProperty("地址")
+    @Schema(title = "地址")
     private String address;
 
-    @ApiModelProperty("用户描述")
+    @Schema(title = "用户描述")
     private String description;
 
-    @ApiModelProperty("用户头像")
+    @Schema(title = "用户头像")
     private String iconUrl;
 
-    @ApiModelProperty("用户分组")
+    @Schema(title = "用户分组")
     private String groupId;
 }

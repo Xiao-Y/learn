@@ -6,8 +6,8 @@ import com.billow.product.pojo.po.GoodsSpuSpecPo;
 import com.billow.product.pojo.search.GoodsSpuSpecSearchParam;
 import com.billow.product.pojo.vo.GoodsSpuSpecVo;
 import com.billow.product.service.GoodsSpuSpecService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +27,7 @@ import java.util.List;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"GoodsSpuSpecApi"},value = "spu规格表")
+@Tag(name = "GoodsSpuSpecApi",description =  "spu规格表")
 @RestController
 @RequestMapping("/goodsSpuSpecApi")
 public class GoodsSpuSpecApi extends HighLevelApi<GoodsSpuSpecService, GoodsSpuSpecPo, GoodsSpuSpecVo, GoodsSpuSpecBuildParam, GoodsSpuSpecSearchParam>
@@ -36,7 +36,7 @@ public class GoodsSpuSpecApi extends HighLevelApi<GoodsSpuSpecService, GoodsSpuS
     @Autowired
     private GoodsSpuSpecService goodsSpuSpecService;
 
-    @ApiOperation(value = "根据 spuId 查询 spu 规格Key数据")
+    @Operation(summary = "根据 spuId 查询 spu 规格Key数据")
     @GetMapping(value = "/findSpuSpecKey/{spuId}")
     public List<Long> findSpuSpecKey(@PathVariable Long spuId) {
         return goodsSpuSpecService.findSpuSpecKey(spuId);

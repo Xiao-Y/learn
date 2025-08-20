@@ -6,7 +6,7 @@ import com.billow.system.pojo.vo.UserRoleVo;
 import com.billow.system.pojo.search.UserRoleSearchParam;
 import com.billow.system.pojo.po.UserRolePo;
 import com.billow.system.service.UserRoleService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"UserRoleApi"},value = "")
+@Tag(name = "UserRoleApi",description =  "")
 @RestController
 @RequestMapping("/userRoleApi")
 public class UserRoleApi extends HighLevelApi<UserRoleService, UserRolePo, UserRoleVo, UserRoleBuildParam, UserRoleSearchParam> {

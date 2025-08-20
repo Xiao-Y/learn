@@ -6,7 +6,7 @@ import com.billow.order.pojo.po.OrderOperateHistoryPo;
 import com.billow.order.pojo.search.OrderOperateHistorySearchParam;
 import com.billow.order.pojo.vo.OrderOperateHistoryVo;
 import com.billow.order.service.OrderOperateHistoryService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-08-23
  */
 @Slf4j
-@Api(tags = {"OrderOperateHistoryApi"}, value = "")
+@Tag(name = "OrderOperateHistoryApi", description = "")
 @RestController
 @RequestMapping("/orderOperateHistoryApi")
 public class OrderOperateHistoryApi extends HighLevelApi<OrderOperateHistoryService, OrderOperateHistoryPo, OrderOperateHistoryVo, OrderOperateHistoryBuildParam, OrderOperateHistorySearchParam>

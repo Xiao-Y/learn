@@ -6,7 +6,7 @@ import com.billow.product.pojo.po.SeckillSessionPo;
 import com.billow.product.pojo.search.SeckillSessionSearchParam;
 import com.billow.product.pojo.vo.SeckillSessionVo;
 import com.billow.product.service.SeckillSessionService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"SeckillSessionApi"},value = "限时购场次表")
+@Tag(name = "SeckillSessionApi",description =  "限时购场次表")
 @RestController
 @RequestMapping("/seckillSessionApi")
 public class SeckillSessionApi extends HighLevelApi<SeckillSessionService, SeckillSessionPo, SeckillSessionVo, SeckillSessionBuildParam, SeckillSessionSearchParam>

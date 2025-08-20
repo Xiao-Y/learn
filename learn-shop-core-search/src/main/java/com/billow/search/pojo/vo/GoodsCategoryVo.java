@@ -2,7 +2,7 @@ package com.billow.search.pojo.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -23,19 +23,19 @@ import java.util.Date;
 public class GoodsCategoryVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "分类名称")
+    @Schema(title = "分类名称")
     @JSONField(name = "category_name")
     private String categoryName;
 
-    @ApiModelProperty(value = "分类排序")
+    @Schema(title = "分类排序")
     @JSONField(name = "category_sort")
     private Long categorySort;
 
-    @ApiModelProperty(value = "父类目id,顶级类目填0")
+    @Schema(title = "父类目id,顶级类目填0")
     @JSONField(name = "parent_id")
     private Long parentId;
 
-    @ApiModelProperty(value = "是否为父节点，0为否，1为是")
+    @Schema(title = "是否为父节点，0为否，1为是")
     @JSONField(name = "is_parent")
     private Boolean parent;
 

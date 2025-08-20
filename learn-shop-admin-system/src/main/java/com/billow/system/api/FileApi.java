@@ -9,8 +9,8 @@ import com.billow.tools.constant.CommonCst;
 import com.billow.tools.generator.SequenceUtil;
 import com.billow.tools.utlis.StringUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +35,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/fileApi")
-@Api(value = "文件处理API")
+@Tag(name = "FileApi", description = "文件处理API")
 public class FileApi extends BaseApi {
 
     private static final String PATH = "path";
@@ -45,7 +45,7 @@ public class FileApi extends BaseApi {
     @Autowired
     private CustomProperties customProperties;
 
-    @ApiOperation("单个上传文件")
+    @Operation(summary = "单个上传文件")
     @PostMapping(value = {"/singleUpload/{uploadType}", "/singleUpload/{uploadType}/{fileName}"})
     public FileHandleEx singleUpload(@PathVariable("uploadType") String uploadType,
                                      @PathVariable(value = "fileName", required = false) String newFileName,
@@ -62,7 +62,7 @@ public class FileApi extends BaseApi {
         return ex;
     }
 
-    @ApiOperation("批量上传文件")
+    @Operation(summary = "批量上传文件")
     @PostMapping(value = {"/batchUpload/{uploadType}", "/batchUpload/{uploadType}/{fileName}"})
     public List<FileHandleEx> batchUpload(@PathVariable("uploadType") String uploadType,
                                           @PathVariable(value = "fileName", required = false) String newFileName,

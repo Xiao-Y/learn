@@ -1,7 +1,7 @@
 package com.billow.product.pojo.build;
 
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,16 +21,16 @@ import java.io.Serializable;
 public class GoodsSpecKeyBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "规格编号")
+    @Schema(title = "规格编号")
     private String specNo;
 
-    @ApiModelProperty(value = "规格名称")
+    @Schema(title = "规格名称")
     private String specName;
 
-    @ApiModelProperty(value = "规格排序")
+    @Schema(title = "规格排序")
     private Long keySort;
 
-    @ApiModelProperty(value = "分类id")
+    @Schema(title = "分类id")
     private Long categoryId;
 
 

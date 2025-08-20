@@ -1,6 +1,6 @@
 //package com.billow.common.base.pojo;
 //
-//import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.v3.oas.annotations.media.Schema;
 //
 //import java.io.Serializable;
 //
@@ -16,13 +16,13 @@
 //    private static final Integer PAGE_NO = 1; // 当前页号
 //    private static final Integer RECORD_COUNT = 0; // 总记录数
 //
-//    @ApiModelProperty("每页要显示的记录数")
+//    @Schema(title = "每页要显示的记录数")
 //    private Integer pageSize = PAGE_SIZE;
 //
-//    @ApiModelProperty("当前页号")
+//    @Schema(title = "当前页号")
 //    private Integer pageNo = PAGE_NO;
 //
-//    @ApiModelProperty("总记录数")
+//    @Schema(title = "总记录数")
 //    private Integer recordCount = RECORD_COUNT;
 //
 //    private Integer offset = PAGE_SIZE * PAGE_NO;

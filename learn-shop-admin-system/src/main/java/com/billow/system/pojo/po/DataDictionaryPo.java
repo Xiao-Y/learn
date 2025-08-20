@@ -3,7 +3,8 @@ package com.billow.system.pojo.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModel;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,7 +21,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("sys_data_dictionary")
-@ApiModel(value = "DataDictionaryPo对象", description = "")
+@Schema(title = "DataDictionaryPo对象", description = "")
 public class DataDictionaryPo extends BasePo {
 
     private static final long serialVersionUID = 1L;

@@ -61,8 +61,9 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
         </dependency>
         <!-- 分库分表，读写分离-->
 <!--        <dependency>-->

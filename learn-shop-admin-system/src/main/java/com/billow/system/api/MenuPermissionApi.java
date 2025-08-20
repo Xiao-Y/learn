@@ -6,7 +6,7 @@ import com.billow.system.pojo.vo.MenuPermissionVo;
 import com.billow.system.pojo.search.MenuPermissionSearchParam;
 import com.billow.system.pojo.po.MenuPermissionPo;
 import com.billow.system.service.MenuPermissionService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-12-26
  */
 @Slf4j
-@Api(tags = {"MenuPermissionApi"}, value = "菜单权限")
+@Tag(name = "MenuPermissionApi", description = "菜单权限")
 @RestController
 @RequestMapping("/menuPermissionApi")
 public class MenuPermissionApi extends HighLevelApi<MenuPermissionService, MenuPermissionPo, MenuPermissionVo,

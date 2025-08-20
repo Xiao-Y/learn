@@ -6,8 +6,8 @@ import com.billow.common.utils.UserTools;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/loginApp")
-@Api(value = "登陆时，获取角色菜单和菜单路由,不受权限控制")
+@Tag(name = "LoginApp", description = "登陆时，获取角色菜单和菜单路由,不受权限控制")
 public class LoginApp extends BaseApi {
 
     @Autowired
@@ -43,7 +43,7 @@ public class LoginApp extends BaseApi {
      * @date 2021/12/30 13:37
      */
     @GetMapping("/findRouterList")
-    @ApiOperation(value = "查询角色的的路由列表", notes = "查询角色的的路由列表")
+    @Operation(summary = "查询角色的的路由列表", description = "查询角色的的路由列表")
     public List<MenuPo> findRouterList() {
         // 获取角色信息
         List<RoleVo> roleVos = this.getCurrentRoleVos();
@@ -52,7 +52,7 @@ public class LoginApp extends BaseApi {
     }
 
     @GetMapping("/findHomeMenu")
-    @ApiOperation(value = "查询登陆时菜单信息", notes = "查询登陆时菜单信息")
+    @Operation(summary = "查询登陆时菜单信息", description = "查询登陆时菜单信息")
     public List<Tree<Long>> findHomeMenu() {
         List<String> currentRoleCode = userTools.getCurrentRoleCode();
 //        return roleMenuService.findMenuByRoleCode(Arrays.asList("custom"), true);

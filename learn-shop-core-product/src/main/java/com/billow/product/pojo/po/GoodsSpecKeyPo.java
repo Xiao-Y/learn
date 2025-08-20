@@ -3,8 +3,8 @@ package com.billow.product.pojo.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,24 +21,24 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pms_goods_spec_key")
-@ApiModel(value="GoodsSpecKeyPo对象", description="规格表")
+@Schema(title = "GoodsSpecKeyPo对象", description="规格表")
 public class GoodsSpecKeyPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "规格编号")
+    @Schema(title = "规格编号")
     @TableField("spec_no")
     private String specNo;
 
-    @ApiModelProperty(value = "规格名称")
+    @Schema(title = "规格名称")
     @TableField("spec_name")
     private String specName;
 
-    @ApiModelProperty(value = "规格排序")
+    @Schema(title = "规格排序")
     @TableField("key_sort")
     private Long keySort;
 
-    @ApiModelProperty(value = "分类id")
+    @Schema(title = "分类id")
     @TableField("category_id")
     private Long categoryId;
 

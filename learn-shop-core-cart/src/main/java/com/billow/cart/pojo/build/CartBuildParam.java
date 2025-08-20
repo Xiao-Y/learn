@@ -1,6 +1,6 @@
 package com.billow.cart.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -17,15 +17,15 @@ import java.io.Serializable;
 public class CartBuildParam implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户ID")
+    @Schema(title = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(value = "SKU ID")
+    @Schema(title = "SKU ID")
     private Long skuId;
 
-    @ApiModelProperty(value = "商品数量")
+    @Schema(title = "商品数量")
     private Integer quantity;
 
-    @ApiModelProperty(value = "是否选中")
+    @Schema(title = "是否选中")
     private Boolean selected;
 } 

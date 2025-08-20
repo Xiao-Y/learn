@@ -6,7 +6,7 @@ import com.billow.order.pojo.po.CartItemPo;
 import com.billow.order.pojo.search.CartItemSearchParam;
 import com.billow.order.pojo.vo.CartItemVo;
 import com.billow.order.service.CartItemService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-08-23
  */
 @Slf4j
-@Api(tags = {"CartItemApi"}, value = "")
+@Tag(name = "CartItemApi", description = "")
 @RestController
 @RequestMapping("/cartItemApi")
 public class CartItemApi extends HighLevelApi<CartItemService, CartItemPo, CartItemVo, CartItemBuildParam, CartItemSearchParam>

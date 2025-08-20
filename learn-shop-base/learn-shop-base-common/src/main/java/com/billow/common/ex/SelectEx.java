@@ -1,6 +1,6 @@
 package com.billow.common.ex;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,15 +12,15 @@ import lombok.Data;
 @Data
 public class SelectEx {
 
-    @ApiModelProperty("名称id")
+    @Schema(title = "名称id")
     private String id;
 
-    @ApiModelProperty("显示的名称")
+    @Schema(title = "显示的名称")
     private String fieldDisplay;
 
-    @ApiModelProperty("显示名称的值")
+    @Schema(title = "显示名称的值")
     private String fieldValue;
 
-    @ApiModelProperty("字段排序")
+    @Schema(title = "字段排序")
     private Long fieldOrder;
 }

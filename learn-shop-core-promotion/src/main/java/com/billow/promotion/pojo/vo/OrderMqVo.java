@@ -1,6 +1,6 @@
 package com.billow.promotion.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,21 +14,21 @@ import java.math.BigDecimal;
 @Data
 public class OrderMqVo {
 
-    @ApiModelProperty(value = "订单类型：0->正常订单；1->秒杀订单")
+    @Schema(title = "订单类型：0->正常订单；1->秒杀订单")
     private Integer orderType;
 
-    @ApiModelProperty(value = "订单用户code")
+    @Schema(title = "订单用户code")
     private String usercode;
 
-    @ApiModelProperty(value = "商品价格")
+    @Schema(title = "商品价格")
     private Long productId;
 
-    @ApiModelProperty(value = "skuid")
+    @Schema(title = "skuid")
     private Long skuId;
 
-    @ApiModelProperty(value = "价格")
+    @Schema(title = "价格")
     private BigDecimal price;
 
-    @ApiModelProperty(value = "数量")
+    @Schema(title = "数量")
     private Integer count;
 }

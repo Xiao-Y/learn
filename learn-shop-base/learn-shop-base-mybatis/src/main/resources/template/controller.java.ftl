@@ -13,7 +13,7 @@ import ${Parent}.pojo.vo.${VO};
 import ${Parent}.pojo.search.${SP};
 import ${package.Entity}.${entity};
 import ${Parent}.service.${table.serviceName};
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if restControllerStyle>
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Controller;
  */
 @Slf4j
 <#if restControllerStyle>
-@Api(tags = {"${table.controllerName}"},value = "${table.comment!}")
+@Tag(name = "${table.controllerName}",description =  "${table.comment!}")
 @RestController
 <#else>
 @Controller

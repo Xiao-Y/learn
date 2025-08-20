@@ -7,8 +7,8 @@ import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.search.GoodsBrandSearchParam;
 import com.billow.product.pojo.vo.GoodsBrandVo;
 import com.billow.product.service.GoodsBrandService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,11 +29,11 @@ import java.util.List;
  * @since 2021-09-02
  */
 @Slf4j
-@Api(tags = {"GoodsBrandApi"}, value = "品牌表")
+@Tag(name = "GoodsBrandApi", description = "品牌表")
 @RestController
 @RequestMapping("/goodsBrandApi")
 public class GoodsBrandApi extends HighLevelApi<GoodsBrandService, GoodsBrandPo, GoodsBrandVo, GoodsBrandBuildParam, GoodsBrandSearchParam> {
-    @ApiOperation(value = "查询品牌下拉列表数据")
+    @Operation(summary = "查询品牌下拉列表数据")
     @PostMapping(value = "/findBrandSelect")
     public List<SelectEx> findBrandSelect(@RequestBody GoodsBrandVo goodsBrandVo) {
         List<SelectEx> selectExes = new ArrayList<>();

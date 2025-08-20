@@ -6,7 +6,7 @@ import com.billow.order.pojo.po.OrderReturnApplyPo;
 import com.billow.order.pojo.search.OrderReturnApplySearchParam;
 import com.billow.order.pojo.vo.OrderReturnApplyVo;
 import com.billow.order.service.OrderReturnApplyService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-08-23
  */
 @Slf4j
-@Api(tags = {"OrderReturnApplyApi"}, value = "")
+@Tag(name = "OrderReturnApplyApi", description = "")
 @RestController
 @RequestMapping("/orderReturnApplyApi")
 public class OrderReturnApplyApi extends HighLevelApi<OrderReturnApplyService, OrderReturnApplyPo, OrderReturnApplyVo, OrderReturnApplyBuildParam, OrderReturnApplySearchParam>

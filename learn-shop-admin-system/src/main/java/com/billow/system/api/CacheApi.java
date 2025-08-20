@@ -2,8 +2,8 @@ package com.billow.system.api;
 
 import com.billow.common.base.BaseApi;
 import com.billow.system.common.init.StartLoading;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/cacheApi")
-@Api(value = "缓存管理")
+@Tag(name = "CacheApi", description = "缓存管理")
 public class CacheApi extends BaseApi {
 
     @Autowired
@@ -33,19 +33,19 @@ public class CacheApi extends BaseApi {
     protected RedisTemplate<String, Object> redisCacheTemplate;
 
     @PutMapping("/initAll")
-    @ApiOperation("初始化所有缓存，initDictionary,initRoleMenu,initRolePermission")
+    @Operation(summary = "初始化所有缓存，initDictionary,initRoleMenu,initRolePermission")
     public boolean initAll() {
         return startLoading.init(null);
     }
 
     @PutMapping("/init/{cacheType}")
-    @ApiOperation("初始化指定的缓存，initDictionary,initRoleMenu,initRolePermission,initCity")
+    @Operation(summary = "初始化指定的缓存，initDictionary,initRoleMenu,initRolePermission,initCity")
     public boolean initCacheByType(@PathVariable("cacheType") String cacheType) {
         return startLoading.init(cacheType);
     }
 
     @PutMapping("/clearCacheNamespace/{cacheNamespace}")
-    @ApiOperation("清空指定mybatis产生的缓存")
+    @Operation(summary = "清空指定mybatis产生的缓存")
     public boolean clearCacheNamespace(@PathVariable("cacheNamespace") String cacheNamespace) {
         return redisCacheTemplate.delete(cacheNamespace);
     }

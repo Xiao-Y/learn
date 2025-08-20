@@ -3,7 +3,7 @@ package com.billow.search.pojo.po;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.billow.search.common.cons.AnalyzerConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,117 +32,117 @@ public class GoodsInfoPo {
     public final static String ES_INDEX_GOODS_INFO = "goods_info";
 
     // GoodsSpuPo
-    @ApiModelProperty(value = "spu_id")
+    @Schema(title = "spu_id")
     @IndexId(type = IdType.CUSTOMIZE)
     @JSONField(name = "id")
     private Long spuId;
 
     // GoodsCategoryPo
-    @ApiModelProperty(value = "品牌分类id")
+    @Schema(title = "品牌分类id")
     @IndexField(fieldType = FieldType.LONG)
     @JSONField(name = "category_id")
     private Long categoryId;
 
-    @ApiModelProperty(value = "品牌分类名称")
+    @Schema(title = "品牌分类名称")
     @HighLight(mappingField = "categoryNameHighlight", preTag = "<font color='red'>", postTag = "</font>")
     @IndexField(fieldType = FieldType.KEYWORD)
     private String categoryName;
     private String categoryNameHighlight;
 
     // GoodsBrandPo
-    @ApiModelProperty(value = "品牌id")
+    @Schema(title = "品牌id")
     @IndexField(fieldType = FieldType.LONG)
     @JSONField(name = "brand_id")
     private Long brandId;
 
-    @ApiModelProperty(value = "品牌名称")
+    @Schema(title = "品牌名称")
     @HighLight(mappingField = "brandNameHighlight", preTag = "<font color='red'>", postTag = "</font>")
     @IndexField(fieldType = FieldType.KEYWORD)
     private String brandName;
     private String brandNameHighlight;
 
     // GoodsSpuPo
-    @ApiModelProperty(value = "商品编号，唯一")
+    @Schema(title = "商品编号，唯一")
     @IndexField(fieldType = FieldType.KEYWORD)
     @JSONField(name = "spu_no")
     private String spuNo;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(title = "商品名称")
     @HighLight(mappingField = "goodsNameHighlight", preTag = "<font color='red'>", postTag = "</font>")
     @IndexField(fieldType = FieldType.TEXT, analyzer = AnalyzerConstant.ANALYZER, ignoreCase = true)
     @JSONField(name = "goods_name")
     private String goodsName;
     private String goodsNameHighlight;
 
-    @ApiModelProperty(value = "关键字")
+    @Schema(title = "关键字")
     @HighLight(mappingField = "keywordsHighlight", preTag = "<font color='red'>", postTag = "</font>")
     @IndexField(fieldType = FieldType.TEXT, analyzer = AnalyzerConstant.ANALYZER, ignoreCase = true)
     private String keywords;
     private String keywordsHighlight;
 
-    @ApiModelProperty(value = "副标题")
+    @Schema(title = "副标题")
     @HighLight(mappingField = "subTitleHighlight", preTag = "<font color='red'>", postTag = "</font>")
     @IndexField(fieldType = FieldType.TEXT, analyzer = AnalyzerConstant.ANALYZER, ignoreCase = true)
     @JSONField(name = "sub_title")
     private String subTitle;
     private String subTitleHighlight;
 
-    @ApiModelProperty(value = "详情标题")
+    @Schema(title = "详情标题")
     @HighLight(mappingField = "detailTitleHighlight", preTag = "<font color='red'>", postTag = "</font>")
     @IndexField(fieldType = FieldType.TEXT, analyzer = AnalyzerConstant.ANALYZER, ignoreCase = true)
     @JSONField(name = "detail_title")
     private String detailTitle;
     private String detailTitleHighlight;
 
-    @ApiModelProperty(value = "图片")
+    @Schema(title = "图片")
     private String pic;
 
-    @ApiModelProperty(value = "新品状态:0->不是新品；1->新品")
+    @Schema(title = "新品状态:0->不是新品；1->新品")
     @IndexField(fieldType = FieldType.INTEGER)
     @JSONField(name = "new_status")
     private Integer newStatus;
 
-    @ApiModelProperty(value = "推荐状态；0->不推荐；1->推荐")
+    @Schema(title = "推荐状态；0->不推荐；1->推荐")
     @IndexField(fieldType = FieldType.INTEGER)
     @JSONField(name = "recommand_status")
     private Integer recommandStatus;
 
-    @ApiModelProperty(value = "是否为预告商品：0->不是；1->是")
+    @Schema(title = "是否为预告商品：0->不是；1->是")
     @IndexField(fieldType = FieldType.INTEGER)
     @JSONField(name = "preview_status")
     private Integer previewStatus;
 
-    @ApiModelProperty(value = "以逗号分割的产品服务：1->无忧退货；2->快速退款；3->免费包邮")
+    @Schema(title = "以逗号分割的产品服务：1->无忧退货；2->快速退款；3->免费包邮")
     @JSONField(name = "service_ids")
     private String serviceIds;
 
-    @ApiModelProperty(value = "价格")
+    @Schema(title = "价格")
     @IndexField(fieldType = FieldType.INTEGER)
     private Integer price;
 
-    @ApiModelProperty(value = "最低售价")
+    @Schema(title = "最低售价")
     @IndexField(fieldType = FieldType.INTEGER)
     @JSONField(name = "low_price")
     private Integer lowPrice;
 
-    @ApiModelProperty(value = "销量")
+    @Schema(title = "销量")
     @IndexField(fieldType = FieldType.INTEGER)
     private Integer sale;
 
-    @ApiModelProperty(value = "总库存量")
+    @Schema(title = "总库存量")
     @IndexField(fieldType = FieldType.LONG)
     private Long stock;
 
-    @ApiModelProperty(value = "库存预警值")
+    @Schema(title = "库存预警值")
     @IndexField(fieldType = FieldType.LONG)
     @JSONField(name = "low_stock")
     private Long lowStock;
 
-    @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
+    @Schema(title = "画册图片，连产品图片限制为5张，以逗号分割")
     @JSONField(name = "album_pics")
     private String albumPics;
 
-    @ApiModelProperty(value = "商品排序")
+    @Schema(title = "商品排序")
     @IndexField(fieldType = FieldType.LONG)
     @JSONField(name = "spu_sort")
     private Long spuSort;

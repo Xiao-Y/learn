@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ${Parent}.service.${table.serviceName};
 import com.billow.tools.utlis.ConvertUtils;
 import ${package.Entity}.${entity};
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 <#if restControllerStyle>
@@ -39,7 +39,7 @@ import ${superControllerClassPackage};
  */
 @Slf4j
 <#if restControllerStyle>
-@Api(tags = {"${table.controllerName}"},value = "${table.comment!}")
+@Tag(name = "${table.controllerName}",description =  "${table.comment!}")
 @RestController
 <#else>
 @Controller
@@ -57,20 +57,20 @@ public class ${table.controllerName} {
     @Autowired
     private ${table.serviceName} ${table.serviceName?uncap_first};
 
-    @ApiOperation(value = "查询分页${table.comment!}数据")
+    @Operation(summary = "查询分页${table.comment!}数据")
     @PostMapping(value = "/findListByPage")
     public IPage<${entity}> findListByPage(@RequestBody ${SP} ${Sp}){
         return ${table.serviceName?uncap_first}.findListByPage(${Sp});
     }
 
-    @ApiOperation(value = "根据id查询${table.comment!}数据")
+    @Operation(summary = "根据id查询${table.comment!}数据")
     @GetMapping(value = "/findById/{id}")
     public ${VO} findById(@PathVariable("id") String id){
         ${entity} po = ${table.serviceName?uncap_first}.getById(id);
         return ConvertUtils.convert(po, ${VO}.class);
     }
 
-    @ApiOperation(value = "新增${table.comment!}数据")
+    @Operation(summary = "新增${table.comment!}数据")
     @PostMapping(value = "/add")
     public ${VO} add(@RequestBody ${BP} ${Bp}){
         ${entity} po = ConvertUtils.convert(${Bp}, ${entity}.class);
@@ -78,13 +78,13 @@ public class ${table.controllerName} {
         return ConvertUtils.convert(po, ${VO}.class);
     }
 
-    @ApiOperation(value = "删除${table.comment!}数据")
+    @Operation(summary = "删除${table.comment!}数据")
     @DeleteMapping(value = "/delById/{id}")
     public boolean delById(@PathVariable("id") String id){
         return ${table.serviceName?uncap_first}.removeById(id);
     }
 
-    @ApiOperation(value = "更新${table.comment!}数据")
+    @Operation(summary = "更新${table.comment!}数据")
     @PutMapping(value = "/update")
     public ${VO} update(@RequestBody ${BP} ${Bp}){
         ${entity} po = ConvertUtils.convert(${Bp}, ${entity}.class);
@@ -92,7 +92,7 @@ public class ${table.controllerName} {
         return ConvertUtils.convert(po, ${VO}.class);
     }
 
-    @ApiOperation("根据ID禁用${table.comment!}数据")
+    @Operation(summary = "根据ID禁用${table.comment!}数据")
     @PutMapping("/prohibitById/{id}")
     public boolean prohibitById(@PathVariable String id) {
         return ${table.serviceName?uncap_first}.prohibitById(id);

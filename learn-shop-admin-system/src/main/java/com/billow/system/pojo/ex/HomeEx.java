@@ -1,7 +1,7 @@
 //package com.billow.system.pojo.ex;
 //
 //
-//import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.v3.oas.annotations.media.Schema;
 //import lombok.Data;
 //
 //import java.io.Serializable;
@@ -17,9 +17,9 @@
 //@Data
 //public class HomeEx implements Serializable {
 //
-//    @ApiModelProperty("角色CODE集合")
+//    @Schema(title = "角色CODE集合")
 //    List<String> roleCodes = new ArrayList<>();
 //
-//    @ApiModelProperty("菜单集合")
+//    @Schema(title = "菜单集合")
 //    List<MenuEx> menus = new ArrayList<>();
 //}

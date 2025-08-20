@@ -6,7 +6,7 @@ import com.billow.product.pojo.vo.GoodsVertifyRecordVo;
 import com.billow.product.pojo.search.GoodsVertifyRecordSearchParam;
 import com.billow.product.pojo.po.GoodsVertifyRecordPo;
 import com.billow.product.service.GoodsVertifyRecordService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"GoodsVertifyRecordApi"},value = "商品审核记录表")
+@Tag(name = "GoodsVertifyRecordApi",description =  "商品审核记录表")
 @RestController
 @RequestMapping("/goodsVertifyRecordApi")
 public class GoodsVertifyRecordApi extends HighLevelApi<GoodsVertifyRecordService, GoodsVertifyRecordPo, GoodsVertifyRecordVo, GoodsVertifyRecordBuildParam, GoodsVertifyRecordSearchParam>

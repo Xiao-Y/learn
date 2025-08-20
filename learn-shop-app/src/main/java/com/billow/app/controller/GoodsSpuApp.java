@@ -7,8 +7,8 @@ import com.billow.security.annotation.PreAuthorize;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.resData.BaseResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,7 @@ import java.util.Objects;
  * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsSpuApp"}, value = "spu表")
+@Tag(name = "GoodsSpuApp", description = "spu表")
 @RestController
 @RequestMapping("/goodsSpuApp")
 public class GoodsSpuApp {
@@ -37,7 +37,7 @@ public class GoodsSpuApp {
     private GoodsSpuFeign goodsSpuFeign;
 
     @PreAuthorize(hasPermi = "12313")
-    @ApiOperation(value = "根据id查询spu表数据")
+    @Operation(summary = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
     public BaseResponse<GoodsSpuVo> getById(@PathVariable("id") Long id) {
         BaseResponse<GoodsSpuVo> baseResponse = goodsSpuFeign.getById(id);

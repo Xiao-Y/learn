@@ -9,8 +9,8 @@ import com.billow.product.pojo.vo.GoodsCategoryTreeVo;
 import com.billow.product.pojo.vo.GoodsCategoryVo;
 import com.billow.product.service.GoodsCategoryService;
 import com.billow.tools.utlis.ConvertUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsCategoryApi"}, value = "分类表")
+@Tag(name = "GoodsCategoryApi", description = "分类表")
 @RestController
 @RequestMapping("/goodsCategoryApi")
 public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCategoryPo, GoodsCategoryVo,
@@ -44,7 +44,7 @@ public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCa
     @Autowired
     private GoodsCategoryService goodsCategoryService;
 
-    @ApiOperation(value = "查询分类下拉列表数据")
+    @Operation(summary = "查询分类下拉列表数据")
     @PostMapping(value = "/findCategorySelect")
     public List<SelectEx> findCategorySelect(@RequestBody GoodsCategoryVo goodsCategoryVo) {
         List<SelectEx> selectExes = new ArrayList<>();
@@ -60,7 +60,7 @@ public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCa
         return selectExes;
     }
 
-    @ApiOperation(value = "通过父ID查询分类树")
+    @Operation(summary = "通过父ID查询分类树")
     @GetMapping(value = "/findCategoryTree/{parentId}")
     public List<GoodsCategoryTreeVo> findCategoryTree(@PathVariable Long parentId)  {
         List<GoodsCategoryPo> list = goodsCategoryService.findCategoryTree(parentId);

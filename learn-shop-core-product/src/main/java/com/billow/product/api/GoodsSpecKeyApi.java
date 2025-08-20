@@ -6,8 +6,8 @@ import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.search.GoodsSpecKeySearchParam;
 import com.billow.product.pojo.vo.GoodsSpecKeyVo;
 import com.billow.product.service.GoodsSpecKeyService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,7 @@ import java.util.List;
  * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsSpecKeyApi"},value = "规格表")
+@Tag(name = "GoodsSpecKeyApi",description =  "规格表")
 @RestController
 @RequestMapping("/goodsSpecKeyApi")
 public class GoodsSpecKeyApi extends HighLevelApi<GoodsSpecKeyService, GoodsSpecKeyPo, GoodsSpecKeyVo, GoodsSpecKeyBuildParam, GoodsSpecKeySearchParam> {
@@ -37,13 +37,13 @@ public class GoodsSpecKeyApi extends HighLevelApi<GoodsSpecKeyService, GoodsSpec
     @Autowired
     private GoodsSpecKeyService goodsSpecKeyService;
 
-    @ApiOperation(value = "通过 CategoryId 查询出所有的规格 KEY")
+    @Operation(summary = "通过 CategoryId 查询出所有的规格 KEY")
     @GetMapping(value = "/findListByCategoryId/{categoryId}")
     public List<GoodsSpecKeyPo> findListByCategoryId(@PathVariable("categoryId") Long categoryId) {
         return goodsSpecKeyService.findListByCategoryId(categoryId);
     }
 
-    @ApiOperation(value = "保存一组规格信息")
+    @Operation(summary = "保存一组规格信息")
     @PostMapping(value = "/saveList")
     public  List<GoodsSpecKeyVo> saveList(@RequestBody List<GoodsSpecKeyVo> goodsSpecKeyVos) {
         return goodsSpecKeyService.saveList(goodsSpecKeyVos);

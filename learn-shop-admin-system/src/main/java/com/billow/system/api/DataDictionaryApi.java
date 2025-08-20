@@ -11,8 +11,8 @@ import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/dataDictionaryApi")
-@Api(value = "数据字典管理")
+@Tag(name = "DataDictionaryApi", description = "数据字典管理")
 public class DataDictionaryApi extends BaseApi {
 
     private final static String FIELD_TYPE_KEY = RedisCst.COMM_DICTIONARY_FIELD_TYPE;
@@ -52,7 +52,7 @@ public class DataDictionaryApi extends BaseApi {
     @Qualifier("initDictionary")
     private IStartLoading initDictionary;
 
-    @ApiOperation(value = "查询数据字典，指定 systemModule 和 fieldType")
+    @Operation(summary = "查询数据字典，指定 systemModule 和 fieldType")
     @GetMapping("/findDataDictionary/{systemModule}/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("systemModule") String systemModule, @PathVariable("fieldType") String fieldType) throws Exception {
         // 从 redis 中获取
@@ -71,7 +71,7 @@ public class DataDictionaryApi extends BaseApi {
         return dataDictionaryVos;
     }
 
-    @ApiOperation(value = "查询数据字典，指定 fieldType")
+    @Operation(summary = "查询数据字典，指定 fieldType")
     @GetMapping("/findDataDictionary/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("fieldType") String fieldType) throws Exception {
         DataDictionaryVo dataDictionaryVo = new DataDictionaryVo();
@@ -81,13 +81,13 @@ public class DataDictionaryApi extends BaseApi {
         return dataDictionaryVos;
     }
 
-    @ApiOperation("根据条件查询数据字典信息")
+    @Operation(summary = "根据条件查询数据字典信息")
     @PostMapping("/list")
     public IPage<DataDictionaryPo> listByPage(@RequestBody DataDictionaryVo dataDictionaryVo) {
         return dataDictionaryService.listByPage(dataDictionaryVo);
     }
 
-    @ApiOperation("字典下拉字段分类")
+    @Operation(summary = "字典下拉字段分类")
     @GetMapping("/findFieldType")
     public List<DataDictionaryPo> findFieldType() {
         List<DataDictionaryPo> dataDictionaryPos = new ArrayList<>();
@@ -108,7 +108,7 @@ public class DataDictionaryApi extends BaseApi {
         return dataDictionaryPos;
     }
 
-    @ApiOperation("字典下拉系统模块")
+    @Operation(summary = "字典下拉系统模块")
     @GetMapping("/findSysModule")
     public List<DataDictionaryPo> findSysModule() {
         Map<String, String> routeInfoMap = redisUtils.getHashAllObj(RedisCst.COMM_ROUTE_INFO);
@@ -123,7 +123,7 @@ public class DataDictionaryApi extends BaseApi {
         return dataDictionaryPos;
     }
 
-    @ApiOperation("保存/更新数据字典")
+    @Operation(summary = "保存/更新数据字典")
     @PutMapping("/saveOrUpdate")
     public DataDictionaryVo saveOrUpdate(@RequestBody DataDictionaryVo dataDictionaryVo) {
         dataDictionaryService.saveOrUpdate(dataDictionaryVo);
@@ -131,21 +131,21 @@ public class DataDictionaryApi extends BaseApi {
         return dataDictionaryVo;
     }
 
-    @ApiOperation("根据id删除数据字典")
+    @Operation(summary = "根据id删除数据字典")
     @DeleteMapping("/del/{id}")
     public void delById(@PathVariable Long id) {
         dataDictionaryService.delById(id);
         initDictionary.init();
     }
 
-    @ApiOperation("根据id禁用数据字典")
+    @Operation(summary = "根据id禁用数据字典")
     @PutMapping("/prohibit/{id}")
     public DataDictionaryVo prohibitById(@PathVariable Long id) {
         DataDictionaryVo dataDictionaryVo = dataDictionaryService.prohibitById(id);
         return dataDictionaryVo;
     }
 
-    @ApiOperation(value = "加载缓存中路由信息")
+    @Operation(summary = "加载缓存中路由信息")
     @GetMapping("/findDataRouteCache")
     public List<DataDictionaryVo> findDataRouteCache() {
         List<DataDictionaryVo> vos = new ArrayList<>();

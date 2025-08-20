@@ -2,7 +2,7 @@ package com.billow.system.pojo.vo;
 
 
 import com.billow.system.pojo.po.RolePo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,18 +20,18 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class RoleVo extends RolePo implements Serializable {
 
-    @ApiModelProperty("选种的权限")
+    @Schema(title = "选种的权限")
     private List<Long> permissionChecked = new ArrayList<>();
 
-    @ApiModelProperty("原始选种的权限")
+    @Schema(title = "原始选种的权限")
     private List<Long> oldPermissionChecked = new ArrayList<>();
 
-    @ApiModelProperty("选种的菜单")
+    @Schema(title = "选种的菜单")
     private List<String> menuChecked = new ArrayList<>();
 
-    @ApiModelProperty("原始选种的菜单")
+    @Schema(title = "原始选种的菜单")
     private List<String> oldMenuChecked = new ArrayList<>();
 
-    @ApiModelProperty("是否是新添加的角色")
+    @Schema(title = "是否是新添加的角色")
     private Boolean isNewRole = true;
 }

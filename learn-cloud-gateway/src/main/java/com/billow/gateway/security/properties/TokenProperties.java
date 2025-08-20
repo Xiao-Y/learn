@@ -30,10 +30,6 @@ public class TokenProperties {
         return jwtFileName;
     }
 
-    public void setJwtFileName(String jwtFileName) {
-        this.jwtFileName = jwtFileName;
-    }
-
     public String getJwtPassword() {
         Assert.notNull(jwtPassword, "jwtPassword 不能为空，请配置 auth.token.jwtPassword");
         return jwtPassword;

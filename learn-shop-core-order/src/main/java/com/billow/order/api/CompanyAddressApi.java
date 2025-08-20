@@ -6,7 +6,7 @@ import com.billow.order.pojo.po.CompanyAddressPo;
 import com.billow.order.pojo.search.CompanyAddressSearchParam;
 import com.billow.order.pojo.vo.CompanyAddressVo;
 import com.billow.order.service.CompanyAddressService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-08-23
  */
 @Slf4j
-@Api(tags = {"CompanyAddressApi"}, value = "")
+@Tag(name = "CompanyAddressApi", description = "")
 @RestController
 @RequestMapping("/companyAddressApi")
 public class CompanyAddressApi extends HighLevelApi<CompanyAddressService, CompanyAddressPo, CompanyAddressVo, CompanyAddressBuildParam, CompanyAddressSearchParam>

@@ -1,6 +1,6 @@
 package com.billow.product.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,19 +20,19 @@ import java.io.Serializable;
 public class GoodsCommentReplayVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "评论id")
+    @Schema(title = "评论id")
     private Long commentId;
 
-    @ApiModelProperty(value = "会员昵称")
+    @Schema(title = "会员昵称")
     private String memberNickName;
 
-    @ApiModelProperty(value = "会员头像")
+    @Schema(title = "会员头像")
     private String memberIcon;
 
-    @ApiModelProperty(value = "内容")
+    @Schema(title = "内容")
     private String content;
 
-    @ApiModelProperty(value = "评论人员类型；0->会员；1->管理员")
+    @Schema(title = "评论人员类型；0->会员；1->管理员")
     private Integer type;
 
 

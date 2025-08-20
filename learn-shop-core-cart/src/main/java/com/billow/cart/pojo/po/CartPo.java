@@ -3,8 +3,8 @@ package com.billow.cart.pojo.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,24 +19,24 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("cart")
-@ApiModel(value="CartPo对象", description="购物车")
+@Schema(title = "CartPo对象", description="购物车")
 public class CartPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户ID")
+    @Schema(title = "用户ID")
     @TableField("user_id")
     private Long userId;
 
-    @ApiModelProperty(value = "SKU ID")
+    @Schema(title = "SKU ID")
     @TableField("sku_id")
     private Long skuId;
 
-    @ApiModelProperty(value = "商品数量")
+    @Schema(title = "商品数量")
     @TableField("quantity")
     private Integer quantity;
 
-    @ApiModelProperty(value = "是否选中")
+    @Schema(title = "是否选中")
     @TableField("selected")
     private Boolean selected;
 } 

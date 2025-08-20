@@ -70,7 +70,7 @@
         <commons-io.version>1.3.2</commons-io.version>
         <lombok.version>1.18.32</lombok.version>
         <activiti.version>6.0.0</activiti.version>
-        <swagger-bootstrap.version>1.9.5</swagger-bootstrap.version>
+        <springdoc-openapi-starter.version>2.5.0</springdoc-openapi-starter.version>
         <apache.poi.version>4.1.1</apache.poi.version>
         <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
@@ -221,9 +221,14 @@
             </dependency>
             <!-- swagger2 -->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-boot-starter</artifactId>
-                <version>${springfox.boot.starter.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>${springdoc-openapi-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi-starter.version}</version>
             </dependency>
             <!-- 自动任务 -->
             <dependency>

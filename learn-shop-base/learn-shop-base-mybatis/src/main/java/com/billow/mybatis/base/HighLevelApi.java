@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.utils.SqlUtil;
 import com.billow.tools.utlis.ConvertUtils;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
     // vo 类型
     protected Class<V> vClass = (Class<V>) this.getClass(2);
 
-    @ApiOperation(value = "分页查询表数据")
+    @Operation(summary = "分页查询表数据")
     @PostMapping(value = "/list")
     public IPage<E> findListByPage(@RequestBody SP sp) {
         // 分页
@@ -61,14 +61,14 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
         return service.findListByPage(page, sp);
     }
 
-    @ApiOperation(value = "根据id查询表数据")
+    @Operation(summary = "根据id查询表数据")
     @GetMapping(value = "/getById/{id}")
     public V getById(@PathVariable("id") Long id) {
         E po = service.getById(id);
         return ConvertUtils.convert(po, vClass);
     }
 
-    @ApiOperation(value = "新增表数据")
+    @Operation(summary = "新增表数据")
     @PostMapping(value = "/add")
     public V add(@RequestBody BP bp) {
         E po = ConvertUtils.convert(bp, eClass);
@@ -76,13 +76,13 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
         return ConvertUtils.convert(po, vClass);
     }
 
-    @ApiOperation(value = "删除表数据")
+    @Operation(summary = "删除表数据")
     @DeleteMapping(value = "/delById/{id}")
     public boolean delById(@PathVariable("id") Long id) {
         return service.removeById(id);
     }
 
-    @ApiOperation(value = "更新表数据")
+    @Operation(summary = "更新表数据")
     @PutMapping(value = "/update")
     public V update(@RequestBody BP bp) {
         E po = ConvertUtils.convert(bp, eClass);
@@ -90,7 +90,7 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
         return ConvertUtils.convert(po, vClass);
     }
 
-    @ApiOperation("根据ID禁用表数据")
+    @Operation(summary = "根据ID禁用表数据")
     @PutMapping("/prohibitById/{id}")
     public boolean prohibitById(@PathVariable Long id) {
         return service.prohibitById(id);

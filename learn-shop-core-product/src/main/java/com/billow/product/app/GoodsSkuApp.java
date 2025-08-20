@@ -1,8 +1,8 @@
 package com.billow.product.app;
 
 import com.billow.product.service.GoodsSkuService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsSkuApp"}, value = "sku表")
+@Tag(name = "GoodsSkuApp", description = "sku表")
 @RestController
 @RequestMapping("/goodsSkuApp")
 public class GoodsSkuApp {
@@ -31,13 +31,13 @@ public class GoodsSkuApp {
     @Autowired
     private GoodsSkuService goodsSkuService;
 
-    @ApiOperation(value = "根据 spuId 查询 sku 规格表数据")
+    @Operation(summary = "根据 spuId 查询 sku 规格表数据")
     @GetMapping(value = "/findSkuSpec/{spuId}")
     public List<Map<String, Object>> findSkuSpec(@PathVariable Long spuId) {
         return goodsSkuService.findSpuSpec(spuId);
     }
 
-    @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
+    @Operation(summary = "通过 spuId 获取商品 sku 信息")
     @GetMapping(value = "/findGoodsSku/{spuId}")
     public List<Map<String, Object>> findGoodsSku(@PathVariable Long spuId) {
         return goodsSkuService.findGoodsSkuSpec(spuId);

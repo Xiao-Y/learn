@@ -3,8 +3,8 @@ package com.billow.system.api;
 import com.billow.common.base.BaseApi;
 import com.billow.system.pojo.vo.WhiteListVo;
 import com.billow.system.service.WhiteListService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,7 @@ import java.util.List;
  * @author liuyongtao
  * @create 2018-05-19 14:35
  */
-@Api(value = "WhiteListController", description = "白名单")
+@Tag(name = "WhiteListApi", description = "白名单")
 @RestController
 @RequestMapping("/whiteListApi")
 public class WhiteListApi extends BaseApi {
@@ -37,7 +37,7 @@ public class WhiteListApi extends BaseApi {
      * @author LiuYongTao
      * @date 2018/5/21 8:35
      */
-    @ApiOperation(value = "获取有效的白名单信息", notes = "根据ip和模块获取有效的白名单信息")
+    @Operation(summary = "获取有效的白名单信息", description = "根据ip和模块获取有效的白名单信息")
     @GetMapping("/findWhiteListVos/{ip}/{module}/{validInd}")
     public List<WhiteListVo> findWhiteListVos(@PathVariable("ip") String ip,
                                               @PathVariable("module") String module,

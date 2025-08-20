@@ -1,6 +1,6 @@
 package com.billow.order.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,13 +20,13 @@ import java.io.Serializable;
 public class SuccessKilledBuildParam implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户code")
+    @Schema(title = "用户code")
     private String usercode;
 
-    @ApiModelProperty(value = "秒杀商品ID")
+    @Schema(title = "秒杀商品ID")
     private Long seckillId;
 
-    @ApiModelProperty(value = "秒杀状态标识:-0:无效 1:成功 2:已付款 3:已发货")
+    @Schema(title = "秒杀状态标识:-0:无效 1:成功 2:已付款 3:已发货")
     private Integer killState;
 
 

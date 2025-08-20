@@ -7,8 +7,8 @@
 //import com.billow.excel.service.DictService;
 //import com.billow.excel.service.ExcelTaskService;
 //import com.billow.excel.test.model.UserExcelModel;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
+//import io.swagger.v3.oas.annotations.tags.Tag;
+//import io.swagger.v3.oas.annotations.Operation;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.web.bind.annotation.*;
@@ -33,14 +33,14 @@
 //    private final DictService dictService;
 //    private final ExcelTaskService taskService;
 //
-//    @ApiOperation("导出用户数据")
+//    @Operation(summary = "导出用户数据")
 //    @GetMapping("/export")
 //    public void exportUsers(HttpServletResponse response) {
 //        List<UserExcelModel> dataList = generateTestData();
 //        excelExporter.exportToResponse(dataList, response);
 //    }
 //
-//    @ApiOperation("异步导出用户数据")
+//    @Operation(summary = "异步导出用户数据")
 //    @GetMapping("/export/async")
 //    public String exportUsersAsync() {
 //        List<UserExcelModel> dataList = generateTestData();
@@ -49,32 +49,32 @@
 //        return taskId;
 //    }
 //
-//    @ApiOperation("导出用户数据模板")
+//    @Operation(summary = "导出用户数据模板")
 //    @GetMapping("/template")
 //    public void exportTemplate(HttpServletResponse response) {
 //        excelExporter.exportTemplate(UserExcelModel.class, response);
 //    }
 //
-//    @ApiOperation("导入用户数据")
+//    @Operation(summary = "导入用户数据")
 //    @PostMapping("/import")
 //    public List<UserExcelModel> importUsers(@RequestParam("file") MultipartFile file) {
 //        return excelImporter.importFromMultipartFile(file, UserExcelModel.class);
 //    }
 //
-//    @ApiOperation("异步导入用户数据")
+//    @Operation(summary = "异步导入用户数据")
 //    @PostMapping("/import/async")
 //    public String importUsersAsync(@RequestParam("file") MultipartFile file) {
 //        Future<ImportResult<UserExcelModel>> future = excelImporter.importAsync(file, UserExcelModel.class);
 //        return "导入任务已提交";
 //    }
 //
-//    @ApiOperation("获取任务信息")
+//    @Operation(summary = "获取任务信息")
 //    @GetMapping("/task/{taskId}")
 //    public ExcelTask getTask(@PathVariable String taskId) {
 //        return taskService.getTask(taskId);
 //    }
 //
-//    @ApiOperation("获取任务列表")
+//    @Operation(summary = "获取任务列表")
 //    @GetMapping("/tasks")
 //    public List<ExcelTask> getTasks(
 //            @RequestParam(required = false) ExcelTask.TaskType type,
@@ -82,19 +82,19 @@
 //        return taskService.listTasks(type, status);
 //    }
 //
-//    @ApiOperation("删除任务")
+//    @Operation(summary = "删除任务")
 //    @DeleteMapping("/task/{taskId}")
 //    public void deleteTask(@PathVariable String taskId) {
 //        taskService.deleteTask(taskId);
 //    }
 //
-//    @ApiOperation("获取性别字典")
+//    @Operation(summary = "获取性别字典")
 //    @GetMapping("/dict/gender")
 //    public Map<String, String> getGenderDict() {
 //        return dictService.getDictMap("USER_GENDER");
 //    }
 //
-//    @ApiOperation("获取状态字典")
+//    @Operation(summary = "获取状态字典")
 //    @GetMapping("/dict/status")
 //    public Map<String, String> getStatusDict() {
 //        return dictService.getDictMap("USER_STATUS");

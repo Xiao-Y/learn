@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

@@ -3,7 +3,7 @@
 package ${Parent}.pojo.build;
 
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -29,7 +29,7 @@ public class ${BP} extends BasePo implements Serializable {
 <#list table.fields as field>
     <#if field.comment!?length gt 0>
         <#if swagger2>
-    @ApiModelProperty(value = "${field.comment}")
+    @Schema(title = "${field.comment}")
         <#else>
     /**
      * ${field.comment}

@@ -1,7 +1,7 @@
 package com.billow.product.pojo.build;
 
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,10 +21,10 @@ import java.io.Serializable;
 public class GoodsSkuSafeguardBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "sku_id")
+    @Schema(title = "sku_id")
     private Long skuId;
 
-    @ApiModelProperty(value = "safeguard_id")
+    @Schema(title = "safeguard_id")
     private Long safeguardId;
 
 

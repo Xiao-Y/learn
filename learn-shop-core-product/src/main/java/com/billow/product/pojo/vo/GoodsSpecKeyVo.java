@@ -2,7 +2,7 @@ package com.billow.product.pojo.vo;
 
 
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -27,16 +27,16 @@ public class GoodsSpecKeyVo implements Serializable {
 
     private Long id;
 
-    @ApiModelProperty(value = "规格编号")
+    @Schema(title = "规格编号")
     private String specNo;
 
-    @ApiModelProperty(value = "规格名称")
+    @Schema(title = "规格名称")
     private String specName;
 
-    @ApiModelProperty(value = "规格排序")
+    @Schema(title = "规格排序")
     private Long keySort;
 
-    @ApiModelProperty(value = "分类id")
+    @Schema(title = "分类id")
     private Long categoryId;
 
     private List<GoodsSpecValueVo> goodsSpecValueVos;

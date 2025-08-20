@@ -2,7 +2,7 @@ package com.billow.system.pojo.vo;
 
 
 import com.billow.system.pojo.po.MenuPo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,13 +21,13 @@ import java.util.Set;
 public class MenuVo extends MenuPo implements Serializable {
 
 
-    @ApiModelProperty("菜单ids，用于删除")
+    @Schema(title = "菜单ids，用于删除")
     Set<String> ids;
 
-    @ApiModelProperty("角色集合")
+    @Schema(title = "角色集合")
     private List<RoleVo> roleVos;
 
-    @ApiModelProperty("当前用户名")
+    @Schema(title = "当前用户名")
     private String userCode;
 
 }

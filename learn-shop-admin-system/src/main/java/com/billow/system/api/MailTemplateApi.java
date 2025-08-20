@@ -4,8 +4,8 @@ import com.billow.email.common.CustomPage;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import com.billow.email.service.MailTemplateService;
 import com.billow.common.utils.UserTools;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/mailTemplateApi")
-@Api(value = "邮件模板管理API")
+@Tag(name = "MailTemplateApi", description = "邮件模板管理API")
 public class MailTemplateApi {
 
     @Autowired
@@ -35,40 +35,40 @@ public class MailTemplateApi {
     @Autowired
     private UserTools userTools;
 
-    @ApiOperation("根据条件查询邮件模板信息")
+    @Operation(summary = "根据条件查询邮件模板信息")
     @PostMapping("/findMailTemplateList")
     public CustomPage<MailTemplateVo> findMailTemplateList(@RequestBody MailTemplateVo mailTemplateVo) {
         return mailTemplateService.findMailTemplateList(mailTemplateVo);
     }
 
-    @ApiOperation("根据id获取邮件模板信息")
+    @Operation(summary = "根据id获取邮件模板信息")
     @GetMapping("/findMailTemplateById/{id}")
     public MailTemplateVo findMailTemplateById(@PathVariable("id") Long id) {
         return mailTemplateService.findMailTemplateById(id);
     }
 
-    @ApiOperation("根据ID删除邮件模板")
+    @Operation(summary = "根据ID删除邮件模板")
     @DeleteMapping("/deleteMailTemplateById/{id}")
     public MailTemplateVo deleteMailTemplateById(@PathVariable Long id) {
         MailTemplateVo mailTemplateVo = mailTemplateService.deleteMailTemplateById(id);
         return mailTemplateVo;
     }
 
-    @ApiOperation("根据ID禁用邮件模板")
+    @Operation(summary = "根据ID禁用邮件模板")
     @PutMapping("/prohibitMailTemplateById/{id}")
     public MailTemplateVo prohibitMailTemplateById(@PathVariable Long id) {
         MailTemplateVo mailTemplateVo = mailTemplateService.prohibitMailTemplateById(id, userTools.getCurrentUserCode());
         return mailTemplateVo;
     }
 
-    @ApiOperation("添加邮件模板信息")
+    @Operation(summary = "添加邮件模板信息")
     @PostMapping("/saveMailTemplate")
     public MailTemplateVo saveMailTemplate(@RequestBody MailTemplateVo mailTemplateVo) {
         mailTemplateService.saveMailTemplate(mailTemplateVo, userTools.getCurrentUserCode());
         return mailTemplateVo;
     }
 
-    @ApiOperation("更新邮件模板信息")
+    @Operation(summary = "更新邮件模板信息")
     @PutMapping("/updateMailTemplate")
     public MailTemplateVo updateMailTemplate(@RequestBody MailTemplateVo mailTemplateVo) {
         mailTemplateVo.setUpdaterCode(userTools.getCurrentUserCode());
@@ -76,7 +76,7 @@ public class MailTemplateApi {
         return mailTemplateVo;
     }
 
-    @ApiOperation(value = "查询 mailCode 的个数")
+    @Operation(summary = "查询 mailCode 的个数")
     @GetMapping("/checkMailCode/{mailCode}")
     public Integer checkMailCode(@PathVariable("mailCode") String mailCode) {
         return mailTemplateService.checkMailCode(mailCode);

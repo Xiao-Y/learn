@@ -6,7 +6,7 @@ import com.billow.product.pojo.po.SeckillPo;
 import com.billow.product.pojo.search.SeckillSearchParam;
 import com.billow.product.pojo.vo.SeckillVo;
 import com.billow.product.service.SeckillService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v2.0
  */
 @Slf4j
-@Api(tags = {"SeckillApi"},value = "限时购表")
+@Tag(name = "SeckillApi",description =  "限时购表")
 @RestController
 @RequestMapping("/seckillApi")
 public class SeckillApi extends HighLevelApi<SeckillService, SeckillPo, SeckillVo, SeckillBuildParam, SeckillSearchParam>

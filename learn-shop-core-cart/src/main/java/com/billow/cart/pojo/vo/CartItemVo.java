@@ -1,6 +1,6 @@
 package com.billow.cart.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -17,27 +17,27 @@ import java.io.Serializable;
 public class CartItemVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "购物车ID")
+    @Schema(title = "购物车ID")
     private Long id;
 
-    @ApiModelProperty(value = "SKU ID")
+    @Schema(title = "SKU ID")
     private Long skuId;
 
-    @ApiModelProperty(value = "商品数量")
+    @Schema(title = "商品数量")
     private Integer quantity;
 
-    @ApiModelProperty(value = "是否选中")
+    @Schema(title = "是否选中")
     private Boolean selected;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(title = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "商品图片")
+    @Schema(title = "商品图片")
     private String goodsImage;
 
-    @ApiModelProperty(value = "商品价格")
+    @Schema(title = "商品价格")
     private Integer price;
 
-    @ApiModelProperty(value = "商品规格")
+    @Schema(title = "商品规格")
     private String spec;
 } 

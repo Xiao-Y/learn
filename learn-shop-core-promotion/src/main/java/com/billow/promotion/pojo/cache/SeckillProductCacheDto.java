@@ -1,6 +1,6 @@
 package com.billow.promotion.pojo.cache;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,27 +21,27 @@ import java.math.BigDecimal;
 public class SeckillProductCacheDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "限时购id")
+    @Schema(title = "限时购id")
     private Long seckillId;
 
-    @ApiModelProperty(value = "编号")
+    @Schema(title = "编号")
     private Long seckillSessionId;
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(title = "商品id")
     private Long productId;
 
-    @ApiModelProperty(value = "skuid")
+    @Schema(title = "skuid")
     private Long skuId;
 
-    @ApiModelProperty(value = "限时购价格")
+    @Schema(title = "限时购价格")
     private BigDecimal seckillPrice;
 
-    @ApiModelProperty(value = "限时购数量")
+    @Schema(title = "限时购数量")
     private Integer seckillCount;
 
-    @ApiModelProperty(value = "每人限购数量")
+    @Schema(title = "每人限购数量")
     private Integer seckillLimit;
 
-    @ApiModelProperty(value = "排序")
+    @Schema(title = "排序")
     private Integer sort;
 }

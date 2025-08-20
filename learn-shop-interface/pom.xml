@@ -33,9 +33,8 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>1.5.20</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>

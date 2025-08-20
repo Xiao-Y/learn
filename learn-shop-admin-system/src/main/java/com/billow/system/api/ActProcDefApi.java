@@ -4,8 +4,8 @@ import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.CustomPage;
 import com.billow.base.workflow.vo.ProcessDefinitionVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/actProcDefApi")
-@Api(value = "工作流部署API")
+@Tag(name = "ActProcDefApi", description = "工作流部署API")
 public class ActProcDefApi {
 
     @Autowired
@@ -27,14 +27,14 @@ public class ActProcDefApi {
     @Autowired
     private WorkFlowQuery workFlowQuery;
 
-    @ApiOperation(value = "查询流程定义列表")
+    @Operation(summary = "查询流程定义列表")
     @PostMapping("/findProcDefList")
     public CustomPage<ProcessDefinitionVo> findProcDefList(@RequestBody ProcessDefinitionVo vo) {
         CustomPage<ProcessDefinitionVo> definitionPage = workFlowQuery.queryProcessDefinition(vo, vo.getOffset(), vo.getPageSize());
         return definitionPage;
     }
 
-    @ApiOperation(value = "挂起流程定义")
+    @Operation(summary = "挂起流程定义")
     @PutMapping("/suspendProcess/{processDefinitionId}/{cascade}")
     public void suspendProcess(@PathVariable String processDefinitionId, @PathVariable(required = false) boolean cascade) throws Exception {
         if (cascade) {
@@ -44,7 +44,7 @@ public class ActProcDefApi {
         }
     }
 
-    @ApiOperation(value = "激活流程定义")
+    @Operation(summary = "激活流程定义")
     @PutMapping("/activateProcess/{processDefinitionId}/{cascade}")
     public void activateProcess(@PathVariable String processDefinitionId, @PathVariable(required = false) boolean cascade) throws Exception {
         if (cascade) {
@@ -54,7 +54,7 @@ public class ActProcDefApi {
         }
     }
 
-    @ApiOperation(value = "通过 key 查询到最新的一个流程定义")
+    @Operation(summary = "通过 key 查询到最新的一个流程定义")
     @GetMapping("/findDefByKey/{key}")
     public ProcessDefinitionVo findDefByKey(@PathVariable String key) {
         ProcessDefinitionVo processDefinitionVo = workFlowQuery.queryProcessDefinitionByKey(key);
