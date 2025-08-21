@@ -17,7 +17,7 @@ import com.billow.system.pojo.po.UserRolePo;
 import com.billow.system.pojo.search.UserSearchParam;
 import com.billow.system.pojo.vo.UserVo;
 import com.billow.system.service.UserService;
-import com.billow.system.service.redis.CommonUserRedis;
+import com.billow.system.service.redis.UserRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
     @Autowired
     private RoleDao roleDao;
     @Autowired
-    private CommonUserRedis commonUserRedis;
+    private UserRedisKit userRedisKit;
     @Autowired
     private UserTools userTools;
 
@@ -154,9 +154,10 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
             // 新添加的用户不管
             if (userId != null) {
                 // 修改 usercode 放入redis中
-                commonUserRedis.setBlacklistOnEditUser(oldUser.getUsercode(), userPo.getUsercode(), roleCodes);
+                userRedisKit.setBlacklistOnEditUser(oldUser.getUsercode(), userPo.getUsercode(), roleCodes);
             }
         }
+        userRedisKit.updateUserInfoCache(userPo.getUsercode());
         return vo;
     }
 
@@ -167,6 +168,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
         if (userPo != null) {
             userDao.deleteById(id);
         }
+        userRedisKit.updateUserInfoCache(userPo.getUsercode());
         return ConvertUtils.convert(userPo, UserVo.class);
     }
 
@@ -178,6 +180,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
             userPo.setValidInd(false);
             userDao.insert(userPo);
         }
+        userRedisKit.updateUserInfoCache(userPo.getUsercode());
         return ConvertUtils.convert(userPo, UserVo.class);
     }
 
@@ -229,6 +232,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         oldUser.setPassword(bCryptPasswordEncoder.encode(oldUser.getPassword()));
         userDao.insert(ConvertUtils.convert(oldUser, UserPo.class));
+        userRedisKit.updateUserInfoCache(oldUser.getUsercode());
     }
 
     @Override
@@ -241,6 +245,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
         }
         userPo.setIconUrl(userVo.getIconUrl());
         userDao.insert(userPo);
+        userRedisKit.updateUserInfoCache(userPo.getUsercode());
         return true;
     }
 

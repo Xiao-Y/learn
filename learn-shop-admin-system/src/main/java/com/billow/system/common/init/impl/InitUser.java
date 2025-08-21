@@ -2,18 +2,23 @@ package com.billow.system.common.init.impl;
 
 import com.billow.redis.util.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
-import com.billow.system.pojo.po.DataDictionaryPo;
-import com.billow.system.service.DataDictionaryService;
+import com.billow.system.pojo.po.UserPo;
+import com.billow.system.pojo.po.UserRolePo;
+import com.billow.system.service.UserRoleService;
+import com.billow.system.service.UserService;
 import com.billow.tools.constant.RedisCst;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -22,10 +27,12 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class InitUser  implements IStartLoading {
+public class InitUser implements IStartLoading {
 
     @Autowired
-    private DataDictionaryService dataDictionaryService;
+    private UserService userService;
+    @Autowired
+    private UserRoleService userRoleService;
     @Autowired
     private RedisUtils redisUtils;
     @Resource(name = "fxbDrawExecutor")
@@ -33,22 +40,40 @@ public class InitUser  implements IStartLoading {
 
     @Override
     public boolean init() {
-        log.info("======== start init Dictionary....");
+        log.info("======== start init User....");
         executorService.execute(() -> {
-            List<DataDictionaryPo> dataDictionaryPos = dataDictionaryService.list();
-            // 以 getFieldType 分组
-            Map<String, List<DataDictionaryPo>> collect = dataDictionaryPos.stream()
-                    .collect(Collectors.groupingBy(DataDictionaryPo::getSystemModule));
-            // 排序
-            for (Map.Entry<String, List<DataDictionaryPo>> entry : collect.entrySet()) {
-                Map<String, List<DataDictionaryPo>> fieldTypeList = entry.getValue().stream()
-                        .collect(Collectors.groupingBy(DataDictionaryPo::getFieldType));
-                for (Map.Entry<String, List<DataDictionaryPo>> entry2 : fieldTypeList.entrySet()) {
-                    entry2.getValue().sort(Comparator.nullsLast(Comparator.comparing(DataDictionaryPo::getFieldOrder)));
-                }
-                redisUtils.setHash(RedisCst.COMM_DICTIONARY_FIELD_TYPE + ":" + entry.getKey(), fieldTypeList);
+
+            List<UserPo> list = userService.list();
+
+            if (CollectionUtils.isEmpty(list)) {
+                return;
             }
-            log.info("======== end init Dictionary....");
+            // 缓存用户信息
+            Map<Long, List<UserRolePo>> userRoleMapUserId = userRoleService.lambdaQuery()
+                    .in(UserRolePo::getUserId, list.stream()
+                            .map(UserPo::getId)
+                            .collect(Collectors.toList()))
+                    .list()
+                    .stream()
+                    .collect(Collectors.groupingBy(UserRolePo::getUserId));
+
+            Map<String, UserPo> userPoMapUsercode = list.stream()
+                    .collect(Collectors.toMap(UserPo::getUsercode, Function.identity(), (k1, k2) -> k1));
+            redisUtils.setHash(RedisCst.USER_INFO_KEY, userPoMapUsercode);
+
+            // 缓存用户角色
+            if (MapUtils.isNotEmpty(userRoleMapUserId)) {
+                Map<String, List<UserRolePo>> userRoleMapUsercode = new HashMap<>();
+                for (UserPo userPo : list) {
+                    List<UserRolePo> userRolePos = userRoleMapUserId.get(userPo.getId());
+                    if (CollectionUtils.isNotEmpty(userRolePos)) {
+                        userRoleMapUsercode.put(userPo.getUsercode(), userRolePos);
+                    }
+                }
+                redisUtils.setHash(RedisCst.USER_ROLE_KEY, userRoleMapUsercode);
+            }
+
+            log.info("======== end init User....");
         });
         return true;
     }

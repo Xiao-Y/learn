@@ -11,15 +11,24 @@ public class RedisCst {
     public final static String delimiter = ":";
 
     /**
-     * 角色的权限信息：role:permission:admin
+     * 角色的权限信息：role:permission:{roleCode}
      */
     public final static String ROLE_PERMISSION_KEY = "role:permission";
 
     /**
-     * 角色的菜单信息：role:menu:admin
+     * 角色的菜单信息：role:menu:{roleCode}
      */
     public final static String ROLE_MENU_KEY = "role:menu";
 
+    /**
+     * 角色的菜单信息：user:info->{usercode}
+     */
+    public final static String USER_INFO_KEY = "user:info";
+
+    /**
+     * 角色的菜单信息：user:role->{usercode}
+     */
+    public final static String USER_ROLE_KEY = "user:role";
     //==============================================================================================
 
     /**
