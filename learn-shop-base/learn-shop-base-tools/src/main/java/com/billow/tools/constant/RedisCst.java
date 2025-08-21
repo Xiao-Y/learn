@@ -11,92 +11,92 @@ public class RedisCst {
     public final static String delimiter = ":";
 
     /**
-     * 角色的权限信息：ROLE:PERMISSION:ADMIN
+     * 角色的权限信息：role:permission:admin
      */
-    public final static String ROLE_PERMISSION_KEY = "ROLE:PERMISSION";
+    public final static String ROLE_PERMISSION_KEY = "role:permission";
 
     /**
-     * 角色的菜单信息：ROLE:MENU:ADMIN
+     * 角色的菜单信息：role:menu:admin
      */
-    public final static String ROLE_MENU_KEY = "ROLE:MENU";
+    public final static String ROLE_MENU_KEY = "role:menu";
 
     //==============================================================================================
 
     /**
-     * 数据字典信息：COMM:DICTIONARY_FIELD_TYPE->dataSourcesType,mailType...
+     * 数据字典信息：comm:dictionary_field_type->dataSourcesType,mailType...
      */
-    public final static String COMM_DICTIONARY_FIELD_TYPE = "COMM:DIC_FIELD_TYPE";
+    public final static String COMM_DICTIONARY_FIELD_TYPE = "comm:dic_field_type";
 
     /**
-     * 数据字典信息：COMM:CITY:TREE
+     * 数据字典信息：comm:city:tree
      */
-    public final static String COMM_CITY_TREE = "COMM:CITY:TREE";
+    public final static String COMM_CITY_TREE = "comm:city:tree";
     /**
-     * 数据字典信息：COMM:CITY:ONE
+     * 数据字典信息：comm:city:one
      */
-    public final static String COMM_CITY_ONE = "COMM:CITY:ONE";
+    public final static String COMM_CITY_ONE = "comm:city:one";
 
     /**
-     * 路由信息 COMM:ROUTE_INFO
+     * 路由信息 comm:route_info
      */
-    public final static String COMM_ROUTE_INFO = "COMM:ROUTE_INFO";
+    public final static String COMM_ROUTE_INFO = "comm:route_info";
     /**
      * 数据恢复
      *
      * @author billow
      * @date 2019/8/11 13:53
      */
-    public final static String COMM_DATA_RECOVERY = "COMM:DATA_RECOVERY";
+    public final static String COMM_DATA_RECOVERY = "comm:data_recovery";
 
     //==============================================================================================
 
     /**
-     * 黑名单-修改过用户信息：BLACKLIST:EDITUSER:xxx
+     * 黑名单-修改过用户信息：blacklist:edituser:xxx
      */
-    public final static String BLACKLIST_EDITUSER = "BLACKLIST:EDITUSER:";
+    public final static String BLACKLIST_EDITUSER = "blacklist:edituser:";
     /**
      * 黑名单-修改过用户信息：value 中的 key
      */
-    public final static String BLACKLIST_EDITUSER_OLDUSER = "OLD_USER";
+    public final static String BLACKLIST_EDITUSER_OLDUSER = "old_user";
     /**
      * 黑名单-修改过用户信息：value 中的 key
      */
-    public final static String BLACKLIST_EDITUSER_ROLECODES = "ROLE_CODES";
+    public final static String BLACKLIST_EDITUSER_ROLECODES = "role_codes";
     //==============================================================================================
     /**
-     * 秒杀用户锁定前缀。SECKILL:LOCK:{seckillProductId}:{userCode}
+     * 秒杀用户锁定前缀。seckill:lock:{seckillProductId}:{userCode}
      */
-    public final static String SECKILL_LOCK = "SECKILL:LOCK";
+    public final static String SECKILL_LOCK = "seckill:lock";
     /**
-     * 秒杀库存前缀，SECKILL:PRODUCT:STOCK:{seckillProductId}
+     * 秒杀库存前缀，seckill:product:stock:{seckillProductId}
      */
-    public final static String SECKILL_PRODUCT_STOCK = "SECKILL:PRODUCT:STOCK";
+    public final static String SECKILL_PRODUCT_STOCK = "seckill:product:stock";
     /**
-     * 秒杀商品信息前缀，SECKILL:PRODUCT:INFO:{seckillProductId}
+     * 秒杀商品信息前缀，seckill:product:info:{seckillProductId}
      */
-    public final static String SECKILL_PRODUCT_INFO = "SECKILL:PRODUCT:INFO";
+    public final static String SECKILL_PRODUCT_INFO = "seckill:product:info";
 
     /**
-     * 秒杀信息前缀，SECKILL:INFO:{seckillId}
+     * 秒杀信息前缀，seckill:info:{seckillId}
      */
-    public final static String SECKILL_INFO = "SECKILL:INFO";
+    public final static String SECKILL_INFO = "seckill:info";
 
     /**
-     * 秒杀场次信息前缀，SECKILL:SESSION:{seckillSessionId}
+     * 秒杀场次信息前缀，seckill:session:{seckillSessionId}
      */
-    public final static String SECKILL_SESSION = "SECKILL:SESSION";
+    public final static String SECKILL_SESSION = "seckill:session";
     //==============================================================================================
     /**
-     * 订单信息前缀。ORDER:INFO:{orderSn}
+     * 订单信息前缀。order:info:{orderSn}
      */
-    public final static String ORDER_INFO = "ORDER:INFO";
+    public final static String ORDER_INFO = "order:info";
 
     //==============================================================================================
 
     /**
-     * 根据id查询菜单信息，MENU:MENU_ID
+     * 根据id查询菜单信息，menu:menu_id
      */
-    public final static String MENU_MENU_ID = "MENU:MENU_ID";
+    public final static String MENU_MENU_ID = "menu:menu_id";
 
 
     /**

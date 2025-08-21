@@ -24,13 +24,14 @@
         <module>learn-shop-base</module>
 
         <module>learn-shop-admin-system</module>
-        <module>learn-shop-admin-user</module>
+<!--   合并到 system      -->
+<!--        <module>learn-shop-admin-user</module>-->
 
         <module>learn-shop-core-cart</module>
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
         <module>learn-shop-core-search</module>
-
+<!--   合并到 gateway  -->
 <!--        <module>learn-shop-public-auth</module>-->
         <module>learn-shop-core-promotion</module>
         <module>learn-shop-interface</module>

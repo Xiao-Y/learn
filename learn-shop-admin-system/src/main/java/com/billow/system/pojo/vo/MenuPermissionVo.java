@@ -1,6 +1,5 @@
 package com.billow.system.pojo.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
