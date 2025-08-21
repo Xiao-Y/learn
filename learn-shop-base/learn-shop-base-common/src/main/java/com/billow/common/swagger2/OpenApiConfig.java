@@ -29,7 +29,14 @@ public class OpenApiConfig {
     private String url;
     @Value("${swagger.service.contact.email}")
     private String email;
-    
+
+    /**
+     * API 页面上半部分展示信息
+     *
+     * @return
+     * @author 千面
+     * @date 2025-08-21 08:50:01
+     */
     @Bean
     public OpenAPI customOpenAPI() {
 
