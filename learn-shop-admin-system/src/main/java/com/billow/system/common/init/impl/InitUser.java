@@ -1,12 +1,11 @@
 package com.billow.system.common.init.impl;
 
-import com.billow.redis.util.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.UserPo;
 import com.billow.system.pojo.po.UserRolePo;
 import com.billow.system.service.UserRoleService;
 import com.billow.system.service.UserService;
-import com.billow.tools.constant.RedisCst;
+import com.billow.system.service.redis.UserRedisKit;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,10 +32,10 @@ public class InitUser implements IStartLoading {
     private UserService userService;
     @Autowired
     private UserRoleService userRoleService;
-    @Autowired
-    private RedisUtils redisUtils;
     @Resource(name = "fxbDrawExecutor")
     private ExecutorService executorService;
+    @Autowired
+    private UserRedisKit userRedisKit;
 
     @Override
     public boolean init() {
@@ -59,7 +58,7 @@ public class InitUser implements IStartLoading {
 
             Map<String, UserPo> userPoMapUsercode = list.stream()
                     .collect(Collectors.toMap(UserPo::getUsercode, Function.identity(), (k1, k2) -> k1));
-            redisUtils.setHash(RedisCst.USER_INFO_KEY, userPoMapUsercode);
+            userRedisKit.setUserInfoCache(userPoMapUsercode);
 
             // 缓存用户角色
             if (MapUtils.isNotEmpty(userRoleMapUserId)) {
@@ -70,7 +69,7 @@ public class InitUser implements IStartLoading {
                         userRoleMapUsercode.put(userPo.getUsercode(), userRolePos);
                     }
                 }
-                redisUtils.setHash(RedisCst.USER_ROLE_KEY, userRoleMapUsercode);
+                userRedisKit.setUserRoleCache(userRoleMapUsercode);
             }
 
             log.info("======== end init User....");

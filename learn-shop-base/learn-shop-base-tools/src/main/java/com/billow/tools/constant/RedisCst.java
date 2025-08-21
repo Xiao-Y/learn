@@ -21,12 +21,17 @@ public class RedisCst {
     public final static String ROLE_MENU_KEY = "role:menu";
 
     /**
-     * 角色的菜单信息：user:info->{usercode}
+     * 角色信息：role:info->{id}
+     */
+    public final static String ROLE_INFO_KEY = "role:info";
+
+    /**
+     * 用户信息：user:info->{usercode}
      */
     public final static String USER_INFO_KEY = "user:info";
 
     /**
-     * 角色的菜单信息：user:role->{usercode}
+     * 用户角色信息：user:role->{usercode}
      */
     public final static String USER_ROLE_KEY = "user:role";
     //==============================================================================================

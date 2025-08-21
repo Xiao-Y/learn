@@ -92,4 +92,12 @@ public class UserRedisKit {
             redisUtils.setHash(RedisCst.USER_ROLE_KEY, usercode, userRolePos);
         }
     }
+
+    public void setUserInfoCache(Map<String, UserPo> userPoMapUsercode) {
+        redisUtils.setHash(RedisCst.USER_INFO_KEY, userPoMapUsercode);
+    }
+
+    public void setUserRoleCache(Map<String, List<UserRolePo>> userRolePoMapUsercode) {
+        redisUtils.setHash(RedisCst.USER_ROLE_KEY, userRolePoMapUsercode);
+    }
 }

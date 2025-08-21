@@ -1,9 +1,10 @@
 package com.billow.system.service.redis;
 
+import com.billow.redis.util.RedisUtils;
 import com.billow.system.pojo.po.MenuPo;
+import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.tools.constant.RedisCst;
-import com.billow.redis.util.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,10 +47,8 @@ public class MenuRedisKit {
      * @author liuyongtao
      * @since 2021-1-30 10:28
      */
-    public boolean setMenusList(List<MenuPo> menuPos)
-    {
-        if (CollectionUtils.isEmpty(menuPos))
-        {
+    public boolean setMenusList(List<MenuPo> menuPos) {
+        if (CollectionUtils.isEmpty(menuPos)) {
             return false;
         }
         Map<String, MenuPo> menuPoMap = menuPos.stream()
@@ -67,7 +66,7 @@ public class MenuRedisKit {
      * @since 2021-1-30 10:53
      */
     public MenuVo getMenuById(Long id) {
-        return redisUtils.getHashObj(MENU_ID, id.toString(),MenuVo.class);
+        return redisUtils.getHashObj(MENU_ID, id.toString(), MenuVo.class);
     }
 
     /**
