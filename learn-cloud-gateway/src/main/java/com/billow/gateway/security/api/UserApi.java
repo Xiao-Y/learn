@@ -3,26 +3,20 @@ package com.billow.gateway.security.api;
 import cn.hutool.core.util.StrUtil;
 import com.billow.gateway.pojo.search.UserSearchParam;
 import com.billow.gateway.pojo.vo.UserRelationVo;
-import com.billow.gateway.security.component.CustomUserDetailsService;
+import com.billow.gateway.security.service.CustomUserDetailsService;
 import com.billow.gateway.security.util.JwtTokenUtil;
 import com.billow.gateway.security.vo.TokenVo;
 import com.billow.gateway.security.vo.UserVo;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
-import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * @author liuyongtao

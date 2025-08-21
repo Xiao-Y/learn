@@ -1,6 +1,6 @@
 package com.billow.gateway.security.config;
 
-import com.billow.gateway.security.component.CustomUserDetailsService;
+import com.billow.gateway.security.service.CustomUserDetailsService;
 import com.billow.gateway.security.properties.AuthProperties;
 import com.billow.gateway.security.properties.TokenProperties;
 import org.springframework.context.annotation.Bean;

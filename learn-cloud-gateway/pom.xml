@@ -44,15 +44,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-jpa</artifactId>
-        </dependency>
-        <!-- mysql -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
         <!-- base-tools -->
         <dependency>
             <groupId>com.billow</groupId>
@@ -71,11 +62,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream</artifactId>
         </dependency>
-        <!-- Spring Boot Actuator -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
         <!-- 负载均衡 loadbalancer -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -92,16 +78,6 @@
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
             <version>2.5.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.springfox</groupId>-->
-<!--            <artifactId>springfox-boot-starter</artifactId>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->
-<!--            <version>2.5.0</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -110,12 +86,6 @@
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
         </dependency>
-
-        <!-- rabbit,用于配置中心文件修改通知和发送其它系统间通知 -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-bus-amqp</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
