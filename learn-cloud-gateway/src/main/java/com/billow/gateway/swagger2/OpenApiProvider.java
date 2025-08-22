@@ -1,6 +1,7 @@
 package com.billow.gateway.swagger2;
 
 import jakarta.annotation.PostConstruct;
+import org.springdoc.core.properties.AbstractSwaggerUiConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,10 +9,7 @@ import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Configuration
 public class OpenApiProvider {
@@ -50,6 +48,11 @@ public class OpenApiProvider {
                 urlMap.put(serviceName, genSwaggerUrl(serviceName, path));
             }
         }
+        // 默认折叠
+        swaggerUiConfigProperties.setDocExpansion("none");
+        // 额外配置：设置API文档标签按字母排序
+        swaggerUiConfigProperties.setOperationsSorter("alpha");
+        swaggerUiConfigProperties.setTagsSorter("alpha");
         swaggerUiConfigProperties.setUrls(new HashSet<>(urlMap.values()));
     }
 

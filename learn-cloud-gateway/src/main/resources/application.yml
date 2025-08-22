@@ -91,14 +91,7 @@ secure:
     # swagger 配置
     - /v3/**
     - /*/v3/**
-    - /swagger-resources/**
-    - /swagger-resources
-    - /course/coursebase/**
-    - /swagger-ui.html
-    - /*/swagger-ui/index.html
-    - /swagger-ui/index.html
-    - /swagger-ui/**
-    - /favicon.ico
+    - /webjars/**
     - /*/*App/**
   need-check:
     - /*/*Api/**
