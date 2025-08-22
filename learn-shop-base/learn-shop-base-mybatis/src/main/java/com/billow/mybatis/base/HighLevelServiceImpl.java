@@ -3,7 +3,6 @@ package com.billow.mybatis.base;
 import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -16,10 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <p>
@@ -38,7 +34,7 @@ import java.util.Objects;
 public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extends BasePage> extends ServiceImpl<M, E> implements HighLevelService<E, SP> {
 
     // 查询对象
-    protected Class<SP> sPClass = (Class<SP>) this.getClass(2);
+    protected Class<SP> sPClass = (Class<SP>) this.getClassByIndex(2);
 
     @Override
     public IPage<E> findListByPage(IPage<E> page, SP sp) {
@@ -65,6 +61,19 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extend
      * @since 2021-8-13 10:20
      */
     public void genQueryCondition(LambdaQueryWrapper<E> wrapper, SP sp) {
+        this.genQueryCondition(wrapper, sp, null);
+    }
+
+    /**
+     * 分页查询的查询条件
+     *
+     * @param wrapper
+     * @param sp
+     * @param tableAlias 表别名
+     * @author liuyongtao
+     * @since 2021-8-13 10:20
+     */
+    public void genQueryCondition(LambdaQueryWrapper<E> wrapper, SP sp, String tableAlias) {
         // 排除字段
         List<String> excludedFields = Arrays.asList("pageSize", "pageNo", "orderBy", "isAsc");
         Filter<Field> filter = field -> {
@@ -84,7 +93,17 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extend
             if (Objects.isNull(fieldValue)) {
                 continue;
             }
-            String column = StrUtil.toUnderlineCase(field.getName());
+            String column = Optional.ofNullable(tableAlias)
+                    .filter(StringUtils::isNotBlank)
+                    .map(m -> {
+                        if (m.endsWith(".")) {
+                            return m;
+                        } else {
+                            return m + ".";
+                        }
+                    })
+                    .orElse("")
+                    + StrUtil.toUnderlineCase(field.getName());
             // 使用 apply 方法动态添加条件
             bufferSql.append(" and ");
             if (fieldValue instanceof List && column.endsWith("list")) {
@@ -137,8 +156,8 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extend
      * @author liuyongtao
      * @since 2021-8-12 15:00
      */
-    protected Class<?> getClass(int index) {
-        return TypeUtil.getTypeArgument(this.getClass(), index).getClass();
+    protected Class<?> getClassByIndex(int index) {
+        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelServiceImpl.class, index);
     }
 }
 

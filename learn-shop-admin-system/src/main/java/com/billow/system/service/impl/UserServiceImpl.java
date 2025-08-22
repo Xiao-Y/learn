@@ -1,9 +1,7 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.common.utils.UserTools;
 import com.billow.mybatis.base.HighLevelServiceImpl;
@@ -55,11 +53,6 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
 
     @Override
     public IPage<UserVo> findUserList(UserSearchParam userVo) {
-        UserPo convert = ConvertUtils.convert(userVo, UserPo.class);
-
-        LambdaQueryWrapper<UserPo> wrapper = Wrappers.lambdaQuery();
-        // 查询条件
-        this.genQueryCondition(wrapper, userVo);
         // 分页
         Page<UserPo> page = new Page<>(userVo.getPageNo(), userVo.getPageSize());
         // 排序
@@ -67,8 +60,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
             String orderBy = SqlUtil.escapeOrderBySql(userVo.getOrderBy());
             page.addOrder(OrderItem.asc(orderBy).setAsc(userVo.getIsAsc()));
         }
-        IPage<UserPo> userPoPage = baseMapper.selectPage(page, wrapper);
-        return userPoPage.convert(this::convertToUserVo);
+        return this.findListByPage(page, userVo).convert(this::convertToUserVo);
     }
 
     /**
