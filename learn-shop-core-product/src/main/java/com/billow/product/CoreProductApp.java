@@ -15,7 +15,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableFeignClients
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.billow.aop", "com.billow.product"})
 @MapperScan("com.billow.*.dao")
 public class CoreProductApp {
     public static void main(String[] args) {

@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EsMapperScan("com.billow.search.dao")
 @EnableFeignClients
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.billow.aop", "com.billow.search"})
 public class CoreSearchApp {
 
     public static void main(String[] args) {

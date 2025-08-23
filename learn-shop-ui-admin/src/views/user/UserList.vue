@@ -206,9 +206,7 @@
           name: 'userUserEdit',
           query: {
             optionType: 'edit',
-            selectRole: JSON.stringify(this.selectRole),
-            selectSex: JSON.stringify(this.selectSex),
-            userEdit: JSON.stringify(row)
+            userId: row.id
           }
         });
       },

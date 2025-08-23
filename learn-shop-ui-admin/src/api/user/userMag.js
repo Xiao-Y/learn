@@ -45,6 +45,12 @@ export const ProhibitUserById = id => requestUtils.del(baseUrl + '/prohibitUserB
  * @constructor
  */
 export const DeleteUserById = id => requestUtils.del(baseUrl + '/deleteUserById/' + id);
+/**
+ * 根据id查询用户信息
+ * @param id
+ * @constructor
+ */
+export const LoadUserInfoById = id => requestUtils.get(baseUrl + '/findUserInfoById/' + id);
 
 /**
  * 根据id查询有效的用户角色

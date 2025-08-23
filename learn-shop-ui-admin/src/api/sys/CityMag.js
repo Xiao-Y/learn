@@ -18,7 +18,7 @@ export const LoadCityData = ()=> {
   }
   // 查询数据库
   return new Promise((resolve, reject) => {
-    requestUtils.get(baseUrl + '/findCity/100000').then(res=>{
+    requestUtils.get(baseUrl + '/findCityByCityId/100000').then(res=>{
       setCityData(res.resData);
       resolve(res.resData);
     }).catch(res => {

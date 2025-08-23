@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @ EnableCircuitBreaker 开启断路器
  */
 @EnableFeignClients
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.billow.aop", "com.billow.promotion"})
 @EnableDiscoveryClient
 public class CorePromotionApp {
     public static void main(String[] args) {

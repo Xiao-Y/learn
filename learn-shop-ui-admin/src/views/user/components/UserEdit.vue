@@ -80,6 +80,7 @@
     SaveUser,
     UpdateUser,
     LoadRoleIdsByUserId,
+    LoadUserInfoById,
     CheckUserCode
   } from "../../../api/user/userMag";
   import CustomSelect from '../../../components/common/CustomSelect.vue';
@@ -133,31 +134,52 @@
         }
       };
     },
-    created() {
+    activated() {
       // 组件：在个人信息修改时也是这个页面 optionType === 'myUserInfo'
-      var selectRole = this.$route.query.selectRole;
-      if (selectRole) {
-        this.selectRole = JSON.parse(selectRole);
-      } else {
-        LoadSelectRoleList().then(res => {
-          this.selectRole = res.resData;
-        });
-      }
-      var selectSex = this.$route.query.selectSex;
-      if (selectSex) {
-        this.selectSex = JSON.parse(selectSex);
-      } else {
-        LoadUserDataDictionary('sexType').then(res => {
-          this.selectSex = res.resData;
-        });
-      }
+      // 加载角色下拉列表
+      LoadSelectRoleList().then(res => {
+        this.selectRole = res.resData;
+      });
+      // 加载性别下拉列表
+      LoadUserDataDictionary('sexType').then(res => {
+        this.selectSex = res.resData;
+      });
+      //
+      // var selectRole = this.$route.query.selectRole;
+      // if (selectRole) {
+      //   this.selectRole = JSON.parse(selectRole);
+      // } else {
+      //   LoadSelectRoleList().then(res => {
+      //     this.selectRole = res.resData;
+      //   });
+      // }
+      // var selectSex = this.$route.query.selectSex;
+      // if (selectSex) {
+      //   this.selectSex = JSON.parse(selectSex);
+      // } else {
+      //   LoadUserDataDictionary('sexType').then(res => {
+      //     this.selectSex = res.resData;
+      //   });
+      // }
 
       this.optionType = this.$route.query.optionType;
       if (this.optionType === 'edit' || this.optionType === 'myUserInfo') {
-        var editInfo = JSON.parse(this.$route.query.userEdit);
-        this.userInfo = editInfo;
-        this.loadUserRole(this.userInfo);
-        this.oldUserCode = editInfo.usercode;
+        let userId = this.$route.query.userId;
+        LoadUserInfoById(userId).then(res => {
+          this.userInfo = res.resData;
+          this.oldUserCode = this.userInfo.usercode;
+        });
+        LoadRoleIdsByUserId(userId).then(res => {
+          var roleIds = res.resData.roleIds;
+          Object.assign(userInfo, {
+            roleIds: roleIds
+          });
+        });
+        //
+        // var editInfo = JSON.parse(this.$route.query.userEdit);
+        // this.userInfo = editInfo;
+        // this.loadUserRole(this.userInfo);
+        // this.oldUserCode = editInfo.usercode;
       }
       // 个人信息修改
       if (this.optionType === 'myUserInfo') {
@@ -211,16 +233,16 @@
         this.$refs[userInfo].resetFields();
       },
       // 加载指定用户的角色信息
-      loadUserRole(userInfo) {
-        if (userInfo.roleIds.length < 1) {
-          LoadRoleIdsByUserId(userInfo.id).then(res => {
-            var roleIds = res.resData.roleIds;
-            Object.assign(userInfo, {
-              roleIds: roleIds
-            });
-          });
-        }
-      },
+      // loadUserRole(userInfo) {
+      //   if (userInfo.roleIds.length < 1) {
+      //     LoadRoleIdsByUserId(userInfo.id).then(res => {
+      //       var roleIds = res.resData.roleIds;
+      //       Object.assign(userInfo, {
+      //         roleIds: roleIds
+      //       });
+      //     });
+      //   }
+      // },
       // 校验账号是否重复
       checkUserCode(rule, value, callback) {
         if (this.oldUserCode != '' && this.oldUserCode === value) {

@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @ EnableHystrixDashboard 开启熔断监控仪表盘
  */
 @EnableAsync
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.billow.aop", "com.billow.order"})
 @EnableDiscoveryClient
 @EnableFeignClients //(basePackages={"com.billow.remote"})
 @MapperScan("com.billow.*.dao")
