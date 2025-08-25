@@ -76,7 +76,7 @@ public class UserApi extends HighLevelApi<UserService, UserPo, UserVo,
 
     @Operation(summary = "根据userId查询用户信息")
     @GetMapping("/findUserInfoById/{id}")
-    public UserPo findUserInfoById(@PathVariable("id")  Long id) {
+    public UserVo findUserInfoById(@PathVariable("id")  Long id) {
         return userService.findUserInfoById(id);
     }
 

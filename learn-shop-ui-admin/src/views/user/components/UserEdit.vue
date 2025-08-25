@@ -43,14 +43,12 @@
           <el-form-item label="地址" prop="casAddress">
             <el-col :span="18">
               <el-popover trigger="hover" placement="right" @show="addressShow">
-                <div >{{userInfo.showAddress}}</div>
+                <div>{{ userInfo.showAddress }}</div>
                 <el-cascader v-model="userInfo.casAddress"
-                              ref="cascaderAddr"
-                              slot="reference"
-                              :options="citySources"
-                              :props="optionProps"
-                              @active-item-change="handleItemChange"
-                              @change="handleChange">
+                             ref="cascaderAddr"
+                             slot="reference"
+                             :props="optionProps"
+                             :style="{ width: '100%' }">
                 </el-cascader>
               </el-popover>
             </el-col>
@@ -76,242 +74,257 @@
 </template>
 
 <script>
-  import {
-    SaveUser,
-    UpdateUser,
-    LoadRoleIdsByUserId,
-    LoadUserInfoById,
-    CheckUserCode
-  } from "../../../api/user/userMag";
-  import CustomSelect from '../../../components/common/CustomSelect.vue';
-  import {
-    LoadSelectRoleList
-  } from "../../../api/sys/roleMag";
-  import {
-    LoadUserDataDictionary
-  } from "../../../api/sys/DataDictionaryMag";
-  import {
-    LoadCityData,
-  } from "../../../api/sys/CityMag";
+import {
+  SaveUser,
+  UpdateUser,
+  LoadUserInfoById,
+  CheckUserCode
+} from "../../../api/user/userMag";
+import CustomSelect from '../../../components/common/CustomSelect.vue';
+import {
+  LoadSelectRoleList
+} from "../../../api/sys/roleMag";
+import {
+  LoadUserDataDictionary
+} from "../../../api/sys/DataDictionaryMag";
+import {
+  LoadCityData,
+  LoadCityDataByParentId
+} from "../../../api/sys/CityMag";
 
-  import {
-    getCityData,
-    setCityData
-  } from '../../../utils/cookieUtils' // 验权
+export default {
+  components: {
+    CustomSelect
+  },
+  data() {
+    return {
+      optionType: '', // 操作类型，edit,add
+      userInfo: {
+        username: '',
+        usercode: '',
+        description: '',
+        roleIds: [],
+        validInd: true,
+        casAddress: [],
+      },
+      selectRole: [], // 角色下拉列表
+      selectSex: [], // 性别下拉列表
+      optionProps: {
+        value: 'cityId',
+        label: 'name',
+        level: 'levelType',
+        children: 'children',
+        lazy: true,
+        emitPath: true,
+        lazyLoad: this.lazyLoadCityData
+      },
+      fromUserInfo: false, // 是否来自个人信息
+      oldUserCode: '',// 旧userCode，用于校验
+      rulesForm: {
+        username: [{required: true, message: '请输入姓名', trigger: 'blur'}],
+        usercode: [{required: true, message: '请输入账号', trigger: 'blur'},
+          {validator: this.checkUserCode}],
+        phone: [{
+          message: '请输入正确的手机号', trigger: 'blur',
+          pattern: /^1([38][0-9]|4[579]|5[^4]|6[6]|7[0135678]|9[89])\d{8}$/
+        }]
+      }
+    };
+  },
+  async activated() {
+    try {
+      // 并行加载基础数据
+      const [roleResult, sexResult] = await Promise.all([
+        LoadSelectRoleList().catch(error => {
+          this.$message.error('角色列表加载失败');
+          return {resData: []};
+        }),
+        LoadUserDataDictionary('sexType').catch(error => {
+          this.$message.error('性别数据加载失败');
+          return {resData: []};
+        }),
+      ]);
 
-  export default {
-    components: {
-      CustomSelect
-    },
-    data() {
-      return {
-        optionType: '', // 操作类型，edit,add
-        userInfo: {
-          username: '',
-          usercode: '',
-          description: '',
-          roleIds: [],
-          validInd: true
-        },
-        selectRole: [], // 角色下拉列表
-        selectSex: [], // 性别下拉列表
-        citySources: [],// 省份下拉列表
-        optionProps: {
-          value: 'cityId',
-          label: 'name',
-          children: 'children'
-        },
-        fromUserInfo: false, // 是否来自个人信息
-        oldUserCode: '',// 旧userCode，用于校验
-        rulesForm: {
-          username: [{required: true, message: '请输入姓名', trigger: 'blur'}],
-          usercode: [{required: true, message: '请输入账号', trigger: 'blur'},
-            {validator: this.checkUserCode, trigger: 'blur'}],
-          phone: [{
-            message: '请输入正确的手机号', trigger: 'blur',
-            pattern: /^1([38][0-9]|4[579]|5[^4]|6[6]|7[0135678]|9[89])\d{8}$/
-          }]
-        }
-      };
-    },
-    activated() {
-      // 组件：在个人信息修改时也是这个页面 optionType === 'myUserInfo'
-      // 加载角色下拉列表
-      LoadSelectRoleList().then(res => {
-        this.selectRole = res.resData;
-      });
-      // 加载性别下拉列表
-      LoadUserDataDictionary('sexType').then(res => {
-        this.selectSex = res.resData;
-      });
-      //
-      // var selectRole = this.$route.query.selectRole;
-      // if (selectRole) {
-      //   this.selectRole = JSON.parse(selectRole);
-      // } else {
-      //   LoadSelectRoleList().then(res => {
-      //     this.selectRole = res.resData;
-      //   });
-      // }
-      // var selectSex = this.$route.query.selectSex;
-      // if (selectSex) {
-      //   this.selectSex = JSON.parse(selectSex);
-      // } else {
-      //   LoadUserDataDictionary('sexType').then(res => {
-      //     this.selectSex = res.resData;
-      //   });
-      // }
+      this.selectRole = roleResult.resData;
+      this.selectSex = sexResult.resData;
 
       this.optionType = this.$route.query.optionType;
+
       if (this.optionType === 'edit' || this.optionType === 'myUserInfo') {
         let userId = this.$route.query.userId;
-        LoadUserInfoById(userId).then(res => {
-          this.userInfo = res.resData;
-          this.oldUserCode = this.userInfo.usercode;
-        });
-        LoadRoleIdsByUserId(userId).then(res => {
-          var roleIds = res.resData.roleIds;
-          Object.assign(userInfo, {
-            roleIds: roleIds
+
+        // 检查 userId 是否有效
+        try {
+          // 加载用户信息和角色信息
+          LoadUserInfoById(userId).then(res => {
+            this.userInfo = res.resData;
+            this.oldUserCode = this.userInfo.usercode;
+            // 处理地址回显
+            if (this.userInfo.casAddress) {
+              // 确保 casAddress 是数组格式
+              this.userInfo.casAddress = Array.isArray(this.userInfo.casAddress)
+                ? this.userInfo.casAddress
+                : [];
+            }
+            // 修复：添加 this 前缀
+            Object.assign(this.userInfo, {
+              roleIds: this.userInfo.roleIds || []
+            });
           });
-        });
-        //
-        // var editInfo = JSON.parse(this.$route.query.userEdit);
-        // this.userInfo = editInfo;
-        // this.loadUserRole(this.userInfo);
-        // this.oldUserCode = editInfo.usercode;
+        } catch (error) {
+          this.$message.error('用户数据加载失败');
+          console.error(error);
+        }
       }
+
       // 个人信息修改
       if (this.optionType === 'myUserInfo') {
         this.fromUserInfo = true;
       }
-      // 加载城市下拉列表
-      this.loadCitySources();
+    } catch (error) {
+      console.error('数据加载过程中出错:', error);
+    }
+  },
+  methods: {
+    validSubmit() {
+      var _this = this;
+      this.$refs['userInfo'].validate(valid => {
+        if (valid) {
+          _this.onSubmit();
+        } else {
+          return false;
+        }
+      });
     },
-    methods: {
-      validSubmit() {
-        var _this = this;
-        this.$refs['userInfo'].validate(valid => {
-          if (valid) {
-            _this.onSubmit();
-          } else {
-            return false;
-          }
-        });
-      },
-      onSubmit() {
-        var _this = this;
-        if (_this.optionType === 'edit' || this.optionType === 'myUserInfo') {
-          UpdateUser(_this.userInfo).then(res => {
-            _this.$message({
-              type: 'success',
-              message: '更新成功!'
-            });
-            if (this.optionType === 'edit') {
-              //传递一个map，updateuser 是 key，resData 是 value
-              this.$bus.emit('userInfo', res.resData);
-            }
-            _this.$router.back(-1);
+    onSubmit() {
+      var _this = this;
+      if (_this.optionType === 'edit' || this.optionType === 'myUserInfo') {
+        UpdateUser(_this.userInfo).then(res => {
+          _this.$message({
+            type: 'success',
+            message: '更新成功!'
           });
-        } else { // add
-          SaveUser(_this.userInfo).then(res => {
-            _this.$message({
-              type: 'success',
-              message: '保存成功!'
-            });
-            //传递一个map，adduser 是 key，resData 是 value
+          if (this.optionType === 'edit') {
+            //传递一个map，updateuser 是 key，resData 是 value
             this.$bus.emit('userInfo', res.resData);
-            _this.$router.back(-1);
-          });
-        }
-      },
-      onReturn() {
-        //调用router回退页面
-        this.$router.back(-1);
-      },
-      onReset(userInfo) {
-        this.$refs[userInfo].resetFields();
-      },
-      // 加载指定用户的角色信息
-      // loadUserRole(userInfo) {
-      //   if (userInfo.roleIds.length < 1) {
-      //     LoadRoleIdsByUserId(userInfo.id).then(res => {
-      //       var roleIds = res.resData.roleIds;
-      //       Object.assign(userInfo, {
-      //         roleIds: roleIds
-      //       });
-      //     });
-      //   }
-      // },
-      // 校验账号是否重复
-      checkUserCode(rule, value, callback) {
-        if (this.oldUserCode != '' && this.oldUserCode === value) {
-          callback();
-          return true;
-        }
-        CheckUserCode(value).then(res => {
-          if (res.resData >= 1) {
-            callback(new Error("账号已经存在"));
-          } else {
-            callback();
           }
+          _this.$router.back(-1);
         });
-      },
-      loadCitySources() {
-        LoadCityData().then(res => {
-          this.citySources = res;
+      } else { // add
+        SaveUser(_this.userInfo).then(res => {
+          _this.$message({
+            type: 'success',
+            message: '保存成功!'
+          });
+          //传递一个map，adduser 是 key，resData 是 value
+          this.$bus.emit('userInfo', res.resData);
+          _this.$router.back(-1);
         });
-      },
-      // 加载城市下拉列表
-      handleChange(value) {
-        console.info("value", value);
-        console.log(this.$refs['cascaderAddr'].currentLabels);
-      },
-      handleItemChange(value) {
-        console.info("value1", value);
-      },
-      addressShow(){
+      }
+    },
+    onReturn() {
+      //调用router回退页面
+      this.$router.back(-1);
+    },
+    onReset(userInfo) {
+      this.$refs[userInfo].resetFields();
+    },
+    // 校验账号是否重复
+    checkUserCode(rule, value, callback) {
+      if (this.oldUserCode != '' && this.oldUserCode === value) {
+        callback();
+        return true;
+      }
+      CheckUserCode(value).then(res => {
+        if (res.resData >= 1) {
+          callback(new Error("账号已经存在"));
+        } else {
+          callback();
+        }
+      });
+    },
+    async lazyLoadCityData(node, resolve) {
+      const {level} = node;
+      let parentId = 100000;
+      // 获取父级ID
+      if (level > 0) {
+        parentId = node.value;
+      }
+      try {
+        // 调用API获取子级城市数据
+        const res = await LoadCityDataByParentId(parentId);
+        let nodes = res.resData || [];
+        // // 正确处理数据结构和叶子节点判断
+        nodes = nodes.map(item => {
+          return {
+            cityId: item.cityId,
+            name: item.name,
+            children: item.children || [],
+            leaf: level >= 2
+          };
+        });
+        resolve(nodes);
+      } catch (error) {
+        this.$message.error('城市数据加载失败');
+        resolve([]);
+      }
+    },
+    // 地址显示方法
+    addressShow() {
+      // 检查组件引用是否存在
+      if (this.$refs['cascaderAddr'] && this.$refs['cascaderAddr'].currentLabels) {
         var addLabels = this.$refs['cascaderAddr'].currentLabels;
-        Object.assign(this.userInfo,{showAddress:addLabels.join("/")});
+        // 确保 addLabels 是数组
+        if (Array.isArray(addLabels)) {
+          Object.assign(this.userInfo, {showAddress: addLabels.join("/")});
+        } else {
+          // 如果没有标签，设置为空字符串
+          Object.assign(this.userInfo, {showAddress: ''});
+        }
+      } else {
+        // 如果组件引用不存在，设置为空字符串
+        Object.assign(this.userInfo, {showAddress: ''});
       }
     }
-  };
+  }
+};
 </script>
 
 <style scoped>
-  .ms-doc {
-    width: 70%;
-    margin: 0 auto;
-  }
+.ms-doc {
+  width: 70%;
+  margin: 0 auto;
+}
 
-  .ms-doc h3 {
-    padding: 9px 10px 10px;
-    margin: 0;
-    font-size: 14px;
-    line-height: 17px;
-    background-color: #f5f5f5;
-    border: 1px solid #d8d8d8;
-    border-bottom: 0;
-    border-radius: 3px 3px 0 0;
-  }
+.ms-doc h3 {
+  padding: 9px 10px 10px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 17px;
+  background-color: #f5f5f5;
+  border: 1px solid #d8d8d8;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+}
 
-  .ms-doc article {
-    padding: 10px;
-    word-wrap: break-word;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-  }
-  .ms-doc article .el-checkbox {
-    margin-bottom: 5px;
-  }
+.ms-doc article {
+  padding: 10px;
+  word-wrap: break-word;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
 
-  .el-form-item {
-    margin-bottom: 3px;
-  }
+.ms-doc article .el-checkbox {
+  margin-bottom: 5px;
+}
 
-  .el-input__inner {
-    width: 80%
-  }
+.el-form-item {
+  margin-bottom: 3px;
+}
+
+.el-input__inner {
+  width: 80%
+}
 </style>

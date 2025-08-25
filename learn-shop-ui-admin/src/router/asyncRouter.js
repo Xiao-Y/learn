@@ -152,9 +152,6 @@ const asyncRouterList = [
     // 用户管理
     name: 'userUserListIndex',
     path: '/user/userList/index',
-    meta: {
-      keepAlive: true
-    },
     component: resolve => require(['../views/user/UserList.vue'], resolve)
   }, {
     // 用户修改/添加

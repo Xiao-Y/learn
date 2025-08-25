@@ -116,6 +116,6 @@ public interface UserService extends HighLevelService<UserPo, UserSearchParam> {
      * @author billow
      * @date 2019/9/1 13:20
      */
-    UserPo findUserInfoById(Long id);
+    UserVo findUserInfoById(Long id);
 
 }

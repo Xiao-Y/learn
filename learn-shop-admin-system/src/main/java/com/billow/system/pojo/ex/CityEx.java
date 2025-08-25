@@ -21,8 +21,11 @@ public class CityEx implements Serializable {
     @Schema(title = "上级城市 id")
     private String parentCityId;
 
-    @Schema(title = "城市名称 id")
+    @Schema(title = "城市名称")
     private String name;
+
+    @Schema(title = "级别")
+    private String levelType;
 
     @Schema(title = "下级城市信息")
     private List<CityEx> children;

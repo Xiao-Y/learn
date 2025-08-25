@@ -242,7 +242,14 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
     }
 
     @Override
-    public UserPo findUserInfoById(Long id) {
-        return userDao.selectById(id);
+    public UserVo findUserInfoById(Long id) {
+        UserPo userPo = userDao.selectById(id);
+        UserVo userVo = this.convertToUserVo(userPo);
+        List<UserRolePo> userRolePos = userRoleDao.findByUserIdIsAndValidIndIsTrue(id);
+        if (ToolsUtils.isNotEmpty(userRolePos)) {
+            List<Long> collect = userRolePos.stream().map(m -> m.getRoleId()).collect(Collectors.toList());
+            userVo.setRoleIds(collect);
+        }
+        return userVo;
     }
 }

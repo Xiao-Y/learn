@@ -43,13 +43,13 @@ public class CityApi extends BaseApi {
         return cityService.getCityLowerLevel(cityId);
     }
 
-    @Operation(summary = "查询本级及以下所有")
+    @Operation(summary = "查询城市本级及以下所有")
     @GetMapping("/findCityCascade/{cityId}")
     public CityEx findCityCascade(@PathVariable("cityId") String cityId) {
         return cityService.findCityByParentCityId(cityId);
     }
 
-    @Operation(summary = "查询所有")
+    @Operation(summary = "查询所有城市")
     @GetMapping("/findCity")
     public Set<CityEx> findCity() {
         return cityService.findCity();
