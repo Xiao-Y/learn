@@ -26,7 +26,7 @@
                            placeholder="请选择性别">
             </custom-select>
           </el-form-item>
-          <el-form-item label="角色">
+          <el-form-item label="角色" prop="roleIds">
             <custom-select v-model="userInfo.roleIds" :datasource="selectRole" :value-key="userInfo.usercode"
                            :disabled="fromUserInfo"
                            placeholder="请选择角色" multiple>
@@ -63,7 +63,6 @@
           </el-form-item>
           <el-form-item size="mini">
             <el-button type="primary" @click="validSubmit">保存</el-button>
-            <el-button @click="onReset('userInfo')">重置</el-button>
             <el-button @click="onReturn">返回</el-button>
           </el-form-item>
         </el-form>
@@ -74,23 +73,11 @@
 </template>
 
 <script>
-import {
-  SaveUser,
-  UpdateUser,
-  LoadUserInfoById,
-  CheckUserCode
-} from "../../../api/user/userMag";
+import {CheckUserCode, LoadUserInfoById, SaveUser, UpdateUser} from "../../../api/user/userMag";
 import CustomSelect from '../../../components/common/CustomSelect.vue';
-import {
-  LoadSelectRoleList
-} from "../../../api/sys/roleMag";
-import {
-  LoadUserDataDictionary
-} from "../../../api/sys/DataDictionaryMag";
-import {
-  LoadCityData,
-  LoadCityDataByParentId
-} from "../../../api/sys/CityMag";
+import {LoadSelectRoleList} from "../../../api/sys/roleMag";
+import {LoadUserDataDictionary} from "../../../api/sys/DataDictionaryMag";
+import {LoadCityDataByParentId} from "../../../api/sys/CityMag";
 
 export default {
   components: {
@@ -112,7 +99,6 @@ export default {
       optionProps: {
         value: 'cityId',
         label: 'name',
-        level: 'levelType',
         children: 'children',
         lazy: true,
         emitPath: true,
@@ -132,62 +118,70 @@ export default {
     };
   },
   async activated() {
-    try {
-      // 并行加载基础数据
-      const [roleResult, sexResult] = await Promise.all([
-        LoadSelectRoleList().catch(error => {
-          this.$message.error('角色列表加载失败');
-          return {resData: []};
-        }),
-        LoadUserDataDictionary('sexType').catch(error => {
-          this.$message.error('性别数据加载失败');
-          return {resData: []};
-        }),
-      ]);
-
-      this.selectRole = roleResult.resData;
-      this.selectSex = sexResult.resData;
-
+    // 初始化基础数据
+    this.initData();
+    // 初始化数据
+    await this.loadBaseData();
+    // 加载业务数据
+    await this.loadBusinessData();
+  },
+  methods: {
+    // 初始化基础数据
+    initData() {
       this.optionType = this.$route.query.optionType;
-
-      if (this.optionType === 'edit' || this.optionType === 'myUserInfo') {
-        let userId = this.$route.query.userId;
-
-        // 检查 userId 是否有效
-        try {
-          // 加载用户信息和角色信息
-          LoadUserInfoById(userId).then(res => {
-            this.userInfo = res.resData;
-            this.oldUserCode = this.userInfo.usercode;
-            // 处理地址回显
-            if (this.userInfo.casAddress) {
-              // 确保 casAddress 是数组格式
-              this.userInfo.casAddress = Array.isArray(this.userInfo.casAddress)
-                ? this.userInfo.casAddress
-                : [];
-            }
-            // 修复：添加 this 前缀
-            Object.assign(this.userInfo, {
-              roleIds: this.userInfo.roleIds || []
-            });
-          });
-        } catch (error) {
-          this.$message.error('用户数据加载失败');
-          console.error(error);
-        }
-      }
 
       // 个人信息修改
       if (this.optionType === 'myUserInfo') {
         this.fromUserInfo = true;
       }
-    } catch (error) {
-      console.error('数据加载过程中出错:', error);
-    }
-  },
-  methods: {
+    },
+    async loadBaseData() {
+      try {
+        // 并行加载基础数据
+        const [roleResult, sexResult] = await Promise.all([
+          LoadSelectRoleList().catch(error => {
+            this.$message.error('角色列表加载失败');
+            return {resData: []};
+          }),
+          LoadUserDataDictionary('sexType').catch(error => {
+            this.$message.error('性别数据加载失败');
+            return {resData: []};
+          }),
+        ]);
+
+        this.selectRole = roleResult.resData;
+        this.selectSex = sexResult.resData;
+      } catch (error) {
+        console.error('基础数据加载过程中出错:', error);
+      }
+    },
+    // 加载业务数据
+    async loadBusinessData() {
+      // 如果不符合条件直接返回
+      if (this.optionType !== 'edit' && this.optionType !== 'myUserInfo') {
+        return;
+      }
+      let userId = this.$route.query.userId;
+      // 检查 userId 是否有效
+      try {
+        // 加载用户信息和角色信息
+        LoadUserInfoById(userId).then(res => {
+          this.userInfo = res.resData;
+          this.oldUserCode = this.userInfo.usercode;
+          // 处理地址回显
+          if (this.userInfo.casAddress) {
+            // 确保 casAddress 是数组格式
+            this.userInfo.casAddress = Array.isArray(this.userInfo.casAddress)
+              ? this.userInfo.casAddress : [];
+          }
+        });
+      } catch (error) {
+        this.$message.error('加载业务数据失败');
+        console.error(error);
+      }
+    },
     validSubmit() {
-      var _this = this;
+      const _this = this;
       this.$refs['userInfo'].validate(valid => {
         if (valid) {
           _this.onSubmit();
@@ -223,15 +217,15 @@ export default {
       }
     },
     onReturn() {
+      if (this.$refs.userInfo) {
+        this.$refs.userInfo.resetFields();
+      }
       //调用router回退页面
       this.$router.back(-1);
     },
-    onReset(userInfo) {
-      this.$refs[userInfo].resetFields();
-    },
     // 校验账号是否重复
     checkUserCode(rule, value, callback) {
-      if (this.oldUserCode != '' && this.oldUserCode === value) {
+      if (this.oldUserCode !== '' && this.oldUserCode === value) {
         callback();
         return true;
       }
