@@ -1,0 +1,29 @@
+swagger: #??????
+  basepackage: com.billow.file.api #???? GetMapping?PostMapping...
+  service:
+    name: ${spring.application.name} #api??
+    version: 3.0
+    description: ????API???????????????????????????? #api??
+    contact:
+      developer: billow #api???
+      url: https://github.com/Xiao-Y/learn
+      email: lyongtao123@126.com #api???
+
+server:
+  port: 9911
+  servlet:
+    context-path: /core-file
+spring:
+  profiles:
+    active: dev
+  application:
+    name: learn-shop-core-file #?????
+  config:
+    import: optional:nacos:${spring.application.name}.yml
+
+minio:
+  enabled: true                     # ???? minio ??
+  endpoint: http://127.0.0.1:9000   # MinIO API ??
+  accessKey: access_learn-shop             # ???
+  secretKey: secret_learn-shop             # ??
+  bucketName: learn-shop                 # Bucket?????
