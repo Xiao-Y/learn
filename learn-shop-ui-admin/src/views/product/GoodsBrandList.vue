@@ -17,7 +17,7 @@
     <!-- 查询按钮组 -->
     <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"/>
     <el-row>
-      <el-table :data="tableData" border stripe style="width:100%">
+      <el-table :data="tableData" border stripe>
         <el-table-column label="品牌名称" prop="brandName"></el-table-column>
         <el-table-column label="品牌排序" prop="brandSort" width="200"></el-table-column>
         <el-table-column fixed="right" label="操作" width="240">

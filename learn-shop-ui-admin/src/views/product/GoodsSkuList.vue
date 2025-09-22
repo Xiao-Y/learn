@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="tableData" border stripe style="width:100%">
+      <el-table :data="tableData" border stripe>
         <el-table-column label="SKU编号" prop="skuNo" width="200"></el-table-column>
         <el-table-column label="SKU名称" prop="skuName"></el-table-column>
         <el-table-column label="说明" prop="specKeyValueName" width="200"></el-table-column>

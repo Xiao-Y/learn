@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="tableData" border stripe style="width:100%">
+      <el-table :data="tableData" border stripe>
         <el-table-column label="规格编号" prop="specNo"></el-table-column>
         <el-table-column label="规格名称" prop="specName">
           <template slot-scope="scope">

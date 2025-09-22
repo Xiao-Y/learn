@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="tableData" border stripe style="width:100%">
+      <el-table :data="tableData" border stripe>
         <el-table-column label="规格值名称" prop="specValue">
           <template slot-scope="scope">
             <el-input v-model="scope.row.specValue" :readonly="scope.row.readonly" placeholder="请输入内容"></el-input>

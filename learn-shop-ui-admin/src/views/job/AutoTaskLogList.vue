@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="tableData" border stripe style="width:100%">
+      <el-table :data="tableData" border stripe>
         <el-table-column label="任务分组" prop="jobGroup">
           <template slot-scope="scope">
             <custom-select v-model="scope.row.jobGroup"

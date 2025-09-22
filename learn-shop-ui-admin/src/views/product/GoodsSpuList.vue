@@ -32,7 +32,7 @@
     <!-- 查询按钮组 -->
     <button-group-query @onAdd="handleAdd" @onQuery="loadDataList" :queryFilter="queryFilter"/>
     <el-row>
-      <el-table :data="tableData" border stripe style="width:100%">
+      <el-table :data="tableData" border stripe>
         <el-table-column label="商品编号" prop="spuNo" width="200"></el-table-column>
         <el-table-column label="商品名称" prop="goodsName" width="200"></el-table-column>
         <el-table-column label="最低售价" prop="lowPrice"></el-table-column>
