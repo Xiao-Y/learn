@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
+          <el-form inline :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
               <el-form-item label="待办项目">
                 <el-select v-model="toDo" @change="changToDo">
@@ -46,7 +46,7 @@
     <button-group-query :show-add="false" @onQuery="loadDataList" :queryFilter="queryFilter"></button-group-query>
     <el-row>
       <template>
-        <el-table border style="width: 100%" ref="taskListRef" :data="tableData" row-key="id">
+        <el-table border stripe ref="taskListRef" :data="tableData" row-key="id">
           <el-table-column label="任务ID" prop="taskId"></el-table-column>
           <el-table-column label="申请人" prop="applyUserCode"></el-table-column>
           <el-table-column label="申请类型" prop="applyType" width="210">
@@ -70,7 +70,7 @@
           </el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
-              <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
+              <el-form label-position="left" inline class="ms-table-expand" label-width="120px">
                 <el-form-item label="创建人">
                   <span>{{ scope.row.creatorCode }}</span>
                 </el-form-item>
@@ -330,45 +330,3 @@
   }
 </script>
 
-<style scoped>
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  ::-webkit-scrollbar {
-    width: 3px;
-    /*滚动条宽度*/
-    height: 3px;
-    /*滚动条高度*/
-  }
-
-  /*定义滚动条轨道 内阴影+圆角*/
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    /*滚动条的背景区域的圆角*/
-    background-color: white;
-    /*滚动条的背景颜色*/
-  }
-
-  /*定义滑块 内阴影+圆角*/
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    /*滚动条的圆角*/
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f;
-    /*滚动条的背景颜色*/
-  }
-
-  .demo-table-expand {
-    font-size: 0;
-  }
-
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
-</style>

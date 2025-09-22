@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie'
-
 const ACCESS_TOKEN = 'AccessToken';
 const REFRESH_TOKEN = 'RefreshToken';
 const CityData = 'CityData';
@@ -13,8 +11,7 @@ const ButtonPermission = 'buttonPermission';
  */
 export function getAccessToken() {
   // var accessToken = Cookies.get(ACCESS_TOKEN);
-  var accessToken = localStorage.getItem(ACCESS_TOKEN);
-  return accessToken
+  return localStorage.getItem(ACCESS_TOKEN)
 }
 
 /**
@@ -24,8 +21,7 @@ export function getAccessToken() {
  */
 export function getRefresToken() {
   // var refreshToken = Cookies.get(REFRESH_TOKEN);
-  var refreshToken = localStorage.getItem(REFRESH_TOKEN);
-  return refreshToken
+  return localStorage.getItem(REFRESH_TOKEN)
 }
 
 /**

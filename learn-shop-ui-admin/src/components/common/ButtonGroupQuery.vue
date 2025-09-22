@@ -1,25 +1,25 @@
 <template>
-  <div style="display: inline-block;" class="button-group-query">
-    <el-button type="success" size="mini" class="button_group_query"
+  <div class="query-button-group">
+    <el-button type="success" size="mini" class="query-button-item"
                @click="onAdd"
                icon="el-icon-plus"
                v-if="showAdd"
                v-has="hasAdd"
                :disabled="disAdd">添加
     </el-button>
-    <el-button type="primary" size="mini" class="button_group_query"
+    <el-button type="primary" size="mini" class="query-button-item"
                @click="onQuery"
                icon="el-icon-search"
                v-if="showQuery"
                :disabled="disQuery">查询
     </el-button>
-    <el-button type="info" size="mini" class="button_group_query"
+    <el-button type="info" size="mini" class="query-button-item"
                @click="resetForm"
                icon="el-icon-close"
                v-if="showReset"
                :disabled="disReset">重置
     </el-button>
-    <el-button type="warning" size="mini" class="button_group_query"
+    <el-button type="warning" size="mini" class="query-button-item"
                @click="refresh"
                icon="el-icon-refresh"
                v-if="showRefresh"
@@ -117,11 +117,13 @@ export default {
 </script>
 
 <style scoped>
-.button-group-query {
+.query-button-group {
+  display: inline-block;
   margin-top: 3px;
   margin-bottom: 10px;
 }
-.button_group_query {
-  padding: 5px 5px;
+
+.query-button-item {
+  padding: 5px 8px 5px 5px;
 }
 </style>

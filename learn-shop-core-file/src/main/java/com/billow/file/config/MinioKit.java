@@ -151,7 +151,7 @@ public class MinioKit {
                         .method(Method.GET)
                         .bucket(bucketName)
                         .object(fileName)
-                        .expiry(7, TimeUnit.DAYS) // 7天有效期
+//                        .expiry(7, TimeUnit.DAYS) // 7天有效期
                         .build()
         );
     }

@@ -3,7 +3,7 @@
     <el-row>
       <el-collapse value="1">
         <el-collapse-item title="查询条件" name="1">
-          <el-form :inline="true" :model="queryForm" class="demo-form-inline" ref="queryFilter">
+          <el-form inline :model="queryForm" class="demo-form-inline" ref="queryFilter">
             <el-row>
               <el-form-item label="审批人" prop="user">
                 <el-input v-model="queryForm.user" placeholder="审批人"></el-input>
@@ -34,7 +34,7 @@
     <button-group-query :queryFilter="queryForm"></button-group-query>
     <el-row>
       <template>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" border stripe >
           <el-table-column fixed prop="date" label="日期" width="150">
           </el-table-column>
           <el-table-column prop="name" label="姓名" width="120">
@@ -145,38 +145,3 @@
   }
 </script>
 
-<style scoped>
-  .el-row {
-    margin-bottom: 5px;
-  }
-
-  .el-form-item {
-    margin-bottom: 3px;
-  }
-
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  ::-webkit-scrollbar {
-    width: 3px;
-    /*滚动条宽度*/
-    height: 3px;
-    /*滚动条高度*/
-  }
-
-  /*定义滚动条轨道 内阴影+圆角*/
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    /*滚动条的背景区域的圆角*/
-    background-color: white;
-    /*滚动条的背景颜色*/
-  }
-
-  /*定义滑块 内阴影+圆角*/
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    /*滚动条的圆角*/
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f;
-    /*滚动条的背景颜色*/
-  }
-</style>

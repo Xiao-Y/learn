@@ -23,7 +23,7 @@
               </div>
             </el-row>
 
-            <el-form ref="menu" :inline="true" :model="menu" label-width="80px" size="mini">
+            <el-form ref="menu" inline :model="menu" label-width="80px" size="mini">
               <el-form-item label="菜单标题">
                 <el-input v-model="menu.title" readonly></el-input>
               </el-form-item>
@@ -47,7 +47,7 @@
 
           <div v-show="parentMenusShow">
             <el-collapse-item name="3" title="父菜单信息">
-              <el-form ref="parentMenu" :inline="true" :model="parentMenu" label-width="80px" size="mini">
+              <el-form ref="parentMenu" inline :model="parentMenu" label-width="80px" size="mini">
                 <el-form-item label="菜单标题">
                   <el-input v-model="parentMenu.menuName" readonly></el-input>
                 </el-form-item>
@@ -71,7 +71,7 @@
                   <el-input v-model="parentMenu.sortField" readonly></el-input>
                 </el-form-item>
               </el-form>
-              <el-form ref="parentMenu" :inline="true" :model="parentMenu" label-width="80px" size="mini">
+              <el-form ref="parentMenu" inline :model="parentMenu" label-width="80px" size="mini">
                 <el-form-item label="创建人">
                   <el-input v-model="parentMenu.creatorCode" readonly></el-input>
                 </el-form-item>

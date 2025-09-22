@@ -53,7 +53,7 @@ public class MinioController {
 
     @Operation(summary = "上传 Object")
     @PostMapping("/uploadObject")
-    public MinioVo uploadObject(MultipartFile file) throws Exception {
+    public MinioVo uploadObject(@RequestParam("file") MultipartFile file) throws Exception {
         return minioKit.uploadFile(minioConfig.getBucketName(), file);
     }
 

@@ -40,9 +40,6 @@ export const defaultRouterMap = [{
   // 流程跟踪查询(单独页面打开)
   name: 'procViewProcessImg',
   path: '/procViewProcessImg',
-  meta: {
-    keepAlive: false
-  },
   component: resolve => require(['../views/process/ViewProcessImg.vue'], resolve)
 }];
 

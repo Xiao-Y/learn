@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
+          <el-form inline :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
             <el-row>
               <el-form-item label="ID" prop="id">
                 <el-input v-model="queryFilter.id" placeholder="ID"></el-input>
@@ -33,7 +33,7 @@
     </div>
     <el-row>
       <template>
-        <el-table border style="width: 100%" ref="procDeployListRef"
+        <el-table border stripe ref="procDeployListRef"
                   :data="tableData"
                   row-key="id">
           <el-table-column label="ID" prop="id"></el-table-column>
@@ -41,7 +41,7 @@
           <el-table-column label="部署名称" prop="name"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
-              <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
+              <el-form label-position="left" inline class="ms-table-expand" label-width="120px">
                 <el-form-item label="分组">
                   <span>{{ scope.row.category }}</span>
                 </el-form-item>
@@ -246,45 +246,3 @@
   }
 </script>
 
-<style scoped>
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  ::-webkit-scrollbar {
-    width: 3px;
-    /*滚动条宽度*/
-    height: 3px;
-    /*滚动条高度*/
-  }
-
-  /*定义滚动条轨道 内阴影+圆角*/
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    /*滚动条的背景区域的圆角*/
-    background-color: white;
-    /*滚动条的背景颜色*/
-  }
-
-  /*定义滑块 内阴影+圆角*/
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    /*滚动条的圆角*/
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f;
-    /*滚动条的背景颜色*/
-  }
-
-  .demo-table-expand {
-    font-size: 0;
-  }
-
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
-</style>

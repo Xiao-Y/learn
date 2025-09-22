@@ -36,9 +36,6 @@ const asyncRouterList = [
     // 角色管理
     name: 'sysRoleListIndex',
     path: '/sys/roleList/index',
-    meta: {
-      keepAlive: true
-    },
     component: resolve => require(['../views/sys/RoleList.vue'], resolve)
   }, {
     // 修改角色信息
@@ -49,9 +46,6 @@ const asyncRouterList = [
     // 权限管理
     name: 'sysPermissionListIndex',
     path: '/sys/permissionList/index',
-    meta: {
-      keepAlive: true
-    },
     component: resolve => require(['../views/sys/PermissionList.vue'], resolve)
   }, {
     // 修改权限信息
@@ -67,9 +61,6 @@ const asyncRouterList = [
     // 邮件模板管理
     name: 'sysMailTemplateListIndex',
     path: '/sys/mailTemplateList/index',
-    meta: {
-      keepAlive: true
-    },
     component: resolve => require(['../views/sys/MailTemplateList.vue'], resolve)
   }, {
     // 邮件模板修改
@@ -80,9 +71,6 @@ const asyncRouterList = [
     // 数据字典
     name: 'sysDataDictionaryList',
     path: '/sys/dataDictionaryList/index',
-    meta: {
-      keepAlive: true
-    },
     component: resolve => require(['../views/sys/DataDictionaryList.vue'], resolve)
   }, {
     // 修改数据字典
@@ -95,9 +83,6 @@ const asyncRouterList = [
     // 自动任务
     name: 'jobAutoTaskListIndex',
     path: '/job/autoTaskList/index',
-    meta: {
-      keepAlive: true
-    },
     component: resolve => require(['../views/job/AutoTaskList.vue'], resolve)
   }, {
     // 修改自动任务
@@ -136,12 +121,12 @@ const asyncRouterList = [
     name: 'proGoodsCategoryEdit',
     path: '/pro/goodsCategoryList/goodsCategoryEdit',
     component: resolve => require(['../views/product/components/GoodsCategoryEdit.vue'], resolve)
-  },{
+  }, {
     // 品牌管理
     name: 'proGoodsBrandListIndex',
     path: '/pro/brandList/index',
     component: resolve => require(['../views/product/GoodsBrandList.vue'], resolve)
-  },{
+  }, {
     // 修改产品品牌
     name: 'proGoodsBrandEdit',
     path: '/pro/goodsCategoryList/goodsBrandEdit',
@@ -193,9 +178,6 @@ const asyncRouterList = [
     // 我的任务
     name: 'workbenchMyTaskListIndex',
     path: '/workbench/workbenchMyTaskList/index',
-    meta: {
-      keepAlive: false
-    },
     component: resolve => require(['../views/process/MyTaskList.vue'], resolve)
   }
 ]

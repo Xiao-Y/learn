@@ -1,18 +1,18 @@
 <template>
-  <div style="float:left;">
-    <el-tooltip class="button_group_option" effect="dark" content="禁用" placement="top-start"
+  <div class="option-button-group">
+    <el-tooltip class="option-button-item" effect="dark" content="禁用" placement="top-start"
                 :open-delay="openDelay"
                 v-has="hasInd"
                 v-if="showInd">
       <el-button @click="onInd" type="warning" size="mini" :disabled="disInd">禁用</el-button>
     </el-tooltip>
-    <el-tooltip class="button_group_option" effect="dark" content="删除" placement="top-start"
+    <el-tooltip class="option-button-item" effect="dark" content="删除" placement="top-start"
                 :open-delay="openDelay"
                 v-has="hasDel"
                 v-if="showDel">
       <el-button @click="onDel" type="danger" size="mini" :disabled="disDel">删除</el-button>
     </el-tooltip>
-    <el-tooltip class="button_group_option" effect="dark" content="修改" placement="top-start"
+    <el-tooltip class="option-button-item" effect="dark" content="修改" placement="top-start"
                 :open-delay="openDelay"
                 v-has="hasEdit"
                 v-if="showEdit">
@@ -96,7 +96,12 @@ export default {
 </script>
 
 <style>
-.button_group_option {
+.option-button-group {
+  display: inline-block;
+}
+
+.option-button-item {
   padding: 5px 5px;
+  margin: 0;
 }
 </style>
