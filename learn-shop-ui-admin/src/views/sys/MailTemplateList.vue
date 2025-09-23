@@ -11,7 +11,7 @@
               <el-form-item label="邮件CODE" prop="mailCode">
                 <el-input v-model="queryFilter.mailCode" placeholder="邮件CODE"></el-input>
               </el-form-item>
-              <el-form-item label="邮件类型" prop="mailType">
+              <el-form-item label="邮件类型" prop="mailType" >
                 <custom-select v-model="queryFilter.mailType"
                                :datasource="mailTypeSelect"
                                placeholder="请选择邮件类型">

@@ -1,6 +1,6 @@
 <!-- 下拉列表组件： 可以通过绑定数据源 datasource 和指定 fieldType 的方式加载下拉，如果是列表查询建议使用 datasource 方式-->
 <template>
-  <el-tooltip class="item" effect="dark" :disabled="currentTooltipDisabled" :content="tooltipContent" placement="right"
+  <el-tooltip class="select-custom" effect="dark" :disabled="currentTooltipDisabled" :content="tooltipContent" placement="right"
               :open-delay="0">
     <el-select
       class="full-width"
@@ -172,6 +172,6 @@ export default {
 </script>
 <style scoped>
 .full-width {
-  width: 100%;
+  width: 90%;
 }
 </style>

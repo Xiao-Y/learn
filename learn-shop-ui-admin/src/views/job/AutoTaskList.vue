@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b> <i class="el-icon-search"></i>
           </template>
-          <el-form ref="queryFilter" inline :model="queryFilter" label-width="130px" size="mini">
+          <el-form ref="queryFilter" inline :model="queryFilter" class="query-form-filter" size="mini">
             <el-form-item label="任务分组" prop="jobGroup">
               <el-input v-model="queryFilter.jobGroup" placeholder="请输入内容"></el-input>
             </el-form-item>
@@ -56,7 +56,7 @@
         <el-table-column label="任务描述" prop="description"></el-table-column>
         <el-table-column label="详细" type="expand" width="50">
           <template slot-scope="props">
-            <el-form class="ms-table-expand" inline label-position="left" label-width="120px">
+            <el-form class="ms-table-expand" inline label-position="left" label-width="120px"  size="mini">
               <el-form-item label="创建人">
                 <span>{{ props.row.creatorCode }}</span>
               </el-form-item>

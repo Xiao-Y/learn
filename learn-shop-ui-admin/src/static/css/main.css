@@ -75,18 +75,27 @@ a {
 }
 
 /**************************** 列表样式 ********************************/
-.el-icon-search{
+.el-icon-search {
   margin-left: 5px;
 }
 
 .query-form-filter .el-form-item__content {
-  margin-right: 30px;
+  padding-right: 30px;
+}
+
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  margin-bottom: 3px;
+}
+
+.query-form-filter .el-form-item__label {
+  width: 100px;
 }
 
 .el-table .el-table__header th {
   background-color: #e6e8e6 !important; /* def2ff f2faff */
   color: #606266;
 }
+
 .el-table--striped .el-table__body tr.el-table__row--striped td {
   background-color: #ecf8f8 !important; /* def2ff f2faff */
 }
@@ -128,6 +137,6 @@ a {
 
 .ms-table-expand .el-form-item {
   margin-right: 0;
-  margin-bottom: 0;
+  margin-bottom: 3px;
   width: 50%;
 }

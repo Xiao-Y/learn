@@ -31,6 +31,7 @@
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
         <module>learn-shop-core-search</module>
+        <module>learn-shop-core-file</module>
 <!--   合并到 gateway  -->
 <!--        <module>learn-shop-public-auth</module>-->
         <module>learn-shop-core-promotion</module>
