@@ -17,7 +17,7 @@
               <el-form-item label="授权链接" prop="url">
                 <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
               </el-form-item>
-              <el-form-item label="系统模块" prop="systemModule">
+              <el-form-item label="系统模块" prop="systemModule" class="form-custom-select">
                 <custom-select v-model="queryFilter.systemModule"
                                :datasource="systemModuleSelect"
                                placeholder="请选择系统模块">

@@ -13,13 +13,13 @@
             <el-form-item label="商品名称" prop="goodsName">
               <el-input v-model="queryFilter.goodsName" placeholder="请输入内容"></el-input>
             </el-form-item>
-            <el-form-item label="分类名称" prop="categoryId">
+            <el-form-item label="分类名称" prop="categoryId" class="form-custom-select">
               <custom-select v-model="queryFilter.categoryId"
                              :datasource="categorySelect"
                              placeholder="请选择商品分类">
               </custom-select>
             </el-form-item>
-            <el-form-item label="品牌名称" prop="brandId">
+            <el-form-item label="品牌名称" prop="brandId" class="form-custom-select">
               <custom-select v-model="queryFilter.brandId"
                              :datasource="brandSelect"
                              placeholder="请选择商品品牌">

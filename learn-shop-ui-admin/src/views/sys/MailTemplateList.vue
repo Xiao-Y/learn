@@ -11,13 +11,13 @@
               <el-form-item label="邮件CODE" prop="mailCode">
                 <el-input v-model="queryFilter.mailCode" placeholder="邮件CODE"></el-input>
               </el-form-item>
-              <el-form-item label="邮件类型" prop="mailType" >
+              <el-form-item label="邮件类型" prop="mailType" class="form-custom-select">
                 <custom-select v-model="queryFilter.mailType"
                                :datasource="mailTypeSelect"
                                placeholder="请选择邮件类型">
                 </custom-select>
               </el-form-item>
-              <el-form-item label="数据来源" prop="dataSources">
+              <el-form-item label="数据来源" prop="dataSources" class="form-custom-select">
                 <custom-select v-model="queryFilter.dataSources"
                                :datasource="dataSourcesSelect"
                                placeholder="请选择数据来源">

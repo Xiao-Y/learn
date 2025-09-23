@@ -11,13 +11,13 @@
               <el-form-item label="字段显示" prop="fieldDisplay">
                 <el-input v-model="queryFilter.fieldDisplay" placeholder="字段显示"></el-input>
               </el-form-item>
-              <el-form-item label="字典类型" prop="fieldType">
+              <el-form-item label="字典类型" prop="fieldType" class="form-custom-select">
                 <custom-select v-model="queryFilter.fieldType"
                                :datasource="fieldTypeSelect"
                                placeholder="请选择数据字典类型">
                 </custom-select>
               </el-form-item>
-              <el-form-item label="系统模块" prop="systemModule">
+              <el-form-item label="系统模块" prop="systemModule" class="form-custom-select">
                 <custom-select v-model="queryFilter.systemModule"
                                :datasource="systemModuleSelect"
                                placeholder="请选择数据字典系统模块">

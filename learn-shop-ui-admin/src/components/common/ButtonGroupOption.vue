@@ -101,7 +101,7 @@ export default {
 }
 
 .option-button-item {
-  padding: 5px 5px;
+  padding: 5px;
   margin: 0;
 }
 </style>

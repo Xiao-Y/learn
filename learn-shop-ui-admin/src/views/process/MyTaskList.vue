@@ -24,7 +24,7 @@
               <el-form-item label="申请人" prop="applyUserCode">
                 <el-input v-model="queryFilter.applyUserCode" placeholder="申请人"></el-input>
               </el-form-item>
-              <el-form-item label="申请类型" prop="applyType" width="210">
+              <el-form-item label="申请类型" prop="applyType" class="form-custom-select">
                 <custom-select v-model="queryFilter.applyType"
                                :clearable="true"
                                :datasource="applyTypeSelect"

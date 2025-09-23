@@ -83,6 +83,11 @@ a {
   padding-right: 30px;
 }
 
+/*对自定义select样式调整*/
+.form-custom-select .el-form-item__content {
+  padding-right: 10px;
+}
+
 .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
   margin-bottom: 3px;
 }
