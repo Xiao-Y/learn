@@ -119,7 +119,7 @@ export default {
 <style scoped>
 .query-button-group {
   display: inline-block;
-  margin-top: 3px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 

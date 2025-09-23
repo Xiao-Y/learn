@@ -75,6 +75,14 @@ a {
 }
 
 /**************************** 列表样式 ********************************/
+.el-icon-search{
+  margin-left: 5px;
+}
+
+.query-form-filter .el-form-item__content {
+  margin-right: 30px;
+}
+
 .el-table .el-table__header th {
   background-color: #e6e8e6 !important; /* def2ff f2faff */
   color: #606266;

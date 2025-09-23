@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form inline :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
+          <el-form inline :model="queryFilter" ref="queryFilter" class="query-form-filter" size="mini">
             <el-row>
               <el-form-item label="字段显示" prop="fieldDisplay">
                 <el-input v-model="queryFilter.fieldDisplay" placeholder="字段显示"></el-input>

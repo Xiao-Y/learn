@@ -226,6 +226,10 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
             sql += " and data_sources = ? ";
             queryParam.add(mailTemplatePo.getDataSources());
         }
+        if (ToolsUtils.isNotEmpty(mailTemplatePo.getDescription())) {
+            sql += " and description like concat('%',?,'%')";
+            queryParam.add(mailTemplatePo.getDescription());
+        }
         return sql;
     }
 

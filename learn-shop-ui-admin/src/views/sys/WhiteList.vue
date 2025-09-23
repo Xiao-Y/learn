@@ -3,7 +3,7 @@
     <el-row>
       <el-collapse value="1">
         <el-collapse-item title="查询条件" name="1">
-          <el-form inline :model="queryForm" class="demo-form-inline" ref="queryFilter">
+          <el-form inline :model="queryForm" ref="queryFilter" class="query-form-filter" size="mini">
             <el-row>
               <el-form-item label="审批人" prop="user">
                 <el-input v-model="queryForm.user" placeholder="审批人"></el-input>

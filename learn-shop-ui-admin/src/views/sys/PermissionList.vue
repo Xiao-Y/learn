@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form ref="queryFilter" inline :model="queryFilter" class="demo-form-inline" size="mini">
+          <el-form inline :model="queryFilter" ref="queryFilter" class="query-form-filter" size="mini">
             <el-row>
               <el-form-item label="权限名称" prop="permissionName">
                 <el-input v-model="queryFilter.permissionName" placeholder="权限名称"></el-input>

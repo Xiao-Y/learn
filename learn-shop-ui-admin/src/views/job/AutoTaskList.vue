@@ -4,7 +4,7 @@
       <el-collapse value="1">
         <el-collapse-item name="1">
           <template slot="title">
-            <b>查询条件 </b> <i class="el-icon-search"></i>
+            <b>查询条件</b> <i class="el-icon-search"></i>
           </template>
           <el-form ref="queryFilter" inline :model="queryFilter" label-width="130px" size="mini">
             <el-form-item label="任务分组" prop="jobGroup">
@@ -34,7 +34,6 @@
 
     <el-row>
       <el-table :data="tableData" border stripe>
-        <!--        <el-table-column label="ID" prop="id" width="40"></el-table-column>-->
         <el-table-column label="任务分组" prop="jobGroup">
           <template slot-scope="scope">
             <custom-select v-model="scope.row.jobGroup"
@@ -121,7 +120,7 @@
                 </custom-select>
               </el-form-item>
 
-              <template v-if="props.row.sendType == 'email'">
+              <template v-if="props.row.sendType === 'email'">
                 <el-form-item label="邮件模板">
                   <custom-sel-mail-template v-model="props.row.templateId" :button-disabled="true"
                                             :input-read-only="true"></custom-sel-mail-template>
@@ -131,7 +130,7 @@
                             type="textarea"></el-input>
                 </el-form-item>
               </template>
-              <template v-if="props.row.sendType == 'dingding'">
+              <template v-if="props.row.sendType === 'dingding'">
                 <el-form-item label="钉钉模板">
                   <custom-sel-mail-template v-model="props.row.templateId" :button-disabled="true"
                                             :input-read-only="true"></custom-sel-mail-template>
@@ -143,7 +142,8 @@
               </template>
 
               <el-form-item label="任务状态">
-                <el-switch v-model="props.row.jobStatus" :disabled="!props.row.validInd" active-text="启用" active-value="1"
+                <el-switch v-model="props.row.jobStatus" :disabled="!props.row.validInd" active-text="启用"
+                           active-value="1"
                            inactive-text="停止"
                            inactive-value="0"
                            @change="changeJobStatus(props.row)"></el-switch>
@@ -157,24 +157,17 @@
             <button-group-option :show-ind="false"
                                  @onDel="handleDelete(scope.row,scope.$index)"
                                  @onEdit="handleEdit(scope.row,scope.$index)"></button-group-option>
-            <div style="float:left;margin-left:10px;">
-              <el-tooltip :content="scope.row.validInd ? '停止' : '启用'" :open-delay="700" class="item" effect="dark"
-                          placement="top-start">
-                <el-button :type="scope.row.validInd? 'warning' : 'success'" size="mini"
-                           @click="handleCust(scope.row,scope.$index)">
-                  <i :class="scope.row.validInd ? 'el-icon-video-pause' :'el-icon-video-play'"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip :open-delay="700" class="item" content="立即执行" effect="dark" placement="top-start">
-                <el-button size="mini" type="info" @click="handleImmediate(scope.row,scope.$index)">
-                  <i class="el-icon-refresh"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip :open-delay="700" class="item" content="执行日志" effect="dark" placement="top-start">
-                <el-button size="mini" type="success" @click="handleRunLog(scope.row,scope.$index)">
-                  <i class="el-icon-document"></i>
-                </el-button>
-              </el-tooltip>
+            <div class="custom-option-button-group">
+              <el-button :type="scope.row.validInd? 'warning' : 'success'" size="mini" class="option-button-item"
+                         @click="handleCust(scope.row,scope.$index)">
+                {{ scope.row.validInd ? '启用' : '停止' }}
+              </el-button>
+              <el-button size="mini" type="info" @click="handleImmediate(scope.row,scope.$index)"
+                         class="option-button-item">立即执行
+              </el-button>
+              <el-button size="mini" type="success" @click="handleRunLog(scope.row,scope.$index)"
+                         class="option-button-item">执行日志
+              </el-button>
             </div>
           </template>
         </el-table-column>
@@ -191,16 +184,13 @@
 
 <script>
 // ===== api start
+import {LoadJobDataDictionary, LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
 import {
-  LoadSysDataDictionary,
-  LoadJobDataDictionary
-} from "../../api/sys/DataDictionaryMag";
-import {
-  LoadDataJobList,
-  UpdateJobStatus,
   DeleteAutoTask,
+  ImmediateExecutionTask,
+  LoadDataJobList,
   UpdateJobInd,
-  ImmediateExecutionTask
+  UpdateJobStatus
 } from "../../api/job/jobMag";
 // ===== component start
 import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
@@ -406,3 +396,13 @@ export default {
 }
 </script>
 
+<style scoped>
+.custom-option-button-group {
+  display: inline-block;
+}
+
+.option-button-item {
+  padding: 5px 5px;
+  margin: 0;
+}
+</style>

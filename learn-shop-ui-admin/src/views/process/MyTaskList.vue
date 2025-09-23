@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form inline :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
+          <el-form inline :model="queryFilter" ref="queryFilter" class="query-form-filter" size="mini">
             <el-row>
               <el-form-item label="待办项目">
                 <el-select v-model="toDo" @change="changToDo">
