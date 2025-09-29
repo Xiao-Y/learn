@@ -3,6 +3,7 @@ package com.billow.mybatis.base;
 import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.utils.SqlUtil;
@@ -104,6 +105,7 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
      * @since 2021-8-12 15:00
      */
     protected Class<?> getClass(int index) {
-        return TypeUtil.getTypeArgument(this.getClass(), index).getClass();
+//        return TypeUtil.getTypeArgument(this.getClass(), index).getClass();
+        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelApi.class, index);
     }
 }

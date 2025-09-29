@@ -1,0 +1,634 @@
+# JDBC 逻辑库名称。在集群模式中，使用该参数来联通 ShardingSphere-JDBC 与 ShardingSphere-Proxy。默认值：logic_db
+#databaseName (?):
+
+
+# 1. mode 运行模式
+
+# 1.1 主要配置
+# mode (?): # 不配置则默认单机模式
+#  type: # 运行模式类型。可选配置：Standalone、Cluster
+#  repository (?): # 持久化仓库配置
+
+## 1.1.1 单例示例
+#mode:
+#  type: Standalone
+#  repository:
+#    type: # 持久化仓库类型
+#    props: # 持久化仓库所需属性
+#      foo_key: foo_value
+#      bar_key: bar_value
+
+mode:
+  type: Standalone
+#  repository:
+#    type: JDBC
+
+## 1.2 集群配置
+#mode:
+#  type: Cluster
+#  repository:
+#    type: # 持久化仓库类型
+#    props: # 持久化仓库所需属性
+#      namespace: # 注册中心命名空间
+#      server-lists: # 注册中心连接地址
+#      foo_key: foo_value
+#      bar_key: bar_value
+
+
+### 1.2.1 集群示例
+#mode:
+#  type: Cluster
+#  repository:
+#    type: ZooKeeper
+#    props:
+#      namespace: governance
+#      server-lists: localhost:2181
+#      retryIntervalMilliseconds: 500
+#      timeToLiveSeconds: 60
+
+
+### 1.2.2
+#使用持久化仓库需要额外引入对应的 Maven 依赖，推荐使用：
+#<dependency>
+#<groupId>org.apache.shardingsphere</groupId>
+#<artifactId>shardingsphere-cluster-mode-repository-zookeeper</artifactId>
+#<version>${shardingsphere.version}</version>
+#</dependency>
+
+
+# 2. dataSources 数据源集合
+
+## 2.1 数据源配置参数解释
+#dataSources: # 数据源配置，可配置多个 <data-source-name>
+#  <data_source_name>: # 数据源名称
+#    dataSourceClassName: # 数据源完整类名
+#    driverClassName: # 数据库驱动类名，以数据库连接池自身配置为准
+#    jdbcUrl: # 数据库 URL 连接，以数据库连接池自身配置为准
+#    username: # 数据库用户名，以数据库连接池自身配置为准
+#    password: # 数据库密码，以数据库连接池自身配置为准
+#    # ... 数据库连接池的其它属性
+
+
+### 2.1.1 数据源配置-示例
+#dataSources:
+#  ds_1:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/ds_1
+#    username: root
+#    password:
+#  ds_2:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/ds_2
+#    username: root
+#    password:
+# 配置其他数据源
+
+dataSources:
+  317a_master: # 数据源名称
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource # 数据源完整类名
+    driverClassName: com.mysql.cj.jdbc.Driver # 数据库驱动类名，以数据库连接池自身配置为准
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai # 数据库 URL 连接，以数据库连接池自身配置为
+    username: root # 数据库用户名，以数据库连接池自身配置为准
+    password: root # 数据库密码，以数据库连接池自身配置为准
+  317c_slave_of_317a: #
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource # 数据源完整类名
+    driverClassName: com.mysql.cj.jdbc.Driver # 数据库驱动类名，以数据库连接池自身配置为准
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai # 数据库 URL 连接，以数据库连接池自身配置为
+    username: root # 数据库用户名，以数据库连接池自身配置为准
+    password: root # 数据库密码，以数据库连接池自身配置为准
+  327b_slave_of_317a: #
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource # 数据源完整类名
+    driverClassName: com.mysql.cj.jdbc.Driver # 数据库驱动类名，以数据库连接池自身配置为准
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai # 数据库 URL 连接，以数据库连接池自身配置为
+    username: root # 数据库用户名，以数据库连接池自身配置为准
+    password: root # 数据库密码，以数据库连接池自身配置为准
+
+
+# 2. rules 规则集合
+
+## 2.1 数据分片 参数解释
+#rules:
+#  - !SHARDING
+#    tables: # 数据分片规则配置
+#      <logic_table_name> (+): # 逻辑表名称
+#        actualDataNodes (?): # 由数据源名 + 表名组成（参考 Inline 语法规则）
+#        databaseStrategy (?): # 分库策略，缺省表示使用默认分库策略，以下的分片策略只能选其一
+#          standard: # 用于单分片键的标准分片场景
+#            shardingColumn: # 分片列名称
+#            shardingAlgorithmName: # 分片算法名称
+#          complex: # 用于多分片键的复合分片场景
+#            shardingColumns: # 分片列名称，多个列以逗号分隔
+#            shardingAlgorithmName: # 分片算法名称
+#          hint: # Hint 分片策略
+#            shardingAlgorithmName: # 分片算法名称
+#          none: # 不分片
+#        tableStrategy: # 分表策略，同分库策略
+#        keyGenerateStrategy: # 分布式序列策略
+#          column: # 自增列名称，缺省表示不使用自增主键生成器
+#          keyGeneratorName: # 分布式序列算法名称
+#        auditStrategy: # 分片审计策略
+#          auditorNames: # 分片审计算法名称
+#            - <auditor_name>
+#            - <auditor_name>
+#          allowHintDisable: true # 是否禁用分片审计hint
+#    autoTables: # 自动分片表规则配置
+#      t_order_auto: # 逻辑表名称
+#        actualDataSources (?): # 数据源名称
+#        shardingStrategy: # 切分策略
+#          standard: # 用于单分片键的标准分片场景
+#            shardingColumn: # 分片列名称
+#            shardingAlgorithmName: # 自动分片算法名称
+#    bindingTables (+): # 绑定表规则列表
+#      - <logic_table_name_1, logic_table_name_2, ...>
+#      - <logic_table_name_1, logic_table_name_2, ...>
+#    defaultDatabaseStrategy: # 默认数据库分片策略
+#    defaultTableStrategy: # 默认表分片策略
+#    defaultKeyGenerateStrategy: # 默认的分布式序列策略
+#    defaultShardingColumn: # 默认分片列名称
+#
+#    # 分片算法配置
+#    shardingAlgorithms:
+#      <sharding_algorithm_name> (+): # 分片算法名称
+#        type: # 分片算法类型
+#        props: # 分片算法属性配置
+#        # ...
+#
+#    # 分布式序列算法配置
+#    keyGenerators:
+#      <key_generate_algorithm_name> (+): # 分布式序列算法名称
+#        type: # 分布式序列算法类型
+#        props: # 分布式序列算法属性配置
+#        # ...
+#    # 分片审计算法配置
+#    auditors:
+#      <sharding_audit_algorithm_name> (+): # 分片审计算法名称
+#        type: # 分片审计算法类型
+#        props: # 分片审计算法属性配置
+#        # ...
+#
+#  - !BROADCAST
+#    tables: # 广播表规则列表
+#      - <table_name>
+#      - <table_name>
+
+### 2.1.1 数据分片示例
+#dataSources:
+#  ds_0:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/demo_ds_0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password:
+#  ds_1:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/demo_ds_1?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password:
+#
+#rules:
+#  - !SHARDING
+#    tables:
+#      t_order:
+#        actualDataNodes: ds_${0..1}.t_order_${0..1}
+#        tableStrategy:
+#          standard:
+#            shardingColumn: order_id
+#            shardingAlgorithmName: t_order_inline
+#        keyGenerateStrategy:
+#          column: order_id
+#          keyGeneratorName: snowflake
+#        auditStrategy:
+#          auditorNames:
+#            - sharding_key_required_auditor
+#          allowHintDisable: true
+#      t_order_item:
+#        actualDataNodes: ds_${0..1}.t_order_item_${0..1}
+#        tableStrategy:
+#          standard:
+#            shardingColumn: order_id
+#            shardingAlgorithmName: t_order_item_inline
+#        keyGenerateStrategy:
+#          column: order_item_id
+#          keyGeneratorName: snowflake
+#      t_account:
+#        actualDataNodes: ds_${0..1}.t_account_${0..1}
+#        tableStrategy:
+#          standard:
+#            shardingAlgorithmName: t_account_inline
+#        keyGenerateStrategy:
+#          column: account_id
+#          keyGeneratorName: snowflake
+#    defaultShardingColumn: account_id
+#    bindingTables:
+#      - t_order,t_order_item
+#    defaultDatabaseStrategy:
+#      standard:
+#        shardingColumn: user_id
+#        shardingAlgorithmName: database_inline
+#    defaultTableStrategy:
+#      none:
+#
+#    shardingAlgorithms:
+#      database_inline:
+#        type: INLINE
+#        props:
+#          algorithm-expression: ds_${user_id % 2}
+#      t_order_inline:
+#        type: INLINE
+#        props:
+#          algorithm-expression: t_order_${order_id % 2}
+#      t_order_item_inline:
+#        type: INLINE
+#        props:
+#          algorithm-expression: t_order_item_${order_id % 2}
+#      t_account_inline:
+#        type: INLINE
+#        props:
+#          algorithm-expression: t_account_${account_id % 2}
+#    keyGenerators:
+#      snowflake:
+#        type: SNOWFLAKE
+#    auditors:
+#      sharding_key_required_auditor:
+#        type: DML_SHARDING_CONDITIONS
+#
+#  - !BROADCAST
+#    tables:
+#      - t_address
+#
+#props:
+#  sql-show: false
+
+
+
+
+## 2.2 广播表 参数解释
+#rules:
+#  - !BROADCAST
+#    tables: # 广播表规则列表
+#      - <table_name>
+#      - <table_name>
+
+
+### 2.2.1 广播表 示例
+#dataSources:
+#  ds_0:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/demo_ds_0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password:
+#  ds_1:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/demo_ds_1?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password:
+#
+#rules:
+#  - !BROADCAST
+#    tables:
+#      - t_address
+
+
+## 2.3 读写分离-参数解释
+#rules:
+#  - !READWRITE_SPLITTING
+#    dataSourceGroups:
+#      <data_source_name> (+): # 读写分离逻辑数据源名称，默认使用 Groovy 的行表达式 SPI 实现来解析
+#        write_data_source_name: # 写库数据源名称，默认使用 Groovy 的行表达式 SPI 实现来解析
+#        read_data_source_names: # 读库数据源名称，多个从数据源用逗号分隔，默认使用 Groovy 的行表达式 SPI 实现来解析
+#        transactionalReadQueryStrategy (?): # 事务内读请求的路由策略，可选值：PRIMARY（路由至主库）、FIXED（同一事务内路由至固定数据源）、DYNAMIC（同一事务内路由至非固定数据源）。默认值：DYNAMIC
+#        loadBalancerName: # 负载均衡算法名称
+#
+#    # 负载均衡算法配置
+#    loadBalancers:
+#      <load_balancer_name> (+): # 负载均衡算法名称
+#        type: # 负载均衡算法类型
+#        props: # 负载均衡算法属性配置
+#        # ...
+
+
+### 2.3.1 读写分离-示例
+#rules:
+#  - !READWRITE_SPLITTING
+#    dataSourceGroups:
+#      readwrite_ds:
+#        writeDataSourceName: write_ds
+#        readDataSourceNames:
+#          - read_ds_0
+#          - read_ds_1
+#        transactionalReadQueryStrategy: PRIMARY
+#        loadBalancerName: random
+#    loadBalancers:
+#      random:
+#        type: RANDOM
+
+
+rules:
+  - !SINGLE
+    tables:
+      - "*.*"
+
+
+  - !READWRITE_SPLITTING
+    dataSourceGroups:
+      readwrite_ds:
+        writeDataSourceName: 317a_master
+        readDataSourceNames:
+          - 317c_slave_of_317a
+          - 327b_slave_of_317a
+        transactionalReadQueryStrategy: PRIMARY
+        loadBalancerName: random
+    loadBalancers:
+      random:
+        type: RANDOM
+
+
+# 2.4 分布式事物-参数解释
+#transaction:
+#  defaultType: # 事务模式，可选值 LOCAL/XA/BASE
+#  providerType: # 指定模式下的具体实现
+
+### 2.4.1 使用local 模式
+#transaction:
+#  defaultType: LOCAL
+
+
+### 2.4.2 使用xa 模式
+#transaction:
+#  defaultType: XA
+#  providerType: Narayana/Atomikos
+
+
+#手动添加 Narayana 相关依赖：
+#jta-5.12.7.Final.jar
+#arjuna-5.12.7.Final.jar
+#common-5.12.7.Final.jar
+#jboss-connector-api_1.7_spec-1.0.0.Final.jar
+#jboss-logging-3.2.1.Final.jar
+#jboss-transaction-api_1.2_spec-1.0.0.Alpha3.jar
+#jboss-transaction-spi-7.6.1.Final.jar
+#narayana-jts-integration-5.12.7.Final.jar
+#shardingsphere-transaction-xa-narayana-x.x.x-SNAPSHOT.jar
+
+
+### 2.4.3 使用base模式
+#transaction:
+#  defaultType: BASE
+#  providerType: Seata
+
+
+## 2.5 数据加密 -参数解释
+
+#rules:
+#  - !ENCRYPT
+#    tables:
+#      <table_name> (+): # 加密表名称
+#        columns:
+#          <column_name> (+): # 加密列名称
+#            cipher:
+#              name: # 密文列名称
+#              encryptorName: # 密文列加密算法名称
+#            assistedQuery (?):
+#              name: # 查询辅助列名称
+#              encryptorName:  # 查询辅助列加密算法名称
+#            likeQuery (?):
+#              name: # 模糊查询列名称
+#              encryptorName:  # 模糊查询列加密算法名称
+#
+#    # 加密算法配置
+#    encryptors:
+#      <encrypt_algorithm_name> (+): # 加解密算法名称
+#        type: # 加解密算法类型
+#        props: # 加解密算法属性配置
+#        # ...
+
+### 2.5.1 数据加密 - 示例
+#dataSources:
+#  unique_ds:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/demo_ds?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password:
+#
+#rules:
+#  - !ENCRYPT
+#    tables:
+#      t_user:
+#        columns:
+#          username:
+#            cipher:
+#              name: username
+#              encryptorName: aes_encryptor
+#            assistedQuery:
+#              name: assisted_query_username
+#              encryptorName: assisted_encryptor
+#            likeQuery:
+#              name: like_query_username
+#              encryptorName: like_encryptor
+#          pwd:
+#            cipher:
+#              name: pwd
+#              encryptorName: aes_encryptor
+#            assistedQuery:
+#              name: assisted_query_pwd
+#              encryptorName: assisted_encryptor
+#    encryptors:
+#      aes_encryptor:
+#        type: AES
+#        props:
+#          aes-key-value: 123456abc
+#          digest-algorithm-name: SHA-1
+#      assisted_encryptor:
+#        type: MD5
+#      like_encryptor:
+#        type: CHAR_DIGEST_LIKE
+
+## 2.6 数据脱敏-参数解释
+#rules:
+#  - !MASK
+#    tables:
+#      <table_name> (+): # 脱敏表名称
+#        columns:
+#          <column_name> (+): # 脱敏列名称
+#            maskAlgorithm: # 脱敏算法
+#
+#    # 脱敏算法配置
+#    maskAlgorithms:
+#      <mask_algorithm_name> (+): # 脱敏算法名称
+#        type: # 脱敏算法类型
+#        props: # 脱敏算法属性配置
+#        # ...
+
+### 2.6.1 数据脱敏 - 示例
+#dataSources:
+#  unique_ds:
+#    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+#    driverClassName: com.mysql.jdbc.Driver
+#    jdbcUrl: jdbc:mysql://localhost:3306/demo_ds?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password:
+#
+#rules:
+#  - !MASK
+#    tables:
+#      t_user:
+#        columns:
+#          password:
+#            maskAlgorithm: md5_mask
+#          email:
+#            maskAlgorithm: mask_before_special_chars_mask
+#          telephone:
+#            maskAlgorithm: keep_first_n_last_m_mask
+#
+#    maskAlgorithms:
+#      md5_mask:
+#        type: MD5
+#      mask_before_special_chars_mask:
+#        type: MASK_BEFORE_SPECIAL_CHARS
+#        props:
+#          special-chars: '@'
+#          replace-char: '*'
+#      keep_first_n_last_m_mask:
+#        type: KEEP_FIRST_N_LAST_M
+#        props:
+#          first-n: 3
+#          last-m: 4
+#          replace-char: '*'
+
+## 2.7 影子库-参数解释
+#rules:
+#  - !SHADOW
+#    dataSources:
+#      shadowDataSource:
+#        productionDataSourceName: # 生产数据源名称
+#        shadowDataSourceName: # 影子数据源名称
+#    tables:
+#      <table_name>:
+#        dataSourceNames: # 影子表关联影子数据源名称列表
+#          - <shadow_data_source>
+#        shadowAlgorithmNames: # 影子表关联影子算法名称列表
+#          - <shadow_algorithm_name>
+#    defaultShadowAlgorithmName: # 默认影子算法名称（选配项）
+#    shadowAlgorithms:
+#      <shadow_algorithm_name> (+): # 影子算法名称
+#        type: # 影子算法类型
+#        props: # 影子算法属性配置
+
+
+### 2.7.1 影子库-示例
+#dataSources:
+#  ds:
+#    url: jdbc:mysql://127.0.0.1:3306/ds?serverTimezone=UTC&useSSL=false
+#    username: root
+#    password:
+#    connectionTimeoutMilliseconds: 30000
+#    idleTimeoutMilliseconds: 60000
+#    maxLifetimeMilliseconds: 1800000
+#    maxPoolSize: 50
+#    minPoolSize: 1
+#  shadow_ds:
+#    url: jdbc:mysql://127.0.0.1:3306/shadow_ds?serverTimezone=UTC&useSSL=false
+#    username: root
+#    password:
+#    connectionTimeoutMilliseconds: 30000
+#    idleTimeoutMilliseconds: 60000
+#    maxLifetimeMilliseconds: 1800000
+#    maxPoolSize: 50
+#    minPoolSize: 1
+#
+#rules:
+#  - !SHADOW
+#    dataSources:
+#      shadowDataSource:
+#        productionDataSourceName: ds
+#        shadowDataSourceName: shadow_ds
+#    tables:
+#      t_order:
+#        dataSourceNames:
+#          - shadowDataSource
+#        shadowAlgorithmNames:
+#          - user_id_insert_match_algorithm
+#          - sql_hint_algorithm
+#    shadowAlgorithms:
+#      user_id_insert_match_algorithm:
+#        type: REGEX_MATCH
+#        props:
+#          operation: insert
+#          column: user_id
+#          regex: "[1]"
+#      sql_hint_algorithm:
+#        type: SQL_HINT
+
+
+## 2.8 sql 解析
+
+## 2.9 sql 翻译
+
+## 2.10 混合规则
+
+## 2.11 混合规则
+
+## 2.12 数据分片路由缓存
+
+## 2.13 单表
+
+## 2.14 联邦查询
+
+
+
+# 3. 算法配置
+
+## 3.1 分片算法
+#shardingAlgorithms:
+#  # algorithmName 由用户指定，需要和分片策略中的 shardingAlgorithmName 属性一致
+#  <algorithmName>:
+#    # type 和 props，请参考分片内置算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/sharding/
+#    type: xxx
+#    props:
+#      xxx: xxx
+
+## 3.2 加密算法
+#
+#encryptors:
+#  # encryptorName 由用户指定，需要和加密规则中的 encryptorName 属性一致
+#  <encryptorName>:
+#    # type 和 props，请参考加密内置算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/encrypt/
+#    type: xxx
+#    props:
+#      xxx: xxx
+
+## 3.3 读写分离负载均衡算法
+#loadBalancers:
+#  # loadBalancerName 由用户指定，需要和读写分离规则中的 loadBalancerName 属性一致
+#  <loadBalancerName>:
+#    # type 和 props，请参考读写分离负载均衡内置算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/load-balance/
+#    type: xxx
+#    props:
+#      xxx: xxx
+
+## 3.4 影子算法
+#shadowAlgorithms:
+#  # shadowAlgorithmName 由用户指定，需要和影子库规则中的 shadowAlgorithmNames 属性一致
+#  <shadowAlgorithmName>:
+#    # type 和 props，请参考影子库内置算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/shadow/
+#    type: xxx
+#    props:
+#      xxx: xxx
+
+
+## 3.5 脱敏算法
+#maskAlgorithms:
+#  # maskAlgorithmName 由用户指定，需要和脱敏规则中的 maskAlgorithm 属性一致
+#  <maskAlgorithmName>:
+#    # type 和 props，请参考脱敏内置算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/mask/
+#    type: xxx
+#    props:
+#      xxx: xxx
+
+

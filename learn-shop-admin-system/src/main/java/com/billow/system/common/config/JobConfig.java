@@ -18,21 +18,20 @@ import java.io.IOException;
 public class JobConfig {
 
 
-    @Value("${spring.datasource.url}")
+    @Value("${dataSources.master.url}")
     private String url;
 
-    @Value("${spring.datasource.username}")
+    @Value("${dataSources.master.username}")
     private String username;
 
-    @Value("${spring.datasource.password}")
+    @Value("${dataSources.master.password}")
     private String password;
 
-    @Value("${spring.datasource.driver-class-name}")
+    @Value("${dataSources.master.driverClassName}")
     private String driverClassName;
 
 
     @Bean
-    @ConfigurationProperties("spring.datasource")
     public JobDataSourceProperties jobDataSourceProperties() throws IOException {
         JobDataSourceProperties properties = new JobDataSourceProperties();
         return properties.setUrl(url)

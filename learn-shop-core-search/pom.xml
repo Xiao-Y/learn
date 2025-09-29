@@ -34,7 +34,7 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.apache.shardingsphere</groupId>
-                    <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                    <artifactId>shardingsphere-jdbc</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

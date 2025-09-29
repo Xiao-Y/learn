@@ -22,10 +22,33 @@
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-mybatis</artifactId>
+        </dependency>
+        <!-- 消息中间件、消息通知 -->
+        <dependency>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-notice</artifactId>
+        </dependency>
         <!-- 配置中心获取端 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
         <!--配置命名容错处理-->
         <dependency>
@@ -36,14 +59,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-shop-base-mybatis</artifactId>
         </dependency>
     </dependencies>
 

@@ -77,15 +77,14 @@
         <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
-        <!--        <spring-cloud-starter.version>3.2.4</spring-cloud-starter.version>-->
-        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
+        <sharding-jdbc.version>5.5.2</sharding-jdbc.version>
         <jsch.version>0.1.54</jsch.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
         <log4j-api.version>2.17.1</log4j-api.version>
         <javax.mail.version>1.6.2</javax.mail.version>
         <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
         <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
-        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+        <mybatis-plus.version>3.5.14</mybatis-plus.version>
     </properties>
 
     <dependencyManagement>
@@ -280,7 +279,7 @@
             <!-- 分库分表 -->
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <artifactId>shardingsphere-jdbc</artifactId>
                 <version>${sharding-jdbc.version}</version>
             </dependency>
             <dependency>

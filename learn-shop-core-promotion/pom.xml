@@ -26,8 +26,8 @@
                     <groupId>mysql</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
                     <groupId>org.apache.shardingsphere</groupId>
+                    <artifactId>shardingsphere-jdbc</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -48,6 +48,16 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
         <!--配置命名容错处理-->
         <dependency>

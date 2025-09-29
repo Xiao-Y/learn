@@ -6,8 +6,9 @@ import com.billow.job.pojo.vo.ScheduleJobVo;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ import java.util.List;
  * @date 2017年5月12日 下午6:44:08
  */
 @Slf4j
-public class InitJob implements InitializingBean {
+@Component
+public class InitJob implements SmartInitializingSingleton {
 
     @Autowired
     private ScheduleJobService scheduleJobService;
@@ -26,7 +28,7 @@ public class InitJob implements InitializingBean {
     private QuartzManager quartzManager;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterSingletonsInstantiated() {
         log.info("==========初始化自动任务开始==========");
         try {
             ScheduleJobVo scheduleJobVo = new ScheduleJobVo();
