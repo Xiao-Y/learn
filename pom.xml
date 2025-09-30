@@ -30,21 +30,14 @@
 
     <modules>
         <module>learn-cloud-gateway</module>
-
         <module>learn-cloud-common</module>
         <module>learn-shop-base</module>
-
         <module>learn-shop-admin-system</module>
-<!--   合并到 system      -->
-<!--        <module>learn-shop-admin-user</module>-->
-
         <module>learn-shop-core-cart</module>
         <module>learn-shop-core-order</module>
         <module>learn-shop-core-product</module>
         <module>learn-shop-core-search</module>
         <module>learn-shop-core-file</module>
-<!--   合并到 gateway  -->
-<!--        <module>learn-shop-public-auth</module>-->
         <module>learn-shop-core-promotion</module>
         <module>learn-shop-interface</module>
         <module>learn-shop-app</module>

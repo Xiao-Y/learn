@@ -27,7 +27,7 @@ public class ${VO} implements Serializable {
 <#-- ----------  BEGIN 字段循环遍历  ---------->
 <#list table.fields as field>
     <#if field.comment!?length gt 0>
-        <#if swagger2>
+        <#if swagger>
     @Schema(title = "${field.comment}")
         <#else>
     /**
