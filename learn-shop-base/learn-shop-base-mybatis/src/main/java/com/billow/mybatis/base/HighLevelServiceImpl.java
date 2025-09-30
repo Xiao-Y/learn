@@ -157,7 +157,7 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E, SP extend
      * @since 2021-8-12 15:00
      */
     protected Class<?> getClassByIndex(int index) {
-        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelServiceImpl.class, index);
+        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelV2ServiceImpl.class, index);
     }
 }
 

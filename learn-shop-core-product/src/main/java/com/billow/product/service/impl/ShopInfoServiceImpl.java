@@ -1,6 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.dao.ShopInfoDao;
 import com.billow.product.pojo.po.ShopInfoPo;
 import com.billow.product.pojo.search.ShopInfoSearchParam;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-09-02
  */
 @Service
-public class ShopInfoServiceImpl extends HighLevelServiceImpl<ShopInfoDao, ShopInfoPo,ShopInfoSearchParam> implements ShopInfoService {
+public class ShopInfoServiceImpl extends HighLevelV2ServiceImpl<ShopInfoDao, ShopInfoPo,ShopInfoSearchParam> implements ShopInfoService {
 
 }
 

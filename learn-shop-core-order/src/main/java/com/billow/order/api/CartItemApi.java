@@ -1,6 +1,6 @@
 package com.billow.order.api;
 
-import com.billow.mybatis.base.HighLevelApi;
+import com.billow.mybatis.base.HighLevelV2Api;
 import com.billow.order.pojo.build.CartItemBuildParam;
 import com.billow.order.pojo.po.CartItemPo;
 import com.billow.order.pojo.search.CartItemSearchParam;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "CartItemApi", description = "")
 @RestController
 @RequestMapping("/cartItemApi")
-public class CartItemApi extends HighLevelApi<CartItemService, CartItemPo, CartItemVo, CartItemBuildParam, CartItemSearchParam>
-{
+public class CartItemApi extends HighLevelV2Api<CartItemService, CartItemPo, CartItemSearchParam> {
 
 }

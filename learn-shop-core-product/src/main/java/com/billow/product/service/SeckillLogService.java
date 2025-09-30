@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.SeckillLogPo;
 import com.billow.product.pojo.search.SeckillLogSearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.product.pojo.search.SeckillLogSearchParam;
  * @version v2.0
  * @since 2021-08-31
  */
-public interface SeckillLogService extends HighLevelService<SeckillLogPo,SeckillLogSearchParam> {
+public interface SeckillLogService extends HighLevelV2Service<SeckillLogPo,SeckillLogSearchParam> {
 
 }

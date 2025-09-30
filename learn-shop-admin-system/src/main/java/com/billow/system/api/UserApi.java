@@ -2,8 +2,7 @@ package com.billow.system.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.utils.UserTools;
-import com.billow.mybatis.base.HighLevelApi;
-import com.billow.system.pojo.build.UserBuildParam;
+import com.billow.mybatis.base.HighLevelV2Api;
 import com.billow.system.pojo.po.UserPo;
 import com.billow.system.pojo.search.UserSearchParam;
 import com.billow.system.pojo.vo.UserVo;
@@ -24,8 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "UserApi", description = "用户信息操作")
 @RestController
 @RequestMapping("/userApi")
-public class UserApi extends HighLevelApi<UserService, UserPo, UserVo,
-        UserBuildParam, UserSearchParam> {
+public class UserApi extends HighLevelV2Api<UserService, UserPo, UserSearchParam> {
 
     @Autowired
     private UserService userService;
@@ -76,7 +74,7 @@ public class UserApi extends HighLevelApi<UserService, UserPo, UserVo,
 
     @Operation(summary = "根据userId查询用户信息")
     @GetMapping("/findUserInfoById/{id}")
-    public UserVo findUserInfoById(@PathVariable("id")  Long id) {
+    public UserVo findUserInfoById(@PathVariable("id") Long id) {
         return userService.findUserInfoById(id);
     }
 

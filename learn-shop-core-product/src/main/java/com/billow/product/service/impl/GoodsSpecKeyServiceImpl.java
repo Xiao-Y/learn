@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.search.GoodsSpecKeySearchParam;
@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2019-11-27
  */
 @Service
-public class GoodsSpecKeyServiceImpl extends HighLevelServiceImpl<GoodsSpecKeyDao, GoodsSpecKeyPo, GoodsSpecKeySearchParam> implements GoodsSpecKeyService {
+public class GoodsSpecKeyServiceImpl extends HighLevelV2ServiceImpl<GoodsSpecKeyDao, GoodsSpecKeyPo, GoodsSpecKeySearchParam> implements GoodsSpecKeyService {
 
     @Autowired
     private GoodsSpecKeyDao goodsSpecKeyDao;

@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.SeckillSessionPo;
 import com.billow.product.pojo.search.SeckillSessionSearchParam;
 
@@ -14,7 +14,7 @@ import com.billow.product.pojo.search.SeckillSessionSearchParam;
  * @version v2.0
  * @since 2021-08-31
  */
-public interface SeckillSessionService extends HighLevelService<SeckillSessionPo,SeckillSessionSearchParam> {
+public interface SeckillSessionService extends HighLevelV2Service<SeckillSessionPo,SeckillSessionSearchParam> {
 
     void loadData();
 }

@@ -33,7 +33,7 @@ import java.util.*;
  * @since 2021-01-21
  */
 public abstract class HighLevelV2ServiceImpl<M extends BaseMapper<E>, E extends BasePo, SP extends BasePage>
-        extends ServiceImpl<M, E> implements HighLevelService<E, SP> {
+        extends ServiceImpl<M, E> implements HighLevelV2Service<E, SP> {
 
     // 查询对象
     protected Class<SP> sPClass = (Class<SP>) this.getClassByIndex(2);

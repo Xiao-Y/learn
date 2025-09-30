@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.GoodsSpuSpecPo;
 import com.billow.product.pojo.search.GoodsSpuSpecSearchParam;
 
@@ -17,7 +17,7 @@ import java.util.Map;
  * @version v2.0
  * @since 2021-09-02
  */
-public interface GoodsSpuSpecService extends HighLevelService<GoodsSpuSpecPo, GoodsSpuSpecSearchParam> {
+public interface GoodsSpuSpecService extends HighLevelV2Service<GoodsSpuSpecPo, GoodsSpuSpecSearchParam> {
 
 
     /**

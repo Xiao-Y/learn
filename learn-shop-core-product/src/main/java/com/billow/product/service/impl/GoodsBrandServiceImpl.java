@@ -1,6 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.dao.GoodsBrandDao;
 import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.search.GoodsBrandSearchParam;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-09-02
  */
 @Service
-public class GoodsBrandServiceImpl extends HighLevelServiceImpl<GoodsBrandDao, GoodsBrandPo, GoodsBrandSearchParam> implements GoodsBrandService {
+public class GoodsBrandServiceImpl extends HighLevelV2ServiceImpl<GoodsBrandDao, GoodsBrandPo, GoodsBrandSearchParam> implements GoodsBrandService {
 
 }
 

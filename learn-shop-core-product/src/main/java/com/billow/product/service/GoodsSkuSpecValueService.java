@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.search.GoodsSkuSpecValueSearchParam;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @version v1.0
  * @since 2019-11-27
  */
-public interface GoodsSkuSpecValueService extends HighLevelService<GoodsSkuSpecValuePo, GoodsSkuSpecValueSearchParam> {
+public interface GoodsSkuSpecValueService extends HighLevelV2Service<GoodsSkuSpecValuePo, GoodsSkuSpecValueSearchParam> {
 
     /**
      * 根据 spuId 查询出 skuId

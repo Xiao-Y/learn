@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * 高级公用方法
  * <p>
  * 例如：
- * S-OrderItemService 继承 HighLevelService
+ * S-OrderItemService 继承 HighLevelV2Service
  * <p>
  * E-OrderItemPo 实体类
  * <p>
@@ -106,6 +106,6 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
      */
     protected Class<?> getClass(int index) {
 //        return TypeUtil.getTypeArgument(this.getClass(), index).getClass();
-        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelApi.class, index);
+        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelV2Api.class, index);
     }
 }

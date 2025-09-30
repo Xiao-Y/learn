@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.search.GoodsSpecKeySearchParam;
 import com.billow.product.pojo.vo.GoodsSpecKeyVo;
@@ -17,7 +17,7 @@ import java.util.List;
  * @version v1.0
  * @since 2019-11-27
  */
-public interface GoodsSpecKeyService extends HighLevelService<GoodsSpecKeyPo, GoodsSpecKeySearchParam> {
+public interface GoodsSpecKeyService extends HighLevelV2Service<GoodsSpecKeyPo, GoodsSpecKeySearchParam> {
 
     /**
      * 通过 CategoryId 查询出所有的规格 KEY

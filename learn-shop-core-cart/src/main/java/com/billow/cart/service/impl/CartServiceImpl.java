@@ -2,7 +2,7 @@ package com.billow.cart.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billow.common.utils.UserTools;
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.cart.dao.CartDao;
 import com.billow.cart.pojo.po.CartPo;
 import com.billow.cart.pojo.search.CartSearchParam;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartSearchParam> implements CartService {
+public class CartServiceImpl extends HighLevelV2ServiceImpl<CartDao, CartPo, CartSearchParam> implements CartService {
 
     @Autowired
     private CartDao cartDao;

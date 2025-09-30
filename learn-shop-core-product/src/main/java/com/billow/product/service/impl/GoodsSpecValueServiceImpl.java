@@ -2,7 +2,7 @@ package com.billow.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.dao.GoodsSpecValueDao;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.search.GoodsSpecValueSearchParam;
@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2019-11-27
  */
 @Service
-public class GoodsSpecValueServiceImpl extends HighLevelServiceImpl<GoodsSpecValueDao, GoodsSpecValuePo, GoodsSpecValueSearchParam> implements GoodsSpecValueService {
+public class GoodsSpecValueServiceImpl extends HighLevelV2ServiceImpl<GoodsSpecValueDao, GoodsSpecValuePo, GoodsSpecValueSearchParam> implements GoodsSpecValueService {
 
     @Autowired
     private GoodsSpecValueDao goodsSpecValueDao;

@@ -1,6 +1,6 @@
 package com.billow.order.api;
 
-import com.billow.mybatis.base.HighLevelApi;
+import com.billow.mybatis.base.HighLevelV2Api;
 import com.billow.order.pojo.build.CompanyAddressBuildParam;
 import com.billow.order.pojo.po.CompanyAddressPo;
 import com.billow.order.pojo.search.CompanyAddressSearchParam;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "CompanyAddressApi", description = "")
 @RestController
 @RequestMapping("/companyAddressApi")
-public class CompanyAddressApi extends HighLevelApi<CompanyAddressService, CompanyAddressPo, CompanyAddressVo, CompanyAddressBuildParam, CompanyAddressSearchParam>
-{
+public class CompanyAddressApi extends HighLevelV2Api<CompanyAddressService, CompanyAddressPo, CompanyAddressSearchParam> {
 
 }

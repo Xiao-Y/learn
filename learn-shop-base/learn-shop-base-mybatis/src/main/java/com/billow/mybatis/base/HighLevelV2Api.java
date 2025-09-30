@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * 高级公用方法
  * <p>
  * 例如：
- * S-OrderItemService 继承 HighLevelService
+ * S-OrderItemService 继承 HighLevelV2Service
  * <p>
  * E-OrderItemPo 实体类
  * <p>
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2021-8-12 14:23
  */
 @Slf4j
-public class HighLevelV2Api<S extends HighLevelService<E, SP>, E extends BasePo, SP extends BasePage> {
+public class HighLevelV2Api<S extends HighLevelV2Service<E, SP>, E extends BasePo, SP extends BasePage> {
 
     @Autowired
     protected HttpServletRequest request;

@@ -1,6 +1,6 @@
 package com.billow.order.service.impl;
 
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.order.dao.CompanyAddressDao;
 import com.billow.order.pojo.po.CompanyAddressPo;
 import com.billow.order.pojo.search.CompanyAddressSearchParam;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-08-23
  */
 @Service
-public class CompanyAddressServiceImpl extends HighLevelServiceImpl<CompanyAddressDao, CompanyAddressPo,CompanyAddressSearchParam> implements CompanyAddressService {
+public class CompanyAddressServiceImpl extends HighLevelV2ServiceImpl<CompanyAddressDao, CompanyAddressPo,CompanyAddressSearchParam> implements CompanyAddressService {
 
 }
 

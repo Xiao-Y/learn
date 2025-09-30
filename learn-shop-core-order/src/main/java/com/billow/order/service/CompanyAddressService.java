@@ -1,7 +1,7 @@
 
 package com.billow.order.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.order.pojo.po.CompanyAddressPo;
 import com.billow.order.pojo.search.CompanyAddressSearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.order.pojo.search.CompanyAddressSearchParam;
  * @version v2.0
  * @since 2021-08-23
  */
-public interface CompanyAddressService extends HighLevelService<CompanyAddressPo,CompanyAddressSearchParam> {
+public interface CompanyAddressService extends HighLevelV2Service<CompanyAddressPo,CompanyAddressSearchParam> {
 
 }

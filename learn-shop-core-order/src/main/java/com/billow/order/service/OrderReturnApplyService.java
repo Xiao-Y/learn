@@ -1,7 +1,7 @@
 
 package com.billow.order.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.order.pojo.po.OrderReturnApplyPo;
 import com.billow.order.pojo.search.OrderReturnApplySearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.order.pojo.search.OrderReturnApplySearchParam;
  * @version v2.0
  * @since 2021-08-23
  */
-public interface OrderReturnApplyService extends HighLevelService<OrderReturnApplyPo,OrderReturnApplySearchParam> {
+public interface OrderReturnApplyService extends HighLevelV2Service<OrderReturnApplyPo,OrderReturnApplySearchParam> {
 
 }

@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelApi;
+import com.billow.mybatis.base.HighLevelV2Api;
 import com.billow.product.pojo.build.GoodsSpecKeyBuildParam;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.search.GoodsSpecKeySearchParam;
@@ -29,10 +29,10 @@ import java.util.List;
  * @since 2019-11-27
  */
 @Slf4j
-@Tag(name = "GoodsSpecKeyApi",description =  "规格表")
+@Tag(name = "GoodsSpecKeyApi", description = "规格表")
 @RestController
 @RequestMapping("/goodsSpecKeyApi")
-public class GoodsSpecKeyApi extends HighLevelApi<GoodsSpecKeyService, GoodsSpecKeyPo, GoodsSpecKeyVo, GoodsSpecKeyBuildParam, GoodsSpecKeySearchParam> {
+public class GoodsSpecKeyApi extends HighLevelV2Api<GoodsSpecKeyService, GoodsSpecKeyPo, GoodsSpecKeySearchParam> {
 
     @Autowired
     private GoodsSpecKeyService goodsSpecKeyService;
@@ -45,7 +45,7 @@ public class GoodsSpecKeyApi extends HighLevelApi<GoodsSpecKeyService, GoodsSpec
 
     @Operation(summary = "保存一组规格信息")
     @PostMapping(value = "/saveList")
-    public  List<GoodsSpecKeyVo> saveList(@RequestBody List<GoodsSpecKeyVo> goodsSpecKeyVos) {
+    public List<GoodsSpecKeyVo> saveList(@RequestBody List<GoodsSpecKeyVo> goodsSpecKeyVos) {
         return goodsSpecKeyService.saveList(goodsSpecKeyVos);
     }
 }

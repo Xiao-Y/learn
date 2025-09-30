@@ -1,6 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.dao.GoodsCommentReplayDao;
 import com.billow.product.pojo.search.GoodsCommentReplaySearchParam;
 import com.billow.product.pojo.po.GoodsCommentReplayPo;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-09-02
  */
 @Service
-public class GoodsCommentReplayServiceImpl extends HighLevelServiceImpl<GoodsCommentReplayDao, GoodsCommentReplayPo,GoodsCommentReplaySearchParam> implements GoodsCommentReplayService {
+public class GoodsCommentReplayServiceImpl extends HighLevelV2ServiceImpl<GoodsCommentReplayDao, GoodsCommentReplayPo,GoodsCommentReplaySearchParam> implements GoodsCommentReplayService {
 
 }
 

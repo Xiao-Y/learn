@@ -1,7 +1,7 @@
 package com.billow.product.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.cache.SeckillProductCache;
 import com.billow.product.dao.SeckillProductDao;
 import com.billow.product.pojo.cache.SeckillProductCacheDto;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @since 2021-08-31
  */
 @Service
-public class SeckillProductServiceImpl extends HighLevelServiceImpl<SeckillProductDao, SeckillProductPo, SeckillProductSearchParam> implements SeckillProductService {
+public class SeckillProductServiceImpl extends HighLevelV2ServiceImpl<SeckillProductDao, SeckillProductPo, SeckillProductSearchParam> implements SeckillProductService {
 
     @Autowired
     private SeckillProductCache seckillProductCache;

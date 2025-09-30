@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.search.GoodsBrandSearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.product.pojo.search.GoodsBrandSearchParam;
  * @version v2.0
  * @since 2021-09-02
  */
-public interface GoodsBrandService extends HighLevelService<GoodsBrandPo, GoodsBrandSearchParam> {
+public interface GoodsBrandService extends HighLevelV2Service<GoodsBrandPo, GoodsBrandSearchParam> {
 
 }

@@ -1,7 +1,7 @@
 package com.billow.product.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.cache.SeckillSessionCache;
 import com.billow.product.common.enums.SeckillSessionStatusEnum;
 import com.billow.product.dao.SeckillSessionDao;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @since 2021-08-31
  */
 @Service
-public class SeckillSessionServiceImpl extends HighLevelServiceImpl<SeckillSessionDao, SeckillSessionPo,SeckillSessionSearchParam> implements SeckillSessionService {
+public class SeckillSessionServiceImpl extends HighLevelV2ServiceImpl<SeckillSessionDao, SeckillSessionPo,SeckillSessionSearchParam> implements SeckillSessionService {
 
     @Autowired
     private SeckillSessionCache seckillSessionCache;

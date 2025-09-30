@@ -1,6 +1,6 @@
 package com.billow.order.api;
 
-import com.billow.mybatis.base.HighLevelApi;
+import com.billow.mybatis.base.HighLevelV2Api;
 import com.billow.order.pojo.build.OrderOperateHistoryBuildParam;
 import com.billow.order.pojo.po.OrderOperateHistoryPo;
 import com.billow.order.pojo.search.OrderOperateHistorySearchParam;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "OrderOperateHistoryApi", description = "")
 @RestController
 @RequestMapping("/orderOperateHistoryApi")
-public class OrderOperateHistoryApi extends HighLevelApi<OrderOperateHistoryService, OrderOperateHistoryPo, OrderOperateHistoryVo, OrderOperateHistoryBuildParam, OrderOperateHistorySearchParam>
-{
+public class OrderOperateHistoryApi extends HighLevelV2Api<OrderOperateHistoryService, OrderOperateHistoryPo, OrderOperateHistorySearchParam> {
 
 }

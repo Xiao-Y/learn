@@ -1,6 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.dao.GoodsVertifyRecordDao;
 import com.billow.product.pojo.po.GoodsVertifyRecordPo;
 import com.billow.product.pojo.search.GoodsVertifyRecordSearchParam;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-09-02
  */
 @Service
-public class GoodsVertifyRecordServiceImpl extends HighLevelServiceImpl<GoodsVertifyRecordDao, GoodsVertifyRecordPo,GoodsVertifyRecordSearchParam> implements GoodsVertifyRecordService {
+public class GoodsVertifyRecordServiceImpl extends HighLevelV2ServiceImpl<GoodsVertifyRecordDao, GoodsVertifyRecordPo,GoodsVertifyRecordSearchParam> implements GoodsVertifyRecordService {
 
 }
 

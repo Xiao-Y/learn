@@ -1,5 +1,5 @@
 //import cn.hutool.core.util.ReflectUtil;
-//import com.billow.mybatis.base.HighLevelApi;
+//import com.billow.mybatis.base.HighLevelV2Api;
 //import io.swagger.v3.oas.annotations.tags.Tag;
 //import org.reflections.Reflections;
 //import org.springframework.web.bind.annotation.*;
@@ -30,8 +30,8 @@
 //
 //                commonMapping = commonMapping.substring(0, commonMapping.lastIndexOf("Api"));
 //                // 获取父类公用方法
-//                if (HighLevelApi.class.isAssignableFrom(aClass)) {
-//                    getUrl(key, urls, HighLevelApi.class, commonMapping);
+//                if (HighLevelV2Api.class.isAssignableFrom(aClass)) {
+//                    getUrl(key, urls, HighLevelV2Api.class, commonMapping);
 //                }
 //                getUrl(key, urls, aClass, commonMapping);
 //            }

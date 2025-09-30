@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelApi;
+import com.billow.mybatis.base.HighLevelV2Api;
 import com.billow.product.pojo.build.SeckillLogBuildParam;
 import com.billow.product.pojo.po.SeckillLogPo;
 import com.billow.product.pojo.search.SeckillLogSearchParam;
@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author billow
- * @since 2021-08-31
  * @version v2.0
+ * @since 2021-08-31
  */
 @Slf4j
-@Tag(name = "SeckillLogApi",description =  "限时购通知记录表")
+@Tag(name = "SeckillLogApi", description = "限时购通知记录表")
 @RestController
 @RequestMapping("/seckillLogApi")
-public class SeckillLogApi extends HighLevelApi<SeckillLogService, SeckillLogPo, SeckillLogVo, SeckillLogBuildParam, SeckillLogSearchParam>
-{
+public class SeckillLogApi extends HighLevelV2Api<SeckillLogService, SeckillLogPo, SeckillLogSearchParam> {
 
 }

@@ -3,7 +3,7 @@ package com.billow.product.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.search.GoodsSpecValueSearchParam;
@@ -20,7 +20,7 @@ import java.util.List;
  * @version v1.0
  * @since 2019-11-27
  */
-public interface GoodsSpecValueService extends HighLevelService<GoodsSpecValuePo, GoodsSpecValueSearchParam> {
+public interface GoodsSpecValueService extends HighLevelV2Service<GoodsSpecValuePo, GoodsSpecValueSearchParam> {
 
     /**
      * 通过 SpecKeyId 查询出所有的规格 Value

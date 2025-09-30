@@ -2,7 +2,7 @@ package com.billow.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.base.HighLevelV2ServiceImpl;
 import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.dao.GoodsSpecValueDao;
 import com.billow.product.dao.GoodsSpuSpecDao;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class GoodsSpuSpecServiceImpl extends HighLevelServiceImpl<GoodsSpuSpecDao, GoodsSpuSpecPo,GoodsSpuSpecSearchParam> implements GoodsSpuSpecService {
+public class GoodsSpuSpecServiceImpl extends HighLevelV2ServiceImpl<GoodsSpuSpecDao, GoodsSpuSpecPo,GoodsSpuSpecSearchParam> implements GoodsSpuSpecService {
 
     @Autowired
     private GoodsSpuSpecDao goodsSpuSpecDao;

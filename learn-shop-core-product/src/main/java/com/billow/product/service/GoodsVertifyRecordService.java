@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelV2Service;
 import com.billow.product.pojo.po.GoodsVertifyRecordPo;
 import com.billow.product.pojo.search.GoodsVertifyRecordSearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.product.pojo.search.GoodsVertifyRecordSearchParam;
  * @version v2.0
  * @since 2021-09-02
  */
-public interface GoodsVertifyRecordService extends HighLevelService<GoodsVertifyRecordPo,GoodsVertifyRecordSearchParam> {
+public interface GoodsVertifyRecordService extends HighLevelV2Service<GoodsVertifyRecordPo,GoodsVertifyRecordSearchParam> {
 
 }
