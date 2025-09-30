@@ -4,7 +4,6 @@ import com.billow.system.common.properties.CustomProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -16,7 +15,6 @@ import java.util.Map;
  * @create 2019-07-22 16:03
  */
 @Slf4j
-@RefreshScope
 @Component
 public class StartLoading implements SmartInitializingSingleton {
 

@@ -1,10 +1,13 @@
 package com.billow.promotion;
 
 import com.billow.tools.utlis.SpringContextUtil;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  * @ EnableEurekaClient 开启客户端发现
@@ -15,8 +18,13 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @SpringBootApplication(scanBasePackages = {"com.billow.aop", "com.billow.promotion"})
 @EnableDiscoveryClient
-public class CorePromotionApp {
+public class CorePromotionApp implements ApplicationContextAware {
     public static void main(String[] args) {
-        SpringContextUtil.setApplicationContext(SpringApplication.run(CorePromotionApp.class, args));
+        SpringApplication.run(CorePromotionApp.class, args);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        SpringContextUtil.setApplicationContext(applicationContext);
     }
 }

@@ -2,10 +2,13 @@ package com.billow.order;
 
 import com.billow.tools.utlis.SpringContextUtil;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
@@ -19,8 +22,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableDiscoveryClient
 @EnableFeignClients //(basePackages={"com.billow.remote"})
 @MapperScan("com.billow.*.dao")
-public class CoreOrderApp {
+public class CoreOrderApp  implements ApplicationContextAware {
     public static void main(String[] args) {
-        SpringContextUtil.setApplicationContext(SpringApplication.run(CoreOrderApp.class, args));
+        SpringApplication.run(CoreOrderApp.class, args);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        SpringContextUtil.setApplicationContext(applicationContext);
     }
 }

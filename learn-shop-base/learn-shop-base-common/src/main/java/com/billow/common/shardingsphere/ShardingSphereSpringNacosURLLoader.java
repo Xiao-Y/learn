@@ -20,8 +20,7 @@ public final class ShardingSphereSpringNacosURLLoader implements ShardingSphereU
     @Override
     @SneakyThrows(RuntimeException.class)
     public String load(final String configurationSubject, final Properties queryProps) {
-        NacosConfigManager nacosConfigManager = SpringContextUtil.getApplicationContext()
-                .getBean(NacosConfigManager.class);
+        NacosConfigManager nacosConfigManager = SpringContextUtil.getBean(NacosConfigManager.class);
         try {
             String db = nacosConfigManager.getConfigService()
                     .getConfig("sys-config-db.yml", "DEFAULT_GROUP", TIMEOUT);

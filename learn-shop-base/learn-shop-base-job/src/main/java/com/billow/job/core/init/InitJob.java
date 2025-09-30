@@ -39,8 +39,7 @@ public class InitJob implements SmartInitializingSingleton {
                 quartzManager.addJobList(list);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.info("初始化自动任务失败：" + e);
+            log.error("初始化自动任务失败：{}", e.getMessage(), e);
         }
         log.info("==========初始化自动任务结束==========");
     }

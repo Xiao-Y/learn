@@ -5,7 +5,6 @@ import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.MenuService;
 import com.billow.system.service.RoleService;
-import com.billow.system.service.redis.MenuRedisKit;
 import com.billow.system.service.redis.RoleMenuRedisKit;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +30,6 @@ public class InitRoleMenu implements IStartLoading {
     private MenuService menuService;
     @Resource(name = "fxbDrawExecutor")
     private ExecutorService executorService;
-    @Autowired
-    private MenuRedisKit menuRedisKit;
     @Autowired
     private RoleMenuRedisKit roleMenuRedisKit;
 
