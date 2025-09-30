@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.ShopInfoPo;
 import com.billow.product.pojo.search.ShopInfoSearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.product.pojo.search.ShopInfoSearchParam;
  * @version v2.0
  * @since 2021-09-02
  */
-public interface ShopInfoService extends HighLevelV2Service<ShopInfoPo, ShopInfoSearchParam> {
+public interface ShopInfoService extends HighLevelService<ShopInfoPo, ShopInfoSearchParam> {
 
 }

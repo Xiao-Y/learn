@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2021-8-12 14:23
  */
 @Slf4j
-public class HighLevelV2Api<S extends HighLevelV2Service<E, SP>, E extends BasePo, SP extends BasePage> {
+public class HighLevelApi<S extends HighLevelService<E, SP>, E extends BasePo, SP extends BasePage> {
 
     @Autowired
     protected HttpServletRequest request;

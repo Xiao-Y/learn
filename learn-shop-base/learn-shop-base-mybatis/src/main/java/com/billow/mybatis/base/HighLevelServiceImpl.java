@@ -32,8 +32,8 @@ import java.util.*;
  * @version v1.0
  * @since 2021-01-21
  */
-public abstract class HighLevelV2ServiceImpl<M extends BaseMapper<E>, E extends BasePo, SP extends BasePage>
-        extends ServiceImpl<M, E> implements HighLevelV2Service<E, SP> {
+public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E extends BasePo, SP extends BasePage>
+        extends ServiceImpl<M, E> implements HighLevelService<E, SP> {
 
     // 查询对象
     protected Class<SP> sPClass = (Class<SP>) this.getClassByIndex(2);
@@ -159,7 +159,7 @@ public abstract class HighLevelV2ServiceImpl<M extends BaseMapper<E>, E extends 
      * @since 2021-8-12 15:00
      */
     protected Class<?> getClassByIndex(int index) {
-        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelV2ServiceImpl.class, index);
+        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelServiceImpl.class, index);
     }
 }
 

@@ -1,7 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.product.pojo.build.GoodsSpecValueBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.search.GoodsSpecValueSearchParam;
 import com.billow.product.pojo.vo.GoodsSpecValueVo;
@@ -30,7 +29,7 @@ import java.util.List;
 @Tag(name = "GoodsSpecValueApi", description = "规格值表")
 @RestController
 @RequestMapping("/goodsSpecValueApi")
-public class GoodsSpecValueApi extends HighLevelV2Api<GoodsSpecValueService, GoodsSpecValuePo, GoodsSpecValueSearchParam> {
+public class GoodsSpecValueApi extends HighLevelApi<GoodsSpecValueService, GoodsSpecValuePo, GoodsSpecValueSearchParam> {
 
     @Autowired
     private GoodsSpecValueService goodsSpecValueService;

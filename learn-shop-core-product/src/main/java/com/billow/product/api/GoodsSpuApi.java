@@ -1,10 +1,8 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.product.pojo.build.GoodsSpuBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.search.GoodsSpuSearchParam;
-import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "GoodsSpuApi", description = "spu")
 @RestController
 @RequestMapping("/goodsSpuApi")
-public class GoodsSpuApi extends HighLevelV2Api<GoodsSpuService, GoodsSpuPo, GoodsSpuSearchParam> {
+public class GoodsSpuApi extends HighLevelApi<GoodsSpuService, GoodsSpuPo, GoodsSpuSearchParam> {
 
     @Autowired
     private GoodsSpuService goodsSpuService;

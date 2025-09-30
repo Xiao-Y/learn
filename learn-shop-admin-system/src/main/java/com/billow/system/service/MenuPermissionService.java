@@ -1,7 +1,7 @@
 
 package com.billow.system.service;
 
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.MenuPermissionPo;
 import com.billow.system.pojo.search.MenuPermissionSearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.system.pojo.search.MenuPermissionSearchParam;
  * @version v2.0
  * @since 2021-12-26
  */
-public interface MenuPermissionService extends HighLevelV2Service<MenuPermissionPo, MenuPermissionSearchParam>
+public interface MenuPermissionService extends HighLevelService<MenuPermissionPo, MenuPermissionSearchParam>
 {
 }

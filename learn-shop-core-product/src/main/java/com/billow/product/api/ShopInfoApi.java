@@ -1,7 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.product.pojo.build.ShopInfoBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.ShopInfoPo;
 import com.billow.product.pojo.search.ShopInfoSearchParam;
 import com.billow.product.service.ShopInfoService;
@@ -23,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "ShopInfoApi", description = "店铺表")
 @RestController
 @RequestMapping("/shopInfoApi")
-public class ShopInfoApi extends HighLevelV2Api<ShopInfoService, ShopInfoPo, ShopInfoSearchParam> {
+public class ShopInfoApi extends HighLevelApi<ShopInfoService, ShopInfoPo, ShopInfoSearchParam> {
 
 }

@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsSpuSpecPo;
 import com.billow.product.pojo.search.GoodsSpuSpecSearchParam;
 import com.billow.product.service.GoodsSpuSpecService;
@@ -28,7 +28,7 @@ import java.util.List;
 @Tag(name = "GoodsSpuSpecApi", description = "spu规格表")
 @RestController
 @RequestMapping("/goodsSpuSpecApi")
-public class GoodsSpuSpecApi extends HighLevelV2Api<GoodsSpuSpecService, GoodsSpuSpecPo, GoodsSpuSpecSearchParam> {
+public class GoodsSpuSpecApi extends HighLevelApi<GoodsSpuSpecService, GoodsSpuSpecPo, GoodsSpuSpecSearchParam> {
 
     @Autowired
     private GoodsSpuSpecService goodsSpuSpecService;

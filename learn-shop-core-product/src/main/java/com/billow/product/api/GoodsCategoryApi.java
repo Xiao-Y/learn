@@ -1,8 +1,7 @@
 package com.billow.product.api;
 
 import com.billow.common.ex.SelectEx;
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.product.pojo.build.GoodsCategoryBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.search.GoodsCategorySearchParam;
 import com.billow.product.pojo.vo.GoodsCategoryTreeVo;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
 @Tag(name = "GoodsCategoryApi", description = "分类表")
 @RestController
 @RequestMapping("/goodsCategoryApi")
-public class GoodsCategoryApi extends HighLevelV2Api<GoodsCategoryService, GoodsCategoryPo, GoodsCategorySearchParam> {
+public class GoodsCategoryApi extends HighLevelApi<GoodsCategoryService, GoodsCategoryPo, GoodsCategorySearchParam> {
 
     @Autowired
     private GoodsCategoryService goodsCategoryService;

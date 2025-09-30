@@ -1,10 +1,8 @@
 package com.billow.order.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.order.pojo.build.OrderOperateHistoryBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.order.pojo.po.OrderOperateHistoryPo;
 import com.billow.order.pojo.search.OrderOperateHistorySearchParam;
-import com.billow.order.pojo.vo.OrderOperateHistoryVo;
 import com.billow.order.service.OrderOperateHistoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "OrderOperateHistoryApi", description = "")
 @RestController
 @RequestMapping("/orderOperateHistoryApi")
-public class OrderOperateHistoryApi extends HighLevelV2Api<OrderOperateHistoryService, OrderOperateHistoryPo, OrderOperateHistorySearchParam> {
+public class OrderOperateHistoryApi extends HighLevelApi<OrderOperateHistoryService, OrderOperateHistoryPo, OrderOperateHistorySearchParam> {
 
 }

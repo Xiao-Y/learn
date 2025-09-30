@@ -1,12 +1,10 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.product.pojo.build.GoodsSkuBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsSkuPo;
 import com.billow.product.pojo.search.GoodsSkuSearchParam;
 import com.billow.product.pojo.vo.GoodsSkuVo;
 import com.billow.product.service.GoodsSkuService;
-import com.billow.tools.utlis.ConvertUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +27,7 @@ import java.util.Map;
 @Tag(name = "GoodsSkuApi", description = "sku表")
 @RestController
 @RequestMapping("/goodsSkuApi")
-public class GoodsSkuApi extends HighLevelV2Api<GoodsSkuService, GoodsSkuPo, GoodsSkuSearchParam> {
+public class GoodsSkuApi extends HighLevelApi<GoodsSkuService, GoodsSkuPo, GoodsSkuSearchParam> {
 
     @Autowired
     private GoodsSkuService goodsSkuService;

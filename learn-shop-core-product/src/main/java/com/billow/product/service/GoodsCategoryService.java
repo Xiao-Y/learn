@@ -1,9 +1,7 @@
 
 package com.billow.product.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.search.GoodsCategorySearchParam;
 import com.billow.product.pojo.vo.GoodsCategoryVo;
@@ -19,7 +17,7 @@ import java.util.List;
  * @version v1.0
  * @since 2019-11-27
  */
-public interface GoodsCategoryService extends HighLevelV2Service<GoodsCategoryPo, GoodsCategorySearchParam> {
+public interface GoodsCategoryService extends HighLevelService<GoodsCategoryPo, GoodsCategorySearchParam> {
 
     /**
      * 查询分类表数据

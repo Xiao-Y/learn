@@ -1,10 +1,8 @@
 package com.billow.order.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.order.pojo.build.OrderReturnReasonBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.order.pojo.po.OrderReturnReasonPo;
 import com.billow.order.pojo.search.OrderReturnReasonSearchParam;
-import com.billow.order.pojo.vo.OrderReturnReasonVo;
 import com.billow.order.service.OrderReturnReasonService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "OrderReturnReasonApi", description = "")
 @RestController
 @RequestMapping("/orderReturnReasonApi")
-public class OrderReturnReasonApi extends HighLevelV2Api<OrderReturnReasonService, OrderReturnReasonPo, OrderReturnReasonSearchParam> {
+public class OrderReturnReasonApi extends HighLevelApi<OrderReturnReasonService, OrderReturnReasonPo, OrderReturnReasonSearchParam> {
 
 }

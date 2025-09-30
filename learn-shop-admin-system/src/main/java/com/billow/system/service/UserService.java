@@ -1,12 +1,12 @@
 package com.billow.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.UserPo;
 import com.billow.system.pojo.search.UserSearchParam;
 import com.billow.system.pojo.vo.UserVo;
 
-public interface UserService extends HighLevelV2Service<UserPo, UserSearchParam> {
+public interface UserService extends HighLevelService<UserPo, UserSearchParam> {
 
     /**
      * 根据条件查询用户信息

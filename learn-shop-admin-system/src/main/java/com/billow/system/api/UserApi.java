@@ -2,7 +2,7 @@ package com.billow.system.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.utils.UserTools;
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.system.pojo.po.UserPo;
 import com.billow.system.pojo.search.UserSearchParam;
 import com.billow.system.pojo.vo.UserVo;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "UserApi", description = "用户信息操作")
 @RestController
 @RequestMapping("/userApi")
-public class UserApi extends HighLevelV2Api<UserService, UserPo, UserSearchParam> {
+public class UserApi extends HighLevelApi<UserService, UserPo, UserSearchParam> {
 
     @Autowired
     private UserService userService;

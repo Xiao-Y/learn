@@ -7,7 +7,7 @@
 <#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 package ${package.Controller};
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 <#--import ${Parent}.pojo.build.${BP};-->
 <#--import ${Parent}.pojo.vo.${VO};-->
 import ${Parent}.pojo.search.${SP};
@@ -42,7 +42,7 @@ import org.springframework.stereotype.Controller;
 <#if kotlin>
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
-public class ${table.controllerName} extends HighLevelV2Api<${table.serviceName}, ${entity}, ${SP}> {
+public class ${table.controllerName} extends HighLevelApi<${table.serviceName}, ${entity}, ${SP}> {
 
 }
 </#if>

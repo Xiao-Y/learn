@@ -1,6 +1,6 @@
 package com.billow.order.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.order.pojo.po.OrderItemPo;
 import com.billow.order.pojo.search.OrderItemSearchParam;
 import com.billow.order.service.OrderItemService;
@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "OrderItemApi", description = "")
 @RestController
 @RequestMapping("/orderItemApi")
-public class OrderItemApi extends HighLevelV2Api<OrderItemService, OrderItemPo, OrderItemSearchParam> {
+public class OrderItemApi extends HighLevelApi<OrderItemService, OrderItemPo, OrderItemSearchParam> {
 
 }

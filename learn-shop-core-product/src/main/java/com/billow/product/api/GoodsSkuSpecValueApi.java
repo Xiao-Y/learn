@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
 import com.billow.product.pojo.search.GoodsSkuSpecValueSearchParam;
 import com.billow.product.service.GoodsSkuSpecValueService;
@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "GoodsSkuSpecValueApi", description = "sku规格值")
 @RestController
 @RequestMapping("/goodsSkuSpecValueApi")
-public class GoodsSkuSpecValueApi extends HighLevelV2Api<GoodsSkuSpecValueService, GoodsSkuSpecValuePo, GoodsSkuSpecValueSearchParam> {
+public class GoodsSkuSpecValueApi extends HighLevelApi<GoodsSkuSpecValueService, GoodsSkuSpecValuePo, GoodsSkuSpecValueSearchParam> {
 
 }

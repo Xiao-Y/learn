@@ -1,6 +1,6 @@
 package com.billow.order.service.impl;
 
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.order.dao.OrderOperateHistoryDao;
 import com.billow.order.pojo.po.OrderOperateHistoryPo;
 import com.billow.order.pojo.search.OrderOperateHistorySearchParam;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-08-23
  */
 @Service
-public class OrderOperateHistoryServiceImpl extends HighLevelV2ServiceImpl<OrderOperateHistoryDao, OrderOperateHistoryPo,OrderOperateHistorySearchParam> implements OrderOperateHistoryService {
+public class OrderOperateHistoryServiceImpl extends HighLevelServiceImpl<OrderOperateHistoryDao, OrderOperateHistoryPo,OrderOperateHistorySearchParam> implements OrderOperateHistoryService {
 
 }
 

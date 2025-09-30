@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.search.GoodsSpuSearchParam;
 import com.billow.product.pojo.vo.GoodsSpuVo;
@@ -15,7 +15,7 @@ import com.billow.product.pojo.vo.GoodsSpuVo;
  * @version v1.0
  * @since 2019-11-27
  */
-public interface GoodsSpuService extends HighLevelV2Service<GoodsSpuPo, GoodsSpuSearchParam> {
+public interface GoodsSpuService extends HighLevelService<GoodsSpuPo, GoodsSpuSearchParam> {
 
     /**
      * 添加或者更新

@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.SeckillPo;
 import com.billow.product.pojo.search.SeckillSearchParam;
 import com.billow.product.service.SeckillService;
@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "SeckillApi", description = "限时购表")
 @RestController
 @RequestMapping("/seckillApi")
-public class SeckillApi extends HighLevelV2Api<SeckillService, SeckillPo, SeckillSearchParam> {
+public class SeckillApi extends HighLevelApi<SeckillService, SeckillPo, SeckillSearchParam> {
 
 }

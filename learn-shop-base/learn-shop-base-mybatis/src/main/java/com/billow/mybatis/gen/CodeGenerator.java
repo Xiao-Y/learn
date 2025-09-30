@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.mybatis.base.HighLevelV2Service;
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelApi;
+import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.mybatis.pojo.BasePo;
 import org.apache.commons.lang3.StringUtils;
@@ -178,7 +178,7 @@ public class CodeGenerator {
                 .controllerBuilder()
                 .formatFileName("%sApi")
                 .template(template + "/controller.java")
-                .superClass(HighLevelV2Api.class)
+                .superClass(HighLevelApi.class)
                 .enableHyphenStyle()
                 .enableRestStyle()
                 .enableFileOverride()
@@ -186,11 +186,11 @@ public class CodeGenerator {
                 .serviceBuilder()
                 .formatServiceFileName("%sService")
                 .serviceTemplate(template + "/IService.java")
-                .superServiceClass(HighLevelV2Service.class)
+                .superServiceClass(HighLevelService.class)
 
                 .formatServiceImplFileName("%sServiceImpl")
                 .serviceImplTemplate(template + "/ServiceImpl.java")
-                .superServiceImplClass(HighLevelV2ServiceImpl.class)
+                .superServiceImplClass(HighLevelServiceImpl.class)
                 .enableFileOverride()
 
                 .mapperBuilder()

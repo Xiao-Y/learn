@@ -2,7 +2,7 @@ package com.billow.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsCategoryDao;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.search.GoodsCategorySearchParam;
@@ -24,7 +24,7 @@ import java.util.Objects;
  * @since 2019-11-27
  */
 @Service
-public class GoodsCategoryServiceImpl extends HighLevelV2ServiceImpl<GoodsCategoryDao, GoodsCategoryPo, GoodsCategorySearchParam> implements GoodsCategoryService {
+public class GoodsCategoryServiceImpl extends HighLevelServiceImpl<GoodsCategoryDao, GoodsCategoryPo, GoodsCategorySearchParam> implements GoodsCategoryService {
 
     @Autowired
     private GoodsCategoryDao goodsCategoryDao;

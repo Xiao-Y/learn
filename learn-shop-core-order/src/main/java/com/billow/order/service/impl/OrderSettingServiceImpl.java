@@ -1,6 +1,6 @@
 package com.billow.order.service.impl;
 
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.order.dao.OrderSettingDao;
 import com.billow.order.pojo.po.OrderSettingPo;
 import com.billow.order.pojo.search.OrderSettingSearchParam;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-08-23
  */
 @Service
-public class OrderSettingServiceImpl extends HighLevelV2ServiceImpl<OrderSettingDao, OrderSettingPo,OrderSettingSearchParam> implements OrderSettingService {
+public class OrderSettingServiceImpl extends HighLevelServiceImpl<OrderSettingDao, OrderSettingPo,OrderSettingSearchParam> implements OrderSettingService {
 
 }
 

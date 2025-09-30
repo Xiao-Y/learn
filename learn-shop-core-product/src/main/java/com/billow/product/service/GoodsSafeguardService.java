@@ -1,7 +1,7 @@
 
 package com.billow.product.service;
 
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.GoodsSafeguardPo;
 import com.billow.product.pojo.search.GoodsSafeguardSearchParam;
 
@@ -14,6 +14,6 @@ import com.billow.product.pojo.search.GoodsSafeguardSearchParam;
  * @version v2.0
  * @since 2021-09-02
  */
-public interface GoodsSafeguardService extends HighLevelV2Service<GoodsSafeguardPo,GoodsSafeguardSearchParam> {
+public interface GoodsSafeguardService extends HighLevelService<GoodsSafeguardPo,GoodsSafeguardSearchParam> {
 
 }

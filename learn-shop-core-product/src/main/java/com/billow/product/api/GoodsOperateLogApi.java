@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsOperateLogPo;
 import com.billow.product.pojo.search.GoodsOperateLogSearchParam;
 import com.billow.product.service.GoodsOperateLogService;
@@ -24,6 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "GoodsOperateLogApi", description = "商品操作记录表")
 @RestController
 @RequestMapping("/goodsOperateLogApi")
-public class GoodsOperateLogApi extends HighLevelV2Api<GoodsOperateLogService, GoodsOperateLogPo, GoodsOperateLogSearchParam> {
+public class GoodsOperateLogApi extends HighLevelApi<GoodsOperateLogService, GoodsOperateLogPo, GoodsOperateLogSearchParam> {
 
 }

@@ -1,6 +1,6 @@
 package com.billow.cart.service;
 
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.cart.pojo.po.CartPo;
 import com.billow.cart.pojo.search.CartSearchParam;
 import com.billow.cart.pojo.vo.CartVo;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author liuyongtao
  * @since 2024-01-19
  */
-public interface CartService extends HighLevelV2Service<CartPo, CartSearchParam> {
+public interface CartService extends HighLevelService<CartPo, CartSearchParam> {
 
     /**
      * 添加商品到购物车

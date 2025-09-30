@@ -1,8 +1,7 @@
 package com.billow.product.api;
 
 import com.billow.common.ex.SelectEx;
-import com.billow.mybatis.base.HighLevelV2Api;
-import com.billow.product.pojo.build.GoodsBrandBuildParam;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.search.GoodsBrandSearchParam;
 import com.billow.product.pojo.vo.GoodsBrandVo;
@@ -32,7 +31,7 @@ import java.util.List;
 @Tag(name = "GoodsBrandApi", description = "品牌表")
 @RestController
 @RequestMapping("/goodsBrandApi")
-public class GoodsBrandApi extends HighLevelV2Api<GoodsBrandService, GoodsBrandPo, GoodsBrandSearchParam> {
+public class GoodsBrandApi extends HighLevelApi<GoodsBrandService, GoodsBrandPo, GoodsBrandSearchParam> {
     @Operation(summary = "查询品牌下拉列表数据")
     @PostMapping(value = "/findBrandSelect")
     public List<SelectEx> findBrandSelect(@RequestBody GoodsBrandVo goodsBrandVo) {

@@ -4,7 +4,7 @@
 
 package ${Parent}.service;
 
-import com.billow.mybatis.base.HighLevelV2Service;
+import com.billow.mybatis.base.HighLevelService;
 import ${package.Entity}.${entity};
 import ${Parent}.pojo.search.${SP};
 
@@ -17,6 +17,6 @@ import ${Parent}.pojo.search.${SP};
  * @version v2.0
  * @since ${date}
  */
-public interface ${table.serviceName} extends HighLevelV2Service<${entity},${SP}> {
+public interface ${table.serviceName} extends HighLevelService<${entity},${SP}> {
 
 }

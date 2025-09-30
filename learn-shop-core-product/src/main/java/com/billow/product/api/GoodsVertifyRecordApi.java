@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsVertifyRecordPo;
 import com.billow.product.pojo.search.GoodsVertifyRecordSearchParam;
 import com.billow.product.service.GoodsVertifyRecordService;
@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "GoodsVertifyRecordApi", description = "商品审核记录表")
 @RestController
 @RequestMapping("/goodsVertifyRecordApi")
-public class GoodsVertifyRecordApi extends HighLevelV2Api<GoodsVertifyRecordService, GoodsVertifyRecordPo, GoodsVertifyRecordSearchParam> {
+public class GoodsVertifyRecordApi extends HighLevelApi<GoodsVertifyRecordService, GoodsVertifyRecordPo, GoodsVertifyRecordSearchParam> {
 
 }

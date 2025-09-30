@@ -1,6 +1,6 @@
 package com.billow.system.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.system.pojo.po.MenuPermissionPo;
 import com.billow.system.pojo.search.MenuPermissionSearchParam;
 import com.billow.system.service.MenuPermissionService;
@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "MenuPermissionApi", description = "菜单权限")
 @RestController
 @RequestMapping("/menuPermissionApi")
-public class MenuPermissionApi extends HighLevelV2Api<MenuPermissionService, MenuPermissionPo, MenuPermissionSearchParam> {
+public class MenuPermissionApi extends HighLevelApi<MenuPermissionService, MenuPermissionPo, MenuPermissionSearchParam> {
 
 }

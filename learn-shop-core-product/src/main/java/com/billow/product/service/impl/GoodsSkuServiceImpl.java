@@ -3,7 +3,7 @@ package com.billow.product.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.*;
 import com.billow.product.pojo.po.*;
 import com.billow.product.pojo.search.GoodsSkuSearchParam;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class GoodsSkuServiceImpl extends HighLevelV2ServiceImpl<GoodsSkuDao, GoodsSkuPo, GoodsSkuSearchParam> implements GoodsSkuService {
+public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, GoodsSkuPo, GoodsSkuSearchParam> implements GoodsSkuService {
 
     @Autowired
     private GoodsSkuDao goodsSkuDao;

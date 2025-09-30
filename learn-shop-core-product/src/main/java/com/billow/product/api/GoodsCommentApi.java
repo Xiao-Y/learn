@@ -1,6 +1,6 @@
 package com.billow.product.api;
 
-import com.billow.mybatis.base.HighLevelV2Api;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.product.pojo.po.GoodsCommentPo;
 import com.billow.product.pojo.search.GoodsCommentSearchParam;
 import com.billow.product.service.GoodsCommentService;
@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "GoodsCommentApi", description = "商品评价表")
 @RestController
 @RequestMapping("/goodsCommentApi")
-public class GoodsCommentApi extends HighLevelV2Api<GoodsCommentService, GoodsCommentPo, GoodsCommentSearchParam> {
+public class GoodsCommentApi extends HighLevelApi<GoodsCommentService, GoodsCommentPo, GoodsCommentSearchParam> {
 
 }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.common.utils.UserTools;
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.mybatis.utils.SqlUtil;
 import com.billow.system.dao.RoleDao;
 import com.billow.system.dao.UserDao;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class UserServiceImpl extends HighLevelV2ServiceImpl<UserDao, UserPo, UserSearchParam> implements UserService {
+public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserSearchParam> implements UserService {
 
     @Autowired
     private UserDao userDao;

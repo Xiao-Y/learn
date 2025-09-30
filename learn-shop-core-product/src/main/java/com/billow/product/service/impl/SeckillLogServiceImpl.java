@@ -1,6 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.SeckillLogDao;
 import com.billow.product.pojo.po.SeckillLogPo;
 import com.billow.product.pojo.search.SeckillLogSearchParam;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-08-31
  */
 @Service
-public class SeckillLogServiceImpl extends HighLevelV2ServiceImpl<SeckillLogDao, SeckillLogPo,SeckillLogSearchParam> implements SeckillLogService {
+public class SeckillLogServiceImpl extends HighLevelServiceImpl<SeckillLogDao, SeckillLogPo,SeckillLogSearchParam> implements SeckillLogService {
 
 }
 

@@ -3,7 +3,7 @@
 <#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 package ${Parent}.service.impl;
 
-import com.billow.mybatis.base.HighLevelV2ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import ${Parent}.dao.${table.mapperName};
 import ${Parent}.pojo.search.${SP};
 import ${Parent}.pojo.po.${entity};
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @since ${date}
  */
 @Service
-public class ${table.serviceImplName} extends HighLevelV2ServiceImpl<${table.mapperName}, ${entity},${SP}> implements ${table.serviceName} {
+public class ${table.serviceImplName} extends HighLevelServiceImpl<${table.mapperName}, ${entity},${SP}> implements ${table.serviceName} {
 
 }
 
