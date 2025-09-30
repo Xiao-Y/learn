@@ -6,6 +6,17 @@
     <artifactId>learn</artifactId>
     <version>4.0-SNAPSHOT</version>
 
+    <packaging>pom</packaging>
+
+    <name>learn</name>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.1</version>
+        <relativePath/>
+    </parent>
+
     <developers>
         <developer>
             <name>billow</name>
@@ -37,54 +48,42 @@
         <module>learn-shop-core-promotion</module>
         <module>learn-shop-interface</module>
         <module>learn-shop-app</module>
-
     </modules>
-    <packaging>pom</packaging>
-
-    <name>learn</name>
-    <url>http://maven.apache.org</url>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.1</version>
-        <relativePath/>
-    </parent>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
+        <sharding-jdbc.version>5.5.2</sharding-jdbc.version>
+        <mybatis-plus.version>3.5.14</mybatis-plus.version>
+        <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
+        <spring.boot.redis.version>3.5.0</spring.boot.redis.version>
+        <lombok.version>1.18.32</lombok.version>
+        <hutool.version>5.8.28</hutool.version>
         <springfox.boot.starter.version>3.0.0</springfox.boot.starter.version>
+        <springdoc-openapi-starter.version>2.5.0</springdoc-openapi-starter.version>
         <quartz.version>2.2.1</quartz.version>
         <qrgen.version>2.0</qrgen.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <fastjson.version>2.0.48</fastjson.version>
-        <hutool.version>5.8.28</hutool.version>
         <lcn.last.version>4.1.0</lcn.last.version>
-        <spring.boot.redis.version>3.5.0</spring.boot.redis.version>
         <redisson.version>3.45.1</redisson.version>
         <guava.version>27.1-jre</guava.version>
         <netty.all.version>4.1.42.Final</netty.all.version>
         <jjwt.version>0.7.0</jjwt.version>
         <commons-io.version>1.3.2</commons-io.version>
-        <lombok.version>1.18.32</lombok.version>
         <activiti.version>6.0.0</activiti.version>
-        <springdoc-openapi-starter.version>2.5.0</springdoc-openapi-starter.version>
         <apache.poi.version>4.1.1</apache.poi.version>
         <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
-        <spring-cloud.version>2023.0.3</spring-cloud.version>
-        <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
-        <sharding-jdbc.version>5.5.2</sharding-jdbc.version>
         <jsch.version>0.1.54</jsch.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
         <log4j-api.version>2.17.1</log4j-api.version>
         <javax.mail.version>1.6.2</javax.mail.version>
         <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
-        <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
-        <mybatis-plus.version>3.5.14</mybatis-plus.version>
     </properties>
 
     <dependencyManagement>
