@@ -3,8 +3,8 @@ package com.billow.system.api;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.service.PermissionService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +25,7 @@ import java.util.List;
  * @create 2019-07-09 15:31
  */
 @Slf4j
-@Api("权限管理")
+@Tag(name = "PermissionApi", description = "权限管理")
 @RestController
 @RequestMapping("/permissionApi")
 public class PermissionApi {
@@ -33,56 +33,56 @@ public class PermissionApi {
     @Autowired
     private PermissionService permissionService;
 
-    @ApiOperation("根据条件查询权限列表")
+    @Operation(summary = "根据条件查询权限列表")
     @PostMapping("/findPermissionList")
     public IPage<PermissionVo> findPermissionList(@RequestBody PermissionVo permissionVo) throws Exception {
         IPage<PermissionVo> permissionList = permissionService.findPermissionList(permissionVo);
         return permissionList;
     }
 
-    @ApiOperation("查询权限列表")
+    @Operation(summary = "查询权限列表")
     @GetMapping("/findPermissionAll")
     public List<PermissionVo> findPermissionAll() throws Exception {
         List<PermissionVo> permissionList = permissionService.findPermissionAll();
         return permissionList;
     }
 
-    @ApiOperation("根据ID删除权限")
+    @Operation(summary = "根据ID删除权限")
     @DeleteMapping("/deletePermissionById/{id}")
     public PermissionVo deletePermissionById(@PathVariable Long id) {
         PermissionVo permissionVo = permissionService.deletePermissionById(id);
         return permissionVo;
     }
 
-    @ApiOperation("根据ID禁用权限")
+    @Operation(summary = "根据ID禁用权限")
     @PutMapping("/prohibitPermissionById/{id}")
     public PermissionVo prohibitPermissionById(@PathVariable Long id) {
         PermissionVo permissionVo = permissionService.prohibitPermissionById(id);
         return permissionVo;
     }
 
-    @ApiOperation("添加权限信息")
+    @Operation(summary = "添加权限信息")
     @PostMapping("/savePermission")
     public PermissionVo savePermission(@RequestBody PermissionVo permissionVo) {
         permissionService.savePermission(permissionVo);
         return permissionVo;
     }
 
-    @ApiOperation("更新权限信息")
+    @Operation(summary = "更新权限信息")
     @PutMapping("/updatePermission")
     public PermissionVo updatePermission(@RequestBody PermissionVo permissionVo) {
         permissionService.updatePermission(permissionVo);
         return permissionVo;
     }
 
-    @ApiOperation("查询我的权限列表")
+    @Operation(summary = "查询我的权限列表")
     @GetMapping("/findMyPermissionList")
     public List<String> findMyPermissionList() throws Exception {
         List<String> permissionList = permissionService.findMyPermissionList();
         return permissionList;
     }
 
-    @ApiOperation(value = "查询菜单关联的权限列表", notes = "查询菜单关联的权限列表")
+    @Operation(summary = "查询菜单关联的权限列表", description = "查询菜单关联的权限列表")
     @GetMapping("/findPermissionByMenuId/{menuId}")
     public List<PermissionVo> findPermissionByMenuId(@PathVariable("menuId") Long menuId)
     {

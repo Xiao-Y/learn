@@ -1,6 +1,6 @@
 package com.billow.order.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,16 +20,16 @@ import java.io.Serializable;
 public class OrderOperateHistoryBuildParam implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "订单id")
+    @Schema(title = "订单id")
     private Long orderId;
 
-    @ApiModelProperty(value = "操作人：用户；系统；后台管理员")
+    @Schema(title = "操作人：用户；系统；后台管理员")
     private String operateMan;
 
-    @ApiModelProperty(value = "订单状态：0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单")
+    @Schema(title = "订单状态：0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单")
     private Integer orderStatus;
 
-    @ApiModelProperty(value = "备注")
+    @Schema(title = "备注")
     private String note;
 
 

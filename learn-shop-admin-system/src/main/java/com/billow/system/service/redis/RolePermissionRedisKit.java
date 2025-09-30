@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
 import com.billow.system.pojo.po.PermissionPo;
+import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;

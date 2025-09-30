@@ -6,7 +6,6 @@ import org.slf4j.MDC;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +26,7 @@ public class AppBeanConfig {
         // 以下省略其他相关配置
         RestTemplate restTemplate = new RestTemplate();
         // 使用拦截器包装http header
-        restTemplate.setInterceptors(new ArrayList<ClientHttpRequestInterceptor>() {
+        restTemplate.setInterceptors(new ArrayList<>() {
             {
                 add((request, body, execution) -> {
                     String traceId = MDC.get(CommonCst.LOG_TRACE_ID);

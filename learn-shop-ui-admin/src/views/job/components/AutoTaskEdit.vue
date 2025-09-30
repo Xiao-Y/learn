@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="ms-doc">
-      <h3>自动任务信息</h3>
+      <div class="ms-doc-title">自动任务信息</div >
       <article>
         <el-form ref="autoTaskInfo" :inline-message="true" :model="autoTaskInfo" :rules="rulesForm" label-width="100px"
                  size="mini">
@@ -345,37 +345,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.ms-doc {
-  width: 70%;
-  margin: 0 auto;
-}
-
-.ms-doc h3 {
-  padding: 9px 10px 10px;
-  margin: 0;
-  font-size: 14px;
-  line-height: 17px;
-  background-color: #f5f5f5;
-  border: 1px solid #d8d8d8;
-  border-bottom: 0;
-  border-radius: 3px 3px 0 0;
-}
-
-.ms-doc article {
-  padding: 10px;
-  word-wrap: break-word;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
-
-.ms-doc article .el-checkbox {
-  margin-bottom: 5px;
-}
-
-.el-form-item {
-  margin-bottom: 3px;
-}
-</style>

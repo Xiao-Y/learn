@@ -4,14 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.mybatis.base.HighLevelServiceImpl;
-import com.billow.product.dao.GoodsSkuDao;
-import com.billow.product.dao.GoodsSkuSpecValueDao;
-import com.billow.product.dao.GoodsSpecKeyDao;
-import com.billow.product.dao.GoodsSpecValueDao;
-import com.billow.product.pojo.po.GoodsSkuPo;
-import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
-import com.billow.product.pojo.po.GoodsSpecKeyPo;
-import com.billow.product.pojo.po.GoodsSpecValuePo;
+import com.billow.product.dao.*;
+import com.billow.product.pojo.po.*;
 import com.billow.product.pojo.search.GoodsSkuSearchParam;
 import com.billow.product.pojo.vo.GoodsSkuSpecValueVo;
 import com.billow.product.pojo.vo.GoodsSkuVo;
@@ -56,6 +50,8 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
     private GoodsSpecValueDao goodsSpecValueDao;
     @Autowired
     private GoodsSkuSpecValueService goodsSkuSpecValueService;
+    @Autowired
+    private GoodsSpuDao goodsSpuDao;
 
     @Override
     public List<Map<String, Object>> findGoodsSkuSpec(Long spuId) {
@@ -145,6 +141,11 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
         // 插入 sku
         GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
         po.setSkuNo(NumUtil.makeNum("SK"));
+
+        Long spuId = po.getSpuId();
+        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectById(spuId);
+        // 插入 sku
+        po.setSkuName(goodsSpuPo.getGoodsName() + "/" + po.getSkuName());
 //        po.setShopId("0");
         goodsSkuDao.insert(po);
         Long skuId = po.getId();
@@ -157,6 +158,7 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
         for (int i = 0; i < goodsSkuSpecValuePos.size(); i++) {
             GoodsSkuSpecValuePo goodsSkuSpecValuePo = goodsSkuSpecValuePos.get(i);
             goodsSkuSpecValuePo.setSkuId(skuId);
+            goodsSkuSpecValuePo.setSpuId(spuId);
             goodsSkuSpecValuePo.setSkuSpecSort(new Long(i));
             goodsSkuSpecValueDao.insert(goodsSkuSpecValuePo);
         }
@@ -166,11 +168,16 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
 
     @Override
     public void update(GoodsSkuVo vo) {
-        // 插入 sku
         GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
+
+        Long spuId = po.getSpuId();
+        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectById(spuId);
+        // 插入 sku
+        po.setSkuName(goodsSpuPo.getGoodsName() + "/" + po.getSkuName());
         goodsSkuDao.updateById(po);
 
         Long skuId = po.getId();
+
         // 删除 sku 下的所有规格
         LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
@@ -180,6 +187,7 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
         for (int i = 0; i < goodsSkuSpecValuePos.size(); i++) {
             GoodsSkuSpecValuePo goodsSkuSpecValuePo = goodsSkuSpecValuePos.get(i);
             goodsSkuSpecValuePo.setSkuId(skuId);
+            goodsSkuSpecValuePo.setSpuId(spuId);
             goodsSkuSpecValuePo.setSkuSpecSort(new Long(i));
             goodsSkuSpecValueDao.insert(goodsSkuSpecValuePo);
         }

@@ -2,7 +2,7 @@ package com.billow.system.common.init;
 
 import com.billow.system.common.properties.CustomProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class StartLoading implements InitializingBean {
+public class StartLoading implements SmartInitializingSingleton {
 
     @Autowired
     private Map<String, IStartLoading> startLoading;
@@ -24,10 +24,10 @@ public class StartLoading implements InitializingBean {
     private CustomProperties customProperties;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterSingletonsInstantiated() {
         if (customProperties.getCommon().getStartInitData()) {
             this.init(null);
-        }else {
+        } else {
             log.warn("未开启缓存加载，首次启动时需要设置为true，对应配置：custom.common.start-init-data");
         }
     }

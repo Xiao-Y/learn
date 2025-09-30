@@ -1,6 +1,7 @@
 package com.billow.product.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.billow.mybatis.pojo.BasePo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,31 +19,31 @@ import java.math.BigDecimal;
  */
 @Data
 @Accessors(chain = true)
-public class SeckillProductBuildParam implements Serializable {
+public class SeckillProductBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "限时购id")
+    @Schema(title = "限时购id")
     private Long seckillId;
 
-    @ApiModelProperty(value = "编号")
+    @Schema(title = "编号")
     private Long seckillSessionId;
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(title = "商品id")
     private Long productId;
 
-    @ApiModelProperty(value = "skuid")
+    @Schema(title = "skuid")
     private Long skuId;
 
-    @ApiModelProperty(value = "限时购价格")
+    @Schema(title = "限时购价格")
     private BigDecimal seckillPrice;
 
-    @ApiModelProperty(value = "限时购库存数量")
+    @Schema(title = "限时购库存数量")
     private Integer seckillCount;
 
-    @ApiModelProperty(value = "每人限购数量")
+    @Schema(title = "每人限购数量")
     private Integer seckillLimit;
 
-    @ApiModelProperty(value = "排序")
+    @Schema(title = "排序")
     private Integer sort;
 
 

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>learn</artifactId>
         <groupId>com.billow</groupId>
-        <version>3.0-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,8 +26,8 @@
                     <groupId>mysql</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
                     <groupId>org.apache.shardingsphere</groupId>
+                    <artifactId>shardingsphere-jdbc</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -48,6 +48,16 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
         <!--配置命名容错处理-->
         <dependency>
@@ -67,10 +77,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <!--fork :  如果没有该项配置，肯呢个devtools不会起作用，即应用不会restart -->
-                    <fork>true</fork>
-                </configuration>
             </plugin>
             <!-- docker -->
             <plugin>
@@ -96,10 +102,10 @@
                     <execution>
                         <phase>package</phase>
                         <configuration>
-                            <tasks>
+                            <target>
                                 <copy todir="src/main/docker"
                                       file="target/${project.artifactId}.${project.packaging}"></copy>
-                            </tasks>
+                            </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>

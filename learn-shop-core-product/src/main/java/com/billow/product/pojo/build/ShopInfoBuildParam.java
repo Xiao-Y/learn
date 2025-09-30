@@ -1,6 +1,7 @@
 package com.billow.product.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.billow.mybatis.pojo.BasePo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -17,13 +18,13 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class ShopInfoBuildParam implements Serializable {
+public class ShopInfoBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(title = "店铺名称")
     private String shopName;
 
-    @ApiModelProperty(value = "店铺排序")
+    @Schema(title = "店铺排序")
     private Long shopSort;
 
 

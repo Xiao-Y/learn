@@ -2,12 +2,9 @@ package com.billow.product.interfaces.api;
 
 import com.billow.product.interfaces.constant.ContextPath;
 import com.billow.product.interfaces.vo.GoodsBrandVo;
-import com.billow.product.interfaces.vo.GoodsCategoryVo;
 import com.billow.tools.resData.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -18,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v1.0
  * @since 2019-11-27
  */
-@RestController
-@RequestMapping(ContextPath.CORE_PRODUCT + "/goodsBrandApi")
 public interface GoodsBrandApi {
 
     /**
@@ -30,6 +25,6 @@ public interface GoodsBrandApi {
      * @author xiaoy
      * @since 2021/2/4 16:20
      */
-    @GetMapping(value = "/getById/{id}")
+    @GetMapping(value = ContextPath.CORE_PRODUCT + "/goodsBrandApi/getById/{id}")
     BaseResponse<GoodsBrandVo> getBrandById(@PathVariable("id") Long id);
 }

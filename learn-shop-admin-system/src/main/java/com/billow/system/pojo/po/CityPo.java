@@ -3,8 +3,8 @@ package com.billow.system.pojo.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("sys_city")
-@ApiModel(value = "CityPo对象", description = "")
+@Schema(title = "CityPo对象", description = "")
 public class CityPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public class CityPo extends BasePo {
     @TableField("level_type")
     private String levelType;
 
-    @ApiModelProperty(value = "地市code")
+    @Schema(title = "地市code")
     @TableField("city_code")
     private String cityCode;
 
@@ -51,7 +51,7 @@ public class CityPo extends BasePo {
     @TableField("merger_name")
     private String mergerName;
 
-    @ApiModelProperty(value = "邮编")
+    @Schema(title = "邮编")
     @TableField("zip_code")
     private String zipCode;
 

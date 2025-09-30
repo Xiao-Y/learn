@@ -14,6 +14,6 @@ import com.billow.product.pojo.search.ShopInfoSearchParam;
  * @version v2.0
  * @since 2021-09-02
  */
-public interface ShopInfoService extends HighLevelService<ShopInfoPo,ShopInfoSearchParam> {
+public interface ShopInfoService extends HighLevelService<ShopInfoPo, ShopInfoSearchParam> {
 
 }

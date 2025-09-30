@@ -1,22 +1,23 @@
 package com.billow.mybatis.gen;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.InjectionConfig;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.FileOutConfig;
-import com.baomidou.mybatisplus.generator.config.GlobalConfig;
-import com.baomidou.mybatisplus.generator.config.PackageConfig;
-import com.baomidou.mybatisplus.generator.config.StrategyConfig;
-import com.baomidou.mybatisplus.generator.config.TemplateConfig;
+import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.billow.mybatis.base.HighLevelApi;
+import com.billow.mybatis.base.HighLevelService;
+import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.mybatis.cache.MybatisRedisCache;
+import com.billow.mybatis.pojo.BasePo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 执行 main 方法控制台输入模块表名回车自动生成对应项目目录中
@@ -24,11 +25,12 @@ import java.util.List;
  * @author LiuYongTao
  * @date 2019/10/29 9:30
  */
-public class CodeGenerator
-{
+public class CodeGenerator {
 
     String projectPath = System.getProperty("user.dir") + "/learn-shop-base/learn-shop-base-mybatis";
     String template = "/template";
+    String srcJava = "/src/test/java";
+    String srcRes = "/src/test/resources";
 
     /**
      * 自定义配置
@@ -37,146 +39,57 @@ public class CodeGenerator
      * @author LiuYongTao
      * @date 2019/10/29 9:46
      */
-    private InjectionConfig getInjectionConfig(PackageConfig pc)
-    {
+    private InjectionConfig getInjectionConfig(PackageConfig pc) {
         String parent = pc.getParent();
         String replace = "";
-        if (StringUtils.isNoneBlank(parent))
-        {
+        if (StringUtils.isNoneBlank(parent)) {
             replace = parent.replace(".", "/");
         }
-        String srcJava = "/src/test/java/" + replace + "/";
-        String srcRes = "/src/test/resources";
+        String javaPath = srcJava + "/" + replace + "/";
 
         // 自定义输出配置
-        List<FileOutConfig> focList = new ArrayList<>();
+        List<CustomFile> focList = new ArrayList<>();
 
         // 如果模板引擎是 freemarker
-        String templatePath = template + "/mapper.xml.ftl";
-        // 如果模板引擎是 velocity
-//        String templatePath = "/templates/mapper.xml.vm";
         // 自定义配置:mapper.xml
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcRes + "/mapper/base/" + tableInfo.getXmlName() + StringPool.DOT_XML;
-            }
-        });
+        focList.add(new CustomFile.Builder()
+                .filePath(projectPath + srcRes + "/mapper/base/")
+                .formatNameFunction(TableInfo::getXmlName)
+                .fileName(StringPool.DOT_XML)
+                .templatePath(template + "/mapper.xml.ftl")
+                .enableFileOverride()
+                .build());
 
-        // 自定义配置:controller.java
-        templatePath = template + "/controller.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/api/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
-            }
-        });
-
-        // 自定义配置:dao.java
-        templatePath = template + "/mapper.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/dao/" + tableInfo.getMapperName() + StringPool.DOT_JAVA;
-            }
-        });
-
-        // 自定义配置:xxPo.java
-        templatePath = template + "/entity.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/pojo/po/" + tableInfo.getEntityName() + StringPool.DOT_JAVA;
-            }
-        });
-
-        // 自定义配置:xxVo.java
-        templatePath = template + "/vo.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/pojo/vo/" +
-                        tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "Vo" + StringPool.DOT_JAVA;
-            }
-        });
-
-        // 自定义配置:xxBuild.java
-        templatePath = template + "/build.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/pojo/build/" +
-                        tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "BuildParam" + StringPool.DOT_JAVA;
-            }
-        });
+//        // 自定义配置:xxVo.java
+//        focList.add(new CustomFile.Builder()
+//                .filePath(projectPath + javaPath + "/pojo/vo/")
+//                .formatNameFunction(tableInfo -> tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "Vo")
+//                .fileName(StringPool.DOT_JAVA)
+//                .templatePath(template + "/vo.java.ftl")
+//                .enableFileOverride()
+//                .build());
+//
+//        // 自定义配置:xxBuild.java
+//        focList.add(new CustomFile.Builder()
+//                .filePath(projectPath + javaPath + "/pojo/build/")
+//                .formatNameFunction(tableInfo -> tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "BuildParam")
+//                .fileName(StringPool.DOT_JAVA)
+//                .templatePath(template + "/build.java.ftl")
+//                .enableFileOverride()
+//                .build());
 
         // 自定义配置:xxSearch.java
-        templatePath = template + "/search.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/pojo/search/" +
-                        tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "SearchParam" + StringPool.DOT_JAVA;
-            }
-        });
-
-        // 自定义配置:xxService.java
-        templatePath = template + "/IService.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/service/" +
-                        tableInfo.getServiceName() + StringPool.DOT_JAVA;
-            }
-        });
-
-        // 自定义配置:xxServiceImpl.java
-        templatePath = template + "/ServiceImpl.java.ftl";
-        focList.add(new FileOutConfig(templatePath)
-        {
-            @Override
-            public String outputFile(TableInfo tableInfo)
-            {
-                // 自定义输出文件名
-                return projectPath + srcJava + "/service/impl/" +
-                        tableInfo.getServiceImplName() + StringPool.DOT_JAVA;
-            }
-        });
-
+        focList.add(new CustomFile.Builder()
+                .filePath(projectPath + javaPath + "/pojo/search/")
+                .formatNameFunction(tableInfo -> tableInfo.getEntityName().substring(0, tableInfo.getEntityName().length() - 2) + "SearchParam")
+                .fileName(StringPool.DOT_JAVA)
+                .templatePath(template + "/search.java.ftl")
+                .enableFileOverride()
+                .build());
         // 自定义配置
-        InjectionConfig cfg = new InjectionConfig()
-        {
-            @Override
-            public void initMap()
-            {
-            }
-        };
-        cfg.setFileOutConfigList(focList);
-        return cfg;
+        return new InjectionConfig.Builder()
+                .customFile(focList)
+                .build();
     }
 
     /**
@@ -186,20 +99,14 @@ public class CodeGenerator
      * @author LiuYongTao
      * @date 2019/10/29 9:10
      */
-    private DataSourceConfig getDataSourceConfig()
-    {
-        DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        // dsc.setSchemaName("public");
-//        dsc.setUrl("jdbc:mysql://192.168.137.200:36005/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true");
-//        dsc.setUsername("learn_shop");
-//        dsc.setPassword("pass123");
-
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false" +
-                "&allowPublicKeyRetrieval=true");
-        dsc.setUsername("root");
-        dsc.setPassword("root");
-        return dsc;
+    private DataSourceConfig getDataSourceConfig() {
+        String driverName = "com.mysql.cj.jdbc.Driver";
+        String url = "jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true";
+        String username = "root";
+        String password = "root";
+        return new DataSourceConfig.Builder(url, username, password)
+                .driverClassName(driverName)
+                .build();
     }
 
     /**
@@ -209,63 +116,39 @@ public class CodeGenerator
      * @author LiuYongTao
      * @date 2019/10/29 9:07
      */
-    private GlobalConfig getGlobalConfig()
-    {
-        GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir(projectPath + "/src/test/java");
-        gc.setAuthor("billow");
-        gc.setOpen(false);
-        gc.setBaseResultMap(true);
-        gc.setBaseColumnList(true);
-        gc.setFileOverride(true);
-        gc.setEnableCache(true);
+    private GlobalConfig getGlobalConfig() {
+        return new GlobalConfig.Builder()
+                .outputDir(projectPath + srcJava)
+                .author("billow")
+                .disableOpenDir()
+                .enableSwagger()
+                .build();
 
-        gc.setIdType(IdType.ASSIGN_ID);
-
-        gc.setServiceName("%sService");
-        gc.setEntityName("%sPo");
-        gc.setControllerName("%sApi");
-        gc.setMapperName("%sDao");
-        gc.setXmlName("%sMapper");
-        gc.setSwagger2(true); //实体属性 Swagger2 注解
-        return gc;
     }
 
-    public void gen()
-    {
+    public void gen() {
         // 全局配置
         GlobalConfig gc = this.getGlobalConfig();
         // 数据源配置
         DataSourceConfig dsc = this.getDataSourceConfig();
         // 策略配置
-        StrategyConfig strategy = this.getStrategyConfig();
+        StrategyConfig.Builder builder = this.getStrategyConfig();
         // 生成表配置
-        this.setGenTableRule(strategy);
+        this.setGenTableRule(builder);
+        StrategyConfig strategy = builder.build();
         // 包配置
         PackageConfig pc = this.getPackageConfig(strategy);
         // 自定义配置
         InjectionConfig cfg = this.getInjectionConfig(pc);
 
         // 代码生成器
-        AutoGenerator mpg = new AutoGenerator();
-        mpg.setGlobalConfig(gc)
-                .setDataSource(dsc)
-                .setStrategy(strategy)
-                .setPackageInfo(pc)
-                .setCfg(cfg);
-        // 设置模板配置
-        TemplateConfig templateConfig = new TemplateConfig();
-        templateConfig.setXml(null)
-                .setController(null)
-                .setService(null)
-                .setServiceImpl(null)
-                .setEntity(null)
-                .setMapper(null);
-        // 设置模板
-        mpg.setTemplate(templateConfig)
+        AutoGenerator mpg = new AutoGenerator(dsc);
+        mpg.global(gc)
+                .strategy(strategy)
+                .packageInfo(pc)
+                .injection(cfg)
                 // 设置模板引擎
-                .setTemplateEngine(new FreemarkerTemplateEngine())
-                .execute();
+                .execute(new FreemarkerTemplateEngine());
     }
 
     /**
@@ -275,27 +158,51 @@ public class CodeGenerator
      * @author LiuYongTao
      * @date 2019/10/29 9:20
      */
-    private StrategyConfig getStrategyConfig()
-    {
-        StrategyConfig strategy = new StrategyConfig();
-        strategy.setNaming(NamingStrategy.underline_to_camel);
-        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        // 公共父类
-        strategy.setSuperEntityClass("com.billow.mybatis.pojo.BasePo");
-        strategy.setEntityLombokModel(true);
-        strategy.setRestControllerStyle(true);
-        // 是否为链式模型（默认 false）
-        strategy.setChainModel(true);
-        // 是否生成字段常量（默认 false）
-//        strategy.setEntityColumnConstant(true);
-        // 公共父类
-//        strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
-        // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind");
-        strategy.setControllerMappingHyphenStyle(true);
-        strategy.setEntityBooleanColumnRemoveIsPrefix(true);
-        strategy.setEntityTableFieldAnnotationEnable(true);
-        return strategy;
+    private StrategyConfig.Builder getStrategyConfig() {
+        StrategyConfig.Builder builder = new StrategyConfig.Builder();
+        builder.entityBuilder()
+                .formatFileName("%sPo")
+                .javaTemplate(template + "/entity.java")
+                .superClass(BasePo.class)
+                .enableSerialAnnotation()
+                .enableChainModel()
+                .enableLombok()
+                .enableTableFieldAnnotation()
+                .naming(NamingStrategy.underline_to_camel)
+                .columnNaming(NamingStrategy.underline_to_camel)
+                .addSuperEntityColumns("id", "create_time", "creator_code", "update_time", "updater_code", "valid_ind")
+//                .idType(IdType.AUTO)
+                .enableFileOverride()
+                .fieldUseJavaDoc(true)
+
+                .controllerBuilder()
+                .formatFileName("%sApi")
+                .template(template + "/controller.java")
+                .superClass(HighLevelApi.class)
+                .enableHyphenStyle()
+                .enableRestStyle()
+                .enableFileOverride()
+
+                .serviceBuilder()
+                .formatServiceFileName("%sService")
+                .serviceTemplate(template + "/IService.java")
+                .superServiceClass(HighLevelService.class)
+
+                .formatServiceImplFileName("%sServiceImpl")
+                .serviceImplTemplate(template + "/ServiceImpl.java")
+                .superServiceImplClass(HighLevelServiceImpl.class)
+                .enableFileOverride()
+
+                .mapperBuilder()
+                .formatMapperFileName("%sDao")
+                .mapperTemplate(template + "/mapper.java")
+                .enableBaseResultMap()
+                .enableBaseColumnList()
+                .cache(MybatisRedisCache.class)
+                .enableFileOverride()
+                .disableMapperXml()
+        ;
+        return builder;
     }
 
 
@@ -306,37 +213,33 @@ public class CodeGenerator
      * @author LiuYongTao
      * @date 2019/10/29 9:11
      */
-    private PackageConfig getPackageConfig(StrategyConfig strategy)
-    {
-        PackageConfig pc = new PackageConfig();
-        String parent = "";
-        if (strategy.getTablePrefix().contains("pms_") || strategy.getTablePrefix().contains("sms_"))
-        {
-            parent = "product";
-        }
-        else if (strategy.getTablePrefix().contains("sk_"))
-        {
-            parent = "seckill";
-        }
-        else if (strategy.getTablePrefix().contains("sys_") || strategy.getTablePrefix().contains("v_"))
-        {
-            parent = "system";
-        }
-        else if (strategy.getTablePrefix().contains("oms_"))
-        {
-            parent = "order";
-        }
-        else if (strategy.getTablePrefix().contains("u_"))
-        {
-            parent = "user";
+    private PackageConfig getPackageConfig(StrategyConfig strategy) {
+        String moduleName = "";
+        if (strategy.getTablePrefix().contains("pms_") || strategy.getTablePrefix().contains("sms_")) {
+            moduleName = "product";
+        } else if (strategy.getTablePrefix().contains("sk_")) {
+            moduleName = "seckill";
+        } else if (strategy.getTablePrefix().contains("sys_") || strategy.getTablePrefix().contains("v_")) {
+            moduleName = "system";
+        } else if (strategy.getTablePrefix().contains("oms_")) {
+            moduleName = "order";
+        } else if (strategy.getTablePrefix().contains("u_")) {
+            moduleName = "user";
         }
 
-        pc.setParent("com.billow");
-        pc.setModuleName(parent);
-        pc.setEntity("pojo.po");
-        pc.setController("api");
-        pc.setMapper("dao");
-        return pc;
+        String javaPath = srcJava + "/" + moduleName + "/";
+        Map<OutputFile, String> pathInfo = new HashMap<>();
+        pathInfo.put(OutputFile.parent, projectPath + "/learn-shop-base/learn-shop-base-mybatis" + javaPath);
+
+        return new PackageConfig.Builder("com.billow", moduleName)
+                .entity("pojo.po")
+                .mapper("dao")
+                .service("service")
+                .serviceImpl("service.impl")
+                .xml("mapper")
+                .controller("api")
+                .pathInfo(pathInfo)
+                .build();
     }
 
     /**
@@ -346,8 +249,7 @@ public class CodeGenerator
      * @author liuyongtao
      * @since 2021-9-8 8:26
      */
-    private void setGenTableRule(StrategyConfig strategy)
-    {
+    private void setGenTableRule(StrategyConfig.Builder strategy) {
         //        strategy.setInclude("oms_cart_item"
 //                , "oms_company_address"
 //                , "oms_order"
@@ -387,21 +289,20 @@ public class CodeGenerator
 //        );
 //        strategy.setTablePrefix("pms_");
 
-        strategy.setInclude(
-//                "sys_apply_info",
+        strategy.addTablePrefix("sys_")
+                .addInclude("sys_apply_info",
 //                "sys_city",
 //                "sys_data_dictionary",
-                "sys_menu",
+                        "sys_menu",
 //                "sys_permission",
 //                "sys_role",
-                "sys_user_role",
-                "sys_role_menu",
-                "sys_role_permission",
-                "sys_permission",
-                "sys_menu_permission",
-                "sys_white_list"
-        );
-        strategy.setTablePrefix("sys_");
+                        "sys_user_role",
+                        "sys_role_menu",
+                        "sys_role_permission",
+                        "sys_permission",
+                        "sys_menu_permission",
+                        "sys_white_list");
+
 
 //        strategy.setInclude("v_mytasklist");
 //        strategy.setTablePrefix("v_");
@@ -411,8 +312,7 @@ public class CodeGenerator
 //        );
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         CodeGenerator cg = new CodeGenerator();
         cg.gen();
     }

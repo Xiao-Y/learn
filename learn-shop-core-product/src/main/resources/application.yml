@@ -14,8 +14,16 @@ server:
   servlet:
     context-path: /core-product
 spring:
+  profiles:
+    active: dev
   application:
     name: learn-shop-core-product #客户端名称
+  config:
+    import: optional:nacos:${spring.application.name}.yml
+  # 数据源配置
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:nacos:sys-config-db.yml
 
 # Excel 模块配置
 learn:

@@ -4,9 +4,9 @@
       <el-collapse value="1">
         <el-collapse-item name="1">
           <template slot="title">
-            <b>查询条件 </b> <i class="el-icon-search"></i>
+            <b>查询条件</b> <i class="el-icon-search"></i>
           </template>
-          <el-form ref="queryFilter" :inline="true" :model="queryFilter" label-width="130px" size="mini">
+          <el-form ref="queryFilter" inline :model="queryFilter" class="query-form-filter" size="mini">
             <el-form-item label="任务分组" prop="jobGroup">
               <el-input v-model="queryFilter.jobGroup" placeholder="请输入内容"></el-input>
             </el-form-item>
@@ -33,8 +33,7 @@
     <button-group-query :queryFilter="queryFilter" @onAdd="handleAdd" @onQuery="loadDataList"></button-group-query>
 
     <el-row>
-      <el-table :data="tableData" border style="width:100%">
-        <!--        <el-table-column label="ID" prop="id" width="40"></el-table-column>-->
+      <el-table :data="tableData" border stripe>
         <el-table-column label="任务分组" prop="jobGroup">
           <template slot-scope="scope">
             <custom-select v-model="scope.row.jobGroup"
@@ -57,7 +56,7 @@
         <el-table-column label="任务描述" prop="description"></el-table-column>
         <el-table-column label="详细" type="expand" width="50">
           <template slot-scope="props">
-            <el-form class="demo-table-expand" inline label-position="left" label-width="120px">
+            <el-form class="ms-table-expand" inline label-position="left" label-width="120px" size="mini">
               <el-form-item label="创建人">
                 <span>{{ props.row.creatorCode }}</span>
               </el-form-item>
@@ -121,7 +120,7 @@
                 </custom-select>
               </el-form-item>
 
-              <template v-if="props.row.sendType == 'email'">
+              <template v-if="props.row.sendType === 'email'">
                 <el-form-item label="邮件模板">
                   <custom-sel-mail-template v-model="props.row.templateId" :button-disabled="true"
                                             :input-read-only="true"></custom-sel-mail-template>
@@ -131,7 +130,7 @@
                             type="textarea"></el-input>
                 </el-form-item>
               </template>
-              <template v-if="props.row.sendType == 'dingding'">
+              <template v-if="props.row.sendType === 'dingding'">
                 <el-form-item label="钉钉模板">
                   <custom-sel-mail-template v-model="props.row.templateId" :button-disabled="true"
                                             :input-read-only="true"></custom-sel-mail-template>
@@ -143,7 +142,8 @@
               </template>
 
               <el-form-item label="任务状态">
-                <el-switch v-model="props.row.jobStatus" :disabled="!props.row.validInd" active-text="启用" active-value="1"
+                <el-switch v-model="props.row.jobStatus" :disabled="!props.row.validInd" active-text="启用"
+                           active-value="1"
                            inactive-text="停止"
                            inactive-value="0"
                            @change="changeJobStatus(props.row)"></el-switch>
@@ -157,24 +157,17 @@
             <button-group-option :show-ind="false"
                                  @onDel="handleDelete(scope.row,scope.$index)"
                                  @onEdit="handleEdit(scope.row,scope.$index)"></button-group-option>
-            <div style="float:left;margin-left:10px;">
-              <el-tooltip :content="scope.row.validInd ? '停止' : '启用'" :open-delay="700" class="item" effect="dark"
-                          placement="top-start">
-                <el-button :type="scope.row.validInd? 'warning' : 'success'" size="mini"
-                           @click="handleCust(scope.row,scope.$index)">
-                  <i :class="scope.row.validInd ? 'el-icon-video-pause' :'el-icon-video-play'"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip :open-delay="700" class="item" content="立即执行" effect="dark" placement="top-start">
-                <el-button size="mini" type="info" @click="handleImmediate(scope.row,scope.$index)">
-                  <i class="el-icon-refresh"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip :open-delay="700" class="item" content="执行日志" effect="dark" placement="top-start">
-                <el-button size="mini" type="success" @click="handleRunLog(scope.row,scope.$index)">
-                  <i class="el-icon-document"></i>
-                </el-button>
-              </el-tooltip>
+            <div class="custom-option-button-group">
+              <el-button :type="scope.row.validInd? 'warning' : 'success'" size="mini" class="option-button-item"
+                         @click="handleCust(scope.row,scope.$index)">
+                {{ scope.row.validInd ? '停止' : '启用' }}
+              </el-button>
+              <el-button size="mini" type="info" @click="handleImmediate(scope.row,scope.$index)"
+                         class="option-button-item">立即执行
+              </el-button>
+              <el-button size="mini" type="success" @click="handleRunLog(scope.row,scope.$index)"
+                         class="option-button-item">执行日志
+              </el-button>
             </div>
           </template>
         </el-table-column>
@@ -191,16 +184,13 @@
 
 <script>
 // ===== api start
+import {LoadJobDataDictionary, LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
 import {
-  LoadSysDataDictionary,
-  LoadJobDataDictionary
-} from "../../api/sys/DataDictionaryMag";
-import {
-  LoadDataJobList,
-  UpdateJobStatus,
   DeleteAutoTask,
+  ImmediateExecutionTask,
+  LoadDataJobList,
   UpdateJobInd,
-  ImmediateExecutionTask
+  UpdateJobStatus
 } from "../../api/job/jobMag";
 // ===== component start
 import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
@@ -407,44 +397,12 @@ export default {
 </script>
 
 <style scoped>
-/*!*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*!*/
-/*::-webkit-scrollbar {*/
-/*  width: 3px;*/
-/*  !*滚动条宽度*!*/
-/*  height: 3px;*/
-/*  !*滚动条高度*!*/
-/*}*/
+.custom-option-button-group {
+  display: inline-block;
+}
 
-/*!*定义滚动条轨道 内阴影+圆角*!*/
-/*::-webkit-scrollbar-track {*/
-/*  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);*/
-/*  border-radius: 10px;*/
-/*  !*滚动条的背景区域的圆角*!*/
-/*  background-color: white;*/
-/*  !*滚动条的背景颜色*!*/
-/*}*/
-
-/*!*定义滑块 内阴影+圆角*!*/
-/*::-webkit-scrollbar-thumb {*/
-/*  border-radius: 10px;*/
-/*  !*滚动条的圆角*!*/
-/*  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);*/
-/*  background-color: #2e363f;*/
-/*  !*滚动条的背景颜色*!*/
-/*}*/
-
-/*.demo-table-expand {*/
-/*  font-size: 0;*/
-/*}*/
-
-/*.demo-table-expand label {*/
-/*  width: 90px;*/
-/*  color: #99a9bf;*/
-/*}*/
-
-/*.demo-table-expand .el-form-item {*/
-/*  margin-right: 0;*/
-/*  margin-bottom: 0;*/
-/*  width: 50%;*/
-/*}*/
+.option-button-item {
+  padding: 5px 5px;
+  margin: 0;
+}
 </style>

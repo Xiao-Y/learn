@@ -49,5 +49,4 @@ public class CommonProperties {
      * @date 2019/8/8 10:21
      */
     private String userIconImgPath;
-
 }

@@ -1,30 +1,24 @@
 package com.billow.search.service;
 
 import com.billow.aop.commons.CustomPage;
-import com.billow.search.common.EsPageUtils;
 import com.billow.search.common.cons.EsIndexConstant;
 import com.billow.search.common.cons.FieldNameConstant;
-import com.billow.search.dao.GoodsInfoDao;
+import com.billow.search.dao.GoodsInfoEsDao;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.search.GoodsInfoSearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.dromara.easyes.core.biz.EsPageInfo;
+import org.dromara.easyes.core.conditions.select.LambdaEsQueryWrapper;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.script.Script;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -43,25 +37,23 @@ import java.util.Set;
 public class GoodsInfoServiceImpl implements GoodsInfoService {
 
     @Autowired
-    private GoodsInfoDao goodsInfoDao;
-    @Autowired
-    private ElasticsearchRestTemplate template;
-    @Autowired
     private RestHighLevelClient restHighLevelClient;
+    @Autowired
+    private GoodsInfoEsDao goodsInfoEsDao;
 
     @Override
     public GoodsInfoPo getById(Long id) {
-        return goodsInfoDao.findById(id).orElse(new GoodsInfoPo());
+        return goodsInfoEsDao.selectById(id);
     }
 
     @Override
     public void saveOrUpdate(GoodsInfoPo goodsInfoPo) {
-        goodsInfoDao.save(goodsInfoPo);
+        goodsInfoEsDao.insert(goodsInfoPo);
     }
 
     @Override
     public void delById(Long id) {
-        goodsInfoDao.deleteById(id);
+        goodsInfoEsDao.deleteById(id);
     }
 
     @Override
@@ -111,68 +103,36 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
     }
 
     @Override
-    public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) {
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        // 构建查询条件
-        if (StringUtils.isNotBlank(param.getSpuNo())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_SPU_NO, param.getSpuNo()));
-        }
-        if (Objects.nonNull(param.getBrandId())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_BRAND_ID, param.getBrandId()));
-        }
-        if (Objects.nonNull(param.getCategoryId())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_CATEGORY_ID, param.getCategoryId()));
-        }
-        if (Objects.nonNull(param.getNewStatus())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_NEW_STATUS, param.getNewStatus()));
-        }
-        if (Objects.nonNull(param.getRecommandStatus())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_RECOMMAND_STATUS, param.getRecommandStatus()));
-        }
-        if (Objects.nonNull(param.getPreviewStatus())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(FieldNameConstant.FIELD_PREVIEW_STATUS, param.getPreviewStatus()));
-        }
-        // 关键字搜索匹配，分词
-        if (StringUtils.isNotBlank(param.getKeyWorlds())) {
-            boolQueryBuilder.must(QueryBuilders.multiMatchQuery(param.getKeyWorlds(),
-                    FieldNameConstant.FIELD_KEYWORDS, FieldNameConstant.FIELD_GOODS_NAME,
-                    FieldNameConstant.FIELD_BRAND_NAME, FieldNameConstant.FIELD_CATEGORY_NAME,
-                    FieldNameConstant.FIELD_SUB_TITLE, FieldNameConstant.FIELD_DETAIL_TITLE));
-        }
-
-        // 价格范围查询
+    public CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) throws IOException {
+        LambdaEsQueryWrapper<GoodsInfoPo> wrapper = new LambdaEsQueryWrapper<>();
+        wrapper.eq(StringUtils.isNotBlank(param.getSpuNo()), GoodsInfoPo::getSpuNo, param.getSpuNo())
+                .eq(Objects.nonNull(param.getBrandId()), GoodsInfoPo::getBrandId, param.getBrandId())
+                .eq(Objects.nonNull(param.getCategoryId()), GoodsInfoPo::getCategoryId, param.getCategoryId())
+                .eq(Objects.nonNull(param.getNewStatus()), GoodsInfoPo::getNewStatus, param.getNewStatus())
+                .eq(Objects.nonNull(param.getRecommandStatus()), GoodsInfoPo::getRecommandStatus, param.getRecommandStatus())
+                .eq(Objects.nonNull(param.getPreviewStatus()), GoodsInfoPo::getPreviewStatus, param.getPreviewStatus());
+        // 关键字查询
+        wrapper.multiMatchQuery(StringUtils.isNotBlank(param.getKeyWorlds()),
+                param.getKeyWorlds(),
+                GoodsInfoPo::getKeywords,
+                GoodsInfoPo::getGoodsName,
+                GoodsInfoPo::getBrandName,
+                GoodsInfoPo::getCategoryName,
+                GoodsInfoPo::getSubTitle,
+                GoodsInfoPo::getDetailTitle);
+        // 添加价格范围过滤
         if (StringUtils.isNotBlank(param.getPrice())) {
-            RangeQueryBuilder rangePrice = QueryBuilders.rangeQuery(FieldNameConstant.FIELD_PRICE_RANGE);
             String[] split = param.getPrice().split(FieldNameConstant.FIELD_LINK_CHAR);
             Long low = StringUtils.isBlank(split[0]) ? 0L : Long.parseLong(split[0]);
-            rangePrice.gte(low);
-            if (split.length > 1) {
-                Long hig = StringUtils.isBlank(split[1]) ? null : Long.parseLong(split[1]);
-                if (hig != null) {
-                    rangePrice.lte(hig);
-                }
+            wrapper.ge(GoodsInfoPo::getPrice, low);
+            if (split.length > 1 && StringUtils.isNotBlank(split[1])) {
+                wrapper.le(GoodsInfoPo::getPrice, Long.parseLong(split[1]));
             }
-            boolQueryBuilder.filter(rangePrice);
         }
-
-        // 分页条件
-        PageRequest pageRequest = PageRequest.of(pageNo - 1, pageSize);
-
-        // 结果高亮显示
-        HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.field(FieldNameConstant.FIELD_SUB_TITLE)
-                .field(FieldNameConstant.FIELD_DETAIL_TITLE)
-                .field(FieldNameConstant.FIELD_GOODS_NAME)
-                .preTags("<font color='red'>")
-                .postTags("</font>");
-
-        // 组装查询
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
-                .withQuery(boolQueryBuilder)
-                .withPageable(pageRequest)
-//                .withHighlightBuilder(highlightBuilder)
-                .build();
-        SearchHits<GoodsInfoPo> searchHits = template.search(nativeSearchQuery, GoodsInfoPo.class);
-        return EsPageUtils.page(searchHits, pageSize);
+        EsPageInfo<GoodsInfoPo> pageInfo = goodsInfoEsDao.pageQuery(wrapper, pageNo, pageSize);
+        return CustomPage.build()
+                .setTableData(pageInfo.getList())
+                .setRecordCount(pageInfo.getTotal())
+                .setTotalPages(pageInfo.getPages());
     }
 }

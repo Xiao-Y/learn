@@ -1,72 +1,28 @@
+swagger: #接口注解文档
+  basepackage: com.billow.cart.api #必须要有 GetMapping，PostMapping...
+  service:
+    name: ${spring.application.name} #api名称
+    version: 3.0
+    description: 警告：此API仅用于测试，禁止任何商业用途，否则一切后果自行承担！！！ #api描述
+    contact:
+      developer: billow #api开发者
+      url: https://github.com/Xiao-Y/learn
+      email: lyongtao123@126.com #api开发者
+
 server:
   port: 8080
   servlet:
-    context-path: /cart
+    context-path: /core-cart
 
 spring:
   application:
     name: learn-shop-core-cart
-  
+  config:
+    import: optional:nacos:${spring.application.name}.yml
   # 数据源配置
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/learn_shop?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-    username: root
-    password: 123456
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 20
-      idle-timeout: 30000
-      auto-commit: true
-      pool-name: CartHikariCP
-      max-lifetime: 1800000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
-
-  # Redis配置
-  redis:
-    host: localhost
-    port: 6379
-    password: 
-    database: 0
-    timeout: 10s
-    lettuce:
-      pool:
-        min-idle: 0
-        max-idle: 8
-        max-active: 8
-        max-wait: -1ms
-
-  # RabbitMQ配置
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: /
-    publisher-confirm-type: correlated
-    publisher-returns: true
-    template:
-      mandatory: true
-    listener:
-      simple:
-        acknowledge-mode: manual
-        prefetch: 1
-
-# MyBatis Plus配置
-mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
-  type-aliases-package: com.billow.cart.pojo.entity
-  configuration:
-    map-underscore-to-camel-case: true
-    cache-enabled: false
-  global-config:
-    db-config:
-      id-type: assign_id
-      logic-delete-field: validInd
-      logic-delete-value: 0
-      logic-not-delete-value: 1
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:nacos:sys-config-db.yml
 
 # 购物车配置
 cart:
@@ -103,16 +59,6 @@ cart:
     responseTime: 500  # 响应时间阈值（毫秒）
     errorRate: 0.01  # 错误率阈值
     hitRate: 0.9  # 缓存命中率阈值
-
-# Swagger配置
-swagger:
-  enabled: true
-  title: 购物车服务接口文档
-  description: 提供购物车相关接口
-  version: 1.0.0
-  contact:
-    name: liuyongtao
-    email: xxx@xxx.com
 
 # 日志配置
 logging:

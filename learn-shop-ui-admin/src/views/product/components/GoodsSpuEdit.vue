@@ -2,7 +2,7 @@
   <div>
     <el-form ref="goodsSpu" :model="goodsSpu" label-width="100px" size="mini">
       <div class="ms-doc">
-        <h3>商品信息</h3>
+        <div class="ms-doc-title">商品信息</div >
         <article>
           <el-form-item label="商品名称" prop="goodsName">
             <el-input v-model="goodsSpu.goodsName" placeholder="请输入内容"></el-input>
@@ -14,7 +14,10 @@
             <el-input v-model="goodsSpu.stock" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="品牌" prop="brandId">
-            <el-input v-model="goodsSpu.brandId" placeholder="请输入内容"></el-input>
+            <custom-select v-model="goodsSpu.brandId"
+                           :datasource="brandSelect"
+                           placeholder="请选择商品品牌">
+            </custom-select>
           </el-form-item>
           <el-form-item label="分类" prop="categoryId">
             <custom-select v-model="goodsSpu.categoryId"
@@ -26,7 +29,7 @@
             <el-input v-model="goodsSpu.spuSort" placeholder="请输入内容"></el-input>
           </el-form-item>
           <el-form-item label="商品规格" prop="spuSort">
-            <el-select
+            <el-select class="full-width"
               v-model="specKeys"
               filterable
               default-first-option
@@ -44,7 +47,7 @@
             <el-switch v-model="goodsSpu.validInd" active-text="有效" inactive-text="无效"></el-switch>
           </el-form-item>
           <el-form-item size="mini">
-            <el-button type="success" @click="showSku = true" :disabled="showSku">显示SKU</el-button>
+            <el-button type="success" @click="showSku = !showSku" >显示SKU</el-button>
             <el-button type="warning" @click="addSku" :disabled="!showSku">添加SKU</el-button>
             <el-button type="primary" @click="onSubmit">保存</el-button>
             <el-button @click="onReset('goodsSpu')">重置</el-button>
@@ -54,7 +57,7 @@
       </div>
       <br>
       <div class="ms-doc" v-if="showSku">
-        <h3>SKU信息</h3>
+        <div class="ms-doc-title">SKU信息</div >
         <article>
           <good-sku-list :spu-id="goodsSpu.id"
                          :category-id="goodsSpu.categoryId"
@@ -98,13 +101,15 @@
           spuSort: 999
         },
         categorySelect: [],// 分类数据源
+        brandSelect: [],// 品牌数据源
         specKeySelect: [],// 规格数据源
         specKeys: [],// 选种的规格
       }
     },
-    created() {
+    activated() {
       this.optionType = this.$route.query.optionType;
       this.categorySelect = JSON.parse(this.$route.query.categorySelect);
+      this.brandSelect = JSON.parse(this.$route.query.brandSelect);
       if (this.optionType === 'edit') {
         this.goodsSpu = JSON.parse(this.$route.query.goodsSpuEdit);
       }
@@ -165,38 +170,3 @@
     }
   };
 </script>
-
-<style scoped>
-  .ms-doc {
-    width: 70%;
-    margin: 0 auto;
-  }
-
-  .ms-doc h3 {
-    padding: 9px 10px 10px;
-    margin: 0;
-    font-size: 14px;
-    line-height: 17px;
-    background-color: #f5f5f5;
-    border: 1px solid #d8d8d8;
-    border-bottom: 0;
-    border-radius: 3px 3px 0 0;
-  }
-
-  .ms-doc article {
-    padding: 10px;
-    word-wrap: break-word;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-  }
-
-  .ms-doc article .el-checkbox {
-    margin-bottom: 5px;
-  }
-
-  .el-form-item {
-    margin-bottom: 3px;
-  }
-</style>

@@ -3,8 +3,8 @@ package com.billow.product.pojo.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,20 +21,20 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pms_shop_info")
-@ApiModel(value="ShopInfoPo对象", description="店铺表")
+@Schema(title = "ShopInfoPo对象", description="店铺表")
 public class ShopInfoPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "店铺编号，唯一")
+    @Schema(title = "店铺编号，唯一")
     @TableField("shop_no")
     private String shopNo;
 
-    @ApiModelProperty(value = "店铺名称")
+    @Schema(title = "店铺名称")
     @TableField("shop_name")
     private String shopName;
 
-    @ApiModelProperty(value = "店铺排序")
+    @Schema(title = "店铺排序")
     @TableField("shop_sort")
     private Long shopSort;
 

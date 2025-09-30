@@ -4,8 +4,8 @@ import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.service.ApplyInfoService;
 import com.billow.tools.enums.ApplyTypeEnum;
 import com.billow.common.utils.UserTools;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/leaveApi")
-@Api(value = "请假申请Api")
+@Tag(name = "LeaveApi", description = "请假申请Api")
 public class LeaveApi {
 
     @Autowired
@@ -31,14 +31,14 @@ public class LeaveApi {
     @Autowired
     private ApplyInfoService applyInfoService;
 
-    @ApiOperation(value = "提交请假申请")
+    @Operation(summary = "提交请假申请")
     @PostMapping("/submitLeave")
     public void submitLeave(@RequestBody LeaveEx leaveEx) {
         String operator = userTools.getCurrentUserCode();
         applyInfoService.submitApplyInfo(operator, ApplyTypeEnum.LEAVE, leaveEx);
     }
 
-    @ApiOperation(value = "提交请假任务")
+    @Operation(summary = "提交请假任务")
     @PostMapping("/commitLeaveProcess/{procInstId}/{taskId}")
     public void commitLeaveProcess(@PathVariable("procInstId") String procInstId,
                                    @PathVariable("taskId") String taskId,

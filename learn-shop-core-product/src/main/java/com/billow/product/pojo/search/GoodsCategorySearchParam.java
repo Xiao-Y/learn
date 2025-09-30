@@ -1,6 +1,7 @@
 package com.billow.product.pojo.search;
 
 import com.billow.mybatis.pojo.BasePage;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,4 +22,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class GoodsCategorySearchParam extends BasePage implements Serializable {
 
+    @Schema(title = "分类名称")
+    private String categoryName;
 }

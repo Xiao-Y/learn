@@ -1,13 +1,12 @@
 package com.billow.product.api;
 
 import com.billow.mybatis.base.HighLevelApi;
-import com.billow.product.pojo.build.GoodsSpecValueBuildParam;
 import com.billow.product.pojo.po.GoodsSpecValuePo;
 import com.billow.product.pojo.search.GoodsSpecValueSearchParam;
 import com.billow.product.pojo.vo.GoodsSpecValueVo;
 import com.billow.product.service.GoodsSpecValueService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,19 +22,19 @@ import java.util.List;
  * </p>
  *
  * @author billow
- * @since 2019-11-27
  * @version v1.0
+ * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsSpecValueApi"},value = "规格值表")
+@Tag(name = "GoodsSpecValueApi", description = "规格值表")
 @RestController
 @RequestMapping("/goodsSpecValueApi")
-public class GoodsSpecValueApi extends HighLevelApi<GoodsSpecValueService, GoodsSpecValuePo, GoodsSpecValueVo, GoodsSpecValueBuildParam, GoodsSpecValueSearchParam> {
+public class GoodsSpecValueApi extends HighLevelApi<GoodsSpecValueService, GoodsSpecValuePo, GoodsSpecValueSearchParam> {
 
     @Autowired
     private GoodsSpecValueService goodsSpecValueService;
 
-    @ApiOperation(value = "通过 SpecKeyId 查询出所有的规格 Value")
+    @Operation(summary = "通过 SpecKeyId 查询出所有的规格 Value")
     @GetMapping(value = "/findListBySpecKeyId/{specKeyId}")
     public List<GoodsSpecValueVo> findListBySpecKeyId(@PathVariable("specKeyId") Long specKeyId) {
         return goodsSpecValueService.findListBySpecKeyId(specKeyId);

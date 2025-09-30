@@ -30,7 +30,7 @@ public class RedisCacheConfig {
 
     private static Logger logger = LoggerFactory.getLogger(RedisCacheConfig.class);
 
-    @Value("${spring.redis.cacheDatabase:15}")
+    @Value("${spring.data.redis.cacheDatabase:15}")
     private Integer cacheDatabase;
 
     @Autowired

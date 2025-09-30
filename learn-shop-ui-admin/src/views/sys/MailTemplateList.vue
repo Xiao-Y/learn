@@ -6,10 +6,25 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form :inline="true" :model="queryFilter" ref="queryFilter" class="demo-form-inline" size="mini">
+          <el-form inline :model="queryFilter" ref="queryFilter" class="query-form-filter" size="mini">
             <el-row>
               <el-form-item label="邮件CODE" prop="mailCode">
                 <el-input v-model="queryFilter.mailCode" placeholder="邮件CODE"></el-input>
+              </el-form-item>
+              <el-form-item label="邮件类型" prop="mailType" class="form-custom-select">
+                <custom-select v-model="queryFilter.mailType"
+                               :datasource="mailTypeSelect"
+                               placeholder="请选择邮件类型">
+                </custom-select>
+              </el-form-item>
+              <el-form-item label="数据来源" prop="dataSources" class="form-custom-select">
+                <custom-select v-model="queryFilter.dataSources"
+                               :datasource="dataSourcesSelect"
+                               placeholder="请选择数据来源">
+                </custom-select>
+              </el-form-item>
+              <el-form-item label="模板描述" prop="description">
+                <el-input v-model="queryFilter.description" placeholder="模板描述"/>
               </el-form-item>
             </el-row>
           </el-form>
@@ -21,7 +36,7 @@
                         :show-add="!selectView"></button-group-query>
     <el-row>
       <template>
-        <el-table border style="width: 100%" ref="mailTemplateListRef"
+        <el-table border stripe ref="mailTemplateListRef"
                   :data="tableData"
                   row-key="id">
           <el-table-column label="选择" width="35" v-if="selectView">
@@ -51,7 +66,7 @@
           <el-table-column label="模板描述" prop="description"></el-table-column>
           <el-table-column type="expand" label="详细" width="50">
             <template slot-scope="scope">
-              <el-form label-position="left" inline class="demo-table-expand" label-width="120px">
+              <el-form label-position="left" inline class="ms-table-expand" label-width="120px">
                 <el-form-item label="创建人">
                   <span>{{ scope.row.creatorCode }}</span>
                 </el-form-item>
@@ -94,188 +109,146 @@
 </template>
 
 <script>
-  // ===== api start
-  import {
-    LoadDataMailTemplateList,
-    ProhibitMailTemplateById,
-    DeleteMailTemplateById
-  } from "../../api/sys/mailTemplateMag";
-  import {
-    LoadSysDataDictionary
-  } from "../../api/sys/DataDictionaryMag";
-  // ===== component start
-  import CustomSelect from '../../components/common/CustomSelect.vue';
-  import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
-  import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
-  import CustomPage from '../../components/common/CustomPage.vue'
-  // ===== 工具类 start
-  import VueUtils from "../../utils/vueUtils";
-  import pageMixins from "../../utils/pageMixins";
+// ===== api start
+import {
+  DeleteMailTemplateById,
+  LoadDataMailTemplateList,
+  ProhibitMailTemplateById
+} from "../../api/sys/mailTemplateMag";
+import {LoadSysDataDictionary} from "../../api/sys/DataDictionaryMag";
+// ===== component start
+import CustomSelect from '../../components/common/CustomSelect.vue';
+import ButtonGroupOption from '../../components/common/ButtonGroupOption.vue';
+import ButtonGroupQuery from '../../components/common/ButtonGroupQuery.vue';
+import CustomPage from '../../components/common/CustomPage.vue'
+// ===== 工具类 start
+import VueUtils from "../../utils/vueUtils";
+import pageMixins from "../../utils/pageMixins";
 
-  export default {
-    name: "sysMailTemplateListIndex",
-    components: {
-      CustomSelect,
-      ButtonGroupOption,
-      ButtonGroupQuery,
-      CustomPage
+export default {
+  name: "sysMailTemplateListIndex",
+  components: {
+    CustomSelect,
+    ButtonGroupOption,
+    ButtonGroupQuery,
+    CustomPage
+  },
+  mixins: [pageMixins],
+  props: {
+    // 是否显示选择框 和操作按钮
+    selectView: {
+      type: Boolean,
+      default: false
     },
-    mixins: [pageMixins],
-    props: {
-      // 是否显示选择框 和操作按钮
-      selectView: {
-        type: Boolean,
-        default: false
+    mailCode: {
+      type: String,
+      default: null
+    }
+  },
+  data() {
+    return {
+      queryFilter: {
+        // 查询条件
+        mailCode: null,
+        mailType: null,
+        dataSources: null,
+        description: null,
       },
-      mailCode: {
-        trype: String,
-        default: null
+      tableData: [], // 列表数据源
+      mailTypeSelect: [],// 邮件类型的下拉数据源
+      dataSourcesSelect: [],// 数据来源的下拉数据源
+    }
+  },
+  created() {
+    // 使用邮件模板时
+    if (this.selectView && this.mailCode && this.mailCode != '') {
+      this.queryFilter.mailCode = this.mailCode;
+    }
+    // 加载邮件类型的下拉
+    LoadSysDataDictionary('mailType').then(res => {
+      this.mailTypeSelect = res.resData;
+    });
+    // 加载数据来源的下拉
+    LoadSysDataDictionary('dataSourcesType').then(res => {
+      this.dataSourcesSelect = res.resData;
+    });
+    // 请数据殂
+    this.loadDataList();
+  },
+  //每次激活时
+  activated() {
+    // 根据key名获取传递回来的参数，data 就是 map
+    this.$bus.once('mailTemplateInfo', function (data) {
+      let index = this.tableData.findIndex(f => f.id === data.id);
+      if (index !== -1) { // 更新
+        this.tableData.splice(index, 1, data);
+      } else { // 添加
+        this.tableData.push(data);
       }
-    },
-    data() {
-      return {
-        queryFilter: {
-          // 查询条件
-          mailCode: null
-        },
-        tableData: [], // 列表数据源
-        mailTypeSelect: [],// 邮件类型的下拉数据源
-        dataSourcesSelect: [],// 数据来源的下拉数据源
-      }
-    },
-    created() {
-      // 使用邮件模板时
-      if (this.selectView && this.mailCode && this.mailCode != '') {
-        this.queryFilter.mailCode = this.mailCode;
-      }
-      // 加载邮件类型的下拉
-      LoadSysDataDictionary('mailType').then(res => {
-        this.mailTypeSelect = res.resData;
+    }.bind(this));
+  },
+  methods: {
+    // 获取权限列表数据
+    loadDataList() {
+      LoadDataMailTemplateList(this.queryFilter).then(res => {
+        let data = res.resData;
+        this.tableData = data.tableData;
+        this.queryFilter.recordCount = data.recordCount;
+        this.queryFilter.totalPages = data.totalPages;
       });
-      // 加载数据来源的下拉
-      LoadSysDataDictionary('dataSourcesType').then(res => {
-        this.dataSourcesSelect = res.resData;
-      });
-      // 请数据殂
-      this.loadDataList();
     },
-    //每次激活时
-    activated() {
-      // 根据key名获取传递回来的参数，data 就是 map
-      this.$bus.once('mailTemplateInfo', function (data) {
-        var index = this.tableData.findIndex(f => f.id === data.id);
-        if (index != -1) { // 更新
-          this.tableData.splice(index, 1, data);
-        } else { // 添加
-          this.tableData.push(data);
+    // 添加权限
+    handleAdd() {
+      this.$router.push({
+        name: 'sysMailTemplateEdit',
+        query: {
+          optionType: 'add',
+          mailTypeSelect: JSON.stringify(this.mailTypeSelect),
+          dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
         }
-      }.bind(this));
+      });
     },
-    methods: {
-      // 获取权限列表数据
-      loadDataList() {
-        LoadDataMailTemplateList(this.queryFilter).then(res => {
-          var data = res.resData;
-          this.tableData = data.tableData;
-          this.queryFilter.recordCount = data.recordCount;
-          this.queryFilter.totalPages = data.totalPages;
-        });
-      },
-      // 添加权限
-      handleAdd() {
-        this.$router.push({
-          name: 'sysMailTemplateEdit',
-          query: {
-            optionType: 'add',
-            mailTypeSelect: JSON.stringify(this.mailTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
-          }
-        });
-      },
-      handleEdit(row, index) {
-        this.$router.push({
-          name: 'sysMailTemplateEdit',
-          query: {
-            optionType: 'edit',
-            id: row.id,
-            mailTypeSelect: JSON.stringify(this.mailTypeSelect),
-            dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
-          }
-        });
-      },
-      handleDelete(row, index) {
-        var _this = this;
+    handleEdit(row, index) {
+      this.$router.push({
+        name: 'sysMailTemplateEdit',
+        query: {
+          optionType: 'edit',
+          id: row.id,
+          mailTypeSelect: JSON.stringify(this.mailTypeSelect),
+          dataSourcesSelect: JSON.stringify(this.dataSourcesSelect)
+        }
+      });
+    },
+    handleDelete(row, index) {
+      var _this = this;
 
-        VueUtils.confirmDel(row.mailCode, () => {
-          DeleteMailTemplateById(row.id).then(res => {
-            _this.tableData.splice(index, 1);
-            _this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
+      VueUtils.confirmDel(row.mailCode, () => {
+        DeleteMailTemplateById(row.id).then(res => {
+          _this.tableData.splice(index, 1);
+          _this.$message({
+            type: 'success',
+            message: '删除成功!'
           });
         });
-      },
-      handleProhibit(row, index) {
-        var _this = this;
+      });
+    },
+    handleProhibit(row, index) {
+      let _this = this;
 
-        VueUtils.confirmInd(row.mailCode, () => {
-          ProhibitMailTemplateById(row.id).then(res => {
-            row.validInd = res.resData.validInd;
-            _this.$message({
-              type: 'success',
-              message: '禁用成功!'
-            });
+      VueUtils.confirmInd(row.mailCode, () => {
+        ProhibitMailTemplateById(row.id).then(res => {
+          row.validInd = res.resData.validInd;
+          _this.$message({
+            type: 'success',
+            message: '禁用成功!'
           });
         });
-      },
-      // 勾选单个后，发送通知
-      handleSelect(row) {
-        this.$emit("change", row);
-      }
+      });
+    },
+    // 勾选单个后，发送通知
+    handleSelect(row) {
+      this.$emit("change", row);
     }
   }
+}
 </script>
-
-<style scoped>
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  ::-webkit-scrollbar {
-    width: 3px;
-    /*滚动条宽度*/
-    height: 3px;
-    /*滚动条高度*/
-  }
-
-  /*定义滚动条轨道 内阴影+圆角*/
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    /*滚动条的背景区域的圆角*/
-    background-color: white;
-    /*滚动条的背景颜色*/
-  }
-
-  /*定义滑块 内阴影+圆角*/
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    /*滚动条的圆角*/
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f;
-    /*滚动条的背景颜色*/
-  }
-
-  .demo-table-expand {
-    font-size: 0;
-  }
-
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
-</style>

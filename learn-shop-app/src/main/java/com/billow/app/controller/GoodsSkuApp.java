@@ -4,8 +4,8 @@ import com.billow.app.feign.product.GoodsSkuFeign;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.exception.GlobalException;
 import com.billow.tools.resData.BaseResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +27,7 @@ import java.util.Objects;
  * @since 2019-11-27
  */
 @Slf4j
-@Api(tags = {"GoodsSkuApp"}, value = "sku表")
+@Tag(name = "GoodsSkuApp", description = "sku表")
 @RestController
 @RequestMapping("/goodsSkuApp")
 public class GoodsSkuApp {
@@ -35,7 +35,7 @@ public class GoodsSkuApp {
     @Autowired
     private GoodsSkuFeign goodsSkuFeign;
 
-    @ApiOperation(value = "根据 spuId 查询 sku 规格表数据")
+    @Operation(summary = "根据 spuId 查询 sku 规格表数据")
     @GetMapping(value = "/findSkuSpec/{spuId}")
     public BaseResponse<List<Map<String, Object>>> findSkuSpec(@PathVariable Long spuId) {
         BaseResponse<List<Map<String, Object>>> baseResponse = goodsSkuFeign.findSkuSpec(spuId);
@@ -45,7 +45,7 @@ public class GoodsSkuApp {
         return baseResponse;
     }
 
-    @ApiOperation(value = "通过 spuId 获取商品 sku 信息")
+    @Operation(summary = "通过 spuId 获取商品 sku 信息")
     @GetMapping(value = "/findGoodsSku/{spuId}")
     public BaseResponse<List<Map<String, Object>>> findGoodsSku(@PathVariable Long spuId) {
         BaseResponse<List<Map<String, Object>>> baseResponse = goodsSkuFeign.findGoodsSkuSpec(spuId);

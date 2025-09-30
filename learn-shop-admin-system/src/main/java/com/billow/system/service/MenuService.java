@@ -70,7 +70,7 @@ public interface MenuService extends IService<MenuPo> {
      * @author LiuYongTao
      * @date 2019/7/24 14:10
      */
-    Integer countMenuCodeByMenuCode(String menuCode);
+    Long countMenuCodeByMenuCode(String menuCode);
 
     /**
      * 查询出指定节点的所有直接父级菜单id

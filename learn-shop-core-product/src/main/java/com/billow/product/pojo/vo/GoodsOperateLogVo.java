@@ -1,6 +1,6 @@
 package com.billow.product.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -23,16 +23,16 @@ import java.math.BigDecimal;
 public class GoodsOperateLogVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(title = "商品id")
     private Long spuId;
 
-    @ApiModelProperty(value = "改变前价格")
+    @Schema(title = "改变前价格")
     private BigDecimal priceOld;
 
-    @ApiModelProperty(value = "改变后价格")
+    @Schema(title = "改变后价格")
     private BigDecimal priceNew;
 
-    @ApiModelProperty(value = "操作人")
+    @Schema(title = "操作人")
     private String operateMan;
 
 

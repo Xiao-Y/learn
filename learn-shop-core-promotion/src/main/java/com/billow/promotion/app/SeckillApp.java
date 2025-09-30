@@ -5,8 +5,8 @@ import com.billow.common.utils.UserTools;
 import com.billow.promotion.pojo.vo.ExposerVo;
 import com.billow.promotion.pojo.vo.SeckillExecutionVo;
 import com.billow.promotion.service.SeckillService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-01-21
  */
 @Slf4j
-@Api(tags = {"SeckillApp"}, value = "秒杀库存表")
+@Tag(name = "SeckillApp", description = "秒杀库存表")
 @RestController
 @RequestMapping("/seckillApp")
 public class SeckillApp extends BaseApi {
@@ -36,13 +36,13 @@ public class SeckillApp extends BaseApi {
     @Autowired
     private UserTools userTools;
 
-    @ApiOperation(value = "生成秒杀链接")
+    @Operation(summary = "生成秒杀链接")
     @GetMapping(value = "/genSeckillUrl/{seckillProductId}")
     public ExposerVo genSeckillUrl(@PathVariable("seckillProductId") Long seckillProductId) {
         return seckillService.genSeckillUrl(seckillProductId);
     }
 
-    @ApiOperation(value = "执行秒杀")
+    @Operation(summary = "执行秒杀")
     @PostMapping(value = "/executionSeckill/{seckillProductId}")
     public SeckillExecutionVo executionSeckill(@PathVariable("seckillProductId") Long seckillProductId,
                                                @RequestParam("userCode") String userCode,

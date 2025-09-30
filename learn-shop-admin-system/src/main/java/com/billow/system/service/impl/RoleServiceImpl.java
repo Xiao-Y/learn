@@ -17,6 +17,7 @@ import com.billow.system.service.RolePermissionService;
 import com.billow.system.service.RoleService;
 import com.billow.system.service.redis.RoleMenuRedisKit;
 import com.billow.system.service.redis.RolePermissionRedisKit;
+import com.billow.system.service.redis.RoleRedisKit;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
@@ -65,6 +66,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
     private MenuService menuService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private RoleRedisKit roleRedisKit;
 
     @Override
     public List<RoleVo> findRoleListInfoByUserId(Long userId) {
@@ -123,6 +126,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
             }
         }
         this.saveOrUpdate(rolePo);
+        roleRedisKit.updateRoleInfoCache(rolePo.getId());
         ConvertUtils.convert(rolePo, roleVo);
         // 保存、更新数据库和 redis 中的角色权限信息
         this.saveOrUpdateRolePermission(roleVo);
@@ -338,7 +342,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         roleMenuService.saveBatch(roleMenuPos);
         // 删除 redis 信息
         roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
-
+        roleRedisKit.deleteRoleById(one.getId());
 
         return ConvertUtils.convert(one, RoleVo.class);
     }
@@ -374,7 +378,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         roleMenuDao.delete(condition2);
         // 删除 redis 信息
         roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
-
+        roleRedisKit.deleteRoleById(one.getId());
         return ConvertUtils.convert(one, RoleVo.class);
     }
 
@@ -394,7 +398,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
     }
 
     @Override
-    public Integer countRoleCodeByRoleCode(String roleCode) {
+    public Long countRoleCodeByRoleCode(String roleCode) {
         LambdaQueryWrapper<RolePo> condition2 = Wrappers.lambdaQuery();
         condition2.eq(RolePo::getRoleCode, roleCode);
         return roleDao.selectCount(condition2);

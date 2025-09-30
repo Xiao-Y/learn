@@ -1,6 +1,6 @@
 package com.billow.product.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -21,16 +21,16 @@ import java.time.LocalDateTime;
 public class SeckillVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "标题")
+    @Schema(title = "标题")
     private String title;
 
-    @ApiModelProperty(value = "开始日期")
+    @Schema(title = "开始日期")
     private LocalDateTime startDate;
 
-    @ApiModelProperty(value = "结束日期")
+    @Schema(title = "结束日期")
     private LocalDateTime endDate;
 
-    @ApiModelProperty(value = "上下线状态")
+    @Schema(title = "上下线状态")
     private Integer status;
 
 

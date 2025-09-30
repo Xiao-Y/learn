@@ -1,11 +1,22 @@
 # nocos 配置
 nacos:
-  ipAddress: 127.0.0.1
   port: 8848
-  namespace: learn-dev # learn-pro
+  ipAddress: 127.0.0.1
+  namespace: dev # pro
+  #  ipAddress: nacos-standalone-mysql
+  #  namespace: prod # pro
   username: nacos
   password: nacos
+
 spring:
+  config:
+    import:
+      # 配置公用文件（新版本使用列表格式）
+      - nacos:cloud-config.yml
+      - nacos:sys-config-db.yml
+      - nacos:sys-config-mq.yml
+      - nacos:sys-config-redis.yml
+      - nacos:sys-config-notice.yml
   cloud:
     nacos:
       discovery:
@@ -20,16 +31,4 @@ spring:
         server-addr: ${nacos.ipAddress}:${nacos.port}
         file-extension: yml
         refresh-enabled: true
-        # 配置公用文件
-        shared-configs[0]:
-          dataId: cloud-config.yml
-        shared-configs[1]:
-          dataId: sys-config-db.yml
-        shared-configs[2]:
-          dataId: sys-config-mq.yml
-        shared-configs[3]:
-          dataId: sys-config-redis.yml
-        # 消息通知、消息中间件
-        shared-configs[4]:
-          dataId: sys-config-notice.yml
 

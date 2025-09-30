@@ -49,7 +49,13 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
         Object[] objects = param.toArray(new Object[param.size()]);
         sql = select_sql + sql;
         log.debug("sql:{}", sql);
-        return jdbcTemplate.queryForObject(sql, objects, new BeanPropertyRowMapper<>(MailTemplatePo.class));
+        List<MailTemplatePo> result = jdbcTemplate.query(
+                sql,
+                objects,
+                new BeanPropertyRowMapper<>(MailTemplatePo.class)
+        );
+        // 如果有结果返回第一条，否则返回null
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
@@ -69,14 +75,27 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
         Object[] objects = param.toArray(new Object[param.size()]);
         sql = select_sql + sql;
         log.debug("sql:{}", sql);
-        return jdbcTemplate.queryForObject(sql, objects, new BeanPropertyRowMapper<>(MailTemplatePo.class));
+        List<MailTemplatePo> result = jdbcTemplate.query(
+                sql,
+                objects,
+                new BeanPropertyRowMapper<>(MailTemplatePo.class)
+        );
+        // 如果有结果返回第一条，否则返回null
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
     public MailTemplatePo findById(Long id) {
         String sql = select_sql + " and id = ?";
         log.debug("sql:{}", sql);
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(MailTemplatePo.class));
+        List<MailTemplatePo> result = jdbcTemplate.query(
+                sql,
+                new Object[]{id},
+                new BeanPropertyRowMapper<>(MailTemplatePo.class)
+        );
+
+        // 如果有结果返回第一条，否则返回null
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
@@ -206,6 +225,10 @@ public class MailTemplateDaoImpl implements MailTemplateDao, Serializable {
         if (ToolsUtils.isNotEmpty(mailTemplatePo.getDataSources())) {
             sql += " and data_sources = ? ";
             queryParam.add(mailTemplatePo.getDataSources());
+        }
+        if (ToolsUtils.isNotEmpty(mailTemplatePo.getDescription())) {
+            sql += " and description like concat('%',?,'%')";
+            queryParam.add(mailTemplatePo.getDescription());
         }
         return sql;
     }

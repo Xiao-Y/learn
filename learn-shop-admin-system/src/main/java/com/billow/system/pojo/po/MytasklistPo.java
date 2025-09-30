@@ -3,7 +3,8 @@ package com.billow.system.pojo.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billow.mybatis.pojo.BasePo;
-import io.swagger.annotations.ApiModel;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -23,7 +24,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("v_mytasklist")
-@ApiModel(value="MytasklistPo对象", description="VIEW")
+@Schema(title = "MytasklistPo对象", description="VIEW")
 public class MytasklistPo extends BasePo {
 
     private static final long serialVersionUID = 1L;

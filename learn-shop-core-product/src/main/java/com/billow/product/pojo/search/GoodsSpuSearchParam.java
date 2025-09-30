@@ -1,7 +1,7 @@
 package com.billow.product.pojo.search;
 
 import com.billow.mybatis.pojo.BasePage;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -24,16 +24,16 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class GoodsSpuSearchParam extends BasePage implements Serializable {
 
-    @ApiModelProperty(value = "商品编号，唯一")
+    @Schema(title = "商品编号，唯一")
     private String spuNo;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(title = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "品牌id")
+    @Schema(title = "品牌id")
     private Long brandId;
 
-    @ApiModelProperty(value = "品牌分类id")
+    @Schema(title = "品牌分类id")
     private Long categoryId;
 
     // 查询测试

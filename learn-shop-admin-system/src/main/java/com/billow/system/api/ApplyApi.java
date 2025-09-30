@@ -10,8 +10,8 @@ import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MytasklistPo;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +33,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/applyApi")
-@Api(value = "申请操作API")
+@Tag(name = "ApplyApi", description = "申请操作API")
 public class ApplyApi {
 
     @Autowired
@@ -45,7 +45,7 @@ public class ApplyApi {
     @Autowired
     private ApplyInfoService applyInfoService;
 
-    @ApiOperation(value = "查询个人任务列表")
+    @Operation(summary = "查询个人任务列表")
     @PostMapping("/queryMyTaskList")
     public IPage<MytasklistPo> queryMyTaskList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
@@ -54,7 +54,7 @@ public class ApplyApi {
         return applyInfoVoPage;
     }
 
-    @ApiOperation(value = "查询个人任务数量")
+    @Operation(summary = "查询个人任务数量")
     @GetMapping("/queryAssigneeTaskCount")
     public long queryAssigneeTaskCount() {
         String currentUserCode = userTools.getCurrentUserCode();
@@ -64,7 +64,7 @@ public class ApplyApi {
         return count;
     }
 
-    @ApiOperation(value = "我发起的流程（所有的）")
+    @Operation(summary = "我发起的流程（所有的）")
     @PostMapping("/myStartProdeList")
     public IPage<ApplyInfoPo> myStartProdeList(@RequestBody ApplyInfoVo applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
@@ -73,7 +73,7 @@ public class ApplyApi {
         return page;
     }
 
-    @ApiOperation(value = "我发起的流程数量（所有的）")
+    @Operation(summary = "我发起的流程数量（所有的）")
     @GetMapping("/myStartProdeCount")
     public long myStartProdeCount() {
         String currentUserCode = userTools.getCurrentUserCode();
@@ -81,7 +81,7 @@ public class ApplyApi {
         return count;
     }
 
-    @ApiOperation(value = "运行中的的流程")
+    @Operation(summary = "运行中的的流程")
     @GetMapping("/ongoingCount")
     public long ongoingCount() {
         String currentUserCode = userTools.getCurrentUserCode();
@@ -89,40 +89,40 @@ public class ApplyApi {
         return count;
     }
 
-    @ApiOperation(value = "认领任务")
+    @Operation(summary = "认领任务")
     @PostMapping("/claimTask/{taskId}")
     public void claimTask(@PathVariable String taskId) {
         String currentUserCode = userTools.getCurrentUserCode();
         workFlowExecute.claim(taskId, currentUserCode);
     }
 
-//    @ApiOperation(value = "放弃认领任务")
+//    @Operation(summary = "放弃认领任务")
 //    @PostMapping("/unclaimTask/{taskId}")
 //    public void unclaimTask(@PathVariable String taskId) {
 //        workFlowExecute.unclaim(taskId);
 //    }
 
-//    @ApiOperation(value = "查询任务列表")
+//    @Operation(summary = "查询任务列表")
 //    @PostMapping("/queryTaskList")
 //    public Page<TaskVo> queryTaskList(@RequestBody TaskVo taskVo) {
 //        Page<TaskVo> taskVos = workFlowQuery.queryTaskList(taskVo, taskVo.getOffset(), taskVo.getPageSize());
 //        return taskVos;
 //    }
 
-    @ApiOperation(value = "删除已经结束的申请")
+    @Operation(summary = "删除已经结束的申请")
     @DeleteMapping("/deleteApplyInfoById/{id}")
     public void submitLeave(@PathVariable Long id) {
         applyInfoService.deleteApplyInfoById(id);
     }
 
-    @ApiOperation(value = "根据ID查询申请信息")
+    @Operation(summary = "根据ID查询申请信息")
     @GetMapping("/findApplyById/{id}")
     public ApplyInfoVo findApplyById(@PathVariable Long id) {
         ApplyInfoVo applyInfoVo = applyInfoService.findLeaveById(id);
         return applyInfoVo;
     }
 
-    @ApiOperation(value = "通过流程实例id 查询批注信息")
+    @Operation(summary = "通过流程实例id 查询批注信息")
     @GetMapping("/findCommentListByProcInstId/{procInstId}")
     public List<CommentVo> findCommentListByProcInstId(@PathVariable("procInstId") String procInstId) {
         List<CommentVo> commentVos = workFlowQuery.findCommentListByProcInstId(procInstId);

@@ -3,7 +3,6 @@ package com.billow.email.service.build;
 import com.billow.email.constant.MailCst;
 import com.billow.email.pojo.vo.MailTemplateVo;
 import com.billow.email.service.MailContentBuild;
-import com.billow.email.service.MailTemplateService;
 import com.billow.email.utils.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +18,7 @@ import java.util.Map;
 public class HtmlMailContentBuild implements MailContentBuild {
 
     @Autowired
-    private MailTemplateService mailTemplateService;
+    private BaseContentBuild baseContentBuild;
 
     @Override
     public String build(MailTemplateVo mailTemplateVo, Map<String, Object> parameter) throws Exception {
@@ -40,16 +39,16 @@ public class HtmlMailContentBuild implements MailContentBuild {
             case MailCst.SYS_FC_DATA_SS_FIXED: // 1-固定邮件
                 break;
             case MailCst.SYS_FC_DATA_SS_SQL: // 2-SQL查询
-                result = mailTemplateService.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
-                mailTemp = mailTemplateService.replaceContent(mailTemp, result, MailCst.SQL_PLACEHOLDER);
+                result = baseContentBuild.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                mailTemp = baseContentBuild.replaceContent(mailTemp, result, MailCst.SQL_PLACEHOLDER);
                 break;
             case MailCst.SYS_FC_DATA_SS_PRO: // 3-参数设置
-                mailTemp = mailTemplateService.replaceContent(mailTemp, parameter, MailCst.PRO_PLACEHOLDER);
+                mailTemp = baseContentBuild.replaceContent(mailTemp, parameter, MailCst.PRO_PLACEHOLDER);
                 break;
             case MailCst.SYS_FC_DATA_SS_MIX: // 4-混合（2、3都有）
-                result = mailTemplateService.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
-                mailTemp = mailTemplateService.replaceContent(mailTemp, parameter, MailCst.PRO_PLACEHOLDER);
-                mailTemp = mailTemplateService.replaceContent(mailTemp, result, MailCst.SQL_PLACEHOLDER);
+                result = baseContentBuild.runSQLSingleResult(parameter, mailTemplateVo.getRunSql());
+                mailTemp = baseContentBuild.replaceContent(mailTemp, parameter, MailCst.PRO_PLACEHOLDER);
+                mailTemp = baseContentBuild.replaceContent(mailTemp, result, MailCst.SQL_PLACEHOLDER);
                 break;
         }
         return mailTemp;

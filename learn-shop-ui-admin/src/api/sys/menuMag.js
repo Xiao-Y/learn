@@ -32,8 +32,8 @@ export const findMenus = () => requestUtils.get(baseUrl + '/findMenus');
 export const saveOrUpdateMenu = editMenus => requestUtils.put(baseUrl + '/saveOrUpdateMenu', {
   id: editMenus.id,
   pid: editMenus.pid,
-  menuName: editMenus.title,
-  menuCode: editMenus.titleCode,
+  menuName: editMenus.menuName,
+  menuCode: editMenus.menuCode,
   sortField: editMenus.sortField,
   icon: editMenus.icon,
   validInd: editMenus.validInd,

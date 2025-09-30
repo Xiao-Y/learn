@@ -1,6 +1,6 @@
 package com.billow.system.pojo.ex;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,15 +15,18 @@ import java.util.List;
 @EqualsAndHashCode
 public class CityEx implements Serializable {
 
-    @ApiModelProperty("城市 id")
+    @Schema(title = "城市 id")
     private String cityId;
 
-    @ApiModelProperty("上级城市 id")
+    @Schema(title = "上级城市 id")
     private String parentCityId;
 
-    @ApiModelProperty("城市名称 id")
+    @Schema(title = "城市名称")
     private String name;
 
-    @ApiModelProperty("下级城市信息")
+    @Schema(title = "级别")
+    private String levelType;
+
+    @Schema(title = "下级城市信息")
     private List<CityEx> children;
 }

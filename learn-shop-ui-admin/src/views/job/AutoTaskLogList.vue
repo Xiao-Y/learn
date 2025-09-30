@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="tableData" border style="width:100%">
+      <el-table :data="tableData" border stripe>
         <el-table-column label="任务分组" prop="jobGroup">
           <template slot-scope="scope">
             <custom-select v-model="scope.row.jobGroup"
@@ -119,30 +119,3 @@
   }
 </script>
 
-<style scoped>
-  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  ::-webkit-scrollbar {
-    width: 3px;
-    /*滚动条宽度*/
-    height: 3px;
-    /*滚动条高度*/
-  }
-
-  /*定义滚动条轨道 内阴影+圆角*/
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    /*滚动条的背景区域的圆角*/
-    background-color: white;
-    /*滚动条的背景颜色*/
-  }
-
-  /*定义滑块 内阴影+圆角*/
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    /*滚动条的圆角*/
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #2e363f;
-    /*滚动条的背景颜色*/
-  }
-</style>

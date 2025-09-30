@@ -1,6 +1,6 @@
 package com.billow.system.pojo.cache;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,21 +10,21 @@ import lombok.Data;
 @Data
 public class PermissionCache {
 
-    @ApiModelProperty("主键Id")
+    @Schema(title = "主键Id")
     private Long id;
 
-    @ApiModelProperty("权限名称")
+    @Schema(title = "权限名称")
     private String permissionName;
 
-    @ApiModelProperty("权限CODE")
+    @Schema(title = "权限CODE")
     private String permissionCode;
 
-    @ApiModelProperty("权限描述")
+    @Schema(title = "权限描述")
     private String description;
 
-    @ApiModelProperty("授权链接")
+    @Schema(title = "授权链接")
     private String url;
 
-    @ApiModelProperty("系统模块")
+    @Schema(title = "系统模块")
     private String systemModule;
 }

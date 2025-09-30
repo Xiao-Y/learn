@@ -10,7 +10,6 @@ public class UserVo  implements Serializable {
     private Long id;
     private String usercode;
     private String username;
-    private String password;
     private List<String> roles;
 
 }

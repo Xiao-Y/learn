@@ -1,6 +1,5 @@
 package com.billow.system.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

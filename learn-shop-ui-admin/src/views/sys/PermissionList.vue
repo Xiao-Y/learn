@@ -6,7 +6,7 @@
           <template slot="title">
             <b>查询条件</b><i class="el-icon-search"></i>
           </template>
-          <el-form ref="queryFilter" :inline="true" :model="queryFilter" class="demo-form-inline" size="mini">
+          <el-form inline :model="queryFilter" ref="queryFilter" class="query-form-filter" size="mini">
             <el-row>
               <el-form-item label="权限名称" prop="permissionName">
                 <el-input v-model="queryFilter.permissionName" placeholder="权限名称"></el-input>
@@ -17,7 +17,7 @@
               <el-form-item label="授权链接" prop="url">
                 <el-input v-model="queryFilter.url" placeholder="授权链接"></el-input>
               </el-form-item>
-              <el-form-item label="系统模块" prop="systemModule">
+              <el-form-item label="系统模块" prop="systemModule" class="form-custom-select">
                 <custom-select v-model="queryFilter.systemModule"
                                :datasource="systemModuleSelect"
                                placeholder="请选择系统模块">
@@ -33,9 +33,8 @@
                         @onQuery="loadDataList"/>
     <el-row>
       <template>
-        <el-table ref="permissionListRef" :data="tableData" border
+        <el-table ref="permissionListRef" :data="tableData" border stripe
                   row-key="id"
-                  style="width: 100%"
                   @select="handleSelect"
                   @select-all="handleSelectAll">
           <el-table-column v-if="roleEditHide" prop="checked" reserve-selection type="selection"
@@ -43,7 +42,7 @@
           <el-table-column label="权限名称" prop="permissionName" width="210"></el-table-column>
           <el-table-column label="授权链接" prop="url"></el-table-column>
           <el-table-column label="权限描述" prop="description"></el-table-column>
-          <el-table-column label="系统模块" prop="systemModule">
+          <el-table-column label="系统模块" prop="systemModule" width="200">
             <template slot-scope="scope">
               <custom-select v-model="scope.row.systemModule" :datasource="systemModuleSelect"
                              :value-key="scope.row.url"
@@ -53,7 +52,7 @@
           </el-table-column>
           <el-table-column label="详细" type="expand" width="50">
             <template slot-scope="scope">
-              <el-form class="demo-table-expand" inline label-position="left" label-width="120px">
+              <el-form class="ms-table-expand" inline label-position="left" label-width="120px">
                 <el-form-item label="创建人">
                   <span>{{ scope.row.creatorCode }}</span>
                 </el-form-item>
@@ -321,54 +320,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.el-row {
-  margin-bottom: 5px;
-}
-
-.el-form-item {
-  margin-bottom: 3px;
-}
-
-/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar {
-  width: 3px;
-  /*滚动条宽度*/
-  height: 3px;
-  /*滚动条高度*/
-}
-
-/*定义滚动条轨道 内阴影+圆角*/
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  /*滚动条的背景区域的圆角*/
-  background-color: white;
-  /*滚动条的背景颜色*/
-}
-
-/*定义滑块 内阴影+圆角*/
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  /*滚动条的圆角*/
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #2e363f;
-  /*滚动条的背景颜色*/
-}
-
-.demo-table-expand {
-  font-size: 0;
-}
-
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
-}
-
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
-</style>

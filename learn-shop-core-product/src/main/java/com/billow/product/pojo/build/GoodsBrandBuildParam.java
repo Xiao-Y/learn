@@ -1,6 +1,7 @@
 package com.billow.product.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.billow.mybatis.pojo.BasePo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -17,31 +18,31 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class GoodsBrandBuildParam implements Serializable {
+public class GoodsBrandBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "首字母")
+    @Schema(title = "首字母")
     private String firstLetter;
 
-    @ApiModelProperty(value = "品牌名称")
+    @Schema(title = "品牌名称")
     private String brandName;
 
-    @ApiModelProperty(value = "分类排序")
+    @Schema(title = "分类排序")
     private Long brandSort;
 
-    @ApiModelProperty(value = "是否显示")
+    @Schema(title = "是否显示")
     private Integer showStatus;
 
-    @ApiModelProperty(value = "产品数量")
+    @Schema(title = "产品数量")
     private Integer productCount;
 
-    @ApiModelProperty(value = "品牌logo")
+    @Schema(title = "品牌logo")
     private String logo;
 
-    @ApiModelProperty(value = "专区大图")
+    @Schema(title = "专区大图")
     private String bigPic;
 
-    @ApiModelProperty(value = "品牌故事")
+    @Schema(title = "品牌故事")
     private String brandStory;
 
 

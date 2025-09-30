@@ -1,11 +1,11 @@
 package com.billow.jpa.utils;
 
 import com.billow.tools.utlis.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
 /**

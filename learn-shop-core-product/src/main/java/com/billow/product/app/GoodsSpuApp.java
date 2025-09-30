@@ -6,8 +6,8 @@ import com.billow.product.pojo.po.GoodsSpuPo;
 import com.billow.product.pojo.vo.GoodsSpuVo;
 import com.billow.product.service.GoodsSpuService;
 import com.billow.tools.utlis.ConvertUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version v1.0
  * @since 2019-11-27
  */
-@Api(tags = {"GoodsSpuApp"}, value = "spu表")
+@Tag(name = "GoodsSpuApp", description = "spu表")
 @RestController
 @RequestMapping("/goodsSpuApp")
 public class GoodsSpuApp {
@@ -35,7 +35,7 @@ public class GoodsSpuApp {
     @Autowired
     private GoodsSpuService goodsSpuService;
 
-    @ApiOperation(value = "根据id查询spu表数据")
+    @Operation(summary = "根据id查询spu表数据")
     @GetMapping(value = "/getById/{id}")
     public GoodsSpuVo getById(@PathVariable("id") Long id) {
         GoodsSpuPo po = goodsSpuService.getById(id);

@@ -1,8 +1,6 @@
 
 package com.billow.product.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.mybatis.base.HighLevelService;
 import com.billow.product.pojo.po.GoodsCategoryPo;
 import com.billow.product.pojo.search.GoodsCategorySearchParam;

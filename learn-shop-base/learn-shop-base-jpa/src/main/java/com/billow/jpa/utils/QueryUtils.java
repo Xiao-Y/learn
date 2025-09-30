@@ -2,10 +2,13 @@ package com.billow.jpa.utils;
 
 
 import com.billow.tools.utlis.ToolsUtils;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+//import javax.persistence.criteria.CriteriaBuilder;
+//import javax.persistence.criteria.Predicate;
+//import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.billow.order.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,12 +20,12 @@ import java.io.Serializable;
 public class OrderReturnReasonVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "退货类型")
+    @Schema(title = "退货类型")
     private String name;
 
     private Integer sort;
 
-    @ApiModelProperty(value = "状态：0->不启用；1->启用")
+    @Schema(title = "状态：0->不启用；1->启用")
     private Integer status;
 
 

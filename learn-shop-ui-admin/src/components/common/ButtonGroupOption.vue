@@ -1,105 +1,107 @@
 <template>
-  <div style="float:left;">
-    <el-tooltip class="item" effect="dark" content="禁用" placement="top-start"
+  <div class="option-button-group">
+    <el-tooltip class="option-button-item" effect="dark" content="禁用" placement="top-start"
                 :open-delay="openDelay"
                 v-has="hasInd"
                 v-if="showInd">
-      <el-button @click="onInd" type="warning" size="mini" :disabled="disInd">
-        <i class="el-icon-warning"></i>
-      </el-button>
+      <el-button @click="onInd" type="warning" size="mini" :disabled="disInd">禁用</el-button>
     </el-tooltip>
-    <el-tooltip class="item" effect="dark" content="删除" placement="top-start"
+    <el-tooltip class="option-button-item" effect="dark" content="删除" placement="top-start"
                 :open-delay="openDelay"
                 v-has="hasDel"
                 v-if="showDel">
-      <el-button @click="onDel" type="danger" size="mini" :disabled="disDel">
-        <i class="el-icon-delete"></i>
-      </el-button>
+      <el-button @click="onDel" type="danger" size="mini" :disabled="disDel">删除</el-button>
     </el-tooltip>
-    <el-tooltip class="item" effect="dark" content="修改" placement="top-start"
+    <el-tooltip class="option-button-item" effect="dark" content="修改" placement="top-start"
                 :open-delay="openDelay"
                 v-has="hasEdit"
                 v-if="showEdit">
-      <el-button @click="onEdit" type="primary" size="mini" :disabled="disEdit">
-        <i class="el-icon-edit"></i>
-      </el-button>
+      <el-button @click="onEdit" type="primary" size="mini" :disabled="disEdit">修改</el-button>
     </el-tooltip>
   </div>
 </template>
 
 <script>
-  export default {
-    props: {
-      // 提示信息延时
-      openDelay: {
-        type: Number,
-        default: 70
-      },
-      // 是否显示禁用按钮
-      showInd: {
-        type: Boolean,
-        default: true
-      },
-      // 是否禁用禁用按钮
-      disInd: {
-        type: Boolean,
-        default: false
-      },
-      // 是否显示删除按钮
-      showDel: {
-        type: Boolean,
-        default: true
-      },
-      // 是否禁用删除按钮
-      disDel: {
-        type: Boolean,
-        default: false
-      },
-      // 是否显示修改按钮
-      showEdit: {
-        type: Boolean,
-        default: true
-      },
-      // 是否禁用修改按钮
-      disEdit: {
-        type: Boolean,
-        default: false
-      },
-      // 删除按钮权限码
-      hasDel: {
-        type: String,
-        default: null
-      },
-      // 修改按钮权限码
-      hasEdit: {
-        type: String,
-        default: null
-      },
-      // 禁用按钮权限码
-      hasInd: {
-        type: String,
-        default: null
-      }
+export default {
+  props: {
+    // 提示信息延时
+    openDelay: {
+      type: Number,
+      default: 70
     },
-    data() {
-      return {}
+    // 是否显示禁用按钮
+    showInd: {
+      type: Boolean,
+      default: true
     },
-    methods: {
-      // 禁用事件
-      onInd() {
-        this.$emit('onInd');
-      },
-      // 删除事件
-      onDel() {
-        this.$emit('onDel');
-      },
-      // 修改事件
-      onEdit() {
-        this.$emit('onEdit');
-      }
+    // 是否禁用禁用按钮
+    disInd: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示删除按钮
+    showDel: {
+      type: Boolean,
+      default: true
+    },
+    // 是否禁用删除按钮
+    disDel: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示修改按钮
+    showEdit: {
+      type: Boolean,
+      default: true
+    },
+    // 是否禁用修改按钮
+    disEdit: {
+      type: Boolean,
+      default: false
+    },
+    // 删除按钮权限码
+    hasDel: {
+      type: String,
+      default: null
+    },
+    // 修改按钮权限码
+    hasEdit: {
+      type: String,
+      default: null
+    },
+    // 禁用按钮权限码
+    hasInd: {
+      type: String,
+      default: null
+    }
+  },
+  data() {
+    return {}
+  },
+  methods: {
+    // 禁用事件
+    onInd() {
+      this.$emit('onInd');
+    },
+    // 删除事件
+    onDel() {
+      this.$emit('onDel');
+    },
+    // 修改事件
+    onEdit() {
+      this.$emit('onEdit');
     }
   }
+}
 </script>
 
 <style>
+.option-button-group {
+  display: inline-block;
+}
+
+.option-button-item {
+  padding: 5px;
+  margin: 0;
+}
 </style>

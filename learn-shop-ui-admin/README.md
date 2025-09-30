@@ -49,6 +49,14 @@ vue-permission是一套基于Vue/Vue-Router/axios/Vuex实现的前端用户权�
 2. username: editor
    password: 任意
 ```
+## 版本
+node v17.9.1
+
+nvm list 查看版本
+
+nvm use v17.9.1 切换版本
+
+nvm install v17.9.1 安装版本
 
 ## Build Setup
 

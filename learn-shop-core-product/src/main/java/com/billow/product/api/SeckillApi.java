@@ -1,12 +1,10 @@
 package com.billow.product.api;
 
 import com.billow.mybatis.base.HighLevelApi;
-import com.billow.product.pojo.build.SeckillBuildParam;
 import com.billow.product.pojo.po.SeckillPo;
 import com.billow.product.pojo.search.SeckillSearchParam;
-import com.billow.product.pojo.vo.SeckillVo;
 import com.billow.product.service.SeckillService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,14 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author billow
- * @since 2021-08-31
  * @version v2.0
+ * @since 2021-08-31
  */
 @Slf4j
-@Api(tags = {"SeckillApi"},value = "限时购表")
+@Tag(name = "SeckillApi", description = "限时购表")
 @RestController
 @RequestMapping("/seckillApi")
-public class SeckillApi extends HighLevelApi<SeckillService, SeckillPo, SeckillVo, SeckillBuildParam, SeckillSearchParam>
-{
+public class SeckillApi extends HighLevelApi<SeckillService, SeckillPo, SeckillSearchParam> {
 
 }

@@ -3,8 +3,7 @@ package com.billow.cloud.common.amqp;
 import lombok.Data;
 
 @Data
-public class AmqpYml
-{
+public class AmqpYml {
     /**
      * 交换机名称
      *

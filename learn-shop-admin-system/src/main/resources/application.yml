@@ -14,14 +14,16 @@ server:
   servlet:
     context-path: /admin-system
 spring:
+  profiles:
+    active: dev
   application:
     name: learn-shop-admin-system #客户端名称
-
-# 开启hystrix熔断机制
-feign:
-  hystrix:
-    enabled: true
-
+  config:
+    import: optional:nacos:${spring.application.name}.yml
+  # 数据源配置
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:nacos:sys-config-sharding-jdbc.yml
 # Excel 模块配置
 learn:
   excel:
@@ -31,7 +33,7 @@ learn:
     dict:
       # Redis字典前缀，用于在Redis中存储字典数据时的键前缀
       # 例如：如果前缀为"DICT:"，字典编码为"USER_STATUS"，则最终的Redis键为"DICT:USER_STATUS"
-      redis-key-prefix: "COMM:DIC_FIELD_TYPE:admin-system"
+      redis-key-prefix: "comm:dic_field_type:admin-system"
 
       # 是否启用枚举字典自动扫描
       # true: 启用自动扫描，会扫描指定包路径下的枚举类

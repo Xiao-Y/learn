@@ -1,0 +1,10 @@
+services:
+  admin-system:
+    container_name: core-product
+    build: .
+    ports:
+      - "8911:8911"
+networks:
+  default:
+    external: true
+    name: learn_shop

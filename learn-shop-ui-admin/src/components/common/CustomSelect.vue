@@ -1,31 +1,33 @@
 <!-- 下拉列表组件： 可以通过绑定数据源 datasource 和指定 fieldType 的方式加载下拉，如果是列表查询建议使用 datasource 方式-->
 <template>
-<el-tooltip class="item" effect="dark" :disabled="currentTooltipDisabled" :content="tooltipContent" placement="right" :open-delay="0">
-  <el-select
-    @change="changeEvent"
-    v-model="currentValue"
-    :value-key="valueKey"
-    :filterable="filterable"
-    :default-first-option="defaultFirstOption"
-    :multiple="multiple"
-    :disabled="disabled"
-    :size="size"
-    :clearable="clearable"
-    :allow-create="allowCreate"
-    :placeholder="placeholder"
-  >
-    <el-option
-      v-for="item in currentSource"
-      :key="item.id"
-      :label="item.fieldDisplay"
-      :value="item.fieldValue"
-    ></el-option>
-  </el-select>
-</el-tooltip>
+  <el-tooltip class="select-custom" effect="dark" :disabled="currentTooltipDisabled" :content="tooltipContent" placement="right"
+              :open-delay="0">
+    <el-select
+      class="full-width"
+      @change="changeEvent"
+      v-model="currentValue"
+      :value-key="valueKey"
+      :filterable="filterable"
+      :default-first-option="defaultFirstOption"
+      :multiple="multiple"
+      :disabled="disabled"
+      :size="size"
+      :clearable="clearable"
+      :allow-create="allowCreate"
+      :placeholder="placeholder"
+    >
+      <el-option
+        v-for="item in currentSource"
+        :key="item.id"
+        :label="item.fieldDisplay"
+        :value="item.fieldValue"
+      ></el-option>
+    </el-select>
+  </el-tooltip>
 </template>
 
 <script>
-import { LoadDataDictionary } from "../../api/sys/DataDictionaryMag";
+import {LoadDataDictionary} from "../../api/sys/DataDictionaryMag";
 
 export default {
   // 双向绑定
@@ -90,7 +92,7 @@ export default {
     },
     clearable: {
       type: Boolean,
-      default: false
+      default: true
     },
     // 是否可以新创建
     allowCreate: {
@@ -98,7 +100,7 @@ export default {
       default: false
     },
     // tooltip 提示信息
-    tooltipDisabled:{
+    tooltipDisabled: {
       type: Boolean,
       default: false
     }
@@ -108,7 +110,7 @@ export default {
       currentValue: null, // currentValue 当前选种的，接收父组件 v-model 传来的值；
       currentSource: [], // currentSource 当前数据源|；
       currentTooltipDisabled: true, // 当前提示信息是否不显示
-      tooltipContent:'' // 提示的内容
+      tooltipContent: '' // 提示的内容
     };
   },
   created() {
@@ -144,23 +146,23 @@ export default {
   },
   watch: {
     // 有时第一次加载的时候 created 中 datasource 为空，以下同理
-    datasource: function(newVal, oldVal) {
+    datasource: function (newVal, oldVal) {
       // console.info("watch 加载数据源字典：", newVal);
       this.currentSource = newVal;
     },
-    parentValues: function(newVal, oldVal) {
+    parentValues: function (newVal, oldVal) {
       // console.info("watch parentValues：", newVal);
       this.currentValue = newVal;
     },
     // 用于显示下拉列表的提示信息
-    currentValue: function(newVal, oldVal) {
+    currentValue: function (newVal, oldVal) {
       this.currentTooltipDisabled = this.tooltipDisabled;
-      if(!this.currentTooltipDisabled){
-        var obj = this.currentSource.find(f=>f.fieldValue === this.currentValue);
-        if(obj){
+      if (!this.currentTooltipDisabled) {
+        var obj = this.currentSource.find(f => f.fieldValue === this.currentValue);
+        if (obj) {
           this.currentTooltipDisabled = !obj.description;
           this.tooltipContent = obj.description;
-        }else{
+        } else {
           this.currentTooltipDisabled = true;
         }
       }
@@ -168,3 +170,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.full-width {
+  width: 90%;
+}
+</style>

@@ -1,6 +1,6 @@
 package com.billow.product.pojo.ex;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,37 +20,37 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SpuInfoEx {
 
-    @ApiModelProperty(value = "spu_id")
+    @Schema(title = "spu_id")
     private Long spuId;
 
     // GoodsBrandPo
-    @ApiModelProperty(value = "品牌id")
+    @Schema(title = "品牌id")
     private Long brandId;
 
-    @ApiModelProperty(value = "品牌名称")
+    @Schema(title = "品牌名称")
     private String brandName;
 
     // GoodsCategoryPo
-    @ApiModelProperty(value = "分类id")
+    @Schema(title = "分类id")
     private Long categoryId;
 
-    @ApiModelProperty(value = "分类名称")
+    @Schema(title = "分类名称")
     private String categoryName;
 
     // GoodsSpuPo
-    @ApiModelProperty(value = "商品编号，唯一")
+    @Schema(title = "商品编号，唯一")
     private String spuNo;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(title = "商品名称")
     private String goodsName;
 
-    @ApiModelProperty(value = "子标题")
+    @Schema(title = "子标题")
     private String subTitle;
 
-    @ApiModelProperty(value = "最低售价")
+    @Schema(title = "最低售价")
     private Integer lowPrice;
 
-    @ApiModelProperty(value = "总库存量")
+    @Schema(title = "总库存量")
     private Long stock;
 
 }

@@ -4,14 +4,10 @@ import com.billow.product.interfaces.constant.ContextPath;
 import com.billow.tools.resData.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping(ContextPath.CORE_PRODUCT +"/goodsSkuApi")
 public interface GoodsSkuApi {
 
     /**
@@ -22,7 +18,7 @@ public interface GoodsSkuApi {
      * @author liuyongtao
      * @since 2021-9-7 14:18
      */
-    @GetMapping(value = "/findSkuSpec/{spuId}")
+    @GetMapping(value = ContextPath.CORE_PRODUCT + "/goodsSkuApi/findSkuSpec/{spuId}")
     BaseResponse<List<Map<String, Object>>> findSkuSpec(@PathVariable Long spuId);
 
     /**
@@ -33,6 +29,6 @@ public interface GoodsSkuApi {
      * @author liuyongtao
      * @since 2021-9-7 14:18
      */
-    @GetMapping(value = "/findGoodsSkuSpec/{spuId}")
+    @GetMapping(value = ContextPath.CORE_PRODUCT + "/goodsSkuApi/findGoodsSkuSpec/{spuId}")
     BaseResponse<List<Map<String, Object>>> findGoodsSkuSpec(@PathVariable Long spuId);
 }

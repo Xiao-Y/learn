@@ -1,6 +1,6 @@
 package com.billow.system.pojo.ex;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,13 +12,13 @@ import java.io.Serializable;
 @Data
 public class DataDictionaryEx implements Serializable {
 
-    @ApiModelProperty("字典 id")
+    @Schema(title = "字典 id")
     private Long id;
 
-    @ApiModelProperty("显示的名称")
+    @Schema(title = "显示的名称")
     private String fieldDisplay;
 
-    @ApiModelProperty("显示名称的值")
+    @Schema(title = "显示名称的值")
     private Long fieldValue;
 
     public DataDictionaryEx(Long id, String fieldDisplay, Long fieldValue) {

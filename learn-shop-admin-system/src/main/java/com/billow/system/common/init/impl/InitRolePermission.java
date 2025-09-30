@@ -6,16 +6,13 @@ import com.billow.system.pojo.po.RolePo;
 import com.billow.system.service.PermissionService;
 import com.billow.system.service.RoleService;
 import com.billow.system.service.redis.RolePermissionRedisKit;
+import com.billow.system.service.redis.RoleRedisKit;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -28,24 +25,29 @@ import java.util.concurrent.ExecutorService;
 @Component
 public class InitRolePermission implements IStartLoading {
 
+    @Resource(name = "fxbDrawExecutor")
+    private ExecutorService executorService;
     @Autowired
     private RolePermissionRedisKit rolePermissionRedisKit;
+    @Autowired
+    private RoleRedisKit roleRedisKit;
     @Autowired
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
-    @Resource(name = "fxbDrawExecutor")
-    private ExecutorService executorService;
 
     @Override
     public boolean init() {
         log.info("======== start init Role Permission....");
         executorService.execute(() -> {
+            Map<String, RolePo> rolePoMapId = new HashMap<>();
             List<RolePo> rolePos = roleService.list();
             for (RolePo rolePo : rolePos) {
+                rolePoMapId.put(rolePo.getId().toString(), rolePo);
                 Set<PermissionPo> permissionPos = permissionService.findPermissionByRole(rolePo);
                 rolePermissionRedisKit.setRolePermission(new ArrayList<>(permissionPos), rolePo.getRoleCode());
             }
+            roleRedisKit.setRoleInfoCache(rolePoMapId);
             log.info("======== end init Role Permission....");
         });
         return true;

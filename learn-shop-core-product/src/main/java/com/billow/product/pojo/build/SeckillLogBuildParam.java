@@ -1,6 +1,7 @@
 package com.billow.product.pojo.build;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.billow.mybatis.pojo.BasePo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,25 +19,25 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-public class SeckillLogBuildParam implements Serializable {
+public class SeckillLogBuildParam extends BasePo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "会员id")
+    @Schema(title = "会员id")
     private Integer memberId;
 
-    @ApiModelProperty(value = "商品id")
+    @Schema(title = "商品id")
     private Long productId;
 
-    @ApiModelProperty(value = "会员电话")
+    @Schema(title = "会员电话")
     private String memberPhone;
 
-    @ApiModelProperty(value = "商品名称")
+    @Schema(title = "商品名称")
     private String productName;
 
-    @ApiModelProperty(value = "会员订阅时间")
+    @Schema(title = "会员订阅时间")
     private LocalDateTime subscribeTime;
 
-    @ApiModelProperty(value = "发送时间")
+    @Schema(title = "发送时间")
     private LocalDateTime sendTime;
 
 

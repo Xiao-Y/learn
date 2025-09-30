@@ -1,6 +1,6 @@
 package com.billow.product.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,12 +12,12 @@ import lombok.Data;
 @Data
 public class GoodsCategoryTreeVo {
 
-    @ApiModelProperty(value = "分类id")
+    @Schema(title = "分类id")
     private Long id;
 
-    @ApiModelProperty(value = "分类名称")
+    @Schema(title = "分类名称")
     private String categoryName;
 
-    @ApiModelProperty(value = "禁用选项")
+    @Schema(title = "禁用选项")
     private Boolean validInd;
 }

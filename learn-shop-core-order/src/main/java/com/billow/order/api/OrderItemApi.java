@@ -1,12 +1,10 @@
 package com.billow.order.api;
 
 import com.billow.mybatis.base.HighLevelApi;
-import com.billow.order.pojo.build.OrderItemBuildParam;
 import com.billow.order.pojo.po.OrderItemPo;
 import com.billow.order.pojo.search.OrderItemSearchParam;
-import com.billow.order.pojo.vo.OrderItemVo;
 import com.billow.order.service.OrderItemService;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-08-23
  */
 @Slf4j
-@Api(tags = {"OrderItemApi"}, value = "")
+@Tag(name = "OrderItemApi", description = "")
 @RestController
 @RequestMapping("/orderItemApi")
-public class OrderItemApi extends HighLevelApi<OrderItemService, OrderItemPo, OrderItemVo, OrderItemBuildParam, OrderItemSearchParam>
-{
+public class OrderItemApi extends HighLevelApi<OrderItemService, OrderItemPo, OrderItemSearchParam> {
 
 }

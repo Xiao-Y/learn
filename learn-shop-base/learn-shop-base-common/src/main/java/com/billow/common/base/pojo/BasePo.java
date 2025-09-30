@@ -1,6 +1,6 @@
 //package com.billow.common.base.pojo;
 //
-//import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.v3.oas.annotations.media.Schema;
 //import lombok.Data;
 //import lombok.EqualsAndHashCode;
 //import org.springframework.data.annotation.CreatedBy;
@@ -28,29 +28,29 @@
 //@EntityListeners(AuditingEntityListener.class)
 //public class BasePo extends BasePage implements Serializable {
 //
-//    @ApiModelProperty("主键id")
+//    @Schema(title = "主键id")
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
 //    private Long id;
 //
-//    @ApiModelProperty("创建人")
+//    @Schema(title = "创建人")
 //    @CreatedBy
 //    private String creatorCode;
 //
-//    @ApiModelProperty("更新人")
+//    @Schema(title = "更新人")
 //    @LastModifiedBy
 //    private String updaterCode;
 //
-//    @ApiModelProperty("创建时间")
+//    @Schema(title = "创建时间")
 //    @CreatedDate
 //    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
 //    private Date createTime;
 //
-//    @ApiModelProperty("更新时间")
+//    @Schema(title = "更新时间")
 //    @LastModifiedDate
 //    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss.SSS")
 //    private Date updateTime;
 //
-//    @ApiModelProperty("有效标志")
+//    @Schema(title = "有效标志")
 //    private Boolean validInd;
 //}

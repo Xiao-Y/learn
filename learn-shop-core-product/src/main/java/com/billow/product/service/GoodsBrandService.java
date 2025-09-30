@@ -14,6 +14,6 @@ import com.billow.product.pojo.search.GoodsBrandSearchParam;
  * @version v2.0
  * @since 2021-09-02
  */
-public interface GoodsBrandService extends HighLevelService<GoodsBrandPo,GoodsBrandSearchParam> {
+public interface GoodsBrandService extends HighLevelService<GoodsBrandPo, GoodsBrandSearchParam> {
 
 }

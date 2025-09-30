@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="ms-doc">
-      <h3>邮件模板信息</h3>
+      <div class="ms-doc-title">邮件模板信息</div>
       <article>
         <el-form ref="mailTemplateInfo" :model="mailTemplateInfo" :rules="rulesForm" label-width="100px" size="mini"
                  :inline-message="true">
@@ -144,10 +144,9 @@
             {validator: this.checkMailCode, trigger: 'blur'}],
           mailTemp: [{required: true, message: '请输入邮件模板内容', trigger: 'blur'}],
           runSql: [{validator: this.validateRunSql, trigger: 'blur'}],
-          templateName: [{validator: this.validatetemplateName, trigger: 'blur'}],
+          templateName: [{validator: this.templateName, trigger: 'blur'}],
           description: [{required: true, message: '请输入邮件模板描述', trigger: 'blur'}],
           toEmails: [{validator: this.validateToEmails, trigger: 'blur'}],
-          templateName: [{required: true, message: '请输入模板名称', trigger: 'blur'}],
         }
       };
     },
@@ -251,7 +250,7 @@
         }
       },
       checkMailCode(rule, value, callback) {
-        if (this.oldMailCode != '' && this.oldMailCode === value) {
+        if (this.oldMailCode !== '' && this.oldMailCode === value) {
           callback();
           return true;
         }
@@ -264,14 +263,14 @@
         });
       },
       validateRunSql(rule, value, callback) {
-        if ((value === '' || value === null) && (this.mailTemplateInfo.dataSources == '2' || this.mailTemplateInfo.dataSources == '4')) {
+        if ((value === '' || value === null) && (this.mailTemplateInfo.dataSources === '2' || this.mailTemplateInfo.dataSources === '4')) {
           callback(new Error('当数据来源为SQL和混合时，请输入运行SQL'));
         } else {
           callback();
         }
       },
       templateName(rule, value, callback) {
-        if ((value === '' || value === null) && (this.mailTemplateInfo.mailType == '5' || this.mailTemplateInfo.mailType == '4')) {
+        if ((value === '' || value === null) && (this.mailTemplateInfo.mailType === '5' || this.mailTemplateInfo.mailType === '4')) {
           callback(new Error('当使用 Thymeleaf 或者 Freemarker 时，请输入模板名称'));
         } else {
           callback();
@@ -302,30 +301,3 @@
     }
   };
 </script>
-
-<style scoped>
-  .ms-doc {
-    width: 70%;
-    margin: 0 auto;
-  }
-
-  .ms-doc h3 {
-    padding: 9px 10px 10px;
-    margin: 0;
-    font-size: 14px;
-    line-height: 17px;
-    background-color: #f5f5f5;
-    border: 1px solid #d8d8d8;
-    border-bottom: 0;
-    border-radius: 3px 3px 0 0;
-  }
-
-  .ms-doc article {
-    padding: 10px;
-    word-wrap: break-word;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-  }
-</style>

@@ -3,6 +3,7 @@ package com.billow.mybatis.base;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.mybatis.pojo.BasePage;
+import com.billow.mybatis.pojo.BasePo;
 
 /**
  * 高级公用服务
@@ -14,7 +15,7 @@ import com.billow.mybatis.pojo.BasePage;
  * @author liuyongtao
  * @since 2021-8-12 14:33
  */
-public interface HighLevelService<E, SP extends BasePage> extends IService<E> {
+public interface HighLevelService<E extends BasePo, SP extends BasePage> extends IService<E> {
 
     /**
      * 分页查询

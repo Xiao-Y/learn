@@ -2,7 +2,7 @@
 <#assign Parent = (package.Entity?substring(0,(package.Entity)?length-8))>
 package ${Parent}.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -27,8 +27,8 @@ public class ${VO} implements Serializable {
 <#-- ----------  BEGIN 字段循环遍历  ---------->
 <#list table.fields as field>
     <#if field.comment!?length gt 0>
-        <#if swagger2>
-    @ApiModelProperty(value = "${field.comment}")
+        <#if swagger>
+    @Schema(title = "${field.comment}")
         <#else>
     /**
      * ${field.comment}

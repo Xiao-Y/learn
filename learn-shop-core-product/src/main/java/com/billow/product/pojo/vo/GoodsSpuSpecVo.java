@@ -1,6 +1,6 @@
 package com.billow.product.pojo.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,10 +20,10 @@ import java.io.Serializable;
 public class GoodsSpuSpecVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "spu_id")
+    @Schema(title = "spu_id")
     private Long spuId;
 
-    @ApiModelProperty(value = "spec_key_id")
+    @Schema(title = "spec_key_id")
     private Long specKeyId;
 
 

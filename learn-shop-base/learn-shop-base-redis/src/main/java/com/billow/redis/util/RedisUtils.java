@@ -3,12 +3,12 @@ package com.billow.redis.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
  * @author liuyongtao
  * @create 2018-05-24 11:32
  */
-public class RedisUtils
-{
+public class RedisUtils {
 
     @Resource
     private RedisTemplate customRedisTemplate;
@@ -34,11 +33,9 @@ public class RedisUtils
      * @author LiuYongTao
      * @date 2018/5/24 12:29
      */
-    public <T> T getObj(String key, Class<T> tClass)
-    {
+    public <T> T getObj(String key, Class<T> tClass) {
         Object json = customRedisTemplate.opsForValue().get(key);
-        if (Objects.isNull(json))
-        {
+        if (Objects.isNull(json)) {
             return null;
         }
         return JSON.parseObject(json.toString(), tClass);
@@ -52,12 +49,10 @@ public class RedisUtils
      * @author LiuYongTao
      * @date 2018/5/24 12:29
      */
-    public String getObj(String key)
-    {
+    public String getObj(String key) {
         ValueOperations<String, Object> ops = customRedisTemplate.opsForValue();
         Object value = ops.get(key);
-        if (Objects.isNull(value))
-        {
+        if (Objects.isNull(value)) {
             return null;
         }
         return (String) value;
@@ -72,8 +67,7 @@ public class RedisUtils
      * @author LiuYongTao
      * @date 2018/5/24 12:29
      */
-    public <T> void setObj(String key, T value)
-    {
+    public <T> void setObj(String key, T value) {
         Assert.notNull(key, "key is not empty");
         ValueOperations<String, Object> ops = customRedisTemplate.opsForValue();
         ops.set(key, value);
@@ -88,8 +82,7 @@ public class RedisUtils
      * @author LiuYongTao
      * @date 2018/5/24 12:29
      */
-    public <T> void setObj(String key, T value, long l, TimeUnit timeUnit)
-    {
+    public <T> void setObj(String key, T value, long l, TimeUnit timeUnit) {
         Assert.notNull(key, "key is not empty");
         Assert.notNull(value, "value is not empty");
         Assert.notNull(timeUnit, "timeUnit is not empty");
@@ -107,15 +100,12 @@ public class RedisUtils
      * @author LiuYongTao
      * @date 2018/5/24 12:29
      */
-    public <T> List<T> getList(String key)
-    {
+    public <T> List<T> getList(String key) {
         Object value = customRedisTemplate.opsForValue().get(key);
-        if (Objects.isNull(value))
-        {
+        if (Objects.isNull(value)) {
             return new ArrayList<>();
         }
-        return JSON.parseObject(value.toString(), new TypeReference<List<T>>()
-        {
+        return JSON.parseObject(value.toString(), new TypeReference<List<T>>() {
         });
     }
 
@@ -127,23 +117,18 @@ public class RedisUtils
      * @author liuyongtao
      * @since 2021-1-28 8:20
      */
-    public <T> List<T> getHashAllValue(String k, Class<T> tClass)
-    {
+    public <T> List<T> getHashAllValue(String k, Class<T> tClass) {
         HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
-        if (entries == null && entries.size() == 0)
-        {
+        if (entries == null && entries.size() == 0) {
             return new ArrayList<>();
         }
         return entries.values()
                 .parallelStream()
                 .map(m -> {
-                    if (m.startsWith("{"))
-                    {
+                    if (m.startsWith("{")) {
                         return Arrays.asList(JSON.parseObject(m, tClass));
-                    }
-                    else
-                    {
+                    } else {
                         return JSON.parseArray(m, tClass);
                     }
                 }).flatMap(Collection::stream)
@@ -158,14 +143,12 @@ public class RedisUtils
      * @author liuyongtao
      * @since 2021-1-28 8:24
      */
-    public <T> Map<String, List<T>> getHashAll(String k, Class<T> clazz)
-    {
+    public <T> Map<String, List<T>> getHashAll(String k, Class<T> clazz) {
         Map<String, List<T>> map = new HashMap<>();
 
         HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
-        if (entries == null && entries.size() == 0)
-        {
+        if (entries == null && entries.size() == 0) {
             return map;
         }
         return entries.entrySet()
@@ -181,14 +164,12 @@ public class RedisUtils
      * @author liuyongtao
      * @since 2021-1-28 8:24
      */
-    public <T> Map<String, T> getHashAllObj(String k, Class<T> clazz)
-    {
+    public <T> Map<String, T> getHashAllObj(String k, Class<T> clazz) {
         Map<String, T> map = new HashMap<>();
 
         HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
-        if (entries == null && entries.size() == 0)
-        {
+        if (entries == null && entries.size() == 0) {
             return map;
         }
         return entries.entrySet()
@@ -204,14 +185,12 @@ public class RedisUtils
      * @author liuyongtao
      * @since 2021-1-28 8:24
      */
-    public Map<String, String> getHashAllObj(String k)
-    {
+    public Map<String, String> getHashAllObj(String k) {
         Map<String, String> map = new HashMap<>();
 
         HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         Map<String, String> entries = opsForHash.entries(k);
-        if (entries == null && entries.size() == 0)
-        {
+        if (entries == null && entries.size() == 0) {
             return map;
         }
         return entries.entrySet()
@@ -227,8 +206,7 @@ public class RedisUtils
      * @author liuyongtao
      * @since 2021-1-28 8:24
      */
-    public <T> List<T> getHash(String k, String hk, Class<T> clazz)
-    {
+    public <T> List<T> getHash(String k, String hk, Class<T> clazz) {
         HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         return JSONObject.parseArray(opsForHash.get(k, hk), clazz);
     }
@@ -241,8 +219,7 @@ public class RedisUtils
      * @author liuyongtao
      * @since 2021-1-28 8:24
      */
-    public <T> T getHashObj(String k, String hk, Class<T> clazz)
-    {
+    public <T> T getHashObj(String k, String hk, Class<T> clazz) {
         HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         return JSON.parseObject(opsForHash.get(k, hk), clazz);
     }
@@ -255,38 +232,36 @@ public class RedisUtils
      * @author liuyongtao
      * @since 2021-1-28 8:21
      */
-    public <T> void setHash(String k, Map<String, T> map)
-    {
+    public <T> void setHash(String k, Map<String, T> map) {
         HashOperations<String, String, T> opsForHash = customRedisTemplate.opsForHash();
         opsForHash.putAll(k, map);
     }
 
 
-    public <T> void setHash(String k, String hk, T v)
-    {
+    public <T> void setHash(String k, String hk, T v) {
         HashOperations<String, String, T> opsForHash = customRedisTemplate.opsForHash();
         opsForHash.put(k, hk, v);
     }
 
-    public <T> void delHash(String k, String... hk)
-    {
+    public <T> void delHash(String k, String... hk) {
         HashOperations<String, String, T> opsForHash = customRedisTemplate.opsForHash();
         opsForHash.delete(k, hk);
     }
 
-    public void del(String key)
-    {
+    public void del(String key) {
         customRedisTemplate.delete(key);
     }
 
-    public void del(Collection<String> keys)
-    {
+    public void del(Collection<String> keys) {
         customRedisTemplate.delete(keys);
     }
 
-    public List<String> getHashKeys(String k)
-    {
+    public List<String> getHashKeys(String k) {
         HashOperations<String, String, String> opsForHash = customRedisTemplate.opsForHash();
         return new ArrayList<>(opsForHash.keys(k));
+    }
+
+    public void setExpire(String key, long timeout, TimeUnit timeUnit) {
+        customRedisTemplate.expire(key, timeout, timeUnit);
     }
 }

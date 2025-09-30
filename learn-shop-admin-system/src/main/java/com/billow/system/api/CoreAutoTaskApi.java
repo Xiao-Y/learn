@@ -13,22 +13,13 @@ import com.billow.job.service.ScheduleJobLogService;
 import com.billow.job.service.ScheduleJobService;
 import com.billow.job.util.TaskUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,7 +29,7 @@ import java.util.List;
  * @author liuyongtao
  * @create 2018-07-02 9:06
  */
-@Api("核心自动任务控制类")
+@Tag(name = "CoreAutoTaskApi", description = "核心自动任务控制类")
 @RestController
 @RequestMapping("/coreAutoTaskApi")
 public class CoreAutoTaskApi extends BaseApi {
@@ -53,20 +44,22 @@ public class CoreAutoTaskApi extends BaseApi {
     @Autowired
     private UserTools userTools;
 
-    @ApiOperation("查询自动任务列表")
+    @Operation(summary = "查询自动任务列表")
     @PostMapping("/findAutoTask")
     public CustomPage<ScheduleJobPo> findAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) {
         CustomPage<ScheduleJobPo> jods = scheduleJobService.findAll(scheduleJobVo);
         return jods;
     }
 
-    @ApiOperation("启用、停止、禁用自动任务")
-    @ApiImplicitParams({@ApiImplicitParam(dataType = "Integer", name = "jobId", value = "自动任务id", required = true),
-            @ApiImplicitParam(dataType = "String", name = "jobStatus", value = "任务状态，0-停止，1-启用", required = true)})
+    @Operation(summary = "启用、停止、禁用自动任务")
     @PutMapping(value = {"/updateJobStatus/{jobId}/{jobStatus}", "/updateJobValidInd/{jobId}/{validInd}"})
-    public void updateJobStatus(@PathVariable("jobId") String jobId,
-                                @PathVariable(value = "jobStatus", required = false) String jobStatus,
-                                @PathVariable(value = "validInd", required = false) Boolean validInd) throws Exception {
+    public void updateJobStatus(
+            @Parameter(description = "自动任务id", example = "1001", required = true)
+            @PathVariable("jobId") String jobId,
+            @Parameter(description = "任务状态", example = "0-停止，1-启用", required = true)
+            @PathVariable(value = "jobStatus", required = false) String jobStatus,
+            @Parameter(description = "是否有效", example = "true", required = true)
+            @PathVariable(value = "validInd", required = false) Boolean validInd) throws Exception {
         // 不能同时为空
         if (ToolsUtils.isEmpty(jobStatus) && validInd == null) {
             return;
@@ -79,14 +72,15 @@ public class CoreAutoTaskApi extends BaseApi {
         coreAutoTaskService.updateJobStatus(dto);
     }
 
-    @ApiOperation("根据任务id,删除自动任务")
-    @ApiParam(name = "jobId", value = "自动任务id")
+    @Operation(summary = "根据任务id,删除自动任务")
     @DeleteMapping("/deleteAutoTask/{jobId}")
-    public void deleteAutoTask(@PathVariable("jobId") String jobId) throws Exception {
+    public void deleteAutoTask(
+            @Parameter(description = "自动任务id", example = "1001", required = true)
+            @PathVariable("jobId") String jobId) throws Exception {
         coreAutoTaskService.deleteAutoTask(jobId);
     }
 
-    @ApiOperation("保存自动任务")
+    @Operation(summary = "保存自动任务")
     @PostMapping("/saveAutoTask")
     public ScheduleJobVo saveAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
         scheduleJobVo.setCreatorCode(userTools.getCurrentUserCode());
@@ -94,38 +88,39 @@ public class CoreAutoTaskApi extends BaseApi {
         return scheduleJobVo;
     }
 
-    @ApiOperation("立即执行自动任务")
+    @Operation(summary = "立即执行自动任务")
     @PostMapping("/immediateExecutionTask")
     public ScheduleJobVo immediateExecutionTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
         coreAutoTaskService.immediateExecutionTask(scheduleJobVo);
         return scheduleJobVo;
     }
 
-    @ApiOperation("校验自动任务添加、修改时参数的设置")
+    @Operation(summary = "校验自动任务添加、修改时参数的设置")
     @PostMapping("/checkAutoTask")
     public ScheduleJobVo checkAutoTask(@RequestBody ScheduleJobVo scheduleJobVo) throws Exception {
         coreAutoTaskService.checkAutoTask(scheduleJobVo);
         return scheduleJobVo;
     }
 
-    @ApiOperation("测试Cron表达式下次运行的时间")
+    @Operation(summary = "测试Cron表达式下次运行的时间")
     @PostMapping("/testRunCron")
     public List<String> testRunCron(@RequestBody TestRunCronEx testRunCronEx) {
         logger.info("cron:{}", testRunCronEx.getCron());
         return TaskUtils.runTime(testRunCronEx.getCron(), testRunCronEx.getTimes());
     }
 
-    @ApiOperation("查询自动任务执行日志")
+    @Operation(summary = "查询自动任务执行日志")
     @PostMapping("/findAutoTaskLog")
     public CustomPage<ScheduleJobLogPo> findAutoTaskLog(@RequestBody ScheduleJobLogVo scheduleJobLogVo) {
         return scheduleJobLogService.findAutoTaskLog(scheduleJobLogVo);
     }
 
 
-    @ApiOperation("根据任务id,查询自动任务")
-    @ApiParam(name = "jobId", value = "自动任务id")
+    @Operation(summary = "根据任务id,查询自动任务")
     @GetMapping("/findAutoTaskById/{jobId}")
-    public ScheduleJobVo findAutoTaskById(@PathVariable("jobId") String jobId) {
-       return coreAutoTaskService.findAutoTaskById(jobId);
+    public ScheduleJobVo findAutoTaskById(
+            @Parameter(description = "自动任务id", example = "1001", required = true)
+            @PathVariable("jobId") String jobId) {
+        return coreAutoTaskService.findAutoTaskById(jobId);
     }
 }

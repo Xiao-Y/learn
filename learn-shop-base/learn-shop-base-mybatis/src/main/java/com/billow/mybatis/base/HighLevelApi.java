@@ -2,29 +2,24 @@ package com.billow.mybatis.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.pojo.BasePage;
+import com.billow.mybatis.pojo.BasePo;
 import com.billow.mybatis.utils.SqlUtil;
-import com.billow.tools.utlis.ConvertUtils;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 高级公用方法
  * <p>
  * 例如：
- * S-OrderItemService 继承 HighLevelService
+ * S-OrderItemService 继承 HighLevelV2Service
  * <p>
  * E-OrderItemPo 实体类
  * <p>
@@ -38,20 +33,16 @@ import javax.servlet.http.HttpServletRequest;
  * @since 2021-8-12 14:23
  */
 @Slf4j
-public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extends BasePage> {
+public class HighLevelApi<S extends HighLevelService<E, SP>, E extends BasePo, SP extends BasePage> {
 
     @Autowired
     protected HttpServletRequest request;
 
+    @Getter
     @Autowired
     private S service;
 
-    // 实体类
-    protected Class<E> eClass = (Class<E>) this.getClass(1);
-    // vo 类型
-    protected Class<V> vClass = (Class<V>) this.getClass(2);
-
-    @ApiOperation(value = "分页查询表数据")
+    @Operation(summary = "分页查询表数据")
     @PostMapping(value = "/list")
     public IPage<E> findListByPage(@RequestBody SP sp) {
         // 分页
@@ -59,65 +50,41 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E, V, BP, SP extend
         // 排序
         if (StringUtils.isNotEmpty(sp.getOrderBy())) {
             String orderBy = SqlUtil.escapeOrderBySql(sp.getOrderBy());
-            page.addOrder(new OrderItem(orderBy, sp.getIsAsc()));
+            page.addOrder(OrderItem.asc(orderBy).setAsc(sp.getIsAsc()));
         }
         return service.findListByPage(page, sp);
     }
 
-    @ApiOperation(value = "根据id查询表数据")
+    @Operation(summary = "根据id查询表数据")
     @GetMapping(value = "/getById/{id}")
-    public V getById(@PathVariable("id") Long id) {
-        E po = service.getById(id);
-        return ConvertUtils.convert(po, vClass);
+    public E getById(@PathVariable("id") Long id) {
+        return service.getById(id);
     }
 
-    @ApiOperation(value = "新增表数据")
+    @Operation(summary = "新增表数据")
     @PostMapping(value = "/add")
-    public V add(@RequestBody BP bp) {
-        E po = ConvertUtils.convert(bp, eClass);
+    public E add(@RequestBody E po) {
         service.save(po);
-        return ConvertUtils.convert(po, vClass);
+        return po;
     }
 
-    @ApiOperation(value = "删除表数据")
+    @Operation(summary = "删除表数据")
     @DeleteMapping(value = "/delById/{id}")
     public boolean delById(@PathVariable("id") Long id) {
         return service.removeById(id);
     }
 
-    @ApiOperation(value = "更新表数据")
-    @PutMapping(value = "/update")
-    public V update(@RequestBody SP sp) {
-        E po = ConvertUtils.convert(sp, eClass);
+    @Operation(summary = "更新表数据")
+    @PutMapping(value = "/update/{id}")
+    public E update(@PathVariable("id") Long id, @RequestBody E po) {
+        po.setId(id);
         service.updateById(po);
-        return ConvertUtils.convert(po, vClass);
+        return po;
     }
 
-    @ApiOperation("根据ID禁用表数据")
+    @Operation(summary = "根据ID禁用表数据")
     @PutMapping("/prohibitById/{id}")
     public boolean prohibitById(@PathVariable Long id) {
         return service.prohibitById(id);
-    }
-
-    /**
-     * 返回当前service
-     *
-     * @return {@link S}
-     * @author liuyongtao
-     * @since 2021-8-13 9:35
-     */
-    public S getService() {
-        return service;
-    }
-
-    /**
-     * 获取泛型类型
-     *
-     * @return {@link Class<?>}
-     * @author liuyongtao
-     * @since 2021-8-12 15:00
-     */
-    protected Class<?> getClass(int index) {
-        return ReflectionKit.getSuperClassGenericType(this.getClass(), index);
     }
 }

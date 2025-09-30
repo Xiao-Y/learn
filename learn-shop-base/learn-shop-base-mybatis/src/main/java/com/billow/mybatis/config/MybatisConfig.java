@@ -2,7 +2,6 @@ package com.billow.mybatis.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.billow.mybatis.handler.AuditMetaObjectHandler;
 import com.billow.mybatis.utils.MybatisUserTools;
@@ -44,7 +43,7 @@ public class MybatisConfig {
 //    }
     @Bean
     public MybatisPlusInterceptor paginationInterceptor() {
-        MybatisPlusInterceptor interceptor  = new MybatisPlusInterceptor();
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }

@@ -3,7 +3,6 @@ package com.billow.search.service;
 import com.billow.aop.commons.CustomPage;
 import com.billow.search.pojo.po.GoodsInfoPo;
 import com.billow.search.pojo.search.GoodsInfoSearchParam;
-import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.io.IOException;
 import java.util.Map;
@@ -58,9 +57,9 @@ public interface GoodsInfoService {
      * @param param    查询参数
      * @param pageSize 页面大小
      * @param pageNo   当前页
-     * @return {@link SearchHits<GoodsInfoPo>}
+     * @return {@link GoodsInfoPo}
      * @author liuyongtao
      * @since 2021-9-6 11:37
      */
-    CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param);
+    CustomPage search(Integer pageNo, Integer pageSize, GoodsInfoSearchParam param) throws IOException;
 }

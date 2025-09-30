@@ -1,0 +1,3 @@
+com.billow.notice.amqp.config.AmqpRegistryBeanConfig
+com.billow.notice.ding.config.DingConfig
+com.billow.notice.amqp.config.RabbitMqConfig
