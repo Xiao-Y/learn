@@ -27,7 +27,7 @@ export default {
     // 提示信息延时
     openDelay: {
       type: Number,
-      default: 70
+      default: 10000
     },
     // 是否显示禁用按钮
     showInd: {

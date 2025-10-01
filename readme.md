@@ -3,19 +3,33 @@
 ## 项目简介
 Learn Shop是一个基于Spring Cloud微服务架构的电商系统，采用前后端分离设计。系统包含商品管理、订单管理、购物车、促销、搜索等核心功能模块，以及统一认证、系统管理等基础服务模块。
 
+## 框架版本
+- spring-boot-starter-parent 3.3.1
+- spring-cloud-dependencies 2023.0.3
+- spring-cloud-alibaba-dependencies 2023.0.3.2
+- shardingsphere-jdbc 5.5.2
+- mybatis-plus-bom 3.5.14
+- spring-boot-starter-data-redis 3.5.0
+- lombok 1.18.32
+- hutool-all 5.8.28
+- redisson 3.45.1
+- activiti 6.0.0
+- spring-security-jwt 1.0.9.RELEASE
+
 ## 环境要求
-- JDK 1.8+
+- JDK 17
 - Maven 3.6+
-- MySQL 5.7+
+- MySQL 8+
 - Redis 6.0+
 - RabbitMQ 3.8+
+- minio RELEASE.2025-04-22T22-12-26Z
 - Nacos 2.0+
 - Node.js 14+ (前端开发)
 
 ## 项目结构
 ### 1. 基础服务
 - `nacos` 注册中心，分布式配置中心 (端口：8761)
-- `learn-cloud-gateway` 路由网关 (端口：8771)
+- `learn-cloud-gateway` 路由网关、鉴权 (端口：8771)
 
 ### 2. 公用组件
 - `learn-cloud-common` 配置中心配置文件，所有的 `learn-cloud-*` 都要依赖
@@ -40,7 +54,7 @@ Learn Shop是一个基于Spring Cloud微服务架构的电商系统，采用前�
 
 ### 3. 业务服务
 - 管理后台服务 (端口：88xx)
-  - `learn-shop-admin-user` 用户管理服务 (8801)
+  ~~- `learn-shop-admin-user` 用户管理服务 (8801)~~
   - `learn-shop-admin-system` 系统管理服务 (8811)
 
 - 核心业务服务 (端口：89xx)
@@ -52,7 +66,7 @@ Learn Shop是一个基于Spring Cloud微服务架构的电商系统，采用前�
 
 - 其他服务
   - `learn-shop-app` APP端服务 (8089)
-  - `learn-shop-public-auth` 认证服务
+  ~~- `learn-shop-public-auth` 认证服务~~
 
 ### 4. 前端项目
 - `learn-shop-ui-admin` 后台管理前端
@@ -69,7 +83,7 @@ Learn Shop是一个基于Spring Cloud微服务架构的电商系统，采用前�
 
 ### 1. 配置中心设置
 - 采用Nacos作为配置中心和路由中心
-- 配置文件路径：`nacos--->dev-->cloud-config.properties`
+- 配置文件路径：`nacos--->dev-->cloud-config.yml`
 - 依赖模块：`learn-cloud-common`
 
 ### 2. 本地开发配置
@@ -165,7 +179,7 @@ http://127.0.0.1:8848/nacos
 
 ### 3. API文档
 - 单个服务文档：http://localhost:<port>/swagger-ui.html
-- 网关聚合文档：http://localhost:8771/swagger-ui.html
+- 网关聚合文档：http://localhost:8771/webjars/swagger-ui/index.html
 
 ## 开发规范
 详细的开发规范请参考 project-rule.md 文件，包括：
