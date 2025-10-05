@@ -1,6 +1,25 @@
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /doc.html
+    # 开启Swagger UI界面
+    enabled: true
+    # 默认折叠
+    doc-expansion: none
+    # 方法字母排序
+    operations-sorter: alpha
+    # 类字母排序
+    tags-sorter: alpha
+  api-docs:
+    # 修改api-docs路径
+    path: /v3/api-docs
+    # 开启api-docs
+    enabled: true
+    version: openapi_3_1
+  packages-to-scan:
+    - com.billow.gateway.api #必须要有 GetMapping，PostMapping...
+    - com.billow.gateway.security.api
 swagger: #接口注解文档
-  enable: true # 是否开启swagger
-  basepackage: com.billow.gateway.api #必须要有 GetMapping，PostMapping...
   service:
     name: ${spring.application.name} #api名称
     version: 4.0
@@ -88,6 +107,7 @@ secure:
     - /*/v3/**
     - /webjars/**
     - /*/*App/**
+    - /doc.html
   need-check:
     - /*/*Api/**
     - /*Api/**

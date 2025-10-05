@@ -10,13 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    public static final String API_URI = "/v3/api-docs";
-
-    @Value("${swagger.enable:true}")
-    private Boolean enable;
-
-    @Value("${swagger.basepackage}")
-    private String basePackage;
     @Value("${swagger.service.name}")
     private String serviceName;
     @Value("${swagger.service.description}")

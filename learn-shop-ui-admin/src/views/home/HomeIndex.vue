@@ -77,7 +77,7 @@ export default {
         },
         {
           title: 'core-search',
-          content: '搜索管理',
+          content: '搜索平台',
           version: '1.0.0',
           lastUpdatetime: '2025-10-01'
         }]

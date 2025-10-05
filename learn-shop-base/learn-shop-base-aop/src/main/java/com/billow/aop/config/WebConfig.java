@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -62,7 +63,12 @@ public class WebConfig implements WebMvcConfigurer {
         objectMapper.registerModule(moduleDate);
 
         converter.setObjectMapper(objectMapper);
+
+        // 增加二进制转换器,解决Spring doc的问题。
+        converters.add(new ByteArrayHttpMessageConverter());
+
         converters.add(converter);
+
 
     }
 }

@@ -164,7 +164,7 @@ export default {
   left: 50%;
   top: 50%;
   width: 300px;
-  height: 140px;
+  height: 120px;
   margin: -150px 0 0 -190px;
   padding: 40px;
   border-radius: 5px;
@@ -178,6 +178,7 @@ export default {
 .bm-btn button {
   width: 40%;
   height: 36px;
+  margin-top: 20px;
 }
 
 .bm-btn .login-btn {

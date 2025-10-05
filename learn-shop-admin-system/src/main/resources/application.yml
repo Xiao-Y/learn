@@ -1,8 +1,27 @@
+springdoc:
+  swagger-ui:
+    # 修改Swagger UI路径
+    path: /doc.html
+    # 开启Swagger UI界面
+    enabled: true
+    # 默认折叠
+    doc-expansion: none
+    # 方法字母排序
+    operations-sorter: alpha
+    # 类字母排序
+    tags-sorter: alpha
+  api-docs:
+    # 修改api-docs路径
+    path: /v3/api-docs
+    # 开启api-docs
+    enabled: true
+    version: openapi_3_1
+  packages-to-scan:
+    - com.billow.system.api #必须要有 GetMapping，PostMapping...
 swagger: #接口注解文档
-  basepackage: com.billow.system.api #必须要有 GetMapping，PostMapping...
   service:
     name: ${spring.application.name} #api名称
-    version: 3.0
+    version: 4.0
     description: 警告：此API仅用于测试，禁止任何商业用途，否则一切后果自行承担！！！ #api描述
     contact:
       developer: billow #api开发者

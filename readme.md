@@ -178,8 +178,10 @@ http://127.0.0.1:8848/nacos
 - 用户服务：http://localhost:8771/admin-user
 
 ### 3. API文档
-- 单个服务文档：http://localhost:<port>/swagger-ui.html
+- 单个服务文档：http://localhost:{port}/{context-path}/swagger-ui/index.html
+- 单个服务文档：http://localhost:{port}/{context-path}/doc.html
 - 网关聚合文档：http://localhost:8771/webjars/swagger-ui/index.html
+- 网关聚合文档：http://localhost:8771/doc.html
 
 ## 开发规范
 详细的开发规范请参考 project-rule.md 文件，包括：

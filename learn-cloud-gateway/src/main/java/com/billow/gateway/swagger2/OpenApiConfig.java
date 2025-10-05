@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${swagger.basepackage}")
-    private String basePackage;
+
     @Value("${swagger.service.name}")
     private String serviceName;
     @Value("${swagger.service.description}")

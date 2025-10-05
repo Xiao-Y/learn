@@ -14,7 +14,8 @@ import java.util.*;
 @Configuration
 public class OpenApiProvider {
 
-    public static final String API_URI = "/v3/api-docs";
+    @Value("${springdoc.api-docs.path:/v3/api-docs}")
+    private String API_URI;
 
     @Value("${swagger.service.name}")
     private String serviceName;
@@ -48,11 +49,11 @@ public class OpenApiProvider {
                 urlMap.put(serviceName, genSwaggerUrl(serviceName, path));
             }
         }
-        // 默认折叠
-        swaggerUiConfigProperties.setDocExpansion("none");
-        // 额外配置：设置API文档标签按字母排序
-        swaggerUiConfigProperties.setOperationsSorter("alpha");
-        swaggerUiConfigProperties.setTagsSorter("alpha");
+//        // 默认折叠
+//        swaggerUiConfigProperties.setDocExpansion("none");
+//        // 额外配置：设置API文档标签按字母排序
+//        swaggerUiConfigProperties.setOperationsSorter("alpha");
+//        swaggerUiConfigProperties.setTagsSorter("alpha");
         swaggerUiConfigProperties.setUrls(new HashSet<>(urlMap.values()));
     }
 
