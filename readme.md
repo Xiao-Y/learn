@@ -7,6 +7,8 @@ Learn Shop是一个基于Spring Cloud微服务架构的电商系统，采用前�
 - spring-boot-starter-parent 3.3.1
 - spring-cloud-dependencies 2023.0.3
 - spring-cloud-alibaba-dependencies 2023.0.3.2
+- spring-security 6.3.1
+- spring-security-jwt 1.0.9.RELEASE
 - shardingsphere-jdbc 5.5.2
 - mybatis-plus-bom 3.5.14
 - spring-boot-starter-data-redis 3.5.0
@@ -14,7 +16,7 @@ Learn Shop是一个基于Spring Cloud微服务架构的电商系统，采用前�
 - hutool-all 5.8.28
 - redisson 3.45.1
 - activiti 6.0.0
-- spring-security-jwt 1.0.9.RELEASE
+
 
 ## 环境要求
 - JDK 17
@@ -194,9 +196,9 @@ http://127.0.0.1:8848/nacos
 
 ## TODO清单
 1. 缓存优化
-    - [ ] 统一缓存策略
-    - [ ] 添加缓存预热
-    - [ ] 优化缓存更新机制
+    - [x] 统一缓存策略
+    - [x] 添加缓存预热
+    - [x] 优化缓存更新机制
 
 2. 订单系统优化
     - [ ] 实现订单自动释放
@@ -204,12 +206,12 @@ http://127.0.0.1:8848/nacos
     - [ ] 优化订单处理流程
 
 3. 权限系统升级
-    - [ ] 调整为权限码形式
-    - [ ] 完善权限粒度
-    - [ ] 添加数据权限
+    - [x] 调整为权限码形式
+    - [x] 完善权限粒度
+    - [x] 添加数据权限
 
 4. UI优化
-    - [ ] 后台管理首页改为卡片布局
+    - [x] 后台管理首页改为卡片布局
     - [ ] 优化移动端适配
     - [ ] 添加数据可视化
 
