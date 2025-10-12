@@ -37,8 +37,9 @@ public class TableKit
         // 获取查询表是否存在的 st
         ST st = StConstants.COMMON_ST_GROUP.getInstanceOf(StConstants.commonStGroupTemplate.JUDGE_TABLE_EXISTS);
 
-        // 1.判断是否有表
+        // 移除模板的参数。
         st.remove(StConstants.tableNameParam.TABLE_NAME);
+        // 添加模板的参数。
         st.add(StConstants.tableNameParam.TABLE_NAME, tableName);
         log.info("判断 {} 表是否存在SQL：\n{}", tableName, st.render());
         int haveDispatchOrderTable = jdbcTemplate.queryForObject(st.render(), Integer.class);
