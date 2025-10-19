@@ -6,7 +6,6 @@ import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -18,8 +17,7 @@ import java.util.Date;
  */
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-public class BasePo extends BasePage implements Serializable {
+public class BasePo implements Serializable {
 
     // 主键id
     @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)

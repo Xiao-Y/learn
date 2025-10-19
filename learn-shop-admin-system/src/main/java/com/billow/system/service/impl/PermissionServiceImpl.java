@@ -1,28 +1,26 @@
 package com.billow.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.common.utils.UserTools;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.mybatis.utils.MybatisKet;
+import com.billow.system.dao.MenuPermissionDao;
 import com.billow.system.dao.PermissionDao;
 import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.pojo.po.MenuPermissionPo;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePermissionPo;
 import com.billow.system.pojo.po.RolePo;
+import com.billow.system.pojo.search.MenuPermissionSearchParam;
 import com.billow.system.pojo.search.PermissionSearchParam;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.service.MenuPermissionService;
 import com.billow.system.service.PermissionService;
 import com.billow.system.service.redis.RolePermissionRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.util.UpdateEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -34,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.billow.system.pojo.po.table.PermissionPoTableDef.PERMISSION_PO;
 
 /**
  * 查询用户是否有权限
@@ -52,6 +52,8 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
     private RolePermissionDao rolePermissionDao;
     @Autowired
     private MenuPermissionService menuPermissionService;
+    @Autowired
+    private MenuPermissionDao menuPermissionDao;
     @Autowired
     private RolePermissionRedisKit rolePermissionRedisKit;
     @Autowired
@@ -73,7 +75,7 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
         }
 
         rolePermissionPos.stream().forEach(rp -> {
-            PermissionPo permissionPo = permissionDao.selectById(rp.getPermissionId());
+            PermissionPo permissionPo = this.getById(rp.getPermissionId());
             if (permissionPo.getValidInd() == null || !permissionPo.getValidInd()) {
                 permissionPo = null;
             }
@@ -89,12 +91,14 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
     }
 
     @Override
-    public IPage<PermissionVo> findPermissionList(PermissionVo permissionVo) {
-        IPage<PermissionPo> page = new Page<>(permissionVo.getPageNo(), permissionVo.getPageSize());
-        PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
-        QueryWrapper<PermissionPo> conditionLike = MybatisKet.getConditionLike(convert);
-        conditionLike.orderByDesc("update_time");
-        return this.page(page, conditionLike).convert(this::convertToPermissionVo);
+    public Page<PermissionVo> findPermissionList(PermissionSearchParam permissionSearchParam) {
+        Page<PermissionPo> page = new Page<>(permissionSearchParam.getPageNo(), permissionSearchParam.getPageSize());
+        QueryWrapper conditionLike = MybatisKet.getConditionLike(permissionSearchParam);
+        // 排序
+        permissionSearchParam.setOrderBy(PERMISSION_PO.UPDATE_TIME.getName());
+        permissionSearchParam.setIsAsc("true");
+        MybatisKet.addSortBy(permissionSearchParam, conditionLike);
+        return this.page(page, conditionLike).map(this::convertToPermissionVo);
     }
 
     private PermissionVo convertToPermissionVo(PermissionPo permissionPo) {
@@ -111,7 +115,7 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo deletePermissionById(Long id) {
-        PermissionPo permissionPo = permissionDao.selectById(id);
+        PermissionPo permissionPo = this.getById(id);
         permissionDao.deleteById(id);
         // redis：删除所有角色所持有的该权限
         rolePermissionRedisKit.deleteRolePermissionById(id);
@@ -155,9 +159,10 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
     public void updatePermission(PermissionVo permissionVo) {
         this.updateById(permissionVo);
         // 先删除菜单与权限关系，再重新绑定
-        LambdaQueryWrapper<MenuPermissionPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(MenuPermissionPo::getPermissionId, permissionVo.getId());
-        menuPermissionService.remove(wrapper);
+        MenuPermissionSearchParam searchParam = new MenuPermissionSearchParam();
+        searchParam.setPermissionId(permissionVo.getId());
+        menuPermissionDao.removeByCondition(searchParam);
+
         this.saveMenuPermission(permissionVo.getId(), permissionVo.getMenuIds());
         // redis：通过权限 id 更新权限信息
         rolePermissionRedisKit.updatePermissionById(permissionVo);
@@ -166,9 +171,11 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo prohibitPermissionById(Long id) {
-        PermissionPo permissionPo = permissionDao.selectById(id);
+        PermissionPo permissionPo = UpdateEntity.of(PermissionPo.class, id);
         permissionPo.setValidInd(false);
-        permissionDao.updateById(permissionPo);
+        permissionDao.update(permissionPo);
+
+        permissionPo = this.getById(id);
         // redis：删除所有角色所持有的该权限
         rolePermissionRedisKit.deleteRolePermissionById(id);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
@@ -176,10 +183,12 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
 
     @Override
     public List<PermissionVo> findPermissionAll() {
-        LambdaQueryWrapper<PermissionPo> condition = Wrappers.lambdaQuery();
-        condition.eq(PermissionPo::getValidInd, true);
-        condition.orderByAsc(PermissionPo::getId);
-        List<PermissionPo> permissionPos = permissionDao.selectList(condition);
+        PermissionSearchParam searchParam = new PermissionSearchParam();
+        searchParam.setValidInd(true);
+        searchParam.setOrderBy(PERMISSION_PO.ID.getName());
+        searchParam.setIsAsc("true");
+        List<PermissionPo> permissionPos = this.findList(searchParam);
+
         List<PermissionVo> permissionVos = new ArrayList<>();
         permissionPos.stream().forEach(f -> {
             permissionVos.add(this.convertToPermissionVo(f));

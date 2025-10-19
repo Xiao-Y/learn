@@ -5,6 +5,7 @@ import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePo;
 import com.billow.system.pojo.search.PermissionSearchParam;
 import com.billow.system.pojo.vo.PermissionVo;
+import com.mybatisflex.core.paginate.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -24,12 +25,12 @@ public interface PermissionService extends HighLevelService<PermissionPo, Permis
     /**
      * 根据条件查询权限列表
      *
-     * @param permissionVo
+     * @param permissionSearchParam
      * @return org.springframework.data.domain.Page<com.billow.auth.pojo.po.PermissionPo>
      * @author LiuYongTao
      * @date 2019/7/9 15:59
      */
-    IPage<PermissionVo> findPermissionList(PermissionVo permissionVo);
+    Page<PermissionVo> findPermissionList(PermissionSearchParam permissionSearchParam);
 
     /**
      * 根据ID删除权限

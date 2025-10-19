@@ -6,8 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.TypeUtil;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.pojo.BasePo;
-import com.billow.mybatis.utils.SqlUtil;
-import com.billow.mybatis.base.HighLevelMapper;
+import com.billow.mybatis.utils.MybatisKet;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateWrapper;
@@ -46,19 +45,20 @@ public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E exten
         QueryWrapper wrapper = QueryWrapper.create();
         // 查询条件
         this.genQueryCondition(wrapper, sp);
-
         // 排序
-        if (StringUtils.isNotEmpty(sp.getOrderBy())) {
-            String orderBy = SqlUtil.escapeOrderBySql(sp.getOrderBy());
-            List<String> orderByList = StrUtil.split(orderBy, ",");
-            List<String> ascList = StrUtil.split(sp.getIsAsc(), ",");
-            for (int i = 0; i < orderByList.size(); i++) {
-                wrapper.orderBy(orderByList.get(i), ascList.get(i));
-
-            }
-        }
-
+        MybatisKet.addSortBy(sp, wrapper);
         return mapper.paginate(page, wrapper);
+    }
+
+
+    @Override
+    public List<E> findList(SP sp) {
+        QueryWrapper wrapper = QueryWrapper.create();
+        // 查询条件
+        this.genQueryCondition(wrapper, sp);
+        // 排序
+        MybatisKet.addSortBy(sp, wrapper);
+        return this.list(wrapper);
     }
 
     @Override

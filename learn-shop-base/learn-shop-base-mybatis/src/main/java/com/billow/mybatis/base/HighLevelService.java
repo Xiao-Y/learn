@@ -5,6 +5,8 @@ import com.billow.mybatis.pojo.BasePo;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.service.IService;
 
+import java.util.List;
+
 /**
  * 高级公用服务
  * <p>
@@ -26,6 +28,16 @@ public interface HighLevelService<E extends BasePo, SP extends BasePage> extends
      * @since 2021-8-13 10:35
      */
     Page<E> findListByPage(Page<E> page, SP sp);
+
+    /**
+     * 查询列表
+     *
+     * @param sp 查询条件
+     * @return {@link List<E>}
+     * @author liuyongtao
+     * @since 2021-8-13 10:35
+     */
+    List<E> findList(SP sp);
 
     /**
      * 根据ID禁用数据

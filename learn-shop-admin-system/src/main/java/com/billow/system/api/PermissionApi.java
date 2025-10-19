@@ -1,8 +1,11 @@
 package com.billow.system.api;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.billow.mybatis.base.HighLevelApi;
+import com.billow.system.pojo.po.PermissionPo;
+import com.billow.system.pojo.search.PermissionSearchParam;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.service.PermissionService;
+import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +31,15 @@ import java.util.List;
 @Tag(name = "PermissionApi", description = "权限管理")
 @RestController
 @RequestMapping("/permissionApi")
-public class PermissionApi {
+public class PermissionApi extends HighLevelApi<PermissionService, PermissionPo, PermissionSearchParam> {
 
     @Autowired
     private PermissionService permissionService;
 
     @Operation(summary = "根据条件查询权限列表")
     @PostMapping("/findPermissionList")
-    public IPage<PermissionVo> findPermissionList(@RequestBody PermissionVo permissionVo) throws Exception {
-        IPage<PermissionVo> permissionList = permissionService.findPermissionList(permissionVo);
+    public Page<PermissionVo> findPermissionList(@RequestBody PermissionSearchParam permissionSearchParam) throws Exception {
+        Page<PermissionVo> permissionList = permissionService.findPermissionList(permissionSearchParam);
         return permissionList;
     }
 

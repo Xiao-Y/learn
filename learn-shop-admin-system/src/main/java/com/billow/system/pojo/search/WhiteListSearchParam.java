@@ -1,7 +1,6 @@
 package com.billow.system.pojo.search;
 
 import com.billow.mybatis.pojo.BasePage;
-import com.mybatisflex.annotation.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -10,22 +9,16 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 菜单权限 信息
+ *  信息
  * </p>
  *
  * @author billow
  * @version v1.0
- * @since 2021-12-26
+ * @since 2025-10-19
  */
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class MenuPermissionSearchParam extends BasePage implements Serializable {
+public class WhiteListSearchParam extends BasePage implements Serializable {
 
-
-    @Column("menu_id")
-    private Long menuId;
-
-    @Column("permission_id")
-    private Long permissionId;
 }
