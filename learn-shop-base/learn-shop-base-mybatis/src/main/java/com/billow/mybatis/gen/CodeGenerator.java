@@ -250,6 +250,9 @@ public class CodeGenerator {
      * @since 2021-9-8 8:26
      */
     private void setGenTableRule(StrategyConfig.Builder strategy) {
+
+        strategy.addTablePrefix("pms_", "sms_", "sk_", "sys_", "v_", "oms_", "u_");
+
         //        strategy.setInclude("oms_cart_item"
 //                , "oms_company_address"
 //                , "oms_order"
@@ -258,7 +261,6 @@ public class CodeGenerator {
 //                , "oms_order_return_apply"
 //                , "oms_order_return_reason"
 //                , "oms_order_setting");
-//        strategy.setTablePrefix("oms_");
 
 
 //        strategy.setInclude("sms_seckill"
@@ -266,10 +268,8 @@ public class CodeGenerator {
 //                , "sms_seckill_product"
 //                , "sms_seckill_session"
 //        );
-//        strategy.setTablePrefix("sms_");
 
 //        strategy.setInclude("sk_seckill", "sk_success_killed");
-//        strategy.setTablePrefix("sk_");
 
 //        strategy.setInclude("pms_goods_brand"
 //                , "pms_goods_category"
@@ -287,29 +287,26 @@ public class CodeGenerator {
 //                , "pms_goods_vertify_record"
 //                , "pms_shop_info"
 //        );
-//        strategy.setTablePrefix("pms_");
-
-        strategy.addTablePrefix("sys_")
-                .addInclude("sys_apply_info",
-//                "sys_city",
-//                "sys_data_dictionary",
-                        "sys_menu",
-//                "sys_permission",
-//                "sys_role",
-                        "sys_user_role",
-                        "sys_role_menu",
-                        "sys_role_permission",
-                        "sys_permission",
-                        "sys_menu_permission",
-                        "sys_white_list");
 
 
-//        strategy.setInclude("v_mytasklist");
-//        strategy.setTablePrefix("v_");
+//        strategy.addInclude("sys_apply_info",
+//                        "sys_city",
+//                        "sys_data_dictionary",
+//                        "sys_mail_template",
+//                        "sys_menu",
+//                        "sys_menu_permission",
+//                        "sys_permission",
+//                        "sys_role",
+//                        "sys_role_menu",
+//                        "sys_role_permission",
+//                        "sys_schedule_job",
+//                        "sys_schedule_job_log",
+//                        "sys_user_role",
+//                        "sys_white_list");
 
-//        strategy.setTablePrefix("u_");
-//        strategy.setInclude("u_user"
-//        );
+        strategy.addInclude("v_mytasklist");
+
+        strategy.addInclude("u_user", "u_leave");
     }
 
     public static void main(String[] args) {

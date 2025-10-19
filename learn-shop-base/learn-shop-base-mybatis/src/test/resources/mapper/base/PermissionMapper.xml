@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.billow.system.dao.PermissionDao">
+
+        <!-- 开启二级缓存 -->
+        <!-- 注意：默认为 flushCache="true" useCache="true" -->
+        <!-- 1.自定义查询方法时，必须 flushCache="false" useCache="false"， -->
+        <!-- 2.更新，添加，删除时，必须 flushCache="true" useCache="true" 或者不添加 -->
+        <!-- 3.请务修改 cache-ref 中的配置 -->
+        <cache-ref namespace="com.billow.system.dao.PermissionDao"/>
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.billow.system.pojo.po.PermissionPo">
+                <result column="id" property="id"/>
+                <result column="valid_ind" property="validInd"/>
+                <result column="create_time" property="createTime"/>
+                <result column="creator_code" property="creatorCode"/>
+                <result column="update_time" property="updateTime"/>
+                <result column="updater_code" property="updaterCode"/>
+                    <result column="permission_name" property="permissionName"/>
+                    <result column="permission_code" property="permissionCode"/>
+                    <result column="url" property="url"/>
+                    <result column="system_module" property="systemModule"/>
+                    <result column="description" property="description"/>
+                    <result column="display" property="display"/>
+                    <result column="icon" property="icon"/>
+                    <result column="pid" property="pid"/>
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+                id,
+                valid_ind,
+                create_time,
+                creator_code,
+                update_time,
+                updater_code,
+            permission_name, permission_code, url, system_module, description, display, icon, pid
+        </sql>
+
+</mapper>
