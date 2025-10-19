@@ -1,10 +1,10 @@
 package com.billow.system.pojo.po;
 
 import com.billow.mybatis.pojo.BasePo;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Table;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.mybatisflex.annotation.Column;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -22,22 +22,22 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sys_white_list")
+@Table("sys_white_list")
 @Schema(title = "WhiteListPo对象", description="")
 public class WhiteListPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("ip")
+    @Column("ip")
     private String ip;
 
-    @TableField("mark")
+    @Column("mark")
     private String mark;
 
-    @TableField("module")
+    @Column("module")
     private String module;
 
-    @TableField("port")
+    @Column("port")
     private String port;
 
 

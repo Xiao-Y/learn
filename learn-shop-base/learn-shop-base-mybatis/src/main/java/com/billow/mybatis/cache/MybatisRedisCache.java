@@ -1,6 +1,7 @@
 package com.billow.mybatis.cache;
 
 import com.billow.tools.utlis.SpringContextUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class MybatisRedisCache implements Cache {
             try {
                 redisTemplate = SpringContextUtil.getBean("redisCacheTemplate");
                 String property = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("spring.redis.cacheExpire");
-                if (property != null && "".equals(property)) {
+                if (StringUtils.isNotEmpty(property)) {
                     EXPIRE_TIME_IN_MINUTES = Long.parseLong(property);
                 }
             } catch (Exception e) {

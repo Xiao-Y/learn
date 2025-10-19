@@ -1,7 +1,7 @@
 package com.billow.product.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,22 +20,22 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("pms_goods_spec_value")
+@Table("pms_goods_spec_value")
 @Schema(title = "GoodsSpecValuePo对象", description="规格值表")
 public class GoodsSpecValuePo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(title = "规格id")
-    @TableField("spec_key_id")
+    @Column("spec_key_id")
     private Long specKeyId;
 
     @Schema(title = "规格值")
-    @TableField("spec_value")
+    @Column("spec_value")
     private String specValue;
 
     @Schema(title = "规格排序")
-    @TableField("value_sort")
+    @Column("value_sort")
     private Long valueSort;
 
 

@@ -1,11 +1,9 @@
 package com.billow.mybatis.base;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.pojo.BasePo;
 import com.billow.mybatis.utils.SqlUtil;
+import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
@@ -44,14 +42,9 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E extends BasePo, S
 
     @Operation(summary = "分页查询表数据")
     @PostMapping(value = "/list")
-    public IPage<E> findListByPage(@RequestBody SP sp) {
+    public Page<E> findListByPage(@RequestBody SP sp) {
         // 分页
         Page<E> page = new Page<>(sp.getPageNo(), sp.getPageSize());
-        // 排序
-        if (StringUtils.isNotEmpty(sp.getOrderBy())) {
-            String orderBy = SqlUtil.escapeOrderBySql(sp.getOrderBy());
-            page.addOrder(OrderItem.asc(orderBy).setAsc(sp.getIsAsc()));
-        }
         return service.findListByPage(page, sp);
     }
 

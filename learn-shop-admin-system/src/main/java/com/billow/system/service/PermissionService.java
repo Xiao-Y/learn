@@ -1,16 +1,15 @@
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.po.RolePo;
+import com.billow.system.pojo.search.PermissionSearchParam;
 import com.billow.system.pojo.vo.PermissionVo;
 
 import java.util.List;
 import java.util.Set;
 
-public interface PermissionService extends IService<PermissionPo>
-{
+public interface PermissionService extends HighLevelService<PermissionPo, PermissionSearchParam> {
 
     /**
      * 通过角色令牌,查询角色的权限集合

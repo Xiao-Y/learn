@@ -1,7 +1,7 @@
 package com.billow.system.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,28 +20,28 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sys_data_dictionary")
+@Table("sys_data_dictionary")
 @Schema(title = "DataDictionaryPo对象", description = "")
 public class DataDictionaryPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("field_type")
+    @Column("field_type")
     private String fieldType;
 
-    @TableField("field_value")
+    @Column("field_value")
     private String fieldValue;
 
-    @TableField("field_display")
+    @Column("field_display")
     private String fieldDisplay;
 
-    @TableField("system_module")
+    @Column("system_module")
     private String systemModule;
 
-    @TableField("field_order")
+    @Column("field_order")
     private Integer fieldOrder;
 
-    @TableField("description")
+    @Column("description")
     private String description;
 
 

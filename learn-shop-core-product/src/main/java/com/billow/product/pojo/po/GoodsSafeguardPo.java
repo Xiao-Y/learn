@@ -1,7 +1,7 @@
 package com.billow.product.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,18 +20,18 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("pms_goods_safeguard")
+@Table("pms_goods_safeguard")
 @Schema(title = "GoodsSafeguardPo对象", description="增值保障")
 public class GoodsSafeguardPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(title = "保障名称")
-    @TableField("safeguard_name")
+    @Column("safeguard_name")
     private String safeguardName;
 
     @Schema(title = "保障价格")
-    @TableField("price")
+    @Column("price")
     private Integer price;
 
 

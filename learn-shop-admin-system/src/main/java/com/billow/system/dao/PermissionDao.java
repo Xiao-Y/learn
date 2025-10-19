@@ -1,6 +1,6 @@
 package com.billow.system.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.billow.mybatis.base.HighLevelMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.system.pojo.po.PermissionPo;
 import com.billow.system.pojo.vo.PermissionVo;
@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2021-04-01
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface PermissionDao extends BaseMapper<PermissionPo> {
+public interface PermissionDao extends HighLevelMapper<PermissionPo> {
 
     /**
      * 通过 rolecode 查询出，权限信息

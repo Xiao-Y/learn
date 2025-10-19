@@ -1,7 +1,7 @@
 package com.billow.system.dao;
 
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.billow.mybatis.base.HighLevelMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.system.pojo.po.UserPo;
 import org.apache.ibatis.annotations.CacheNamespace;
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface UserDao extends BaseMapper<UserPo> {
+public interface UserDao extends HighLevelMapper<UserPo> {
 
     /**
      * 通过用户code 查询用户信息

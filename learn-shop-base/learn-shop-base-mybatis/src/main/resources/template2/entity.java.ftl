@@ -35,7 +35,7 @@ import lombok.experimental.Accessors;
     </#if>
 </#if>
 <#if table.convert>
-@TableName("${table.name}")
+@Table("${table.name}")
 </#if>
 <#if swagger2>
 @Schema(title = "${entity}对象", description="${table.comment!}")
@@ -79,12 +79,12 @@ public class ${entity} implements Serializable {
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
         <#if field.convert>
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+    @Column(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
         <#else>
-    @TableField(fill = FieldFill.${field.fill})
+    @Column(fill = FieldFill.${field.fill})
         </#if>
     <#elseif field.convert>
-    @TableField("${field.annotationColumnName}")
+    @Column("${field.annotationColumnName}")
     </#if>
     <#-- 乐观锁注解 -->
     <#if (versionFieldName!"") == field.name>

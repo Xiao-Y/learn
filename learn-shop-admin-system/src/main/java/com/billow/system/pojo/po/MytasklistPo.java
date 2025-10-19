@@ -1,7 +1,7 @@
 package com.billow.system.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,64 +23,64 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("v_mytasklist")
+@Table("v_mytasklist")
 @Schema(title = "MytasklistPo对象", description="VIEW")
 public class MytasklistPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("executionId")
+    @Column("executionId")
     private String executionId;
 
-    @TableField("assignee")
+    @Column("assignee")
     private String assignee;
 
-    @TableField("groupId")
+    @Column("groupId")
     private String groupId;
 
-    @TableField("taskName")
+    @Column("taskName")
     private String taskName;
 
-    @TableField("taskId")
+    @Column("taskId")
     private String taskId;
 
-    @TableField("claimStatus")
+    @Column("claimStatus")
     private String claimStatus;
 
-    @TableField("suspensionStatus")
+    @Column("suspensionStatus")
     private Integer suspensionStatus;
 
-    @TableField("procDefId")
+    @Column("procDefId")
     private String procDefId;
 
-    @TableField("procInstId")
+    @Column("procInstId")
     private String procInstId;
 
-    @TableField("isEnd")
+    @Column("isEnd")
     private Boolean end;
 
-    @TableField("applyType")
+    @Column("applyType")
     private String applyType;
 
-    @TableField("applyUserCode")
+    @Column("applyUserCode")
     private String applyUserCode;
 
-    @TableField("voClazz")
+    @Column("voClazz")
     private String voClazz;
 
-    @TableField("validInd")
+    @Column("validInd")
     private Boolean validInd;
 
-    @TableField("createTime")
+    @Column("createTime")
     private Date createTime;
 
-    @TableField("creatorCode")
+    @Column("creatorCode")
     private String creatorCode;
 
-    @TableField("updateTime")
+    @Column("updateTime")
     private Date updateTime;
 
-    @TableField("updaterCode")
+    @Column("updaterCode")
     private String updaterCode;
 
 

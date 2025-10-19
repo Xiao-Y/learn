@@ -1,7 +1,7 @@
 package com.billow.order.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,114 +23,114 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("oms_order_return_apply")
+@Table("oms_order_return_apply")
 @Schema(title = "OrderReturnApplyPo对象", description="")
 public class OrderReturnApplyPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(title = "订单id")
-    @TableField("order_id")
+    @Column("order_id")
     private Long orderId;
 
     @Schema(title = "收货地址表id")
-    @TableField("company_address_id")
+    @Column("company_address_id")
     private Long companyAddressId;
 
     @Schema(title = "退货商品id")
-    @TableField("product_id")
+    @Column("product_id")
     private Long productId;
 
     @Schema(title = "订单编号")
-    @TableField("order_sn")
+    @Column("order_sn")
     private String orderSn;
 
     @Schema(title = "申请时间")
-    @TableField("apply_time")
+    @Column("apply_time")
     private LocalDateTime applyTime;
 
     @Schema(title = "会员用户名")
-    @TableField("member_username")
+    @Column("member_username")
     private String memberUsername;
 
     @Schema(title = "退款金额")
-    @TableField("return_amount")
+    @Column("return_amount")
     private BigDecimal returnAmount;
 
     @Schema(title = "退货人姓名")
-    @TableField("return_name")
+    @Column("return_name")
     private String returnName;
 
     @Schema(title = "退货人电话")
-    @TableField("return_phone")
+    @Column("return_phone")
     private String returnPhone;
 
     @Schema(title = "申请状态：0->待处理；1->退货中；2->已完成；3->已拒绝")
-    @TableField("status")
+    @Column("status")
     private Integer status;
 
     @Schema(title = "处理时间")
-    @TableField("handle_time")
+    @Column("handle_time")
     private LocalDateTime handleTime;
 
     @Schema(title = "商品图片")
-    @TableField("product_pic")
+    @Column("product_pic")
     private String productPic;
 
     @Schema(title = "商品名称")
-    @TableField("product_name")
+    @Column("product_name")
     private String productName;
 
     @Schema(title = "商品品牌")
-    @TableField("product_brand")
+    @Column("product_brand")
     private String productBrand;
 
     @Schema(title = "商品销售属性：颜色：红色；尺码：xl;")
-    @TableField("product_attr")
+    @Column("product_attr")
     private String productAttr;
 
     @Schema(title = "退货数量")
-    @TableField("product_count")
+    @Column("product_count")
     private Integer productCount;
 
     @Schema(title = "商品单价")
-    @TableField("product_price")
+    @Column("product_price")
     private BigDecimal productPrice;
 
     @Schema(title = "商品实际支付单价")
-    @TableField("product_real_price")
+    @Column("product_real_price")
     private BigDecimal productRealPrice;
 
     @Schema(title = "原因")
-    @TableField("reason")
+    @Column("reason")
     private String reason;
 
     @Schema(title = "描述")
-    @TableField("description")
+    @Column("description")
     private String description;
 
     @Schema(title = "凭证图片，以逗号隔开")
-    @TableField("proof_pics")
+    @Column("proof_pics")
     private String proofPics;
 
     @Schema(title = "处理备注")
-    @TableField("handle_note")
+    @Column("handle_note")
     private String handleNote;
 
     @Schema(title = "处理人员")
-    @TableField("handle_man")
+    @Column("handle_man")
     private String handleMan;
 
     @Schema(title = "收货人")
-    @TableField("receive_man")
+    @Column("receive_man")
     private String receiveMan;
 
     @Schema(title = "收货时间")
-    @TableField("receive_time")
+    @Column("receive_time")
     private LocalDateTime receiveTime;
 
     @Schema(title = "收货备注")
-    @TableField("receive_note")
+    @Column("receive_note")
     private String receiveNote;
 
 

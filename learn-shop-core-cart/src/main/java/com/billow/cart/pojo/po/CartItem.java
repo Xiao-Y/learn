@@ -1,7 +1,7 @@
 package com.billow.cart.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,91 +20,91 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@TableName("cart_item")
+@Table("cart_item")
 @Schema(title = "CartItem对象", description = "购物车商品表")
 public class CartItem extends BasePo {
 
     @Schema(title = "租户ID")
-    @TableField("tenant_id")
+    @Column("tenant_id")
     private Long tenantId;
 
     @Schema(title = "购物车ID")
-    @TableField("cart_id")
+    @Column("cart_id")
     private Long cartId;
 
     @Schema(title = "用户ID")
-    @TableField("user_id")
+    @Column("user_id")
     private Long userId;
 
     @Schema(title = "商品ID")
-    @TableField("product_id")
+    @Column("product_id")
     private Long productId;
 
     @Schema(title = "SKU ID")
-    @TableField("sku_id")
+    @Column("sku_id")
     private Long skuId;
 
     @Schema(title = "商品数量")
-    @TableField("quantity")
+    @Column("quantity")
     private Integer quantity;
 
     @Schema(title = "原始价格")
-    @TableField("original_price")
+    @Column("original_price")
     private BigDecimal originalPrice;
 
     @Schema(title = "销售价格")
-    @TableField("sale_price")
+    @Column("sale_price")
     private BigDecimal salePrice;
 
     @Schema(title = "小计金额")
-    @TableField("subtotal")
+    @Column("subtotal")
     private BigDecimal subtotal;
 
     @Schema(title = "是否选中：0-未选中，1-已选中")
-    @TableField("selected")
+    @Column("selected")
     private Boolean selected;
 
     @Schema(title = "状态：1-正常，2-已失效，3-已下单")
-    @TableField("status")
+    @Column("status")
     private Integer status;
 
     @Schema(title = "失效原因")
-    @TableField("invalid_reason")
+    @Column("invalid_reason")
     private String invalidReason;
 
     @Schema(title = "乐观锁版本号")
-    @TableField("version")
+    @Column("version")
     private Integer version;
 
     @Schema(title = "商品名称")
-    @TableField("product_name")
+    @Column("product_name")
     private String productName;
 
     @Schema(title = "SKU名称")
-    @TableField("sku_name")
+    @Column("sku_name")
     private String skuName;
 
     @Schema(title = "SKU规格值JSON")
-    @TableField("sku_spec_values")
+    @Column("sku_spec_values")
     private String skuSpecValues;
 
     @Schema(title = "商品图片")
-    @TableField("product_pic")
+    @Column("product_pic")
     private String productPic;
 
     @Schema(title = "促销活动ID")
-    @TableField("promotion_id")
+    @Column("promotion_id")
     private Long promotionId;
 
     @Schema(title = "促销类型：1-满减，2-折扣，3-秒杀")
-    @TableField("promotion_type")
+    @Column("promotion_type")
     private Integer promotionType;
 
     @Schema(title = "促销优惠金额")
-    @TableField("promotion_amount")
+    @Column("promotion_amount")
     private BigDecimal promotionAmount;
 
     @Schema(title = "备注")
-    @TableField("remark")
+    @Column("remark")
     private String remark;
 } 

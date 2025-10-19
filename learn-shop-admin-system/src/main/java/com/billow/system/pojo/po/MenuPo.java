@@ -1,7 +1,7 @@
 package com.billow.system.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,31 +20,31 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sys_menu")
+@Table("sys_menu")
 @Schema(title = "MenuPo对象", description = "")
 public class MenuPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("menu_code")
+    @Column("menu_code")
     private String menuCode;
 
-    @TableField("menu_name")
+    @Column("menu_name")
     private String menuName;
 
-    @TableField("pid")
+    @Column("pid")
     private Long pid;
 
-    @TableField("display")
+    @Column("display")
     private Boolean display;
 
-    @TableField("icon")
+    @Column("icon")
     private String icon;
 
-    @TableField("description")
+    @Column("description")
     private String description;
 
-    @TableField("sort_field")
+    @Column("sort_field")
     private Double sortField;
 
 

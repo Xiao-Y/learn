@@ -1,10 +1,10 @@
 package com.billow.system.pojo.po;
 
 import com.billow.mybatis.pojo.BasePo;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Table;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.mybatisflex.annotation.Column;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -22,31 +22,31 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sys_apply_info")
+@Table("sys_apply_info")
 @Schema(title = "ApplyInfoPo对象", description = "")
 public class ApplyInfoPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("apply_data")
+    @Column("apply_data")
     private String applyData;
 
-    @TableField("apply_type")
+    @Column("apply_type")
     private String applyType;
 
-    @TableField("apply_user_code")
+    @Column("apply_user_code")
     private String applyUserCode;
 
-    @TableField("is_end")
+    @Column("is_end")
     private Boolean isEnd;
 
-    @TableField("proc_def_id")
+    @Column("proc_def_id")
     private String procDefId;
 
-    @TableField("proc_inst_id")
+    @Column("proc_inst_id")
     private String procInstId;
 
-    @TableField("vo_clazz")
+    @Column("vo_clazz")
     private String voClazz;
 
 

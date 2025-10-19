@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * 对应数据库表minio_object
  */
 @Data
-@TableName("minio_object")
+@Table("minio_object")
 public class MinioObject {
 
     /**
@@ -66,13 +66,13 @@ public class MinioObject {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
+    @Column(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Column(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime ts;
 
     /**

@@ -1,6 +1,6 @@
 package com.billow.order.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.billow.mybatis.base.HighLevelMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.order.pojo.po.OrderReturnApplyPo;
 import org.apache.ibatis.annotations.CacheNamespace;
@@ -15,6 +15,6 @@ import org.apache.ibatis.annotations.CacheNamespace;
  * @since 2021-08-23
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface OrderReturnApplyDao extends BaseMapper<OrderReturnApplyPo> {
+public interface OrderReturnApplyDao extends HighLevelMapper<OrderReturnApplyPo> {
 
 }

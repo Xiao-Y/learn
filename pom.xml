@@ -51,7 +51,8 @@
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
         <sharding-jdbc.version>5.5.2</sharding-jdbc.version>
-        <mybatis-plus.version>3.5.14</mybatis-plus.version>
+<!--        <mybatis-plus.version>3.5.14</mybatis-plus.version>-->
+        <mybatis-flex.version>1.11.3</mybatis-flex.version>
         <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
         <spring.boot.redis.version>3.5.0</spring.boot.redis.version>
         <lombok.version>1.18.32</lombok.version>
@@ -96,12 +97,27 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.baomidou</groupId>-->
+<!--                <artifactId>mybatis-plus-bom</artifactId>-->
+<!--                <version>${mybatis-plus.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-bom</artifactId>
-                <version>${mybatis-plus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>com.mybatis-flex</groupId>
+                <artifactId>mybatis-flex-spring-boot3-starter</artifactId>
+                <version>${mybatis-flex.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mybatis-flex</groupId>
+                <artifactId>mybatis-flex-core</artifactId>
+                <version>${mybatis-flex.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mybatis-flex</groupId>
+                <artifactId>mybatis-flex-processor</artifactId>
+                <version>${mybatis-flex.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.plugins</groupId>

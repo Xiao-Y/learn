@@ -1,7 +1,7 @@
 package com.billow.system.dao;
 
 import com.billow.system.pojo.po.MenuPermissionPo;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.billow.mybatis.base.HighLevelMapper;
 
 import org.apache.ibatis.annotations.CacheNamespace;
 import com.billow.mybatis.cache.MybatisRedisCache;
@@ -16,6 +16,6 @@ import com.billow.mybatis.cache.MybatisRedisCache;
  * @since 2021-12-26
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface MenuPermissionDao extends BaseMapper<MenuPermissionPo> {
+public interface MenuPermissionDao extends HighLevelMapper<MenuPermissionPo> {
 
 }

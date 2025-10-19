@@ -1,9 +1,9 @@
 package com.billow.mybatis.base;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.pojo.BasePo;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.service.IService;
 
 /**
  * 高级公用服务
@@ -21,11 +21,11 @@ public interface HighLevelService<E extends BasePo, SP extends BasePage> extends
      * 分页查询
      *
      * @param sp 查询条件
-     * @return {@link IPage<E>}
+     * @return {@link Page<E>}
      * @author liuyongtao
      * @since 2021-8-13 10:35
      */
-    IPage<E> findListByPage(IPage<E> page, SP sp);
+    Page<E> findListByPage(Page<E> page, SP sp);
 
     /**
      * 根据ID禁用数据

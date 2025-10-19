@@ -3,19 +3,21 @@ package com.billow.mybatis.base;
 import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.hutool.core.util.TypeUtil;
 import com.billow.mybatis.pojo.BasePage;
 import com.billow.mybatis.pojo.BasePo;
+import com.billow.mybatis.utils.SqlUtil;
+import com.billow.mybatis.base.HighLevelMapper;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateWrapper;
+import com.mybatisflex.core.util.UpdateEntity;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -32,26 +34,39 @@ import java.util.*;
  * @version v1.0
  * @since 2021-01-21
  */
-public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E extends BasePo, SP extends BasePage>
+public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E extends BasePo, SP extends BasePage>
         extends ServiceImpl<M, E> implements HighLevelService<E, SP> {
 
     // 查询对象
+    protected Class<E> eClass = (Class<E>) this.getClassByIndex(1);
     protected Class<SP> sPClass = (Class<SP>) this.getClassByIndex(2);
 
     @Override
-    public IPage<E> findListByPage(IPage<E> page, SP sp) {
-        LambdaQueryWrapper<E> wrapper = Wrappers.lambdaQuery();
+    public Page<E> findListByPage(Page<E> page, SP sp) {
+        QueryWrapper wrapper = QueryWrapper.create();
         // 查询条件
         this.genQueryCondition(wrapper, sp);
-        return baseMapper.selectPage(page, wrapper);
+
+        // 排序
+        if (StringUtils.isNotEmpty(sp.getOrderBy())) {
+            String orderBy = SqlUtil.escapeOrderBySql(sp.getOrderBy());
+            List<String> orderByList = StrUtil.split(orderBy, ",");
+            List<String> ascList = StrUtil.split(sp.getIsAsc(), ",");
+            for (int i = 0; i < orderByList.size(); i++) {
+                wrapper.orderBy(orderByList.get(i), ascList.get(i));
+
+            }
+        }
+
+        return mapper.paginate(page, wrapper);
     }
 
     @Override
     public boolean prohibitById(Long id) {
-        UpdateWrapper<E> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("validInd", false)
-                .eq("id", id);
-        return this.update(updateWrapper);
+        E e = UpdateEntity.of(eClass, id);
+        UpdateWrapper<E> updateWrapper = UpdateWrapper.of(e);
+        updateWrapper.set("validInd", false);
+        return mapper.update(e) > 0;
     }
 
     /**
@@ -62,20 +77,19 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E extends Ba
      * @author liuyongtao
      * @since 2021-8-13 10:20
      */
-    public void genQueryCondition(LambdaQueryWrapper<E> wrapper, SP sp) {
+    public void genQueryCondition(QueryWrapper wrapper, SP sp) {
         this.genQueryCondition(wrapper, sp, null);
     }
 
     /**
      * 分页查询的查询条件
      *
-     * @param wrapper
      * @param sp
      * @param tableAlias 表别名
      * @author liuyongtao
      * @since 2021-8-13 10:20
      */
-    public void genQueryCondition(LambdaQueryWrapper<E> wrapper, SP sp, String tableAlias) {
+    public void genQueryCondition(QueryWrapper queryWrapper, SP sp, String tableAlias) {
         // 排除字段
         List<String> excludedFields = Arrays.asList("pageSize", "pageNo", "orderBy", "isAsc");
         Filter<Field> filter = field -> {
@@ -109,45 +123,25 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E extends Ba
             // 使用 apply 方法动态添加条件
             bufferSql.append(" and ");
             if (fieldValue instanceof List && column.endsWith("list")) {
+                List fieldValueList = (List) fieldValue;
                 column = column.replaceFirst("_list", "");
                 // 多个值查询
-                bufferSql.append(column + " in ( ");
-                List fieldValueList = (List) fieldValue;
-                for (int j = 0; j < fieldValueList.size(); j++) {
-                    if (j != 0) {
-                        bufferSql.append(",");
-                    }
-                    bufferSql.append("{" + i + "}");
-                    i++;
-                }
-                bufferSql.append(" )");
-                values.addAll(fieldValueList);
+                queryWrapper.in(column, fieldValueList);
             } else if (column.startsWith("date_range_") && fieldValue instanceof String && fieldValue.toString().contains("~")) {
                 // 时间范围查询
                 column = column.replaceFirst("date_range_", "");
                 String[] split = ((String) fieldValue).split("~");
+
                 if (StringUtils.isNotEmpty(split[0])) {
-                    bufferSql.append(column + " >= {" + i + "}");
-                    values.add(split[0]);
-                    i++;
+                    queryWrapper.ge(column, split[0]);
                 }
                 if (StringUtils.isNotEmpty(split[1])) {
-                    if (StringUtils.isNotEmpty(split[0])) {
-                        bufferSql.append(" and ");
-                    }
-                    bufferSql.append(column + " <= {" + i + "}");
-                    values.add(split[1]);
-                    i++;
+                    queryWrapper.le(column, split[1]);
                 }
 
             } else {
-                bufferSql.append(column + " = {" + i + "}");
-                values.add(fieldValue);
-                i++;
+                queryWrapper.eq(column, fieldValue);
             }
-        }
-        if (bufferSql.length() != 0) {
-            wrapper.apply(bufferSql.toString().replaceFirst("and", ""), values.toArray());
         }
     }
 
@@ -159,7 +153,16 @@ public abstract class HighLevelServiceImpl<M extends BaseMapper<E>, E extends Ba
      * @since 2021-8-12 15:00
      */
     protected Class<?> getClassByIndex(int index) {
-        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelServiceImpl.class, index);
+//        return ReflectionKit.getSuperClassGenericType(this.getClass(), HighLevelServiceImpl.class, index);
+        // 获取当前类的泛型父类类型（即HighLevelServiceImpl的泛型定义）
+        Type genericSuperclass = this.getClass().getGenericSuperclass();
+        // 解析泛型参数，返回实际类型数组
+        Type[] actualTypeArguments = TypeUtil.getTypeArguments(genericSuperclass);
+        if (actualTypeArguments == null || index < 0 || index >= actualTypeArguments.length) {
+            throw new IndexOutOfBoundsException("泛型参数索引超出范围: " + index);
+        }
+        // 将泛型参数类型转换为Class对象
+        return TypeUtil.getClass(actualTypeArguments[index]);
     }
 }
 

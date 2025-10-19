@@ -1,15 +1,12 @@
 package com.billow.aop.advice;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.aop.commons.CustomPage;
-import com.billow.tools.constant.CommonCst;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.skywalking.apm.toolkit.trace.TraceContext;
-import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -86,13 +83,21 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
             }
             baseResponse = new BaseResponse(resCode);
             baseResponse.setRequestUrl(map.get("path") + "");
-        } else if (body instanceof IPage) {// mybatis 分页
-            IPage temp = (IPage) body;
+        } else if (body instanceof com.mybatisflex.core.paginate.Page) {// mybatis-flex 分页
+            com.mybatisflex.core.paginate.Page temp = (com.mybatisflex.core.paginate.Page) body;
             CustomPage customPage = new CustomPage();
             customPage.setTableData(temp.getRecords());
-            customPage.setRecordCount(temp.getTotal());
-            customPage.setTotalPages(temp.getPages());
+            customPage.setRecordCount(temp.getTotalRow());
+            customPage.setTotalPages(temp.getTotalPage());
             baseResponse = BaseResponse.success(customPage);
+
+//        } else if (body instanceof IPage) {// mybatis-plus 分页
+//            IPage temp = (IPage) body;
+//            CustomPage customPage = new CustomPage();
+//            customPage.setTableData(temp.getRecords());
+//            customPage.setRecordCount(temp.getTotal());
+//            customPage.setTotalPages(temp.getPages());
+//            baseResponse = BaseResponse.success(customPage);
         } else if (body instanceof Page) {// spring data jpa 分页
             Page temp = (Page) body;
             CustomPage customPage = new CustomPage();

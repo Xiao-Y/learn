@@ -1,7 +1,7 @@
 package com.billow.product.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,42 +20,42 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("pms_goods_brand")
+@Table("pms_goods_brand")
 @Schema(title = "GoodsBrandPo对象", description="品牌表")
 public class GoodsBrandPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(title = "首字母")
-    @TableField("first_letter")
+    @Column("first_letter")
     private String firstLetter;
 
     @Schema(title = "品牌名称")
-    @TableField("brand_name")
+    @Column("brand_name")
     private String brandName;
 
     @Schema(title = "分类排序")
-    @TableField("brand_sort")
+    @Column("brand_sort")
     private Long brandSort;
 
     @Schema(title = "是否显示")
-    @TableField("show_status")
+    @Column("show_status")
     private Integer showStatus;
 
     @Schema(title = "产品数量")
-    @TableField("product_count")
+    @Column("product_count")
     private Integer productCount;
 
     @Schema(title = "品牌logo")
-    @TableField("logo")
+    @Column("logo")
     private String logo;
 
     @Schema(title = "专区大图")
-    @TableField("big_pic")
+    @Column("big_pic")
     private String bigPic;
 
     @Schema(title = "品牌故事")
-    @TableField("brand_story")
+    @Column("brand_story")
     private String brandStory;
 
 

@@ -1,6 +1,6 @@
 package com.billow.system.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.billow.mybatis.base.HighLevelMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.system.pojo.po.UserRolePo;
 import org.apache.ibatis.annotations.CacheNamespace;
@@ -19,7 +19,7 @@ import java.util.List;
  * @since 2021-04-01
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface UserRoleDao extends BaseMapper<UserRolePo> {
+public interface UserRoleDao extends HighLevelMapper<UserRolePo> {
 
     /**
      * 通过用户id 查询出有效角色id

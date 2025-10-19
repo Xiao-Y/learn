@@ -1,6 +1,6 @@
 package com.billow.product.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.billow.mybatis.base.HighLevelMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.product.pojo.po.GoodsOperateLogPo;
 import org.apache.ibatis.annotations.CacheNamespace;
@@ -17,6 +17,6 @@ import org.apache.ibatis.annotations.CacheNamespace;
  * @since 2021-09-02
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface GoodsOperateLogDao extends BaseMapper<GoodsOperateLogPo> {
+public interface GoodsOperateLogDao extends HighLevelMapper<GoodsOperateLogPo> {
 
 }

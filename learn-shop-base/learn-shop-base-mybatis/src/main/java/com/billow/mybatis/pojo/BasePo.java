@@ -1,10 +1,10 @@
 package com.billow.mybatis.pojo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,23 +22,28 @@ import java.util.Date;
 public class BasePo extends BasePage implements Serializable {
 
     // 主键id
-    @TableId(type = IdType.ASSIGN_ID)
+    @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)
     private Long id;
+
     // 创建人
-    @TableField(value = "creator_code", fill = FieldFill.INSERT)
+    @Column(value = "creator_code")
     private String creatorCode;
+
     // 创建人
-    @TableField(value = "updater_code", fill = FieldFill.INSERT_UPDATE)
+    @Column(value = "updater_code")
     private String updaterCode;
+
     // 创建时间
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    @Column(value = "create_time")
     private Date createTime;
+
     // 更新时间
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    @Column(value = "update_time")
     private Date updateTime;
+
     // 有效标志
-    @TableField(value = "valid_ind", fill = FieldFill.INSERT)
+    @Column(value = "valid_ind")
     private Boolean validInd;
 }

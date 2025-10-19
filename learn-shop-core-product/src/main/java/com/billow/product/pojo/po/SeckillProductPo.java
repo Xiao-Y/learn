@@ -1,7 +1,7 @@
 package com.billow.product.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,42 +22,42 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sms_seckill_product")
+@Table("sms_seckill_product")
 @Schema(title = "SeckillProductPo对象", description="限时购与商品关系表。用于存储与限时购相关的商品信息，一个限时购中有多个场次，每个场次都可以设置不同活动商品。")
 public class SeckillProductPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(title = "限时购id")
-    @TableField("seckill_id")
+    @Column("seckill_id")
     private Long seckillId;
 
     @Schema(title = "编号")
-    @TableField("seckill_session_id")
+    @Column("seckill_session_id")
     private Long seckillSessionId;
 
     @Schema(title = "商品id")
-    @TableField("product_id")
+    @Column("product_id")
     private Long productId;
 
     @Schema(title = "skuid")
-    @TableField("sku_id")
+    @Column("sku_id")
     private Long skuId;
 
     @Schema(title = "限时购价格")
-    @TableField("seckill_price")
+    @Column("seckill_price")
     private BigDecimal seckillPrice;
 
     @Schema(title = "限时购库存数量")
-    @TableField("seckill_count")
+    @Column("seckill_count")
     private Integer seckillCount;
 
     @Schema(title = "每人限购数量")
-    @TableField("seckill_limit")
+    @Column("seckill_limit")
     private Integer seckillLimit;
 
     @Schema(title = "排序")
-    @TableField("sort")
+    @Column("sort")
     private Integer sort;
 
 

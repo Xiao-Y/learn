@@ -1,8 +1,7 @@
 package com.billow.mybatis.utils;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.core.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
@@ -15,8 +14,8 @@ import java.util.Map;
  */
 public class MybatisKet {
 
-    public static <T> QueryWrapper<T> getCondition(T t) {
-        QueryWrapper<T> query = Wrappers.query();
+    public static <T> QueryWrapper getCondition(T t) {
+        QueryWrapper query = QueryWrapper.create();
         try {
             LinkedHashMap<String, Object> map = entityToMap(t, false);
             for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -28,8 +27,8 @@ public class MybatisKet {
         return query;
     }
 
-    public static <T> QueryWrapper<T> getConditionLike(T t) {
-        QueryWrapper<T> query = Wrappers.query();
+    public static <T> QueryWrapper getConditionLike(T t) {
+        QueryWrapper query = QueryWrapper.create();
         try {
             LinkedHashMap<String, Object> map = entityToMap(t, false);
             for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -58,7 +57,7 @@ public class MybatisKet {
         Field[] fields = t.getClass().getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
-            TableField annotation = field.getAnnotation(TableField.class);
+            Column annotation = field.getAnnotation(Column.class);
             String name = field.getName();
             if (StringUtils.isEmpty(name) || annotation == null || "serialVersionUID".equalsIgnoreCase(name)) {
                 continue;

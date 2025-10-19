@@ -1,10 +1,10 @@
 package com.billow.system.pojo.po;
 
 import com.billow.mybatis.pojo.BasePo;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Table;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.mybatisflex.annotation.Column;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -22,34 +22,34 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sys_permission")
+@Table("sys_permission")
 @Schema(title = "PermissionPo对象", description="")
 public class PermissionPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("permission_name")
+    @Column("permission_name")
     private String permissionName;
 
-    @TableField("permission_code")
+    @Column("permission_code")
     private String permissionCode;
 
-    @TableField("url")
+    @Column("url")
     private String url;
 
-    @TableField("system_module")
+    @Column("system_module")
     private String systemModule;
 
-    @TableField("description")
+    @Column("description")
     private String description;
 
-    @TableField("display")
+    @Column("display")
     private Boolean display;
 
-    @TableField("icon")
+    @Column("icon")
     private String icon;
 
-    @TableField("pid")
+    @Column("pid")
     private Long pid;
 
 

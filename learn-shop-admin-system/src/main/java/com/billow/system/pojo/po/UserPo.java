@@ -1,7 +1,7 @@
 package com.billow.system.pojo.po;
 
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("u_user")
+@Table("u_user")
 public class UserPo extends BasePo implements Serializable {
 
     @Schema(title = "用户名")

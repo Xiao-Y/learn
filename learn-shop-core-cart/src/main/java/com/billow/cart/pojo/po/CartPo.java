@@ -1,7 +1,7 @@
 package com.billow.cart.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,25 +18,25 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("cart")
+@Table("cart")
 @Schema(title = "CartPo对象", description="购物车")
 public class CartPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(title = "用户ID")
-    @TableField("user_id")
+    @Column("user_id")
     private Long userId;
 
     @Schema(title = "SKU ID")
-    @TableField("sku_id")
+    @Column("sku_id")
     private Long skuId;
 
     @Schema(title = "商品数量")
-    @TableField("quantity")
+    @Column("quantity")
     private Integer quantity;
 
     @Schema(title = "是否选中")
-    @TableField("selected")
+    @Column("selected")
     private Boolean selected;
 } 

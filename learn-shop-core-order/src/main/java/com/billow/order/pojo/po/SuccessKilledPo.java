@@ -1,7 +1,7 @@
 package com.billow.order.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Table;
 import com.billow.mybatis.pojo.BasePo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,26 +22,26 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("sk_success_killed")
+@Table("sk_success_killed")
 @Schema(title = "SuccessKilledPo对象", description="秒杀成功明细表")
 public class SuccessKilledPo extends BasePo {
 
     private static final long serialVersionUID = 1L;
 
     @Schema(title = "用户code")
-    @TableField("usercode")
+    @Column("usercode")
     private String usercode;
 
     @Schema(title = "秒杀商品ID")
-    @TableField("seckill_id")
+    @Column("seckill_id")
     private Long seckillId;
 
     @Schema(title = "秒杀状态标识:-0:无效 1:成功 2:已付款 3:已发货")
-    @TableField("kill_state")
+    @Column("kill_state")
     private Integer killState;
 
     @Schema(title = "订单过期时间")
-    @TableField("expire")
+    @Column("expire")
     private LocalDateTime expire;
 
 

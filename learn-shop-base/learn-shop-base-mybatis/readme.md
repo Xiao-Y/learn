@@ -79,7 +79,7 @@ mybatis-plus.configuration.cache-enabled=true
 3.3使`mybatis-plus` 提供的方法生效,需要在继承`BaseMapper`方法上添加`@CacheNamespace`注解，指定缓存策略，默认使用`com.billow.mybatis.cache.MybatisRedisCache` 
 ```java
 @CacheNamespace(implementation = MybatisRedisCache.class)
-public interface GoodsBrandDao extends BaseMapper<GoodsBrandPo> {
+public interface GoodsBrandDao extends HighLevelMapper<GoodsBrandPo> {
 
 }
 ```
