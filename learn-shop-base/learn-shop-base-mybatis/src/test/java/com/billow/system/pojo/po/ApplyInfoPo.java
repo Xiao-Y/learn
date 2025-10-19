@@ -1,0 +1,53 @@
+package com.billow.system.pojo.po;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.billow.mybatis.pojo.BasePo;
+import java.io.Serial;
+import java.io.Serializable;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author billow
+ * @since 2025-10-19
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+@TableName("sys_apply_info")
+@Schema(title = "ApplyInfoPo对象", description="")
+public class ApplyInfoPo extends BasePo {
+
+    private static final long serialVersionUID = 1L;
+
+    @TableField("apply_data")
+    private String applyData;
+
+    @TableField("apply_type")
+    private String applyType;
+
+    @TableField("apply_user_code")
+    private String applyUserCode;
+
+    @TableField("is_end")
+    private Boolean isEnd;
+
+    @TableField("proc_def_id")
+    private String procDefId;
+
+    @TableField("proc_inst_id")
+    private String procInstId;
+
+    @TableField("vo_clazz")
+    private String voClazz;
+
+
+}
