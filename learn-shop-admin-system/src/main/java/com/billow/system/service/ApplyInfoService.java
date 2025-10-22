@@ -1,14 +1,15 @@
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MytasklistPo;
+import com.billow.system.pojo.search.ApplyInfoSearchParam;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.tools.enums.ApplyTypeEnum;
+import com.mybatisflex.core.paginate.Page;
 
-public interface ApplyInfoService extends IService<ApplyInfoPo> {
+public interface ApplyInfoService extends HighLevelService<ApplyInfoPo, ApplyInfoSearchParam> {
 
     /**
      * 提交申请信息，如果存在 applyType + StartApplyProcess 的实现类，会执行其中的方法
@@ -32,7 +33,7 @@ public interface ApplyInfoService extends IService<ApplyInfoPo> {
      * @author billow
      * @date 2019/9/3 20:03
      */
-    IPage<MytasklistPo> queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize);
+    Page<MytasklistPo> queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize);
 
     /**
      * 我发起的流程（所有的）
@@ -42,7 +43,7 @@ public interface ApplyInfoService extends IService<ApplyInfoPo> {
      * @author billow
      * @date 2019/9/8 17:15
      */
-    IPage<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo);
+    Page<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo);
 
     /**
      * 删除已经结束的申请

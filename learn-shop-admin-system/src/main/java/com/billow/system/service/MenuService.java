@@ -1,16 +1,17 @@
 package com.billow.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RolePo;
+import com.billow.system.pojo.search.MenuSearchParam;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
 
 import java.util.List;
 import java.util.Set;
 
-public interface MenuService extends IService<MenuPo> {
+public interface MenuService extends HighLevelService<MenuPo, MenuSearchParam> {
 //
 //    /**
 //     * 查询菜单

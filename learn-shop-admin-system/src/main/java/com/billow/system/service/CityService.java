@@ -1,9 +1,9 @@
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.ex.CityEx;
-import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.CityPo;
+import com.billow.system.pojo.search.CitySearchParam;
 import com.billow.system.pojo.vo.CityVo;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.Set;
  * @author liuyongtao
  * @create 2019-08-04 13:49
  */
-public interface CityService extends IService<CityPo> {
+public interface CityService extends HighLevelService<CityPo, CitySearchParam> {
 
     /**
      * 查询省市区

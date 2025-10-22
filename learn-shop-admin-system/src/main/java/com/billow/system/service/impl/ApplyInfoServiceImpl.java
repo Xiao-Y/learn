@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
-//import com.billow.mybatis.utils.MybatisKet;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.mybatis.utils.MybatisKet;
 import com.billow.system.dao.ApplyInfoDao;
 import com.billow.system.dao.MytasklistDao;
@@ -18,6 +17,7 @@ import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.ex.UserEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MytasklistPo;
+import com.billow.system.pojo.search.ApplyInfoSearchParam;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
 import com.billow.system.service.StartApplyProcess;
@@ -45,7 +45,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class ApplyInfoServiceImpl extends ServiceImpl<ApplyInfoDao, ApplyInfoPo> implements ApplyInfoService {
+public class ApplyInfoServiceImpl extends HighLevelServiceImpl<ApplyInfoDao, ApplyInfoPo, ApplyInfoSearchParam> implements ApplyInfoService {
 
     @Autowired
     private Map<String, StartApplyProcess> startApplyProcessMap;
@@ -155,7 +155,7 @@ public class ApplyInfoServiceImpl extends ServiceImpl<ApplyInfoDao, ApplyInfoPo>
 
     @Override
     public void deleteApplyInfoById(Long id) {
-        ApplyInfoPo applyInfoPo = applyInfoDao.selectById(id);
+        ApplyInfoPo applyInfoPo = this.getById(id);
         if (!applyInfoPo.getIsEnd()) {
             throw new RuntimeException("流程未结束不能删除");
         }
@@ -164,7 +164,7 @@ public class ApplyInfoServiceImpl extends ServiceImpl<ApplyInfoDao, ApplyInfoPo>
 
     @Override
     public ApplyInfoVo findLeaveById(Long id) {
-        ApplyInfoPo infoPo = applyInfoDao.selectById(id);
+        ApplyInfoPo infoPo = this.getById(id);
         return ConvertUtils.convert(infoPo, ApplyInfoVo.class);
     }
 
@@ -180,9 +180,9 @@ public class ApplyInfoServiceImpl extends ServiceImpl<ApplyInfoDao, ApplyInfoPo>
         if (startApplyProcess != null) {
             // 构建 applyData 数据
             String applyData = startApplyProcess.genApplyData(leaveEx);
-            ApplyInfoPo applyInfo = applyInfoDao.selectById(leaveEx.getId());
+            ApplyInfoPo applyInfo = this.getById(leaveEx.getId());
             applyInfo.setApplyData(applyData);
-            applyInfoDao.updateById(applyInfo);
+            this.updateById(applyInfo);
         }
 
         // 保存批注信息

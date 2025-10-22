@@ -6,12 +6,13 @@ import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.RoleMenuDao;
 import com.billow.system.pojo.po.MenuPo;
 import com.billow.system.pojo.po.RoleMenuPo;
 import com.billow.system.pojo.po.RolePo;
+import com.billow.system.pojo.search.MenuSearchParam;
 import com.billow.system.pojo.vo.MenuVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
@@ -39,7 +40,7 @@ import java.util.*;
 @Service
 @RefreshScope
 @Transactional(readOnly = true)
-public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements MenuService {
+public class MenuServiceImpl extends HighLevelServiceImpl<MenuDao, MenuPo, MenuSearchParam> implements MenuService {
 
     @Autowired
     private MenuDao menuDao;
@@ -69,7 +70,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
         if (menuById != null) {
             return menuById;
         }
-        MenuPo menuPo = menuDao.selectById(id);
+        MenuPo menuPo = this.getById(id);
         return menuRedisKit.setMenuById(ConvertUtils.convert(menuPo, MenuVo.class));
     }
 
@@ -79,7 +80,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
         Long id = menuVo.getId();
         MenuPo one;
         if (null != id) {
-            one = menuDao.selectById(id);
+            one = this.getById(id);
             ConvertUtils.copyNonNullProperties(menuVo, one);
         } else {
             menuVo.setValidInd(true);
@@ -110,7 +111,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
                 roleMenuDao.delete(wrapper);
             }
 
-            MenuPo menuPo = menuDao.selectById(new Long(id));
+            MenuPo menuPo = this.getById(new Long(id));
             if (menuPo != null) {
                 menuDao.deleteById(new Long(id));
             }
@@ -128,7 +129,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
 //                .eq(RoleMenuPo::getValidInd, true);
 //        List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(wrapper);
 //        Set<MenuEx> menuPos = roleMenuPos.stream().map(m -> {
-//            MenuPo menuPo = menuDao.selectById(m.getMenuId());
+//            MenuPo menuPo = this.getById(m.getMenuId());
 //            return roleMenuRedisKit.menuPoCoverMenuex(menuPo);
 //        }).collect(Collectors.toSet());
 //        return new ArrayList<>(menuPos);
@@ -145,7 +146,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
     @Override
     public Set<String> getParentByCurrentId(Long id) {
         Set<String> set = new HashSet<>();
-        MenuPo one = menuDao.selectById(id);
+        MenuPo one = this.getById(id);
         if (one.getPid() != null) {
             this.getMenuPidById(set, one.getPid());
         }
@@ -169,7 +170,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
 
     @Override
     public List<MenuVo> findMenuByPermissionId(Long permissionId) {
-        List<MenuPo> menuPos = this.baseMapper.findMenuByPermissionId(permissionId);
+        List<MenuPo> menuPos = this.mapper.findMenuByPermissionId(permissionId);
         return BeanUtil.copyToList(menuPos, MenuVo.class);
     }
 
@@ -218,7 +219,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, MenuPo> implements Men
      * @date 2019/8/2 10:57
      */
     private void getMenuPidById(Set<String> set, Long id) {
-        MenuPo one = menuDao.selectById(id);
+        MenuPo one = this.getById(id);
         if (one.getPid() != null) {
             this.getMenuPidById(set, one.getPid());
         }

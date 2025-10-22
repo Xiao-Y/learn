@@ -1,8 +1,9 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.system.dao.UserRoleDao;
 import com.billow.system.pojo.po.UserRolePo;
+import com.billow.system.pojo.search.UserRoleSearchParam;
 import com.billow.system.service.UserRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,6 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class UserRoleServiceImpl extends ServiceImpl<UserRoleDao, UserRolePo> implements UserRoleService {
+public class UserRoleServiceImpl extends HighLevelServiceImpl<UserRoleDao, UserRolePo, UserRoleSearchParam> implements UserRoleService {
 
 }

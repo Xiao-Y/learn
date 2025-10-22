@@ -1,11 +1,7 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.common.utils.UserTools;
 import com.billow.mybatis.base.HighLevelServiceImpl;
-import com.billow.mybatis.utils.SqlUtil;
 import com.billow.system.dao.RoleDao;
 import com.billow.system.dao.UserDao;
 import com.billow.system.dao.UserRoleDao;
@@ -18,6 +14,7 @@ import com.billow.system.service.UserService;
 import com.billow.system.service.redis.UserRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.mybatisflex.core.paginate.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,15 +49,10 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
     private UserTools userTools;
 
     @Override
-    public IPage<UserVo> findUserList(UserSearchParam userVo) {
+    public Page<UserVo> findUserList(UserSearchParam userVo) {
         // 分页
         Page<UserPo> page = new Page<>(userVo.getPageNo(), userVo.getPageSize());
-        // 排序
-        if (StringUtils.isNotEmpty(userVo.getOrderBy())) {
-            String orderBy = SqlUtil.escapeOrderBySql(userVo.getOrderBy());
-            page.addOrder(OrderItem.asc(orderBy).setAsc(userVo.getIsAsc()));
-        }
-        return this.findListByPage(page, userVo).convert(this::convertToUserVo);
+        return this.findListByPage(page, userVo).map(this::convertToUserVo);
     }
 
     /**
@@ -89,7 +81,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
 
         if (userId != null) {// 更新
             // 查询出旧的数据
-            UserPo po = userDao.selectById(userId);
+            UserPo po = this.getById(userId);
             oldUser = ConvertUtils.convert(po, UserPo.class);
             // 删除用户角色关联，重新保存
             userRoleDao.deleteByUserId(userId);
@@ -131,14 +123,14 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
                     return po;
                 }).collect(Collectors.toList());
         if (ToolsUtils.isNotEmpty(userRolePos)) {
-            userRoleDao.insert(userRolePos);
+            userRoleDao.insertBatch(userRolePos);
         }
         UserVo vo = ConvertUtils.convert(userPo, UserVo.class);
         vo.setPassword(null);
         vo.setRoleIds(roleIds);
         vo.setCasAddress(userVo.getCasAddress());
         // 修改用户，需要重新登陆（redis 中插入 用户名-角色CODE）
-        List<RolePo> rolePoList = roleDao.selectBatchIds(roleIds);
+        List<RolePo> rolePoList = roleDao.selectListByIds(roleIds);
         if (CollectionUtils.isNotEmpty(rolePoList)) {
             List<String> roleCodes = rolePoList.stream()
                     .map(RolePo::getRoleCode)
@@ -156,7 +148,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserVo deleteUserById(Long id) {
-        UserPo userPo = userDao.selectById(id);
+        UserPo userPo = this.getById(id);
         if (userPo != null) {
             userDao.deleteById(id);
         }
@@ -167,7 +159,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public UserVo prohibitUserById(Long id) {
-        UserPo userPo = userDao.selectById(id);
+        UserPo userPo = this.getById(id);
         if (userPo != null) {
             userPo.setValidInd(false);
             userDao.insert(userPo);
@@ -243,7 +235,7 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
 
     @Override
     public UserVo findUserInfoById(Long id) {
-        UserPo userPo = userDao.selectById(id);
+        UserPo userPo = this.getById(id);
         UserVo userVo = this.convertToUserVo(userPo);
         List<UserRolePo> userRolePos = userRoleDao.findByUserIdIsAndValidIndIsTrue(id);
         if (ToolsUtils.isNotEmpty(userRolePos)) {

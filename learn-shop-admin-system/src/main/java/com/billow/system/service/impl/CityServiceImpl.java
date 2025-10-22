@@ -2,16 +2,17 @@ package com.billow.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
+import com.billow.redis.util.RedisUtils;
 import com.billow.system.dao.CityDao;
 import com.billow.system.pojo.ex.CityEx;
 import com.billow.system.pojo.po.CityPo;
+import com.billow.system.pojo.search.CitySearchParam;
 import com.billow.system.pojo.vo.CityVo;
 import com.billow.system.service.CityService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.billow.redis.util.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  * @create 2019-08-04 13:50
  */
 @Service
-public class CityServiceImpl extends ServiceImpl<CityDao, CityPo> implements CityService {
+public class CityServiceImpl extends HighLevelServiceImpl<CityDao, CityPo, CitySearchParam> implements CityService {
 
     @Autowired
     private CityDao cityDao;

@@ -1,8 +1,9 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.system.dao.RolePermissionDao;
 import com.billow.system.pojo.po.RolePermissionPo;
+import com.billow.system.pojo.search.RolePermissionSearchParam;
 import com.billow.system.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-04-01
  */
 @Service
-public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionDao, RolePermissionPo> implements RolePermissionService {
+public class RolePermissionServiceImpl extends HighLevelServiceImpl<RolePermissionDao, RolePermissionPo, RolePermissionSearchParam> implements RolePermissionService {
 
 }
 

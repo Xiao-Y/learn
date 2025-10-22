@@ -1,9 +1,11 @@
 package com.billow.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.DataDictionaryPo;
+import com.billow.system.pojo.search.DataDictionarySearchParam;
 import com.billow.system.pojo.vo.DataDictionaryVo;
+import com.mybatisflex.core.paginate.Page;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  * @author LiuYongTao
  * @date 2019/7/11 10:57
  */
-public interface DataDictionaryService extends IService<DataDictionaryPo> {
+public interface DataDictionaryService extends HighLevelService<DataDictionaryPo, DataDictionarySearchParam> {
     /**
      * 根据条件查询出数据字典数据
      *
@@ -32,7 +34,7 @@ public interface DataDictionaryService extends IService<DataDictionaryPo> {
      * @author LiuYongTao
      * @date 2019/11/7 9:01
      */
-    IPage<DataDictionaryPo> listByPage(DataDictionaryVo dataDictionaryVo);
+    Page<DataDictionaryPo> listByPage(DataDictionaryVo dataDictionaryVo);
 
     /**
      * 根据下拉字段分类

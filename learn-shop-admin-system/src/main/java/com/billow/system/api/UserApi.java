@@ -1,6 +1,5 @@
 package com.billow.system.api;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.utils.UserTools;
 import com.billow.mybatis.base.HighLevelApi;
 import com.billow.system.pojo.po.UserPo;
@@ -9,6 +8,7 @@ import com.billow.system.pojo.vo.UserVo;
 import com.billow.system.service.UserService;
 import com.billow.tools.enums.ResCodeEnum;
 import com.billow.tools.resData.BaseResponse;
+import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class UserApi extends HighLevelApi<UserService, UserPo, UserSearchParam> 
 
     @Operation(summary = "根据条件查询用户信息")
     @PostMapping("/findUserList")
-    public IPage<UserVo> findUserList(@RequestBody UserSearchParam userVo) {
+    public Page<UserVo> findUserList(@RequestBody UserSearchParam userVo) {
         return userService.findUserList(userVo);
     }
 

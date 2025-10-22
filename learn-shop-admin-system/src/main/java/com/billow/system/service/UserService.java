@@ -5,6 +5,7 @@ import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.UserPo;
 import com.billow.system.pojo.search.UserSearchParam;
 import com.billow.system.pojo.vo.UserVo;
+import com.mybatisflex.core.paginate.Page;
 
 public interface UserService extends HighLevelService<UserPo, UserSearchParam> {
 
@@ -16,7 +17,7 @@ public interface UserService extends HighLevelService<UserPo, UserSearchParam> {
      * @author LiuYongTao
      * @date 2019/8/5 13:51
      */
-    IPage<UserVo> findUserList(UserSearchParam userVo);
+    Page<UserVo> findUserList(UserSearchParam userVo);
 
     /**
      * 保存用户信息

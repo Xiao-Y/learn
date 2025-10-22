@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.redis.util.RedisUtils;
 import com.billow.system.dao.*;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.po.*;
+import com.billow.system.pojo.search.RoleSearchParam;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.MenuService;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements RoleService {
+public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleSearchParam> implements RoleService {
 
     @Autowired
     private UserRoleDao userRoleDao;
@@ -77,7 +78,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         List<UserRolePo> userRolePos = userRoleDao.selectList(wrapper);
         if (ToolsUtils.isNotEmpty(userRolePos)) {
             userRolePos.stream().forEach(userRolePo -> {
-                RolePo rolePo = roleDao.selectById(userRolePo.getRoleId());
+                RolePo rolePo = this.getById(userRolePo.getRoleId());
                 RoleVo roleVo = ConvertUtils.convert(rolePo, RoleVo.class);
                 roleVos.add(roleVo);
             });
@@ -114,7 +115,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         if (id != null) {
             // 表示是新添加的角色
             roleVo.setIsNewRole(false);
-            RolePo one = roleDao.selectById(id);
+            RolePo one = this.getById(id);
             // 如果是无效状态时，删除redis 中的信息
             if (!rolePo.getValidInd()) {
                 rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
@@ -180,10 +181,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         List<RoleMenuPo> roleMenuPos = menuChecked.stream().map(m -> {
             RoleMenuPo roleMenuPo = new RoleMenuPo();
             roleMenuPo.setRoleId(roleVo.getId());
-            roleMenuPo.setMenuId(new Long(m));
+            roleMenuPo.setMenuId(Long.parseLong(m));
             roleMenuPo.setValidInd(true);
             if (roleVo.getValidInd()) {
-                newMenuPos.add(menuDao.selectById(new Long(m)));
+                newMenuPos.add(menuDao.selectOneById(Long.parseLong(m)));
             }
             return roleMenuPo;
         }).collect(Collectors.toList());
@@ -196,7 +197,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
             if (ToolsUtils.isNotEmpty(menuExs)) {
                 List<Long> delMenuIdsTemp = delMenuIds;
                 sourceMenuPo = menuExs.stream()
-                        .filter(f -> !delMenuIdsTemp.contains(new Long(f.getId())))
+                        .filter(f -> !delMenuIdsTemp.contains(f.getId()))
                         .collect(Collectors.toList());
             }
 
@@ -204,7 +205,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
                 newMenuPos.addAll(sourceMenuPo);
                 Map<Long, MenuPo> temp = new HashMap<>();
                 for (MenuPo newMenuPo : newMenuPos) {
-                    if(Objects.isNull(newMenuPo)){
+                    if (Objects.isNull(newMenuPo)) {
                         continue;
                     }
                     temp.put(newMenuPo.getId(), newMenuPo);
@@ -260,11 +261,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
             List<RolePermissionPo> rolePermissionPos = permissionChecked.stream().map(m -> {
                 RolePermissionPo rolePermissionPo = new RolePermissionPo();
                 rolePermissionPo.setRoleId(roleVo.getId());
-                rolePermissionPo.setPermissionId(new Long(m));
+                rolePermissionPo.setPermissionId(m);
                 rolePermissionPo.setValidInd(true);
                 if (roleVo.getValidInd()) {
                     // 查询出该角色要更新的权限
-                    newPermissionPos.add(permissionDao.selectById(new Long(m)));
+                    newPermissionPos.add(permissionDao.selectOneById(m));
                 }
                 return rolePermissionPo;
             }).collect(Collectors.toList());
@@ -303,7 +304,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RoleVo prohibitRoleById(Long roleId) {
-        RolePo one = roleDao.selectById(roleId);
+        RolePo one = this.getById(roleId);
         // 如果不存在，直接构建一个新的返回
         if (one == null) {
             RoleVo roleVo = new RoleVo();
@@ -317,7 +318,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
         }
         // 更新角色为无效
         one.setValidInd(false);
-        roleDao.updateById(one);
+        this.updateById(one);
 
         // 更新该角色的权限为无效
         LambdaQueryWrapper<RolePermissionPo> condition = Wrappers.lambdaQuery();
@@ -350,7 +351,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RoleVo deleteRoleById(Long roleId) {
-        RolePo one = roleDao.selectById(roleId);
+        RolePo one = this.getById(roleId);
         // 如果不存在，直接构建一个新的返回
         if (one == null) {
             RoleVo roleVo = new RoleVo();
@@ -386,7 +387,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, RolePo> implements Rol
     public List<DataDictionaryEx> findSelectRole() {
         List<RolePo> rolePos = this.list();
         List<DataDictionaryEx> collect = rolePos.stream().map(m ->
-                new DataDictionaryEx(m.getId(), m.getRoleName() + "-" + m.getRoleCode(), m.getId()))
+                        new DataDictionaryEx(m.getId(), m.getRoleName() + "-" + m.getRoleCode(), m.getId()))
                 .collect(Collectors.toList());
         return collect;
     }

@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.mybatis.utils.MybatisKet;
 import com.billow.system.dao.DataDictionaryDao;
 import com.billow.system.pojo.po.DataDictionaryPo;
+import com.billow.system.pojo.search.DataDictionarySearchParam;
 import com.billow.system.pojo.vo.DataDictionaryVo;
 import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.utlis.ConvertUtils;
@@ -26,7 +27,7 @@ import java.util.List;
  * @create 2019-07-11 10:58
  */
 @Service
-public class DataDictionaryServiceImpl extends ServiceImpl<DataDictionaryDao, DataDictionaryPo> implements DataDictionaryService {
+public class DataDictionaryServiceImpl extends HighLevelServiceImpl<DataDictionaryDao, DataDictionaryPo, DataDictionarySearchParam> implements DataDictionaryService {
 
     @Autowired
     private DataDictionaryDao dataDictionaryDao;
