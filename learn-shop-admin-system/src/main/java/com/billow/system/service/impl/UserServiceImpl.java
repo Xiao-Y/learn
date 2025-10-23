@@ -50,8 +50,6 @@ public class UserServiceImpl extends HighLevelServiceImpl<UserDao, UserPo, UserS
 
     @Override
     public Page<UserVo> findUserList(UserSearchParam userVo) {
-        // 分页
-        Page<UserPo> page = new Page<>(userVo.getPageNo(), userVo.getPageSize());
         return this.findListByPage(page, userVo).map(this::convertToUserVo);
     }
 

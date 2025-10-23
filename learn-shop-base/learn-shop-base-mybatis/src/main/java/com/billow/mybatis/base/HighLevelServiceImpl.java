@@ -41,10 +41,12 @@ public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E exten
     protected Class<SP> sPClass = (Class<SP>) this.getClassByIndex(2);
 
     @Override
-    public Page<E> findListByPage(Page<E> page, SP sp) {
+    public Page<E> findListByPage(SP sp) {
         QueryWrapper wrapper = QueryWrapper.create();
         // 查询条件
         this.genQueryCondition(wrapper, sp);
+        // 分页
+        Page<E> page = new Page<>(sp.getPageNo(), sp.getPageSize());
         // 排序
         MybatisKet.addSortBy(sp, wrapper);
         return mapper.paginate(page, wrapper);

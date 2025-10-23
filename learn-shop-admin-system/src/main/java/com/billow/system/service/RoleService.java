@@ -1,15 +1,15 @@
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.po.RolePo;
+import com.billow.system.pojo.search.RoleSearchParam;
 import com.billow.system.pojo.vo.RoleVo;
+import com.mybatisflex.core.paginate.Page;
 
 import java.util.List;
 
-public interface RoleService extends IService<RolePo>
-{
+public interface RoleService extends HighLevelService<RolePo, RoleSearchParam> {
 
     /**
      * 通过用户id 查询用户角色信息
@@ -20,14 +20,6 @@ public interface RoleService extends IService<RolePo>
      * @date 2018/11/5 16:19
      */
     List<RoleVo> findRoleListInfoByUserId(Long userId);
-
-    /**
-     * 根据条件查询角色列表信息
-     *
-     * @param roleVo
-     * @return
-     */
-    IPage<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception;
 
     /**
      * 根据角色ID查询权限ID

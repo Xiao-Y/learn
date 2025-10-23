@@ -3,6 +3,7 @@ package com.billow.system.dao;
 import com.billow.mybatis.base.HighLevelMapper;
 import com.billow.mybatis.cache.MybatisRedisCache;
 import com.billow.system.pojo.po.UserRolePo;
+import com.mybatisflex.core.query.QueryWrapper;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +21,12 @@ import java.util.List;
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
 public interface UserRoleDao extends HighLevelMapper<UserRolePo> {
+
+    default List<UserRolePo> queryList(UserRolePo userRolePo) {
+        QueryWrapper wrapper = QueryWrapper.create()
+                .eq(UserRolePo::getUserId, userRolePo.getUserId());
+        return this.selectListByQuery(wrapper);
+    }
 
     /**
      * 通过用户id 查询出有效角色id
@@ -42,4 +49,5 @@ public interface UserRoleDao extends HighLevelMapper<UserRolePo> {
      */
     @Delete("delete sys_user_role r where r.user_id = #{userId}")
     void deleteByUserId(@Param("userId") Long userId);
+
 }

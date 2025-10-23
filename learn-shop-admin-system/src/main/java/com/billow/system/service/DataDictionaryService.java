@@ -1,6 +1,5 @@
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.search.DataDictionarySearchParam;
@@ -73,15 +72,5 @@ public interface DataDictionaryService extends HighLevelService<DataDictionaryPo
      * @date 2019/11/7 10:08
      */
     void saveOrUpdate(DataDictionaryVo dataDictionaryVo);
-
-    /**
-     * 根据id禁用数据字典
-     *
-     * @param id
-     * @return com.billow.system.pojo.vo.DataDictionaryVo
-     * @author LiuYongTao
-     * @date 2019/11/7 10:46
-     */
-    DataDictionaryVo prohibitById(Long id);
 
 }

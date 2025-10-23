@@ -1,8 +1,9 @@
 
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.RoleMenuPo;
+import com.billow.system.pojo.search.RoleMenuSearchParam;
 
 /**
  * <p>
@@ -13,7 +14,6 @@ import com.billow.system.pojo.po.RoleMenuPo;
  * @version v1.0
  * @since 2021-04-01
  */
-public interface RoleMenuService extends IService<RoleMenuPo>
-{
+public interface RoleMenuService extends HighLevelService<RoleMenuPo, RoleMenuSearchParam> {
 
 }

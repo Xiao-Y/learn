@@ -27,7 +27,7 @@ public interface HighLevelService<E extends BasePo, SP extends BasePage> extends
      * @author liuyongtao
      * @since 2021-8-13 10:35
      */
-    Page<E> findListByPage(Page<E> page, SP sp);
+    Page<E> findListByPage(SP sp);
 
     /**
      * 查询列表

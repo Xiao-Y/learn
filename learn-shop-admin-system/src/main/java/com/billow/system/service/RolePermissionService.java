@@ -1,8 +1,9 @@
 
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.RolePermissionPo;
+import com.billow.system.pojo.search.RolePermissionSearchParam;
 
 /**
  * <p>
@@ -13,6 +14,6 @@ import com.billow.system.pojo.po.RolePermissionPo;
  * @version v1.0
  * @since 2021-04-01
  */
-public interface RolePermissionService extends IService<RolePermissionPo> {
+public interface RolePermissionService extends HighLevelService<RolePermissionPo, RolePermissionSearchParam> {
 
 }

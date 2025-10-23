@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.common.base.BaseApi;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.po.RolePo;
+import com.billow.system.pojo.search.RoleSearchParam;
 import com.billow.system.pojo.vo.RoleVo;
 import com.billow.system.service.RoleService;
+import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +41,8 @@ public class RoleApi extends BaseApi {
 
     @Operation(summary = "根据条件查询角色列表信息")
     @PostMapping("/findRoleList")
-    public IPage<RolePo> findRoleList(@RequestBody RoleVo roleVo) throws Exception {
-        IPage<RolePo> page = roleService.findRoleByCondition(roleVo);
+    public Page<RolePo> findRoleList(@RequestBody RoleSearchParam roleVo) throws Exception {
+        Page<RolePo> page = roleService.findListByPage(roleVo);
         return page;
     }
 

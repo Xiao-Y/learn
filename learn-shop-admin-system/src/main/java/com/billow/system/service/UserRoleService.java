@@ -1,7 +1,8 @@
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.UserRolePo;
+import com.billow.system.pojo.search.UserRoleSearchParam;
 
-public interface UserRoleService extends IService<UserRolePo> {
+public interface UserRoleService extends HighLevelService<UserRolePo, UserRoleSearchParam> {
 }

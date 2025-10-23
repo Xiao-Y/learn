@@ -1,6 +1,5 @@
 package com.billow.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.mybatis.base.HighLevelService;
 import com.billow.system.pojo.po.UserPo;
 import com.billow.system.pojo.search.UserSearchParam;

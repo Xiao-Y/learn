@@ -1,14 +1,13 @@
 package com.billow.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.redis.util.RedisUtils;
 import com.billow.system.dao.*;
 import com.billow.system.pojo.ex.DataDictionaryEx;
 import com.billow.system.pojo.po.*;
+import com.billow.system.pojo.search.RolePermissionSearchParam;
 import com.billow.system.pojo.search.RoleSearchParam;
 import com.billow.system.pojo.vo.PermissionVo;
 import com.billow.system.pojo.vo.RoleVo;
@@ -24,7 +23,6 @@ import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -73,12 +71,12 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
     @Override
     public List<RoleVo> findRoleListInfoByUserId(Long userId) {
         List<RoleVo> roleVos = new ArrayList<>();
-        LambdaQueryWrapper<UserRolePo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserRolePo::getUserId, userId);
-        List<UserRolePo> userRolePos = userRoleDao.selectList(wrapper);
+        UserRolePo userRolePo = new UserRolePo();
+        userRolePo.setUserId(userId);
+        List<UserRolePo> userRolePos = userRoleDao.queryList(userRolePo);
         if (ToolsUtils.isNotEmpty(userRolePos)) {
-            userRolePos.stream().forEach(userRolePo -> {
-                RolePo rolePo = this.getById(userRolePo.getRoleId());
+            userRolePos.forEach(item -> {
+                RolePo rolePo = this.getById(item.getRoleId());
                 RoleVo roleVo = ConvertUtils.convert(rolePo, RoleVo.class);
                 roleVos.add(roleVo);
             });
@@ -87,23 +85,15 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
     }
 
     @Override
-    public IPage<RolePo> findRoleByCondition(RoleVo roleVo) throws Exception {
-        IPage<RolePo> page = new Page<>(roleVo.getPageNo(), roleVo.getPageSize());
-        LambdaQueryWrapper<RolePo> condition = Wrappers.lambdaQuery();
-        condition.eq(StringUtils.isNotEmpty(roleVo.getRoleCode()), RolePo::getRoleCode, roleVo.getRoleCode())
-                .like(StringUtils.isNotEmpty(roleVo.getRoleName()), RolePo::getRoleName, roleVo.getRoleName());
-        IPage<RolePo> rolePos = roleDao.selectPage(page, condition);
-        return rolePos;
-    }
-
-    @Override
     public List<Long> findPermissionByRoleId(Long roleId) throws Exception {
         // 查询权限信息
-        LambdaQueryWrapper<RolePermissionPo> condition = Wrappers.lambdaQuery();
-        condition.eq(RolePermissionPo::getRoleId, roleId)
-                .eq(RolePermissionPo::getValidInd, true);
-        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.selectList(condition);
-        return rolePermissionPos.stream().map(m -> m.getPermissionId()).collect(Collectors.toList());
+        RolePermissionSearchParam rolePermissionSearchParam = new RolePermissionSearchParam();
+        rolePermissionSearchParam.setRoleId(roleId);
+        rolePermissionSearchParam.setValidInd(true);
+        List<RolePermissionPo> rolePermissionPos = rolePermissionService.findList(rolePermissionSearchParam);
+        return rolePermissionPos.stream()
+                .map(RolePermissionPo::getPermissionId)
+                .collect(Collectors.toList());
     }
 
     @Override
