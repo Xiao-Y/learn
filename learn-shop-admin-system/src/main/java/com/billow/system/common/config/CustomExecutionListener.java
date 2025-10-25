@@ -33,10 +33,12 @@ public class CustomExecutionListener implements ExecutionListener {
             String businessKey = execution.getProcessInstanceBusinessKey();
             if (businessKey != null) {
                 try {
-                    ApplyInfoPo applyInfoPo = applyInfoDao.selectById(new Long(businessKey));
+                    ApplyInfoPo applyInfoPo = applyInfoDao.selectOneById(Long.valueOf(businessKey));
                     if (applyInfoPo != null) {
-                        applyInfoPo.setIsEnd(true);
-                        applyInfoDao.updateById(applyInfoPo);
+                        ApplyInfoPo updatePo = new ApplyInfoPo();
+                        updatePo.setId(applyInfoPo.getId());
+                        updatePo.setIsEnd(true);
+                        applyInfoDao.update(updatePo);
                     }
                 } catch (Exception e) {
                     log.error("更新申请表 IsEnd 异常，", e);

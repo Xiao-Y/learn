@@ -1,16 +1,16 @@
 package com.billow.system.api;
 
 import cn.hutool.core.util.StrUtil;
-import com.billow.common.base.BaseApi;
+import com.billow.mybatis.base.HighLevelApi;
 import com.billow.redis.util.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
 import com.billow.system.pojo.po.DataDictionaryPo;
+import com.billow.system.pojo.search.DataDictionarySearchParam;
 import com.billow.system.pojo.vo.DataDictionaryVo;
 import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
-import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/dataDictionaryApi")
 @Tag(name = "DataDictionaryApi", description = "数据字典管理")
-public class DataDictionaryApi extends BaseApi {
+public class DataDictionaryApi extends HighLevelApi<DataDictionaryService, DataDictionaryPo, DataDictionarySearchParam> {
 
     private final static String FIELD_TYPE_KEY = RedisCst.COMM_DICTIONARY_FIELD_TYPE;
 
@@ -54,7 +54,7 @@ public class DataDictionaryApi extends BaseApi {
         if (ToolsUtils.isNotEmpty(redisData)) {
             return ConvertUtils.convertIgnoreBase(redisData, DataDictionaryVo.class);
         }
-        DataDictionaryVo dataDictionaryVo = new DataDictionaryVo();
+        DataDictionarySearchParam dataDictionaryVo = new DataDictionarySearchParam();
         dataDictionaryVo.setSystemModule(systemModule);
         dataDictionaryVo.setFieldType(fieldType);
         dataDictionaryVo.setValidInd(true);
@@ -67,18 +67,13 @@ public class DataDictionaryApi extends BaseApi {
     @Operation(summary = "查询数据字典，指定 fieldType")
     @GetMapping("/findDataDictionary/{fieldType}")
     public List<DataDictionaryVo> findDataDictionary(@PathVariable("fieldType") String fieldType) throws Exception {
-        DataDictionaryVo dataDictionaryVo = new DataDictionaryVo();
+        DataDictionarySearchParam dataDictionaryVo = new DataDictionarySearchParam();
         dataDictionaryVo.setFieldType(fieldType);
         dataDictionaryVo.setValidInd(true);
         List<DataDictionaryVo> dataDictionaryVos = dataDictionaryService.findDataDictionaryByCondition(dataDictionaryVo);
         return dataDictionaryVos;
     }
 
-    @Operation(summary = "根据条件查询数据字典信息")
-    @PostMapping("/list")
-    public Page<DataDictionaryPo> listByPage(@RequestBody DataDictionaryVo dataDictionaryVo) {
-        return dataDictionaryService.listByPage(dataDictionaryVo);
-    }
 
     @Operation(summary = "字典下拉字段分类")
     @GetMapping("/findFieldType")
@@ -126,16 +121,10 @@ public class DataDictionaryApi extends BaseApi {
 
     @Operation(summary = "根据id删除数据字典")
     @DeleteMapping("/del/{id}")
-    public void delById(@PathVariable Long id) {
+    public boolean delById(@PathVariable Long id) {
         dataDictionaryService.delById(id);
         initDictionary.init();
-    }
-
-    @Operation(summary = "根据id禁用数据字典")
-    @PutMapping("/prohibit/{id}")
-    public DataDictionaryVo prohibitById(@PathVariable Long id) {
-        DataDictionaryVo dataDictionaryVo = dataDictionaryService.prohibitById(id);
-        return dataDictionaryVo;
+        return true;
     }
 
     @Operation(summary = "加载缓存中路由信息")

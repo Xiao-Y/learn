@@ -5,6 +5,7 @@ import com.billow.system.pojo.ex.LeaveEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MytasklistPo;
 import com.billow.system.pojo.search.ApplyInfoSearchParam;
+import com.billow.system.pojo.search.MytasklistSearchParam;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.tools.enums.ApplyTypeEnum;
 import com.mybatisflex.core.paginate.Page;
@@ -26,14 +27,12 @@ public interface ApplyInfoService extends HighLevelService<ApplyInfoPo, ApplyInf
     /**
      * 加载我的任务任务列表（已签收和未签收的）
      *
-     * @param applyInfoVo
-     * @param offset
-     * @param pageSize
+     * @param mytasklistSearchParam
      * @return com.billow.base.workflow.vo.Page<com.billow.base.workflow.vo.TaskVo>
      * @author billow
      * @date 2019/9/3 20:03
      */
-    Page<MytasklistPo> queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize);
+    Page<MytasklistPo> queryMyTaskList(MytasklistSearchParam mytasklistSearchParam);
 
     /**
      * 我发起的流程（所有的）
@@ -43,7 +42,7 @@ public interface ApplyInfoService extends HighLevelService<ApplyInfoPo, ApplyInf
      * @author billow
      * @date 2019/9/8 17:15
      */
-    Page<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo);
+    Page<ApplyInfoPo> myStartProdeList(ApplyInfoSearchParam applyInfoVo);
 
     /**
      * 删除已经结束的申请

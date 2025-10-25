@@ -18,22 +18,22 @@ public interface DataDictionaryService extends HighLevelService<DataDictionaryPo
     /**
      * 根据条件查询出数据字典数据
      *
-     * @param dataDictionaryVo
+     * @param searchParam
      * @return java.util.List<com.billow.system.pojo.vo.DataDictionaryVo>
      * @author LiuYongTao
      * @date 2019/7/11 11:06
      */
-    List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionaryVo dataDictionaryVo);
+    List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionarySearchParam searchParam);
 
     /**
      * 根据条件查询数据字典信息
      *
-     * @param dataDictionaryVo
+     * @param searchParam
      * @return org.springframework.data.domain.Page<com.billow.system.pojo.po.DataDictionaryPo>
      * @author LiuYongTao
      * @date 2019/11/7 9:01
      */
-    Page<DataDictionaryPo> listByPage(DataDictionaryVo dataDictionaryVo);
+    Page<DataDictionaryPo> listByPage(DataDictionarySearchParam searchParam);
 
     /**
      * 根据下拉字段分类

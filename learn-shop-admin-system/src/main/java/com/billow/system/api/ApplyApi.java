@@ -1,6 +1,5 @@
 package com.billow.system.api;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.CommentVo;
@@ -8,19 +7,16 @@ import com.billow.base.workflow.vo.TaskVo;
 import com.billow.common.utils.UserTools;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MytasklistPo;
+import com.billow.system.pojo.search.ApplyInfoSearchParam;
+import com.billow.system.pojo.search.MytasklistSearchParam;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,10 +43,10 @@ public class ApplyApi {
 
     @Operation(summary = "查询个人任务列表")
     @PostMapping("/queryMyTaskList")
-    public IPage<MytasklistPo> queryMyTaskList(@RequestBody ApplyInfoVo applyInfoVo) {
+    public Page<MytasklistPo> queryMyTaskList(@RequestBody MytasklistSearchParam mytasklistSearchParam) {
         String currentUserCode = userTools.getCurrentUserCode();
-        applyInfoVo.setAssignee(currentUserCode);
-        IPage<MytasklistPo> applyInfoVoPage = applyInfoService.queryMyTaskList(applyInfoVo, applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
+        mytasklistSearchParam.setAssignee(currentUserCode);
+        Page<MytasklistPo> applyInfoVoPage = applyInfoService.queryMyTaskList(mytasklistSearchParam);
         return applyInfoVoPage;
     }
 
@@ -66,10 +62,10 @@ public class ApplyApi {
 
     @Operation(summary = "我发起的流程（所有的）")
     @PostMapping("/myStartProdeList")
-    public IPage<ApplyInfoPo> myStartProdeList(@RequestBody ApplyInfoVo applyInfoVo) {
+    public Page<ApplyInfoPo> myStartProdeList(@RequestBody ApplyInfoSearchParam applyInfoVo) {
         String currentUserCode = userTools.getCurrentUserCode();
         applyInfoVo.setApplyUserCode(currentUserCode);
-        IPage<ApplyInfoPo> page = applyInfoService.myStartProdeList(applyInfoVo);
+        Page<ApplyInfoPo> page = applyInfoService.myStartProdeList(applyInfoVo);
         return page;
     }
 

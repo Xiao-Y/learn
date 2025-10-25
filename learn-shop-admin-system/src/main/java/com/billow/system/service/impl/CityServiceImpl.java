@@ -1,7 +1,5 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.redis.util.RedisUtils;
 import com.billow.system.dao.CityDao;
@@ -41,9 +39,11 @@ public class CityServiceImpl extends HighLevelServiceImpl<CityDao, CityPo, CityS
         Set<CityEx> set = new HashSet<>();
         List<CityPo> cityPoss = redisUtils.getHashAllValue(RedisCst.COMM_CITY_TREE, CityPo.class);
         if (CollectionUtils.isEmpty(cityPoss)) {
-            LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
-            wrapper.eq(CityPo::getValidInd, true);
-            List<CityPo> cityPos = cityDao.selectList(wrapper);
+
+            CitySearchParam sp = new CitySearchParam();
+            sp.setValidInd(true);
+            List<CityPo> cityPos = this.findList(sp);
+
             // 添加到缓存
             Map<String, List<CityPo>> map = new HashMap<>();
             cityPos.stream().forEach(f -> {
@@ -71,9 +71,11 @@ public class CityServiceImpl extends HighLevelServiceImpl<CityDao, CityPo, CityS
     public CityVo findByCityId(String cityId) {
         CityPo po = redisUtils.getHashObj(RedisCst.COMM_CITY_ONE, cityId, CityPo.class);
         if (po == null) {
-            LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
-            wrapper.eq(CityPo::getCityId, cityId);
-            List<CityPo> list = this.list(wrapper);
+
+            CitySearchParam sp = new CitySearchParam();
+            sp.setCityId(cityId);
+            List<CityPo> list = this.findList(sp);
+
             if (ToolsUtils.isNotEmpty(list)) {
                 po = list.get(0);
                 redisUtils.setHash(RedisCst.COMM_CITY_ONE, cityId, po);
@@ -113,10 +115,10 @@ public class CityServiceImpl extends HighLevelServiceImpl<CityDao, CityPo, CityS
     private List<CityPo> findCityLowerLevel(String cityId, boolean isCheckDb) {
         List<CityPo> cityPos = redisUtils.getHash(RedisCst.COMM_CITY_TREE, cityId, CityPo.class);
         if (CollectionUtils.isEmpty(cityPos) && isCheckDb) {
-            LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
-            wrapper.eq(CityPo::getParentCityId, cityId)
-                    .eq(CityPo::getValidInd, true);
-            cityPos = this.list(wrapper);
+            CitySearchParam sp = new CitySearchParam();
+            sp.setParentCityId(cityId);
+            sp.setValidInd(true);
+            cityPos = this.findList(sp);
             if (CollectionUtils.isNotEmpty(cityPos)) {
                 redisUtils.setHash(RedisCst.COMM_CITY_TREE, cityId, cityPos);
             }

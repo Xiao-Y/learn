@@ -44,8 +44,7 @@ public class HighLevelApi<S extends HighLevelService<E, SP>, E extends BasePo, S
     @PostMapping(value = "/list")
     public Page<E> findListByPage(@RequestBody SP sp) {
         // 分页
-        Page<E> page = new Page<>(sp.getPageNo(), sp.getPageSize());
-        return service.findListByPage(page, sp);
+        return service.findListByPage(sp);
     }
 
     @Operation(summary = "根据id查询表数据")

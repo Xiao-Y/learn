@@ -1,11 +1,8 @@
 package com.billow.system.pojo.po;
 
 import com.billow.mybatis.pojo.BasePo;
-import com.mybatisflex.annotation.Table;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.mybatisflex.annotation.Column;
-
+import com.mybatisflex.annotation.Table;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author billow
@@ -23,7 +20,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Table("sys_role")
-@Schema(title = "RolePo对象", description="")
+@Schema(title = "RolePo对象", description = "")
 public class RolePo extends BasePo {
 
     private static final long serialVersionUID = 1L;

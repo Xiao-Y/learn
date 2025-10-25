@@ -1,15 +1,9 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.base.workflow.component.WorkFlowExecute;
 import com.billow.base.workflow.component.WorkFlowQuery;
 import com.billow.base.workflow.vo.ProcessInstanceVo;
 import com.billow.mybatis.base.HighLevelServiceImpl;
-import com.billow.mybatis.utils.MybatisKet;
 import com.billow.system.dao.ApplyInfoDao;
 import com.billow.system.dao.MytasklistDao;
 import com.billow.system.feign.AdminUserFeign;
@@ -18,6 +12,7 @@ import com.billow.system.pojo.ex.UserEx;
 import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.system.pojo.po.MytasklistPo;
 import com.billow.system.pojo.search.ApplyInfoSearchParam;
+import com.billow.system.pojo.search.MytasklistSearchParam;
 import com.billow.system.pojo.vo.ApplyInfoVo;
 import com.billow.system.service.ApplyInfoService;
 import com.billow.system.service.StartApplyProcess;
@@ -27,6 +22,8 @@ import com.billow.tools.enums.SubmitTypeEnum;
 import com.billow.tools.resData.BaseResponse;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.util.UpdateEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.billow.system.pojo.po.table.ApplyInfoPoTableDef.APPLY_INFO_PO;
 
 /**
  * 申请信息服务
@@ -105,8 +104,8 @@ public class ApplyInfoServiceImpl extends HighLevelServiceImpl<ApplyInfoDao, App
     }
 
     @Override
-    public IPage<MytasklistPo> queryMyTaskList(ApplyInfoVo applyInfoVo, Integer offset, Integer pageSize) {
-        String assignee = applyInfoVo.getAssignee();
+    public Page<MytasklistPo> queryMyTaskList(MytasklistSearchParam mytasklistSearchParam) {
+        String assignee = mytasklistSearchParam.getAssignee();
         if (ToolsUtils.isEmpty(assignee)) {
             log.error("assignee 不能为空");
             new RuntimeException("assignee 不能为空");
@@ -120,25 +119,17 @@ public class ApplyInfoServiceImpl extends HighLevelServiceImpl<ApplyInfoDao, App
         }
 
         UserEx resData = baseResponse.getResData();
-
-        IPage<MytasklistPo> page = new Page<>(offset, pageSize);
-        LambdaQueryWrapper<MytasklistPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(MytasklistPo::getAssignee, assignee);
         if (resData != null && ToolsUtils.isNotEmpty(resData.getGroupId())) {
-            wrapper.or().eq(ToolsUtils.isNotEmpty(resData.getGroupId()), MytasklistPo::getGroupId, resData.getGroupId());
+            mytasklistSearchParam.setGroupId(resData.getGroupId());
         }
-        IPage<MytasklistPo> applyInfoPoIPage = mytasklistDao.selectPage(page, wrapper);
+        Page<MytasklistPo> applyInfoPoIPage = mytasklistDao.selectPage(mytasklistSearchParam);
         return applyInfoPoIPage;
     }
 
     @Override
-    public IPage<ApplyInfoPo> myStartProdeList(ApplyInfoVo applyInfoVo) {
-        ApplyInfoPo applyInfoPo = ConvertUtils.convert(applyInfoVo, ApplyInfoPo.class);
-        IPage<ApplyInfoPo> page = new Page<>(applyInfoVo.getPageNo(), applyInfoVo.getPageSize());
-        QueryWrapper<ApplyInfoPo> condition = MybatisKet.getCondition(applyInfoPo);
-        condition.orderByDesc("create_time");
-        IPage<ApplyInfoPo> applyInfoPoIPage = this.page(page, condition);
-        return applyInfoPoIPage;
+    public Page<ApplyInfoPo> myStartProdeList(ApplyInfoSearchParam applyInfoVo) {
+        applyInfoVo.setOrderBy(APPLY_INFO_PO.CREATE_TIME.getName());
+        return this.findListByPage(applyInfoVo);
     }
 
     private ApplyInfoVo applyInfoPoToVo(ApplyInfoPo applyInfoPo) {
@@ -180,9 +171,10 @@ public class ApplyInfoServiceImpl extends HighLevelServiceImpl<ApplyInfoDao, App
         if (startApplyProcess != null) {
             // 构建 applyData 数据
             String applyData = startApplyProcess.genApplyData(leaveEx);
-            ApplyInfoPo applyInfo = this.getById(leaveEx.getId());
+
+            ApplyInfoPo applyInfo = UpdateEntity.of(ApplyInfoPo.class, leaveEx.getId());
             applyInfo.setApplyData(applyData);
-            this.updateById(applyInfo);
+            applyInfoDao.update(applyInfo);
         }
 
         // 保存批注信息

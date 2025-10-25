@@ -28,7 +28,7 @@ public class RoleRedisKit {
     }
 
     public void updateRoleInfoCache(Long id) {
-        RolePo one = roleDao.selectById(id);
+        RolePo one = roleDao.selectOneById(id);
         redisUtils.setHash(RedisCst.ROLE_INFO_KEY, id.toString(), one);
     }
 

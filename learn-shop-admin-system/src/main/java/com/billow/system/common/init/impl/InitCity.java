@@ -1,12 +1,11 @@
 package com.billow.system.common.init.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.billow.system.dao.CityDao;
+import com.billow.redis.util.RedisUtils;
 import com.billow.system.common.init.IStartLoading;
+import com.billow.system.dao.CityDao;
 import com.billow.system.pojo.po.CityPo;
 import com.billow.tools.constant.RedisCst;
-import com.billow.redis.util.RedisUtils;
+import com.mybatisflex.core.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,9 +41,9 @@ public class InitCity implements IStartLoading {
         log.info("======== start init City....");
         executorService.execute(() -> {
             // 构建tree 结构的
-            LambdaQueryWrapper<CityPo> wrapper = Wrappers.lambdaQuery();
+            QueryWrapper wrapper = QueryWrapper.create();
             wrapper.eq(CityPo::getValidInd, true);
-            List<CityPo> cityPos = cityDao.selectList(wrapper);
+            List<CityPo> cityPos = cityDao.selectListByQuery(wrapper);
             Map<String, List<CityPo>> map = new HashMap<>();
             cityPos.stream().forEach(f -> {
                 List<CityPo> collect = cityPos.stream()

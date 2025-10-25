@@ -1,24 +1,21 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billow.mybatis.base.HighLevelServiceImpl;
-import com.billow.mybatis.utils.MybatisKet;
 import com.billow.system.dao.DataDictionaryDao;
 import com.billow.system.pojo.po.DataDictionaryPo;
 import com.billow.system.pojo.search.DataDictionarySearchParam;
 import com.billow.system.pojo.vo.DataDictionaryVo;
 import com.billow.system.service.DataDictionaryService;
 import com.billow.tools.utlis.ConvertUtils;
+import com.mybatisflex.core.paginate.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.billow.system.pojo.po.table.DataDictionaryPoTableDef.DATA_DICTIONARY_PO;
 
 /**
  * 数据字典
@@ -33,13 +30,9 @@ public class DataDictionaryServiceImpl extends HighLevelServiceImpl<DataDictiona
     private DataDictionaryDao dataDictionaryDao;
 
     @Override
-    public IPage<DataDictionaryPo> listByPage(DataDictionaryVo dataDictionaryVo) {
-        DataDictionaryPo convert = ConvertUtils.convert(dataDictionaryVo, DataDictionaryPo.class);
-        QueryWrapper<DataDictionaryPo> condition = MybatisKet.getCondition(convert);
-        condition.orderByDesc("id");
-//        condition.orderByAsc("field_type", "field_order");
-        IPage<DataDictionaryPo> page = new Page<>(dataDictionaryVo.getPageNo(), dataDictionaryVo.getPageSize());
-        IPage<DataDictionaryPo> pages = this.page(page, condition);
+    public Page<DataDictionaryPo> listByPage(DataDictionarySearchParam searchParam) {
+        searchParam.setOrderBy(DATA_DICTIONARY_PO.ID.getName());
+        Page<DataDictionaryPo> pages = this.findListByPage(searchParam);
         return pages;
     }
 
@@ -69,21 +62,9 @@ public class DataDictionaryServiceImpl extends HighLevelServiceImpl<DataDictiona
     }
 
     @Override
-    public DataDictionaryVo prohibitById(Long id) {
-        DataDictionaryPo po = this.getById(id);
-        po.setValidInd(false);
-        LambdaQueryWrapper<DataDictionaryPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataDictionaryPo::getId, id);
-        dataDictionaryDao.update(po, wrapper);
-        return ConvertUtils.convert(po, DataDictionaryVo.class);
-    }
-
-    @Override
-    public List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionaryVo dataDictionaryVo) {
-        DataDictionaryPo convert = ConvertUtils.convert(dataDictionaryVo, DataDictionaryPo.class);
-        QueryWrapper<DataDictionaryPo> condition = MybatisKet.getCondition(convert);
-        condition.orderByAsc("field_order");
-        List<DataDictionaryPo> dataDictionaryPos = dataDictionaryDao.selectList(condition);
+    public List<DataDictionaryVo> findDataDictionaryByCondition(DataDictionarySearchParam searchParam) {
+        searchParam.setOrderBy(DATA_DICTIONARY_PO.FIELD_ORDER.getName());
+        List<DataDictionaryPo> dataDictionaryPos = this.findList(searchParam);
         return ConvertUtils.convert(dataDictionaryPos, DataDictionaryVo.class);
     }
 }

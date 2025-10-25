@@ -1,7 +1,5 @@
 package com.billow.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.redis.util.RedisUtils;
 import com.billow.system.dao.*;
@@ -21,6 +19,7 @@ import com.billow.system.service.redis.RoleRedisKit;
 import com.billow.tools.constant.RedisCst;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,7 +138,7 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
         // 页面传过来选种的菜单
         List<String> menuChecked = roleVo.getMenuChecked();
         // 原始选种的菜单
-        List<String> oldMenuChecked = roleMenuService.lambdaQuery()
+        List<String> oldMenuChecked = roleMenuService.queryChain()
                 .eq(RoleMenuPo::getRoleId, roleVo.getId())
                 .list()
                 .stream()
@@ -150,14 +149,14 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
             // 分析需要删除
             delMenuIds = oldMenuChecked.stream()
                     .filter(f -> !roleVo.getMenuChecked().contains(f))
-                    .map(m -> new Long(m))
+                    .map(m -> Long.valueOf(m))
                     .collect(Collectors.toList());
             // 删除原始的关联菜单数据
             if (CollectionUtils.isNotEmpty(delMenuIds)) {
-                LambdaQueryWrapper<RoleMenuPo> condition = Wrappers.lambdaQuery();
+                QueryWrapper condition = QueryWrapper.create();
                 condition.eq(RoleMenuPo::getRoleId, roleVo.getId())
                         .in(RoleMenuPo::getMenuId, delMenuIds);
-                roleMenuDao.delete(condition);
+                roleMenuDao.deleteByQuery(condition);
             }
             // 分析需要插入新的
             menuChecked = menuChecked.stream()
@@ -234,10 +233,10 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
                     .collect(Collectors.toList());
             // 删除原始的关联权限数据
             if (ToolsUtils.isNotEmpty(delPermissionIds)) {
-                LambdaQueryWrapper<RolePermissionPo> condition = Wrappers.lambdaQuery();
+                QueryWrapper condition = QueryWrapper.create();
                 condition.eq(RolePermissionPo::getRoleId, roleVo.getId())
                         .in(RolePermissionPo::getPermissionId, delPermissionIds);
-                rolePermissionDao.delete(condition);
+                rolePermissionDao.deleteByQuery(condition);
             }
             // 分析需要插入新的
             permissionChecked = permissionChecked.stream().filter(f -> !oldPermissionChecked.contains(f))
@@ -311,10 +310,10 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
         this.updateById(one);
 
         // 更新该角色的权限为无效
-        LambdaQueryWrapper<RolePermissionPo> condition = Wrappers.lambdaQuery();
+        QueryWrapper condition = QueryWrapper.create();
         condition.eq(RolePermissionPo::getRoleId, roleId)
                 .in(RolePermissionPo::getValidInd, true);
-        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.selectList(condition);
+        List<RolePermissionPo> rolePermissionPos = rolePermissionDao.selectListByQuery(condition);
         for (RolePermissionPo rolePermissionPo : rolePermissionPos) {
             rolePermissionPo.setValidInd(false);
         }
@@ -323,10 +322,10 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
         rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
         // 更新该角色的菜单为无效
-        LambdaQueryWrapper<RoleMenuPo> condition1 = Wrappers.lambdaQuery();
+        QueryWrapper condition1 = QueryWrapper.create();
         condition1.eq(RoleMenuPo::getRoleId, roleId)
                 .in(RoleMenuPo::getValidInd, true);
-        List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(condition1);
+        List<RoleMenuPo> roleMenuPos = roleMenuDao.selectListByQuery(condition1);
         for (RoleMenuPo roleMenuPo : roleMenuPos) {
             roleMenuPo.setValidInd(false);
         }
@@ -357,16 +356,16 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
         roleDao.deleteById(one);
 
         // 删除该角色的权限
-        LambdaQueryWrapper<RolePermissionPo> condition1 = Wrappers.lambdaQuery();
+        QueryWrapper condition1 = QueryWrapper.create();
         condition1.eq(RolePermissionPo::getRoleId, roleId);
-        rolePermissionDao.delete(condition1);
+        rolePermissionDao.deleteByQuery(condition1);
         // 删除 redis 信息
         rolePermissionRedisKit.deleteRoleByRoleCode(one.getRoleCode());
 
         // 删除该角色的菜单
-        LambdaQueryWrapper<RoleMenuPo> condition2 = Wrappers.lambdaQuery();
+        QueryWrapper condition2 = QueryWrapper.create();
         condition2.eq(RoleMenuPo::getRoleId, roleId);
-        roleMenuDao.delete(condition2);
+        roleMenuDao.deleteByQuery(condition2);
         // 删除 redis 信息
         roleMenuRedisKit.deleteRoleByRoleCode(one.getRoleCode());
         roleRedisKit.deleteRoleById(one.getId());
@@ -384,15 +383,15 @@ public class RoleServiceImpl extends HighLevelServiceImpl<RoleDao, RolePo, RoleS
 
     @Override
     public List<RoleVo> findRoleById(List<Long> ids) {
-        List<RolePo> pos = roleDao.selectBatchIds(ids);
+        List<RolePo> pos = roleDao.selectListByIds(ids);
         return ConvertUtils.convertIgnoreBase(pos, RoleVo.class);
     }
 
     @Override
     public Long countRoleCodeByRoleCode(String roleCode) {
-        LambdaQueryWrapper<RolePo> condition2 = Wrappers.lambdaQuery();
+        QueryWrapper condition2 = QueryWrapper.create();
         condition2.eq(RolePo::getRoleCode, roleCode);
-        return roleDao.selectCount(condition2);
+        return this.count(condition2);
     }
 
     @Override

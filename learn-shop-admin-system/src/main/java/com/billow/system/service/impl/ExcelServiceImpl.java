@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -39,10 +40,11 @@ public class ExcelServiceImpl implements ExcelService {
     public String exportToFileWithRange(HttpServletResponse response) {
         String taskId = ExcelKit.getInstance().
                 exportToFileWithRange(MenuExcel.class, 2, 0L, (queryParam, pageSize) -> {
-                    List<MenuPo> list = menuService.lambdaQuery()
+                    List<MenuPo> list = menuService.queryChain()
                             .gt(MenuPo::getId, queryParam)
-                            .last("limit " + pageSize)
-                            .orderByAsc(MenuPo::getId)
+                            .limit(pageSize)
+                            .orderBy(MenuPo::getId)
+                            .asc()
                             .list();
                     Long lastId = Optional.ofNullable(CollUtil.getLast(list))
                             .map(MenuPo::getId).orElse(0L);

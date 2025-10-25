@@ -4,8 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.system.dao.MenuDao;
 import com.billow.system.dao.RoleMenuDao;
@@ -20,6 +18,7 @@ import com.billow.system.service.redis.MenuRedisKit;
 import com.billow.system.service.redis.RoleMenuRedisKit;
 import com.billow.tools.utlis.ConvertUtils;
 import com.billow.tools.utlis.ToolsUtils;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,18 +101,18 @@ public class MenuServiceImpl extends HighLevelServiceImpl<MenuDao, MenuPo, MenuS
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delMenuByIds(Set<String> ids) {
         ids.forEach(id -> {
-            LambdaQueryWrapper<RoleMenuPo> wrapper = Wrappers.lambdaQuery();
-            wrapper.eq(RoleMenuPo::getMenuId, new Long(id));
-            List<RoleMenuPo> roleMenuPos = roleMenuDao.selectList(wrapper);
+            QueryWrapper wrapper = QueryWrapper.create();
+            wrapper.eq(RoleMenuPo::getMenuId, Long.valueOf(id));
+            List<RoleMenuPo> roleMenuPos = roleMenuDao.selectListByQuery(wrapper);
             if (ToolsUtils.isNotEmpty(roleMenuPos)) {
-                wrapper = Wrappers.lambdaQuery();
-                wrapper.eq(RoleMenuPo::getMenuId, new Long(id));
-                roleMenuDao.delete(wrapper);
+                wrapper = QueryWrapper.create();
+                wrapper.eq(RoleMenuPo::getMenuId, Long.valueOf(id));
+                roleMenuDao.deleteByQuery(wrapper);
             }
 
-            MenuPo menuPo = this.getById(new Long(id));
+            MenuPo menuPo = this.getById(Long.valueOf(id));
             if (menuPo != null) {
-                menuDao.deleteById(new Long(id));
+                menuDao.deleteById(Long.valueOf(id));
             }
         });
         roleMenuRedisKit.deleteRoleMenuByIds(ids);
@@ -137,7 +136,7 @@ public class MenuServiceImpl extends HighLevelServiceImpl<MenuDao, MenuPo, MenuS
 
     @Override
     public Long countMenuCodeByMenuCode(String menuCode) {
-        LambdaQueryWrapper<MenuPo> wrapper = Wrappers.lambdaQuery();
+        QueryWrapper wrapper = QueryWrapper.create();
         wrapper.eq(MenuPo::getMenuCode, menuCode)
                 .eq(MenuPo::getValidInd, true);
         return this.count(wrapper);

@@ -1,16 +1,16 @@
 package com.billow.cart.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.billow.common.utils.UserTools;
-import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.cart.dao.CartDao;
 import com.billow.cart.pojo.po.CartPo;
 import com.billow.cart.pojo.search.CartSearchParam;
-import com.billow.cart.pojo.vo.CartVo;
 import com.billow.cart.pojo.vo.CartItemVo;
+import com.billow.cart.pojo.vo.CartVo;
 import com.billow.cart.service.CartService;
-import com.billow.tools.exception.GlobalException;
+import com.billow.common.utils.UserTools;
+import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.tools.enums.ResCodeEnum;
+import com.billow.tools.exception.GlobalException;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
 
     @Autowired
     private CartDao cartDao;
-    
+
     @Autowired
     private UserTools userTools;
 
@@ -39,13 +39,13 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
     public CartVo addToCart(Long skuId, Integer quantity) {
         // 获取当前用户ID
         Long userId = Long.parseLong(userTools.getCurrentUserCode());
-        
+
         // 查询购物车是否已存在该商品
-        QueryWrapper<CartPo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", userId)
-                   .eq("sku_id", skuId);
-        List<CartPo> existingItems = this.list(queryWrapper);
-        
+        List<CartPo> existingItems = this.queryChain()
+                .eq(CartPo::getUserId, userId)
+                .eq(CartPo::getSkuId, skuId)
+                .list();
+
         if (!existingItems.isEmpty()) {
             // 更新数量
             CartPo existingItem = existingItems.get(0);
@@ -60,7 +60,7 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
             cartItem.setSelected(true);
             this.save(cartItem);
         }
-        
+
         return getCartList();
     }
 
@@ -70,17 +70,16 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
         if (quantity <= 0) {
             throw new GlobalException(ResCodeEnum.RESCODE_RULE_UNMATCH);
         }
-        
+
         Long userId = Long.parseLong(userTools.getCurrentUserCode());
-        QueryWrapper<CartPo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", userId)
-                   .eq("sku_id", skuId);
-        List<CartPo> items = this.list(queryWrapper);
-        
+        List<CartPo> items = this.queryChain()
+                .eq(CartPo::getUserId, userId)
+                .eq(CartPo::getSkuId, skuId)
+                .list();
         if (items.isEmpty()) {
             throw new GlobalException(ResCodeEnum.RESCODE_NULL_RESULT);
         }
-        
+
         CartPo item = items.get(0);
         item.setQuantity(quantity);
         return this.updateById(item);
@@ -90,9 +89,11 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteItems(List<Long> skuIds) {
         Long userId = Long.parseLong(userTools.getCurrentUserCode());
-        QueryWrapper<CartPo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", userId)
-                   .in("sku_id", skuIds);
+
+        QueryWrapper queryWrapper = this.queryChain()
+                .eq(CartPo::getUserId, userId)
+                .in(CartPo::getSkuId, skuIds)
+                .toQueryWrapper();
         return this.remove(queryWrapper);
     }
 
@@ -100,7 +101,7 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
     @Transactional(rollbackFor = Exception.class)
     public Boolean clearCart() {
         Long userId = Long.parseLong(userTools.getCurrentUserCode());
-        QueryWrapper<CartPo> queryWrapper = new QueryWrapper<>();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         queryWrapper.eq("user_id", userId);
         return this.remove(queryWrapper);
     }
@@ -109,22 +110,22 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
     @Transactional(rollbackFor = Exception.class)
     public Boolean selectItems(List<Long> skuIds, Boolean selected) {
         Long userId = Long.parseLong(userTools.getCurrentUserCode());
-        QueryWrapper<CartPo> queryWrapper = new QueryWrapper<>();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         queryWrapper.eq("user_id", userId)
-                   .in("sku_id", skuIds);
+                .in("sku_id", skuIds);
         List<CartPo> items = this.list(queryWrapper);
-        
+
         items.forEach(item -> item.setSelected(selected));
-        return this.updateBatchById(items);
+        return this.updateBatch(items);
     }
 
     @Override
     public CartVo getCartList() {
         Long userId = Long.parseLong(userTools.getCurrentUserCode());
-        QueryWrapper<CartPo> queryWrapper = new QueryWrapper<>();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         queryWrapper.eq("user_id", userId);
         List<CartPo> items = this.list(queryWrapper);
-        
+
         // TODO: 调用商品服务获取商品详情
         // TODO: 转换为CartVo对象
         return null;
@@ -133,11 +134,11 @@ public class CartServiceImpl extends HighLevelServiceImpl<CartDao, CartPo, CartS
     @Override
     public List<CartItemVo> getSettlementItems() {
         Long userId = Long.parseLong(userTools.getCurrentUserCode());
-        QueryWrapper<CartPo> queryWrapper = new QueryWrapper<>();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         queryWrapper.eq("user_id", userId)
-                   .eq("selected", true);
+                .eq("selected", true);
         List<CartPo> items = this.list(queryWrapper);
-        
+
         // TODO: 调用商品服务获取商品详情
         // TODO: 转换为CartItemVo对象
         return null;

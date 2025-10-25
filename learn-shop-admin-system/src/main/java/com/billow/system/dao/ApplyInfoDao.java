@@ -1,14 +1,13 @@
 package com.billow.system.dao;
 
-import com.billow.system.pojo.po.ApplyInfoPo;
 import com.billow.mybatis.base.HighLevelMapper;
-
-import org.apache.ibatis.annotations.CacheNamespace;
 import com.billow.mybatis.cache.MybatisRedisCache;
+import com.billow.system.pojo.po.ApplyInfoPo;
+import org.apache.ibatis.annotations.CacheNamespace;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author billow
@@ -16,5 +15,4 @@ import com.billow.mybatis.cache.MybatisRedisCache;
  */
 @CacheNamespace(implementation = MybatisRedisCache.class)
 public interface ApplyInfoDao extends HighLevelMapper<ApplyInfoPo> {
-
 }

@@ -48,7 +48,7 @@ public class InitUser implements IStartLoading {
                 return;
             }
             // 缓存用户信息
-            Map<Long, List<UserRolePo>> userRoleMapUserId = userRoleService.lambdaQuery()
+            Map<Long, List<UserRolePo>> userRoleMapUserId = userRoleService.queryChain()
                     .in(UserRolePo::getUserId, list.stream()
                             .map(UserPo::getId)
                             .collect(Collectors.toList()))
