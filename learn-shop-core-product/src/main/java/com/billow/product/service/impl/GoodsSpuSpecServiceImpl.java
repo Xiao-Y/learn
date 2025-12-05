@@ -1,7 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.dao.GoodsSpecValueDao;
@@ -52,10 +51,10 @@ public class GoodsSpuSpecServiceImpl extends HighLevelServiceImpl<GoodsSpuSpecDa
         // 返回值
         List<Map<String, Object>> tree = new ArrayList<>();
         // 查询出商品规格(key-value)
-        LambdaQueryWrapper<GoodsSkuSpecValuePo> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(GoodsSkuSpecValuePo::getSpuId, spuId)
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsSkuSpecValuePo::getSpuId, spuId)
                 .eq(GoodsSkuSpecValuePo::getValidInd, true);
-        List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueService.list(queryWrapper);
+        List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueService.list(qw);
         if (CollectionUtils.isEmpty(skuSpecValuePos)) {
             log.warn("通过 spuId{},没有查询到商品规格!", spuId);
             return tree;
@@ -72,9 +71,9 @@ public class GoodsSpuSpecServiceImpl extends HighLevelServiceImpl<GoodsSpuSpecDa
 
         // 通过key 查询出商品规格名
         Set<Long> specKeyIds = skuSpecValuePos.stream().map(m -> m.getSpecKeyId()).collect(Collectors.toSet());
-        LambdaQueryWrapper<GoodsSpecKeyPo> specKeyQuery = Wrappers.lambdaQuery();
-        specKeyQuery.in(GoodsSpecKeyPo::getId, specKeyIds);
-        List<GoodsSpecKeyPo> goodsSpecKeyPos = goodsSpecKeyDao.selectList(specKeyQuery);
+        QueryWrapper qw2 = QueryWrapper.create()
+                .in(GoodsSpecKeyPo::getId, specKeyIds);
+        List<GoodsSpecKeyPo> goodsSpecKeyPos = goodsSpecKeyDao.selectListByQuery(qw2);
         if (CollectionUtils.isEmpty(goodsSpecKeyPos)) {
             log.warn("通过 specKeyIds{},没有查询到商品规格名!", specKeyIds);
             return tree;
@@ -84,9 +83,9 @@ public class GoodsSpuSpecServiceImpl extends HighLevelServiceImpl<GoodsSpuSpecDa
 
         // 通过vlue 查询出商品规格值
         Set<Long> specValueIds = skuSpecValuePos.stream().map(m -> m.getSpecValueId()).collect(Collectors.toSet());
-        LambdaQueryWrapper<GoodsSpecValuePo> specValueQuery = Wrappers.lambdaQuery();
-        specValueQuery.in(GoodsSpecValuePo::getId, specValueIds);
-        List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectList(specValueQuery);
+        QueryWrapper qw3 = QueryWrapper.create()
+                .in(GoodsSpecValuePo::getId, specValueIds);
+        List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectListByQuery(qw3);
         if (CollectionUtils.isEmpty(goodsSpecValuePos)) {
             log.warn("通过 specValueIds{},没有查询到商品规格值!", specValueIds);
             return tree;
@@ -120,9 +119,9 @@ public class GoodsSpuSpecServiceImpl extends HighLevelServiceImpl<GoodsSpuSpecDa
 
     @Override
     public List<Long> findSpuSpecKey(Long spuId) {
-        LambdaQueryWrapper<GoodsSpuSpecPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSpuSpecPo::getSpuId, spuId);
-        List<GoodsSpuSpecPo> goodsSpuSpecPos = goodsSpuSpecDao.selectList(wrapper);
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsSpuSpecPo::getSpuId, spuId);
+        List<GoodsSpuSpecPo> goodsSpuSpecPos = goodsSpuSpecDao.selectListByQuery(qw);
         return goodsSpuSpecPos.stream().map(m -> m.getSpecKeyId()).collect(Collectors.toList());
     }
 }

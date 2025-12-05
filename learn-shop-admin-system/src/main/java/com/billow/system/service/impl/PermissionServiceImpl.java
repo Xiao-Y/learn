@@ -116,7 +116,7 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public PermissionVo deletePermissionById(Long id) {
         PermissionPo permissionPo = this.getById(id);
-        permissionDao.deleteById(id);
+        this.removeById(id);
         // redis：删除所有角色所持有的该权限
         rolePermissionRedisKit.deleteRolePermissionById(id);
         return ConvertUtils.convert(permissionPo, PermissionVo.class);
@@ -126,7 +126,7 @@ public class PermissionServiceImpl extends HighLevelServiceImpl<PermissionDao, P
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void savePermission(PermissionVo permissionVo) {
         PermissionPo convert = ConvertUtils.convert(permissionVo, PermissionPo.class);
-        permissionDao.insert(convert);
+        this.save(convert);
         this.saveMenuPermission(convert.getId(), permissionVo.getMenuIds());
         ConvertUtils.convert(convert, permissionVo);
     }

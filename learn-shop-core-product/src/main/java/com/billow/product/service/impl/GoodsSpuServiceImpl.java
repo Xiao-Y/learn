@@ -1,7 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSkuDao;
 import com.billow.product.dao.GoodsSkuSpecValueDao;
@@ -70,25 +69,25 @@ public class GoodsSpuServiceImpl extends HighLevelServiceImpl<GoodsSpuDao, Goods
             List<Long> delSpecKeys = spuSpecKey.stream().filter(f -> !specKeys.contains(f)).collect(Collectors.toList());
             if (ToolsUtils.isNotEmpty(delSpecKeys)) {
                 // 通过规格key 获取 所有涉及到的 sku
-                LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
-                wrapper.in(GoodsSkuSpecValuePo::getSpecKeyId, delSpecKeys)
+                QueryWrapper qw = QueryWrapper.create()
+                        .in(GoodsSkuSpecValuePo::getSpecKeyId, delSpecKeys)
                         .eq(GoodsSkuSpecValuePo::getValidInd, true);
-                List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueDao.selectList(wrapper);
+                List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueDao.selectListByQuery(qw);
                 // 设置对应的 sku spec value 为无效
-                wrapper = Wrappers.lambdaQuery();
-                wrapper.in(GoodsSkuSpecValuePo::getSpecKeyId, delSpecKeys)
+                QueryWrapper qw2 = QueryWrapper.create()
+                        .in(GoodsSkuSpecValuePo::getSpecKeyId, delSpecKeys)
                         .eq(GoodsSkuSpecValuePo::getValidInd, true);
                 GoodsSkuSpecValuePo skuSpecValuePo = new GoodsSkuSpecValuePo();
                 skuSpecValuePo.setValidInd(false);
-                goodsSkuSpecValueDao.update(skuSpecValuePo, wrapper);
+                goodsSkuSpecValueDao.updateByQuery(skuSpecValuePo, qw2);
                 // 设置对应的 sku 为无效
                 Set<Long> skuIds = skuSpecValuePos.stream().map(m -> m.getSkuId()).collect(Collectors.toSet());
                 if (ToolsUtils.isNotEmpty(skuIds)) {
-                    LambdaQueryWrapper<GoodsSkuPo> wupdate = Wrappers.lambdaQuery();
-                    wupdate.in(GoodsSkuPo::getId, skuIds);
+                    QueryWrapper qw3 = QueryWrapper.create()
+                            .in(GoodsSkuPo::getId, skuIds);
                     GoodsSkuPo skuPo = new GoodsSkuPo();
                     skuPo.setValidInd(false);
-                    goodsSkuDao.update(skuPo, wupdate);
+                    goodsSkuDao.updateByQuery(skuPo, qw3);
                 }
             }
 //            // 删除原有的商品规格信息

@@ -51,7 +51,7 @@ public class SeckillServiceImpl extends HighLevelServiceImpl<SeckillDao, Seckill
     }
 
     private void loadData() {
-        List<SeckillPo> seckillPos = this.lambdaQuery()
+        List<SeckillPo> seckillPos = this.queryChain()
                 .eq(SeckillPo::getStatus, SeckillStatusEnum.UP.getStatus())
                 .ge(SeckillPo::getEndDate, LocalDateTime.now())
                 .list();

@@ -1,8 +1,7 @@
 package com.billow.product.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.*;
 import com.billow.product.pojo.po.*;
@@ -57,9 +56,9 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
     public List<Map<String, Object>> findGoodsSkuSpec(Long spuId) {
         List<Map<String, Object>> list = new ArrayList<>();
 
-        LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSkuPo::getSpuId, spuId);
-        List<GoodsSkuPo> goodsSkuPos = goodsSkuDao.selectList(wrapper);
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsSkuPo::getSpuId, spuId);
+        List<GoodsSkuPo> goodsSkuPos = goodsSkuDao.selectListByQuery(qw);
         goodsSkuPos.forEach(goodsSkuPo -> {
             Map<String, Object> value = new HashMap<>();
             value.put("id", goodsSkuPo.getId().toString());
@@ -67,9 +66,9 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
             value.put("stock_num", goodsSkuPo.getStock());
 
             // suk 对应的规格值
-            LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper1 = Wrappers.lambdaQuery();
-            wrapper1.eq(GoodsSkuSpecValuePo::getSkuId, goodsSkuPo.getId());
-            List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = goodsSkuSpecValueDao.selectList(wrapper1);
+            QueryWrapper qw1 = QueryWrapper.create()
+                    .eq(GoodsSkuSpecValuePo::getSkuId, goodsSkuPo.getId());
+            List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = goodsSkuSpecValueDao.selectListByQuery(qw1);
             goodsSkuSpecValuePos.forEach(goodsSkuSpecValuePo -> {
                 value.put(goodsSkuSpecValuePo.getSpecKeyId().toString(), goodsSkuSpecValuePo.getSpecValueId().toString());
             });
@@ -87,9 +86,9 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
         Map<Long, GoodsSpecKeyPo> specKey = new HashMap<>();
         Map<Long, GoodsSpecValuePo> specValue = new HashMap<>();
 
-        LambdaQueryWrapper<GoodsSkuPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSkuPo::getSpuId, spuId);
-        List<GoodsSkuPo> goodsSkuPos = goodsSkuDao.selectList(wrapper);
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsSkuPo::getSpuId, spuId);
+        List<GoodsSkuPo> goodsSkuPos = goodsSkuDao.selectListByQuery(qw);
         goodsSkuPos.forEach(goodsSkuPo -> {
             GoodsSkuVo goodsSkuVo = new GoodsSkuVo();
             ConvertUtils.convert(goodsSkuPo, goodsSkuVo);
@@ -98,9 +97,9 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
 
             List<GoodsSkuSpecValueVo> skuSpecValueVos = goodsSkuVo.getGoodsSkuSpecValueVos();
             // suk 对应的规格值
-            LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper1 = Wrappers.lambdaQuery();
-            wrapper1.eq(GoodsSkuSpecValuePo::getSkuId, goodsSkuPo.getId());
-            List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = goodsSkuSpecValueDao.selectList(wrapper1);
+            QueryWrapper qw1 = QueryWrapper.create()
+                    .eq(GoodsSkuSpecValuePo::getSkuId, goodsSkuPo.getId());
+            List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = goodsSkuSpecValueDao.selectListByQuery(qw1);
             goodsSkuSpecValuePos.forEach(goodsSkuSpecValuePo -> {
 
                 // 获取规格对应的值
@@ -109,7 +108,7 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
                 if (specKey.containsKey(specKeyId)) {
                     goodsSpecKeyPo = specKey.get(specKeyId);
                 } else {
-                    goodsSpecKeyPo = goodsSpecKeyDao.selectById(specKeyId);
+                    goodsSpecKeyPo = goodsSpecKeyDao.selectOneById(specKeyId);
                     specKey.put(specKeyId, goodsSpecKeyPo);
                 }
 
@@ -118,7 +117,7 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
                 if (specValue.containsKey(specValueId)) {
                     goodsSpecValuePo = specValue.get(specValueId);
                 } else {
-                    goodsSpecValuePo = goodsSpecValueDao.selectById(specValueId);
+                    goodsSpecValuePo = goodsSpecValueDao.selectOneById(specValueId);
                     specValue.put(specValueId, goodsSpecValuePo);
                 }
                 specKeyValueName.put(goodsSpecKeyPo.getSpecName(), goodsSpecValuePo.getSpecValue());
@@ -143,7 +142,7 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
         po.setSkuNo(NumUtil.makeNum("SK"));
 
         Long spuId = po.getSpuId();
-        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectById(spuId);
+        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectOneById(spuId);
         // 插入 sku
         po.setSkuName(goodsSpuPo.getGoodsName() + "/" + po.getSkuName());
 //        po.setShopId("0");
@@ -171,17 +170,17 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
         GoodsSkuPo po = ConvertUtils.convert(vo, GoodsSkuPo.class);
 
         Long spuId = po.getSpuId();
-        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectById(spuId);
+        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectOneById(spuId);
         // 插入 sku
         po.setSkuName(goodsSpuPo.getGoodsName() + "/" + po.getSkuName());
-        goodsSkuDao.updateById(po);
+        goodsSkuDao.update(po);
 
         Long skuId = po.getId();
 
         // 删除 sku 下的所有规格
-        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSkuSpecValuePo::getSkuId, skuId);
-        goodsSkuSpecValueDao.delete(wrapper);
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsSkuSpecValuePo::getSkuId, skuId);
+        goodsSkuSpecValueDao.deleteByQuery(qw);
         // 重新添加
         List<GoodsSkuSpecValuePo> goodsSkuSpecValuePos = ConvertUtils.convert(vo.getGoodsSkuSpecValueVos(), GoodsSkuSpecValuePo.class);
         for (int i = 0; i < goodsSkuSpecValuePos.size(); i++) {
@@ -200,10 +199,10 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
         // 返回值
         List<Map<String, Object>> tree = new ArrayList<>();
         // 查询出商品规格(key-value)
-        LambdaQueryWrapper<GoodsSkuSpecValuePo> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(GoodsSkuSpecValuePo::getSpuId, spuId)
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsSkuSpecValuePo::getSpuId, spuId)
                 .eq(GoodsSkuSpecValuePo::getValidInd, true);
-        List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueService.list(queryWrapper);
+        List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueService.list(qw);
         if (CollectionUtils.isEmpty(skuSpecValuePos)) {
             log.warn("通过 spuId{},没有查询到商品规格!", spuId);
             return tree;
@@ -220,9 +219,9 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
 
         // 通过key 查询出商品规格名
         Set<Long> specKeyIds = skuSpecValuePos.stream().map(m -> m.getSpecKeyId()).collect(Collectors.toSet());
-        LambdaQueryWrapper<GoodsSpecKeyPo> specKeyQuery = Wrappers.lambdaQuery();
-        specKeyQuery.in(GoodsSpecKeyPo::getId, specKeyIds);
-        List<GoodsSpecKeyPo> goodsSpecKeyPos = goodsSpecKeyDao.selectList(specKeyQuery);
+        QueryWrapper qw2 = QueryWrapper.create()
+                .in(GoodsSpecKeyPo::getId, specKeyIds);
+        List<GoodsSpecKeyPo> goodsSpecKeyPos = goodsSpecKeyDao.selectListByQuery(qw2);
         if (CollectionUtils.isEmpty(goodsSpecKeyPos)) {
             log.warn("通过 specKeyIds{},没有查询到商品规格名!", specKeyIds);
             return tree;
@@ -232,9 +231,9 @@ public class GoodsSkuServiceImpl extends HighLevelServiceImpl<GoodsSkuDao, Goods
 
         // 通过vlue 查询出商品规格值
         Set<Long> specValueIds = skuSpecValuePos.stream().map(m -> m.getSpecValueId()).collect(Collectors.toSet());
-        LambdaQueryWrapper<GoodsSpecValuePo> specValueQuery = Wrappers.lambdaQuery();
-        specValueQuery.in(GoodsSpecValuePo::getId, specValueIds);
-        List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectList(specValueQuery);
+        QueryWrapper qw3 = QueryWrapper.create()
+                .in(GoodsSpecValuePo::getId, specValueIds);
+        List<GoodsSpecValuePo> goodsSpecValuePos = goodsSpecValueDao.selectListByQuery(qw3);
         if (CollectionUtils.isEmpty(goodsSpecValuePos)) {
             log.warn("通过 specValueIds{},没有查询到商品规格值!", specValueIds);
             return tree;

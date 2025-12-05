@@ -1,6 +1,7 @@
 package com.billow.file.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.mybatisflex.annotation.*;
+import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ public class MinioObject {
     /**
      * 主键
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @Id(keyType=KeyType.Generator, value= KeyGenerators.snowFlakeId)
     private String id;
 
     /**
@@ -66,18 +67,18 @@ public class MinioObject {
     /**
      * 创建时间
      */
-    @Column(fill = FieldFill.INSERT)
+    @Column(onInsertValue = "now()")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @Column(fill = FieldFill.INSERT_UPDATE)
+    @Column(onInsertValue = "now()", onUpdateValue = "now()")
     private LocalDateTime ts;
 
     /**
      * 逻辑删除字段(0:正常,1:删除)
      */
-    @TableLogic
+    @Column(isLogicDelete = true)
     private Integer deleteFlag;
 }

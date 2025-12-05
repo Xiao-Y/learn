@@ -1,6 +1,6 @@
 package com.billow.file.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.mybatisflex.core.service.IService;
 import com.billow.file.pojo.po.MinioObject;
 
 import java.util.List;

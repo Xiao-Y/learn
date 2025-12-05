@@ -35,7 +35,7 @@ public class SeckillSessionServiceImpl extends HighLevelServiceImpl<SeckillSessi
 
     @Override
     public void loadData() {
-        List<SeckillSessionPo> seckillSessionPos = this.lambdaQuery()
+        List<SeckillSessionPo> seckillSessionPos = this.queryChain()
                 .gt(SeckillSessionPo::getStatus, SeckillSessionStatusEnum.ON.getStatus())
                 .list();
         if (CollectionUtils.isNotEmpty(seckillSessionPos)) {

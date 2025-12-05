@@ -1,7 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSpecKeyDao;
 import com.billow.product.pojo.po.GoodsSpecKeyPo;
@@ -34,10 +33,10 @@ public class GoodsSpecKeyServiceImpl extends HighLevelServiceImpl<GoodsSpecKeyDa
 
     @Override
     public List<GoodsSpecKeyPo> findListByCategoryId(Long categoryId) {
-        LambdaQueryWrapper<GoodsSpecKeyPo> wrapper = Wrappers.lambdaQuery();
-//        wrapper.eq(GoodsSpecKeyPo::getCategoryId, categoryId);
-        wrapper.eq(GoodsSpecKeyPo::getValidInd, true);
-        return goodsSpecKeyDao.selectList(wrapper);
+        QueryWrapper qw = QueryWrapper.create()
+//                .eq(GoodsSpecKeyPo::getCategoryId, categoryId)
+                .eq(GoodsSpecKeyPo::getValidInd, true);
+        return goodsSpecKeyDao.selectListByQuery(qw);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class GoodsSpecKeyServiceImpl extends HighLevelServiceImpl<GoodsSpecKeyDa
                 ConvertUtils.convert(convert, goodsSpecKeyVo);
             } else {
                 GoodsSpecKeyPo convert = ConvertUtils.convert(goodsSpecKeyVo, GoodsSpecKeyPo.class);
-                goodsSpecKeyDao.updateById(convert);
+                goodsSpecKeyDao.update(convert);
                 ConvertUtils.convert(convert, goodsSpecKeyVo);
             }
         }

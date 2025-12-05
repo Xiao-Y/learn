@@ -42,9 +42,9 @@ public class MybatisConfig implements ConfigurationCustomizer {
 //    }
 
     /**
-     * mybatis 分页插件
+     * mybatis-flex 全局配置
      *
-     * @return com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor
+     * @return FlexGlobalConfig
      * @author LiuYongTao
      * @date 2019/11/1 10:41
      */

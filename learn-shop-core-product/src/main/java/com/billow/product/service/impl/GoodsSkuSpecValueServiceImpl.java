@@ -1,7 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsSkuSpecValueDao;
 import com.billow.product.pojo.po.GoodsSkuSpecValuePo;
@@ -30,9 +29,9 @@ public class GoodsSkuSpecValueServiceImpl extends HighLevelServiceImpl<GoodsSkuS
 
     @Override
     public List<Long> findSpuSpecKey(Long id) {
-        LambdaQueryWrapper<GoodsSkuSpecValuePo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(GoodsSkuSpecValuePo::getSpecKeyId, id);
-        List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueDao.selectList(wrapper);
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsSkuSpecValuePo::getSpecKeyId, id);
+        List<GoodsSkuSpecValuePo> skuSpecValuePos = goodsSkuSpecValueDao.selectListByQuery(qw);
         return skuSpecValuePos.stream().map(m -> m.getSpecKeyId()).collect(Collectors.toList());
     }
 }

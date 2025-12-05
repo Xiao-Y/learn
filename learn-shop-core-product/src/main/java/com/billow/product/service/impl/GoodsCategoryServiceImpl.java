@@ -1,7 +1,6 @@
 package com.billow.product.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.billow.mybatis.base.HighLevelServiceImpl;
 import com.billow.product.dao.GoodsCategoryDao;
 import com.billow.product.pojo.po.GoodsCategoryPo;
@@ -31,9 +30,9 @@ public class GoodsCategoryServiceImpl extends HighLevelServiceImpl<GoodsCategory
 
     @Override
     public List<GoodsCategoryPo> findList(GoodsCategoryVo goodsCategoryVo) {
-        LambdaQueryWrapper<GoodsCategoryPo> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(Objects.nonNull(goodsCategoryVo.getParentId()), GoodsCategoryPo::getParentId, goodsCategoryVo.getParentId());
-        return goodsCategoryDao.selectList(wrapper);
+        QueryWrapper qw = QueryWrapper.create()
+                .eq(GoodsCategoryPo::getParentId, goodsCategoryVo.getParentId(), Objects.nonNull(goodsCategoryVo.getParentId()));
+        return goodsCategoryDao.selectListByQuery(qw);
     }
 
     @Override

@@ -5,7 +5,7 @@ import cn.hutool.core.io.unit.DataSize;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mybatisflex.core.paginate.Page;
 import com.billow.file.pojo.build.MinioBuildParam;
 import com.billow.file.pojo.po.MinioObject;
 import com.billow.file.service.MinioObjectService;
@@ -75,7 +75,7 @@ public class MinioObjectController {
         }
 
         // 查找是否存在 md5 值，如果存在直接返回该对象
-        MinioObject one = minioObjectService.lambdaQuery()
+        MinioObject one = minioObjectService.queryChain()
                 .eq(MinioObject::getMd5, md5)
                 .one();
         if (Objects.nonNull(one)) {
@@ -135,7 +135,7 @@ public class MinioObjectController {
         }
 
         // 存在 md5 值，直接返回该对象
-        MinioObject one = minioObjectService.lambdaQuery()
+        MinioObject one = minioObjectService.queryChain()
                 .eq(MinioObject::getMd5, md5)
                 .one();
         if (Objects.nonNull(one)) {
@@ -179,7 +179,7 @@ public class MinioObjectController {
     @Operation(summary = "根据 ID 文件下载")
     @GetMapping("/download/{id}")
     public void download(@PathVariable String id, HttpServletResponse response) throws Exception {
-        MinioObject one = minioObjectService.lambdaQuery()
+        MinioObject one = minioObjectService.queryChain()
                 .eq(MinioObject::getId, id)
                 .one();
 
@@ -223,7 +223,7 @@ public class MinioObjectController {
         // 解密 url
         String decodedUrl = URLDecoder.decode(stringDTO.getUrl(), StandardCharsets.UTF_8);
 
-        MinioObject one = minioObjectService.lambdaQuery()
+        MinioObject one = minioObjectService.queryChain()
                 .eq(MinioObject::getUrl, decodedUrl)
                 .one();
 

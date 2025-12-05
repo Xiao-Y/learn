@@ -34,7 +34,7 @@ public class SeckillProductServiceImpl extends HighLevelServiceImpl<SeckillProdu
 
     @Override
     public void loadData() {
-        List<SeckillProductPo> seckillProductPos = this.lambdaQuery()
+        List<SeckillProductPo> seckillProductPos = this.queryChain()
                 .gt(SeckillProductPo::getSeckillCount, 0)
                 .list();
         if (CollectionUtils.isNotEmpty(seckillProductPos)) {

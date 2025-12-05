@@ -58,7 +58,7 @@ public class RefreshEsReceive {
      * @since 2021/2/7 19:58
      */
     public void sendRefreshEsInfoBySpuId(Long spuId) {
-        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectById(spuId);
+        GoodsSpuPo goodsSpuPo = goodsSpuDao.selectOneById(spuId);
         // 组装数据，发送mq
         this.converDataSendMQ(goodsSpuPo);
     }
@@ -71,8 +71,8 @@ public class RefreshEsReceive {
      * @since 2021/2/7 21:32
      */
     private void converDataSendMQ(GoodsSpuPo goodsSpuPo) {
-        GoodsBrandPo goodsBrandPo = goodsBrandDao.selectById(goodsSpuPo.getBrandId());
-        GoodsCategoryPo goodsCategoryPo = goodsCategoryDao.selectById(goodsSpuPo.getCategoryId());
+        GoodsBrandPo goodsBrandPo = goodsBrandDao.selectOneById(goodsSpuPo.getBrandId());
+        GoodsCategoryPo goodsCategoryPo = goodsCategoryDao.selectOneById(goodsSpuPo.getCategoryId());
         // 构建数据
         SpuInfoEx ex = new SpuInfoEx();
         ex.setBrandId(goodsBrandPo.getId())
