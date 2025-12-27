@@ -5,6 +5,7 @@ import com.billow.mybatis.pojo.BasePo;
 import com.billow.mybatis.utils.MybatisUserTools;
 import com.mybatisflex.annotation.InsertListener;
 import com.mybatisflex.annotation.UpdateListener;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.util.Date;
  * 自动填充处理器
  * 实现 mybatis-flex 的监听器接口
  */
+@Slf4j
 @Component
 public class MybatisFlexAuditMetaObjectHandler implements InsertListener, UpdateListener {
 
@@ -45,7 +47,7 @@ public class MybatisFlexAuditMetaObjectHandler implements InsertListener, Update
             }
         } catch (Exception e) {
             // 日志记录异常
-            e.printStackTrace();
+            log.warn("自动填充异常: {}", e.getMessage());
         }
     }
 
@@ -68,7 +70,7 @@ public class MybatisFlexAuditMetaObjectHandler implements InsertListener, Update
             }
         } catch (Exception e) {
             // 日志记录异常
-            e.printStackTrace();
+            log.warn("自动填充异常: {}", e.getMessage());
         }
     }
 }

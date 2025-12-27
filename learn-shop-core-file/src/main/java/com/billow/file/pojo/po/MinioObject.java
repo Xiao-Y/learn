@@ -1,28 +1,37 @@
 package com.billow.file.pojo.po;
 
+import com.billow.mybatis.pojo.BasePo;
 import com.mybatisflex.annotation.*;
 import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
+ * <p>
  * MinIO Object实体类
  * 对应数据库表minio_object
+ * </p>
+ *
+ * @author billow
+ * @version v2.0
+ * @since 2021-09-02
  */
 @Data
-@Table("minio_object")
-public class MinioObject {
-
-    /**
-     * 主键
-     */
-    @Id(keyType=KeyType.Generator, value= KeyGenerators.snowFlakeId)
-    private String id;
+@EqualsAndHashCode(callSuper = true)
+@Table("sys_minio_object")
+public class MinioObject extends BasePo {
 
     /**
      * 用户ID
      */
     private String userId;
+
+    /**
+     * 文件编号
+     */
+    private String fileNo;
 
     /**
      * Bucket 桶名
@@ -60,25 +69,12 @@ public class MinioObject {
     private String md5;
 
     /**
-     * 创建人ID
+     * 文件过期时间
      */
-    private String creatorId;
+    private Date expireTime;
 
     /**
-     * 创建时间
+     * 视频缩略图链接（视频文件专用）
      */
-    @Column(onInsertValue = "now()")
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @Column(onInsertValue = "now()", onUpdateValue = "now()")
-    private LocalDateTime ts;
-
-    /**
-     * 逻辑删除字段(0:正常,1:删除)
-     */
-    @Column(isLogicDelete = true)
-    private Integer deleteFlag;
+    private String thumbnailUrl;
 }

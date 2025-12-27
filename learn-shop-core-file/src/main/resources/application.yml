@@ -33,6 +33,11 @@ server:
   servlet:
     context-path: /core-file
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB  # 增大单个文件限制
+      max-request-size: 1GB # 增大整个请求限制
   profiles:
     active: dev
   application:
@@ -49,4 +54,4 @@ minio:
   endpoint: http://127.0.0.1:9000
   accessKey: access_learn-shop
   secretKey: secret_learn-shop
-  bucketName: learn-shop
+  bucketName: learn-shop-${spring.profiles.active:dev}
