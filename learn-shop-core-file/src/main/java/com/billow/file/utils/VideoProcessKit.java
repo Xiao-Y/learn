@@ -1,7 +1,6 @@
-package com.billow.file.config;
+package com.billow.file.utils;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacv.FFmpegFrameGrabber;

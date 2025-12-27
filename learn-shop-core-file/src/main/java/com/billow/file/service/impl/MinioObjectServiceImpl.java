@@ -5,7 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.billow.file.config.VideoProcessKit;
+import com.billow.file.utils.VideoProcessKit;
 import com.billow.file.dao.MinioObjectMapper;
 import com.billow.file.pojo.po.MinioObject;
 import com.billow.file.pojo.search.MinioObjectSearchParam;

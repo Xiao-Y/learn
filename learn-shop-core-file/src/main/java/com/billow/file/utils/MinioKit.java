@@ -1,4 +1,4 @@
-package com.billow.file.config;
+package com.billow.file.utils;
 
 import com.billow.file.pojo.vo.MinioVo;
 import io.minio.*;
@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author 千面

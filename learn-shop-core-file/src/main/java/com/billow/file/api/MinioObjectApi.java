@@ -2,7 +2,7 @@ package com.billow.file.api;
 
 import cn.hutool.core.io.unit.DataSize;
 import com.billow.file.config.MinioConfig;
-import com.billow.file.config.MinioKit;
+import com.billow.file.utils.MinioKit;
 import com.billow.file.pojo.build.MinioBuildParam;
 import com.billow.file.pojo.po.MinioObject;
 import com.billow.file.pojo.search.MinioObjectSearchParam;
