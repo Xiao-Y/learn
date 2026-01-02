@@ -12,6 +12,24 @@ spring:
     password: admin123
     # 虚拟主机
     virtual-host: /learn-default
+    # 连接超时时间
+    connection-timeout: 15000
+    # 启用发布者确认
+    publisher-confirm-type: correlated
+    # 启用发布者返回
+    publisher-returns: true
+    # 监听器配置
+    listener:
+      simple:
+        # 手动确认消息
+        acknowledge-mode: manual
+        # 重试配置
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          max-interval: 10000
+          multiplier: 1.0
 
 notice:
   # 钉钉配置

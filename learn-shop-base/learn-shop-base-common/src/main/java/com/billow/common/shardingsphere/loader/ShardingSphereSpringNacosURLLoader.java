@@ -1,4 +1,4 @@
-package com.billow.common.shardingsphere;
+package com.billow.common.shardingsphere.loader;
 
 import com.alibaba.cloud.nacos.NacosConfigManager;
 import com.alibaba.nacos.api.exception.NacosException;

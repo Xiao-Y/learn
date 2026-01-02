@@ -1,1 +1,1 @@
-com.billow.common.shardingsphere.ShardingSphereSpringNacosURLLoader
+com.billow.common.shardingsphere.loader.ShardingSphereSpringNacosURLLoader
