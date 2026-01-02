@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- *  信息
+ * 信息
  * </p>
  *
  * @author billow
@@ -21,4 +21,18 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class OrderSearchParam extends BasePage implements Serializable {
 
+    /**
+     * 主键
+     */
+    private Long id;
+
+    /**
+     * 订单编号
+     */
+    private String orderSn;
+
+    /**
+     * 创建时间
+     */
+    private String dateRangeCreateTime;
 }

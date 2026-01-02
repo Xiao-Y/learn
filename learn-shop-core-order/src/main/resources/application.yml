@@ -42,3 +42,8 @@ spring:
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
     url: jdbc:shardingsphere:nacos:sys-config-sharding-jdbc.yml
+mybatis:
+  custom:
+    cache:
+      enabled: false # 是否开启缓存
+      expire: 30 # 缓存时间,单位:分钟

@@ -17,7 +17,7 @@ public class MybatisRedisCache implements Cache {
 
     private String id; // cache instance id
 
-    private static long EXPIRE_TIME_IN_MINUTES = 30; // redis过期时间
+    private static long EXPIRE_TIME_IN_MINUTES = 1; // redis过期时间
 
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
@@ -31,7 +31,9 @@ public class MybatisRedisCache implements Cache {
         if (redisTemplate == null) {
             try {
                 redisTemplate = SpringContextUtil.getBean("redisCacheTemplate");
-                String property = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("spring.redis.cacheExpire");
+                String property = SpringContextUtil.getApplicationContext()
+                        .getEnvironment()
+                        .getProperty("mybatis.custom.cache.expire");
                 if (StringUtils.isNotEmpty(property)) {
                     EXPIRE_TIME_IN_MINUTES = Long.parseLong(property);
                 }
@@ -42,6 +44,13 @@ public class MybatisRedisCache implements Cache {
         return redisTemplate;
     }
 
+    public boolean isCacheEnabled() {
+        String cacheEnabled = SpringContextUtil.getApplicationContext()
+                .getEnvironment()
+                .getProperty("mybatis.custom.cache.enabled", "true");
+        return Boolean.parseBoolean(cacheEnabled);
+    }
+
     @Override
     public String getId() {
         return id;
@@ -49,6 +58,9 @@ public class MybatisRedisCache implements Cache {
 
     @Override
     public void putObject(Object key, Object value) {
+        if (!isCacheEnabled()) {
+            return;
+        }
         RedisTemplate redisTemplate = getRedisTemplate();
         redisTemplate.boundHashOps(getId()).put(key, value);
         redisTemplate.boundHashOps(getId()).expire(EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
@@ -59,6 +71,9 @@ public class MybatisRedisCache implements Cache {
 
     @Override
     public Object getObject(Object key) {
+        if (!isCacheEnabled()) {
+            return null;
+        }
         RedisTemplate redisTemplate = getRedisTemplate();
         Object value = redisTemplate.boundHashOps(getId()).get(key);
         log.info("Get cached query result from redis");
