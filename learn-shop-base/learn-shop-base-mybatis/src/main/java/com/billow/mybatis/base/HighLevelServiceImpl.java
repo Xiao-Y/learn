@@ -17,7 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * <p>
@@ -101,9 +104,6 @@ public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E exten
             }
             return false;
         };
-        StringBuffer bufferSql = new StringBuffer();
-        int i = 0;
-        List<Object> values = new ArrayList<>();
         // 获取查询字段
         Field[] fields = ReflectUtil.getFields(sPClass, filter);
         for (Field field : fields) {
@@ -123,7 +123,6 @@ public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E exten
                     .orElse("")
                     + StrUtil.toUnderlineCase(field.getName());
             // 使用 apply 方法动态添加条件
-            bufferSql.append(" and ");
             if (fieldValue instanceof List && column.endsWith("list")) {
                 List fieldValueList = (List) fieldValue;
                 column = column.replaceFirst("_list", "");
