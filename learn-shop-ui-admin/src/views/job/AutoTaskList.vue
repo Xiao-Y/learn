@@ -73,7 +73,7 @@
               <el-form-item label="运行类型">
                 <custom-select v-model="props.row.classType"
                                :datasource="classTypeSelect"
-                               disabled="true"
+                               disabled
                                placeholder="请选择运行类型">
                 </custom-select>
               </el-form-item>

@@ -1,6 +1,8 @@
 package com.billow.mybatis.base;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Filter;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.TypeUtil;
@@ -17,10 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * <p>
@@ -38,6 +37,11 @@ import java.util.Optional;
  */
 public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E extends BasePo, SP extends BasePage>
         extends ServiceImpl<M, E> implements HighLevelService<E, SP> {
+
+    private final static String SUB_FIELD_LIST = "_list";
+    private final static String SUB_FIELD_DATE_RANGE = "_date_range";
+    private final static String REPLACE_REGEX = "(?:_list|_range_date)$";
+
 
     // 查询对象
     protected Class<E> eClass = (Class<E>) this.getClassByIndex(1);
@@ -104,14 +108,31 @@ public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E exten
             }
             return false;
         };
+        // 获取实体类中的字段
+        List<String> tableColumnList = this.getTableColumn();
         // 获取查询字段
         Field[] fields = ReflectUtil.getFields(sPClass, filter);
         for (Field field : fields) {
+
             Object fieldValue = ReflectUtil.getFieldValue(sp, field);
+
             if (Objects.isNull(fieldValue)) {
                 continue;
             }
-            String column = Optional.ofNullable(tableAlias)
+
+            if (fieldValue instanceof Collection) {
+                Collection<?> fieldValueList = (Collection<?>) fieldValue;
+                if (CollUtil.isEmpty(fieldValueList)) continue;
+            }
+
+            // 获取字段名
+            String column = StrUtil.toUnderlineCase(field.getName());
+
+            // 判断字段名是否在表字段中
+            String tableColumn = ReUtil.replaceAll(column, REPLACE_REGEX, "");
+            if (!tableColumnList.contains(tableColumn)) continue;
+
+            column = Optional.ofNullable(tableAlias)
                     .filter(StringUtils::isNotBlank)
                     .map(m -> {
                         if (m.endsWith(".")) {
@@ -121,16 +142,16 @@ public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E exten
                         }
                     })
                     .orElse("")
-                    + StrUtil.toUnderlineCase(field.getName());
+                    + column;
             // 使用 apply 方法动态添加条件
-            if (fieldValue instanceof List && column.endsWith("list")) {
-                List fieldValueList = (List) fieldValue;
-                column = column.replaceFirst("_list", "");
+            if (fieldValue instanceof Collection) {
+                Collection<?> fieldValueList = (Collection<?>) fieldValue;
+                column = column.replaceFirst(REPLACE_REGEX, "");
                 // 多个值查询
                 queryWrapper.in(column, fieldValueList);
-            } else if (column.startsWith("date_range_") && fieldValue instanceof String && fieldValue.toString().contains("~")) {
+            } else if (column.endsWith(SUB_FIELD_DATE_RANGE) && fieldValue instanceof String && fieldValue.toString().contains("~")) {
                 // 时间范围查询
-                column = column.replaceFirst("date_range_", "");
+                column = column.replaceFirst(SUB_FIELD_DATE_RANGE, "");
                 String[] split = ((String) fieldValue).split("~");
 
                 if (StringUtils.isNotEmpty(split[0])) {
@@ -164,6 +185,25 @@ public abstract class HighLevelServiceImpl<M extends HighLevelMapper<E>, E exten
         }
         // 将泛型参数类型转换为Class对象
         return TypeUtil.getClass(actualTypeArguments[index]);
+    }
+
+    /**
+     * 获取指定class及父类的所有属性，合并为一个集合
+     *
+     * @return 包含当前类及其父类所有属性的List
+     */
+    protected List<String> getTableColumn() {
+        List<String> fields = new ArrayList<>();
+        Class<?> clazz = eClass;
+        // 循环获取当前类及其所有父类的属性
+        while (clazz != null && !clazz.equals(Object.class)) {
+            Field[] declaredFields = ReflectUtil.getFields(clazz);
+            for (Field field : declaredFields) {
+                fields.add(StrUtil.toUnderlineCase(field.getName()));
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
     }
 }
 

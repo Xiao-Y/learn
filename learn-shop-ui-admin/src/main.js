@@ -20,7 +20,7 @@ import './router/routerBefore' // premission control
 
 Vue.use(Vuex);
 Vue.use(ElementUI, {
-  size: 'medium', // set element-ui default size
+  size: 'mini', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
 });
 Vue.use(VueBus);
