@@ -85,7 +85,7 @@ export default {
       selectKeyData: [],// custom-sku-spec-select 子组件中 key 的下拉数据
     }
   },
-  created() {
+  activated() {
     if (this.skuId) {
       GetById(this.skuId).then(res => {
         this.goodsSku = res.resData;

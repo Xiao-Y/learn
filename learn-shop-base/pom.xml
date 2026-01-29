@@ -29,5 +29,6 @@
         <module>learn-shop-base-notice</module>
         <module>learn-shop-base-sql</module>
         <module>learn-shop-base-excel</module>
+<!--        <module>learn-shop-base-task</module>-->
     </modules>
 </project>

@@ -213,22 +213,22 @@ export default {
       }
     };
   },
-  created() {
-    this.optionType = this.$route.query.optionType;
-    this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
-    this.isSendInfo = JSON.parse(this.$route.query.isSendInfo);
-    this.classTypeSelect = JSON.parse(this.$route.query.classTypeSelect);
-    this.sendType = JSON.parse(this.$route.query.sendType);
-    if (this.optionType === 'edit') {
-      this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
-      if (this.autoTaskInfo.templateId) {
-        this.autoTaskInfo.templateId = parseInt(this.autoTaskInfo.templateId);
+  activated() {
+      this.optionType = this.$route.query.optionType;
+      this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);
+      this.isSendInfo = JSON.parse(this.$route.query.isSendInfo);
+      this.classTypeSelect = JSON.parse(this.$route.query.classTypeSelect);
+      this.sendType = JSON.parse(this.$route.query.sendType);
+      if (this.optionType === 'edit') {
+        this.autoTaskInfo = JSON.parse(this.$route.query.autoTaskEdit);
+        if (this.autoTaskInfo.templateId) {
+          this.autoTaskInfo.templateId = parseInt(this.autoTaskInfo.templateId);
+        }
       }
-    }
-    LoadRouteCacheData().then().then(res => {
-      this.routeInfoSelect = res.resData;
-    });
-  },
+      LoadRouteCacheData().then().then(res => {
+        this.routeInfoSelect = res.resData;
+      });
+    },
   methods: {
     // 校验提交
     validSubmit() {

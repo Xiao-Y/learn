@@ -150,7 +150,7 @@
         }
       };
     },
-    created() {
+    activated() {
       this.initPageShow();
       this.optionType = this.$route.query.optionType;
       this.mailTypeSelect = JSON.parse(this.$route.query.mailTypeSelect);

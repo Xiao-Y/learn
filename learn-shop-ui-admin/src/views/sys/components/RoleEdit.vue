@@ -83,7 +83,7 @@ export default {
       menuId: null,// 点击的菜单ID
     };
   },
-  created() {
+  activated() {
     if (this.$route.query.optionType === 'edit') {
       var roleInfo = JSON.parse(this.$route.query.roleEdit);
       this.roleInfo = roleInfo;
