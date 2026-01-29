@@ -1,5 +1,13 @@
+
+
 -- ************************ 分表批量修改表结构存储过程（支持原表+数字后缀分表+忽略单表错误+默认值自动拼接+极简结果） ************************
--- 特性：1. 自动识别「原表名_纯数字」格式分表（数字不限位数：2位/4位/6位等）；2. 原表优先修改且必改（不排除）；3. 支持忽略单个分表修改失败；4. 结果极简打印（表XXX，操作 XXX字段：成功/失败）；5. 分表按名称自然排序处理；6. 精准处理默认值（NULL=不加默认值，''=空字符串默认值，非空=自动拼接）
+-- 特性：
+-- 1. 自动识别「原表名_纯数字」格式分表（数字不限位数：2位/4位/6位等）；
+-- 2. 原表优先修改且必改（不排除）；
+-- 3. 支持忽略单个分表修改失败；
+-- 4. 结果极简打印（表XXX，操作 XXX字段：成功/失败）；
+-- 5. 分表按名称自然排序处理；
+-- 6. 精准处理默认值（NULL=不加默认值，''=空字符串默认值，非空=自动拼接）
 -- 参数说明：
 --   operation_type：操作类型（add/modify/drop）；
 --   p_original_table：原表名（必传）；
@@ -32,7 +40,7 @@ BEGIN
     -- 声明变量
     DECLARE v_shard_table VARCHAR(162);   -- 分表名
     DECLARE v_table_exists INT DEFAULT 0; -- 表存在性标记
-    DECLARE v_single_result VARCHAR(100); -- 单表操作结果
+    DECLARE v_single_result VARCHAR(200); -- 单表操作结果（加长，容纳错误详情）
     DECLARE v_exec_summary TEXT DEFAULT ''; -- 汇总结果
     DECLARE v_error_flag INT DEFAULT 0;   -- 全局错误标记
     DECLARE v_shard_error INT DEFAULT 0;  -- 分表错误标记
@@ -53,25 +61,24 @@ ORDER BY TABLE_NAME ASC; -- 按表名自然排序（如01→02→2026→202601�
 -- 游标异常处理器
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
 
-    -- 全局异常处理器
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    -- 全局异常处理器（CONTINUE，避免终止存储过程）
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
 BEGIN
 GET DIAGNOSTICS CONDITION 1 @sql_error_msg = MESSAGE_TEXT;
 IF v_handling_shard = 1 THEN
             IF p_ignore_error = 1 THEN
-                SET v_exec_summary = CONCAT(v_exec_summary, CHAR(10), '表', v_shard_table, '，', operation_type, ' ', columnname, '字段：失败（忽略）');
+                SET v_exec_summary = CONCAT(v_exec_summary, CHAR(10), '表', v_shard_table, '，', operation_type, ' ', columnname, '字段：失败（系统异常，忽略），原因：', @sql_error_msg);
                 SET v_shard_error = 1;
                 SET v_handling_shard = 0;
 ELSE
-                SET v_exec_summary = CONCAT(v_exec_summary, CHAR(10), '表', v_shard_table, '，', operation_type, ' ', columnname, '字段：失败，终止');
+                SET v_exec_summary = CONCAT(v_exec_summary, CHAR(10), '表', v_shard_table, '，', operation_type, ' ', columnname, '字段：失败（系统异常，终止），原因：', @sql_error_msg);
                 SET v_error_flag = 1;
+                SET v_handling_shard = 0;
 END IF;
 ELSE
             SET v_exec_summary = CONCAT('全局错误：', @sql_error_msg);
             SET v_error_flag = 1;
 END IF;
-SELECT v_exec_summary AS '批量修改结果';
-ROLLBACK;
 END;
 
     -- 初始化参数（仅处理p_ignore_error，保留p_default_value的原始NULL状态）
@@ -120,14 +127,14 @@ ELSE
         SET v_final_sqlstr = sqlstr; -- DROP操作直接使用原sqlstr
 END IF;
 
-    -- 第一步：优先修改原表（核心：不排除原表，必改）
+    -- 第一步：优先处理原表（核心：不排除原表，必改）
     IF v_error_flag = 0 THEN
         SET @detail_result = '';
         -- 调用基础表结构修改存储过程（传入拼接后的列定义）
 CALL sp_column_work(operation_type, p_original_table, columnname, v_final_sqlstr, coldesc, @detail_result);
--- 简化结果判断
-IF LEFT(@detail_result, 2) = '错误' OR LEFT(@detail_result, 4) = '执行失败' THEN
-            SET v_exec_summary = CONCAT('表', p_original_table, '，', operation_type, ' ', columnname, '字段：失败');
+-- 修复点1：修正结果判断逻辑，匹配sp_column_work实际返回的「错误:」「执行失败:」前缀
+IF LEFT(@detail_result, 3) = '错误:' OR LEFT(@detail_result, 5) = '执行失败:' THEN
+            SET v_exec_summary = CONCAT('表', p_original_table, '，', operation_type, ' ', columnname, '字段：失败，', @detail_result);
             SET v_error_flag = 1;
             IF p_ignore_error = 1 THEN
                 SET v_exec_summary = CONCAT(v_exec_summary, '（忽略，继续分表）');
@@ -137,44 +144,42 @@ ELSE
 END IF;
 END IF;
 
-    -- 第二步：批量修改数字后缀分表（原表已单独改，此处仅改分表）
+    -- 第二步：批量处理数字后缀分表（原表已单独改，此处仅改分表）
     IF (v_error_flag = 0) OR (v_error_flag = 1 AND p_ignore_error = 1) THEN
         OPEN shard_cursor;
         shard_loop: LOOP
             FETCH shard_cursor INTO v_shard_table;
             IF v_done = 1 THEN LEAVE shard_loop; END IF;
 
-            -- 重置分表错误标记
+            -- 重置分表错误标记，避免前一次错误影响
             SET v_shard_error = 0;
             -- 标记：开始处理当前分表
             SET v_handling_shard = 1;
 
-            -- 调用基础表结构修改存储过程（传入拼接后的列定义）
+            -- 调用基础表结构修改存储过程
             SET @detail_result = '';
 CALL sp_column_work(operation_type, v_shard_table, columnname, v_final_sqlstr, coldesc, @detail_result);
 
 -- 标记：结束处理当前分表
 SET v_handling_shard = 0;
 
-            -- 汇总分表操作结果
+            -- 汇总分表操作结果（仅当未触发系统异常时执行）
             IF v_shard_error = 0 THEN
-                IF LEFT(@detail_result, 2) = '错误' OR LEFT(@detail_result, 4) = '执行失败' THEN
-                    SET v_single_result = CONCAT('表', v_shard_table, '，', operation_type, ' ', columnname, '字段：失败');
+                -- 修复点1：同步修正分表结果判断逻辑，匹配「错误:」「执行失败:」
+IF LEFT(@detail_result, 3) = '错误:' OR LEFT(@detail_result, 5) = '执行失败:' THEN
+                    -- 修复点2：拼接原始错误详情，定位真实失败原因
+SET v_single_result = CONCAT('表', v_shard_table, '，', operation_type, ' ', columnname, '字段：失败');
                     IF p_ignore_error = 1 THEN
-                        SET v_single_result = CONCAT(v_single_result, '（忽略）');
+                        SET v_single_result = CONCAT(v_single_result, '（忽略），', @detail_result);
 ELSE
-                        SET v_single_result = CONCAT(v_single_result, '，终止');
+                        SET v_single_result = CONCAT(v_single_result, '（终止），', @detail_result);
                         SET v_error_flag = 1;
+                        LEAVE shard_loop; -- 不忽略错误，直接终止循环
 END IF;
 ELSE
                     SET v_single_result = CONCAT('表', v_shard_table, '，', operation_type, ' ', columnname, '字段：成功');
 END IF;
                 SET v_exec_summary = CONCAT(v_exec_summary, CHAR(10), v_single_result);
-END IF;
-
-            -- 不忽略错误且分表失败，终止循环
-            IF p_ignore_error = 0 AND v_shard_error = 1 THEN
-                LEAVE shard_loop;
 END IF;
 END LOOP shard_loop;
 CLOSE shard_cursor;
@@ -185,7 +190,7 @@ IF NOT v_exec_summary LIKE CONCAT('%', CHAR(10), '表%，% %字段：%') THEN
 END IF;
 END IF;
 
-    -- 最终打印极简结果
+    -- 最终打印极简结果（含错误详情）
 SELECT v_exec_summary AS '批量修改结果';
 
 END //
