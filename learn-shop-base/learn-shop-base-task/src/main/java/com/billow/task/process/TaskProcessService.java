@@ -1,15 +1,16 @@
 package com.billow.task.process;
 
-import com.billow.taskcenter.entity.SysTaskGroup;
-import com.billow.taskcenter.entity.SysTaskGroupDetail;
+
+import com.billow.task.entity.TaskGroup;
+import com.billow.task.entity.TaskGroupDetail;
 
 import java.util.List;
 
 public interface TaskProcessService {
 
-    List<SysTaskGroupDetail> splitTask(SysTaskGroup sysTaskGroup);
+    List<TaskGroupDetail> splitTask(TaskGroup taskGroup);
 
-    SysTaskGroupDetail executeTask(SysTaskGroupDetail detail);
+    TaskGroupDetail executeTask(TaskGroupDetail detail);
 
     String supportTaskType();
 }

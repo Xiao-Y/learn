@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Data
 @Table("sys_task_group")
-public class SysTaskGroup {
+public class TaskGroup {
     /**
      * 主键ID
      */

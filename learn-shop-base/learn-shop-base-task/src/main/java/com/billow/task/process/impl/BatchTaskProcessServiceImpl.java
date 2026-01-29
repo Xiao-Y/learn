@@ -1,10 +1,10 @@
 package com.billow.task.process.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.billow.taskcenter.entity.SysTaskGroup;
-import com.billow.taskcenter.entity.SysTaskGroupDetail;
-import com.billow.taskcenter.process.TaskProcessService;
-import com.billow.taskcenter.util.TaskStatusEnum;
+import com.billow.task.entity.TaskGroup;
+import com.billow.task.entity.TaskGroupDetail;
+import com.billow.task.process.TaskProcessService;
+import com.billow.task.util.TaskStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,31 +17,31 @@ import java.util.List;
 public class BatchTaskProcessServiceImpl implements TaskProcessService {
 
     @Override
-    public List<SysTaskGroupDetail> splitTask(SysTaskGroup sysTaskGroup) {
-        List<SysTaskGroupDetail> detailList = new ArrayList<>();
+    public List<TaskGroupDetail> splitTask(TaskGroup taskGroup) {
+        List<TaskGroupDetail> detailList = new ArrayList<>();
 
         try {
-            String taskParam = sysTaskGroup.getTaskParam();
+            String taskParam = taskGroup.getTaskParam();
             if (StrUtil.isEmpty(taskParam)) {
                 return detailList;
             }
             List<String> dataIds = StrUtil.split(taskParam, ",");
 
             for (String dataId : dataIds) {
-                SysTaskGroupDetail detail = new SysTaskGroupDetail();
-                detail.setTaskId(sysTaskGroup.getId());
-                detail.setGroupNo(sysTaskGroup.getGroupNo());
+                TaskGroupDetail detail = new TaskGroupDetail();
+                detail.setTaskId(taskGroup.getId());
+                detail.setGroupNo(taskGroup.getGroupNo());
                 detail.setExecuteStatus(TaskStatusEnum.W.name());
                 detail.setStatus(TaskStatusEnum.W.name());
                 detail.setRetryNum(0);
                 detail.setCreateTime(new Date());
                 detail.setTaskParam(dataId);
-                detail.setCreateUser(sysTaskGroup.getCreateUser());
+                detail.setCreateUser(taskGroup.getCreateUser());
 
                 detailList.add(detail);
             }
         } catch (Exception e) {
-            log.error("批处理任务拆分失败，groupNo：{}", sysTaskGroup.getGroupNo(), e);
+            log.error("批处理任务拆分失败，groupNo：{}", taskGroup.getGroupNo(), e);
             throw new RuntimeException("批处理任务拆分异常：" + e.getMessage());
         }
 
@@ -49,7 +49,7 @@ public class BatchTaskProcessServiceImpl implements TaskProcessService {
     }
 
     @Override
-    public SysTaskGroupDetail executeTask(SysTaskGroupDetail detail) {
+    public TaskGroupDetail executeTask(TaskGroupDetail detail) {
         try {
             detail.setExecuteStatus(TaskStatusEnum.W.name());
             detail.setExecutStartTime(new Date());

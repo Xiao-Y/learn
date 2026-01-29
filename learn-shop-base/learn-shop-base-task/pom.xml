@@ -20,19 +20,18 @@
     </properties>
 
     <dependencies>
-        <!-- spring-jdbc -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-mybatis</artifactId>
         </dependency>
         <!-- 消息中间件、消息通知 -->
         <dependency>
             <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-notice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,18 +1,18 @@
 package com.billow.task.service;
 
-import com.billow.taskcenter.entity.SysTaskGroup;
+import com.billow.task.entity.TaskGroup;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.service.IService;
 
-public interface PosTaskGroupService extends IService<SysTaskGroup> {
+public interface PosTaskGroupService extends IService<TaskGroup> {
 
-    SysTaskGroup loadTask(SysTaskGroup taskGroup);
+    TaskGroup loadTask(TaskGroup taskGroup);
 
     void updateTaskProgress(Long taskId, Integer executeEndSize, Integer successSize);
 
     Double queryTaskProgress(Long taskId);
 
-    Page<SysTaskGroup> queryTaskGroupList(Page<SysTaskGroup> page, String taskType, String status);
+    Page<TaskGroup> queryTaskGroupList(Page<TaskGroup> page, String taskType, String status);
 
     void updateTaskSize(Long taskId, Integer taskSize);
 }

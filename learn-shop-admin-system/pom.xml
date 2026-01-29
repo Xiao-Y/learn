@@ -40,6 +40,10 @@
         </dependency>
         <dependency>
             <groupId>com.billow</groupId>
+            <artifactId>learn-shop-base-task</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-mybatis</artifactId>
         </dependency>
         <dependency>

@@ -1,12 +1,12 @@
 package com.billow.task.service.impl;
 
-import com.billow.taskcenter.entity.SysTaskGroup;
-import com.billow.taskcenter.entity.SysTaskGroupDetail;
-import com.billow.taskcenter.process.TaskProcessService;
-import com.billow.taskcenter.process.TaskServiceAdapter;
-import com.billow.taskcenter.service.PosTaskGroupDetailService;
-import com.billow.taskcenter.service.PosTaskGroupService;
-import com.billow.taskcenter.util.TaskStatusEnum;
+import com.billow.task.entity.TaskGroup;
+import com.billow.task.entity.TaskGroupDetail;
+import com.billow.task.process.TaskProcessService;
+import com.billow.task.process.TaskServiceAdapter;
+import com.billow.task.service.PosTaskGroupDetailService;
+import com.billow.task.service.PosTaskGroupService;
+import com.billow.task.util.TaskStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -32,12 +32,12 @@ public class TaskFlowService {
     @Value("${task.center.mq.task-execute-queue}")
     private String taskExecuteQueue;
 
-    public SysTaskGroup startTask(SysTaskGroup taskGroup) {
+    public TaskGroup startTask(TaskGroup taskGroup) {
         if (taskGroup == null || StringUtils.isBlank(taskGroup.getType()) || StringUtils.isBlank(taskGroup.getTaskParam())) {
             throw new RuntimeException("任务组参数不完整：type和taskParam不能为空");
         }
 
-        SysTaskGroup savedGroup = taskGroupService.loadTask(taskGroup);
+        TaskGroup savedGroup = taskGroupService.loadTask(taskGroup);
 
         try {
             rabbitTemplate.convertAndSend(taskSplitQueue, savedGroup.getId());
@@ -53,7 +53,7 @@ public class TaskFlowService {
     public void splitTask(Long taskId) {
         log.info("开始执行任务拆分，taskId：{}", taskId);
 
-        SysTaskGroup taskGroup = taskGroupService.getById(taskId);
+        TaskGroup taskGroup = taskGroupService.getById(taskId);
         if (taskGroup == null) {
             throw new RuntimeException("任务组不存在，无法拆分：" + taskId);
         }
@@ -63,7 +63,7 @@ public class TaskFlowService {
             throw new RuntimeException("未找到[" + taskGroup.getType() + "]类型的任务处理实现类");
         }
 
-        List<SysTaskGroupDetail> detailList = processService.splitTask(taskGroup);
+        List<TaskGroupDetail> detailList = processService.splitTask(taskGroup);
         if (detailList == null || detailList.isEmpty()) {
             log.warn("任务拆分结果为空，taskId：{}", taskId);
             return;
@@ -72,7 +72,7 @@ public class TaskFlowService {
         taskDetailService.saveBatch(detailList);
         taskGroupService.updateTaskSize(taskId, detailList.size());
 
-        for (SysTaskGroupDetail detail : detailList) {
+        for (TaskGroupDetail detail : detailList) {
             try {
                 rabbitTemplate.convertAndSend(taskExecuteQueue, detail.getId());
             } catch (Exception e) {
@@ -86,7 +86,7 @@ public class TaskFlowService {
     public void executeTask(Long taskDetailId) {
         log.info("开始执行子任务，taskDetailId：{}", taskDetailId);
 
-        SysTaskGroupDetail detail = taskDetailService.getById(taskDetailId);
+        TaskGroupDetail detail = taskDetailService.getById(taskDetailId);
         if (detail == null) {
             throw new RuntimeException("子任务不存在，无法执行：" + taskDetailId);
         }
@@ -94,7 +94,7 @@ public class TaskFlowService {
         Long taskId = detail.getTaskId();
         String groupNo = detail.getGroupNo();
 
-        SysTaskGroup taskGroup = taskGroupService.getById(taskId);
+        TaskGroup taskGroup = taskGroupService.getById(taskId);
         if (taskGroup == null) {
             throw new RuntimeException("任务组不存在，无法执行子任务：" + taskId);
         }
@@ -104,7 +104,7 @@ public class TaskFlowService {
             throw new RuntimeException("未找到[" + taskGroup.getType() + "]类型的任务处理实现类");
         }
 
-        SysTaskGroupDetail executedDetail = processService.executeTask(detail);
+        TaskGroupDetail executedDetail = processService.executeTask(detail);
         taskDetailService.updateById(executedDetail);
         Map<String, Integer> counted = taskDetailService.countFinishedByGroupNo(taskId);
         int successSize = counted.getOrDefault(TaskStatusEnum.S.name(), 0);

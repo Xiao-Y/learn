@@ -1,14 +1,14 @@
 package com.billow.task.service;
 
-import com.billow.taskcenter.entity.SysTaskGroupDetail;
+import com.billow.task.entity.TaskGroupDetail;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.service.IService;
 
 import java.util.Map;
 
-public interface PosTaskGroupDetailService extends IService<SysTaskGroupDetail> {
+public interface PosTaskGroupDetailService extends IService<TaskGroupDetail> {
 
-    Page<SysTaskGroupDetail> queryTaskDetailList(Page<SysTaskGroupDetail> page, String groupNo);
+    Page<TaskGroupDetail> queryTaskDetailList(Page<TaskGroupDetail> page, String groupNo);
 
     boolean retryTaskDetail(String taskDetailId);
 

@@ -1,48 +1,44 @@
 package com.billow.task.service.impl;
 
-import com.billow.taskcenter.entity.SysTaskGroupDetail;
-import com.billow.taskcenter.mapper.PosTaskGroupDetailMapper;
-import com.billow.taskcenter.service.PosTaskGroupDetailService;
-import com.billow.taskcenter.util.TaskStatusEnum;
+import com.billow.task.dao.TaskGroupDetailMapper;
+import com.billow.task.entity.TaskGroupDetail;
+import com.billow.task.service.PosTaskGroupDetailService;
+import com.billow.task.util.TaskStatusEnum;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.billow.taskcenter.entity.table.SysTaskGroupDetailTableDef.SYS_TASK_GROUP_DETAIL;
+import static com.billow.task.entity.table.SysTaskGroupDetailTableDef.SYS_TASK_GROUP_DETAIL;
 
 @Service
 @RequiredArgsConstructor
-public class PosTaskGroupDetailServiceImpl extends ServiceImpl<PosTaskGroupDetailMapper, SysTaskGroupDetail>
+public class PosTaskGroupDetailServiceImpl extends ServiceImpl<TaskGroupDetailMapper, TaskGroupDetail>
         implements PosTaskGroupDetailService {
 
-    @Autowired
-    private PosTaskGroupDetailMapper baseMapper;
-
     @Override
-    public Page<SysTaskGroupDetail> queryTaskDetailList(Page<SysTaskGroupDetail> page, String groupNo) {
+    public Page<TaskGroupDetail> queryTaskDetailList(Page<TaskGroupDetail> page, String groupNo) {
         if (StringUtils.isBlank(groupNo)) {
             throw new RuntimeException("任务组编号不能为空");
         }
 
         QueryWrapper wrapper = QueryWrapper.create()
-                .eq(SysTaskGroupDetail::getGroupNo, groupNo)
-                .eq(SysTaskGroupDetail::getDelFlag, "0")
-                .orderBy(SysTaskGroupDetail::getCreateTime, false);
+                .eq(TaskGroupDetail::getGroupNo, groupNo)
+                .eq(TaskGroupDetail::getDelFlag, "0")
+                .orderBy(TaskGroupDetail::getCreateTime, false);
         return this.page(page, wrapper);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean retryTaskDetail(String taskDetailId) {
-        SysTaskGroupDetail detail = this.getById(taskDetailId);
+        TaskGroupDetail detail = this.getById(taskDetailId);
         if (detail == null) {
             throw new RuntimeException("子任务不存在：" + taskDetailId);
         }
@@ -62,13 +58,13 @@ public class PosTaskGroupDetailServiceImpl extends ServiceImpl<PosTaskGroupDetai
         Map<String, Integer> result = new HashMap<>();
 
         QueryWrapper wrapper = QueryWrapper.create()
-                .select(QueryMethods.count(SysTaskGroupDetail::getId).as("task_count"),
+                .select(QueryMethods.count(TaskGroupDetail::getId).as("task_count"),
                         SYS_TASK_GROUP_DETAIL.EXECUTE_STATUS)
-                .eq(SysTaskGroupDetail::getTaskId, taskId)
-                .eq(SysTaskGroupDetail::getDelFlag, "0")
-                .in(SysTaskGroupDetail::getExecuteStatus,
+                .eq(TaskGroupDetail::getTaskId, taskId)
+                .eq(TaskGroupDetail::getDelFlag, "0")
+                .in(TaskGroupDetail::getExecuteStatus,
                         Arrays.asList(TaskStatusEnum.F.name(), TaskStatusEnum.S.name()))
-                .groupBy(SysTaskGroupDetail::getExecuteStatus);
+                .groupBy(TaskGroupDetail::getExecuteStatus);
 
         List<Map> tempResult = this.listAs(wrapper, Map.class);
         for (Map map : tempResult) {
@@ -88,9 +84,9 @@ public class PosTaskGroupDetailServiceImpl extends ServiceImpl<PosTaskGroupDetai
     @Override
     public long countSuccessByGroupNo(Long taskId) {
         QueryWrapper wrapper = QueryWrapper.create()
-                .eq(SysTaskGroupDetail::getTaskId, taskId)
-                .eq(SysTaskGroupDetail::getDelFlag, "0")
-                .in(SysTaskGroupDetail::getExecuteStatus, Arrays.asList(TaskStatusEnum.F.name(), TaskStatusEnum.S.name()));
+                .eq(TaskGroupDetail::getTaskId, taskId)
+                .eq(TaskGroupDetail::getDelFlag, "0")
+                .in(TaskGroupDetail::getExecuteStatus, Arrays.asList(TaskStatusEnum.F.name(), TaskStatusEnum.S.name()));
         return this.count(wrapper);
     }
 }
