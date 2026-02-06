@@ -1,17 +1,19 @@
 package com.billow.task.process;
 
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class TaskServiceAdapter {
+
     private final Map<String, TaskProcessService> processServiceMap = new ConcurrentHashMap<>();
 
-    @Resource
-    public void setProcessServiceMap(java.util.List<TaskProcessService> taskProcessServices) {
+    @Autowired
+    public void setProcessServiceMap(List<TaskProcessService> taskProcessServices) {
         taskProcessServices.forEach(service -> processServiceMap.put(service.supportTaskType(), service));
     }
 

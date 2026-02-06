@@ -2,22 +2,24 @@ package com.billow.system.api;
 
 import com.billow.task.entity.TaskGroup;
 import com.billow.task.entity.TaskGroupDetail;
-import com.billow.task.service.PosTaskGroupDetailService;
-import com.billow.task.service.PosTaskGroupService;
+import com.billow.task.service.TaskGroupDetailService;
+import com.billow.task.service.TaskGroupService;
 import com.billow.task.service.impl.TaskFlowService;
 import com.mybatisflex.core.paginate.Page;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/task")
-@RequiredArgsConstructor
 public class TaskCenterApi {
-    private final TaskFlowService taskFlowService;
-    private final PosTaskGroupService taskGroupService;
-    private final PosTaskGroupDetailService taskDetailService;
+    @Autowired
+    private  TaskFlowService taskFlowService;
+    @Autowired
+    private TaskGroupService taskGroupService;
+    @Autowired
+    private TaskGroupDetailService taskDetailService;
 
     @PostMapping("/start")
     public TaskGroup startTask(@RequestBody TaskGroup taskGroup) {

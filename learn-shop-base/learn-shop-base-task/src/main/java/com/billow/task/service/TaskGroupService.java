@@ -4,7 +4,7 @@ import com.billow.task.entity.TaskGroup;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.service.IService;
 
-public interface PosTaskGroupService extends IService<TaskGroup> {
+public interface TaskGroupService extends IService<TaskGroup> {
 
     TaskGroup loadTask(TaskGroup taskGroup);
 

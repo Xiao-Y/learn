@@ -4,33 +4,35 @@ import com.billow.task.entity.TaskGroup;
 import com.billow.task.entity.TaskGroupDetail;
 import com.billow.task.process.TaskProcessService;
 import com.billow.task.process.TaskServiceAdapter;
-import com.billow.task.service.PosTaskGroupDetailService;
-import com.billow.task.service.PosTaskGroupService;
+import com.billow.task.service.TaskGroupDetailService;
+import com.billow.task.service.TaskGroupService;
 import com.billow.task.util.TaskStatusEnum;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Service
-@RequiredArgsConstructor
+//@Service
 public class TaskFlowService {
-    private final PosTaskGroupService taskGroupService;
-    private final PosTaskGroupDetailService taskDetailService;
-    private final TaskServiceAdapter taskServiceAdapter;
-    private final RabbitTemplate rabbitTemplate;
+    @Autowired
+    private TaskGroupService taskGroupService;
+    @Autowired
+    private TaskGroupDetailService taskDetailService;
+    @Autowired
+    private TaskServiceAdapter taskServiceAdapter;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
-    @Value("${task.center.mq.task-split-queue}")
-    private String taskSplitQueue;
+    @Value("${notice.mq.mq-collect.task-split.route-key}")
+    private String taskSplitRouteKey;
 
-    @Value("${task.center.mq.task-execute-queue}")
-    private String taskExecuteQueue;
+    @Value("${notice.mq.mq-collect.task-execute.route-key}")
+    private String taskExecuteRouteKey;
 
     public TaskGroup startTask(TaskGroup taskGroup) {
         if (taskGroup == null || StringUtils.isBlank(taskGroup.getType()) || StringUtils.isBlank(taskGroup.getTaskParam())) {
@@ -40,7 +42,7 @@ public class TaskFlowService {
         TaskGroup savedGroup = taskGroupService.loadTask(taskGroup);
 
         try {
-            rabbitTemplate.convertAndSend(taskSplitQueue, savedGroup.getId());
+            rabbitTemplate.convertAndSend(taskSplitRouteKey, savedGroup.getId());
             log.info("任务加载成功，已发送拆分MQ消息，groupNo：{}", savedGroup.getGroupNo());
         } catch (Exception e) {
             log.error("发送任务拆分MQ消息失败，groupNo：{}", savedGroup.getGroupNo(), e);
@@ -74,7 +76,7 @@ public class TaskFlowService {
 
         for (TaskGroupDetail detail : detailList) {
             try {
-                rabbitTemplate.convertAndSend(taskExecuteQueue, detail.getId());
+                rabbitTemplate.convertAndSend(taskExecuteRouteKey, detail.getId());
             } catch (Exception e) {
                 log.error("发送子任务执行MQ消息失败，taskId：{}", detail.getTaskId(), e);
             }

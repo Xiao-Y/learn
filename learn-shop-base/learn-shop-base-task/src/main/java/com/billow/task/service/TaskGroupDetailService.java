@@ -6,7 +6,7 @@ import com.mybatisflex.core.service.IService;
 
 import java.util.Map;
 
-public interface PosTaskGroupDetailService extends IService<TaskGroupDetail> {
+public interface TaskGroupDetailService extends IService<TaskGroupDetail> {
 
     Page<TaskGroupDetail> queryTaskDetailList(Page<TaskGroupDetail> page, String groupNo);
 

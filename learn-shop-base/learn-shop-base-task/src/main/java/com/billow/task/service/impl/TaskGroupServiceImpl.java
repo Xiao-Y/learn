@@ -4,25 +4,25 @@ import com.billow.task.dao.TaskGroupDetailMapper;
 import com.billow.task.dao.TaskGroupMapper;
 import com.billow.task.entity.TaskGroup;
 import com.billow.task.entity.TaskGroupDetail;
-import com.billow.task.service.PosTaskGroupService;
+import com.billow.task.service.TaskGroupService;
 import com.billow.task.util.IdGeneratorUtil;
 import com.billow.task.util.TaskStatusEnum;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-@Service
-@RequiredArgsConstructor
-public class PosTaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup>
-        implements PosTaskGroupService {
+//@Service
+public class TaskGroupServiceImpl extends ServiceImpl<TaskGroupMapper, TaskGroup> implements TaskGroupService {
 
-    private final TaskGroupMapper baseMapper;
-    private final TaskGroupDetailMapper taskDetailMapper;
+    @Autowired
+    private TaskGroupMapper baseMapper;
+    @Autowired
+    private TaskGroupDetailMapper taskDetailMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)

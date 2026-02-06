@@ -10,8 +10,7 @@ import org.springframework.amqp.core.ExchangeTypes;
  * @since 2021/12/14 22:40
  */
 @Data
-public class MqSetting
-{
+public class MqSetting {
 
     /**
      * 交换机名称
@@ -123,5 +122,4 @@ public class MqSetting
      * @since 2021/12/14 22:40
      */
     private String dlxQueue;
-
 }

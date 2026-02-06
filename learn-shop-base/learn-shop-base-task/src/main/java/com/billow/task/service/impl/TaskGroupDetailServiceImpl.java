@@ -2,25 +2,21 @@ package com.billow.task.service.impl;
 
 import com.billow.task.dao.TaskGroupDetailMapper;
 import com.billow.task.entity.TaskGroupDetail;
-import com.billow.task.service.PosTaskGroupDetailService;
+import com.billow.task.service.TaskGroupDetailService;
 import com.billow.task.util.TaskStatusEnum;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryMethods;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.billow.task.entity.table.SysTaskGroupDetailTableDef.SYS_TASK_GROUP_DETAIL;
+import static com.billow.task.entity.table.TaskGroupDetailTableDef.TASK_GROUP_DETAIL;
 
-@Service
-@RequiredArgsConstructor
-public class PosTaskGroupDetailServiceImpl extends ServiceImpl<TaskGroupDetailMapper, TaskGroupDetail>
-        implements PosTaskGroupDetailService {
+//@Service
+public class TaskGroupDetailServiceImpl extends ServiceImpl<TaskGroupDetailMapper, TaskGroupDetail> implements TaskGroupDetailService {
 
     @Override
     public Page<TaskGroupDetail> queryTaskDetailList(Page<TaskGroupDetail> page, String groupNo) {
@@ -59,7 +55,7 @@ public class PosTaskGroupDetailServiceImpl extends ServiceImpl<TaskGroupDetailMa
 
         QueryWrapper wrapper = QueryWrapper.create()
                 .select(QueryMethods.count(TaskGroupDetail::getId).as("task_count"),
-                        SYS_TASK_GROUP_DETAIL.EXECUTE_STATUS)
+                        TASK_GROUP_DETAIL.EXECUTE_STATUS)
                 .eq(TaskGroupDetail::getTaskId, taskId)
                 .eq(TaskGroupDetail::getDelFlag, "0")
                 .in(TaskGroupDetail::getExecuteStatus,
