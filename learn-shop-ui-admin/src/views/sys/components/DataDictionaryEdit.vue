@@ -68,7 +68,7 @@
         systemModuleSelect: [],
       };
     },
-    created() {
+    activated() {
       this.optionType = this.$route.query.optionType;
       this.fieldTypeSelect = JSON.parse(this.$route.query.fieldTypeSelect);
       this.systemModuleSelect = JSON.parse(this.$route.query.systemModuleSelect);

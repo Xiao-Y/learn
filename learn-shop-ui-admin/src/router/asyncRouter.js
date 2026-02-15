@@ -179,6 +179,23 @@ const asyncRouterList = [
     name: 'workbenchMyTaskListIndex',
     path: '/workbench/workbenchMyTaskList/index',
     component: resolve => require(['../views/process/MyTaskList.vue'], resolve)
+  },
+  // ===================================== 任务中心 ====================================
+  {
+    // 任务组列表
+    name: 'taskTaskGroupListIndex',
+    path: '/task/taskGroupList/index',
+    component: resolve => require(['../views/task/TaskGroupList.vue'], resolve)
+  }, {
+    // 任务进度详情
+    name: 'taskTaskProgress',
+    path: '/task/taskGroupList/taskProgress',
+    component: resolve => require(['../views/task/components/TaskProgress.vue'], resolve)
+  }, {
+    // 任务详情列表
+    name: 'taskTaskDetailList',
+    path: '/task/taskGroupList/taskDetail',
+    component: resolve => require(['../views/task/components/TaskDetailList.vue'], resolve)
   }
 ]
 

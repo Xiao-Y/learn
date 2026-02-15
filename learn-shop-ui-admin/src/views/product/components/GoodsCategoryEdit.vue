@@ -60,7 +60,7 @@
         }
       }
     },
-    created() {
+    activated() {
       this.optionType = this.$route.query.optionType;
       if (this.optionType === 'edit') {
         this.infoModel = JSON.parse(this.$route.query.editData);

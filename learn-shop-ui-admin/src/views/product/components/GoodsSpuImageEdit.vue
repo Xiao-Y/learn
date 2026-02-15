@@ -43,9 +43,10 @@
         productInfo: {} // 商品信息
       };
     },
-    created() {
+    activated() {
       this.productInfo = this.$route.params.productInfo;
       this.uploadProductImageUrl = 'core-product/productApi/uploadProductImage/' + this.productInfo.id;
+      this.productImageList = []; // 每次激活时清空图片列表，避免重复加载
       this.initProudctImage();
     },
     methods: {
