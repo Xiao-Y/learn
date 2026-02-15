@@ -1,4 +1,4 @@
-package com.billow.cloud.common.amqp;
+package com.billow.notice.amqp.properties;
 
 import lombok.Data;
 

@@ -28,11 +28,6 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-        <!-- 配置中心获取文件配置 -->
-        <dependency>
-            <groupId>com.billow</groupId>
-            <artifactId>learn-cloud-common</artifactId>
-        </dependency>
         <!-- 消息中间件、消息通知 -->
         <dependency>
             <groupId>com.billow</groupId>
@@ -99,6 +94,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 

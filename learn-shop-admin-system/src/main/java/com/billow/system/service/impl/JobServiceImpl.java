@@ -2,7 +2,7 @@ package com.billow.system.service.impl;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.billow.cloud.common.amqp.AmqpYml;
+import com.billow.notice.amqp.properties.AmqpYml;
 import com.billow.email.service.MailService;
 import com.billow.job.pojo.ex.MailEx;
 import com.billow.job.service.JobService;

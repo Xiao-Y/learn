@@ -20,21 +20,8 @@
     <dependencies>
         <dependency>
             <groupId>com.billow</groupId>
-            <artifactId>learn-cloud-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.billow</groupId>
             <artifactId>learn-shop-base-tools</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.billow</groupId>-->
-<!--            <artifactId>learn-shop-base-redis</artifactId>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; rabbit,用于配置中心文件修改通知和发送其它系统间通知 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-bus-amqp</artifactId>-->
-<!--        </dependency>-->
         <!-- 注册中心 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -83,6 +70,24 @@
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <!-- Spring Cloud Alibaba Nacos 服务发现 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- Spring Cloud Alibaba Nacos 配置中心（如需） -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
     </dependencies>
 

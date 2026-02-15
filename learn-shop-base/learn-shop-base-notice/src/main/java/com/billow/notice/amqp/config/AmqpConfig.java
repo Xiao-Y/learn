@@ -1,8 +1,9 @@
-package com.billow.cloud.common.amqp;
+package com.billow.notice.amqp.config;
 
 import cn.hutool.core.text.CharPool;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.billow.notice.amqp.properties.AmqpYml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;

@@ -1,6 +1,6 @@
 package com.billow.gateway.receive;
 
-import com.billow.cloud.common.amqp.AmqpYml;
+import com.billow.notice.amqp.properties.AmqpYml;
 import com.billow.notice.amqp.service.SendMQService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.billow.promotion.service.impl;
 
-import com.billow.cloud.common.amqp.AmqpYml;
+import com.billow.notice.amqp.properties.AmqpYml;
 import com.billow.notice.amqp.service.SendMQService;
 import com.billow.promotion.cache.SeckillProductCache;
 import com.billow.promotion.common.enums.OrderTypeEnum;

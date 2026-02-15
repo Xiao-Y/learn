@@ -28,10 +28,10 @@ public class TaskFlowService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Value("${notice.mq.mq-collect.task-split.route-key}")
+//    @Value("${notice.mq.mq-collect.task-split.route-key}")
     private String taskSplitRouteKey;
 
-    @Value("${notice.mq.mq-collect.task-execute.route-key}")
+//    @Value("${notice.mq.mq-collect.task-execute.route-key}")
     private String taskExecuteRouteKey;
 
     public TaskGroup startTask(TaskGroup taskGroup) {
