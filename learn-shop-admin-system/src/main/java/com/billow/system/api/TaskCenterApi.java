@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/task")
+@RequestMapping("/taskApi")
 public class TaskCenterApi {
     @Autowired
     private  TaskFlowService taskFlowService;
