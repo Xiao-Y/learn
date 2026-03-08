@@ -16,7 +16,7 @@
 
     <properties>
         <!-- 修改对应的 elasticsearch 版本 -->
-        <elasticsearch.version>7.9.3</elasticsearch.version>
+        <elasticsearch.version>8.19.8</elasticsearch.version>
     </properties>
 
     <dependencies>
